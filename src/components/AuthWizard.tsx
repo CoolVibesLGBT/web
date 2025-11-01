@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext.tsx';
 import { useApp } from '../contexts/AppContext';
 import { api } from '../services/api.tsx';
 import { useTranslation } from 'react-i18next';
+import { applicationName } from '../appSettings';
 
 interface AuthWizardProps {
   isOpen: boolean;
@@ -98,7 +99,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
   const steps = [
     {
       id: 'auth-mode',
-      title: t('auth.welcome_title'),
+      title: t('auth.welcome_title', { appName: applicationName }),
       subtitle: t('auth.welcome_subtitle'),
       icon: Heart,
       field: 'authMode',
@@ -133,6 +134,15 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
       type: 'login-form'
     },
     {
+      id: 'birthdate',
+      title: t('auth.birthdate_title', { defaultValue: 'When were you born?' }),
+      subtitle: t('auth.birthdate_subtitle', { defaultValue: 'This helps us create better matches' }),
+      icon: Calendar,
+      field: 'birthDate',
+      placeholder: '',
+      type: 'date-picker'
+    },
+    {
       id: 'nickname',
       title: t('auth.create_account'),
       subtitle: t('auth.welcome_subtitle'),
@@ -141,15 +151,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
       placeholder: 'nickname',
       type: 'text'
     },
-    {
-      id: 'birthdate',
-      title: t('auth.birthdate_title', { defaultValue: 'When were you born?' }),
-      subtitle: t('auth.birthdate_subtitle', { defaultValue: 'This helps us create better matches' }),
-      icon: Calendar,
-      field: 'birthDate',
-      placeholder: '',
-      type: 'date-picker'
-    }
+    
   ];
 
   const getDaysInMonth = (month: number, year: number) => {
@@ -241,7 +243,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
       if (authMode === 'login') {
         setCurrentStep(3); // login-form
       } else {
-        setCurrentStep(4); // nickname
+        setCurrentStep(4); // birthdate (doğum tarihi önce)
       }
     } else if (currentStep === 3 && authMode === 'login') {
       setIsLoading(true);
@@ -261,7 +263,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
           setIsLoading(false);
         });
     } else if (currentStep === 4 && authMode === 'register') {
-      setCurrentStep(5); // birthdate
+      setCurrentStep(5); // nickname (hesap oluşturma formu sonra)
     } else if (currentStep === 5 && authMode === 'register') {
       const birthDate = selectedDate.day && selectedDate.month && selectedDate.year
         ? `${selectedDate.year}-${selectedDate.month.toString().padStart(2, '0')}-${selectedDate.day.toString().padStart(2, '0')}`
@@ -292,8 +294,25 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
   };
 
   const handleBack = () => {
-    if (currentStep > 0) {
+    if (currentStep === 0) {
+      // If on auth-mode step, close wizard
+      onClose();
+    } else {
+      // Clear error when going back
+      setError('');
+      
+      // Handle register flow: step 4 (birthdate) should go back to step 2 (notifications), not step 3 (login-form)
+      // Step 5 (nickname) should go back to step 4 (birthdate)
+      if (authMode === 'register' && currentStep === 4) {
+        setCurrentStep(2); // Go back to notifications
+      } else if (authMode === 'register' && currentStep === 5) {
+        setCurrentStep(4); // Go back to birthdate
+      } else if (authMode === 'login' && currentStep === 3) {
+        setCurrentStep(2); // Go back to notifications
+      } else {
+        // Otherwise go to previous step
       setCurrentStep(currentStep - 1);
+      }
     }
   };
 
@@ -308,7 +327,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
     if (authMode === 'login') {
       return 4; // auth-mode, location, notifications, login-form
     } else if (authMode === 'register') {
-      return 6; // auth-mode, location, notifications, nickname, birthdate
+      return 5; // auth-mode, location, notifications, birthdate, nickname
     }
     return steps.length;
   };
@@ -323,8 +342,8 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
       if (currentStep === 0) return 0; // auth-mode
       if (currentStep === 1) return 1; // location
       if (currentStep === 2) return 2; // notifications
-      if (currentStep === 4) return 3; // nickname
-      if (currentStep === 5) return 4; // birthdate
+      if (currentStep === 4) return 3; // birthdate
+      if (currentStep === 5) return 4; // nickname
     }
     return currentStep;
   };
@@ -430,18 +449,6 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
                   }`}
               />
             </div>
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`p-4 rounded-2xl border ${theme === 'dark'
-                  ? 'bg-red-900/20 border-red-700 text-red-300'
-                  : 'bg-red-50 border-red-200 text-red-700'
-                  }`}
-              >
-                <p className="text-sm font-medium">{error}</p>
-              </motion.div>
-            )}
           </div>
         );
 
@@ -1027,11 +1034,39 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
               {renderFormField()}
             </motion.div>
 
+            {/* Error Message - Show for all steps if error exists */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className={`mb-6 p-4 rounded-2xl border ${theme === 'dark'
+                  ? 'bg-red-900/20 border-red-700 text-red-300'
+                  : 'bg-red-50 border-red-200 text-red-700'
+                }`}
+              >
+                <p className="text-sm font-medium">{error}</p>
+              </motion.div>
+            )}
+
             {/* Actions */}
             <div className="flex flex-row flex-nowrap gap-3 sm:gap-4 items-stretch">
-              {currentStep > 0 && (
+              {currentStep > 0 ? (
                 <motion.button
                   onClick={handleBack}
+                  className={`flex-shrink-0 flex items-center justify-center px-4 sm:px-6 py-3 sm:py-4 rounded-2xl font-semibold text-sm sm:text-base transition-all duration-200 whitespace-nowrap ${theme === 'dark'
+                    ? 'bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
+                    }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                  {t('auth.back')}
+                </motion.button>
+              ) : (
+                <motion.button
+                  onClick={onClose}
                   className={`flex-shrink-0 flex items-center justify-center px-4 sm:px-6 py-3 sm:py-4 rounded-2xl font-semibold text-sm sm:text-base transition-all duration-200 whitespace-nowrap ${theme === 'dark'
                     ? 'bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'

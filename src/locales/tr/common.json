@@ -1,6 +1,6 @@
 {
   "auth": {
-    "welcome_title": "Bifrost'a Hoş Geldin",
+    "welcome_title": "{{appName}}'a Hoş Geldin",
     "welcome_subtitle": "Başlamak için bir yöntem seç",
     "have_account": "Hesabım var",
     "create_account": "Hesap oluştur",
@@ -131,6 +131,8 @@
     "mutual_friends": "ortak arkadaş",
     "connect": "Bağlan",
     "guest_user": "Misafir Kullanıcı",
+    "logout": "Çıkış Yap",
+    "logout_confirmation": "Çıkış yapmak istediğinize emin misiniz?",
     "nav": {
       "home": "Ana Sayfa",
       "nearby": "Yakında",

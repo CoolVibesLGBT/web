@@ -1,6 +1,6 @@
 {
   "auth": {
-    "welcome_title": "Welcome to Bifrost",
+    "welcome_title": "Welcome to {{appName}}",
     "welcome_subtitle": "Choose how you'd like to get started",
     "have_account": "I have an account",
     "create_account": "Create account",
@@ -131,6 +131,8 @@
     "mutual_friends": "mutual friends",
     "connect": "Connect",
     "guest_user": "Guest User",
+    "logout": "Logout",
+    "logout_confirmation": "Are you sure you want to logout?",
     "nav": {
       "home": "Home",
       "nearby": "NearBy",

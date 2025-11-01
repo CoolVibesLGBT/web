@@ -1,0 +1,764 @@
+{
+    "stories": [
+      {
+        "id": "09222f8d-dd32-4960-ac42-5846a8996b80",
+        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+        "user": {
+          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "public_id": 1.9846181998276157e+18,
+          "username": "fuck",
+          "displayname": "fuck",
+          "email": "",
+          "date_of_birth": "2000-11-16T05:45:00+05:45",
+          "gender_identities": null,
+          "sexual_orientations": null,
+          "user_role": "",
+          "is_active": false,
+          "created_at": "2025-11-01T19:32:05.919641+05:45",
+          "updated_at": "2025-11-01T21:03:16.788324+05:45",
+          "default_language": "en",
+          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+          "avatar": {
+            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:16.785578+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:16.785578+05:45",
+            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          },
+          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+          "cover": {
+            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:12.902124+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:12.902124+05:45",
+            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          },
+          "languages": null,
+          "travel": {
+            "visited_countries": null,
+            "travel_frequency": "",
+            "favorite_places": null
+          },
+          "social": {
+  
+          },
+          "deleted_at": null
+        },
+        "media_id": "e6bfe206-28ea-46a3-8de8-6cee561f7247",
+        "media": {
+          "id": "e6bfe206-28ea-46a3-8de8-6cee561f7247",
+          "file_id": "50176eda-e40d-4b8b-9bda-b0512fd3eb40",
+          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "owner_type": "user",
+          "role": "story",
+          "is_public": true,
+          "file": {
+            "id": "50176eda-e40d-4b8b-9bda-b0512fd3eb40",
+            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/3b6c9ba7-0572-437c-8d08-0fcaba388dcd.jpg",
+            "mime_type": "image/jpeg",
+            "size": 91141,
+            "name": "355105234_786737842956948_6752831177010586657_n.jpg",
+            "created_at": "2025-11-01T20:57:50.888664+05:45",
+            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/3b6c9ba7-0572-437c-8d08-0fcaba388dcd.jpg"
+          },
+          "created_at": "2025-11-01T20:57:50.888664+05:45",
+          "updated_at": "2025-11-01T20:57:50.888664+05:45"
+        },
+        "expires_at": "2025-11-02T20:57:50.890881+05:45",
+        "is_expired": false,
+        "is_archived": false,
+        "created_at": "2025-11-01T20:57:50.890881+05:45",
+        "updated_at": "2025-11-01T20:57:50.890881+05:45",
+        "deleted_at": null
+      },
+      {
+        "id": "f7dd6f9f-b215-459d-a763-80cc0fad6603",
+        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+        "user": {
+          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "public_id": 1.9846181998276157e+18,
+          "username": "fuck",
+          "displayname": "fuck",
+          "email": "",
+          "date_of_birth": "2000-11-16T05:45:00+05:45",
+          "gender_identities": null,
+          "sexual_orientations": null,
+          "user_role": "",
+          "is_active": false,
+          "created_at": "2025-11-01T19:32:05.919641+05:45",
+          "updated_at": "2025-11-01T21:03:16.788324+05:45",
+          "default_language": "en",
+          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+          "avatar": {
+            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:16.785578+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:16.785578+05:45",
+            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          },
+          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+          "cover": {
+            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:12.902124+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:12.902124+05:45",
+            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          },
+          "languages": null,
+          "travel": {
+            "visited_countries": null,
+            "travel_frequency": "",
+            "favorite_places": null
+          },
+          "social": {
+  
+          },
+          "deleted_at": null
+        },
+        "media_id": "f49bb687-37f8-48ae-9391-c3c063d463e7",
+        "media": {
+          "id": "f49bb687-37f8-48ae-9391-c3c063d463e7",
+          "file_id": "ac7c7e8d-11d4-45cd-81b6-bd9dff2f592e",
+          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "owner_type": "user",
+          "role": "story",
+          "is_public": true,
+          "file": {
+            "id": "ac7c7e8d-11d4-45cd-81b6-bd9dff2f592e",
+            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/c99f2c49-89d3-424b-95eb-ebfd58c8ba51.jpg",
+            "mime_type": "image/jpeg",
+            "size": 91141,
+            "name": "355105234_786737842956948_6752831177010586657_n.jpg",
+            "created_at": "2025-11-01T20:57:38.592665+05:45",
+            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/c99f2c49-89d3-424b-95eb-ebfd58c8ba51.jpg"
+          },
+          "created_at": "2025-11-01T20:57:38.592666+05:45",
+          "updated_at": "2025-11-01T20:57:38.592666+05:45"
+        },
+        "expires_at": "2025-11-02T20:57:38.599238+05:45",
+        "is_expired": false,
+        "is_archived": false,
+        "created_at": "2025-11-01T20:57:38.599239+05:45",
+        "updated_at": "2025-11-01T20:57:38.599239+05:45",
+        "deleted_at": null
+      },
+      {
+        "id": "46c2035c-a779-44d3-92cd-e505f31a9457",
+        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+        "user": {
+          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "public_id": 1.9846181998276157e+18,
+          "username": "fuck",
+          "displayname": "fuck",
+          "email": "",
+          "date_of_birth": "2000-11-16T05:45:00+05:45",
+          "gender_identities": null,
+          "sexual_orientations": null,
+          "user_role": "",
+          "is_active": false,
+          "created_at": "2025-11-01T19:32:05.919641+05:45",
+          "updated_at": "2025-11-01T21:03:16.788324+05:45",
+          "default_language": "en",
+          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+          "avatar": {
+            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:16.785578+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:16.785578+05:45",
+            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          },
+          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+          "cover": {
+            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:12.902124+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:12.902124+05:45",
+            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          },
+          "languages": null,
+          "travel": {
+            "visited_countries": null,
+            "travel_frequency": "",
+            "favorite_places": null
+          },
+          "social": {
+  
+          },
+          "deleted_at": null
+        },
+        "media_id": "e982ddc3-271a-4af0-a8a1-11e1b45a053e",
+        "media": {
+          "id": "e982ddc3-271a-4af0-a8a1-11e1b45a053e",
+          "file_id": "2b6509f3-8e06-4603-856d-75c7a694ec87",
+          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "owner_type": "user",
+          "role": "story",
+          "is_public": true,
+          "file": {
+            "id": "2b6509f3-8e06-4603-856d-75c7a694ec87",
+            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/43f5ba5c-bfe4-41e1-8284-4e4fa15c04a6.mov",
+            "mime_type": "video/quicktime",
+            "size": 7295721,
+            "name": "0c36eb68bdaa44b895417f0208865c5d.mov",
+            "created_at": "2025-11-01T20:19:59.389066+05:45",
+            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/43f5ba5c-bfe4-41e1-8284-4e4fa15c04a6.mov"
+          },
+          "created_at": "2025-11-01T20:19:59.389066+05:45",
+          "updated_at": "2025-11-01T20:19:59.389066+05:45"
+        },
+        "expires_at": "2025-11-02T20:19:59.390787+05:45",
+        "is_expired": false,
+        "is_archived": false,
+        "created_at": "2025-11-01T20:19:59.390787+05:45",
+        "updated_at": "2025-11-01T20:19:59.390787+05:45",
+        "deleted_at": null
+      },
+      {
+        "id": "14543026-71c0-487a-ad36-a213e3075d7e",
+        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+        "user": {
+          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "public_id": 1.9846181998276157e+18,
+          "username": "fuck",
+          "displayname": "fuck",
+          "email": "",
+          "date_of_birth": "2000-11-16T05:45:00+05:45",
+          "gender_identities": null,
+          "sexual_orientations": null,
+          "user_role": "",
+          "is_active": false,
+          "created_at": "2025-11-01T19:32:05.919641+05:45",
+          "updated_at": "2025-11-01T21:03:16.788324+05:45",
+          "default_language": "en",
+          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+          "avatar": {
+            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:16.785578+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:16.785578+05:45",
+            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          },
+          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+          "cover": {
+            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:12.902124+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:12.902124+05:45",
+            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          },
+          "languages": null,
+          "travel": {
+            "visited_countries": null,
+            "travel_frequency": "",
+            "favorite_places": null
+          },
+          "social": {
+  
+          },
+          "deleted_at": null
+        },
+        "media_id": "e2d8aea8-ab34-44cf-8307-422c92cf3f27",
+        "media": {
+          "id": "e2d8aea8-ab34-44cf-8307-422c92cf3f27",
+          "file_id": "d10fc82a-dbb7-4e45-ba00-11e90a1f3262",
+          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "owner_type": "user",
+          "role": "story",
+          "is_public": true,
+          "file": {
+            "id": "d10fc82a-dbb7-4e45-ba00-11e90a1f3262",
+            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/d8f90e2f-3f1e-410b-8cf9-d36359800107.jpeg",
+            "mime_type": "image/jpeg",
+            "size": 215138,
+            "name": "1669041186022.jpeg",
+            "created_at": "2025-11-01T20:19:36.78046+05:45",
+            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/d8f90e2f-3f1e-410b-8cf9-d36359800107.jpeg"
+          },
+          "created_at": "2025-11-01T20:19:36.780461+05:45",
+          "updated_at": "2025-11-01T20:19:36.780461+05:45"
+        },
+        "expires_at": "2025-11-02T20:19:36.784097+05:45",
+        "is_expired": false,
+        "is_archived": false,
+        "created_at": "2025-11-01T20:19:36.784098+05:45",
+        "updated_at": "2025-11-01T20:19:36.784098+05:45",
+        "deleted_at": null
+      },
+      {
+        "id": "b48ae8fd-3def-4b35-a711-110c8bc38ad4",
+        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+        "user": {
+          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "public_id": 1.9846181998276157e+18,
+          "username": "fuck",
+          "displayname": "fuck",
+          "email": "",
+          "date_of_birth": "2000-11-16T05:45:00+05:45",
+          "gender_identities": null,
+          "sexual_orientations": null,
+          "user_role": "",
+          "is_active": false,
+          "created_at": "2025-11-01T19:32:05.919641+05:45",
+          "updated_at": "2025-11-01T21:03:16.788324+05:45",
+          "default_language": "en",
+          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+          "avatar": {
+            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:16.785578+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:16.785578+05:45",
+            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          },
+          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+          "cover": {
+            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:12.902124+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:12.902124+05:45",
+            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          },
+          "languages": null,
+          "travel": {
+            "visited_countries": null,
+            "travel_frequency": "",
+            "favorite_places": null
+          },
+          "social": {
+  
+          },
+          "deleted_at": null
+        },
+        "media_id": "9f1efb0a-35a6-4b2d-a4e6-abad00374c95",
+        "media": {
+          "id": "9f1efb0a-35a6-4b2d-a4e6-abad00374c95",
+          "file_id": "eb78e9aa-778e-4924-925a-34268e612c17",
+          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "owner_type": "user",
+          "role": "story",
+          "is_public": true,
+          "file": {
+            "id": "eb78e9aa-778e-4924-925a-34268e612c17",
+            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/23a57ee1-31f9-4a03-87d5-00b49f84b0ce.jpeg",
+            "mime_type": "image/jpeg",
+            "size": 403528,
+            "name": "ersanalex.jpeg",
+            "created_at": "2025-11-01T20:19:32.600822+05:45",
+            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/23a57ee1-31f9-4a03-87d5-00b49f84b0ce.jpeg"
+          },
+          "created_at": "2025-11-01T20:19:32.600822+05:45",
+          "updated_at": "2025-11-01T20:19:32.600822+05:45"
+        },
+        "expires_at": "2025-11-02T20:19:32.604521+05:45",
+        "is_expired": false,
+        "is_archived": false,
+        "created_at": "2025-11-01T20:19:32.604521+05:45",
+        "updated_at": "2025-11-01T20:19:32.604521+05:45",
+        "deleted_at": null
+      },
+      {
+        "id": "3ed3d536-da56-4731-b932-dbed0cc57fc3",
+        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+        "user": {
+          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "public_id": 1.9846181998276157e+18,
+          "username": "fuck",
+          "displayname": "fuck",
+          "email": "",
+          "date_of_birth": "2000-11-16T05:45:00+05:45",
+          "gender_identities": null,
+          "sexual_orientations": null,
+          "user_role": "",
+          "is_active": false,
+          "created_at": "2025-11-01T19:32:05.919641+05:45",
+          "updated_at": "2025-11-01T21:03:16.788324+05:45",
+          "default_language": "en",
+          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+          "avatar": {
+            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:16.785578+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:16.785578+05:45",
+            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          },
+          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+          "cover": {
+            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:12.902124+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:12.902124+05:45",
+            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          },
+          "languages": null,
+          "travel": {
+            "visited_countries": null,
+            "travel_frequency": "",
+            "favorite_places": null
+          },
+          "social": {
+  
+          },
+          "deleted_at": null
+        },
+        "media_id": "7fc07320-b171-444e-b8bd-e3aa56671018",
+        "media": {
+          "id": "7fc07320-b171-444e-b8bd-e3aa56671018",
+          "file_id": "4ae66f42-e64c-4cf6-9d42-1cfdc88066a8",
+          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "owner_type": "user",
+          "role": "story",
+          "is_public": true,
+          "file": {
+            "id": "4ae66f42-e64c-4cf6-9d42-1cfdc88066a8",
+            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/ff465226-6fc4-458c-aec9-abdc760e5c1c.jpeg",
+            "mime_type": "image/jpeg",
+            "size": 215138,
+            "name": "1669041186022.jpeg",
+            "created_at": "2025-11-01T20:15:55.238254+05:45",
+            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/ff465226-6fc4-458c-aec9-abdc760e5c1c.jpeg"
+          },
+          "created_at": "2025-11-01T20:15:55.238254+05:45",
+          "updated_at": "2025-11-01T20:15:55.238254+05:45"
+        },
+        "expires_at": "2025-11-02T20:15:55.239522+05:45",
+        "is_expired": false,
+        "is_archived": false,
+        "created_at": "2025-11-01T20:15:55.239522+05:45",
+        "updated_at": "2025-11-01T20:15:55.239523+05:45",
+        "deleted_at": null
+      },
+      {
+        "id": "9c739e0c-8e20-47c1-8021-207d42b2c359",
+        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+        "user": {
+          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "public_id": 1.9846181998276157e+18,
+          "username": "fuck",
+          "displayname": "fuck",
+          "email": "",
+          "date_of_birth": "2000-11-16T05:45:00+05:45",
+          "gender_identities": null,
+          "sexual_orientations": null,
+          "user_role": "",
+          "is_active": false,
+          "created_at": "2025-11-01T19:32:05.919641+05:45",
+          "updated_at": "2025-11-01T21:03:16.788324+05:45",
+          "default_language": "en",
+          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+          "avatar": {
+            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:16.785578+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:16.785578+05:45",
+            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          },
+          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+          "cover": {
+            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:12.902124+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:12.902124+05:45",
+            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          },
+          "languages": null,
+          "travel": {
+            "visited_countries": null,
+            "travel_frequency": "",
+            "favorite_places": null
+          },
+          "social": {
+  
+          },
+          "deleted_at": null
+        },
+        "media_id": "a7bb0bff-3a2d-40b7-a79d-f03bad69cb23",
+        "media": {
+          "id": "a7bb0bff-3a2d-40b7-a79d-f03bad69cb23",
+          "file_id": "8ee99ef9-b080-4b89-9c65-76f50e5527d4",
+          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "owner_type": "user",
+          "role": "story",
+          "is_public": true,
+          "file": {
+            "id": "8ee99ef9-b080-4b89-9c65-76f50e5527d4",
+            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/98ece547-8791-462a-ae57-be447049f8e1.jpeg",
+            "mime_type": "image/jpeg",
+            "size": 215138,
+            "name": "1669041186022.jpeg",
+            "created_at": "2025-11-01T20:14:30.341165+05:45",
+            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/98ece547-8791-462a-ae57-be447049f8e1.jpeg"
+          },
+          "created_at": "2025-11-01T20:14:30.341167+05:45",
+          "updated_at": "2025-11-01T20:14:30.341167+05:45"
+        },
+        "expires_at": "2025-11-02T20:14:30.343596+05:45",
+        "is_expired": false,
+        "is_archived": false,
+        "created_at": "2025-11-01T20:14:30.343596+05:45",
+        "updated_at": "2025-11-01T20:14:30.343596+05:45",
+        "deleted_at": null
+      },
+      {
+        "id": "4b3d2117-f1d4-4dd2-8c3e-8dd0abb9d975",
+        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+        "user": {
+          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "public_id": 1.9846181998276157e+18,
+          "username": "fuck",
+          "displayname": "fuck",
+          "email": "",
+          "date_of_birth": "2000-11-16T05:45:00+05:45",
+          "gender_identities": null,
+          "sexual_orientations": null,
+          "user_role": "",
+          "is_active": false,
+          "created_at": "2025-11-01T19:32:05.919641+05:45",
+          "updated_at": "2025-11-01T21:03:16.788324+05:45",
+          "default_language": "en",
+          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+          "avatar": {
+            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
+            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:16.785578+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:16.785578+05:45",
+            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          },
+          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+          "cover": {
+            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
+            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+            "owner_type": "user",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
+              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
+              "mime_type": "image/jpeg",
+              "size": 442927,
+              "name": "Gye23A2XcAAmuKW.jpeg",
+              "created_at": "2025-11-01T21:03:12.902124+05:45",
+              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
+            },
+            "created_at": "2025-11-01T21:03:12.902124+05:45",
+            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          },
+          "languages": null,
+          "travel": {
+            "visited_countries": null,
+            "travel_frequency": "",
+            "favorite_places": null
+          },
+          "social": {
+  
+          },
+          "deleted_at": null
+        },
+        "media_id": "91f6e466-79a6-4664-b92f-0a8465de218a",
+        "media": {
+          "id": "91f6e466-79a6-4664-b92f-0a8465de218a",
+          "file_id": "ff2252f3-f0ed-4574-9432-d96192bcd403",
+          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
+          "owner_type": "user",
+          "role": "story",
+          "is_public": true,
+          "file": {
+            "id": "ff2252f3-f0ed-4574-9432-d96192bcd403",
+            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/c6644678-8e5e-4c06-99e6-e14dfdf4d802.jpeg",
+            "mime_type": "image/jpeg",
+            "size": 215138,
+            "name": "1669041186022.jpeg",
+            "created_at": "2025-11-01T20:13:19.444916+05:45",
+            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/c6644678-8e5e-4c06-99e6-e14dfdf4d802.jpeg"
+          },
+          "created_at": "2025-11-01T20:13:19.444916+05:45",
+          "updated_at": "2025-11-01T20:13:19.444916+05:45"
+        },
+        "expires_at": "2025-11-02T20:13:19.447657+05:45",
+        "is_expired": false,
+        "is_archived": false,
+        "created_at": "2025-11-01T20:13:19.447658+05:45",
+        "updated_at": "2025-11-01T20:13:19.447658+05:45",
+        "deleted_at": null
+      }
+    ]
+  }

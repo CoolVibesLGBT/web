@@ -12,13 +12,14 @@ import SplashScreen from './components/SplashScreen';
 import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext.tsx';
 import AuthWizard from './components/AuthWizard';
-import { Home, Search, MapPin, Heart, MessageCircle, User, Building2, Menu, X, Sun, Moon, Languages, MoreHorizontal, Flame, FileText, Bell, ChevronRight } from 'lucide-react';
+import { Home, Search, MapPin, Heart, MessageCircle, User, Building2, Menu, X, Sun, Moon, Languages, MoreHorizontal, Flame, FileText, Bell, ChevronRight, LogOut } from 'lucide-react';
 import PlacesScreen from './components/PlacesScreen';
 import HomeScreen from './components/HomeScreen';
 import LanguageSelector from './components/LanguageSelector.tsx';
 import ClassifiedsScreen from './components/ClassifiedsScreen';
 import './i18n';
 import { useTranslation } from 'react-i18next';
+import { applicationName } from './appSettings.tsx';
 
 function App() {
   const [activeScreen, setActiveScreen] = useState('home');
@@ -26,9 +27,11 @@ function App() {
   const [isAuthWizardOpen, setIsAuthWizardOpen] = useState(false);
   const [isLanguageSelectorOpen, setIsLanguageSelectorOpen] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isMobileProfileMenuOpen, setIsMobileProfileMenuOpen] = useState(false);
 
   const { theme, toggleTheme } = useTheme();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation('common');
@@ -102,7 +105,7 @@ function App() {
                 <span className="text-sm font-bold">P</span>
               </div>
               <h1 className={`text-lg font-extrabold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                {t('app.social')}
+                {applicationName}
               </h1>
             </div>
             <button
@@ -129,7 +132,7 @@ function App() {
                   <span className="text-xl font-bold">P</span>
                 </div>
                 <h1 className={`text-2xl font-extrabold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                  {t('app.social')}
+                  {applicationName}
                 </h1>
               </button>
             </div>
@@ -182,40 +185,115 @@ function App() {
               
               {/* User Profile Card */}
               {isAuthenticated ? (
-                <button
-                  onClick={() => navigate(`/${user?.username || 'profile'}`)}
-                  className={`w-full p-3 rounded-2xl transition-all duration-200 border border-transparent hover:border-opacity-30 ${
-                    theme === 'dark' 
-                      ? 'hover:bg-white/5 hover:border-white/30' 
-                      : 'hover:bg-black/5 hover:border-black/30'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="relative">
-                      <div className={`w-11 h-11 rounded-full ring-2 ${theme === 'dark' ? 'ring-white/20' : 'ring-black/20'}`}>
-                        <img
-                          src={
-                            (user as any)?.avatar?.file?.url || 
-                            user?.profile_image_url || 
-                            `https://ui-avatars.com/api/?name=${user?.username || 'User'}&background=random`
-                          }
-                          alt="Profile"
-                          className="w-full h-full rounded-full object-cover"
-                        />
+                <div className="space-y-3 relative">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => navigate(`/${user?.username || 'profile'}`)}
+                      className={`flex-1 p-3 rounded-2xl transition-all duration-200 border border-transparent hover:border-opacity-30 ${
+                        theme === 'dark' 
+                          ? 'hover:bg-white/5 hover:border-white/30' 
+                          : 'hover:bg-black/5 hover:border-black/30'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="relative">
+                          <div className={`w-11 h-11 rounded-full ring-2 ${theme === 'dark' ? 'ring-white/20' : 'ring-black/20'}`}>
+                            <img
+                              src={
+                                (user as any)?.avatar?.file?.url || 
+                                user?.profile_image_url || 
+                                `https://ui-avatars.com/api/?name=${user?.username || 'User'}&background=random`
+                              }
+                              alt="Profile"
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          </div>
+                          <div className={`absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full ring-2 ${theme === 'dark' ? 'ring-black' : 'ring-white'}`}></div>
+                        </div>
+                        <div className="flex-1 text-left min-w-0">
+                          <p className={`font-bold text-sm truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                            {user?.displayname || user?.username || 'User'}
+                          </p>
+                          <p className={`text-xs truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                            @{user?.username || 'username'}
+                          </p>
+                        </div>
                       </div>
-                      <div className={`absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full ring-2 ${theme === 'dark' ? 'ring-black' : 'ring-white'}`}></div>
-                    </div>
-                    <div className="flex-1 text-left min-w-0">
-                      <p className={`font-bold text-sm truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                        {user?.displayname || user?.username || 'User'}
-                      </p>
-                      <p className={`text-xs truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                        @{user?.username || 'username'}
-                      </p>
-                    </div>
-                    <MoreHorizontal className={`w-4 h-4 flex-shrink-0 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsProfileMenuOpen(!isProfileMenuOpen);
+                      }}
+                      className={`p-2 rounded-xl transition-all duration-200 ${
+                        theme === 'dark'
+                          ? 'hover:bg-white/10 text-gray-400 hover:text-white'
+                          : 'hover:bg-black/10 text-gray-600 hover:text-black'
+                      } ${isProfileMenuOpen ? (theme === 'dark' ? 'bg-white/10 text-white' : 'bg-black/10 text-black') : ''}`}
+                    >
+                      <MoreHorizontal className="w-5 h-5" />
+                    </button>
                   </div>
-                </button>
+                  
+                  {/* Profile Dropdown Menu */}
+                  <AnimatePresence>
+                    {isProfileMenuOpen && (
+                      <>
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="fixed inset-0 z-40"
+                          onClick={() => setIsProfileMenuOpen(false)}
+                        />
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                          transition={{ duration: 0.2 }}
+                          className={`absolute bottom-full left-0 right-0 mb-2 rounded-2xl overflow-hidden z-50 ${
+                            theme === 'dark'
+                              ? 'bg-gray-900 border border-gray-800 shadow-2xl'
+                              : 'bg-white border border-gray-200 shadow-2xl'
+                          }`}
+                        >
+                          <button
+                            onClick={() => {
+                              navigate(`/${user?.username || 'profile'}`);
+                              setIsProfileMenuOpen(false);
+                            }}
+                            className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-colors ${
+                              theme === 'dark'
+                                ? 'hover:bg-white/10 text-white'
+                                : 'hover:bg-black/5 text-gray-900'
+                            }`}
+                          >
+                            <User className="w-5 h-5" />
+                            <span className="font-semibold text-sm">{t('app.nav.profile')}</span>
+                          </button>
+                          <div className={`h-px ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`} />
+                          <button
+                            onClick={() => {
+                              if (window.confirm(t('app.logout_confirmation'))) {
+                                logout();
+                                navigate('/');
+                                setIsProfileMenuOpen(false);
+                              }
+                            }}
+                            className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-colors ${
+                              theme === 'dark'
+                                ? 'hover:bg-red-500/10 text-red-400'
+                                : 'hover:bg-red-50 text-red-600'
+                            }`}
+                          >
+                            <LogOut className="w-5 h-5" />
+                            <span className="font-semibold text-sm">{t('app.logout')}</span>
+                          </button>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
               ) : (
                 <button
                   onClick={() => setIsAuthWizardOpen(true)}
@@ -640,7 +718,78 @@ function App() {
                       </span>
                     </div>
                   </div>
+                  
+                  {/* More Options Button */}
+                  {isAuthenticated && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsMobileProfileMenuOpen(!isMobileProfileMenuOpen);
+                      }}
+                      className={`p-2 rounded-xl transition-all duration-200 flex-shrink-0 ${
+                        theme === 'dark'
+                          ? 'hover:bg-white/10 text-gray-400 hover:text-white'
+                          : 'hover:bg-black/10 text-gray-600 hover:text-black'
+                      } ${isMobileProfileMenuOpen ? (theme === 'dark' ? 'bg-white/10 text-white' : 'bg-black/10 text-black') : ''}`}
+                    >
+                      <MoreHorizontal className="w-5 h-5" />
+                    </button>
+                  )}
                 </motion.div>
+                
+                {/* Mobile Profile Dropdown Menu */}
+                {isAuthenticated && (
+                  <AnimatePresence>
+                    {isMobileProfileMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className={`mt-4 rounded-2xl overflow-hidden ${
+                          theme === 'dark'
+                            ? 'bg-gray-900/50 border border-gray-800'
+                            : 'bg-white/50 border border-gray-200'
+                        }`}
+                      >
+                        <button
+                          onClick={() => {
+                            navigate(`/${user?.username || 'profile'}`);
+                            setIsMobileProfileMenuOpen(false);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`w-full px-4 py-3.5 text-left flex items-center gap-3 transition-colors ${
+                            theme === 'dark'
+                              ? 'hover:bg-white/10 text-white'
+                              : 'hover:bg-black/5 text-gray-900'
+                          }`}
+                        >
+                          <User className="w-5 h-5" />
+                          <span className="font-semibold text-[15px]">{t('app.nav.profile')}</span>
+                        </button>
+                        <div className={`h-px ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`} />
+                        <button
+                          onClick={() => {
+                            if (window.confirm(t('app.logout_confirmation'))) {
+                              logout();
+                              navigate('/');
+                              setIsMobileProfileMenuOpen(false);
+                              setIsMobileMenuOpen(false);
+                            }
+                          }}
+                          className={`w-full px-4 py-3.5 text-left flex items-center gap-3 transition-colors ${
+                            theme === 'dark'
+                              ? 'hover:bg-red-500/10 text-red-400'
+                              : 'hover:bg-red-50 text-red-600'
+                          }`}
+                        >
+                          <LogOut className="w-5 h-5" />
+                          <span className="font-semibold text-[15px]">{t('app.logout')}</span>
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                )}
               </div>
 
               {/* Navigation - Modern Grid Layout */}

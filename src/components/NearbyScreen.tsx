@@ -1,9 +1,13 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Filter, Search, Users, Grid, List, Square, ChevronDown, RefreshCw, MapPin, Users2, X } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { UserCard } from './UserCard';
 import { AnimatePresence, motion } from 'framer-motion';
+import { api } from '../services/api';
+import { Actions } from '../services/actions';
+import { useApp } from '../contexts/AppContext';
+import { useAuth } from '../contexts/AuthContext';
 
 interface NearbyUser {
   id: number;
@@ -49,10 +53,15 @@ interface Filters {
 const NearbyScreen: React.FC = () => {
   const { theme } = useTheme();
   const { viewMode, setViewMode } = useSettings();
+  const { defaultLanguage } = useApp();
+  const { user: authUser } = useAuth(); // For future use if needed to filter own user
   const [showFilters, setShowFilters] = useState(false);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [allUsers, setAllUsers] = useState<NearbyUser[]>([]);
   
   const [filters, setFilters] = useState<Filters>({
     minAge: 18,
@@ -87,42 +96,297 @@ const NearbyScreen: React.FC = () => {
     'Italy': ['All Cities', 'Rome', 'Milan', 'Naples', 'Turin', 'Palermo', 'Genoa', 'Bologna', 'Florence', 'Bari'],
   };
 
-  const allUsers: NearbyUser[] = [
-    { id: 1, name: 'Alex Rivera', age: 26, height: 180, weight: 75, sexualOrientation: 'Gay', country: 'United States', city: 'New York', ethnicity: 'Hispanic', position: 'Top', eyeColor: 'Brown', skinColor: 'Medium', smoking: 'No', alcohol: 'Sometimes', bodyType: 'Athletic', distance: '0.5 km', avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&dpr=2', isOnline: true, interests: ['Art', 'Music'] },
-    { id: 2, name: 'Jordan Kim', age: 24, height: 175, weight: 68, sexualOrientation: 'Bisexual', country: 'United States', city: 'Los Angeles', ethnicity: 'Asian', position: 'Bottom', eyeColor: 'Dark Brown', skinColor: 'Light', smoking: 'Never', alcohol: 'Yes', bodyType: 'Slim', distance: '1.2 km', avatar: 'https://images.pexels.com/photos/1559486/pexels-photo-1559486.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&dpr=2', isOnline: false, interests: ['Tech', 'Books'] },
-    { id: 3, name: 'Sam Chen', age: 28, height: 178, weight: 72, sexualOrientation: 'Gay', country: 'United States', city: 'San Francisco', ethnicity: 'Asian', position: 'Versatile', eyeColor: 'Brown', skinColor: 'Medium', smoking: 'No', alcohol: 'Sometimes', bodyType: 'Average', distance: '2.1 km', avatar: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&dpr=2', isOnline: true, interests: ['Yoga', 'Travel'] },
-    { id: 4, name: 'Casey Morgan', age: 25, height: 165, weight: 58, sexualOrientation: 'Lesbian', country: 'Canada', city: 'Toronto', ethnicity: 'Caucasian', position: 'Top', eyeColor: 'Blue', skinColor: 'Fair', smoking: 'No', alcohol: 'Yes', bodyType: 'Slim', distance: '3.5 km', avatar: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&dpr=2', isOnline: true, interests: ['Photography', 'Nature'] },
-    { id: 5, name: 'Riley Thompson', age: 27, height: 170, weight: 65, sexualOrientation: 'Pansexual', country: 'United Kingdom', city: 'London', ethnicity: 'Caucasian', position: 'Bottom', eyeColor: 'Green', skinColor: 'Fair', smoking: 'Sometimes', alcohol: 'Yes', bodyType: 'Average', distance: '4.2 km', avatar: 'https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&dpr=2', isOnline: false, interests: ['Fitness', 'Cooking'] },
-    { id: 6, name: 'Taylor Davis', age: 23, height: 172, weight: 70, sexualOrientation: 'Gay', country: 'United States', city: 'Chicago', ethnicity: 'African American', position: 'Versatile', eyeColor: 'Brown', skinColor: 'Dark', smoking: 'No', alcohol: 'No', bodyType: 'Muscular', distance: '5.8 km', avatar: 'https://images.pexels.com/photos/1102341/pexels-photo-1102341.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&dpr=2', isOnline: true, interests: ['Music', 'Art'] },
-    { id: 7, name: 'Jamie Wilson', age: 29, height: 168, weight: 62, sexualOrientation: 'Lesbian', country: 'United States', city: 'Boston', ethnicity: 'Caucasian', position: 'Top', eyeColor: 'Hazel', skinColor: 'Light', smoking: 'No', alcohol: 'Sometimes', bodyType: 'Average', distance: '0.8 km', avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&dpr=2', isOnline: true, interests: ['Dance', 'Theater'] },
-    { id: 8, name: 'Morgan Lee', age: 25, height: 176, weight: 73, sexualOrientation: 'Bisexual', country: 'Australia', city: 'Sydney', ethnicity: 'Mixed', position: 'Versatile', eyeColor: 'Brown', skinColor: 'Medium', smoking: 'Sometimes', alcohol: 'Yes', bodyType: 'Athletic', distance: '2.5 km', avatar: 'https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&dpr=2', isOnline: false, interests: ['Writing', 'Poetry'] },
-  ];
+  // Helper function to calculate age from date of birth
+  const calculateAge = (dateOfBirth: string | undefined): number => {
+    if (!dateOfBirth) return 0;
+    const birthDate = new Date(dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
 
-  // Filter users based on current filters
-  const nearbyUsers = allUsers.filter(user => {
-    const matchesSearch = !searchQuery || 
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.interests.some(i => i.toLowerCase().includes(searchQuery.toLowerCase()));
+  // Helper function to get localized name
+  const getLocalizedName = (nameObj: Record<string, string> | undefined, fallback: string = ''): string => {
+    if (!nameObj) return fallback;
+    return nameObj[defaultLanguage] || nameObj['en'] || Object.values(nameObj)[0] || fallback;
+  };
+
+  // Helper function to check if user is online (within last 5 minutes)
+  const isUserOnline = (lastOnline: string | undefined): boolean => {
+    if (!lastOnline) return false;
+    const lastOnlineDate = new Date(lastOnline);
+    const now = new Date();
+    const diffInMinutes = (now.getTime() - lastOnlineDate.getTime()) / (1000 * 60);
+    return diffInMinutes <= 5;
+  };
+
+  // Helper function to format distance
+  const formatDistance = (distanceKm: number | undefined): string => {
+    if (!distanceKm) return 'Unknown';
+    if (distanceKm < 1) {
+      return `${Math.round(distanceKm * 1000)}m`;
+    }
+    return `${distanceKm.toFixed(1)}km`;
+  };
+
+  // Fetch nearby users from API
+  const fetchNearbyUsers = async () => {
+    try {
+      setLoadingUsers(true);
+      setError(null);
+      
+      // Build filter payload - always include all filters
+      const payload: any = {
+        limit: 100,
+      };
+      
+      // Add location filters
+      if (filters.country && filters.country !== 'All Countries') {
+        payload.country = filters.country;
+      }
+      if (filters.city && filters.city !== 'All Cities' && filters.city !== 'all') {
+        payload.city = filters.city;
+      }
+      
+      // Add age filters
+      if (filters.minAge !== undefined && filters.minAge !== 18) {
+        payload.min_age = filters.minAge;
+      }
+      if (filters.maxAge !== undefined && filters.maxAge !== 99) {
+        payload.max_age = filters.maxAge;
+      }
+      
+      // Add height filters
+      if (filters.minHeight !== undefined && filters.minHeight !== 150) {
+        payload.min_height = filters.minHeight;
+      }
+      if (filters.maxHeight !== undefined && filters.maxHeight !== 220) {
+        payload.max_height = filters.maxHeight;
+      }
+      
+      // Add weight filters
+      if (filters.minWeight !== undefined && filters.minWeight !== 45) {
+        payload.min_weight = filters.minWeight;
+      }
+      if (filters.maxWeight !== undefined && filters.maxWeight !== 120) {
+        payload.max_weight = filters.maxWeight;
+      }
+      
+      // Add sexual orientation filters
+      if (filters.sexualOrientation && filters.sexualOrientation.length > 0) {
+        payload.sexual_orientations = filters.sexualOrientation;
+      }
+      
+      // Add position (sexual role) filters
+      if (filters.position && filters.position.length > 0) {
+        payload.sexual_roles = filters.position;
+      }
+      
+      // Add ethnicity filters
+      if (filters.ethnicity && filters.ethnicity.length > 0) {
+        payload.ethnicities = filters.ethnicity;
+      }
+      
+      // Add eye color filters
+      if (filters.eyeColor && filters.eyeColor.length > 0) {
+        payload.eye_colors = filters.eyeColor;
+      }
+      
+      // Add skin color filters
+      if (filters.skinColor && filters.skinColor.length > 0) {
+        payload.skin_colors = filters.skinColor;
+      }
+      
+      // Add body type filters
+      if (filters.bodyType && filters.bodyType.length > 0) {
+        payload.body_types = filters.bodyType;
+      }
+      
+      // Add smoking filter
+      if (filters.smoking && filters.smoking !== 'all') {
+        payload.smoking = filters.smoking;
+      }
+      
+      // Add alcohol/drinking filter
+      if (filters.alcohol && filters.alcohol !== 'all') {
+        payload.drinking = filters.alcohol;
+      }
+
+      // Debug: Log payload to verify filters are being sent
+      console.log('Nearby users API payload:', JSON.stringify(payload, null, 2));
+      console.log('Filters state:', JSON.stringify(filters, null, 2));
+
+      const response = await api.call(Actions.CMD_USER_FETCH_NEARBY_USERS, {
+        method: "POST",
+        body: payload,
+      });
+
+      // Transform API response to NearbyUser format
+      const usersData = response?.users || response || [];
+      console.log('API response - total users:', usersData.length);
+      console.log('API response - users data:', usersData);
+      
+      const transformedUsers: NearbyUser[] = usersData.map((user: any) => {
+        // Get interests
+        const interests = user.interests?.map((interest: any) => 
+          getLocalizedName(interest.interest_item?.name, '')
+        ).filter((i: string) => i) || [];
+
+        // Get sexual orientation
+        const sexualOrientation = user.sexual_orientations?.[0] 
+          ? getLocalizedName(user.sexual_orientations[0].name, '')
+          : user.sexual_orientation?.name 
+          ? getLocalizedName(user.sexual_orientation.name, '')
+          : '';
+
+        // Get sex role (position)
+        const position = user.sexual_role 
+          ? getLocalizedName(user.sexual_role.name, '')
+          : '';
+
+        // Get location info
+        const location = user.location || {};
+        const country = location.country || '';
+        const city = location.city || '';
+
+        // Get avatar
+        const avatar = user.avatar?.file?.url || user.profile_image_url || '';
+
+        // Get distance - API may return distance_km or calculate from location
+        const distance = user.distance_km || user.distance || null;
+        
+        // Get attributes - check user_attributes first, then direct fields
+        const userAttributes = user.user_attributes || [];
+        const heightAttr = userAttributes.find((a: any) => a.attribute?.category === 'height');
+        const weightAttr = userAttributes.find((a: any) => a.attribute?.category === 'weight');
+        const ethnicityAttr = userAttributes.find((a: any) => a.attribute?.category === 'ethnicity');
+        const eyeColorAttr = userAttributes.find((a: any) => a.attribute?.category === 'eye_color');
+        const skinColorAttr = userAttributes.find((a: any) => a.attribute?.category === 'skin_color');
+        const bodyTypeAttr = userAttributes.find((a: any) => a.attribute?.category === 'body_type');
+        const smokingAttr = userAttributes.find((a: any) => a.attribute?.category === 'smoking');
+        const drinkingAttr = userAttributes.find((a: any) => a.attribute?.category === 'drinking');
+
+        const height = heightAttr ? parseInt(getLocalizedName(heightAttr.attribute?.name, '0') || '0') : 0;
+        const weight = weightAttr ? parseInt(getLocalizedName(weightAttr.attribute?.name, '0') || '0') : 0;
+        const ethnicity = ethnicityAttr ? getLocalizedName(ethnicityAttr.attribute?.name, '') : '';
+        const eyeColor = eyeColorAttr ? getLocalizedName(eyeColorAttr.attribute?.name, '') : '';
+        const skinColor = skinColorAttr ? getLocalizedName(skinColorAttr.attribute?.name, '') : '';
+        const bodyType = bodyTypeAttr ? getLocalizedName(bodyTypeAttr.attribute?.name, '') : '';
+        const smoking = smokingAttr ? getLocalizedName(smokingAttr.attribute?.name, '') : (user.smoking || '');
+        const alcohol = drinkingAttr ? getLocalizedName(drinkingAttr.attribute?.name, '') : (user.drinking || '');
+
+        // Parse ID - use public_id if available (number), otherwise generate numeric ID from string id
+        let userId: number;
+        if (user.public_id !== undefined && user.public_id !== null) {
+          userId = typeof user.public_id === 'number' ? user.public_id : parseInt(user.public_id.toString()) || 0;
+        } else if (user.id) {
+          // Generate numeric ID from string UUID by hashing
+          const idStr = user.id.toString();
+          userId = Math.abs(idStr.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0));
+        } else {
+          userId = 0;
+        }
+
+        return {
+          id: userId,
+          name: user.displayname || user.username || 'Unknown',
+          age: calculateAge(user.date_of_birth),
+          height,
+          weight,
+          sexualOrientation,
+          country,
+          city,
+          ethnicity,
+          position,
+          eyeColor,
+          skinColor,
+          smoking,
+          alcohol,
+          bodyType,
+          distance: distance ? formatDistance(distance) : 'Unknown',
+          avatar: avatar || '',
+          isOnline: isUserOnline(user.last_online),
+          interests,
+        };
+      });
+
+      console.log('Transformed users count:', transformedUsers.length);
+      console.log('Transformed users:', transformedUsers);
+      setAllUsers(transformedUsers);
+    } catch (err: any) {
+      console.error('Error fetching nearby users:', err);
+      setError(err.response?.data?.message || 'Failed to load nearby users. Please try again.');
+      setAllUsers([]);
+    } finally {
+      setLoadingUsers(false);
+      setIsRefreshing(false);
+    }
+  };
+
+  // Initial fetch on component mount and when filters change
+  useEffect(() => {
+    fetchNearbyUsers();
+  }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Refresh handler
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    fetchNearbyUsers();
+  };
+
+  // Filter users based on search query only (all other filtering is done server-side)
+  // If authUser exists in the list, always show them first
+  const nearbyUsers = useMemo(() => {
+    let filtered: NearbyUser[];
     
-    const matchesAge = user.age >= filters.minAge && user.age <= filters.maxAge;
-    const matchesHeight = user.height >= filters.minHeight && user.height <= filters.maxHeight;
-    const matchesWeight = user.weight >= filters.minWeight && user.weight <= filters.maxWeight;
-    const matchesSexualOrientation = filters.sexualOrientation.length === 0 || filters.sexualOrientation.includes(user.sexualOrientation);
-    const matchesCountry = filters.country === 'All Countries' || user.country === filters.country;
-    const matchesCity = filters.city === 'All Cities' || filters.city === 'all' || user.city === filters.city;
-    const matchesEthnicity = filters.ethnicity.length === 0 || filters.ethnicity.includes(user.ethnicity);
-    const matchesPosition = filters.position.length === 0 || filters.position.includes(user.position);
-    const matchesEyeColor = filters.eyeColor.length === 0 || filters.eyeColor.includes(user.eyeColor);
-    const matchesSkinColor = filters.skinColor.length === 0 || filters.skinColor.includes(user.skinColor);
-    const matchesSmoking = filters.smoking === 'all' || user.smoking === filters.smoking;
-    const matchesAlcohol = filters.alcohol === 'all' || user.alcohol === filters.alcohol;
-    const matchesBodyType = filters.bodyType.length === 0 || filters.bodyType.includes(user.bodyType);
+    if (!searchQuery) {
+      // No search query, return all users from API
+      console.log('No search query - showing all', allUsers.length, 'users');
+      filtered = allUsers;
+    } else {
+      // Filter by search query only
+      filtered = allUsers.filter(user => {
+        const matchesSearch = 
+          user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.interests.some(i => i.toLowerCase().includes(searchQuery.toLowerCase()));
+        
+        return matchesSearch;
+      });
+      
+      console.log('Filtered users by search:', filtered.length, 'from', allUsers.length);
+    }
     
-    return matchesSearch && matchesAge && matchesHeight && matchesWeight && 
-           matchesSexualOrientation && matchesCountry && matchesCity && 
-           matchesEthnicity && matchesPosition && matchesEyeColor && 
-           matchesSkinColor && matchesSmoking && matchesAlcohol && matchesBodyType;
-  });
+    // If authUser exists, move them to the first position
+    if (authUser) {
+      // Get authUser ID - try public_id first, then id
+      const authUserId = (authUser as any).public_id 
+        ? (typeof (authUser as any).public_id === 'number' 
+          ? (authUser as any).public_id 
+          : parseInt((authUser as any).public_id.toString()) || null)
+        : ((authUser as any).id 
+          ? (typeof (authUser as any).id === 'number' 
+            ? (authUser as any).id 
+            : Math.abs((authUser as any).id.toString().split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0)))
+          : null);
+      
+      if (authUserId !== null) {
+        const ownUserIndex = filtered.findIndex(user => user.id === authUserId);
+        
+        if (ownUserIndex !== -1) {
+          // Remove own user from current position and add to beginning
+          const ownUser = filtered.splice(ownUserIndex, 1)[0];
+          filtered.unshift(ownUser);
+          console.log('Moved own user to first position');
+        }
+      }
+    }
+    
+    return filtered;
+  }, [allUsers, searchQuery, authUser]);
 
   const availableCities = filters.country === 'All Countries' || filters.country === 'all' 
     ? ['All Cities'] 
@@ -178,12 +442,7 @@ const NearbyScreen: React.FC = () => {
             
             <div className="flex items-center space-x-2">
               <motion.button
-                onClick={() => {
-                  setIsRefreshing(true);
-                  setTimeout(() => {
-                    setIsRefreshing(false);
-                  }, 1000);
-                }}
+                onClick={handleRefresh}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={`p-2 rounded-full transition-colors ${
@@ -788,8 +1047,56 @@ const NearbyScreen: React.FC = () => {
           )}
         </AnimatePresence>
 
+        {/* Loading State */}
+        {loadingUsers && allUsers.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`rounded-2xl p-12 md:p-16 text-center ${theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}
+          >
+            <div className="max-w-md mx-auto">
+              <div className={`w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+                <RefreshCw className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-400'} animate-spin`} />
+              </div>
+              <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                Loading nearby users...
+              </h3>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                Finding people in your area
+              </p>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Error State */}
+        {error && !loadingUsers && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`rounded-2xl p-6 mb-4 border ${
+              theme === 'dark'
+                ? 'bg-red-900/20 border-red-700 text-red-300'
+                : 'bg-red-50 border-red-200 text-red-700'
+            }`}
+          >
+            <p className="text-sm font-medium">{error}</p>
+            <motion.button
+              onClick={handleRefresh}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`mt-4 px-4 py-2 rounded-xl text-sm font-medium ${
+                theme === 'dark'
+                  ? 'bg-red-900/40 hover:bg-red-900/60'
+                  : 'bg-red-100 hover:bg-red-200'
+              }`}
+            >
+              Try Again
+            </motion.button>
+          </motion.div>
+        )}
+
         {/* Users - Different layouts based on viewMode */}
-        {nearbyUsers.length === 0 ? (
+        {!loadingUsers && nearbyUsers.length === 0 && !error ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

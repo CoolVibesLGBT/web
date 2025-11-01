@@ -30,7 +30,7 @@ interface InterestItem {
     id: string;
     interest_id: string;
     name: Record<string, string>;
-    emoji?: string;
+  emoji?: string;
     interest?: {
       id: string;
       name: Record<string, string>;
@@ -835,7 +835,7 @@ const MatchScreen: React.FC = () => {
                             <div className={`rounded-[18px] overflow-hidden ${theme === 'dark' 
                               ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]' 
                               : 'bg-white backdrop-blur-xl border border-black/[0.06]'
-                            }`}>
+                          }`}>
                               {USER_ATTRIBUTES.map((item, index) => {
                                 // Find attribute from user_attributes
                                 const currentUserAttribute = currentProfile.user_attributes?.find(
@@ -872,11 +872,11 @@ const MatchScreen: React.FC = () => {
                                         : 'bg-black/[0.04] group-hover:bg-black/[0.06]'
                                       }`}>
                                         <item.icon className={`w-7 h-7 ${theme === 'dark' ? 'text-white/90' : 'text-black/90'}`} />
-                                      </div>
+                          </div>
                                       <span className={`text-[15px] font-medium tracking-[-0.011em] ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                                         {item.label}
                                       </span>
-                                    </div>
+                          </div>
                                     <div className="flex items-center gap-2 flex-shrink-0">
                                       {!hasValue && (
                                         <div className={`w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-yellow-400/80' : 'bg-yellow-500/80'}`} />
@@ -887,11 +887,11 @@ const MatchScreen: React.FC = () => {
                                       }`}>
                                         {displayValue}
                                       </span>
-                                    </div>
+                          </div>
                                   </div>
                                 );
                               })}
-                            </div>
+                      </div>
                           </div>
                         </div>
                       )}
@@ -899,9 +899,9 @@ const MatchScreen: React.FC = () => {
                       {/* Interests Tab */}
                       {activeTab === 'interests' && (
                         <div>
-                          <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${
-                            theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                          }`}>Interests</h3>
+                    <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${
+                      theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+                    }`}>Interests</h3>
                           {(() => {
                             const interestsSource = currentProfile.interests;
                             
@@ -968,25 +968,25 @@ const MatchScreen: React.FC = () => {
                                       </div>
                                       <div className="p-3.5 flex flex-wrap gap-2">
                                         {categoryInterests.map((item, index) => (
-                                          <motion.span
+                        <motion.span
                                             key={item.id}
                                             className={`inline-flex items-center gap-1.5 px-4 py-2 text-[14px] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
                                                 ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
                                                 : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
-                                              }`}
-                                            initial={{ opacity: 0, scale: 0 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            transition={{ delay: 0.7 + index * 0.05, duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-                                          >
+                          }`}
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.7 + index * 0.05, duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+                        >
                                             {item.emoji && <span className="text-[15px] leading-none">{item.emoji}</span>}
                                             <span>{item.name}</span>
-                                          </motion.span>
-                                        ))}
-                                      </div>
-                                    </div>
+                        </motion.span>
+                      ))}
+                    </div>
+                        </div>
                                   );
                                 })}
-                              </div>
+                          </div>
                             );
                           })()}
                         </div>
@@ -995,9 +995,9 @@ const MatchScreen: React.FC = () => {
                       {/* Fantasies Tab */}
                       {activeTab === 'fantasies' && (
                         <div>
-                          <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${
-                            theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                          }`}>Fantasies & Preferences</h3>
+                      <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${
+                        theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+                      }`}>Fantasies & Preferences</h3>
                           {currentProfile.fantasies && currentProfile.fantasies.length > 0 ? (
                             (() => {
                               // Group fantasies by category
@@ -1009,8 +1009,8 @@ const MatchScreen: React.FC = () => {
                                 }
                                 fantasiesByCategory[categoryId].push(f);
                               });
-
-                              return (
+                          
+                          return (
                                 <div className="space-y-3">
                                   {Object.entries(fantasiesByCategory).map(([categoryId, categoryFantasies]) => {
                                     const categoryName = fantasyCategoryNames[categoryId]?.[defaultLanguage] || 
@@ -1023,12 +1023,12 @@ const MatchScreen: React.FC = () => {
                                           ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]' 
                                           : 'bg-white backdrop-blur-xl border border-black/[0.06]'
                                         }`}
-                                      >
+                            >
                                         <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
                                           <h3 className={`text-[11px] font-bold uppercase tracking-[0.08em] ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
                                             {categoryName}
                                           </h3>
-                                        </div>
+                                </div>
                                         <div className="p-3.5 flex flex-wrap gap-2">
                                           {categoryFantasies.map((f, index) => {
                                             const translation = f.fantasy?.translations?.find(t => t.language === defaultLanguage) ||
@@ -1050,10 +1050,10 @@ const MatchScreen: React.FC = () => {
                                               </motion.span>
                                             );
                                           })}
-                                        </div>
+                              </div>
                                       </div>
-                                    );
-                                  })}
+                          );
+                        })}
                                 </div>
                               );
                             })()
@@ -1067,30 +1067,30 @@ const MatchScreen: React.FC = () => {
                               </div>
                               <p className={`text-[15px] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_fantasies_added')}</p>
                             </div>
-                          )}
-                        </div>
-                      )}
+                        )}
+                      </div>
+                  )}
 
-                      {/* Action Buttons at Bottom */}
-                      <motion.div 
-                        className="pt-6 pb-4"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.9, duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-                      >
-                        <motion.button 
-                          className={`w-full flex items-center justify-center gap-3 py-5 rounded-2xl font-semibold text-base transition-all ${
-                            theme === 'dark'
-                              ? 'bg-white text-black hover:bg-gray-100'
-                              : 'bg-black text-white hover:bg-gray-900'
-                          }`}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                        >
-                          <MessageCircle className="w-5 h-5" strokeWidth={2.5} />
-                          <span>Send Message</span>
-                        </motion.button>
-                      </motion.div>
+                  {/* Action Buttons at Bottom */}
+                  <motion.div 
+                    className="pt-6 pb-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.9, duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+                  >
+                    <motion.button 
+                      className={`w-full flex items-center justify-center gap-3 py-5 rounded-2xl font-semibold text-base transition-all ${
+                        theme === 'dark'
+                          ? 'bg-white text-black hover:bg-gray-100'
+                          : 'bg-black text-white hover:bg-gray-900'
+                      }`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <MessageCircle className="w-5 h-5" strokeWidth={2.5} />
+                      <span>Send Message</span>
+                    </motion.button>
+                  </motion.div>
                     </motion.div>
                   </AnimatePresence>
                 </div>

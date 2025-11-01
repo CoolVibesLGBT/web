@@ -2,12 +2,37 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Plus, X, ChevronLeft, ChevronRight, Heart, MessageCircle, Share } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
+import { api } from '../services/api';
+import { Actions } from '../services/actions';
+import { useAuth } from '../contexts/AuthContext';
 
 const Stories: React.FC = () => {
   const { theme } = useTheme();
-  const [selectedStory, setSelectedStory] = useState<number | null>(null);
+  const { user: authUser } = useAuth();
+  const [selectedStory, setSelectedStory] = useState<number | string | null>(null);
   const [showAddStoryModal, setShowAddStoryModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isVideo, setIsVideo] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [stories, setStories] = useState<Array<{
+    id: number | string;
+    name: string;
+    avatar: string | null;
+    cover: string | null;
+    userCover?: string | null; // User's profile cover for video preview
+    isOwn?: boolean;
+    hasStory?: boolean;
+    storyId?: string;
+    storyMedia?: any;
+    allStories?: Array<{
+      id: string;
+      media: any;
+      created_at: string;
+    }>;
+  }>>([]);
+  const [loadingStories, setLoadingStories] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -15,25 +40,69 @@ const Stories: React.FC = () => {
   const [itemWidth, setItemWidth] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const stories = [
-    { id: 1, name: 'Your Story', avatar: null, cover: null, isOwn: true },
-    { id: 2, name: 'Alex', avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', cover: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400&h=600&dpr=2', hasStory: true },
-    { id: 3, name: 'Jordan', avatar: 'https://images.pexels.com/photos/1559486/pexels-photo-1559486.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', cover: 'https://images.pexels.com/photos/1559486/pexels-photo-1559486.jpeg?auto=compress&cs=tinysrgb&w=400&h=600&dpr=2', hasStory: true },
-    { id: 4, name: 'Sam', avatar: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', cover: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=400&h=600&dpr=2', hasStory: true },
-    { id: 5, name: 'Casey', avatar: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', cover: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=400&h=600&dpr=2', hasStory: true },
-    { id: 6, name: 'Riley', avatar: 'https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', cover: 'https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg?auto=compress&cs=tinysrgb&w=400&h=600&dpr=2', hasStory: true },
-    { id: 7, name: 'Jordan', avatar: 'https://images.pexels.com/photos/1559486/pexels-photo-1559486.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', cover: 'https://images.pexels.com/photos/1559486/pexels-photo-1559486.jpeg?auto=compress&cs=tinysrgb&w=400&h=600&dpr=2', hasStory: true },
-    { id: 8, name: 'Sam', avatar: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', cover: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=400&h=600&dpr=2', hasStory: true },
-    { id: 9, name: 'Casey', avatar: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', cover: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=400&h=600&dpr=2', hasStory: true },
-    { id: 10, name: 'Riley', avatar: 'https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', cover: 'https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg?auto=compress&cs=tinysrgb&w=400&h=600&dpr=2', hasStory: true },
-  ];
-
   const selectedStoryData = selectedStory ? stories.find(s => s.id === selectedStory) : null;
-  const availableStories = stories.filter(s => s.hasStory && !s.isOwn);
+  const availableStories = stories.filter(s => s.hasStory);
 
-  // Separate own story from others
-  const ownStory = stories.find(s => s.isOwn);
-  const otherStories = stories.filter(s => !s.isOwn);
+  // Separate own story button from other stories
+  const otherStories = stories;
+
+  // Fetch stories from API
+  useEffect(() => {
+    const fetchStories = async () => {
+      try {
+        setLoadingStories(true);
+        const response = await api.call(Actions.CMD_USER_FETCH_STORIES, {
+          method: "POST",
+          body: { limit: 100 }, // Increased limit to show all stories
+        });
+
+        // Transform API response to match component structure
+        // API returns { stories: [...] }
+        const storiesData = response?.stories || [];
+        
+        // Filter out expired stories
+        const activeStories = storiesData.filter((story: any) => !story.is_expired);
+        
+        // Sort all stories by created_at (newest first) - no grouping
+        const sortedStories = [...activeStories].sort((a: any, b: any) => 
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        
+        // Transform each story to a card (no grouping by user)
+        const transformedStories = sortedStories.map((story: any) => {
+          const user = story.user;
+          const isVideo = story?.media?.file?.mime_type?.startsWith('video/');
+          const storyCover = isVideo 
+            ? (user?.cover?.file?.url || user?.avatar?.file?.url || user?.profile_image_url || null)
+            : (story?.media?.file?.url || null);
+          
+          return {
+            id: story.id,
+            name: user?.displayname || user?.username || 'User',
+            avatar: user?.avatar?.file?.url || user?.profile_image_url || null,
+            cover: storyCover,
+            userCover: user?.cover?.file?.url || null,
+            isOwn: story.user_id === authUser?.id,
+            hasStory: true,
+            storyId: story.id,
+            storyMedia: story.media,
+            userId: story.user_id,
+            created_at: story.created_at,
+          };
+        });
+        
+        setStories(transformedStories);
+      } catch (err: any) {
+        console.error('Error fetching stories:', err);
+        // On error, show empty state
+        setStories([]);
+      } finally {
+        setLoadingStories(false);
+      }
+    };
+
+    fetchStories();
+  }, [authUser?.id]);
 
   // Calculate drag constraints for scrollable stories
   useEffect(() => {
@@ -43,7 +112,7 @@ const Stories: React.FC = () => {
         const containerWidth = scrollContainer.offsetWidth;
         const cardWidth = 120;
         const gap = 12;
-        const contentWidth = (cardWidth + gap) * otherStories.length - gap; // subtract last gap
+        const contentWidth = (cardWidth + gap) * stories.length - gap; // subtract last gap
         const maxDrag = Math.max(0, contentWidth - containerWidth);
         
         setItemWidth(maxDrag);
@@ -58,7 +127,7 @@ const Stories: React.FC = () => {
       clearTimeout(timer);
       window.removeEventListener('resize', calculateConstraints);
     };
-  }, [otherStories.length]);
+  }, [stories]);
 
   const nextStory = () => {
     if (!selectedStory) return;
@@ -81,20 +150,100 @@ const Stories: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setSelectedFile(file);
+      const fileType = file.type;
+      const isVideoFile = fileType.startsWith('video/');
+      setIsVideo(isVideoFile);
+      
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelectedImage(reader.result as string);
         setShowAddStoryModal(true);
+        setUploadError(null);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleShareStory = () => {
-    // Here you would upload the story to your backend
-    console.log('Sharing story:', selectedImage);
-    setShowAddStoryModal(false);
-    setSelectedImage(null);
+  const handleShareStory = async () => {
+    if (!selectedFile) {
+      setUploadError('No file selected');
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError(null);
+
+    try {
+      const response = await api.call(Actions.CMD_USER_UPLOAD_STORY, {
+        method: "POST",
+        body: { story: selectedFile },
+      });
+
+      // Handle successful upload
+      console.log('Story uploaded successfully:', response);
+      
+      // Close modal and reset state
+      setShowAddStoryModal(false);
+      setSelectedImage(null);
+      setSelectedFile(null);
+      setIsVideo(false);
+      
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+
+      // Refresh stories list to show the newly uploaded story
+      try {
+        const storiesResponse = await api.call(Actions.CMD_USER_FETCH_STORIES, {
+          method: "POST",
+          body: { limit: 100 }, // Increased limit to show all stories
+        });
+        const storiesData = storiesResponse?.stories || [];
+        
+        // Filter out expired stories
+        const activeStories = storiesData.filter((story: any) => !story.is_expired);
+        
+        // Sort all stories by created_at (newest first) - no grouping
+        const sortedStories = [...activeStories].sort((a: any, b: any) => 
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        
+        // Transform each story to a card (no grouping by user)
+        const transformedStories = sortedStories.map((story: any) => {
+          const user = story.user;
+          const isVideo = story?.media?.file?.mime_type?.startsWith('video/');
+          const storyCover = isVideo 
+            ? (user?.cover?.file?.url || user?.avatar?.file?.url || user?.profile_image_url || null)
+            : (story?.media?.file?.url || null);
+          
+          return {
+            id: story.id,
+            name: user?.displayname || user?.username || 'User',
+            avatar: user?.avatar?.file?.url || user?.profile_image_url || null,
+            cover: storyCover,
+            userCover: user?.cover?.file?.url || null,
+            isOwn: story.user_id === authUser?.id,
+            hasStory: true,
+            storyId: story.id,
+            storyMedia: story.media,
+            userId: story.user_id,
+            created_at: story.created_at,
+          };
+        });
+        
+        setStories(transformedStories);
+      } catch (err) {
+        console.error('Error refreshing stories after upload:', err);
+      }
+      
+    } catch (err: any) {
+      console.error('Error uploading story:', err);
+      setUploadError(err.response?.data?.message || 'Failed to upload story. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -110,37 +259,41 @@ const Stories: React.FC = () => {
 
       {/* Stories List - Fixed Own Story + Infinite Scrollable Others */}
       <div className="py-1 relative flex px-1" ref={containerRef}>
-        {/* Fixed "Your Story" */}
-        {ownStory && (
+        {/* Loading State */}
+        {loadingStories && stories.length === 0 && (
+          <div className="flex gap-3 px-1">
+            <div className={`flex-shrink-0 w-[120px] h-[180px] rounded-[14px] ${
+              theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'
+            } animate-pulse`} />
+            <div className={`flex-shrink-0 w-[120px] h-[180px] rounded-[14px] ${
+              theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'
+            } animate-pulse`} />
+            <div className={`flex-shrink-0 w-[120px] h-[180px] rounded-[14px] ${
+              theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'
+            } animate-pulse`} />
+          </div>
+        )}
+
+        {/* Fixed "Your Story" Button - Always visible */}
+        {!loadingStories && authUser && (
           <div className="flex-shrink-0 z-20 relative">
             <div className="relative group">
               <button
                 onClick={() => fileInputRef.current?.click()}
                 className={`relative w-[120px] h-[180px] rounded-[14px] overflow-hidden ${
                   theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'
-                } transition-all duration-300 cursor-pointer shadow-lg`}
+                } transition-all duration-300 cursor-pointer`}
                 style={{ transformOrigin: 'center' }}
               >
-                {ownStory.cover ? (
-                  <>
-                    <img
-                      src={ownStory.cover}
-                      alt={ownStory.name}
-                      className="w-full h-full object-cover absolute inset-0 transition-all duration-300 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
-                  </>
-                ) : (
-                  <div className={`absolute inset-0 w-full h-full flex items-center justify-center ${
-                    theme === 'dark' ? 'bg-gradient-to-br from-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-50 to-gray-100'
-                  }`}>
-                    <div className={`w-16 h-16 rounded-full ${
-                      theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-                    } flex items-center justify-center`}>
-                      <Plus className={`w-8 h-8 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
-                    </div>
+                <div className={`absolute inset-0 w-full h-full flex items-center justify-center ${
+                  theme === 'dark' ? 'bg-gradient-to-br from-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-50 to-gray-100'
+                }`}>
+                  <div className={`w-16 h-16 rounded-full ${
+                    theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+                  } flex items-center justify-center`}>
+                    <Plus className={`w-8 h-8 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
                   </div>
-                )}
+                </div>
 
                 <div className="absolute bottom-0 left-0 right-0 p-3 z-10">
                   <div className={`backdrop-blur-xl ${
@@ -149,27 +302,26 @@ const Stories: React.FC = () => {
                     <p className={`text-[13px] font-semibold tracking-[-0.006em] truncate ${
                       theme === 'dark' ? 'text-white' : 'text-gray-900'
                     }`}>
-                      {ownStory.name}
+                      Your Story
                     </p>
                   </div>
                 </div>
 
-                {!ownStory.cover && (
-                  <div className="absolute top-3 left-3 z-10">
-                    <div className={`w-11 h-11 rounded-full ${
-                      theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'
-                    } flex items-center justify-center`}>
-                      <Plus className={`w-6 h-6 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`} />
-                    </div>
+                <div className="absolute top-3 left-3 z-10">
+                  <div className={`w-11 h-11 rounded-full ${
+                    theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'
+                  } flex items-center justify-center`}>
+                    <Plus className={`w-6 h-6 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`} />
                   </div>
-                )}
+                </div>
               </button>
             </div>
           </div>
         )}
 
-        {/* Scrollable Other Stories Container */}
-        <div className="flex-1 overflow-hidden relative ml-3" ref={scrollContainerRef}>
+        {/* Scrollable Stories Container */}
+        {!loadingStories && (
+        <div className={`flex-1 overflow-hidden relative ${authUser ? 'ml-3' : ''}`} ref={scrollContainerRef}>
           <motion.div 
             className="flex space-x-3 cursor-grab active:cursor-grabbing"
             drag="x"
@@ -198,7 +350,7 @@ const Stories: React.FC = () => {
                   }}
                   className={`relative w-[120px] h-[180px] rounded-[14px] overflow-hidden ${
                     theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'
-                  } transition-all duration-300 cursor-pointer shadow-lg pointer-events-auto`}
+                  } transition-all duration-300 cursor-pointer pointer-events-auto`}
                   style={{ transformOrigin: 'center' }}
                 >
                   {story.cover && (
@@ -241,6 +393,7 @@ const Stories: React.FC = () => {
           ))}
           </motion.div>
         </div>
+        )}
       </div>
 
       {/* Premium Story Viewer */}
@@ -310,17 +463,40 @@ const Stories: React.FC = () => {
                 className="relative w-full max-w-[420px] h-[92vh] mx-auto"
               >
                 <div className="relative w-full h-full rounded-3xl overflow-hidden">
-                  {/* Story Image */}
-                  {selectedStoryData.cover && (
-                    <motion.img
-                      initial={{ scale: 1.1 }}
-                      animate={{ scale: 1 }}
-                      transition={{ duration: 0.6 }}
-                      src={selectedStoryData.cover}
-                      alt={selectedStoryData.name}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
+                  {/* Story Media (Image or Video) */}
+                  {(() => {
+                    const isVideoMedia = selectedStoryData.storyMedia?.file?.mime_type?.startsWith('video/');
+                    const mediaUrl = isVideoMedia 
+                      ? selectedStoryData.storyMedia?.file?.url 
+                      : selectedStoryData.cover;
+                    
+                    if (!mediaUrl) return null;
+                    
+                    return isVideoMedia ? (
+                      <motion.video
+                        key={mediaUrl}
+                        initial={{ scale: 1.1 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.6 }}
+                        src={mediaUrl}
+                        className="w-full h-full object-cover"
+                        controls
+                        autoPlay
+                        loop
+                        playsInline
+                      />
+                    ) : (
+                      <motion.img
+                        key={mediaUrl}
+                        initial={{ scale: 1.1 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.6 }}
+                        src={mediaUrl}
+                        alt={selectedStoryData.name}
+                        className="w-full h-full object-cover"
+                      />
+                    );
+                  })()}
 
                   {/* Premium Gradient Overlays */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
@@ -451,13 +627,24 @@ const Stories: React.FC = () => {
                 {/* Close Button */}
                 <motion.button
                   onClick={() => {
-                    setShowAddStoryModal(false);
-                    setSelectedImage(null);
+                    if (!isUploading) {
+                      setShowAddStoryModal(false);
+                      setSelectedImage(null);
+                      setSelectedFile(null);
+                      setIsVideo(false);
+                      setUploadError(null);
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = '';
+                      }
+                    }
                   }}
-                  whileHover={{ scale: 1.1, rotate: 90 }}
-                  whileTap={{ scale: 0.9 }}
+                  disabled={isUploading}
+                  whileHover={!isUploading ? { scale: 1.1, rotate: 90 } : {}}
+                  whileTap={!isUploading ? { scale: 0.9 } : {}}
                   className={`absolute top-5 right-5 z-20 w-11 h-11 rounded-full backdrop-blur-xl flex items-center justify-center transition-all duration-300 ${
-                    theme === 'dark' 
+                    isUploading
+                      ? 'bg-gray-400/20 text-gray-500 cursor-not-allowed'
+                      : theme === 'dark' 
                       ? 'bg-white/10 hover:bg-white/20 text-white' 
                       : 'bg-black/10 hover:bg-black/20 text-gray-900'
                   }`}
@@ -481,21 +668,62 @@ const Stories: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Image Preview */}
+                {/* Media Preview */}
                 <div className={`relative w-full h-[500px] ${
                   theme === 'dark' ? 'bg-black/40' : 'bg-gray-900'
                 }`}>
-                  <motion.img
-                    initial={{ scale: 1.1, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                    src={selectedImage}
-                    alt="Story preview"
-                    className="w-full h-full object-cover"
-                  />
-                  {/* Image Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  {isVideo && selectedImage ? (
+                    <motion.video
+                      initial={{ scale: 1.1, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.5 }}
+                      src={selectedImage}
+                      className="w-full h-full object-cover"
+                      controls
+                      autoPlay
+                      loop
+                      muted
+                    />
+                  ) : selectedImage ? (
+                    <motion.img
+                      initial={{ scale: 1.1, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.5 }}
+                      src={selectedImage}
+                      alt="Story preview"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : null}
+                  {/* Media Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                  
+                  {/* Loading Overlay */}
+                  {isUploading && (
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-20">
+                      <div className="flex flex-col items-center gap-3">
+                        <div className={`w-8 h-8 border-2 border-t-transparent rounded-full animate-spin ${
+                          theme === 'dark' ? 'border-white' : 'border-white'
+                        }`} />
+                        <p className="text-white text-sm font-medium">Uploading story...</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                {/* Error Message */}
+                {uploadError && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`mx-5 mb-3 p-3 rounded-xl border ${
+                      theme === 'dark'
+                        ? 'bg-red-900/20 border-red-700 text-red-300'
+                        : 'bg-red-50 border-red-200 text-red-700'
+                    }`}
+                  >
+                    <p className="text-sm font-medium">{uploadError}</p>
+                  </motion.div>
+                )}
 
                 {/* Action Buttons */}
                 <div className={`p-5 flex gap-3 backdrop-blur-xl ${
@@ -505,25 +733,47 @@ const Stories: React.FC = () => {
                 }`}>
                   <motion.button
                     onClick={handleShareStory}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`flex-1 px-5 py-3.5 rounded-2xl font-bold text-[15px] tracking-[-0.011em] shadow-lg transition-all duration-300 ${
-                      theme === 'dark'
+                    disabled={isUploading}
+                    whileHover={!isUploading ? { scale: 1.02 } : {}}
+                    whileTap={!isUploading ? { scale: 0.98 } : {}}
+                    className={`flex-1 px-5 py-3.5 rounded-2xl font-bold text-[15px] tracking-[-0.011em] shadow-lg transition-all duration-300 flex items-center justify-center gap-2 ${
+                      isUploading
+                        ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                        : theme === 'dark'
                         ? 'bg-white text-black hover:bg-gray-100'
                         : 'bg-black text-white hover:bg-gray-900'
                     }`}
                   >
-                    Share Story
+                    {isUploading ? (
+                      <>
+                        <div className={`w-4 h-4 border-2 border-t-transparent rounded-full animate-spin ${
+                          theme === 'dark' ? 'border-black' : 'border-white'
+                        }`} />
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      'Share Story'
+                    )}
                   </motion.button>
                   <motion.button
                     onClick={() => {
-                      setShowAddStoryModal(false);
-                      setSelectedImage(null);
+                      if (!isUploading) {
+                        setShowAddStoryModal(false);
+                        setSelectedImage(null);
+                        setSelectedFile(null);
+                        setUploadError(null);
+                        if (fileInputRef.current) {
+                          fileInputRef.current.value = '';
+                        }
+                      }
                     }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    disabled={isUploading}
+                    whileHover={!isUploading ? { scale: 1.02 } : {}}
+                    whileTap={!isUploading ? { scale: 0.98 } : {}}
                     className={`px-5 py-3.5 rounded-2xl font-bold text-[15px] tracking-[-0.011em] transition-all duration-300 ${
-                      theme === 'dark' 
+                      isUploading
+                        ? 'bg-gray-400/20 text-gray-500 cursor-not-allowed'
+                        : theme === 'dark' 
                         ? 'bg-white/10 hover:bg-white/20 text-white' 
                         : 'bg-black/10 hover:bg-black/20 text-gray-900'
                     }`}

@@ -39,6 +39,11 @@ export const Actions = {
 	CMD_USER_UPLOAD_STORY   : "user.upload_story",
 
 
+  CMD_USER_FETCH_STORIES : "user.fetch.stories",
+	CMD_USER_FETCH_NEARBY_USERS : "user.fetch.nearby.users",
+
+
+
 } as const;
 
 export type ActionType = typeof Actions[keyof typeof Actions];

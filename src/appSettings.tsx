@@ -6,6 +6,8 @@
  *
  */
 
+export const applicationName = "Bifrost"
+
 const hostName = window.location.hostname;
 export const isDevPlayground: boolean =
   hostName !== 'playground.lexical.dev' &&

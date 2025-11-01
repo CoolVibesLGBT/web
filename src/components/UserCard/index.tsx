@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Heart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Github, HeartHandshake, Banana, Carrot, Coffee, Baby, Gift, MessageCircleHeart, UserPlus, Flag } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -13,8 +14,20 @@ interface UserCardProps {
 
 export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) => {
   const { theme } = useTheme();
+  const navigate = useNavigate();
   const [isGiftSelectorOpen, setIsGiftSelectorOpen] = useState(false);
   const [isQuickMessageSelectorOpen, setIsQuickMessageSelectorOpen] = useState(false);
+
+  // Get username from user object (prioritize username, fallback to name slug)
+  const getUsername = () => {
+    if (user.username) return user.username;
+    if (user.name) return user.name.toLowerCase().replace(/\s+/g, '');
+    return 'profile';
+  };
+
+  const handleProfileClick = () => {
+    navigate(`/${getUsername()}`);
+  };
 
   const handleGiftSelect = (gift: any) => {
     console.log(`Sending ${gift.name} to ${user.name}`);
@@ -33,7 +46,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
         className={`relative rounded-xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] ${
           theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'
         }`}
-        onClick={() => window.location.href = `/${user.name.toLowerCase().replace(' ', '')}`}
+        onClick={handleProfileClick}
       >
         <div className="aspect-square relative">
           <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
@@ -63,7 +76,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
         className={`flex items-center gap-4 p-3 rounded-xl cursor-pointer transition-all hover:bg-opacity-50 ${
           theme === 'dark' ? 'bg-gray-900 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
         }`}
-        onClick={() => window.location.href = `/${user.name.toLowerCase().replace(' ', '')}`}
+        onClick={handleProfileClick}
       >
         <div className="relative">
           <img src={user.avatar} alt={user.name} className="w-14 h-14 rounded-xl object-cover" />
@@ -97,9 +110,10 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
   return (
     <div
       key={user.id}
-      className={`select-none relative rounded-xl overflow-hidden transition-all duration-300 ${
+      className={`select-none relative rounded-xl overflow-hidden transition-all duration-300 cursor-pointer ${
         theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'
       }`}
+      onClick={handleProfileClick}
     >
       <div className="relative min-h-[512px]">
         <img src={user.avatar} alt={user.name} className="w-full h-full min-h-[512px] object-cover" />
