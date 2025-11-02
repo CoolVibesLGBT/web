@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Github, HeartHandshake, Banana, Carrot, Coffee, Baby, Gift, MessageCircleHeart, UserPlus, Flag } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import GiftSelector from '../GiftSelector';
@@ -42,25 +42,28 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
   // Compact view (for grid mode)
   if (viewMode === 'compact') {
     return (
-      <div
+      <motion.div
         className={`relative rounded-xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] ${
           theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'
         }`}
-        onClick={handleProfileClick}
+        onTap={handleProfileClick}
+        whileTap={{ scale: 0.98 }}
       >
         <div className="aspect-square relative">
-          
-          
-          <img  src={user?.avatar?.file?.url} alt={user.name} className="w-full h-full object-cover" />
+          <motion.img
+            src={user?.avatar?.file?.url}
+            alt={user.name}
+            className="w-full h-full object-cover"
+            whileTap={{ filter: 'blur(4px)' }}
+            transition={{ duration: 0.2 }}
+          />
           {true &&(
             <div className="absolute top-2 right-2 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-black" />
           )}
         </div>
- 
+
         
-        <GiftSelector isOpen={isGiftSelectorOpen} onClose={() => setIsGiftSelectorOpen(false)} onSelectGift={handleGiftSelect} userName={user.name} />
-        <QuickMessages isOpen={isQuickMessageSelectorOpen} onClose={() => setIsQuickMessageSelectorOpen(false)} userName={user.name} onSendMessage={handleQuickMessageSelect} />
-      </div>
+      </motion.div>
     );
   }
 

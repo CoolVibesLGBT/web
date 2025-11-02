@@ -1397,8 +1397,24 @@ const ProfileScreen: React.FC = () => {
     navigate(-1);
   };
 
-  const handleFollowClick = () => {
-    setIsFollowing(!isFollowing);
+  const handleFollowClick = async () => {
+
+    if (!user?.public_id) return;
+  
+    try {
+      const response = await api.call(Actions.CMD_USER_TOGGLE_FOLLOW, {
+        method: "POST",
+        body: {
+          followee_id: user.public_id
+        },
+      });
+      
+      // Toggle follow status on success
+      setIsFollowing(!isFollowing);
+    } catch (error) {
+      console.error('Error toggling follow:', error);
+      // Optionally show error message to user
+    }
   };
 
   const formatJoinDate = (dateString: string) => {
@@ -1436,7 +1452,18 @@ const ProfileScreen: React.FC = () => {
   }
 
   return (
-    <div className={`scrollbar-hide max-h-[100dvh] overflow-y-auto ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ 
+        type: 'spring',
+        stiffness: 300,
+        damping: 30,
+        mass: 0.8
+      }}
+      className={`scrollbar-hide max-h-[100dvh] overflow-y-auto ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}
+    >
       {/* Header */}
       <div ref={headerRef} className={`sticky top-0 z-30 ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}`}>
         <div className="flex items-center px-4 py-3">
@@ -2514,13 +2541,13 @@ const ProfileScreen: React.FC = () => {
             <div className="flex gap-5 mb-4">
               <button className={`text-sm hover:underline ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
                 <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                  {user.following_count?.toLocaleString()}
+                  {(user.social?.followees?.length ?? 0).toLocaleString()}
                 </span>
                 <span className="ml-1">{t('profile.following')}</span>
               </button>
               <button className={`text-sm hover:underline ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
                 <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                  {user.followers_count?.toLocaleString()}
+                {(user.social?.followers?.length ?? 0).toLocaleString()}
                 </span>
                 <span className="ml-1">{t('profile.followers')}</span>
               </button>
@@ -2986,7 +3013,7 @@ const ProfileScreen: React.FC = () => {
         )}
       </div>
 
-    </div>
+    </motion.div>
   );
 };
 

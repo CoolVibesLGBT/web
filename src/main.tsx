@@ -9,6 +9,7 @@ import { AppProvider } from './contexts/AppContext.tsx'
 import { ToolbarContext } from './contexts/ToolbarContext.tsx'
 import { SettingsContext } from './contexts/SettingsContext.tsx'
 import './i18n'
+import { RecoilRoot } from 'recoil';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
@@ -17,7 +18,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <ThemeProvider>
             <AppProvider>
               <AuthProvider>
+                <RecoilRoot>
                 <App />
+                </RecoilRoot>
               </AuthProvider>
             </AppProvider>
           </ThemeProvider>

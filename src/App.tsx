@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useTransform, useMotionValue, useViewportScroll } from 'framer-motion';
 import Footer from './components/Footer';
 import MatchScreen from './components/MatchScreen';
 import NearbyScreen from './components/NearbyScreen';
@@ -20,6 +20,9 @@ import ClassifiedsScreen from './components/ClassifiedsScreen';
 import './i18n';
 import { useTranslation } from 'react-i18next';
 import { applicationName } from './appSettings.tsx';
+
+
+
 
 function App() {
   const [activeScreen, setActiveScreen] = useState('home');
@@ -73,8 +76,9 @@ function App() {
     { id: 'profile', label: t('app.nav.profile'), icon: User },
   ];
 
+  
 
-
+  
   return (
     <>
       {/* Splash Screen */}
@@ -84,7 +88,7 @@ function App() {
 
       {/* Twitter Style Layout - 3 Columns */}
       {!showSplash && (
-      <div className={`flex min-h-screen ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+      <div className={`max-h-[100dvh] flex  min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide`}>
         
         {/* Mobile Header - Top Navigation */}
         <header className={`lg:hidden fixed top-0 left-0 right-0 z-50 ${theme === 'dark' ? 'bg-black/95 backdrop-blur-xl border-b border-gray-800/50' : 'bg-white/95 backdrop-blur-xl border-b border-gray-100/50'}`}>
@@ -336,12 +340,9 @@ function App() {
           </div>
         </aside>
 
+  
         {/* Middle Section - Scrollable */}
-        <main className={`
-              max-h-[100dvh] 
-            
-    scrollbar-hide
-     flex-1 min-w-0 lg:border-l lg:border-r ${theme === 'dark' ? 'lg:border-gray-800/30' : 'lg:border-gray-100/50'} pt-[56px] lg:pt-0 pb-[80px] lg:pb-0`}>
+        <main className={`max-h-[100dvh]  min-h-[100dvh]  overflow-y-hidden overflow-x-hidden scrollbar-hide flex-1 min-w-0 lg:border-l lg:border-r ${theme === 'dark' ? 'lg:border-gray-800/30' : 'lg:border-gray-100/50'} pt-[56px] lg:pt-0 pb-[80px] lg:pb-0`}>
           <Routes>
             {/* Home Routes */}
             <Route path="/" element={<HomeScreen />} />
@@ -356,6 +357,8 @@ function App() {
             <Route path="/match" element={<MatchScreen />} />
             <Route path="/nearby" element={<NearbyScreen />} />
             <Route path="/places" element={<PlacesScreen />} />
+            <Route path="/profile" element={<ProfileScreen />} />
+
             <Route path="/messages" element={<MessagesScreen />} />
             <Route path="/notifications" element={<NotificationsScreen />} />
             <Route path="/classifieds" element={<ClassifiedsScreen />} />

@@ -22,6 +22,10 @@ export const Actions = {
 	CMD_USER_UPDATE_INTEREST  : "user.update_interest",
 	CMD_USER_UPDATE_FANTASY   : "user.update_fantasy",
 
+  CMD_USER_FOLLOW        : "user.follow",
+	CMD_USER_UNFOLLOW      : "user.unfollow",
+	CMD_USER_TOGGLE_FOLLOW : "user.follow.toggle",
+
 
   CMD_USER_POSTS        : "user.fetch.posts",
 	CMD_USER_POST_REPLIES : "user.fetch.posts.replies",

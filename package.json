@@ -24,6 +24,7 @@
     "axios": "^1.12.2",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.11",
+    "i18next": "^23.11.5",
     "intersection-observer": "^0.12.2",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
@@ -33,10 +34,10 @@
     "react": "^18.3.1",
     "react-day-picker": "^9.11.1",
     "react-dom": "^18.3.1",
-    "react-leaflet": "^4.2.1",
-    "i18next": "^23.11.5",
     "react-i18next": "^14.1.2",
+    "react-leaflet": "^4.2.1",
     "react-router-dom": "^7.9.4",
+    "recoil": "^0.7.7",
     "tailwind-scrollbar-hide": "^4.0.0"
   },
   "devDependencies": {
