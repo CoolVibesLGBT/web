@@ -320,10 +320,18 @@ const ProfileScreen: React.FC = () => {
     if (isOwnProfile && authUser && (authUser as any).avatar?.file?.url) {
       return (authUser as any).avatar.file.url;
     }
-    // Fallback to user state or authUser's profile_image_url
-    if (user?.profile_image_url) {
-      return user.profile_image_url;
+    // Check user state for avatar URL (multiple formats)
+    if (user) {
+      // First check normalized profile_image_url
+      if ((user as any).profile_image_url) {
+        return (user as any).profile_image_url;
+      }
+      // Then check avatar.file.url structure from API
+      if ((user as any).avatar?.file?.url) {
+        return (user as any).avatar.file.url;
+      }
     }
+    // Fallback to authUser's profile_image_url
     if (authUser && (authUser as any).profile_image_url) {
       return (authUser as any).profile_image_url;
     }
@@ -335,10 +343,18 @@ const ProfileScreen: React.FC = () => {
     if (isOwnProfile && authUser && (authUser as any).cover?.file?.url) {
       return (authUser as any).cover.file.url;
     }
-    // Fallback to user state or authUser's cover_image_url
-    if (user?.cover_image_url) {
-      return user.cover_image_url;
+    // Check user state for cover URL (multiple formats)
+    if (user) {
+      // First check normalized cover_image_url
+      if ((user as any).cover_image_url) {
+        return (user as any).cover_image_url;
+      }
+      // Then check cover.file.url structure from API
+      if ((user as any).cover?.file?.url) {
+        return (user as any).cover.file.url;
+      }
     }
+    // Fallback to authUser's cover_image_url
     if (authUser && (authUser as any).cover_image_url) {
       return (authUser as any).cover_image_url;
     }
@@ -1228,94 +1244,67 @@ const ProfileScreen: React.FC = () => {
     return () => window.removeEventListener('resize', updateHeaderHeight);
   }, [user, isEditMode]);
 
-  // Mock user data for now
+  // Fetch user data from API
   useEffect(() => {
     const fetchUserData = async () => {
+      console.log('ProfileScreen - fetchUserData called, username:', username);
+      
+      if (!username) {
+        console.log('ProfileScreen - No username, returning early');
+        return;
+      }
+      
       try {
         setLoading(true);
-        // TODO: Replace with actual API call
-        // If viewing own profile and authUser exists, use authUser data, otherwise create mock
+        setError(null);
+        
+        // Check if viewing own profile and authUser exists
         const isOwn = isAuthenticated && authUser && (authUser.username === username || authUser.id === username);
         
-        let userInterests: any[] = [];
-        let userFantasies: any[] = [];
-        let userAttributes: any[] = [];
-        
+        // If viewing own profile, use authUser data immediately for better UX
         if (isOwn && authUser) {
-          // Use real data from authUser
-          userInterests = (authUser as any).interests || [];
-          userFantasies = (authUser as any).fantasies || [];
-          userAttributes = authUser.user_attributes || [];
+          console.log('ProfileScreen - Using own profile data from authUser');
+          setUser(authUser as unknown as User);
+          setLoading(false);
+          return;
         }
         
-        // Get avatar and cover URLs from authUser if available
-        const profileImageUrl = (isOwn && authUser && (authUser as any).avatar?.file?.url) 
-          ? (authUser as any).avatar.file.url 
-          : (isOwn && authUser && (authUser as any).profile_image_url)
-          ? (authUser as any).profile_image_url
-          : `https://ui-avatars.com/api/?name=${username || 'user'}&background=random`;
+        // Fetch user profile from API using POST with nickname
+        console.log('ProfileScreen - Fetching profile for username:', username);
+        const requestBody = { nickname: username };
+        console.log('ProfileScreen - Request body:', requestBody);
         
-        const coverImageUrl = (isOwn && authUser && (authUser as any).cover?.file?.url) 
-          ? (authUser as any).cover.file.url 
-          : (isOwn && authUser && (authUser as any).cover_image_url)
-          ? (authUser as any).cover_image_url
-          : undefined;
-
-        const mockUser: User = {
-          id: isOwn && authUser ? authUser.id : '1',
-          public_id: isOwn && authUser ? authUser.public_id : 1,
-          username: username || 'user',
-          displayname: isOwn && authUser ? authUser.displayname : (username ? username.charAt(0).toUpperCase() + username.slice(1) : 'User'),
-          email: isOwn && authUser ? (authUser.email || `${username}@example.com`) : `${username}@example.com`,
-          date_of_birth: isOwn && authUser ? (authUser.date_of_birth || '1990-01-01') : '1990-01-01',
-          gender: isOwn && authUser ? (authUser.gender || 'male') : 'male',
-          sexual_orientation: isOwn && authUser && (authUser as any).sexual_orientation ? (authUser as any).sexual_orientation : { id: '1', key: 'straight', order: 1 },
-          sex_role: isOwn && authUser ? ((authUser as any).sex_role || 'top') : 'top',
-          relationship_status: isOwn && authUser ? (authUser.relationship_status || 'single') : 'single',
-          user_role: isOwn && authUser ? (authUser.user_role || 'user') : 'user',
-          is_active: isOwn && authUser ? authUser.is_active : true,
-          created_at: isOwn && authUser ? authUser.created_at : '2023-01-01T00:00:00Z',
-          updated_at: isOwn && authUser ? authUser.updated_at : '2023-01-01T00:00:00Z',
-          default_language: isOwn && authUser ? ((authUser as any).default_language || 'en') : 'en',
-          languages: isOwn && authUser ? (authUser.languages || null) : ['English'],
-          languages_display: isOwn && authUser ? ((authUser as any).languages_display || 'English') : 'English',
-          fantasies: userFantasies,
-          interests: userInterests,
-          height_cm: 178,
-          weight_kg: 76,
-          hair_color: 'Brown',
-          eye_color: 'Hazel',
-          body_type: 'Athletic',
-          skin_color: 'Tan',
-          ethnicity: 'Mediterranean',
-          zodiac_sign: 'Aquarius',
-          physical_disability: 'None',
-          circumcision: 'Circumcised',
-          kids: "I'd like them someday",
-          smoking: 'No',
-          drinking: 'Socially',
-          star_sign: 'Aquarius',
-          pets: 'Dog(s)',
-          religion: 'Agnostic',
-          personality: 'Somewhere in between',
-          education_level: 'Undergraduate degree',
-          travel: null,
-          social: null,
-          deleted_at: null,
-          bio: isOwn && authUser && authUser.bio ? authUser.bio : `Welcome to my profile! I'm ${username} and I love connecting with amazing people.`,
-          location: isOwn && authUser && (authUser as any).location ? (authUser as any).location : 'New York, NY',
-          website: isOwn && authUser && (authUser as any).website ? (authUser as any).website : 'https://example.com',
-          profile_image_url: profileImageUrl,
-          cover_image_url: coverImageUrl,
-          followers_count: Math.floor(Math.random() * 1000) + 100,
-          following_count: Math.floor(Math.random() * 500) + 50,
-          posts_count: Math.floor(Math.random() * 200) + 20,
-          user_attributes: userAttributes,
+        const response = await api.call(Actions.USER_FETCH_PROFILE, {
+          method: "POST",
+          body: requestBody,
+        });
+        
+        console.log('ProfileScreen - API response:', response);
+        
+        // Handle different response structures
+        let userData = response?.user || response;
+        
+        if (!userData) {
+          throw new Error('User not found');
+        }
+        
+        // Normalize avatar and cover URLs from API response structure
+        // API returns avatar.file.url and cover.file.url, we need to extract them
+        const normalizedUserData = {
+          ...userData,
+          profile_image_url: userData.avatar?.file?.url || userData.profile_image_url || undefined,
+          cover_image_url: userData.cover?.file?.url || userData.cover_image_url || undefined,
         };
-        setUser(mockUser);
-      } catch (err) {
+        
+        console.log('ProfileScreen - Normalized user data:', normalizedUserData);
+        
+        // Set user data
+        setUser(normalizedUserData as unknown as User);
+      } catch (err: any) {
         console.error('Error fetching user:', err);
-        setError('Failed to load profile');
+        const errorMessage = err.response?.data?.message || err.message || 'Failed to load profile';
+        setError(errorMessage);
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -1420,10 +1409,18 @@ const ProfileScreen: React.FC = () => {
 
   if (loading) {
     return (
-      <div className={`min-h-screen flex items-center justify-center ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
-        <div className={`text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-          {t('profile.loading_profile')}
-        </div>
+      <div className={`min-h-screen flex flex-col items-center justify-center ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="flex flex-col items-center gap-4"
+        >
+          <div className={`w-16 h-16 border-4 ${theme === 'dark' ? 'border-gray-800 border-t-white' : 'border-gray-200 border-t-black'} rounded-full animate-spin`} />
+          <p className={`text-base font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+            {t('profile.loading_profile')}
+          </p>
+        </motion.div>
       </div>
     );
   }

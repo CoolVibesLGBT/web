@@ -11,7 +11,6 @@ import { SettingsContext } from './contexts/SettingsContext.tsx'
 import './i18n'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
     <BrowserRouter>
       <SettingsContext>
         <ToolbarContext>
@@ -25,5 +24,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </ToolbarContext>
       </SettingsContext>
     </BrowserRouter>
-  </React.StrictMode>
 )

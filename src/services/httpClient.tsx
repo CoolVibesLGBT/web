@@ -14,8 +14,8 @@ class HttpClient {
 
     // Request interceptor (örneğin token ekleme)
     this.instance.interceptors.request.use((config) => {
-      const token = localStorage.getItem("auth_token");
-      if (token) config.headers["Authorization"] = `Bearer ${token}`;
+      const token = localStorage.getItem("authToken");
+      if (token) config.headers["Authorization"] = `${token}`;
       return config;
     });
 
@@ -25,7 +25,7 @@ class HttpClient {
       (error) => {
         if (error.response?.status === 401) {
           console.warn("Unauthorized — redirecting to login.");
-          localStorage.removeItem("auth_token");
+          //localStorage.removeItem("authToken");
           // window.location.href = "/login"; // istersen aktif et
         }
         return Promise.reject(error);

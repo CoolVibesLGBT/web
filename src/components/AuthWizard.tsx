@@ -248,10 +248,17 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
     } else if (currentStep === 3 && authMode === 'login') {
       setIsLoading(true);
       setError('');
-      api.handleLogin({
+      const loginData: any = {
         nickname: formData.nickname,
         password: formData.password
-      })
+      };
+      
+      // Add location if available
+      if (formData.location) {
+        loginData.location = formData.location;
+      }
+      
+      api.handleLogin(loginData)
         .then(response => {
           login(response.token, response.user);
           onClose();

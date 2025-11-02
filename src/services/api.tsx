@@ -28,7 +28,7 @@ export class ApiService {
     console.log("handleCreatePost",data)
   }
 
-  async handleLogin(credentials: { nickname: string; password: string }) {
+  async handleLogin(credentials: { nickname: string; password: string; location?: any }) {
     return this.call(Actions.AUTH_LOGIN, {
       method: "POST",
       body: credentials,

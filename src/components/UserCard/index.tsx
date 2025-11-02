@@ -49,19 +49,14 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
         onClick={handleProfileClick}
       >
         <div className="aspect-square relative">
-          <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-          {user.isOnline && (
+          
+          
+          <img  src={user?.avatar?.file?.url} alt={user.name} className="w-full h-full object-cover" />
+          {true &&(
             <div className="absolute top-2 right-2 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-black" />
           )}
         </div>
-        <div className="p-3">
-          <h3 className={`font-bold text-sm truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-            {user.name}
-          </h3>
-          <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-            {user.age} · {user.distance}
-          </p>
-        </div>
+ 
         
         <GiftSelector isOpen={isGiftSelectorOpen} onClose={() => setIsGiftSelectorOpen(false)} onSelectGift={handleGiftSelect} userName={user.name} />
         <QuickMessages isOpen={isQuickMessageSelectorOpen} onClose={() => setIsQuickMessageSelectorOpen(false)} userName={user.name} onSendMessage={handleQuickMessageSelect} />
@@ -79,21 +74,21 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
         onClick={handleProfileClick}
       >
         <div className="relative">
-          <img src={user.avatar} alt={user.name} className="w-14 h-14 rounded-xl object-cover" />
+          <img src={user?.avatar?.file?.url} alt={user.name} className="w-14 h-14 rounded-xl object-cover" />
           {user.isOnline && (
             <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-black" />
           )}
         </div>
         <div className="flex-1 min-w-0">
           <h3 className={`font-bold text-base truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-            {user.name}
+            {user.displayname}
           </h3>
           <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
             {user.age} · {user.distance}
           </p>
         </div>
         <div className="flex flex-wrap gap-1">
-          {user.interests.slice(0, 2).map((interest, idx) => (
+          {user && user.intersts && user.interests.length > 0 && user.interests.slice(0, 2).map((interest, idx) => (
             <span key={idx} className={`text-xs px-2 py-1 rounded-full ${theme === 'dark' ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-700'}`}>
               {interest}
             </span>
@@ -116,7 +111,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
       onClick={handleProfileClick}
     >
       <div className="relative min-h-[512px]">
-        <img src={user.avatar} alt={user.name} className="w-full h-full min-h-[512px] object-cover" />
+        <img  src={user?.avatar?.file?.url} alt={user.name} className="w-full h-full min-h-[512px] object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
         
         {user.isOnline && (
@@ -156,12 +151,12 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
 
         <div className="absolute bottom-0 left-0 right-0 p-6">
           <div className="mb-4">
-            <h3 className="text-lg font-bold text-white truncate">{user.name}</h3>
+            <h3 className="text-lg font-bold text-white truncate">{user.displayname}</h3>
             <p className="text-sm text-gray-200">{user.age} years old</p>
           </div>
 
           <div className="flex flex-wrap gap-2 mb-6">
-            {user.interests.slice(0, 2).map((interest, idx) => (
+            {user && user.intersts && user.interests.length > 0 && user.interests.slice(0, 2).map((interest, idx) => (
               <span key={idx} className="px-3 py-1.5 rounded-full text-sm font-medium bg-white/20 backdrop-blur-sm text-white">
                 {interest}
               </span>
