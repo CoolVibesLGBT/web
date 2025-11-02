@@ -322,7 +322,7 @@ const HomeScreen: React.FC = () => {
                   : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              <span className="relative z-10">For You</span>
+              <span className="relative z-10">Flows</span>
               {activeTab === 'foryou' && (
                 <motion.div
                   className={`absolute bottom-0 left-0 right-0 h-1 ${theme === 'dark' ? 'bg-white' : 'bg-black'}`}
@@ -341,7 +341,7 @@ const HomeScreen: React.FC = () => {
                   : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              <span className="relative z-10">Following</span>
+              <span className="relative z-10">Vibes</span>
               {activeTab === 'following' && (
                 <motion.div
                   className={`absolute bottom-0 left-0 right-0 h-1 ${theme === 'dark' ? 'bg-white' : 'bg-black'}`}

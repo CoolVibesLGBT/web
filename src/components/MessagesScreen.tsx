@@ -21,12 +21,16 @@ import {
   Volume2,
   Info,
   Menu,
-  X
+  X,
+  Settings,
+  PlusSquare,
+  Lock
 } from 'lucide-react';
 
 const MessagesScreen: React.FC = () => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'groups' | 'private'>('groups');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'unread' | 'groups' | 'unencrypted'>('all');
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -115,34 +119,71 @@ const MessagesScreen: React.FC = () => {
 
   const privateChats = [
     {
+      id: 'kewl',
+      name: 'KEWL',
+      username: 'kewlswap',
+      emojis: '',
+      avatar: null,
+      avatarLetter: 'K',
+      lastMessage: 'asda\naasd...',
+      lastTime: '3 dk',
+      unread: 0,
+      online: true,
+      verified: true,
+      encrypted: false
+    },
+    {
+      id: 'ersan',
+      name: 'ersan',
+      username: 'ersanyakit',
+      emojis: '🐶 🐱 🦊 🦌 🐻 🐼',
+      avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
+      avatarLetter: null,
+      lastMessage: 'selam',
+      lastTime: '3m',
+      unread: 0,
+      online: true,
+      verified: false,
+      encrypted: false
+    },
+    {
       id: 'alex',
       name: 'Alex Chen',
+      username: 'alexchen',
+      emojis: '',
       avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
       lastMessage: 'Thanks for the support!',
       lastTime: '5m',
       unread: 2,
       online: true,
-      verified: true
+      verified: true,
+      encrypted: true
     },
     {
       id: 'sam',
       name: 'Sam Kim',
+      username: 'samkim',
+      emojis: '',
       avatar: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
       lastMessage: 'See you at the event!',
       lastTime: '1h',
       unread: 0,
       online: false,
-      verified: false
+      verified: false,
+      encrypted: true
     },
     {
       id: 'jordan',
       name: 'Jordan Lee',
+      username: 'jordanlee',
+      emojis: '',
       avatar: 'https://images.pexels.com/photos/1559486/pexels-photo-1559486.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
       lastMessage: 'Amazing community!',
       lastTime: '2h',
       unread: 1,
       online: true,
-      verified: true
+      verified: true,
+      encrypted: true
     }
   ];
 
@@ -211,325 +252,309 @@ const MessagesScreen: React.FC = () => {
                 ? 'border-gray-800 bg-black/95 backdrop-blur-xl' 
                 : 'border-gray-200 bg-white/95 backdrop-blur-xl'
             }`}>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <h1 className={`text-lg sm:text-xl font-bold ${
                   theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>Messages</h1>
-                <motion.button 
-                  onClick={() => setShowSidebar(false)}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="lg:hidden p-2 rounded-lg transition-colors"
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                </motion.button>
+                }`}>Chat</h1>
+                <div className="flex items-center space-x-2">
+                  <motion.button 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`p-2 rounded-lg transition-colors ${
+                      theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-black/10'
+                    }`}
+                  >
+                    <Settings className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
+                  </motion.button>
+                  <motion.button 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`p-2 rounded-lg transition-colors ${
+                      theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-black/10'
+                    }`}
+                  >
+                    <PlusSquare className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
+                  </motion.button>
+                  <motion.button 
+                    onClick={() => setShowSidebar(false)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="lg:hidden p-2 rounded-lg transition-colors"
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                  </motion.button>
+                </div>
               </div>
               
               {/* Search */}
-              <div className="mt-3 sm:mt-4 relative">
+              <div className="relative mb-3 sm:mb-4">
                 <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
                   theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                 }`} />
                 <input
                   type="text"
-                  placeholder="Search messages..."
-                  className={`w-full pl-10 pr-4 py-2 sm:py-3 rounded-xl border text-sm ${
+                  placeholder="Search"
+                  className={`w-full pl-10 pr-4 py-2 sm:py-3 rounded-full border-0 text-sm ${
                     theme === 'dark' 
-                      ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' 
-                      : 'bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500'
+                      ? 'bg-gray-800 text-white placeholder-gray-400' 
+                      : 'bg-gray-100 text-gray-900 placeholder-gray-500'
                   }`}
                 />
               </div>
-            </div>
 
-            {/* Tabs */}
-            <div className="flex border-b">
-              <motion.button
-                onClick={() => setActiveTab('groups')}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`flex-1 py-3 sm:py-4 px-3 sm:px-4 text-sm font-medium transition-colors ${
-                  activeTab === 'groups'
-                    ? theme === 'dark'
-                      ? 'text-white border-b-2 border-gray-300'
-                      : 'text-gray-900 border-b-2 border-gray-900'
-                    : theme === 'dark'
-                    ? 'text-gray-400'
-                    : 'text-gray-500'
-                }`}
-              >
-                <Globe className="w-4 h-4 inline mr-2" />
-                Groups
-              </motion.button>
-              <motion.button
-                onClick={() => setActiveTab('private')}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`flex-1 py-3 sm:py-4 px-3 sm:px-4 text-sm font-medium transition-colors ${
-                  activeTab === 'private'
-                    ? theme === 'dark'
-                      ? 'text-white border-b-2 border-gray-300'
-                      : 'text-gray-900 border-b-2 border-gray-900'
-                    : theme === 'dark'
-                    ? 'text-gray-400'
-                    : 'text-gray-500'
-                }`}
-              >
-                <User className="w-4 h-4 inline mr-2" />
-                Private
-              </motion.button>
+              {/* Filter Tabs */}
+              <div className="flex gap-2">
+                <motion.button
+                  onClick={() => setActiveFilter('all')}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                    activeFilter === 'all'
+                      ? theme === 'dark'
+                        ? 'bg-white text-black'
+                        : 'bg-black text-white'
+                      : theme === 'dark'
+                      ? 'bg-gray-800 text-gray-400'
+                      : 'bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  Tümü
+                </motion.button>
+                <motion.button
+                  onClick={() => setActiveFilter('unread')}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                    activeFilter === 'unread'
+                      ? theme === 'dark'
+                        ? 'bg-white text-black'
+                        : 'bg-black text-white'
+                      : theme === 'dark'
+                      ? 'bg-gray-800 text-gray-400'
+                      : 'bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  Okunmamış
+                </motion.button>
+                <motion.button
+                  onClick={() => setActiveFilter('groups')}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                    activeFilter === 'groups'
+                      ? theme === 'dark'
+                        ? 'bg-white text-black'
+                        : 'bg-black text-white'
+                      : theme === 'dark'
+                      ? 'bg-gray-800 text-gray-400'
+                      : 'bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  Gruplar
+                </motion.button>
+                <motion.button
+                  onClick={() => setActiveFilter('unencrypted')}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                    activeFilter === 'unencrypted'
+                      ? theme === 'dark'
+                        ? 'bg-white text-black'
+                        : 'bg-black text-white'
+                      : theme === 'dark'
+                      ? 'bg-gray-800 text-gray-400'
+                      : 'bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  Şifrelenmemiş
+                </motion.button>
+              </div>
             </div>
 
             {/* Chat List */}
-            <div className="h-[calc(100%-120px)] sm:h-[calc(100%-140px)] overflow-y-auto scrollbar-hide">
-              <AnimatePresence mode="wait">
-                {activeTab === 'groups' ? (
-                  <motion.div
-                    key="groups"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    className="space-y-0"
-                  >
-                    {groupChats.length === 0 ? (
-                      <div className="flex items-center justify-center h-full text-gray-400 text-center p-8">
-                        No group chats found.
-                      </div>
-                    ) : groupChats.map((chat) => (
-                      <motion.div
-                        key={chat.id}
-                        onClick={() => handleChatSelect(chat.id)}
-                        className={`p-3 sm:p-4 cursor-pointer transition-colors border-b ${
-                          theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
-                        } ${
-                          selectedChat === chat.id
-                            ? theme === 'dark'
-                              ? 'bg-gray-800'
-                              : 'bg-gray-100'
-                            : theme === 'dark'
-                            ? 'hover:bg-gray-800/50'
-                            : 'hover:bg-gray-50'
-                        }`}
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.99 }}
-                      >
-                        <div className="flex items-center space-x-2 sm:space-x-3">
-                          <div className="text-xl sm:text-2xl flex-shrink-0">{chat.flag}</div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-1 sm:space-x-2 min-w-0 flex-1">
-                                <h3 className={`font-semibold truncate text-sm sm:text-base ${
-                                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                                }`}>{chat.name}</h3>
-                                {chat.pinned && (
-                                  <Star className="w-3 h-3 text-yellow-500 flex-shrink-0" />
-                                )}
-                              </div>
-                              <span className={`text-xs flex-shrink-0 ml-1 sm:ml-2 ${
-                                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                              }`}>{chat.lastTime}</span>
-                            </div>
-                            <p className={`text-xs sm:text-sm truncate mt-1 ${
-                              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                            }`}>{chat.lastMessage}</p>
-                            <div className="flex items-center justify-between mt-1 sm:mt-2">
-                              <span className={`text-xs ${
-                                theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                              }`}>{chat.members} members • {chat.online} online</span>
-                              {chat.unread > 0 && (
-                                <span className="bg-gray-900 text-white text-xs px-2 py-1 rounded-full flex-shrink-0">
-                                  {chat.unread}
-                                </span>
-                              )}
-                            </div>
-                          </div>
+            <div className="h-[calc(100%-180px)] sm:h-[calc(100%-200px)] overflow-y-auto scrollbar-hide">
+              {privateChats.filter((chat: any) => {
+                if (activeFilter === 'all') return true;
+                if (activeFilter === 'unread') return chat.unread > 0;
+                if (activeFilter === 'unencrypted') return !chat.encrypted;
+                return true;
+              }).length === 0 ? (
+                <div className="flex items-center justify-center h-full text-gray-400 text-center p-8">
+                  No chats found.
+                </div>
+              ) : privateChats.filter((chat: any) => {
+                if (activeFilter === 'all') return true;
+                if (activeFilter === 'unread') return chat.unread > 0;
+                if (activeFilter === 'unencrypted') return !chat.encrypted;
+                return true;
+              }).map((chat: any) => (
+                <div
+                  key={chat.id}
+                  onClick={() => handleChatSelect(chat.id)}
+                  className={`p-3 sm:p-4 cursor-pointer transition-colors border-b ${
+                    theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
+                  } ${
+                    selectedChat === chat.id
+                      ? theme === 'dark'
+                        ? 'bg-gray-800'
+                        : 'bg-gray-100'
+                      : theme === 'dark'
+                      ? 'hover:bg-gray-800/50'
+                      : 'hover:bg-gray-50'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className="relative flex-shrink-0">
+                      {chat.avatar ? (
+                        <img
+                          src={chat.avatar}
+                          alt={chat.name}
+                          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-lg font-bold ${
+                          theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-black text-white'
+                        }`}>
+                          {chat.avatarLetter || chat.name.charAt(0).toUpperCase()}
                         </div>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="private"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    className="space-y-0"
-                  >
-                    {privateChats.length === 0 ? (
-                      <div className="flex items-center justify-center h-full text-gray-400 text-center p-8">
-                        No private chats found.
-                      </div>
-                    ) : privateChats.map((chat) => (
-                      <motion.div
-                        key={chat.id}
-                        onClick={() => handleChatSelect(chat.id)}
-                        className={`p-3 sm:p-4 cursor-pointer transition-colors border-b ${
-                          theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
-                        } ${
-                          selectedChat === chat.id
-                            ? theme === 'dark'
-                              ? 'bg-gray-800'
-                              : 'bg-gray-100'
-                            : theme === 'dark'
-                            ? 'hover:bg-gray-800/50'
-                            : 'hover:bg-gray-50'
-                        }`}
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.99 }}
-                      >
-                        <div className="flex items-center space-x-2 sm:space-x-3">
-                          <div className="relative flex-shrink-0">
-                            <img
-                              src={chat.avatar}
-                              alt={chat.name}
-                              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
-                            />
-                            {chat.online && (
-                              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
-                            )}
-                            {chat.verified && (
-                              <div className="absolute -top-1 -right-1 w-4 h-4 bg-gray-900 border-2 border-white rounded-full flex items-center justify-center">
-                                <Check className="w-2 h-2 text-white" />
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between">
-                              <h3 className={`font-semibold truncate text-sm sm:text-base ${
-                                theme === 'dark' ? 'text-white' : 'text-gray-900'
-                              }`}>{chat.name}</h3>
-                              <span className={`text-xs flex-shrink-0 ml-1 sm:ml-2 ${
-                                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                              }`}>{chat.lastTime}</span>
-                            </div>
-                            <p className={`text-xs sm:text-sm truncate mt-1 ${
-                              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                            }`}>{chat.lastMessage}</p>
-                            {chat.unread > 0 && (
-                              <div className="flex justify-end mt-1 sm:mt-2">
-                                <span className="bg-gray-900 text-white text-xs px-2 py-1 rounded-full">
-                                  {chat.unread}
-                                </span>
-                              </div>
-                            )}
-                          </div>
+                      )}
+                      {!chat.encrypted && (
+                        <Lock className={`absolute -bottom-1 left-0 w-3 h-3 ${
+                          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                        }`} />
+                      )}
+                      {chat.online && (
+                        <div className={`absolute -bottom-1 -right-1 w-3 h-3 border-2 rounded-full ${
+                          theme === 'dark' ? 'bg-white border-black' : 'bg-black border-white'
+                        }`}></div>
+                      )}
+                      {chat.verified && (
+                        <Check className={`absolute -top-1 -right-1 w-4 h-4 ${
+                          theme === 'dark' ? 'text-white' : 'text-black'
+                        }`} />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center min-w-0 flex-1">
+                          <h3 className={`font-semibold truncate text-sm sm:text-base ${
+                            theme === 'dark' ? 'text-white' : 'text-gray-900'
+                          }`}>{chat.name}</h3>
+                          {chat.emojis && (
+                            <span className="ml-1 text-xs sm:text-sm">{chat.emojis}</span>
+                          )}
                         </div>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                        <div className="flex items-center space-x-1 flex-shrink-0 ml-2">
+                          <span className={`text-xs ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                          }`}>{chat.lastTime}</span>
+                          {chat.unread === 0 && (
+                            <CheckCheck className={`w-3 h-3 ${
+                              theme === 'dark' ? 'text-white' : 'text-black'
+                            }`} />
+                          )}
+                        </div>
+                      </div>
+                      <div className="mt-1">
+                        {(chat.lastMessage || '').split('\n').slice(0, 2).map((line: string, idx: number) => (
+                          <p key={idx} className={`text-xs sm:text-sm truncate ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                          }`}>{line}</p>
+                        ))}
+                      </div>
+                      {chat.unread > 0 && (
+                        <div className="flex justify-end mt-1 sm:mt-2">
+                          <span className={`text-white text-xs px-2 py-1 rounded-full ${
+                            theme === 'dark' ? 'bg-white text-black' : 'bg-black text-white'
+                          }`}>
+                            {chat.unread}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Chat Area */}
-          <div className="flex-1 flex flex-col h-full w-full relative z-10 overflow-hidden">
+          <AnimatePresence mode="wait">
             {selectedChat ? (
-              <>
+              <motion.div
+                key="chat-view"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ 
+                  type: 'spring',
+                  stiffness: 300,
+                  damping: 30
+                }}
+                className="flex-1 flex flex-col h-full w-full relative z-10 overflow-hidden"
+              >
                 {/* Chat Header */}
                 <div className={`sticky top-0 z-40 p-3 sm:p-4 border-b ${
                   theme === 'dark' 
                     ? 'border-gray-800 bg-black/95 backdrop-blur-xl' 
                     : 'border-gray-200 bg-white/95 backdrop-blur-xl'
                 }`}>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center">
                     <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
-                      {/* Mobile menu button */}
+                      {/* Mobile back button */}
                       <motion.button 
-                        onClick={() => setShowSidebar(true)}
+                        onClick={() => {
+                          setSelectedChat(null);
+                          setShowSidebar(true);
+                        }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="lg:hidden p-2 rounded-lg flex-shrink-0"
+                        className="lg:hidden p-2 rounded-lg flex-shrink-0 mr-1"
                       >
-                        <Menu className="w-5 h-5" />
+                        <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
                       </motion.button>
                       
-                      {activeTab === 'groups' && selectedGroupChat ? (
-                        <>
-                          <div className="text-xl sm:text-2xl flex-shrink-0">{selectedGroupChat.flag}</div>
-                          <div className="min-w-0 flex-1">
-                            <h2 className={`font-semibold truncate text-sm sm:text-base ${
-                              theme === 'dark' ? 'text-white' : 'text-gray-900'
-                            }`}>{selectedGroupChat.name}</h2>
-                            <p className={`text-xs sm:text-sm truncate ${
-                              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                            }`}>{selectedGroupChat.members} members • {selectedGroupChat.online} online</p>
-                          </div>
-                        </>
-                      ) : selectedPrivateChat ? (
+                      {selectedPrivateChat ? (
                         <>
                           <div className="relative flex-shrink-0">
-                            <img
-                              src={selectedPrivateChat.avatar}
-                              alt={selectedPrivateChat.name}
-                              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover"
-                            />
-                            {selectedPrivateChat.online && (
-                              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
-                            )}
-                            {selectedPrivateChat.verified && (
-                              <div className="absolute -top-1 -right-1 w-4 h-4 bg-gray-900 border-2 border-white rounded-full flex items-center justify-center">
-                                <Check className="w-2 h-2 text-white" />
+                            {selectedPrivateChat.avatar ? (
+                              <img
+                                src={selectedPrivateChat.avatar}
+                                alt={selectedPrivateChat.name}
+                                className="w-10 h-10 rounded-full object-cover"
+                              />
+                            ) : (
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-base font-bold ${
+                                theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-black text-white'
+                              }`}>
+                                {selectedPrivateChat.avatarLetter || selectedPrivateChat.name.charAt(0).toUpperCase()}
                               </div>
                             )}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <h2 className={`font-semibold truncate text-sm sm:text-base ${
-                              theme === 'dark' ? 'text-white' : 'text-gray-900'
-                            }`}>{selectedPrivateChat.name}</h2>
-                            <p className={`text-xs sm:text-sm truncate ${
+                            <div className="flex items-center gap-1">
+                              <h2 className={`font-semibold truncate text-base ${
+                                theme === 'dark' ? 'text-white' : 'text-gray-900'
+                              }`}>{selectedPrivateChat.name}</h2>
+                              {selectedPrivateChat.emojis && (
+                                <span className="text-base">{selectedPrivateChat.emojis}</span>
+                              )}
+                              {selectedPrivateChat.verified && (
+                                <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${
+                                  theme === 'dark' ? 'bg-white' : 'bg-black'
+                                }`}>
+                                  <Check className={`w-2.5 h-2.5 ${
+                                    theme === 'dark' ? 'text-black' : 'text-white'
+                                  }`} />
+                                </div>
+                              )}
+                            </div>
+                            <p className={`text-sm truncate mt-0.5 ${
                               theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                            }`}>{selectedPrivateChat.online ? 'Online' : 'Offline'}</p>
+                            }`}>@{selectedPrivateChat.username || selectedPrivateChat.name.toLowerCase()}</p>
                           </div>
                         </>
                       ) : null}
-                    </div>
-                    <div className="flex items-center space-x-1 flex-shrink-0">
-                      <motion.button 
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className={`p-2 rounded-lg ${
-                          theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
-                        }`}
-                      >
-                        <Volume2 className="w-4 h-4" />
-                      </motion.button>
-                      <motion.button 
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className={`p-2 rounded-lg ${
-                          theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
-                        }`}
-                      >
-                        <Phone className="w-4 h-4" />
-                      </motion.button>
-                      <motion.button 
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className={`p-2 rounded-lg ${
-                          theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
-                        }`}
-                      >
-                        <Video className="w-4 h-4" />
-                      </motion.button>
-                      <motion.button 
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className={`p-2 rounded-lg ${
-                          theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
-                        }`}
-                      >
-                        <Info className="w-4 h-4" />
-                      </motion.button>
-                      <motion.button 
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className={`p-2 rounded-lg ${
-                          theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
-                        }`}
-                      >
-                        <MoreVertical className="w-4 h-4" />
-                      </motion.button>
                     </div>
                   </div>
                 </div>
@@ -537,48 +562,91 @@ const MessagesScreen: React.FC = () => {
                 {/* Messages */}
                 <div className={`flex-1 overflow-y-auto p-3 sm:p-4 scrollbar-hide ${
                   theme === 'dark' 
-                    ? 'bg-gradient-to-br from-gray-900 via-gray-950 to-gray-900' 
-                    : 'bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100'
-                }`} style={{ paddingBottom: selectedFiles.length > 0 ? 160 : 88 }}>
-                  <div className="space-y-1.5 sm:space-y-2 max-w-4xl mx-auto">
-                    {/* Sample messages */}
-                    <div className="flex justify-end group">
-                      <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl ${
-                        theme === 'dark' 
-                          ? 'bg-[#3390ec] text-white' 
-                          : 'bg-[#3390ec] text-white'
+                    ? 'bg-black' 
+                    : 'bg-white'
+                }`} style={{ paddingBottom: selectedFiles.length > 0 ? (isMobile ? 240 : 160) : (isMobile ? 168 : 88) }}>
+                  <div className="space-y-3 max-w-4xl mx-auto">
+                    {/* Date Separator */}
+                    <div className="flex justify-center my-6">
+                      <div className={`px-3 py-1 rounded-full ${
+                        theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'
                       }`}>
-                        <p className="text-sm leading-relaxed mb-0.5">Hello! How are you doing? 😊</p>
-                        <div className="flex items-center justify-end mt-1 gap-1">
-                          <span className="text-[10px] opacity-75">2:30 PM</span>
-                          <CheckCheck className="w-3 h-3 opacity-75" />
+                        <span className={`text-xs font-medium ${
+                          theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                        }`}>Bugün</span>
+                      </div>
+                    </div>
+
+                    {/* Incoming message */}
+                    <div className="flex justify-start group">
+                      <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-4 py-2.5 rounded-2xl shadow-sm ${
+                        theme === 'dark' 
+                          ? 'bg-gray-800 text-white' 
+                          : 'bg-white text-gray-900 border border-gray-200'
+                      }`} style={{ 
+                        borderBottomLeftRadius: '4px',
+                        borderTopLeftRadius: '16px',
+                        borderTopRightRadius: '16px',
+                        borderBottomRightRadius: '16px'
+                      }}>
+                        <p className="text-sm leading-relaxed mb-1">selam</p>
+                        <div className="flex items-center mt-1.5">
+                          <span className={`text-[11px] ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                          }`}>00:24</span>
                         </div>
                       </div>
                     </div>
-                    
-                    <div className="flex justify-start group">
-                      <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl ${
+
+                    {/* Outgoing messages */}
+                    <div className="flex justify-end group">
+                      <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-4 py-2.5 rounded-2xl shadow-sm ${
                         theme === 'dark' 
                           ? 'bg-gray-800 text-white' 
-                          : 'bg-white text-gray-900'
-                      } shadow-sm`}>
-                        <p className="text-sm leading-relaxed mb-0.5">I'm doing great! Thanks for asking. How about you?</p>
-                        <div className="flex items-center mt-1">
-                          <span className="text-[10px] opacity-75">2:32 PM</span>
+                          : 'bg-black text-white'
+                      }`} style={{ 
+                        borderBottomRightRadius: '4px',
+                        borderTopLeftRadius: '16px',
+                        borderTopRightRadius: '16px',
+                        borderBottomLeftRadius: '16px'
+                      }}>
+                        <p className="text-sm leading-relaxed mb-1">naber</p>
+                        <div className="flex items-center justify-end mt-1.5 gap-1.5">
+                          <span className={`text-[11px] ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-300'
+                          }`}>00:33</span>
+                          <CheckCheck className={`w-3.5 h-3.5 ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-300'
+                          }`} />
                         </div>
                       </div>
                     </div>
 
                     <div className="flex justify-end group">
-                      <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl ${
+                      <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-4 py-2.5 rounded-2xl shadow-sm ${
                         theme === 'dark' 
-                          ? 'bg-[#3390ec] text-white' 
-                          : 'bg-[#3390ec] text-white'
-                      }`}>
-                        <p className="text-sm leading-relaxed mb-0.5">Amazing! The community is so supportive here! 🏳️‍🌈</p>
-                        <div className="flex items-center justify-end mt-1 gap-1">
-                          <span className="text-[10px] opacity-75">2:35 PM</span>
-                          <CheckCheck className="w-3 h-3 opacity-75" />
+                          ? 'bg-gray-800 text-white' 
+                          : 'bg-black text-white'
+                      }`} style={{ 
+                        borderBottomRightRadius: '4px',
+                        borderTopLeftRadius: '16px',
+                        borderTopRightRadius: '16px',
+                        borderBottomLeftRadius: '16px'
+                      }}>
+                        <div className="text-sm leading-relaxed mb-1">
+                          <p>asda</p>
+                          <p>aasd</p>
+                          <p>asdad</p>
+                          <p>asda</p>
+                          <p>asda</p>
+                        </div>
+                        <div className="flex items-center justify-end mt-1.5 gap-1.5">
+                          <span className={`text-[11px] ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-300'
+                          }`}>00:38</span>
+                          <CheckCheck className={`w-3.5 h-3.5 ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-300'
+                          }`} />
                         </div>
                       </div>
                     </div>
@@ -586,19 +654,24 @@ const MessagesScreen: React.FC = () => {
                     {/* Typing indicator */}
                     {isTyping && (
                       <div className="flex justify-start">
-                        <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl ${
-                          theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
-                        } shadow-sm`}>
-                          <div className="flex items-center space-x-3">
+                        <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-4 py-2.5 rounded-2xl shadow-sm ${
+                          theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-900 border border-gray-200'
+                        }`} style={{ 
+                          borderBottomLeftRadius: '4px',
+                          borderTopLeftRadius: '16px',
+                          borderTopRightRadius: '16px',
+                          borderBottomRightRadius: '16px'
+                        }}>
+                          <div className="flex items-center space-x-2">
                             <div className="flex space-x-1">
                               <div className={`w-2 h-2 rounded-full animate-bounce ${
-                                theme === 'dark' ? 'bg-gray-400' : 'bg-gray-500'
+                                theme === 'dark' ? 'bg-gray-400' : 'bg-gray-600'
                               }`}></div>
                               <div className={`w-2 h-2 rounded-full animate-bounce ${
-                                theme === 'dark' ? 'bg-gray-400' : 'bg-gray-500'
+                                theme === 'dark' ? 'bg-gray-400' : 'bg-gray-600'
                               }`} style={{ animationDelay: '0.2s' }}></div>
                               <div className={`w-2 h-2 rounded-full animate-bounce ${
-                                theme === 'dark' ? 'bg-gray-400' : 'bg-gray-500'
+                                theme === 'dark' ? 'bg-gray-400' : 'bg-gray-600'
                               }`} style={{ animationDelay: '0.4s' }}></div>
                             </div>
                           </div>
@@ -656,18 +729,8 @@ const MessagesScreen: React.FC = () => {
                 {/* Message Input */}
                 <div className={`sticky bottom-0 p-3 sm:p-4 border-t z-40 ${
                   theme === 'dark' ? 'border-gray-800 bg-black/95 backdrop-blur-xl' : 'border-gray-200 bg-white/95 backdrop-blur-xl'
-                }`}>
+                }`} style={{ paddingBottom: isMobile ? '80px' : undefined }}>
                   <div className="flex items-center space-x-2">
-                    <motion.button 
-                      onClick={() => fileInputRef.current?.click()}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className={`p-2 rounded-lg ${
-                        theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
-                      }`}
-                    >
-                      <Paperclip className="w-4 h-4" />
-                    </motion.button>
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -675,16 +738,6 @@ const MessagesScreen: React.FC = () => {
                       onChange={handleFileSelect}
                       className="hidden"
                     />
-                    <motion.button 
-                      onClick={() => imageInputRef.current?.click()}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className={`p-2 rounded-lg ${
-                        theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
-                      }`}
-                    >
-                      <Image className="w-4 h-4" />
-                    </motion.button>
                     <input
                       ref={imageInputRef}
                       type="file"
@@ -694,55 +747,61 @@ const MessagesScreen: React.FC = () => {
                       className="hidden"
                     />
                     <div className="flex-1 relative">
+                      <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
+                        <motion.button 
+                          onClick={() => fileInputRef.current?.click()}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className={`p-1.5 rounded-full ${
+                            theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
+                          }`}
+                        >
+                          <PlusSquare className={`w-4 h-4 ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                          }`} />
+                        </motion.button>
+                        <motion.button 
+                          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className={`p-1.5 rounded-full ${
+                            theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
+                          }`}
+                        >
+                          <Smile className={`w-4 h-4 ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                          }`} />
+                        </motion.button>
+                      </div>
                       <input
                         type="text"
                         value={message}
                         onChange={handleTyping}
-                        placeholder="Type a message..."
-                        className={`w-full pl-4 pr-12 py-2 sm:py-3 rounded-xl border text-sm ${
+                        placeholder="Unencrypted message"
+                        className={`w-full pl-20 pr-12 py-2 sm:py-3 rounded-full border-0 text-sm ${
                           theme === 'dark' 
-                            ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' 
-                            : 'bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500'
+                            ? 'bg-gray-800 text-white placeholder-gray-400' 
+                            : 'bg-gray-100 text-gray-900 placeholder-gray-500'
                         }`}
                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                       />
-                      <motion.button 
-                        onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className={`absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-lg ${
-                          theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'
+                      <motion.button
+                        onClick={handleSendMessage}
+                        disabled={!message.trim() && selectedFiles.length === 0}
+                        whileTap={{ scale: 0.95 }}
+                        className={`absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 rounded-full transition-all hover:scale-105 ${
+                          (message.trim() || selectedFiles.length > 0)
+                            ? theme === 'dark'
+                              ? 'bg-white text-black'
+                              : 'bg-black text-white'
+                            : theme === 'dark'
+                            ? 'bg-gray-700 text-gray-500'
+                            : 'bg-gray-200 text-gray-500'
                         }`}
                       >
-                        <Smile className="w-4 h-4" />
+                        <Send className="w-4 h-4" />
                       </motion.button>
                     </div>
-                    <motion.button
-                      onClick={handleSendMessage}
-                      disabled={!message.trim() && selectedFiles.length === 0}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className={`p-2 rounded-lg ${
-                        (message.trim() || selectedFiles.length > 0)
-                          ? theme === 'dark'
-                            ? 'bg-gray-800'
-                            : 'bg-gray-900'
-                          : theme === 'dark'
-                          ? 'bg-gray-700 text-gray-500'
-                          : 'bg-gray-300 text-gray-500'
-                      }`}
-                    >
-                      <Send className="w-4 h-4" />
-                    </motion.button>
-                    <motion.button 
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className={`p-2 rounded-lg ${
-                        theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
-                      }`}
-                    >
-                      <Mic className="w-4 h-4" />
-                    </motion.button>
                   </div>
 
                   {/* Emoji Picker */}
@@ -768,9 +827,21 @@ const MessagesScreen: React.FC = () => {
                     </div>
                   )}
                 </div>
-              </>
+              </motion.div>
             ) : (
-              !isMobile ? (
+              <motion.div
+                key="chat-list-placeholder"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ 
+                  type: 'spring',
+                  stiffness: 300,
+                  damping: 30
+                }}
+                className="flex-1 flex flex-col h-full w-full relative z-10 overflow-hidden"
+              >
+                {!isMobile ? (
                 <div className={`flex-1 flex items-center justify-center ${
                   theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
                 }`}>
@@ -786,9 +857,10 @@ const MessagesScreen: React.FC = () => {
                     }`}>Choose a group or private chat to start messaging</p>
                   </div>
                 </div>
-              ) : null
+                ) : null}
+              </motion.div>
             )}
-          </div>
+          </AnimatePresence>
         </div>
       </div>
     </div>

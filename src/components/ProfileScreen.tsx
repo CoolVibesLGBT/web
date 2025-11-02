@@ -1334,7 +1334,7 @@ const ProfileScreen: React.FC = () => {
           response = await api.call(Actions.CMD_USER_POSTS, {
             method: "POST",
             body: { 
-              user_id: user?.id,
+              user_id: user?.public_id,
               limit: 20,
               cursor: ""
             },
@@ -1344,7 +1344,7 @@ const ProfileScreen: React.FC = () => {
           response = await api.call(Actions.CMD_USER_POST_REPLIES, {
             method: "POST",
             body: { 
-              user_id: user?.id,
+              user_id: user?.public_id,
               limit: 20,
               cursor: ""
             },
@@ -1354,7 +1354,7 @@ const ProfileScreen: React.FC = () => {
           response = await api.call(Actions.CMD_USER_POST_MEDIA, {
             method: "POST",
             body: { 
-              user_id: user?.id,
+              user_id: user?.public_id,
               limit: 20,
               cursor: ""
             },
@@ -1364,7 +1364,7 @@ const ProfileScreen: React.FC = () => {
           response = await api.call(Actions.CMD_USER_POST_LIKES, {
             method: "POST",
             body: { 
-              user_id: user?.id,
+              user_id: user?.public_id,
               limit: 20,
               cursor: ""
             },

@@ -12,7 +12,7 @@ import SplashScreen from './components/SplashScreen';
 import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext.tsx';
 import AuthWizard from './components/AuthWizard';
-import { Home, Search, MapPin, Heart, MessageCircle, User, Building2, Menu, X, Sun, Moon, Languages, MoreHorizontal, Flame, FileText, Bell, ChevronRight, LogOut } from 'lucide-react';
+import { Home, Search, MapPin, Heart, MessageCircle, User, Building2, Menu, X, Sun, Moon, Languages, MoreHorizontal, Flame, FileText, Bell, ChevronRight, LogOut, EarIcon, Earth, EarthIcon } from 'lucide-react';
 import PlacesScreen from './components/PlacesScreen';
 import HomeScreen from './components/HomeScreen';
 import LanguageSelector from './components/LanguageSelector.tsx';
@@ -25,7 +25,7 @@ import { applicationName } from './appSettings.tsx';
 
 
 function App() {
-  const [activeScreen, setActiveScreen] = useState('home');
+  const [activeScreen, setActiveScreen] = useState('discover');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthWizardOpen, setIsAuthWizardOpen] = useState(false);
   const [isLanguageSelectorOpen, setIsLanguageSelectorOpen] = useState(false);
@@ -42,8 +42,8 @@ function App() {
   // Update activeScreen based on current URL
   React.useEffect(() => {
     const path = location.pathname;
-    if (path === '/' || path === '/home') {
-      setActiveScreen('home');
+    if (path === '/' || path === '/discover') {
+      setActiveScreen('discover');
     } else if (path === '/search') {
       setActiveScreen('search');
     } else if (path === '/nearby') {
@@ -65,7 +65,7 @@ function App() {
   }, [location.pathname]);
 
   const mobileNavItems = [
-    { id: 'home', label: t('app.nav.home'), icon: Home },
+    { id: 'discover', label: "Discover", icon: Earth },
     { id: 'search', label: t('app.nav.search'), icon: Search },
     { id: 'nearby', label: t('app.nav.nearby'), icon: MapPin },
     { id: 'match', label: t('app.nav.match'), icon: Heart },
@@ -144,7 +144,7 @@ function App() {
             {/* Navigation */}
             <nav className="space-y-1 flex-1">
               {[
-                { id: 'home', label: t('app.nav.home'), icon: Home },
+                { id: 'discover',label: "Discover", icon: Earth },
                 { id: 'nearby', label: t('app.nav.nearby'), icon: MapPin },
                 { id: 'search', label: t('app.nav.explore'), icon: Search },
                 { id: 'match', label: t('app.nav.matches'), icon: Heart },
@@ -347,6 +347,7 @@ function App() {
             {/* Home Routes */}
             <Route path="/" element={<HomeScreen />} />
             <Route path="/home" element={<HomeScreen />} />
+            <Route path="/discover" element={<HomeScreen />} />
             
             {/* Profile Routes */}
             <Route path="/:username" element={<ProfileScreen />} />
@@ -531,7 +532,7 @@ function App() {
       } backdrop-blur-xl safe-area-inset-bottom`}>
         <div className="flex items-center justify-around px-4 py-3">
           {[
-            { id: 'home', icon: Home, label: t('app.nav.home') },
+            { id: 'discover', icon: Earth, label: "Discover"},
             { id: 'search', icon: Search, label: t('app.nav.search') },
             { id: 'match', icon: Heart, label: t('app.nav.match') },
             { id: 'messages', icon: MessageCircle, label: t('app.nav.messages') },
@@ -543,9 +544,12 @@ function App() {
               <button
                 key={item.id}
                 onClick={() => {
-                  if (item.id === 'home') {
+                  if (item.id === 'discover') {
                     navigate('/');
-                  } else if (item.id === 'profile') {
+                  } else if (item.id === 'discover') {
+                    navigate(`/discover'}`);
+                  } 
+                   else if (item.id === 'profile') {
                     navigate(`/${user?.username || 'profile'}`);
                   } else {
                     navigate(`/${item.id}`);
@@ -806,7 +810,7 @@ function App() {
                         key={item.id}
                         className="relative"
                         onClick={() => {
-                          if (item.id === 'home') {
+                          if (item.id === 'discover') {
                             navigate('/');
                           } else if (item.id === 'profile') {
                             navigate(`/${user?.username || 'profile'}`);
