@@ -25,7 +25,7 @@ import { applicationName } from './appSettings.tsx';
 
 
 function App() {
-  const [activeScreen, setActiveScreen] = useState('discover');
+  const [activeScreen, setActiveScreen] = useState('aura');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthWizardOpen, setIsAuthWizardOpen] = useState(false);
   const [isLanguageSelectorOpen, setIsLanguageSelectorOpen] = useState(false);
@@ -42,8 +42,8 @@ function App() {
   // Update activeScreen based on current URL
   React.useEffect(() => {
     const path = location.pathname;
-    if (path === '/' || path === '/discover') {
-      setActiveScreen('discover');
+    if (path === '/' || path === '/aura') {
+      setActiveScreen('aura');
     } else if (path === '/search') {
       setActiveScreen('search');
     } else if (path === '/nearby') {
@@ -65,7 +65,7 @@ function App() {
   }, [location.pathname]);
 
   const mobileNavItems = [
-    { id: 'discover', label: "Discover", icon: Earth },
+    { id: 'aura', label: "Aura", icon: Earth },
     { id: 'search', label: t('app.nav.search'), icon: Search },
     { id: 'nearby', label: t('app.nav.nearby'), icon: MapPin },
     { id: 'match', label: t('app.nav.match'), icon: Heart },
@@ -144,7 +144,7 @@ function App() {
             {/* Navigation */}
             <nav className="space-y-1 flex-1">
               {[
-                { id: 'discover',label: "Discover", icon: Earth },
+                { id: 'aura',label: "Aura", icon: Earth },
                 { id: 'nearby', label: t('app.nav.nearby'), icon: MapPin },
                 { id: 'search', label: t('app.nav.explore'), icon: Search },
                 { id: 'match', label: t('app.nav.matches'), icon: Heart },
@@ -347,7 +347,7 @@ function App() {
             {/* Home Routes */}
             <Route path="/" element={<HomeScreen />} />
             <Route path="/home" element={<HomeScreen />} />
-            <Route path="/discover" element={<HomeScreen />} />
+            <Route path="/aura" element={<HomeScreen />} />
             
             {/* Profile Routes */}
             <Route path="/:username" element={<ProfileScreen />} />
@@ -375,7 +375,7 @@ function App() {
         <aside className={`hidden xl:flex scrollbar-hide flex-col w-[380px] ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
           <div className="p-5 sticky top-0 h-screen scrollbar-hide overflow-y-auto space-y-4">
             
-            {/* Discover Section */}
+            {/* Aura Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -532,7 +532,7 @@ function App() {
       } backdrop-blur-xl safe-area-inset-bottom`}>
         <div className="flex items-center justify-around px-4 py-3">
           {[
-            { id: 'discover', icon: Earth, label: "Discover"},
+            { id: 'aura', icon: Earth, label: "Aura"},
             { id: 'search', icon: Search, label: t('app.nav.search') },
             { id: 'match', icon: Heart, label: t('app.nav.match') },
             { id: 'messages', icon: MessageCircle, label: t('app.nav.messages') },
@@ -544,10 +544,10 @@ function App() {
               <button
                 key={item.id}
                 onClick={() => {
-                  if (item.id === 'discover') {
+                  if (item.id === 'aura') {
                     navigate('/');
-                  } else if (item.id === 'discover') {
-                    navigate(`/discover'}`);
+                  } else if (item.id === 'aura') {
+                    navigate(`/aura'}`);
                   } 
                    else if (item.id === 'profile') {
                     navigate(`/${user?.username || 'profile'}`);
@@ -810,7 +810,7 @@ function App() {
                         key={item.id}
                         className="relative"
                         onClick={() => {
-                          if (item.id === 'discover') {
+                          if (item.id === 'aura') {
                             navigate('/');
                           } else if (item.id === 'profile') {
                             navigate(`/${user?.username || 'profile'}`);
