@@ -8,6 +8,7 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import Container from './Container';
 
 interface Place {
   id: number;
@@ -307,6 +308,8 @@ const PlacesScreen: React.FC = () => {
 
           {/* Main Content */}
           <main className="flex-1 p-4 md:p-6">
+          <Container>
+
         {sortedPlaces.length === 0 ? (
               <div className="text-center py-16">
                 <p className={`text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
@@ -395,13 +398,15 @@ const PlacesScreen: React.FC = () => {
             ))}
               </div>
         )}
+        </Container>
           </main>
       </div>
+   
       )}
 
       {/* Place Detail View */}
         {selectedPlace && (
-        <div className={`min-h-screen ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+        <Container>
           {/* Hero Image */}
           <div className="relative h-[50vh] min-h-[400px] max-h-[600px] overflow-hidden">
                 <img
@@ -602,7 +607,7 @@ const PlacesScreen: React.FC = () => {
               </p>
             </motion.div>
                 </div>
-                    </div>
+                </Container>
       )}
     </div>
   );

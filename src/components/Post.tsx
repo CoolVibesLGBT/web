@@ -9,7 +9,7 @@ import { api } from '../services/api';
 // API data structure interfaces
 interface ApiPost {
   id: string;
-  public_id: number;
+  public_id: string;
   author_id: string;
   type: string;
   content?: {
@@ -171,9 +171,9 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
 
   // Fetch children (replies) when in detail view
   useEffect(() => {
-    if (isDetailView && post.id) {
+    if (isDetailView && post.public_id) {
       setLoadingChildren(true);
-      api.fetchPost(post.id)
+      api.fetchPost(post.public_id)
         .then((response) => {
           if (response.children) {
             setChildren(response.children);
@@ -186,7 +186,7 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
           setLoadingChildren(false);
         });
     }
-  }, [isDetailView, post.id]);
+  }, [isDetailView, post.public_id]);
 
   // Handle image load
   const handleImageLoad = useCallback((imageUrl: string) => {
@@ -411,7 +411,7 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
         onClick={(e) => {
           e.stopPropagation();
           if (onPostClick) {
-            onPostClick(post.id, post.author.username);
+            onPostClick(post.public_id, post.author.username);
           }
         }}
       >

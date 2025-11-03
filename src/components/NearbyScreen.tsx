@@ -10,6 +10,7 @@ import { useApp } from '../contexts/AppContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { globalState, GlobalState } from '../state/nearby'; // atomun tanımlı olduğu dosya
+import Container from './Container';
 
 
 const NearbyScreen: React.FC = () => {
@@ -111,7 +112,7 @@ const NearbyScreen: React.FC = () => {
 
 
   return (
-    <div className={`w-full min-h-screen scrollbar-hide max-h-[100dvh] ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+    <Container>
       {/* Header - Sticky */}
       <div className={`sticky top-0 z-50 border-b ${theme === 'dark'
         ? 'border-gray-800/50 bg-black/95'
@@ -362,7 +363,7 @@ const NearbyScreen: React.FC = () => {
           )}
         </motion.div>
       </div>
-    </div>
+      </Container>
   );
 };
 

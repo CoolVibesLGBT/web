@@ -4,6 +4,7 @@ import { Heart, X, Star, MapPin, Briefcase, GraduationCap, MessageCircle, Info, 
 import { useTheme } from '../contexts/ThemeContext';
 import { useApp } from '../contexts/AppContext';
 import { useTranslation } from 'react-i18next';
+import Container from './Container';
 
 interface Fantasy {
   id: string;
@@ -481,8 +482,8 @@ const MatchScreen: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#0A0A0A]' : 'bg-white'} flex items-center justify-center p-4 transition-colors duration-300`}>
-      <motion.div 
+<Container>
+<motion.div 
         className="w-full max-w-md mx-auto"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -1148,7 +1149,7 @@ const MatchScreen: React.FC = () => {
           </motion.button>
         </motion.div>
       </motion.div>
-    </div>
+    </Container>
   );
 };
 

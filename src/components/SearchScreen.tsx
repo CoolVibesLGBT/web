@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Users, Calendar, Heart, MessageCircle, Share2, MoreHorizontal, Filter, X } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import Container from './Container';
 
 const SearchScreen: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -188,8 +189,7 @@ const SearchScreen: React.FC = () => {
   });
 
   return (
-    <div className={`scrollbar-hide max-h-[100dvh]  overflow-y-auto ${theme === 'dark' ? 'bg-black' : 'bg-gray-50'}`}>
-      {/* Search Header */}
+    <Container>
       <div className={`sticky top-0 z-50 ${theme === 'dark' ? 'bg-black border-gray-800' : 'bg-white border-gray-200'} border-b backdrop-blur-xl bg-opacity-80`}>
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="relative">
@@ -248,8 +248,6 @@ const SearchScreen: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Search Results */}
       <div className="max-w-4xl mx-auto px-4 py-6">
         <AnimatePresence mode="wait">
           {isSearching ? (
@@ -510,7 +508,7 @@ const SearchScreen: React.FC = () => {
           )}
         </AnimatePresence>
       </div>
-    </div>
+    </Container>
   );
 };
 

@@ -12,6 +12,7 @@ import {
   Settings,
   CheckCheck
 } from 'lucide-react';
+import Container from './Container';
 
 interface Notification {
   id: number;
@@ -181,7 +182,7 @@ const NotificationsScreen: React.FC = () => {
   };
 
   return (
-    <div className={`scrollbar-hide max-h-[100dvh]  overflow-y-auto ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+    <Container>
       {/* Header - Sticky */}
       <div className={`sticky top-0 z-50 border-b ${
         theme === 'dark' 
@@ -483,7 +484,7 @@ const NotificationsScreen: React.FC = () => {
           )}
         </AnimatePresence>
       </div>
-    </div>
+      </Container>
   );
 };
 

@@ -20,6 +20,7 @@ import ClassifiedsScreen from './components/ClassifiedsScreen';
 import './i18n';
 import { useTranslation } from 'react-i18next';
 import { applicationName } from './appSettings.tsx';
+import LandingPage from './components/LandingPage.tsx';
 
 
 
@@ -342,9 +343,10 @@ function App() {
 
   
         {/* Middle Section - Scrollable */}
-        <main className={`max-h-[100dvh]  min-h-[100dvh]  overflow-y-hidden overflow-x-hidden scrollbar-hide flex-1 min-w-0 lg:border-l lg:border-r ${theme === 'dark' ? 'lg:border-gray-800/30' : 'lg:border-gray-100/50'} pt-[56px] lg:pt-0 pb-[80px] lg:pb-0`}>
+        <main className={`max-h-[100dvh]  min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide flex-1 min-w-0 lg:border-l lg:border-r ${theme === 'dark' ? 'lg:border-gray-800/30' : 'lg:border-gray-100/50'} pt-[56px] lg:pt-0 pb-[80px] lg:pb-0`}>
           <Routes>
             {/* Home Routes */}
+            <Route path="/landing" element={<LandingPage />} />
             <Route path="/" element={<HomeScreen />} />
             <Route path="/home" element={<HomeScreen />} />
             <Route path="/pride" element={<HomeScreen />} />
@@ -371,7 +373,7 @@ function App() {
 
         {/* Right Sidebar - Fixed */}
         {/* Hide right sidebar on messages and notifications routes for better UX */}
-        {location.pathname !== '/messages' && (
+        {location.pathname !== '/messages' && location.pathname !== '/landing' && (
         <aside className={`hidden xl:flex scrollbar-hide flex-col w-[380px] ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
           <div className="p-5 sticky top-0 h-screen scrollbar-hide overflow-y-auto space-y-4">
             

@@ -29,6 +29,7 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
 import { $getRoot, $createParagraphNode, $createTextNode } from 'lexical';
 import { ToolbarContext } from '../contexts/ToolbarContext';
+import Container from './Container';
 
 // ToolbarPlugin wrapper component
 const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (editor: any) => void }) => {
@@ -1511,18 +1512,7 @@ const ProfileScreen: React.FC = () => {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      transition={{ 
-        type: 'spring',
-        stiffness: 300,
-        damping: 30,
-        mass: 0.8
-      }}
-      className={`scrollbar-hide max-h-[100dvh] overflow-y-auto ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}
-    >
+    <Container>
       {/* Header */}
       <div ref={headerRef} className={`sticky top-0 z-30 ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}`}>
         <div className="flex items-center px-4 py-3">
@@ -3120,7 +3110,7 @@ const ProfileScreen: React.FC = () => {
         )}
       </div>
 
-    </motion.div>
+      </Container>
   );
 };
 
