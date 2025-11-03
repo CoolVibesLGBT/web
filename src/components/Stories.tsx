@@ -409,7 +409,7 @@ const Stories: React.FC = () => {
               className="
               opacity-100
               w-full
-              bg-transparent
+              p-4
               h-full
               transform-none
               fixed inset-0 z-[200]
@@ -429,7 +429,7 @@ const Stories: React.FC = () => {
             />
 
             {/* Story Viewer Container */}
-            <div className="fixed inset-0 z-[201] flex items-center justify-center p-4">
+            <div className="fixed inset-0 z-[201] flex items-center justify-center">
               {/* Close Button - Flat */}
               <motion.button
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -474,14 +474,17 @@ const Stories: React.FC = () => {
 
               {/* Story Content - Premium Card */}
               <motion.div
+              onClick={()=>{
+                setSelectedStory(null)
+              }}
                 key={selectedStory}
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-full max-w-full md:max-w-[] lg:max-w-[420px] h-[100vh] md:h-[92vh] lg:h-[92vh] mx-auto"
+                className="p-3 relative rounded-3xl w-screen h-screen mx-auto"
               >
-                <div className="relative w-full h-full lg:rounded-3xl md:rounded-3xl overflow-hidden">
+                <div className="relative mx-auto w-full h-full max-w-sm rounded-3xl overflow-hidden">
                   {/* Story Media (Image or Video) */}
                   {(() => {
                     const isVideoMedia = selectedStoryData.storyMedia?.file?.mime_type?.startsWith('video/');
@@ -498,7 +501,7 @@ const Stories: React.FC = () => {
                         animate={{ scale: 1 }}
                         transition={{ duration: 0.6 }}
                         src={mediaUrl}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full rounded-3xl object-cover"
                         controls
                         autoPlay
                         loop
@@ -512,7 +515,7 @@ const Stories: React.FC = () => {
                         transition={{ duration: 0.6 }}
                         src={mediaUrl}
                         alt={selectedStoryData.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full rounded-3xl object-cover"
                       />
                     );
                   })()}

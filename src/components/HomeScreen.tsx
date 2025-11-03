@@ -8,7 +8,6 @@ import Post from './Post';
 import Flows from './Flows';
 import Vibes from './Vibes';
 import { api } from '../services/api';
-import Container from './Container';
 
 // Import the ApiPost interface from Post component
 interface ApiPost {
@@ -202,11 +201,11 @@ const HomeScreen: React.FC = () => {
   }, [selectedPost]);
 
   return (
-    <Container>
+    <div className={`scrollbar-hide max-h-[100dvh]  overflow-y-auto ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
 
       {/* Stories Above Tabs - Only show when not in post detail view */}
       {!selectedPost && (
-        <div className={` lg:block ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-black' : 'border-gray-100'} p-4`}>
+        <div className={`hidden lg:block ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-black' : 'border-gray-100'} p-4`}>
           <Stories />
         </div>
       )}
@@ -341,7 +340,7 @@ const HomeScreen: React.FC = () => {
           )}
         </main>
       </div>
-      </Container>
+    </div>
   );
 };
 
