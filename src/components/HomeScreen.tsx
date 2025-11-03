@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Stories from './Stories';
-import CreatePost from './CreatePost';
 import Post from './Post';
-import Media from './Media';
+import Flows from './Flows';
+import Vibes from './Vibes';
 import { api } from '../services/api';
 
 // Import the ApiPost interface from Post component
@@ -148,30 +148,11 @@ interface ApiPost {
   };
 }
 
-interface TimelineResponse {
-  posts: ApiPost[];
-  next_cursor: number;
-}
-
 const HomeScreen: React.FC = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
-  const [posts, setPosts] = useState<ApiPost[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(true);
-  const [nextCursor, setNextCursor] = useState<string>('');
-
   const [activeTab, setActiveTab] = useState('flows');
-
-  // Vibes state
-  const [vibesPosts, setVibesPosts] = useState<ApiPost[]>([]);
-  const [vibesLoading, setVibesLoading] = useState(false);
-  const [vibesLoadingMore, setVibesLoadingMore] = useState(false);
-  const [vibesHasMore, setVibesHasMore] = useState(true);
-  const [vibesNextCursor, setVibesNextCursor] = useState<string>('');
 
   // Get selected post from URL or null
   const selectedPost = location.pathname.includes('/status/')
@@ -197,48 +178,6 @@ const HomeScreen: React.FC = () => {
     navigate(`/${username}`, { replace: true });
   };
 
-  // Fetch posts from API
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const response: TimelineResponse = await api.fetchTimeline({ limit: 10, cursor: "" });
-        setPosts(response.posts);
-        setNextCursor(response.next_cursor?.toString() || '');
-        setHasMore(response.posts.length > 0);
-      } catch (err) {
-        console.error('Error fetching posts:', err);
-        setError('Failed to load posts. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPosts();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Fetch vibes when tab switches to vibes
-  useEffect(() => {
-    const fetchVibes = async () => {
-      if (activeTab === 'following' && vibesPosts.length === 0 && !vibesLoading) {
-        try {
-          setVibesLoading(true);
-          const response: TimelineResponse = await api.fetchVibes({ limit: 20, cursor: "" });
-          setVibesPosts(response.posts);
-          setVibesNextCursor(response.next_cursor?.toString() || '');
-          setVibesHasMore(response.posts.length > 0);
-        } catch (err) {
-          console.error('Error fetching vibes:', err);
-        } finally {
-          setVibesLoading(false);
-        }
-      }
-    };
-
-    fetchVibes();
-  }, [activeTab]); // eslint-disable-line react-hooks/exhaustive-deps
-
   // Fetch post detail when selectedPost changes
   useEffect(() => {
     const fetchPostDetail = async () => {
@@ -253,7 +192,6 @@ const HomeScreen: React.FC = () => {
         setSelectedPostData(response);
       } catch (err) {
         console.error('Error fetching post detail:', err);
-        setError('Failed to load post. Please try again.');
       } finally {
         setLoadingPostDetail(false);
       }
@@ -261,53 +199,6 @@ const HomeScreen: React.FC = () => {
 
     fetchPostDetail();
   }, [selectedPost]);
-
-  // Load more posts function
-  const loadMorePosts = useCallback(async () => {
-    if (!nextCursor || loadingMore) {
-      console.log('Load more skipped:', { nextCursor, loadingMore });
-      return;
-    }
-
-    try {
-      console.log('Loading more posts with cursor:', nextCursor);
-      setLoadingMore(true);
-      const response: TimelineResponse = await api.fetchTimeline({ limit: 10, cursor: nextCursor });
-
-      console.log('Load more response:', response);
-
-      if (response.posts.length > 0) {
-        setPosts(prevPosts => [...prevPosts, ...response.posts]);
-        setNextCursor(response.next_cursor?.toString() || '');
-      } else {
-        setHasMore(false);
-      }
-    } catch (err) {
-      console.error('Error loading more posts:', err);
-    } finally {
-      setLoadingMore(false);
-    }
-  }, [nextCursor, loadingMore]);
-
-  // Load more posts when scrolling to bottom
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      const clientHeight = document.documentElement.clientHeight;
-
-      const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-
-      // Load more when 200px from bottom
-      if (distanceFromBottom <= 200 && hasMore && !loadingMore && !loading && !selectedPost) {
-        console.log('Triggering load more:', { distanceFromBottom, hasMore, loadingMore, loading, selectedPost });
-        loadMorePosts();
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [hasMore, loadingMore, loading, selectedPost, loadMorePosts]);
 
   return (
     <div className={`scrollbar-hide max-h-[100dvh]  overflow-y-auto ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
@@ -433,140 +324,17 @@ const HomeScreen: React.FC = () => {
             // Posts Feed or Vibes Grid
             <AnimatePresence mode="wait">
               {activeTab === 'flows' ? (
-                <motion.div
+                <Flows
                   key="flows"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {/* Create Post */}
-                  <div className={`${theme === 'dark' ? 'bg-black border-b border-black' : 'bg-white border-b border-gray-100'}`}>
-                    <CreatePost
-                      onPostCreated={() => {
-                        // Refresh the timeline when a new post is created
-                        const fetchPosts = async () => {
-                          try {
-                            const response: TimelineResponse = await api.fetchTimeline({ limit: 10, cursor: "" });
-                            setPosts(response.posts);
-                            setNextCursor(response.next_cursor?.toString() || '');
-                            setHasMore(response.posts.length > 0);
-                          } catch (err) {
-                            console.error('Error refreshing posts:', err);
-                          }
-                        };
-                        fetchPosts();
-                      }}
-                    />
-                  </div>
-
-                  {/* Posts Feed */}
-                  <div>
-                    {loading ? (
-                      <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                        Loading posts...
-                      </div>
-                    ) : error ? (
-                      <div className={`p-8 text-center ${theme === 'dark' ? 'text-red-400' : 'text-red-500'}`}>
-                        {error}
-                      </div>
-                    ) : posts.length === 0 ? (
-                      <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                        No posts available
-                      </div>
-                    ) : (
-                      posts.map((post, index) => (
-                        <motion.div
-                          key={post.id}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.05 }}
-                          className={`${theme === 'dark' ? 'bg-black' : 'bg-white'}`}
-                        >
-                          <Post
-                            post={post}
-                            onPostClick={(postId, username) => handlePostClick(postId, username)}
-                            onProfileClick={handleProfileClick}
-                            onRefreshParent={() => {
-                              // Refresh the entire timeline when a reply is posted
-                              const fetchPosts = async () => {
-                                try {
-                                  const response: TimelineResponse = await api.fetchTimeline({ limit: 10, cursor: "" });
-                                  setPosts(response.posts);
-                                  setNextCursor(response.next_cursor?.toString() || '');
-                                  setHasMore(response.posts.length > 0);
-                                } catch (err) {
-                                  console.error('Error refreshing posts:', err);
-                                }
-                              };
-                              fetchPosts();
-                            }}
-                          />
-                        </motion.div>
-                      ))
-                    )}
-                    {/* Loading More Indicator */}
-                    {loadingMore && (
-                      <div className={`p-8 text-center border-t ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}`}>
-                        <div className={`inline-flex items-center space-x-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-400 border-t-transparent"></div>
-                          <span>Loading more posts...</span>
-                        </div>
-                      </div>
-                    )}
-                    {!hasMore && posts.length > 0 && (
-                      <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                        No more posts to load
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
+                  onPostClick={handlePostClick}
+                  onProfileClick={handleProfileClick}
+                />
               ) : (
-                /* Vibes Masonry Grid */
-                <motion.div
+                <Vibes
                   key="vibes"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-4"
-                >
-                  {vibesLoading ? (
-                    <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                      Loading vibes...
-                    </div>
-                  ) : vibesPosts.length === 0 ? (
-                    <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                      No vibes available
-                    </div>
-                  ) : (
-                    <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-2 sm:gap-3">
-                      {vibesPosts.map((post, index) => {
-                        // Filter posts with media attachments
-                        const mediaAttachments = post.attachments?.filter(att =>
-                          att.file?.mime_type?.startsWith('image/') ||
-                          att.file?.mime_type?.startsWith('video/')
-                        ) || [];
-
-                        if (mediaAttachments.length === 0) return null;
-
-                        const firstMedia = mediaAttachments[0];
-
-                        return (
-                          <motion.div
-                            key={post.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.03 }}
-                            onClick={() => handlePostClick(post.id, post.author.username)}
-                          >
-                            <Media media={firstMedia} />
-                          </motion.div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </motion.div>
+                  activeTab={activeTab}
+                  onPostClick={handlePostClick}
+                />
               )}
             </AnimatePresence>
           )}
