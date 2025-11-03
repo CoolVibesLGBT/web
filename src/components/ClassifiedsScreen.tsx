@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 import { Plus, Search, Briefcase, Home, MapPin, Clock, Tag, X, User, Mail, CheckCircle, ArrowLeft, Star } from 'lucide-react';
+import Container from './Container';
 
 interface Author {
   name: string;
@@ -296,6 +297,7 @@ const ClassifiedsScreen: React.FC = () => {
           </aside>
 
           {/* Main Content */}
+          <Container>
           <main className="flex-1 p-4 md:p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredAds.map((ad, index) => (
@@ -420,6 +422,7 @@ const ClassifiedsScreen: React.FC = () => {
               </div>
             )}
           </main>
+          </Container>
         </div>
         </>
       )}
