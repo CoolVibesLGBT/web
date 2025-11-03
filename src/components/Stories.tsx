@@ -440,7 +440,7 @@ const Stories: React.FC = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedStory(null)}
-                className="absolute top-6 right-6 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl flex items-center justify-center text-white transition-all duration-300 hover:bg-white/20"
+                className="absolute top-12  right-8 z-20 w-12 h-12 rounded-full bg-white/50 border border-2 border-black backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:bg-white/20"
               >
                 <X className="w-6 h-6" />
               </motion.button>
@@ -454,7 +454,7 @@ const Stories: React.FC = () => {
                   whileHover={{ scale: 1.05, x: -5 }}
                   whileTap={{ scale: 0.95 }}
                 onClick={prevStory}
-                  className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/10 backdrop-blur-xl flex items-center justify-center text-white transition-all duration-300 hover:bg-white/20 z-20"
+                  className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 border border-2 border-black rounded-full bg-white/10 backdrop-blur-xl flex items-center justify-center transition-all duration-300 hover:bg-white/20 z-20"
               >
                   <ChevronLeft className="w-7 h-7" />
                 </motion.button>
@@ -468,7 +468,7 @@ const Stories: React.FC = () => {
                   whileHover={{ scale: 1.05, x: 5 }}
                   whileTap={{ scale: 0.95 }}
                 onClick={nextStory}
-                  className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/10 backdrop-blur-xl flex items-center justify-center text-white transition-all duration-300 hover:bg-white/20 z-20"
+                  className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/10 backdrop-blur-xl flex items-center justify-center border border-2 border-black transition-all duration-300 hover:bg-white/20 z-20"
               >
                   <ChevronRight className="w-7 h-7" />
                 </motion.button>
@@ -504,9 +504,9 @@ const Stories: React.FC = () => {
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="p-3 relative rounded-3xl w-screen h-screen mx-auto"
+                className="p-3 relative rounded-3xl w-screen h-screen mx-auto flex items-center justify-center"
               >
-                <div className="relative mx-auto w-full h-full max-w-sm rounded-3xl overflow-hidden">
+                <div className="relative mx-auto w-full h-full max-h-[95dvh] max-w-sm rounded-3xl overflow-hidden">
                   {/* Story Media (Image or Video) */}
                   {(() => {
                     const isVideoMedia = selectedStoryData.storyMedia?.file?.mime_type?.startsWith('video/');
