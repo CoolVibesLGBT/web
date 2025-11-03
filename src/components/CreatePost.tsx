@@ -896,7 +896,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                     <RichTextPlugin
                       contentEditable={
                         <ContentEditable 
-                          className="editor-input lexical-editor"
+                          className="editor-input lexical-editor py-4 px-0 bg-red-500"
                           style={{
                             minHeight: isFullScreen ? '70dvh' : isExpanded ? '140px' : '80px',
                             maxHeight: isFullScreen ? '100%' : '100%',
@@ -906,7 +906,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                         />
                       }
                       placeholder={
-                        <div className="pt-[32px] ml-[-10px] editor-placeholder w-full h-full text-center flex justify-center items-center">
+                        <div className="pt-[24px] rounded-sm p-0 editor-placeholder w-full h-full text-start flex justify-start items-start">
                           {placeholder}
                         </div>
                       }
