@@ -205,7 +205,7 @@ const HomeScreen: React.FC = () => {
 
       {/* Stories Above Tabs - Only show when not in post detail view */}
       {!selectedPost && (
-        <div className={`hidden lg:block ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-black' : 'border-gray-100'} p-4`}>
+        <div className={`lg:block ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-black' : 'border-gray-100'} p-4`}>
           <Stories />
         </div>
       )}
