@@ -89,7 +89,7 @@ function App() {
 
       {/* Twitter Style Layout - 3 Columns */}
       {!showSplash && (
-      <div className={`max-h-[100dvh] flex  min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide`}>
+      <div className={`max-h-[100dvh] w-full max-w-max  flex  mx-auto min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide`}>
         
         {/* Mobile Header - Top Navigation */}
         <header className={`lg:hidden fixed top-0 left-0 right-0 z-50 ${theme === 'dark' ? 'bg-black/95 backdrop-blur-xl border-b border-gray-800/50' : 'bg-white/95 backdrop-blur-xl border-b border-gray-100/50'}`}>
