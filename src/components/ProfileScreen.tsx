@@ -3110,7 +3110,7 @@ const ProfileScreen: React.FC = () => {
         )}
       </div>
 
-      </Container>
+    </Container>
   );
 };
 

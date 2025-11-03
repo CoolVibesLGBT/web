@@ -4,6 +4,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import CreatePost from './CreatePost';
 import Post from './Post';
 import { api } from '../services/api';
+import Container from './Container';
 
 interface ApiPost {
   id: string;
@@ -259,6 +260,7 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
           }}
         />
       </div>
+      <Container>
 
       {/* Posts Feed */}
       <div>
@@ -275,6 +277,7 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
             No posts available
           </div>
         ) : (
+       
           posts.map((post, index) => (
             <motion.div
               key={post.id}
@@ -293,6 +296,7 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
               />
             </motion.div>
           ))
+      
         )}
         {/* Loading More Indicator */}
         {loadingMore && (
@@ -309,6 +313,7 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
           </div>
         )}
       </div>
+      </Container>
     </motion.div>
   );
 };
