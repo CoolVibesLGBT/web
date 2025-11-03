@@ -222,7 +222,7 @@ const NearbyScreen: React.FC = () => {
 
       <div
 
-        className="min-h-screen scrollbar-hide h-[100dvh] pb-[35dvh] overflow-y-scroll w-full mx-auto max-w-7xl relative"
+        className="w-full mx-auto max-w-7xl relative"
         style={{ touchAction: 'pan-y', WebkitOverflowScrolling: 'touch' }}>
 
 

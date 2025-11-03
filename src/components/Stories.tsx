@@ -460,9 +460,9 @@ const Stories: React.FC = () => {
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-full max-w-[420px] h-[92vh] mx-auto"
+                className="relative w-full max-w-full md:max-w-[420px] lg:max-w-[420px] h-[100vh] md:h-[92vh] lg:h-[92vh] mx-auto"
               >
-                <div className="relative w-full h-full rounded-3xl overflow-hidden">
+                <div className="relative w-full h-full lg:rounded-3xl md:rounded-3xl overflow-hidden">
                   {/* Story Media (Image or Video) */}
                   {(() => {
                     const isVideoMedia = selectedStoryData.storyMedia?.file?.mime_type?.startsWith('video/');
