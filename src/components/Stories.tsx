@@ -406,7 +406,29 @@ const Stories: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black z-[200]"
+              className="
+              opacity-100
+              w-full
+              bg-transparent
+              h-full
+              transform-none
+              fixed inset-0 z-[200]
+            "
+            style={{
+              backgroundImage: theme ==="dark" ? 'radial-gradient(transparent 1px, #000000 1px)' : 'radial-gradient(transparent 1px, #000000 1px)',
+             
+              backdropFilter:`blur(3px)`,
+              backgroundColor: 'transparent',
+
+              backgroundSize: '2px 3px',
+              transform:"none",
+          
+
+          
+              maskImage: 'linear-gradient(#ffffff calc(100% - 20px), transparent)',
+              WebkitMaskImage: 'linear-gradient(#ffffff calc(100% - 20px), transparent)', // Safari için
+            }}
+         
             />
 
             {/* Story Viewer Container */}
@@ -460,7 +482,7 @@ const Stories: React.FC = () => {
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-full max-w-full md:max-w-[420px] lg:max-w-[420px] h-[100vh] md:h-[92vh] lg:h-[92vh] mx-auto"
+                className="relative w-full max-w-full md:max-w-[] lg:max-w-[420px] h-[100vh] md:h-[92vh] lg:h-[92vh] mx-auto"
               >
                 <div className="relative w-full h-full lg:rounded-3xl md:rounded-3xl overflow-hidden">
                   {/* Story Media (Image or Video) */}
