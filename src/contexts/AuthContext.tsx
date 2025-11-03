@@ -42,8 +42,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       } catch (error) {
         console.error('Auto-login failed:', error);
         // If token is invalid, remove it
-        localStorage.removeItem("authToken");
-        setToken(null);
+        //localStorage.removeItem("authToken");
+        //setToken(null);
       }
     };
 

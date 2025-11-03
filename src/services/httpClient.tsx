@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { serviceURL } from "../appSettings";
 
 class HttpClient {
   private instance: AxiosInstance;
@@ -38,4 +39,4 @@ class HttpClient {
   }
 }
 
-export const httpClient = new HttpClient("http://localhost:3001/").getInstance();
+export const httpClient = new HttpClient(serviceURL[0]).getInstance();
