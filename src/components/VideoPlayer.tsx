@@ -267,12 +267,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, className = '' }
   return (
     <div
       ref={containerRef}
-      className={`relative w-full rounded-2xl overflow-hidden ${className} ${
-        theme === 'dark' ? 'bg-black' : 'bg-gray-100'
-      } ${
+      style={{
+        backgroundImage: theme ==="dark" ? 'radial-gradient(transparent 1px,rgb(51, 48, 48) 1px)' : 'radial-gradient(transparent 1px, #000000 1px)',
+       height:isFullscreen ? "100%" : undefined,
+       width:isFullscreen ? "100%" : undefined,
+        backdropFilter:`blur(3px)`,
+        backgroundColor: theme === 'dark' ? "transparent" : 'white',
+
+        backgroundSize: '2px 3px',
+        transform:"none",
+        WebkitMaskImage: 'linear-gradient(#ffffff calc(100% - 20px), transparent)', // Safari için
+      }}
+      className={`relative  w-full rounded-2xl overflow-hidden ${className} ${
         isFullscreen ? '!rounded-none flex items-center justify-center h-full' : ''
       }`}
-      style={isFullscreen ? { height: '100%', width: '100%' } : undefined}
       onMouseMove={() => {
         setIsHovering(true);
         resetControlsTimeout();
@@ -293,7 +301,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, className = '' }
         ref={videoRef}
         src={src}
         poster={poster}
-        className={`object-contain ${
+        className={`object-contain  bg-transparent ${
           isFullscreen 
             ? 'max-w-full max-h-full w-auto h-auto' 
             : 'w-full h-auto max-h-[600px]'
@@ -319,7 +327,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, className = '' }
       {/* Controls Overlay - LGBTQ+ Rainbow Style (only at bottom) */}
 
 <div
-  className="absolute bottom-0 left-0 right-0 h-[60px] pointer-events-none transition-opacity duration-300 backdrop-blur-xl"
+  className="absolute bottom-0 left-0 right-0 h-full z-[-10] pointer-events-none transition-opacity duration-300 backdrop-blur-xl"
   style={{
     opacity: showControls ? (theme === 'dark' ? 0.8 : 0.7) : 0,
     background: `linear-gradient(to top,

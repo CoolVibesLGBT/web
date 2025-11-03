@@ -18,9 +18,7 @@ const Media: React.FC<MediaProps> = ({ media }) => {
 
   return (
     <div
-      className={`break-inside-avoid mb-2 sm:mb-3 rounded-lg overflow-hidden cursor-pointer group ${
-        theme === 'dark' ? 'bg-gray-900' : 'bg-white'
-      }`}
+      className={`break-inside-avoid mb-2 sm:mb-3 rounded-lg overflow-hidden cursor-pointer group`}
     >
       {isVideo ? (
         <VideoPlayer 

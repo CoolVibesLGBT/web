@@ -422,9 +422,6 @@ const Stories: React.FC = () => {
 
               backgroundSize: '2px 3px',
               transform:"none",
-          
-
-          
               maskImage: 'linear-gradient(#ffffff calc(100% - 20px), transparent)',
               WebkitMaskImage: 'linear-gradient(#ffffff calc(100% - 20px), transparent)', // Safari için
             }}
