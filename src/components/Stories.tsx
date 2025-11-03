@@ -39,6 +39,8 @@ const Stories: React.FC = () => {
   const x = useMotionValue(0);
   const [itemWidth, setItemWidth] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const storyViewerX = useMotionValue(0);
+  const [isStoryViewerDragging, setIsStoryViewerDragging] = useState(false);
 
   const selectedStoryData = selectedStory ? stories.find(s => s.id === selectedStory) : null;
   const availableStories = stories.filter(s => s.hasStory);
@@ -474,9 +476,29 @@ const Stories: React.FC = () => {
 
               {/* Story Content - Premium Card */}
               <motion.div
-              onClick={()=>{
-                setSelectedStory(null)
-              }}
+                onClick={()=>{
+                  if (!isStoryViewerDragging) {
+                    setSelectedStory(null)
+                  }
+                }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.2}
+                dragTransition={{ bounceStiffness: 300, bounceDamping: 30 }}
+                onDragStart={() => setIsStoryViewerDragging(true)}
+                onDragEnd={(_, info) => {
+                  setIsStoryViewerDragging(false);
+                  const threshold = 50;
+                  if (info.offset.x > threshold) {
+                    // Swipe right - previous story
+                    prevStory();
+                  } else if (info.offset.x < -threshold) {
+                    // Swipe left - next story
+                    nextStory();
+                  }
+                  storyViewerX.set(0);
+                }}
+                style={{ x: storyViewerX }}
                 key={selectedStory}
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
