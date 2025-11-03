@@ -349,8 +349,8 @@ const HomeScreen: React.FC = () => {
                   : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
                 }`}
             >
-              <div className='relative z-10 w-full flex flex-row gap-5 items-center justify-center'>
-                <img src={"/icons/flows.gif"} className='w-12 h-12' />
+              <div className='relative z-10 w-full flex flex-row gap-2 items-center justify-center'>
+                <img src={"/icons/flows.webp"} className='w-12 h-12' />
                 <span>Flows</span>
               </div>
            
@@ -371,8 +371,8 @@ const HomeScreen: React.FC = () => {
                   : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
                 }`}
             >
-              <div className='relative z-10 w-full flex flex-row gap-5 items-center justify-center'>
-                <img src={"/icons/vibes.gif"}  className='w-12 h-12 rounded-lg' />
+              <div className='relative z-10 w-full flex flex-row gap-2 items-center justify-center'>
+                <img src={"/icons/vibes.webp"}  className='w-12 h-12 rounded-lg' />
                 <span>Vibes</span>
               </div>
 

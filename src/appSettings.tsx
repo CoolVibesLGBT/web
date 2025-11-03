@@ -6,7 +6,7 @@
  *
  */
 
-export const applicationName = "Bifrost"
+export const applicationName = "coolvibes"
 
 const hostName = window.location.hostname;
 export const isDevPlayground: boolean =

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
+import { applicationName } from '../appSettings';
 
 const SplashScreen: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const { theme } = useTheme();
@@ -47,7 +48,7 @@ const SplashScreen: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
               <span className={`text-5xl font-black ${
                 theme === 'dark' ? 'text-black' : 'text-white'
               }`}>
-                P
+                C
               </span>
             </motion.div>
 
@@ -64,7 +65,7 @@ const SplashScreen: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
                 theme === 'dark' ? 'text-white' : 'text-black'
               }`}
             >
-              PrideConnect
+              {applicationName}
             </motion.h1>
 
             {/* Tagline */}
