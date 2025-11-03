@@ -37,6 +37,7 @@ export const Actions = {
   POST_CREATE : "post.create",
   POST_FETCH : "post.fetch",
   POST_TIMELINE: "post.timeline",
+  POST_VIBES: "post.vibes",
 
   CMD_USER_UPLOAD_AVATAR  : "user.upload_avatar",
 	CMD_USER_UPLOAD_COVER   : "user.upload_cover",

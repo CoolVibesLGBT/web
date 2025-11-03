@@ -43,6 +43,13 @@ export class ApiService {
     });
   }
 
+  async fetchVibes({ limit = 10, cursor = "" }: { limit?: number; cursor?: string }) {
+    return this.call(Actions.POST_VIBES, {
+      method: "POST",
+      body: { limit, cursor },
+    });
+  }
+
   async fetchPost(postId: string) {
     return this.call(Actions.POST_FETCH, {
       method: "GET",

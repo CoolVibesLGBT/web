@@ -1,0 +1,1238 @@
+{
+    "has_more": true,
+    "medias": [
+        {
+            "id": "8e71ecfe-3f3f-4293-8432-ceddbaf22f8a",
+            "public_id": 1985127808690556928,
+            "file_id": "1d1a8a4e-7a4f-423d-9c18-1ae19a8244b2",
+            "owner_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "owner_type": "user",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "story",
+            "is_public": true,
+            "file": {
+                "id": "1d1a8a4e-7a4f-423d-9c18-1ae19a8244b2",
+                "storage_path": "./static/users/2df36af6-6f6c-4bca-83dc-6a13d4bbd901/stories/0d461e5d-be92-4f0f-8108-5a5a9c059b07.jpeg",
+                "mime_type": "image/jpeg",
+                "size": 442927,
+                "name": "Gye23A2XcAAmuKW.jpeg",
+                "created_at": "2025-11-03T05:17:06.140572+05:45",
+                "url": "http://localhost:3001/static/users/2df36af6-6f6c-4bca-83dc-6a13d4bbd901/stories/0d461e5d-be92-4f0f-8108-5a5a9c059b07.jpeg"
+            },
+            "created_at": "2025-11-03T05:17:06.140572+05:45",
+            "updated_at": "2025-11-03T05:17:06.140572+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "03e70ac0-a58d-41a4-9292-def7ef3ee400",
+            "public_id": 1985127764365152256,
+            "file_id": "65466dfa-18f7-4ca2-aa25-0fb2538cec7a",
+            "owner_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "owner_type": "user",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "story",
+            "is_public": true,
+            "file": {
+                "id": "65466dfa-18f7-4ca2-aa25-0fb2538cec7a",
+                "storage_path": "./static/users/2df36af6-6f6c-4bca-83dc-6a13d4bbd901/stories/89ed0112-1f4f-4d45-a79f-fb458ded5ccf.png",
+                "mime_type": "image/png",
+                "size": 293096,
+                "name": "Ekran Resmi 2025-11-01 23.20.12.png",
+                "created_at": "2025-11-03T05:16:55.572377+05:45",
+                "url": "http://localhost:3001/static/users/2df36af6-6f6c-4bca-83dc-6a13d4bbd901/stories/89ed0112-1f4f-4d45-a79f-fb458ded5ccf.png"
+            },
+            "created_at": "2025-11-03T05:16:55.572377+05:45",
+            "updated_at": "2025-11-03T05:16:55.572377+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "4f79c047-8ca1-4c05-9160-0a83bb1a58f0",
+            "public_id": 1985127732152897536,
+            "file_id": "f45ff056-f765-4f86-b181-8b20d1c7141f",
+            "owner_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "owner_type": "user",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "story",
+            "is_public": true,
+            "file": {
+                "id": "f45ff056-f765-4f86-b181-8b20d1c7141f",
+                "storage_path": "./static/users/2df36af6-6f6c-4bca-83dc-6a13d4bbd901/stories/1174af10-cf28-4609-8057-084d56f01b8e.png",
+                "mime_type": "image/png",
+                "size": 293096,
+                "name": "Ekran Resmi 2025-11-01 23.20.12.png",
+                "created_at": "2025-11-03T05:16:47.892635+05:45",
+                "url": "http://localhost:3001/static/users/2df36af6-6f6c-4bca-83dc-6a13d4bbd901/stories/1174af10-cf28-4609-8057-084d56f01b8e.png"
+            },
+            "created_at": "2025-11-03T05:16:47.892636+05:45",
+            "updated_at": "2025-11-03T05:16:47.892636+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "e73f0779-a43d-450c-ae19-1f7f482fbc3a",
+            "public_id": 1985126442396028928,
+            "file_id": "fcd27fc7-7c68-42b5-96fd-6d7322785f3f",
+            "owner_id": "f1260d86-7e65-4c8a-a645-b0834baca752",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "fcd27fc7-7c68-42b5-96fd-6d7322785f3f",
+                "storage_path": "./static/posts/f1260d86-7e65-4c8a-a645-b0834baca752/2025-11-03/43c4da55-4f5d-430a-9e46-69996a66dbf4.jpeg",
+                "mime_type": "image/jpeg",
+                "size": 215138,
+                "name": "1669041186022.jpeg",
+                "created_at": "2025-11-03T05:11:40.390418+05:45",
+                "url": "http://localhost:3001/static/posts/f1260d86-7e65-4c8a-a645-b0834baca752/2025-11-03/43c4da55-4f5d-430a-9e46-69996a66dbf4.jpeg"
+            },
+            "created_at": "2025-11-03T05:11:40.390418+05:45",
+            "updated_at": "2025-11-03T05:11:40.390418+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "ca6cd3fb-296e-4cd8-b528-82f6eaf6640a",
+            "public_id": 1985126313966440448,
+            "file_id": "4106e230-318c-4625-b62d-76ff955466fc",
+            "owner_id": "d135c5a1-66ef-4d74-a469-7959b05d7cd2",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "4106e230-318c-4625-b62d-76ff955466fc",
+                "storage_path": "./static/posts/d135c5a1-66ef-4d74-a469-7959b05d7cd2/2025-11-03/fb89711c-c330-4204-8565-00f29b2e11bd.png",
+                "mime_type": "image/png",
+                "size": 293096,
+                "name": "Ekran Resmi 2025-11-01 23.20.12.png",
+                "created_at": "2025-11-03T05:11:09.770648+05:45",
+                "url": "http://localhost:3001/static/posts/d135c5a1-66ef-4d74-a469-7959b05d7cd2/2025-11-03/fb89711c-c330-4204-8565-00f29b2e11bd.png"
+            },
+            "created_at": "2025-11-03T05:11:09.770648+05:45",
+            "updated_at": "2025-11-03T05:11:09.770648+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "c13d7491-0e61-446a-b9fc-9f59ad672d20",
+            "public_id": 1985124977132703744,
+            "file_id": "e410f773-c69e-4bc2-b33c-250c1b737531",
+            "owner_id": "f228c051-04c7-4e8b-bead-b9477d3f2ed7",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "e410f773-c69e-4bc2-b33c-250c1b737531",
+                "storage_path": "./static/posts/f228c051-04c7-4e8b-bead-b9477d3f2ed7/2025-11-03/33bb0102-b597-43fe-8c18-726df9ef39e1.png",
+                "mime_type": "image/png",
+                "size": 293096,
+                "name": "Ekran Resmi 2025-11-01 23.20.12.png",
+                "created_at": "2025-11-03T05:05:51.04411+05:45",
+                "url": "http://localhost:3001/static/posts/f228c051-04c7-4e8b-bead-b9477d3f2ed7/2025-11-03/33bb0102-b597-43fe-8c18-726df9ef39e1.png"
+            },
+            "created_at": "2025-11-03T05:05:51.04411+05:45",
+            "updated_at": "2025-11-03T05:05:51.04411+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "34722089-cb75-4e2f-85a3-f1dbd31adc08",
+            "public_id": 1985124248116531200,
+            "file_id": "b21bb47f-26aa-45aa-a7e4-414db2c15e7c",
+            "owner_id": "06bbb149-c51b-469a-baea-6a7c1601c03b",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "b21bb47f-26aa-45aa-a7e4-414db2c15e7c",
+                "storage_path": "./static/posts/06bbb149-c51b-469a-baea-6a7c1601c03b/2025-11-03/1fc5dc86-4ae9-4567-8f0b-caf3ace1e8c8.jpeg",
+                "mime_type": "image/jpeg",
+                "size": 215138,
+                "name": "1669041186022.jpeg",
+                "created_at": "2025-11-03T05:02:57.233991+05:45",
+                "url": "http://localhost:3001/static/posts/06bbb149-c51b-469a-baea-6a7c1601c03b/2025-11-03/1fc5dc86-4ae9-4567-8f0b-caf3ace1e8c8.jpeg"
+            },
+            "created_at": "2025-11-03T05:02:57.233991+05:45",
+            "updated_at": "2025-11-03T05:02:57.233991+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "f1f88253-9cbb-487b-a468-c164cf704e7b",
+            "public_id": 1985124248112336896,
+            "file_id": "5ddcd465-38fe-447a-9310-43319ebe3e06",
+            "owner_id": "06bbb149-c51b-469a-baea-6a7c1601c03b",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "5ddcd465-38fe-447a-9310-43319ebe3e06",
+                "storage_path": "./static/posts/06bbb149-c51b-469a-baea-6a7c1601c03b/2025-11-03/4f7008c0-5af7-4c20-aafd-ce63f9ea8a6a.jpg",
+                "mime_type": "image/jpeg",
+                "size": 294912,
+                "name": "281EE9EC-4233-496A-81E7-35EB550279EB.JPG",
+                "created_at": "2025-11-03T05:02:57.232071+05:45",
+                "url": "http://localhost:3001/static/posts/06bbb149-c51b-469a-baea-6a7c1601c03b/2025-11-03/4f7008c0-5af7-4c20-aafd-ce63f9ea8a6a.jpg"
+            },
+            "created_at": "2025-11-03T05:02:57.232071+05:45",
+            "updated_at": "2025-11-03T05:02:57.232071+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "79ed8eab-56ed-4ecd-a125-4f251d68d905",
+            "public_id": 1985121623543386112,
+            "file_id": "43a473ab-871a-4961-b00d-2aa43a629c11",
+            "owner_id": "8641ca80-59c6-4173-a909-a307a2a9319c",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "43a473ab-871a-4961-b00d-2aa43a629c11",
+                "storage_path": "./static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/21aa3455-2b67-4cb3-bb85-aaf9556527e0.jpeg",
+                "mime_type": "image/jpeg",
+                "size": 442927,
+                "name": "Gye23A2XcAAmuKW.jpeg",
+                "created_at": "2025-11-03T04:52:31.486113+05:45",
+                "url": "http://localhost:3001/static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/21aa3455-2b67-4cb3-bb85-aaf9556527e0.jpeg"
+            },
+            "created_at": "2025-11-03T04:52:31.486113+05:45",
+            "updated_at": "2025-11-03T04:52:31.486113+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "e044b4d0-06f5-4bfd-8e80-0d2b1744d4de",
+            "public_id": 1985121623539191808,
+            "file_id": "3cda1df2-7a80-404e-bdcb-8bf69072485f",
+            "owner_id": "8641ca80-59c6-4173-a909-a307a2a9319c",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "3cda1df2-7a80-404e-bdcb-8bf69072485f",
+                "storage_path": "./static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/e665950d-f428-4083-bedd-31d52415bfeb.jpeg",
+                "mime_type": "image/jpeg",
+                "size": 403528,
+                "name": "ersanalex.jpeg",
+                "created_at": "2025-11-03T04:52:31.485437+05:45",
+                "url": "http://localhost:3001/static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/e665950d-f428-4083-bedd-31d52415bfeb.jpeg"
+            },
+            "created_at": "2025-11-03T04:52:31.485437+05:45",
+            "updated_at": "2025-11-03T04:52:31.485437+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "76b00691-da83-410d-b3e3-0cc586edd76c",
+            "public_id": 1985121623534997504,
+            "file_id": "08865ba4-75e0-4933-ad4d-a97819290787",
+            "owner_id": "8641ca80-59c6-4173-a909-a307a2a9319c",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "08865ba4-75e0-4933-ad4d-a97819290787",
+                "storage_path": "./static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/7df95461-bd89-483c-b950-5f4cd3c76162.png",
+                "mime_type": "image/png",
+                "size": 70149,
+                "name": "Ekran Resmi 2025-11-03 00.41.45.png",
+                "created_at": "2025-11-03T04:52:31.484348+05:45",
+                "url": "http://localhost:3001/static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/7df95461-bd89-483c-b950-5f4cd3c76162.png"
+            },
+            "created_at": "2025-11-03T04:52:31.484348+05:45",
+            "updated_at": "2025-11-03T04:52:31.484348+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "9985f01f-6722-4111-927d-acfb24808267",
+            "public_id": 1985121623526608896,
+            "file_id": "2dd8ae73-384a-4584-b1fb-238fec089ff0",
+            "owner_id": "8641ca80-59c6-4173-a909-a307a2a9319c",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "2dd8ae73-384a-4584-b1fb-238fec089ff0",
+                "storage_path": "./static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/27dbd283-0b7e-4424-887d-4e71bb2e43c3.png",
+                "mime_type": "image/png",
+                "size": 191596,
+                "name": "Ekran Resmi 2025-11-03 00.33.56.png",
+                "created_at": "2025-11-03T04:52:31.482962+05:45",
+                "url": "http://localhost:3001/static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/27dbd283-0b7e-4424-887d-4e71bb2e43c3.png"
+            },
+            "created_at": "2025-11-03T04:52:31.482963+05:45",
+            "updated_at": "2025-11-03T04:52:31.482963+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "f499838b-d3a0-47b2-a28c-55afa89c7f57",
+            "public_id": 1985121623522414592,
+            "file_id": "e71fb81c-f164-417c-bf77-21541a02f6bf",
+            "owner_id": "8641ca80-59c6-4173-a909-a307a2a9319c",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "e71fb81c-f164-417c-bf77-21541a02f6bf",
+                "storage_path": "./static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/ec9870a4-48b6-4066-b599-1be5d2351006.png",
+                "mime_type": "image/png",
+                "size": 245378,
+                "name": "Ekran Resmi 2025-11-03 00.28.03.png",
+                "created_at": "2025-11-03T04:52:31.481803+05:45",
+                "url": "http://localhost:3001/static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/ec9870a4-48b6-4066-b599-1be5d2351006.png"
+            },
+            "created_at": "2025-11-03T04:52:31.481803+05:45",
+            "updated_at": "2025-11-03T04:52:31.481803+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "23583a3e-8f11-4289-ac66-7191c617f9c3",
+            "public_id": 1985121623518220288,
+            "file_id": "55007569-3732-49d3-b00e-dc69ef11b9a3",
+            "owner_id": "8641ca80-59c6-4173-a909-a307a2a9319c",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "55007569-3732-49d3-b00e-dc69ef11b9a3",
+                "storage_path": "./static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/9ad39c2d-47d8-4365-9612-e3368ef3cc93.png",
+                "mime_type": "image/png",
+                "size": 236011,
+                "name": "Ekran Resmi 2025-11-03 00.24.37.png",
+                "created_at": "2025-11-03T04:52:31.4801+05:45",
+                "url": "http://localhost:3001/static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/9ad39c2d-47d8-4365-9612-e3368ef3cc93.png"
+            },
+            "created_at": "2025-11-03T04:52:31.4801+05:45",
+            "updated_at": "2025-11-03T04:52:31.4801+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "1d737f65-b6fa-412f-b631-6c60fb3a0fc4",
+            "public_id": 1985121623493054464,
+            "file_id": "03a0edfd-c4f7-4aeb-81de-ac5f1e79db7d",
+            "owner_id": "8641ca80-59c6-4173-a909-a307a2a9319c",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "03a0edfd-c4f7-4aeb-81de-ac5f1e79db7d",
+                "storage_path": "./static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/3c8fe704-3880-4b83-a941-d080fb926111.png",
+                "mime_type": "image/png",
+                "size": 293096,
+                "name": "Ekran Resmi 2025-11-01 23.20.12.png",
+                "created_at": "2025-11-03T04:52:31.474961+05:45",
+                "url": "http://localhost:3001/static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/3c8fe704-3880-4b83-a941-d080fb926111.png"
+            },
+            "created_at": "2025-11-03T04:52:31.474961+05:45",
+            "updated_at": "2025-11-03T04:52:31.474961+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "id": "b52159d7-78f7-4c91-b1f5-03154251ed46",
+            "public_id": 1985121623463694336,
+            "file_id": "ac009524-6411-45b6-825f-79b656b5c6a0",
+            "owner_id": "8641ca80-59c6-4173-a909-a307a2a9319c",
+            "owner_type": "post",
+            "user_id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "ac009524-6411-45b6-825f-79b656b5c6a0",
+                "storage_path": "./static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/6ead9183-ff67-4bbf-905e-a2361e04cb9f.png",
+                "mime_type": "image/png",
+                "size": 256429,
+                "name": "Ekran Resmi 2025-10-30 16.22.07.png",
+                "created_at": "2025-11-03T04:52:31.467646+05:45",
+                "url": "http://localhost:3001/static/posts/8641ca80-59c6-4173-a909-a307a2a9319c/2025-11-03/6ead9183-ff67-4bbf-905e-a2361e04cb9f.png"
+            },
+            "created_at": "2025-11-03T04:52:31.467646+05:45",
+            "updated_at": "2025-11-03T04:52:31.467646+05:45",
+            "user": {
+                "public_id": "1985121337483464704",
+                "id": "2df36af6-6f6c-4bca-83dc-6a13d4bbd901",
+                "socket_id": "bb344b05-1334-4510-a6e8-27ab7eb5a431",
+                "username": "Kohler4996",
+                "displayname": "Blanca Farrell",
+                "email": "kennedimuller@rohan.net",
+                "profile_image_url": "https://picsum.photos/200/200",
+                "bio": "Then their until yearly Afghan it his pair gallop wow.",
+                "date_of_birth": "1986-11-03T11:58:22.908003+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": true,
+                "created_at": "2025-11-03T04:51:23.284723+05:45",
+                "updated_at": "2025-11-03T04:51:23.284723+05:45",
+                "last_online": "2025-10-31T15:51:23.284723+05:45",
+                "default_language": "en",
+                "languages": [
+                    "en",
+                    "tr"
+                ],
+                "hobbies": [
+                    "reading",
+                    "gaming"
+                ],
+                "movies_genres": [
+                    "action",
+                    "comedy"
+                ],
+                "tv_shows_genres": [
+                    "drama",
+                    "thriller"
+                ],
+                "theater_genres": [
+                    "musical"
+                ],
+                "cinema_genres": [
+                    "sci-fi"
+                ],
+                "art_interests": [
+                    "painting",
+                    "sculpture"
+                ],
+                "entertainment": [
+                    "music",
+                    "concerts"
+                ],
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        }
+    ],
+    "next_cursor": 1985121623463694336
+}

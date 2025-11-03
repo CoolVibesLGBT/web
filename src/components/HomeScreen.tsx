@@ -2,10 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Stories from './Stories';
 import CreatePost from './CreatePost';
 import Post from './Post';
+import Media from './Media';
 import { api } from '../services/api';
 
 // Import the ApiPost interface from Post component
@@ -163,11 +164,18 @@ const HomeScreen: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
   const [nextCursor, setNextCursor] = useState<string>('');
 
-  const [activeTab, setActiveTab] = useState('foryou');
-  
+  const [activeTab, setActiveTab] = useState('flows');
+
+  // Vibes state
+  const [vibesPosts, setVibesPosts] = useState<ApiPost[]>([]);
+  const [vibesLoading, setVibesLoading] = useState(false);
+  const [vibesLoadingMore, setVibesLoadingMore] = useState(false);
+  const [vibesHasMore, setVibesHasMore] = useState(true);
+  const [vibesNextCursor, setVibesNextCursor] = useState<string>('');
+
   // Get selected post from URL or null
-  const selectedPost = location.pathname.includes('/status/') 
-    ? location.pathname.split('/status/')[1] 
+  const selectedPost = location.pathname.includes('/status/')
+    ? location.pathname.split('/status/')[1]
     : null;
 
   // Separate state for post detail data (fetched independently)
@@ -210,6 +218,27 @@ const HomeScreen: React.FC = () => {
     fetchPosts();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Fetch vibes when tab switches to vibes
+  useEffect(() => {
+    const fetchVibes = async () => {
+      if (activeTab === 'following' && vibesPosts.length === 0 && !vibesLoading) {
+        try {
+          setVibesLoading(true);
+          const response: TimelineResponse = await api.fetchVibes({ limit: 20, cursor: "" });
+          setVibesPosts(response.posts);
+          setVibesNextCursor(response.next_cursor?.toString() || '');
+          setVibesHasMore(response.posts.length > 0);
+        } catch (err) {
+          console.error('Error fetching vibes:', err);
+        } finally {
+          setVibesLoading(false);
+        }
+      }
+    };
+
+    fetchVibes();
+  }, [activeTab]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Fetch post detail when selectedPost changes
   useEffect(() => {
     const fetchPostDetail = async () => {
@@ -244,9 +273,9 @@ const HomeScreen: React.FC = () => {
       console.log('Loading more posts with cursor:', nextCursor);
       setLoadingMore(true);
       const response: TimelineResponse = await api.fetchTimeline({ limit: 10, cursor: nextCursor });
-      
+
       console.log('Load more response:', response);
-      
+
       if (response.posts.length > 0) {
         setPosts(prevPosts => [...prevPosts, ...response.posts]);
         setNextCursor(response.next_cursor?.toString() || '');
@@ -268,7 +297,7 @@ const HomeScreen: React.FC = () => {
       const clientHeight = document.documentElement.clientHeight;
 
       const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-      
+
       // Load more when 200px from bottom
       if (distanceFromBottom <= 200 && hasMore && !loadingMore && !loading && !selectedPost) {
         console.log('Triggering load more:', { distanceFromBottom, hasMore, loadingMore, loading, selectedPost });
@@ -282,12 +311,12 @@ const HomeScreen: React.FC = () => {
 
   return (
     <div className={`scrollbar-hide max-h-[100dvh]  overflow-y-auto ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
-      
+
       {/* Stories Above Tabs - Only show when not in post detail view */}
       {!selectedPost && (
-      <div className={`hidden lg:block ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-black' : 'border-gray-100'} p-4`}>
-        <Stories />
-      </div>
+        <div className={`hidden lg:block ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-black' : 'border-gray-100'} p-4`}>
+          <Stories />
+        </div>
       )}
 
       {/* Header - Show Post Detail or Tabs */}
@@ -297,9 +326,8 @@ const HomeScreen: React.FC = () => {
           <div className="flex items-center px-4 py-3">
             <button
               onClick={handleBackClick}
-              className={`p-2 rounded-full transition-all duration-200 mr-3 ${
-                theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
-              }`}
+              className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
+                }`}
             >
               <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
             </button>
@@ -313,39 +341,45 @@ const HomeScreen: React.FC = () => {
           // Tab Navigation
           <div className="flex relative">
             <motion.button
-              onClick={() => setActiveTab('foryou')}
-              whileHover={{ backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}
-              whileTap={{ scale: 0.99 }}
-              className={`flex-1 py-4 font-semibold text-[15px] relative transition-all duration-200 ${
-                activeTab === 'foryou'
+              onClick={() => setActiveTab('flows')}
+              whileTap={{ scale: 0.98 }}
+              className={`flex-1 py-4 cursor-pointer font-semibold text-[15px] relative transition-all duration-200 ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-black/5'
+                } ${activeTab === 'flows'
                   ? theme === 'dark' ? 'text-white' : 'text-black'
                   : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
-              }`}
+                }`}
             >
-              <span className="relative z-10">Flows</span>
-              {activeTab === 'foryou' && (
+              <div className='relative z-10 w-full flex flex-row gap-5 items-center justify-center'>
+                <img src={"/icons/flows.gif"} className='w-12 h-12' />
+                <span>Flows</span>
+              </div>
+           
+              {activeTab === 'flows' && (
                 <motion.div
-                  className={`absolute bottom-0 left-0 right-0 h-1 ${theme === 'dark' ? 'bg-white' : 'bg-black'}`}
-                  layoutId="activeTabIndicator"
+                  className={`absolute bottom-0 left-0 right-0 h-1 ${theme === 'dark' ? 'bg-white/20' : 'bg-black'}`}
+                  layoutId="homeScreenTabIndicator"
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 />
               )}
             </motion.button>
             <motion.button
-              onClick={() => setActiveTab('following')}
-              whileHover={{ backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}
-              whileTap={{ scale: 0.99 }}
-              className={`flex-1 py-4 font-semibold text-[15px] relative transition-all duration-200 ${
-                activeTab === 'following'
+              onClick={() => setActiveTab('vibes')}
+              whileTap={{ scale: 0.98 }}
+              className={`flex-1 cursor-pointer py-4 font-semibold text-[15px] relative transition-all duration-200 ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-black/5'
+                } ${activeTab === 'vibes'
                   ? theme === 'dark' ? 'text-white' : 'text-black'
                   : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
-              }`}
+                }`}
             >
-              <span className="relative z-10">Vibes</span>
-              {activeTab === 'following' && (
+              <div className='relative z-10 w-full flex flex-row gap-5 items-center justify-center'>
+                <img src={"/icons/vibes.gif"}  className='w-12 h-12 rounded-lg' />
+                <span>Vibes</span>
+              </div>
+
+              {activeTab === 'vibes' && (
                 <motion.div
-                  className={`absolute bottom-0 left-0 right-0 h-1 ${theme === 'dark' ? 'bg-white' : 'bg-black'}`}
-                  layoutId="activeTabIndicator"
+                  className={`absolute bottom-0 left-0 right-0 h-1 ${theme === 'dark' ? 'bg-white/20' : 'bg-black'}`}
+                  layoutId="homeScreenTabIndicator"
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 />
               )}
@@ -354,93 +388,101 @@ const HomeScreen: React.FC = () => {
         )}
       </div>
 
-      <div className="w-full lg:max-w-[1380px] lg:mx-auto">
-        
- 
-      <main className={`flex-1 w-full min-w-0 lg:border-x ${theme === 'dark' ? 'lg:border-black' : 'lg:border-gray-100'}`}>
-        {selectedPost ? (
-          // Post Detail View
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.2 }}
-            className={`${theme === 'dark' ? 'bg-black' : 'bg-white'}`}
-          >
-            {loadingPostDetail ? (
-              <div className={`flex items-center justify-center py-12 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                Loading post...
-              </div>
-            ) : selectedPostData ? (
-              <Post 
-                post={selectedPostData} 
-                onPostClick={(postId, username) => handlePostClick(postId, username)}
-                onProfileClick={handleProfileClick}
-                isDetailView={true}
-                onRefreshParent={() => {
-                  // Refresh the specific post when a reply is posted
-                  const refreshPost = async () => {
-                    try {
-                      const response = await api.fetchPost(selectedPostData.id);
-                      setSelectedPostData(response);
-                    } catch (err) {
-                      console.error('Error refreshing post:', err);
-                    }
-                  };
-                  refreshPost();
-                }}
-              />
-            ) : (
-              <div className={`text-center py-12 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                Post not found
-              </div>
-            )}
-          </motion.div>
-        ) : (
-          // Posts Feed
-          <>
-            {/* Create Post */}
-            <div className={`${theme === 'dark' ? 'bg-black border-b border-black' : 'bg-white border-b border-gray-100'}`}>
-              <CreatePost 
-                onPostCreated={() => {
-                  // Refresh the timeline when a new post is created
-                  const fetchPosts = async () => {
-                    try {
-                      const response: TimelineResponse = await api.fetchTimeline({ limit: 10, cursor: "" });
-                      setPosts(response.posts);
-                      setNextCursor(response.next_cursor?.toString() || '');
-                      setHasMore(response.posts.length > 0);
-                    } catch (err) {
-                      console.error('Error refreshing posts:', err);
-                    }
-                  };
-                  fetchPosts();
-                }}
-              />
-            </div>
+      <div className="w-full min-h-[100dvh] lg:max-w-[1380px] lg:mx-auto">
 
-            {/* Posts Feed */}
-            <div>
-              {loading ? (
-                <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                  Loading posts...
+
+        <main className={`flex-1 w-full min-w-0 lg:border-x ${theme === 'dark' ? 'lg:border-black' : 'lg:border-gray-100'}`}>
+          {selectedPost ? (
+            // Post Detail View
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
+              className={`${theme === 'dark' ? 'bg-black' : 'bg-white'}`}
+            >
+              {loadingPostDetail ? (
+                <div className={`flex items-center justify-center py-12 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                  Loading post...
                 </div>
-              ) : error ? (
-                <div className={`p-8 text-center ${theme === 'dark' ? 'text-red-400' : 'text-red-500'}`}>
-                  {error}
-                </div>
-              ) : posts.length === 0 ? (
-                <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                  No posts available
-                </div>
+              ) : selectedPostData ? (
+                <Post
+                  post={selectedPostData}
+                  onPostClick={(postId, username) => handlePostClick(postId, username)}
+                  onProfileClick={handleProfileClick}
+                  isDetailView={true}
+                  onRefreshParent={() => {
+                    // Refresh the specific post when a reply is posted
+                    const refreshPost = async () => {
+                      try {
+                        const response = await api.fetchPost(selectedPostData.id);
+                        setSelectedPostData(response);
+                      } catch (err) {
+                        console.error('Error refreshing post:', err);
+                      }
+                    };
+                    refreshPost();
+                  }}
+                />
               ) : (
-                posts.map((post, index) => (
+                <div className={`text-center py-12 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                  Post not found
+                </div>
+              )}
+            </motion.div>
+          ) : (
+            // Posts Feed or Vibes Grid
+            <AnimatePresence mode="wait">
+              {activeTab === 'flows' ? (
                 <motion.div
-                  key={post.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                    className={`${theme === 'dark' ? 'bg-black' : 'bg-white'}`}
-                  >
+                  key="flows"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {/* Create Post */}
+                  <div className={`${theme === 'dark' ? 'bg-black border-b border-black' : 'bg-white border-b border-gray-100'}`}>
+                    <CreatePost
+                      onPostCreated={() => {
+                        // Refresh the timeline when a new post is created
+                        const fetchPosts = async () => {
+                          try {
+                            const response: TimelineResponse = await api.fetchTimeline({ limit: 10, cursor: "" });
+                            setPosts(response.posts);
+                            setNextCursor(response.next_cursor?.toString() || '');
+                            setHasMore(response.posts.length > 0);
+                          } catch (err) {
+                            console.error('Error refreshing posts:', err);
+                          }
+                        };
+                        fetchPosts();
+                      }}
+                    />
+                  </div>
+
+                  {/* Posts Feed */}
+                  <div>
+                    {loading ? (
+                      <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Loading posts...
+                      </div>
+                    ) : error ? (
+                      <div className={`p-8 text-center ${theme === 'dark' ? 'text-red-400' : 'text-red-500'}`}>
+                        {error}
+                      </div>
+                    ) : posts.length === 0 ? (
+                      <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        No posts available
+                      </div>
+                    ) : (
+                      posts.map((post, index) => (
+                        <motion.div
+                          key={post.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          className={`${theme === 'dark' ? 'bg-black' : 'bg-white'}`}
+                        >
                           <Post
                             post={post}
                             onPostClick={(postId, username) => handlePostClick(postId, username)}
@@ -460,27 +502,75 @@ const HomeScreen: React.FC = () => {
                               fetchPosts();
                             }}
                           />
-                  </motion.div>
-                ))
-              )}
-              {/* Loading More Indicator */}
-              {loadingMore && (
-                <div className={`p-8 text-center border-t ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}`}>
-                  <div className={`inline-flex items-center space-x-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-400 border-t-transparent"></div>
-                    <span>Loading more posts...</span>
+                        </motion.div>
+                      ))
+                    )}
+                    {/* Loading More Indicator */}
+                    {loadingMore && (
+                      <div className={`p-8 text-center border-t ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}`}>
+                        <div className={`inline-flex items-center space-x-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-400 border-t-transparent"></div>
+                          <span>Loading more posts...</span>
                         </div>
                       </div>
-              )}
-              {!hasMore && posts.length > 0 && (
-                <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                  No more posts to load
+                    )}
+                    {!hasMore && posts.length > 0 && (
+                      <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        No more posts to load
                       </div>
                     )}
-            </div>
-          </>
-        )}
-      </main>
+                  </div>
+                </motion.div>
+              ) : (
+                /* Vibes Masonry Grid */
+                <motion.div
+                  key="vibes"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-4"
+                >
+                  {vibesLoading ? (
+                    <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                      Loading vibes...
+                    </div>
+                  ) : vibesPosts.length === 0 ? (
+                    <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                      No vibes available
+                    </div>
+                  ) : (
+                    <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-2 sm:gap-3">
+                      {vibesPosts.map((post, index) => {
+                        // Filter posts with media attachments
+                        const mediaAttachments = post.attachments?.filter(att =>
+                          att.file?.mime_type?.startsWith('image/') ||
+                          att.file?.mime_type?.startsWith('video/')
+                        ) || [];
+
+                        if (mediaAttachments.length === 0) return null;
+
+                        const firstMedia = mediaAttachments[0];
+
+                        return (
+                          <motion.div
+                            key={post.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.03 }}
+                            onClick={() => handlePostClick(post.id, post.author.username)}
+                          >
+                            <Media media={firstMedia} />
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
+        </main>
       </div>
     </div>
   );

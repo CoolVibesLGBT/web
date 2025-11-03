@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useApp } from '../contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Post from './Post';
+import Media from './Media';
 import { api } from '../services/api';
 import { Actions } from '../services/actions';
 import { useTranslation } from 'react-i18next';
@@ -183,6 +184,30 @@ interface ProfilePost {
   }>;
 }
 
+// Media interface
+interface Media {
+  id: string;
+  public_id: number;
+  file_id: string;
+  owner_id: string;
+  owner_type: string;
+  user_id: string;
+  role: string;
+  is_public: boolean;
+  file: {
+    id: string;
+    storage_path: string;
+    mime_type: string;
+    size: number;
+    name: string;
+    created_at: string;
+    url: string;
+  };
+  created_at: string;
+  updated_at: string;
+  user: User;
+}
+
 const ProfileScreen: React.FC = () => {
   const { username } = useParams<{ username: string }>();
   const navigate = useNavigate();
@@ -192,8 +217,10 @@ const ProfileScreen: React.FC = () => {
   const { t } = useTranslation('common');
   const [user, setUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<ProfilePost[]>([]);
+  const [medias, setMedias] = useState<Media[]>([]);
   const [loading, setLoading] = useState(true);
   const [postsLoading, setPostsLoading] = useState(true);
+  const [mediasLoading, setMediasLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'profile' | 'posts' | 'replies' | 'media' | 'likes'>('profile');
   const [isFollowing, setIsFollowing] = useState(false);
@@ -1349,16 +1376,6 @@ const ProfileScreen: React.FC = () => {
               cursor: ""
             },
           });
-        } else if (activeTab === 'media') {
-          // Fetch user media posts
-          response = await api.call(Actions.CMD_USER_POST_MEDIA, {
-            method: "POST",
-            body: { 
-              user_id: user?.public_id,
-              limit: 20,
-              cursor: ""
-            },
-          });
         } else if (activeTab === 'likes') {
           // Fetch user liked posts
           response = await api.call(Actions.CMD_USER_POST_LIKES, {
@@ -1388,8 +1405,50 @@ const ProfileScreen: React.FC = () => {
       }
     };
 
-    if (user && username) {
+    if (user && username && activeTab !== 'media') {
       fetchUserPosts();
+    }
+  }, [user?.id, username, activeTab]);
+
+  // Fetch medias when media tab is active
+  useEffect(() => {
+    const fetchUserMedias = async () => {
+      if (activeTab !== 'media') {
+        return;
+      }
+
+      try {
+        setMediasLoading(true);
+        setError(null);
+        
+        const response = await api.call(Actions.CMD_USER_POST_MEDIA, {
+          method: "POST",
+          body: { 
+            user_id: user?.public_id,
+            limit: 50,
+            cursor: ""
+          },
+        });
+        
+        // Set medias from API response
+        if (response && response.medias) {
+          setMedias(response.medias);
+        } else if (response && Array.isArray(response)) {
+          setMedias(response);
+        } else {
+          setMedias([]);
+        }
+      } catch (err: any) {
+        console.error('Error fetching medias:', err);
+        setError(err.response?.data?.message || 'Failed to load medias');
+        setMedias([]);
+      } finally {
+        setMediasLoading(false);
+      }
+    };
+
+    if (user && username) {
+      fetchUserMedias();
     }
   }, [user?.id, username, activeTab]);
 
@@ -2537,17 +2596,19 @@ const ProfileScreen: React.FC = () => {
               </div>
             </div>
 
+
+
             {/* Stats */}
             <div className="flex gap-5 mb-4">
               <button className={`text-sm hover:underline ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
                 <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                  {(user.social?.followees?.length ?? 0).toLocaleString()}
+                  {(user.following_count ?? 0).toLocaleString()}
                 </span>
                 <span className="ml-1">{t('profile.following')}</span>
               </button>
               <button className={`text-sm hover:underline ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
                 <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                {(user.social?.followers?.length ?? 0).toLocaleString()}
+                {(user.followers_count ?? 0).toLocaleString()}
                 </span>
                 <span className="ml-1">{t('profile.followers')}</span>
               </button>
@@ -2931,81 +2992,127 @@ const ProfileScreen: React.FC = () => {
               </div>
             )}
 
-            {/* Posts */}
+            {/* Posts / Media Masonry / Likes */}
             <div className={activeTab === 'profile' ? 'hidden' : ''}>
-              {postsLoading ? (
-                <div className="flex items-center justify-center py-16">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className={`w-12 h-12 border-4 ${theme === 'dark' ? 'border-gray-800 border-t-white' : 'border-gray-200 border-t-black'} rounded-full animate-spin`} />
-                    <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                      {activeTab === 'posts' && t('profile.loading_posts')}
-                      {activeTab === 'replies' && t('profile.loading_replies')}
-                      {activeTab === 'media' && t('profile.loading_media')}
-                      {activeTab === 'likes' && t('profile.loading_likes')}
-                    </p>
-                  </div>
-                </div>
-              ) : posts.length === 0 ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex items-center justify-center py-20"
-                >
-                  <div className="flex flex-col items-center gap-4 max-w-sm mx-auto px-4">
-                    <div className={`w-20 h-20 rounded-full flex items-center justify-center ${theme === 'dark' 
-                      ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 border border-white/[0.06]' 
-                      : 'bg-gradient-to-br from-gray-50 to-white border border-black/[0.06]'
-                    }`}>
-                      {activeTab === 'posts' && (
-                        <FileText className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                      )}
-                      {activeTab === 'replies' && (
-                        <MessageCircle className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                      )}
-                      {activeTab === 'media' && (
-                        <ImageIcon className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                      )}
-                      {activeTab === 'likes' && (
-                        <Heart className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                      )}
+              {activeTab === 'media' ? (
+                // Media Masonry Grid
+                <>
+                  {mediasLoading ? (
+                    <div className="flex items-center justify-center py-16">
+                      <div className="flex flex-col items-center gap-4">
+                        <div className={`w-12 h-12 border-4 ${theme === 'dark' ? 'border-gray-800 border-t-white' : 'border-gray-200 border-t-black'} rounded-full animate-spin`} />
+                        <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {t('profile.loading_media')}
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-center">
-                      <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                        {activeTab === 'posts' && t('profile.no_posts_yet')}
-                        {activeTab === 'replies' && t('profile.no_replies_yet')}
-                        {activeTab === 'media' && t('profile.no_media_yet')}
-                        {activeTab === 'likes' && t('profile.no_likes_yet')}
-                      </h3>
-                      <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
-                        {activeTab === 'posts' && isOwnProfile && t('profile.share_thoughts')}
-                        {activeTab === 'posts' && !isOwnProfile && `@${user.username} ${t('profile.no_posts_from_user')}`}
-                        {activeTab === 'replies' && isOwnProfile && t('profile.replies_appear_here')}
-                        {activeTab === 'replies' && !isOwnProfile && `@${user.username} ${t('profile.no_replies_from_user')}`}
-                        {activeTab === 'media' && isOwnProfile && t('profile.media_appear_here')}
-                        {activeTab === 'media' && !isOwnProfile && `@${user.username} ${t('profile.no_media_from_user')}`}
-                        {activeTab === 'likes' && isOwnProfile && t('profile.likes_appear_here')}
-                        {activeTab === 'likes' && !isOwnProfile && `@${user.username} ${t('profile.no_likes_from_user')}`}
-                      </p>
+                  ) : medias.length === 0 ? (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex items-center justify-center py-20"
+                    >
+                      <div className="flex flex-col items-center gap-4 max-w-sm mx-auto px-4">
+                        <div className={`w-20 h-20 rounded-full flex items-center justify-center ${theme === 'dark' 
+                          ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 border border-white/[0.06]' 
+                          : 'bg-gradient-to-br from-gray-50 to-white border border-black/[0.06]'
+                        }`}>
+                          <ImageIcon className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+                        </div>
+                        <div className="text-center">
+                          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                            {t('profile.no_media_yet')}
+                          </h3>
+                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+                            {isOwnProfile && t('profile.media_appear_here')}
+                            {!isOwnProfile && `@${user.username} ${t('profile.no_media_from_user')}`}
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <div className="p-4">
+                      <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-2 sm:gap-3">
+                        {medias
+                          .map((media) => (
+                            <Media key={media.id} media={media} />
+                          ))}
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
+                  )}
+                </>
               ) : (
-                posts.map((post, index) => (
-                  <motion.div
-                    key={post.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className={`${theme === 'dark' ? 'bg-black' : 'bg-white'}`}
-                  >
-                    <Post
-                      post={post as any}
-                      onPostClick={(postId, username) => navigate(`/${username}/status/${postId}`)}
-                      onProfileClick={(username) => navigate(`/${username}`)}
-                    />
-                  </motion.div>
-                ))
+                // Regular Posts / Replies / Likes
+                <>
+                  {postsLoading ? (
+                    <div className="flex items-center justify-center py-16">
+                      <div className="flex flex-col items-center gap-4">
+                        <div className={`w-12 h-12 border-4 ${theme === 'dark' ? 'border-gray-800 border-t-white' : 'border-gray-200 border-t-black'} rounded-full animate-spin`} />
+                        <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {activeTab === 'posts' && t('profile.loading_posts')}
+                          {activeTab === 'replies' && t('profile.loading_replies')}
+                          {activeTab === 'likes' && t('profile.loading_likes')}
+                        </p>
+                      </div>
+                    </div>
+                  ) : posts.length === 0 ? (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex items-center justify-center py-20"
+                    >
+                      <div className="flex flex-col items-center gap-4 max-w-sm mx-auto px-4">
+                        <div className={`w-20 h-20 rounded-full flex items-center justify-center ${theme === 'dark' 
+                          ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 border border-white/[0.06]' 
+                          : 'bg-gradient-to-br from-gray-50 to-white border border-black/[0.06]'
+                        }`}>
+                          {activeTab === 'posts' && (
+                            <FileText className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+                          )}
+                          {activeTab === 'replies' && (
+                            <MessageCircle className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+                          )}
+                          {activeTab === 'likes' && (
+                            <Heart className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+                          )}
+                        </div>
+                        <div className="text-center">
+                          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                            {activeTab === 'posts' && t('profile.no_posts_yet')}
+                            {activeTab === 'replies' && t('profile.no_replies_yet')}
+                            {activeTab === 'likes' && t('profile.no_likes_yet')}
+                          </h3>
+                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+                            {activeTab === 'posts' && isOwnProfile && t('profile.share_thoughts')}
+                            {activeTab === 'posts' && !isOwnProfile && `@${user.username} ${t('profile.no_posts_from_user')}`}
+                            {activeTab === 'replies' && isOwnProfile && t('profile.replies_appear_here')}
+                            {activeTab === 'replies' && !isOwnProfile && `@${user.username} ${t('profile.no_replies_from_user')}`}
+                            {activeTab === 'likes' && isOwnProfile && t('profile.likes_appear_here')}
+                            {activeTab === 'likes' && !isOwnProfile && `@${user.username} ${t('profile.no_likes_from_user')}`}
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    posts.map((post, index) => (
+                      <motion.div
+                        key={post.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        className={`${theme === 'dark' ? 'bg-black' : 'bg-white'}`}
+                      >
+                        <Post
+                          post={post as any}
+                          onPostClick={(postId, username) => navigate(`/${username}/status/${postId}`)}
+                          onProfileClick={(username) => navigate(`/${username}`)}
+                        />
+                      </motion.div>
+                    ))
+                  )}
+                </>
               )}
             </div>
           </div>
