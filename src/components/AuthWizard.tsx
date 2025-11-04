@@ -12,9 +12,10 @@ import ReCAPTCHA from 'react-google-recaptcha';
 interface AuthWizardProps {
   isOpen: boolean;
   onClose: () => void;
+  mode?: 'modal' | 'inline';
 }
 
-const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }): JSX.Element | null => {
+const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal' }): JSX.Element | null => {
   const { theme } = useTheme();
   const { login } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
@@ -1026,51 +1027,36 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }): JSX.Element
 
   if (!isOpen) return null;
 
-  return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4"
-      >
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          className={`w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border ${theme === 'dark'
-            ? 'bg-gray-900 border-gray-800'
-            : 'bg-white border-gray-200'
-            }`}
-        >
-
-          <div className="flex items-center justify-between p-4 sm:p-6 pb-3 sm:pb-4 border-b border-gray-200 dark:border-gray-800">
-
-            {/* Progress Bar */}
-            <div className="flex-1 flex space-x-1 sm:space-x-2 mr-3 sm:mr-6">
-              {Array.from({ length: getTotalSteps() }, (_, index) => (
-                <div
-                  key={index}
-                  className={`h-1.5 sm:h-2 flex-1 rounded-full transition-all duration-300 ${index <= getCurrentStepIndex()
-                    ? theme === 'dark' ? 'bg-white shadow-sm' : 'bg-gray-900 shadow-sm'
-                    : theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'
-                    }`}
-                />
-              ))}
-            </div>
-
-            {/* X Button */}
-            <button
-              onClick={onClose}
-              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 flex-shrink-0 ${theme === 'dark'
-                ? 'hover:bg-gray-800 text-gray-400 hover:text-gray-300'
-                : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
-                }`}
-            >
-              <X className="w-4 h-4 sm:w-5 sm:h-5" />
-            </button>
-
+  const content = (
+    <>
+      {/* Header - Only show in modal mode */}
+      {mode === 'modal' && (
+        <div className="flex items-center justify-between p-4 sm:p-6 pb-3 sm:pb-4 border-b border-gray-200 dark:border-gray-800">
+          {/* Progress Bar */}
+          <div className="flex-1 flex space-x-1 sm:space-x-2 mr-3 sm:mr-6">
+            {Array.from({ length: getTotalSteps() }, (_, index) => (
+              <div
+                key={index}
+                className={`h-1.5 sm:h-2 flex-1 rounded-full transition-all duration-300 ${index <= getCurrentStepIndex()
+                  ? theme === 'dark' ? 'bg-white shadow-sm' : 'bg-gray-900 shadow-sm'
+                  : theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'
+                  }`}
+              />
+            ))}
           </div>
+
+          {/* X Button */}
+          <button
+            onClick={onClose}
+            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 flex-shrink-0 ${theme === 'dark'
+              ? 'hover:bg-gray-800 text-gray-400 hover:text-gray-300'
+              : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+              }`}
+          >
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+        </div>
+      )}
 
           {/* Step Content */}
           <motion.div
@@ -1179,6 +1165,38 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }): JSX.Element
 
             </div>
           </div>
+    </>
+  );
+
+  if (mode === 'inline') {
+    return (
+      <div className={`w-full rounded-3xl overflow-hidden ${theme === 'dark'
+        ? 'bg-gray-900'
+        : 'bg-white'
+      }`}>
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4"
+      >
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+          className={`w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border ${theme === 'dark'
+            ? 'bg-gray-900 border-gray-800'
+            : 'bg-white border-gray-200'
+          }`}
+        >
+          {content}
         </motion.div>
       </motion.div>
     </AnimatePresence>

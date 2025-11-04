@@ -30,6 +30,7 @@ import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
 import { $getRoot, $createParagraphNode, $createTextNode } from 'lexical';
 import { ToolbarContext } from '../contexts/ToolbarContext';
 import Container from './Container';
+import AuthWizard from './AuthWizard';
 
 // ToolbarPlugin wrapper component
 const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (editor: any) => void }) => {
@@ -1498,6 +1499,26 @@ const ProfileScreen: React.FC = () => {
           </p>
         </motion.div>
       </div>
+    );
+  }
+
+  // If trying to view own profile without login, show auth wizard
+  if ((!username || username === 'profile') && !isAuthenticated) {
+    return (
+      <Container>
+        <div className="flex items-center justify-center min-h-[60vh] px-4">
+          <div className="w-full max-w-lg">
+            <AuthWizard
+              isOpen={true}
+              onClose={() => {
+                // If user closes auth wizard, navigate to home
+                navigate('/');
+              }}
+              mode="inline"
+            />
+          </div>
+        </div>
+      </Container>
     );
   }
 

@@ -1,6 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import AuthWizard from './AuthWizard';
 import { 
   MessageCircle, 
   User, 
@@ -29,6 +32,8 @@ import {
 
 const MessagesScreen: React.FC = () => {
   const { theme } = useTheme();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'groups' | 'private'>('groups');
   const [activeFilter, setActiveFilter] = useState<'all' | 'unread' | 'groups' | 'unencrypted'>('all');
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
@@ -237,6 +242,26 @@ const MessagesScreen: React.FC = () => {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
+
+  // If not authenticated, show inline auth wizard
+  if (!isAuthenticated) {
+    return (
+      <div className={`h-[100dvh] w-full overflow-hidden flex flex-col ${theme === 'dark' ? 'bg-black' : 'bg-gray-50'}`}>
+        <div className="flex items-center justify-center flex-1 px-4">
+          <div className="w-full max-w-lg">
+            <AuthWizard
+              isOpen={true}
+              onClose={() => {
+                // If user closes auth wizard, navigate to home
+                navigate('/');
+              }}
+              mode="inline"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`h-[100dvh] w-full overflow-hidden flex flex-col ${theme === 'dark' ? 'bg-black' : 'bg-gray-50'}`}>
