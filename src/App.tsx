@@ -69,7 +69,7 @@ function App() {
     { id: 'pride', label: "Pride", icon: HandFist },
     { id: 'search', label: t('app.nav.search'), icon: Search },
     { id: 'nearby', label: t('app.nav.nearby'), icon: MapPin },
-    { id: 'match', label: t('app.nav.match'), icon: Heart },
+    { id: 'match', label: t('app.nav.match'), icon: "/icons/matches.png" },
     { id: 'places', label: t('app.nav.places'), icon: Building2 },
     { id: 'messages', label: t('app.nav.messages'), icon: MessageCircle },
     { id: 'notifications', label: t('app.nav.notifications'), icon: Bell },
@@ -534,11 +534,11 @@ function App() {
       } backdrop-blur-xl safe-area-inset-bottom`}>
         <div className="flex items-center justify-around px-4 py-3">
           {[
-            { id: 'pride', icon: Spotlight, label: "Pride"},
-            { id: 'search', icon: Search, label: t('app.nav.search') },
-            { id: 'match', icon: Heart, label: t('app.nav.match') },
-            { id: 'messages', icon: MessageCircle, label: t('app.nav.messages') },
-            { id: 'profile', icon: User, label: t('app.nav.profile') },
+            { id: 'pride', icon:"/icons/pride.webp", label: "Pride"},
+            { id: 'search',  icon:"/icons/search.webp", label: t('app.nav.search') },
+            { id: 'match', icon:"/icons/matches.webp", label: t('app.nav.match') },
+            { id: 'messages', icon: "/icons/chat.webp", label: t('app.nav.messages') },
+            { id: 'profile',  icon:"/icons/profile.webp", label: t('app.nav.profile') },
           ].map((item) => {
             const Icon = item.icon;
             const isActive = activeScreen === item.id;
@@ -572,30 +572,11 @@ function App() {
                   />
                 )}
                 
-                {/* Icon */}
-                <Icon 
-                  className={`relative z-10 w-6 h-6 transition-colors duration-200 ${
-                    isActive
-                      ? theme === 'dark'
-                        ? 'text-white'
-                        : 'text-black'
-                      : theme === 'dark'
-                        ? 'text-gray-500'
-                        : 'text-gray-400'
-                  }`} 
-                  strokeWidth={isActive ? 2.5 : 2}
-                />
+                <img className='w-12 h-12' src={item.icon}/>
                 
                 {/* Label */}
                 <span 
-                  className={`relative z-10 text-[10px] font-medium tracking-tight mt-1 transition-all duration-200 ${
-                    isActive
-                      ? theme === 'dark'
-                        ? 'text-white opacity-100'
-                        : 'text-black opacity-100'
-                      : 'opacity-0'
-                  }`}
-                >
+                  className={`relative z-10 text-[10px] font-medium tracking-tight mt-1 transition-all duration-200 `}>
                   {item.label}
                 </span>
               </button>
@@ -845,18 +826,11 @@ function App() {
                           <div className={`mb-2.5 ${
                             isActive ? 'scale-110' : ''
                           } transition-transform duration-200`}>
-                            <Icon 
-                              className={`w-[26px] h-[26px] ${
-                                isActive
-                                  ? theme === 'dark'
-                                    ? 'text-white'
-                                    : 'text-black'
-                                  : theme === 'dark'
-                                    ? 'text-gray-400'
-                                    : 'text-gray-600'
-                              }`}
-                              strokeWidth={isActive ? 2.5 : 2}
-                            />
+                            {
+                              <img src='/icons/matches.webp'/>
+                            }
+                           
+                            
                           </div>
                           
                           {/* Label */}
