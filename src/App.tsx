@@ -535,7 +535,7 @@ function App() {
         <div className="flex items-center justify-around px-4 py-3">
           {[
             { id: 'pride', icon:"/icons/pride.webp", label: "Pride"},
-            { id: 'search',  icon:"/icons/search.webp", label: t('app.nav.search') },
+            { id: 'nearby', label: t('app.nav.nearby'), icon:"/icons/nearby.webp" },
             { id: 'match', icon:"/icons/matches.webp", label: t('app.nav.match') },
             { id: 'messages', icon: "/icons/chat.webp", label: t('app.nav.messages') },
             { id: 'profile',  icon:"/icons/profile.webp", label: t('app.nav.profile') },
