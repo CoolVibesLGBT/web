@@ -66,15 +66,15 @@ function App() {
   }, [location.pathname]);
 
   const mobileNavItems = [
-    { id: 'pride', label: "Pride", icon: HandFist },
-    { id: 'search', label: t('app.nav.search'), icon: Search },
-    { id: 'nearby', label: t('app.nav.nearby'), icon: MapPin },
-    { id: 'match', label: t('app.nav.match'), icon: "/icons/matches.png" },
-    { id: 'places', label: t('app.nav.places'), icon: Building2 },
-    { id: 'messages', label: t('app.nav.messages'), icon: MessageCircle },
-    { id: 'notifications', label: t('app.nav.notifications'), icon: Bell },
-    { id: 'classifieds', label: t('app.nav.classifieds'), icon: FileText },
-    { id: 'profile', label: t('app.nav.profile'), icon: User },
+    { id: 'pride', label: "Pride", icon: "/icons/pride.webp" },
+   // { id: 'search', label: t('app.nav.search'), icon: Search },
+    { id: 'nearby', label: t('app.nav.nearby'), icon: "/icons/nearby.webp" },
+    { id: 'match', label: t('app.nav.match'), icon: "/icons/matches.webp" },
+   // { id: 'places', label: t('app.nav.places'), icon: Building2 },
+    { id: 'messages', label: t('app.nav.messages'), icon: "/icons/chat.webp" },
+    //{ id: 'notifications', label: t('app.nav.notifications'), icon: Bell },
+    //{ id: 'classifieds', label: t('app.nav.classifieds'), icon: FileText },
+    { id: 'profile', label: t('app.nav.profile'), icon: "/icons/profile.webp" },
   ];
 
   
@@ -827,7 +827,7 @@ function App() {
                             isActive ? 'scale-110' : ''
                           } transition-transform duration-200`}>
                             {
-                              <img src='/icons/matches.webp'/>
+                              <img src={item.icon}/>
                             }
                            
                             
