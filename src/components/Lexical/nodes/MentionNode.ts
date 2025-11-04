@@ -105,7 +105,7 @@ export class MentionNode extends TextNode {
 
     console.log("exportDOM:",this.__mentionClass)
     
-    element.className = `mention  ${this.__mentionClass} ersan`;
+    element.className = `mention  ${this.__mentionClass}`;
     element.textContent = this.__text;
     return {element};
   }
