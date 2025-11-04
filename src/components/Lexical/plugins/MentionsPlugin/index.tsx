@@ -318,7 +318,6 @@ export default function NewMentionsPlugin(): JSX.Element | null {
       nodeToReplace: TextNode | null,
       closeMenu: () => void,
     ) => {
-      console.log(editor)
       editor.update(() => {
         const mentionNode = $createMentionNode(selectedOption.name,undefined,editor._config.theme.mention);
         if (nodeToReplace) {
