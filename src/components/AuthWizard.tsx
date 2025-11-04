@@ -1,25 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowLeft, User, Calendar, Heart, X, ChevronLeft, ChevronRight, ChevronDown, LocateFixed, MapPin, Bell } from 'lucide-react';
+import { ArrowRight, ArrowLeft, User, Calendar, Heart, X, ChevronLeft, ChevronRight, ChevronDown, LocateFixed, MapPin, Bell, Shield } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useApp } from '../contexts/AppContext';
 import { api } from '../services/api.tsx';
 import { useTranslation } from 'react-i18next';
-import { applicationName } from '../appSettings';
+import { applicationName, RECAPTCHA_SITE_KEY } from '../appSettings';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface AuthWizardProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
+const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }): JSX.Element | null => {
   const { theme } = useTheme();
   const { login } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const [authMode, setAuthMode] = useState<'login' | 'register' | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const { data: _data, defaultLanguage: _defaultLanguage } = useApp();
   const { t } = useTranslation('common');
 
@@ -151,6 +154,15 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
       placeholder: 'nickname',
       type: 'text'
     },
+    {
+      id: 'captcha',
+      title: t('auth.verify_human', { defaultValue: 'Verify you are human' }),
+      subtitle: t('auth.verify_human_subtitle', { defaultValue: 'Please complete the security check' }),
+      icon: Shield,
+      field: 'captcha',
+      placeholder: '',
+      type: 'captcha'
+    },
     
   ];
 
@@ -272,6 +284,13 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
     } else if (currentStep === 4 && authMode === 'register') {
       setCurrentStep(5); // nickname (hesap oluşturma formu sonra)
     } else if (currentStep === 5 && authMode === 'register') {
+      setCurrentStep(6); // captcha step
+    } else if (currentStep === 6 && authMode === 'register') {
+      if (!recaptchaToken) {
+        setError(t('auth.captcha_required', { defaultValue: 'Please complete the reCAPTCHA verification' }));
+        return;
+      }
+
       const birthDate = selectedDate.day && selectedDate.month && selectedDate.year
         ? `${selectedDate.year}-${selectedDate.month.toString().padStart(2, '0')}-${selectedDate.day.toString().padStart(2, '0')}`
         : '';
@@ -281,7 +300,8 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
         nickname: formData.nickname,
         password: formData.password,
         birthDate: birthDate,
-        location: formData.location
+        location: formData.location,
+        recaptchaToken: recaptchaToken
       };
 
       setIsLoading(true);
@@ -293,6 +313,11 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
         })
         .catch(err => {
           setError(err.response?.data?.message || 'Registration failed. Please try again.');
+          // Reset captcha on error
+          if (recaptchaRef.current) {
+            recaptchaRef.current.reset();
+          }
+          setRecaptchaToken(null);
         })
         .finally(() => {
           setIsLoading(false);
@@ -310,10 +335,18 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
       
       // Handle register flow: step 4 (birthdate) should go back to step 2 (notifications), not step 3 (login-form)
       // Step 5 (nickname) should go back to step 4 (birthdate)
+      // Step 6 (captcha) should go back to step 5 (nickname)
       if (authMode === 'register' && currentStep === 4) {
         setCurrentStep(2); // Go back to notifications
       } else if (authMode === 'register' && currentStep === 5) {
         setCurrentStep(4); // Go back to birthdate
+      } else if (authMode === 'register' && currentStep === 6) {
+        setCurrentStep(5); // Go back to nickname
+        // Reset captcha when going back
+        if (recaptchaRef.current) {
+          recaptchaRef.current.reset();
+        }
+        setRecaptchaToken(null);
       } else if (authMode === 'login' && currentStep === 3) {
         setCurrentStep(2); // Go back to notifications
       } else {
@@ -334,7 +367,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
     if (authMode === 'login') {
       return 4; // auth-mode, location, notifications, login-form
     } else if (authMode === 'register') {
-      return 5; // auth-mode, location, notifications, birthdate, nickname
+      return 6; // auth-mode, location, notifications, birthdate, nickname, captcha
     }
     return steps.length;
   };
@@ -351,6 +384,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
       if (currentStep === 2) return 2; // notifications
       if (currentStep === 4) return 3; // birthdate
       if (currentStep === 5) return 4; // nickname
+      if (currentStep === 6) return 5; // captcha
     }
     return currentStep;
   };
@@ -372,6 +406,8 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
           formData.password === formData.confirmPassword;
       case 'birthDate':
         return selectedDate.day && selectedDate.month && selectedDate.year;
+      case 'captcha':
+        return !!recaptchaToken;
       default:
         return false;
     }
@@ -952,7 +988,37 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
           </div>
         );
       }
-
+      case 'captcha':
+        return (
+          <div className="space-y-6">
+            <div className="text-center">
+              <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-indigo-900/30' : 'bg-indigo-100'}`}>
+                <Shield className={`w-8 h-8 ${theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600'}`} />
+              </div>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                {t('auth.captcha_instructions', { defaultValue: 'Please verify that you are not a robot' })}
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={RECAPTCHA_SITE_KEY}
+                onChange={(token) => {
+                  setRecaptchaToken(token);
+                  setError(''); // Clear error when captcha is completed
+                }}
+                onExpired={() => {
+                  setRecaptchaToken(null);
+                }}
+                onError={() => {
+                  setRecaptchaToken(null);
+                  setError(t('auth.captcha_error', { defaultValue: 'reCAPTCHA verification failed. Please try again.' }));
+                }}
+                theme={theme === 'dark' ? 'dark' : 'light'}
+              />
+            </div>
+          </div>
+        );
       default:
         return null;
     }
@@ -1105,7 +1171,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose }) => {
                   </div>
                 ) : (
                   <>
-                    <span className="text-sm sm:text-base whitespace-nowrap">{currentStep === (authMode === 'login' ? 3 : 5) ? (authMode === 'login' ? t('auth.sign_in') : t('auth.complete_registration')) : t('auth.continue')}</span>
+                    <span className="text-sm sm:text-base whitespace-nowrap">{currentStep === (authMode === 'login' ? 3 : 6) ? (authMode === 'login' ? t('auth.sign_in') : t('auth.complete_registration')) : t('auth.continue')}</span>
                     <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 flex-shrink-0" />
                   </>
                 )}
