@@ -79,7 +79,27 @@ export class ApiService {
   }
 
   async searchUserLookup(query: string) {
-    return this.call<{ users: Array<{ username: string; displayname: string }> } | Array<{ username: string; displayname: string }>>(Actions.CMD_SEARCH_LOOKUP_USER, {
+    return this.call<{ 
+      users: Array<{ 
+        id: string;
+        username: string; 
+        displayname: string;
+        avatar?: {
+          file?: {
+            url?: string;
+          };
+        };
+      }> 
+    } | Array<{ 
+      id: string;
+      username: string; 
+      displayname: string;
+      avatar?: {
+        file?: {
+          url?: string;
+        };
+      };
+    }>>(Actions.CMD_SEARCH_LOOKUP_USER, {
       method: "POST",
       body: { query },
     });

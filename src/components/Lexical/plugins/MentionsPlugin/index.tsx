@@ -17,12 +17,13 @@ import {
 } from '@lexical/react/LexicalTypeaheadMenuPlugin';
 import {TextNode} from 'lexical';
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import {$createMentionNode} from '../../nodes/MentionNode';
 import { User } from 'lucide-react';
 import { api } from '../../../../services/api';
+import { motion } from 'framer-motion';
+import { useTheme } from '../../../../contexts/ThemeContext';
 
 const PUNCTUATION =
   '\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%\'"~=<>_:;';
@@ -89,19 +90,29 @@ const SUGGESTION_LIST_LENGTH_LIMIT = 5;
 
 const mentionsCache = new Map();
 
-async function lookupUsers(query: string): Promise<Array<string>> {
+interface UserData {
+  id: string;
+  username: string;
+  displayname: string;
+  avatar?: {
+    file?: {
+      url?: string;
+    };
+  };
+}
+
+async function lookupUsers(query: string): Promise<Array<UserData>> {
   try {
     const response = await api.searchUserLookup(query);
     
-    let users: Array<{ username: string; displayname: string }> = [];
+    let users: Array<UserData> = [];
     if (Array.isArray(response)) {
       users = response;
     } else if (response && typeof response === 'object' && 'users' in response) {
       users = response.users;
     }
     
-    // username veya displayname kullan, öncelik displayname
-    return users.map(user => user.displayname || user.username);
+    return users;
   } catch (error) {
     console.error('Error fetching users:', error);
     return [];
@@ -109,7 +120,7 @@ async function lookupUsers(query: string): Promise<Array<string>> {
 }
 
 function useMentionLookupService(mentionString: string | null) {
-  const [results, setResults] = useState<Array<string>>([]);
+  const [results, setResults] = useState<Array<UserData>>([]);
 
   useEffect(() => {
     const cachedResults = mentionsCache.get(mentionString);
@@ -168,11 +179,15 @@ function getPossibleQueryMatch(text: string): MenuTextMatch | null {
 
 class MentionTypeaheadOption extends MenuOption {
   name: string;
+  username: string;
+  avatarUrl: string | null;
   picture: JSX.Element;
 
-  constructor(name: string, picture: JSX.Element) {
+  constructor(name: string, username: string, avatarUrl: string | null, picture: JSX.Element) {
     super(name);
     this.name = name;
+    this.username = username;
+    this.avatarUrl = avatarUrl;
     this.picture = picture;
   }
 }
@@ -190,36 +205,85 @@ function MentionsTypeaheadMenuItem({
   onMouseEnter: () => void;
   option: MentionTypeaheadOption;
 }) {
+  const { theme } = useTheme();
+  const avatarUrl = option.avatarUrl;
+  const displayName = option.name;
 
-  let className = `
-  item flex rounded-full flex-row gap-2 cursor-pointer block px-4 py-2 text-md font-semibold 
-  focus:outline-none inline-block font-extrabold 
-  bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)] 
-  bg-clip-text text-transparent 
-  hover:bg-black hover:text-white hover:bg-clip-border
-`
-  if (isSelected) {
-    className += ' selected';
-  }
   return (
-    <li
+    <motion.li
       key={option.key}
       tabIndex={-1}
-      className={className}
       ref={option.setRefElement}
       role="option"
       aria-selected={isSelected}
       id={'typeahead-item-' + index}
       onMouseEnter={onMouseEnter}
-      onClick={onClick}>
-      {option.picture}
-      <span className="text">{option.name}</span>
-    </li>
+      onClick={onClick}
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2, delay: index * 0.05 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      className={`
+        flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl transition-all
+        ${isSelected 
+          ? theme === 'dark'
+            ? 'bg-white/10 backdrop-blur-sm'
+            : 'bg-gray-100'
+          : theme === 'dark'
+            ? 'hover:bg-white/5'
+            : 'hover:bg-gray-50'
+        }
+      `}
+    >
+      <div className="flex-shrink-0">
+        {avatarUrl ? (
+          <motion.img
+            src={avatarUrl}
+            alt={displayName}
+            className={`w-10 h-10 rounded-full object-cover border-2 ${
+              theme === 'dark' ? 'border-white/20' : 'border-gray-200'
+            }`}
+            whileHover={{ scale: 1.1 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          />
+        ) : (
+          <div className={`w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center border-2 ${
+            theme === 'dark' ? 'border-white/20' : 'border-gray-200'
+          }`}>
+            <User className="w-5 h-5 text-white" />
+          </div>
+        )}
+      </div>
+      <div className="flex-1 min-w-0">
+        <motion.div 
+          className={`font-semibold truncate ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: index * 0.05 + 0.1 }}
+        >
+          {displayName}
+        </motion.div>
+        <motion.div 
+          className={`text-xs truncate ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+          }`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: index * 0.05 + 0.15 }}
+        >
+          @{option.username}
+        </motion.div>
+      </div>
+    </motion.li>
   );
 }
 
 export default function NewMentionsPlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext();
+  const { theme } = useTheme();
 
   const [queryString, setQueryString] = useState<string | null>(null);
 
@@ -233,8 +297,16 @@ export default function NewMentionsPlugin(): JSX.Element | null {
     () =>
       results
         .map(
-          (result) =>
-            new MentionTypeaheadOption(result, <User className='w-5 h-5 font-semibold text-white'/>),
+          (user) => {
+            const displayName = user.displayname || user.username;
+            const avatarUrl = user.avatar?.file?.url || null;
+            return new MentionTypeaheadOption(
+              displayName,
+              user.username,
+              avatarUrl,
+              <User className='w-5 h-5 font-semibold text-white'/>
+            );
+          }
         )
         .slice(0, SUGGESTION_LIST_LENGTH_LIMIT),
     [results],
@@ -246,8 +318,9 @@ export default function NewMentionsPlugin(): JSX.Element | null {
       nodeToReplace: TextNode | null,
       closeMenu: () => void,
     ) => {
+      console.log(editor)
       editor.update(() => {
-        const mentionNode = $createMentionNode(selectedOption.name);
+        const mentionNode = $createMentionNode(selectedOption.name,undefined,editor._config.theme.mention);
         if (nodeToReplace) {
           nodeToReplace.replace(mentionNode);
         }
@@ -281,8 +354,18 @@ export default function NewMentionsPlugin(): JSX.Element | null {
       ) =>
         anchorElementRef.current && results.length
           ? ReactDOM.createPortal(
-              <div className="typeahead-popover p-4 w-full bg-black rounded-xl relative mentions-menu absolute right-0 z-10 mt-2 min-w-[300px] origin-top-right rounded-md shadow-lg outline-1 outline-black/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
-                <ul>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className={`typeahead-popover p-2 w-full backdrop-blur-xl rounded-xl relative mentions-menu absolute right-0 z-10 mt-2 min-w-[320px] max-w-[400px] origin-top-right shadow-2xl border ${
+                  theme === 'dark'
+                    ? 'bg-black/95 border-white/10'
+                    : 'bg-white/95 border-gray-200'
+                }`}
+              >
+                <ul className="space-y-1">
                   {options.map((option, i: number) => (
                     <MentionsTypeaheadMenuItem
                       index={i}
@@ -299,7 +382,7 @@ export default function NewMentionsPlugin(): JSX.Element | null {
                     />
                   ))}
                 </ul>
-              </div>,
+              </motion.div>,
               anchorElementRef.current,
             )
           : null
