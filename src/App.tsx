@@ -343,7 +343,7 @@ function App() {
 
   
         {/* Middle Section - Scrollable */}
-        <main className={`max-h-[100dvh]  min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide flex-1 min-w-0 lg:border-l lg:border-r ${theme === 'dark' ? 'lg:border-gray-800/70' : 'lg:border-black/5'} pt-[56px] lg:pt-0 pb-[80px] lg:pb-0`}>
+        <main className={`max-h-[100dvh]  min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide flex-1 min-w-0 lg:border-l lg:border-r ${theme === 'dark' ? 'lg:border-gray-800/70' : 'lg:border-black/5'} pt-[56px] lg:pt-0  lg:pb-0`}>
           <Routes>
             {/* Home Routes */}
             <Route path="/landing" element={<LandingPage />} />
@@ -373,7 +373,7 @@ function App() {
 
         {/* Right Sidebar - Fixed */}
         {/* Hide right sidebar on messages and notifications routes for better UX */}
-        {location.pathname !== '/messages' && location.pathname !== '/landing' && (
+        {location.pathname !== '/messages' && location.pathname !== '/landing' && location.pathname !== '/classifieds' && location.pathname !== '/places' && location.pathname !== '/match' && (
         <aside className={`hidden xl:flex scrollbar-hide flex-col w-[380px]`}>
           <div className="p-5 sticky top-0 h-screen scrollbar-hide overflow-y-auto space-y-4">
             

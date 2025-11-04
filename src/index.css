@@ -4,16 +4,16 @@
 
 html, body {
   margin: 0;
-  padding: 0;
+  width: 100dvw;
   height: 100dvh;   /* dynamic viewport height */
   overflow: hidden; /* scroll bar kaldır */
-}
-
-body {
   position: fixed;  /* body'yi sabitle */
-  width: 100vw;     /* yatay genişliği kapla */
+  width: 100vdw;     /* yatay genişliği kapla */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+
 }
 
+ 
 /* Touch-friendly range sliders */
 input[type="range"] {
   -webkit-appearance: none;
