@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence, PanInfo, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, PanInfo, useMotionValue } from 'framer-motion';
 import { Heart, X, Star, MapPin, Briefcase, GraduationCap, MessageCircle, Camera, Shield, Sparkles, ChevronRight, Wine, Cigarette, Baby, PawPrint, Church, Eye, Paintbrush, Ruler, RulerDimensionLine, Palette, Users, Accessibility, PersonStanding, Drama, Vegan, HeartHandshake, Panda, Ghost, Frown, UserCircle, Rainbow, Smile, Banana, Link, Calendar, RefreshCw } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useApp } from '../contexts/AppContext';
@@ -232,9 +232,7 @@ const MatchScreen: React.FC = () => {
   const [hasLoadedMatches, setHasLoadedMatches] = useState(false); // Track if matches have been loaded
   const [processedProfiles, setProcessedProfiles] = useState<Set<string>>(new Set()); // Track processed profile IDs
   const cardRef = useRef<HTMLDivElement>(null);
-  const profilesRef = useRef<Profile[]>([]);
   const processedProfilesRef = useRef<Set<string>>(new Set());
-  const currentIndexRef = useRef<number>(0);
   const fetchMatchedProfilesRef = useRef<((cursor: string | null, limit: number) => Promise<void>) | null>(null);
   const fetchLikedProfilesRef = useRef<((cursor: string | null, limit: number) => Promise<void>) | null>(null);
   const fetchPassedProfilesRef = useRef<((cursor: string | null, limit: number) => Promise<void>) | null>(null);
@@ -247,16 +245,8 @@ const MatchScreen: React.FC = () => {
   
   // Keep refs in sync with state
   useEffect(() => {
-    profilesRef.current = profiles;
-  }, [profiles]);
-  
-  useEffect(() => {
     processedProfilesRef.current = processedProfiles;
   }, [processedProfiles]);
-  
-  useEffect(() => {
-    currentIndexRef.current = currentIndex;
-  }, [currentIndex]);
   
   useEffect(() => {
     hasLoadedMatchesRef.current = hasLoadedMatches;
@@ -323,12 +313,6 @@ const MatchScreen: React.FC = () => {
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const rotate = useTransform(x, [-300, 0, 300], [-20, 0, 20]);
-
-  // Smooth spring animation for x - Tinder-quality smooth animations
-  const springConfig = { damping: 30, stiffness: 350 };
-  const springX = useSpring(x, springConfig);
-  const springRotate = useSpring(rotate, springConfig);
 
   const handleSwipe = async (direction: 'left' | 'right' = 'right', reactionType: 'like' | 'dislike' | 'superlike' = 'like') => {
     const targetX = direction === 'right' ? 600 : -600;
@@ -742,7 +726,7 @@ const MatchScreen: React.FC = () => {
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-              Loading profiles...
+              {t('match.loading_profiles') || 'Loading profiles...'}
             </p>
           </div>
         </div>
@@ -763,7 +747,7 @@ const MatchScreen: React.FC = () => {
             }`}>
               <Heart className={`w-16 h-16 mx-auto mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
               <p className={`text-base font-semibold mb-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-              No profiles to show right now. Come back soon!
+              {t('match.no_profiles') || 'No profiles to show right now. Come back soon!'}
               </p>
               <motion.button
                 className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all ${
@@ -799,7 +783,7 @@ const MatchScreen: React.FC = () => {
                 disabled={isLoading}
               >
                 <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                <span>Refresh</span>
+                <span>{t('match.refresh') || 'Refresh'}</span>
               </motion.button>
             </div>
           </div>
@@ -919,7 +903,7 @@ const MatchScreen: React.FC = () => {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                 >
-                  IT'S A MATCH!
+                  {t('match.its_a_match') || 'IT\'S A MATCH!'}
                 </motion.h1>
                 <motion.p
                   className="text-xl sm:text-2xl text-white/90 text-center mt-4"
@@ -927,7 +911,7 @@ const MatchScreen: React.FC = () => {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.4 }}
                 >
-                  You and {matchedProfile?.displayname || matchedProfile?.name || 'someone'} liked each other
+                  {t('match.you_and_liked', { name: matchedProfile?.displayname || matchedProfile?.name || t('match.someone') || 'someone' }) || `You and ${matchedProfile?.displayname || matchedProfile?.name || 'someone'} liked each other`}
                 </motion.p>
               </motion.div>
 
@@ -1124,7 +1108,7 @@ const MatchScreen: React.FC = () => {
                         transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 20 }}
                       >
                         <span className="text-[10px] sm:text-xs font-bold tracking-wider">
-                          {matchPercentage}% MATCH
+                          {matchPercentage}% {t('match.match') || 'MATCH'}
                         </span>
                       </motion.div>
                     </div>
@@ -1173,7 +1157,7 @@ const MatchScreen: React.FC = () => {
                             <div className="flex items-center gap-1.5 mb-1.5">
                               <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-400 animate-pulse shadow-lg shadow-green-400/50" />
                               <span className="text-[10px] sm:text-xs font-medium text-white/85 tracking-wide drop-shadow-lg">
-                                Active {currentProfile.lastActive}
+                                {t('match.active') || 'Active'} {currentProfile.lastActive}
                               </span>
                             </div>
                           )}
@@ -1193,7 +1177,7 @@ const MatchScreen: React.FC = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 20 }}
                       >
-                        <span className="text-[11px] sm:text-xs font-semibold text-white tracking-tight">Profile</span>
+                        <span className="text-[11px] sm:text-xs font-semibold text-white tracking-tight">{t('match.profile') || 'Profile'}</span>
                         <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" strokeWidth={3} />
                       </motion.button>
                     </motion.div>
@@ -1253,10 +1237,10 @@ const MatchScreen: React.FC = () => {
                             <div className={`flex gap-1.5 sm:gap-2 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b overflow-x-auto scrollbar-hide ${theme === 'dark' ? 'border-white/10' : 'border-gray-200'
                               }`}>
                               {[
-                                { id: 'about' as const, label: 'About', count: null },
-                                { id: 'details' as const, label: 'Attributes', count: currentProfile.user_attributes?.filter(ua => ua.attribute?.name).length || 0 },
-                                { id: 'interests' as const, label: 'Interests', count: currentProfile.interests?.length || 0 },
-                                { id: 'fantasies' as const, label: 'Fantasies', count: currentProfile.fantasies?.length || 0 }
+                                { id: 'about' as const, label: t('match.about') || 'About', count: null },
+                                { id: 'details' as const, label: t('match.attributes') || 'Attributes', count: currentProfile.user_attributes?.filter(ua => ua.attribute?.name).length || 0 },
+                                { id: 'interests' as const, label: t('match.interests') || 'Interests', count: currentProfile.interests?.length || 0 },
+                                { id: 'fantasies' as const, label: t('match.fantasies') || 'Fantasies', count: currentProfile.fantasies?.length || 0 }
                               ].map((tab) => (
                                 <motion.button
                                   key={tab.id}
@@ -1305,7 +1289,7 @@ const MatchScreen: React.FC = () => {
                                     {/* User Info */}
                                     <div>
                                       <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                        }`}>Profile</h3>
+                                        }`}>{t('match.profile') || 'Profile'}</h3>
                                       <div className="space-y-3">
                                         {currentProfile.displayname && (
                                           <div className={`flex items-center p-4 rounded-2xl border transition-all ${theme === 'dark'
@@ -1314,7 +1298,7 @@ const MatchScreen: React.FC = () => {
                                             }`}>
                                             <div className="flex-1">
                                               <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                                }`}>Display Name</p>
+                                                }`}>{t('match.display_name') || 'Display Name'}</p>
                                               <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'
                                                 }`}>{currentProfile.displayname}</p>
                                             </div>
@@ -1327,7 +1311,7 @@ const MatchScreen: React.FC = () => {
                                             }`}>
                                             <div className="flex-1">
                                               <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                                }`}>Username</p>
+                                                }`}>{t('match.username') || 'Username'}</p>
                                               <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'
                                                 }`}>@{currentProfile.username}</p>
                                             </div>
@@ -1339,7 +1323,7 @@ const MatchScreen: React.FC = () => {
                                     {/* Bio */}
                                     <div>
                                       <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                        }`}>Bio</h3>
+                                        }`}>{t('match.bio') || 'Bio'}</h3>
                                       <p className={`text-base leading-relaxed font-light ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
                                         }`}>{currentProfile.bio}</p>
                                     </div>
@@ -1348,7 +1332,7 @@ const MatchScreen: React.FC = () => {
                                     {(currentProfile.website || currentProfile.created_at) && (
                                       <div>
                                         <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                          }`}>Information</h3>
+                                          }`}>{t('match.information') || 'Information'}</h3>
                                         <div className="space-y-3">
                                           {currentProfile.website && (
                                             <div className={`flex items-center p-4 rounded-2xl border transition-all ${theme === 'dark'
@@ -1362,7 +1346,7 @@ const MatchScreen: React.FC = () => {
                                               </div>
                                               <div className="flex-1 min-w-0">
                                                 <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                                  }`}>Website</p>
+                                                  }`}>{t('match.website') || 'Website'}</p>
                                                 <a
                                                   href={currentProfile.website}
                                                   target="_blank"
@@ -1387,7 +1371,7 @@ const MatchScreen: React.FC = () => {
                                               </div>
                                               <div>
                                                 <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                                  }`}>Joined</p>
+                                                  }`}>{t('match.joined') || 'Joined'}</p>
                                                 <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'
                                                   }`}>{formatJoinDate(currentProfile.created_at)}</p>
                                               </div>
@@ -1401,7 +1385,7 @@ const MatchScreen: React.FC = () => {
                                     {(currentProfile.followers_count !== undefined || currentProfile.following_count !== undefined || currentProfile.posts_count !== undefined) && (
                                       <div>
                                         <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                          }`}>Stats</h3>
+                                          }`}>{t('match.stats') || 'Stats'}</h3>
                                         <div className={`rounded-[18px] overflow-hidden ${theme === 'dark'
                                           ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
                                           : 'bg-white backdrop-blur-xl border border-black/[0.06]'
@@ -1446,7 +1430,7 @@ const MatchScreen: React.FC = () => {
                                     {(currentProfile.occupation || currentProfile.education) && (
                                       <div>
                                         <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                          }`}>Professional</h3>
+                                          }`}>{t('match.professional') || 'Professional'}</h3>
                                         <div className="space-y-3">
                                           {currentProfile.occupation && (
                                             <div className={`flex items-center p-4 rounded-2xl border transition-all ${theme === 'dark'
@@ -1460,7 +1444,7 @@ const MatchScreen: React.FC = () => {
                                               </div>
                                               <div>
                                                 <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                                  }`}>Occupation</p>
+                                                  }`}>{t('match.occupation') || 'Occupation'}</p>
                                                 <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'
                                                   }`}>{currentProfile.occupation}</p>
                                               </div>
@@ -1478,7 +1462,7 @@ const MatchScreen: React.FC = () => {
                                               </div>
                                               <div>
                                                 <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                                  }`}>Education</p>
+                                                  }`}>{t('match.education') || 'Education'}</p>
                                                 <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'
                                                   }`}>{currentProfile.education}</p>
                                               </div>
@@ -1495,7 +1479,7 @@ const MatchScreen: React.FC = () => {
                                   <div className="space-y-6">
                                     <div>
                                       <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                        }`}>Attributes</h3>
+                                        }`}>{t('match.attributes') || 'Attributes'}</h3>
                                       <div className={`rounded-[18px] overflow-hidden ${theme === 'dark'
                                         ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
                                         : 'bg-white backdrop-blur-xl border border-black/[0.06]'
@@ -1563,7 +1547,7 @@ const MatchScreen: React.FC = () => {
                                 {activeTab === 'interests' && (
                                   <div>
                                     <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                      }`}>Interests</h3>
+                                      }`}>{t('match.interests') || 'Interests'}</h3>
                                     {(() => {
                                       const interestsSource = currentProfile.interests;
 
@@ -1658,7 +1642,7 @@ const MatchScreen: React.FC = () => {
                                 {activeTab === 'fantasies' && (
                                   <div>
                                     <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                      }`}>Fantasies & Preferences</h3>
+                                      }`}>{t('match.fantasies_preferences') || 'Fantasies & Preferences'}</h3>
                                     {currentProfile.fantasies && currentProfile.fantasies.length > 0 ? (
                                       (() => {
                                         // Group fantasies by category
@@ -1748,7 +1732,7 @@ const MatchScreen: React.FC = () => {
                                     whileTap={{ scale: 0.98 }}
                                   >
                                     <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
-                                    <span>Send Message</span>
+                                    <span>{t('match.send_message') || 'Send Message'}</span>
                                   </motion.button>
                                 </motion.div>
                               </motion.div>
@@ -1828,9 +1812,9 @@ const MatchScreen: React.FC = () => {
         <div className={`flex gap-2 px-4 mb-4 overflow-x-auto scrollbar-hide ${theme === 'dark' ? '' : ''
           }`}>
           {[
-            { id: 'matches' as const, label: 'My Matches', icon: Sparkles, count: matchedProfiles.length },
-            { id: 'liked' as const, label: 'Liked', icon: Heart, count: likedProfiles.length },
-            { id: 'passed' as const, label: 'Passed', icon: Ghost, count: passedProfiles.length }
+            { id: 'matches' as const, label: t('match.my_matches') || 'My Matches', icon: Sparkles, count: matchedProfiles.length },
+            { id: 'liked' as const, label: t('match.liked') || 'Liked', icon: Heart, count: likedProfiles.length },
+            { id: 'passed' as const, label: t('match.passed') || 'Passed', icon: Ghost, count: passedProfiles.length }
           ].map((tab) => (
             <motion.button
               key={tab.id}
@@ -1884,7 +1868,7 @@ const MatchScreen: React.FC = () => {
                       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
                       <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                         }`}>
-                        Loading matches...
+                        {t('match.loading_matches') || 'Loading matches...'}
                       </p>
                     </div>
                   ) : matchedProfiles.length === 0 ? (
@@ -1894,7 +1878,7 @@ const MatchScreen: React.FC = () => {
                         }`} />
                       <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                         }`}>
-                        No matches yet
+                        {t('match.no_matches') || 'No matches yet'}
                       </p>
                     </div>
                   ) : (
@@ -1962,10 +1946,10 @@ const MatchScreen: React.FC = () => {
                             {isLoadingMatches ? (
                               <span className="flex items-center gap-2">
                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
-                                Loading...
+                                {t('match.loading') || 'Loading...'}
                               </span>
                             ) : (
-                              'Load More'
+                              t('match.load_more') || 'Load More'
                             )}
                           </motion.button>
                         </div>
@@ -1984,7 +1968,7 @@ const MatchScreen: React.FC = () => {
                       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
                       <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                         }`}>
-                        Loading liked profiles...
+                        {t('match.loading_liked') || 'Loading liked profiles...'}
                       </p>
                     </div>
                   ) : likedProfiles.length === 0 ? (
@@ -1994,7 +1978,7 @@ const MatchScreen: React.FC = () => {
                         }`} />
                       <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                         }`}>
-                        No profiles liked yet
+                        {t('match.no_profiles_liked') || 'No profiles liked yet'}
                       </p>
                     </div>
                   ) : (
@@ -2043,10 +2027,10 @@ const MatchScreen: React.FC = () => {
                             {isLoadingLiked ? (
                               <span className="flex items-center gap-2">
                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
-                                Loading...
+                                {t('match.loading') || 'Loading...'}
                               </span>
                             ) : (
-                              'Load More'
+                              t('match.load_more') || 'Load More'
                             )}
                           </motion.button>
                         </div>
@@ -2065,7 +2049,7 @@ const MatchScreen: React.FC = () => {
                       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
                       <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                         }`}>
-                        Loading passed profiles...
+                        {t('match.loading_passed') || 'Loading passed profiles...'}
                       </p>
                     </div>
                   ) : passedProfiles.length === 0 ? (
@@ -2075,7 +2059,7 @@ const MatchScreen: React.FC = () => {
                         }`} />
                       <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                         }`}>
-                        No profiles passed yet
+                        {t('match.no_profiles_passed') || 'No profiles passed yet'}
                       </p>
                     </div>
                   ) : (
@@ -2124,10 +2108,10 @@ const MatchScreen: React.FC = () => {
                             {isLoadingPassed ? (
                               <span className="flex items-center gap-2">
                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
-                                Loading...
+                                {t('match.loading') || 'Loading...'}
                               </span>
                             ) : (
-                              'Load More'
+                              t('match.load_more') || 'Load More'
                             )}
                           </motion.button>
                         </div>
