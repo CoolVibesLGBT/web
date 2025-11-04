@@ -178,8 +178,8 @@ function App() {
                           ? 'text-gray-400 hover:text-white hover:bg-white/10'
                           : 'text-gray-600 hover:text-black hover:bg-gray-100'
                     }`}>
-                    <Icon className={`w-6 h-6 transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
-                    <span className="font-semibold text-base tracking-wide">{item.label}</span>
+                    <Icon className={`w-6 h-6 transition-transform duration-200  rounded-full ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
+                    <span className=" font-semibold text-base tracking-wide">{item.label}</span>
                   </button>
                 );
               })}

@@ -55,6 +55,9 @@ export const Actions = {
 	CMD_MATCH_FETCH_PASSED  : "match.fetch.passed" , // Geçilen kullanıcıları getirme
 
 
+  CMD_SEARCH_LOOKUP_USER : "search.user.lookup"
+
+
 } as const;
 
 export type ActionType = typeof Actions[keyof typeof Actions];

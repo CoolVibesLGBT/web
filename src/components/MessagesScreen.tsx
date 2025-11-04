@@ -303,12 +303,12 @@ const MessagesScreen: React.FC = () => {
               </div>
 
               {/* Filter Tabs */}
-              <div className="flex gap-2">
+              <div className="flex gap-2 overflow-x-auto scrollbar-hide flex-nowrap">
                 <motion.button
                   onClick={() => setActiveFilter('all')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
                     activeFilter === 'all'
                       ? theme === 'dark'
                         ? 'bg-white text-black'
@@ -324,7 +324,7 @@ const MessagesScreen: React.FC = () => {
                   onClick={() => setActiveFilter('unread')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
                     activeFilter === 'unread'
                       ? theme === 'dark'
                         ? 'bg-white text-black'
@@ -340,7 +340,7 @@ const MessagesScreen: React.FC = () => {
                   onClick={() => setActiveFilter('groups')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
                     activeFilter === 'groups'
                       ? theme === 'dark'
                         ? 'bg-white text-black'
@@ -356,7 +356,7 @@ const MessagesScreen: React.FC = () => {
                   onClick={() => setActiveFilter('unencrypted')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
                     activeFilter === 'unencrypted'
                       ? theme === 'dark'
                         ? 'bg-white text-black'

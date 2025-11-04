@@ -43,6 +43,8 @@ import ToolbarPlugin from './Lexical/plugins/ToolbarPlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
 import { $getRoot } from 'lexical';
+import { MentionNode } from './Lexical/nodes/MentionNode';
+import NewMentionsPlugin from './Lexical/plugins/MentionsPlugin';
 
 // ToolbarPlugin wrapper component
 const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (editor: any) => void }) => {
@@ -711,7 +713,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   const editorConfig = {
     namespace: "TailwindRichText",
     editable: true,
-    nodes:[HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode],
+    nodes:[HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode,MentionNode],
     theme: {
       paragraph: `mb-2 text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`,
       heading: {
@@ -735,6 +737,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
         underline: "underline",
         strikethrough: "line-through",
       },
+       hashtag: "inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)]  bg-clip-text text-transparent  font-semibold hover:underline cursor-pointer",
+       mention: "inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)]  bg-clip-text text-transparent  font-semibold hover:underline cursor-pointer"
     },
     onError(error: Error) {
       console.error("Lexical Error:", error);
@@ -888,6 +892,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                     <HashtagPlugin/>
                     <ListPlugin/>
                     <LinkPlugin/>
+                    <NewMentionsPlugin/>
                   
                     <div className="-mx-2 mt-1">
                       <ToolbarPluginWrapper setEditorInstance={setEditorInstance} />
@@ -912,6 +917,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                       }
                       ErrorBoundary={LexicalErrorBoundary}
                     />
+                    
                     <OnChangePlugin onChange={onChange} />
                     <AutoFocusPlugin />
                     <HistoryPlugin />

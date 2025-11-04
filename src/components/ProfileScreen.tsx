@@ -2486,7 +2486,7 @@ const ProfileScreen: React.FC = () => {
         <main className={`flex-1 w-full min-w-0 ${theme === 'dark' ? 'border-x border-black' : 'border-x border-gray-100'}`}>
 
           {/* Cover Photo */}
-          <div className={`h-48 relative ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
+          <div className={`h-48  relative ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
             {getCoverImageUrl() ? (
               <img
                 src={getCoverImageUrl() || ''}
@@ -2507,7 +2507,7 @@ const ProfileScreen: React.FC = () => {
                   <img
                   src={getProfileImageUrl() || `https://ui-avatars.com/api/?name=${user.username}&background=random`}
                     alt={user.displayname}
-                    className="w-full h-full rounded-full object-cover"
+                    className="w-full h-full gay rounded-full object-cover"
                   />
               </div>
 

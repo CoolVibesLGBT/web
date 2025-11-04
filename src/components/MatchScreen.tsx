@@ -739,11 +739,11 @@ const MatchScreen: React.FC = () => {
       <div className='grid sm:grid-cols-2 grid-cols-1 gap-2'>
         <div className='w-full'>
       {profiles.length === 0 ? (
-        <div className="flex items-center justify-center min-h-[60dvh] md:min-h-[75dvh]">
+        <div className="flex items-center justify-center p-4 h-[100dvh] min-h-[60dvh] md:min-h-[75dvh]">
           <div className="text-center">
-            <div className={`rounded-3xl flex flex-col gap-2 items-center p-8 mb-6 ${theme === 'dark' 
-              ? 'border border-white/10' 
-              : 'border border-gray-200/50'
+            <div className={`rounded-3xl flex flex-col gap-2 h-[100dvh] justify-center items-center p-8 mb-6 ${theme === 'dark' 
+              ? 'bg-white/5' 
+              : 'bg-gray-50'
             }`}>
               <Heart className={`w-16 h-16 mx-auto mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
               <p className={`text-base font-semibold mb-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
