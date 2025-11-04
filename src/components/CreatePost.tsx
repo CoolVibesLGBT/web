@@ -766,18 +766,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
 
   return (
     <div className={`${isFullScreen ? "fixed left-0 top-0 w-full  z-[999] min-h-[100dvh] h-[100dvh] max-h-[100dvh] overflow-y-scroll scrollbar-hide" : ""} ${theme === 'dark' ? "bg-black" : "bg-white"} `}>
-      {/* Full Screen Overlay */}
-      <AnimatePresence>
-        {isFullScreen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed nset-0 z-50 bg-black/50 backdrop-blur-sm"
-            onClick={toggleFullScreen}
-          />
-        )}
-      </AnimatePresence>
+
+
 
       {/* Ultra-Professional Create Post Component */}
       <motion.div

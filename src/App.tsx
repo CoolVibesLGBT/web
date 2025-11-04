@@ -572,7 +572,7 @@ function App() {
                   />
                 )}
                 
-                <img className='w-6 h-6' src={item.icon}/>
+                <img className='w-8 h-8' src={item.icon}/>
                 
                 {/* Label */}
                 <span 
