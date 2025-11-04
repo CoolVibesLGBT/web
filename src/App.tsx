@@ -344,31 +344,46 @@ function App() {
   
         {/* Middle Section - Scrollable */}
         <main className={`max-h-[100dvh]  min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide flex-1 min-w-0 lg:border-l lg:border-r ${theme === 'dark' ? 'lg:border-gray-800/70' : 'lg:border-black/5'} pt-[56px] lg:pt-0  lg:pb-0`}>
-          <Routes>
-            {/* Home Routes */}
-            <Route path="/landing" element={<LandingPage />} />
-            <Route path="/" element={<HomeScreen />} />
-            <Route path="/home" element={<HomeScreen />} />
-            <Route path="/pride" element={<HomeScreen />} />
-            
-            {/* Profile Routes */}
-            <Route path="/:username" element={<ProfileScreen />} />
-            <Route path="/:username/status/:postId" element={<HomeScreen />} />
-            
-            {/* Other Routes */}
-            <Route path="/search" element={<SearchScreen />} />
-            <Route path="/match" element={<MatchScreen />} />
-            <Route path="/nearby" element={<NearbyScreen />} />
-            <Route path="/places" element={<PlacesScreen />} />
-            <Route path="/profile" element={<ProfileScreen />} />
+          {!isAuthenticated ? (
+            /* Show AuthWizard in inline mode when not authenticated */
+            <div className={`h-full w-full flex items-start lg:items-center justify-center overflow-y-auto ${theme === 'dark' ? 'bg-black' : 'bg-gray-50'}`}>
+              <div className="w-full max-w-lg px-0 lg:px-4 py-4 lg:py-0">
+                <AuthWizard
+                  isOpen={true}
+                  onClose={() => {
+                    // Prevent closing - user must authenticate
+                  }}
+                  mode="inline"
+                />
+              </div>
+            </div>
+          ) : (
+            <Routes>
+              {/* Home Routes */}
+              <Route path="/landing" element={<LandingPage />} />
+              <Route path="/" element={<HomeScreen />} />
+              <Route path="/home" element={<HomeScreen />} />
+              <Route path="/pride" element={<HomeScreen />} />
+              
+              {/* Profile Routes */}
+              <Route path="/:username" element={<ProfileScreen />} />
+              <Route path="/:username/status/:postId" element={<HomeScreen />} />
+              
+              {/* Other Routes */}
+              <Route path="/search" element={<SearchScreen />} />
+              <Route path="/match" element={<MatchScreen />} />
+              <Route path="/nearby" element={<NearbyScreen />} />
+              <Route path="/places" element={<PlacesScreen />} />
+              <Route path="/profile" element={<ProfileScreen />} />
 
-            <Route path="/messages" element={<MessagesScreen />} />
-            <Route path="/notifications" element={<NotificationsScreen />} />
-            <Route path="/classifieds" element={<ClassifiedsScreen />} />
-            
-            {/* Fallback */}
-            <Route path="*" element={<HomeScreen />} />
-          </Routes>
+              <Route path="/messages" element={<MessagesScreen />} />
+              <Route path="/notifications" element={<NotificationsScreen />} />
+              <Route path="/classifieds" element={<ClassifiedsScreen />} />
+              
+              {/* Fallback */}
+              <Route path="*" element={<HomeScreen />} />
+            </Routes>
+          )}
         </main>
 
         {/* Right Sidebar - Fixed */}
