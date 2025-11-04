@@ -765,7 +765,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
 
 
   return (
-    <>
+    <div className={`${isFullScreen ? "fixed left-0 top-0 w-full  z-[999] min-h-[100dvh] h-[100dvh] max-h-[100dvh] overflow-y-scroll scrollbar-hide" : ""} ${theme === 'dark' ? "bg-black" : "bg-white"} `}>
       {/* Full Screen Overlay */}
       <AnimatePresence>
         {isFullScreen && (
@@ -781,15 +781,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
 
       {/* Ultra-Professional Create Post Component */}
       <motion.div
-        className={`w-full   transition-all duration-500 ${
-          isFullScreen 
-            ? 'fixed inset-0 z-50 max-w-none max-h-none rounded-none mb-0'
-            : 'w-full max-w-full mb-6'
-        } ${
-          theme === 'dark'
-            ? 'bg-black/60 backdrop-blur-xl shadow-black/20'
-            : 'bg-white/90 backdrop-blur-xl shadow-gray-900/10'
-        } ${isExpanded ? 'shadow-xl' : ''}`}
+        className={`w-full h-full transition-all duration-500 `}
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ 
           opacity: 1, 
@@ -906,7 +898,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                         <ContentEditable 
                           className="editor-input lexical-editor py-4 px-0 bg-red-500"
                           style={{
-                            minHeight: isFullScreen ? '70dvh' : isExpanded ? '140px' : '80px',
+                            minHeight: isFullScreen ? '70dvh' : '140px',
                             maxHeight: isFullScreen ? '100%' : '100%',
                             wordWrap: 'break-word',
                             overflowWrap: 'break-word'
@@ -2059,7 +2051,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
 
 
 
-    </>
+    </div>
   );
 };
 
