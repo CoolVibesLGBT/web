@@ -1806,8 +1806,7 @@ const MatchScreen: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className={`rounded-2xl overflow-hidden ${theme === 'dark' ? 'bg-[#111111]' : 'bg-white'
-          }`}>
+        <div className={`w-full overflow-hidden`}>
           <AnimatePresence mode="wait">
             <motion.div
               key={historyTab}
@@ -1831,58 +1830,49 @@ const MatchScreen: React.FC = () => {
                       </p>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                       {matchedProfiles.map((profile) => (
                         <motion.div
                           key={profile.id}
-                          className={`relative rounded-2xl overflow-hidden p-4 border-2 ${theme === 'dark'
-                              ? 'bg-gradient-to-br from-pink-500/20 to-purple-500/20 border-pink-500/50'
-                              : 'bg-gradient-to-br from-pink-50 to-purple-50 border-pink-300'
-                            } cursor-pointer group`}
+                          className="relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer group"
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
                         >
-                          <div className="flex items-center gap-4">
-                            <div className="relative w-20 h-20 rounded-full overflow-hidden flex-shrink-0">
-                              <img
-                                src={profile.images[0]}
-                                alt={profile.name}
-                                className="w-full h-full object-cover"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                <h3 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-black'
-                                  }`}>
-                                  {profile.name}, {profile.age}
-                                </h3>
-                                <Sparkles className="w-5 h-5 text-pink-500" fill="currentColor" />
-                              </div>
-                              <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                                } line-clamp-2`}>
-                                {profile.bio}
-                              </p>
-                              <div className="flex items-center gap-2 mt-2">
-                                <MapPin className={`w-4 h-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                                  }`} />
-                                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                                  }`}>
-                                  {profile.location}
-                                </span>
-                              </div>
-                            </div>
+                          <img
+                            src={profile.images[0]}
+                            alt={profile.name}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                          <div className="absolute bottom-0 left-0 right-0 p-3">
+                            <h3 className="text-white font-semibold text-sm truncate">
+                              {profile.name}, {profile.age}
+                            </h3>
                           </div>
+                          <div className="absolute top-2 right-2">
+                            <Sparkles className="w-5 h-5 text-pink-500" fill="currentColor" />
+                          </div>
+                          {/* Send Message Button - Icon */}
                           <motion.button
-                            className={`w-full mt-4 py-2.5 rounded-xl font-semibold text-sm ${theme === 'dark'
-                                ? 'bg-white text-black hover:bg-gray-100'
-                                : 'bg-black text-white hover:bg-gray-900'
-                              }`}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                            className={`absolute bottom-3 right-3 w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-xl text-white bg-white/20 rounded-full border border-white/30`}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ 
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 20
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // Handle message action
+                            }}
                           >
-                            <MessageCircle className="w-4 h-4 inline mr-2" />
-                            Send Message
+                            <MessageCircle className="w-5 h-5" strokeWidth={2.5} />
                           </motion.button>
                         </motion.div>
                       ))}
@@ -1940,7 +1930,7 @@ const MatchScreen: React.FC = () => {
                   {passedProfiles.length === 0 ? (
                     <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
                       }`}>
-                      <X className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
+                      <Ghost className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
                         }`} />
                       <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                         }`}>
