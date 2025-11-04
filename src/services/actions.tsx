@@ -48,6 +48,12 @@ export const Actions = {
 	CMD_USER_FETCH_NEARBY_USERS : "user.fetch.nearby.users",
 
 
+  CMD_MATCH_GET_UNSEEN : "match.fetch.unseen", // Görülmemiş eşleşmeler
+	CMD_MATCH_CREATE : "match.create" ,// Yeni eşleşme oluşturma (örneğin karşılıklı like)
+	CMD_MATCH_FETCH_MATCHED : "match.fetch.matched", // Karşılıklı eşleşmeleri getirme (gerçek matchler)
+	CMD_MATCH_FETCH_LIKED   : "match.fetch.liked" ,  // Beğenilen kullanıcıları getirme
+	CMD_MATCH_FETCH_PASSED  : "match.fetch.passed" , // Geçilen kullanıcıları getirme
+
 
 } as const;
 

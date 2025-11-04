@@ -1,0 +1,312 @@
+{
+    "users": [
+        {
+            "public_id": "1985530056679624704",
+            "id": "c5d8160a-32f7-4bc7-95e9-f6768f78d399",
+            "username": "can",
+            "displayname": "can",
+            "email": "",
+            "date_of_birth": "2000-11-23T05:45:00+05:45",
+            "gender_identities": [],
+            "sexual_orientations": [],
+            "user_role": "",
+            "is_active": false,
+            "created_at": "2025-11-04T07:55:29.534485+05:45",
+            "updated_at": "2025-11-04T07:55:35.260473+05:45",
+            "location": {
+                "id": "8b605f05-7e8c-48f6-ab93-e302c1dc8c5e",
+                "contentable_id": "c5d8160a-32f7-4bc7-95e9-f6768f78d399",
+                "contentable_type": "user",
+                "country_code": "NP",
+                "address": "",
+                "city": "Pokhara",
+                "country": "Nepal",
+                "region": "Gandaki",
+                "timezone": "",
+                "display": "Pokhara, Nepal",
+                "latitude": 28.205279,
+                "longitude": 83.966053,
+                "location_point": {
+                    "lng": 83.966053,
+                    "lat": 28.205279
+                },
+                "created_at": "2025-11-04T07:55:29.463654+05:45",
+                "updated_at": "2025-11-04T07:55:29.463654+05:45",
+                "deleted_at": null
+            },
+            "default_language": "en",
+            "avatar_id": "09ceb510-e400-4ed3-a917-530e6ddaade5",
+            "avatar": {
+                "id": "09ceb510-e400-4ed3-a917-530e6ddaade5",
+                "public_id": 1985530080666849280,
+                "file_id": "7a9c514f-9595-409d-b815-e18ef6b1bdde",
+                "owner_id": "c5d8160a-32f7-4bc7-95e9-f6768f78d399",
+                "owner_type": "user",
+                "user_id": "c5d8160a-32f7-4bc7-95e9-f6768f78d399",
+                "role": "avatar",
+                "is_public": true,
+                "file": {
+                    "id": "7a9c514f-9595-409d-b815-e18ef6b1bdde",
+                    "storage_path": "./static/users/c5d8160a-32f7-4bc7-95e9-f6768f78d399/media/3a136aa4-c742-4239-936d-dbdca39274da.png",
+                    "mime_type": "image/png",
+                    "size": 293096,
+                    "name": "Ekran Resmi 2025-11-01 23.20.12.png",
+                    "created_at": "2025-11-04T07:55:35.253167+05:45",
+                    "url": "http://localhost:3001/static/users/c5d8160a-32f7-4bc7-95e9-f6768f78d399/media/3a136aa4-c742-4239-936d-dbdca39274da.png"
+                },
+                "created_at": "2025-11-04T07:55:35.253167+05:45",
+                "updated_at": "2025-11-04T07:55:35.253167+05:45"
+            },
+            "languages": null,
+            "travel": {
+                "visited_countries": null,
+                "travel_frequency": "",
+                "favorite_places": null
+            },
+            "social": {},
+            "deleted_at": null
+        },
+        {
+            "public_id": "1985530110719037440",
+            "id": "1480a250-7401-4eeb-8e6a-f75c12aba9b7",
+            "username": "aytek",
+            "displayname": "aytek",
+            "email": "",
+            "date_of_birth": "2000-11-23T05:45:00+05:45",
+            "gender_identities": [],
+            "sexual_orientations": [],
+            "user_role": "",
+            "is_active": false,
+            "created_at": "2025-11-04T07:55:42.418557+05:45",
+            "updated_at": "2025-11-04T07:55:49.223134+05:45",
+            "location": {
+                "id": "adcfe118-4eb6-4860-bc53-2f4bc9ae45f7",
+                "contentable_id": "1480a250-7401-4eeb-8e6a-f75c12aba9b7",
+                "contentable_type": "user",
+                "country_code": "NP",
+                "address": "",
+                "city": "Pokhara",
+                "country": "Nepal",
+                "region": "Gandaki",
+                "timezone": "",
+                "display": "Pokhara, Nepal",
+                "latitude": 28.205279,
+                "longitude": 83.966053,
+                "location_point": {
+                    "lng": 83.966053,
+                    "lat": 28.205279
+                },
+                "created_at": "2025-11-04T07:55:42.393365+05:45",
+                "updated_at": "2025-11-04T07:55:42.393366+05:45",
+                "deleted_at": null
+            },
+            "default_language": "en",
+            "avatar_id": "13c33f33-8090-4c17-9b7f-4581b0a8952b",
+            "avatar": {
+                "id": "13c33f33-8090-4c17-9b7f-4581b0a8952b",
+                "public_id": 1985530139248693248,
+                "file_id": "db61dce4-c00e-468e-822f-c25a2d23d9d4",
+                "owner_id": "1480a250-7401-4eeb-8e6a-f75c12aba9b7",
+                "owner_type": "user",
+                "user_id": "1480a250-7401-4eeb-8e6a-f75c12aba9b7",
+                "role": "avatar",
+                "is_public": true,
+                "file": {
+                    "id": "db61dce4-c00e-468e-822f-c25a2d23d9d4",
+                    "storage_path": "./static/users/1480a250-7401-4eeb-8e6a-f75c12aba9b7/media/827d25b7-3c8d-4c07-b418-1a52aad05eb3.jpeg",
+                    "mime_type": "image/jpeg",
+                    "size": 442927,
+                    "name": "Gye23A2XcAAmuKW.jpeg",
+                    "created_at": "2025-11-04T07:55:49.220237+05:45",
+                    "url": "http://localhost:3001/static/users/1480a250-7401-4eeb-8e6a-f75c12aba9b7/media/827d25b7-3c8d-4c07-b418-1a52aad05eb3.jpeg"
+                },
+                "created_at": "2025-11-04T07:55:49.220237+05:45",
+                "updated_at": "2025-11-04T07:55:49.220237+05:45"
+            },
+            "languages": null,
+            "travel": {
+                "visited_countries": null,
+                "travel_frequency": "",
+                "favorite_places": null
+            },
+            "social": {},
+            "deleted_at": null
+        },
+        {
+            "public_id": "1985530172484358144",
+            "id": "2bbee366-ee49-40af-bb83-9fbfbdc6ee23",
+            "username": "furkan",
+            "displayname": "furkan",
+            "email": "",
+            "date_of_birth": "2000-11-23T05:45:00+05:45",
+            "gender_identities": [],
+            "sexual_orientations": [],
+            "user_role": "",
+            "is_active": false,
+            "created_at": "2025-11-04T07:55:57.144647+05:45",
+            "updated_at": "2025-11-04T07:55:57.144647+05:45",
+            "location": {
+                "id": "3ee82838-7547-4d66-8600-2a333e174318",
+                "contentable_id": "2bbee366-ee49-40af-bb83-9fbfbdc6ee23",
+                "contentable_type": "user",
+                "country_code": "NP",
+                "address": "",
+                "city": "Pokhara",
+                "country": "Nepal",
+                "region": "Gandaki",
+                "timezone": "",
+                "display": "Pokhara, Nepal",
+                "latitude": 28.205279,
+                "longitude": 83.966053,
+                "location_point": {
+                    "lng": 83.966053,
+                    "lat": 28.205279
+                },
+                "created_at": "2025-11-04T07:55:57.142504+05:45",
+                "updated_at": "2025-11-04T07:55:57.142505+05:45",
+                "deleted_at": null
+            },
+            "default_language": "en",
+            "languages": null,
+            "travel": {
+                "visited_countries": null,
+                "travel_frequency": "",
+                "favorite_places": null
+            },
+            "social": {},
+            "deleted_at": null
+        },
+        {
+            "public_id": "1985530205627748352",
+            "id": "03c2ce3b-6c43-4618-ba9e-e550836521b0",
+            "username": "mycity",
+            "displayname": "mycity",
+            "email": "",
+            "date_of_birth": "2000-11-23T05:45:00+05:45",
+            "gender_identities": [],
+            "sexual_orientations": [],
+            "user_role": "",
+            "is_active": false,
+            "created_at": "2025-11-04T07:56:05.046596+05:45",
+            "updated_at": "2025-11-04T07:56:11.438215+05:45",
+            "location": {
+                "id": "d0609dfe-26ad-497e-87e9-6a4a623d78dd",
+                "contentable_id": "03c2ce3b-6c43-4618-ba9e-e550836521b0",
+                "contentable_type": "user",
+                "country_code": "NP",
+                "address": "",
+                "city": "Pokhara",
+                "country": "Nepal",
+                "region": "Gandaki",
+                "timezone": "",
+                "display": "Pokhara, Nepal",
+                "latitude": 28.205279,
+                "longitude": 83.966053,
+                "location_point": {
+                    "lng": 83.966053,
+                    "lat": 28.205279
+                },
+                "created_at": "2025-11-04T07:56:05.045088+05:45",
+                "updated_at": "2025-11-04T07:56:05.045089+05:45",
+                "deleted_at": null
+            },
+            "default_language": "en",
+            "avatar_id": "53a653ec-cdb4-4b43-9f18-305683b8ecd9",
+            "avatar": {
+                "id": "53a653ec-cdb4-4b43-9f18-305683b8ecd9",
+                "public_id": 1985530232429350912,
+                "file_id": "0ee8d8ba-04a7-48e2-aacf-65f64b9932a7",
+                "owner_id": "03c2ce3b-6c43-4618-ba9e-e550836521b0",
+                "owner_type": "user",
+                "user_id": "03c2ce3b-6c43-4618-ba9e-e550836521b0",
+                "role": "avatar",
+                "is_public": true,
+                "file": {
+                    "id": "0ee8d8ba-04a7-48e2-aacf-65f64b9932a7",
+                    "storage_path": "./static/users/03c2ce3b-6c43-4618-ba9e-e550836521b0/media/74641a39-8215-4e34-acaa-4321d27bdbb1.jpeg",
+                    "mime_type": "image/jpeg",
+                    "size": 403528,
+                    "name": "ersanalex.jpeg",
+                    "created_at": "2025-11-04T07:56:11.43666+05:45",
+                    "url": "http://localhost:3001/static/users/03c2ce3b-6c43-4618-ba9e-e550836521b0/media/74641a39-8215-4e34-acaa-4321d27bdbb1.jpeg"
+                },
+                "created_at": "2025-11-04T07:56:11.436661+05:45",
+                "updated_at": "2025-11-04T07:56:11.436661+05:45"
+            },
+            "languages": null,
+            "travel": {
+                "visited_countries": null,
+                "travel_frequency": "",
+                "favorite_places": null
+            },
+            "social": {},
+            "deleted_at": null
+        },
+        {
+            "public_id": "1985530265308499968",
+            "id": "3f61c194-e79c-4472-91e7-1f0bcd2bc46a",
+            "username": "captain",
+            "displayname": "captain",
+            "email": "",
+            "date_of_birth": "2000-11-23T05:45:00+05:45",
+            "gender_identities": [],
+            "sexual_orientations": [],
+            "user_role": "",
+            "is_active": false,
+            "created_at": "2025-11-04T07:56:19.276214+05:45",
+            "updated_at": "2025-11-04T07:56:25.311336+05:45",
+            "location": {
+                "id": "6dc33096-e5ee-4bf1-b48f-071666b4ed7b",
+                "contentable_id": "3f61c194-e79c-4472-91e7-1f0bcd2bc46a",
+                "contentable_type": "user",
+                "country_code": "NP",
+                "address": "",
+                "city": "Pokhara",
+                "country": "Nepal",
+                "region": "Gandaki",
+                "timezone": "",
+                "display": "Pokhara, Nepal",
+                "latitude": 28.205279,
+                "longitude": 83.966053,
+                "location_point": {
+                    "lng": 83.966053,
+                    "lat": 28.205279
+                },
+                "created_at": "2025-11-04T07:56:19.274215+05:45",
+                "updated_at": "2025-11-04T07:56:19.274215+05:45",
+                "deleted_at": null
+            },
+            "default_language": "en",
+            "avatar_id": "276bcfbb-a7bd-4ab9-8ae3-13183812184e",
+            "avatar": {
+                "id": "276bcfbb-a7bd-4ab9-8ae3-13183812184e",
+                "public_id": 1985530290616930304,
+                "file_id": "0d3462a1-45fb-4b17-aaf1-a9ae0a492fb6",
+                "owner_id": "3f61c194-e79c-4472-91e7-1f0bcd2bc46a",
+                "owner_type": "user",
+                "user_id": "3f61c194-e79c-4472-91e7-1f0bcd2bc46a",
+                "role": "avatar",
+                "is_public": true,
+                "file": {
+                    "id": "0d3462a1-45fb-4b17-aaf1-a9ae0a492fb6",
+                    "storage_path": "./static/users/3f61c194-e79c-4472-91e7-1f0bcd2bc46a/media/8d36a4c9-fd92-4073-b285-5e8cc90d20b9.jpeg",
+                    "mime_type": "image/jpeg",
+                    "size": 403528,
+                    "name": "ersanalex.jpeg",
+                    "created_at": "2025-11-04T07:56:25.309597+05:45",
+                    "url": "http://localhost:3001/static/users/3f61c194-e79c-4472-91e7-1f0bcd2bc46a/media/8d36a4c9-fd92-4073-b285-5e8cc90d20b9.jpeg"
+                },
+                "created_at": "2025-11-04T07:56:25.309597+05:45",
+                "updated_at": "2025-11-04T07:56:25.309597+05:45"
+            },
+            "languages": null,
+            "travel": {
+                "visited_countries": null,
+                "travel_frequency": "",
+                "favorite_places": null
+            },
+            "social": {},
+            "deleted_at": null
+        }
+    ]
+}

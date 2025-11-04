@@ -1,10 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, PanInfo, useMotionValue, useTransform, useSpring } from 'framer-motion';
-import { Heart, X, Star, MapPin, Briefcase, GraduationCap, MessageCircle, Camera, Shield, Sparkles, ChevronRight, Wine, Cigarette, Baby, PawPrint, Church, Eye, Paintbrush, Ruler, RulerDimensionLine, Palette, Users, Accessibility, PersonStanding, Drama, Vegan, HeartHandshake, Panda, Ghost, Frown, UserCircle, Rainbow, Smile, Banana, Link, Calendar } from 'lucide-react';
+import { Heart, X, Star, MapPin, Briefcase, GraduationCap, MessageCircle, Camera, Shield, Sparkles, ChevronRight, Wine, Cigarette, Baby, PawPrint, Church, Eye, Paintbrush, Ruler, RulerDimensionLine, Palette, Users, Accessibility, PersonStanding, Drama, Vegan, HeartHandshake, Panda, Ghost, Frown, UserCircle, Rainbow, Smile, Banana, Link, Calendar, RefreshCw } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useApp } from '../contexts/AppContext';
 import { useTranslation } from 'react-i18next';
 import Container from './Container';
+import { api } from '../services/api';
+import { Actions } from '../services/actions';
 
 interface Fantasy {
   id: string;
@@ -39,8 +41,49 @@ interface InterestItem {
   };
 }
 
+interface ApiUser {
+  id: string;
+  public_id: number;
+  username: string;
+  displayname: string;
+  date_of_birth?: string;
+  location?: {
+    display?: string;
+    city?: string;
+    country?: string;
+  };
+  avatar?: {
+    file?: {
+      url?: string;
+    };
+  };
+  bio?: string;
+  website?: string;
+  created_at?: string;
+  followers_count?: number;
+  following_count?: number;
+  posts_count?: number;
+  interests?: InterestItem[];
+  fantasies?: Fantasy[];
+  user_attributes?: Array<{
+    id: string;
+    user_id: string;
+    category_type: string;
+    attribute_id: string;
+    attribute: {
+      id: string;
+      category: string;
+      display_order: number;
+      name: Record<string, string>;
+    };
+  }>;
+  occupation?: string;
+  education?: string;
+}
+
 interface Profile {
-  id: number;
+  id: string;
+  public_id: number;
   name: string;
   displayname?: string;
   username?: string;
@@ -74,497 +117,94 @@ interface Profile {
   }>;
 }
 
+interface MatchResponse {
+  matched: boolean;
+  target_user: string;
+}
+
 const MatchScreen: React.FC = () => {
   const { theme } = useTheme();
   const { defaultLanguage } = useApp();
   const { t } = useTranslation('common');
-  const [profiles] = useState<Profile[]>([
-    {
-      id: 1,
-      name: 'Alex Rivera',
-      displayname: 'Alex Rivera',
-      username: 'alexrivera',
-      age: 26,
-      location: 'Downtown, New Jersey',
-      bio: 'Artist & activist. Love hiking, coffee, and meaningful conversations. Looking for genuine connections. 🏳️‍🌈✨',
-      website: 'https://alexrivera.art',
-      created_at: '2023-03-15T00:00:00Z',
-      followers_count: 1250,
-      following_count: 890,
-      posts_count: 156,
-      images: [
-        'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2',
-        'https://images.pexels.com/photos/1559486/pexels-photo-1559486.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2',
-        'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2'
-      ],
-      interests: [
-        {
-          id: '1',
-          user_id: '1',
-          interest_item_id: '175',
-          interest_item: {
-            id: '175',
-            interest_id: 'hobbies',
-            name: { en: 'Art', tr: 'Sanat' },
-            emoji: '🎨',
-            interest: {
-              id: 'hobbies',
-              name: { en: 'Hobbies', tr: 'Hobiler' }
-            }
-          }
-        },
-        {
-          id: '2',
-          user_id: '1',
-          interest_item_id: '221',
-          interest_item: {
-            id: '221',
-            interest_id: 'outdoor',
-            name: { en: 'Hiking', tr: 'Doğa Yürüyüşü' },
-            emoji: '🥾',
-            interest: {
-              id: 'outdoor',
-              name: { en: 'Outdoor', tr: 'Açık Hava' }
-            }
-          }
-        },
-        {
-          id: '3',
-          user_id: '1',
-          interest_item_id: '247',
-          interest_item: {
-            id: '247',
-            interest_id: 'hobbies',
-            name: { en: 'Photography', tr: 'Fotoğrafçılık' },
-            emoji: '📸',
-            interest: {
-              id: 'hobbies',
-              name: { en: 'Hobbies', tr: 'Hobiler' }
-            }
-          }
-        }
-      ],
-      occupation: 'Graphic Designer',
-      education: 'Art Institute',
-      distance: '2 km away',
-      verified: true,
-      lastActive: '5 min ago',
-      user_attributes: [
-        {
-          id: 'attr1',
-          user_id: '1',
-          category_type: 'height',
-          attribute_id: 'height_178',
-          attribute: {
-            id: 'height_178',
-            category: 'height',
-            display_order: 1,
-            name: { en: '178 cm', tr: '178 cm' }
-          }
-        },
-        {
-          id: 'attr2',
-          user_id: '1',
-          category_type: 'weight',
-          attribute_id: 'weight_75',
-          attribute: {
-            id: 'weight_75',
-            category: 'weight',
-            display_order: 1,
-            name: { en: '75 kg', tr: '75 kg' }
-          }
-        },
-        {
-          id: 'attr3',
-          user_id: '1',
-          category_type: 'body_type',
-          attribute_id: 'body_athletic',
-          attribute: {
-            id: 'body_athletic',
-            category: 'body_type',
-            display_order: 1,
-            name: { en: 'Athletic', tr: 'Atletik' }
-          }
-        },
-        {
-          id: 'attr4',
-          user_id: '1',
-          category_type: 'hair_color',
-          attribute_id: 'hair_dark_brown',
-          attribute: {
-            id: 'hair_dark_brown',
-            category: 'hair_color',
-            display_order: 1,
-            name: { en: 'Dark Brown', tr: 'Koyu Kahverengi' }
-          }
-        },
-        {
-          id: 'attr5',
-          user_id: '1',
-          category_type: 'eye_color',
-          attribute_id: 'eye_hazel',
-          attribute: {
-            id: 'eye_hazel',
-            category: 'eye_color',
-            display_order: 1,
-            name: { en: 'Hazel', tr: 'Ela' }
-          }
-        },
-        {
-          id: 'attr6',
-          user_id: '1',
-          category_type: 'zodiac_sign',
-          attribute_id: 'zodiac_leo',
-          attribute: {
-            id: 'zodiac_leo',
-            category: 'zodiac_sign',
-            display_order: 1,
-            name: { en: 'Leo', tr: 'Aslan' }
-          }
-        },
-        {
-          id: 'attr7',
-          user_id: '1',
-          category_type: 'smoking',
-          attribute_id: 'smoking_never',
-          attribute: {
-            id: 'smoking_never',
-            category: 'smoking',
-            display_order: 1,
-            name: { en: 'Never', tr: 'Hiç' }
-          }
-        },
-        {
-          id: 'attr8',
-          user_id: '1',
-          category_type: 'drinking',
-          attribute_id: 'drinking_socially',
-          attribute: {
-            id: 'drinking_socially',
-            category: 'drinking',
-            display_order: 1,
-            name: { en: 'Socially', tr: 'Sosyal' }
-          }
-        }
-      ],
-      fantasies: [
-        {
-          id: '1',
-          user_id: '1',
-          fantasy_id: '1',
-          fantasy: {
-            id: '1',
-            category: 'joy_or_tabu',
-            translations: [{
-              id: '1',
-              fantasy_id: '1',
-              language: 'en',
-              label: 'Blowjob',
-              description: 'Oral stimulation of the penis with the mouth'
-            }]
-          }
-        },
-        {
-          id: '2',
-          user_id: '1',
-          fantasy_id: '2',
-          fantasy: {
-            id: '2',
-            category: 'joy_or_tabu',
-            translations: [{
-              id: '2',
-              fantasy_id: '2',
-              language: 'en',
-              label: 'Slow sex',
-              description: 'Combining sex with mindfulness for deeper connection'
-            }]
-          }
-        },
-        {
-          id: '3',
-          user_id: '1',
-          fantasy_id: '3',
-          fantasy: {
-            id: '3',
-            category: 'amusement',
-            translations: [{
-              id: '3',
-              fantasy_id: '3',
-              language: 'en',
-              label: 'Photography',
-              description: 'Capturing erotic poses on camera'
-            }]
-          }
-        },
-        {
-          id: '4',
-          user_id: '1',
-          fantasy_id: '4',
-          fantasy: {
-            id: '4',
-            category: 'sexual_adventure',
-            translations: [{
-              id: '4',
-              fantasy_id: '4',
-              language: 'en',
-              label: 'Outdoor',
-              description: 'Open-air sexual adventures'
-            }]
-          }
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Jordan Kim',
-      displayname: 'Jordan Kim',
-      username: 'jordankim',
-      age: 24,
-      location: 'Brooklyn, New York',
-      bio: 'Software engineer by day, musician by night. Love indie music, good books, and exploring the city. 🎵📚',
-      website: 'https://jordankim.dev',
-      created_at: '2023-06-20T00:00:00Z',
-      followers_count: 890,
-      following_count: 650,
-      posts_count: 98,
-      images: [
-        'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2',
-        'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2',
-        'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2'
-      ],
-      interests: [
-        {
-          id: '7',
-          user_id: '2',
-          interest_item_id: '125',
-          interest_item: {
-            id: '125',
-            interest_id: 'entertainment',
-            name: { en: 'Music', tr: 'Müzik' },
-            emoji: '🎵',
-            interest: {
-              id: 'entertainment',
-              name: { en: 'Entertainment', tr: 'Eğlence' }
-            }
-          }
-        },
-        {
-          id: '8',
-          user_id: '2',
-          interest_item_id: '136',
-          interest_item: {
-            id: '136',
-            interest_id: 'entertainment',
-            name: { en: 'Books', tr: 'Kitaplar' },
-            emoji: '📚',
-            interest: {
-              id: 'entertainment',
-              name: { en: 'Entertainment', tr: 'Eğlence' }
-            }
-          }
-        }
-      ],
-      occupation: 'Software Engineer',
-      education: 'MIT',
-      distance: '5 km away',
-      verified: true,
-      lastActive: '2 min ago'
-    },
-    {
-      id: 3,
-      name: 'Sam Chen',
-      displayname: 'Sam Chen',
-      username: 'samchen',
-      age: 28,
-      location: 'Manhattan, New York',
-      bio: 'Yoga instructor and wellness coach. Passionate about mental health, sustainability, and creating safe spaces. 🧘‍♀️🌱',
-      website: 'https://samchenwellness.com',
-      created_at: '2023-01-10T00:00:00Z',
-      followers_count: 2100,
-      following_count: 1200,
-      posts_count: 234,
-      images: [
-        'https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2',
-        'https://images.pexels.com/photos/1102341/pexels-photo-1102341.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2',
-        'https://images.pexels.com/photos/3764119/pexels-photo-3764119.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2'
-      ],
-      interests: [
-        {
-          id: '13',
-          user_id: '3',
-          interest_item_id: '228',
-          interest_item: {
-            id: '228',
-            interest_id: 'fitness',
-            name: { en: 'Yoga', tr: 'Yoga' },
-            emoji: '🧘',
-            interest: {
-              id: 'fitness',
-              name: { en: 'Fitness', tr: 'Fitness' }
-            }
-          }
-        },
-        {
-          id: '14',
-          user_id: '3',
-          interest_item_id: '88',
-          interest_item: {
-            id: '88',
-            interest_id: 'lifestyle',
-            name: { en: 'Wellness', tr: 'Sağlık' },
-            emoji: '🌿',
-            interest: {
-              id: 'lifestyle',
-              name: { en: 'Lifestyle', tr: 'Yaşam Tarzı' }
-            }
-          }
-        }
-      ],
-      occupation: 'Yoga Instructor',
-      education: 'Wellness Institute',
-      distance: '3 km away',
-      verified: false,
-      lastActive: '1 hour ago'
-    },
-    {
-      id: 4,
-      name: 'Taylor Morgan',
-      displayname: 'Taylor Morgan',
-      username: 'taylormorgan',
-      age: 25,
-      location: 'San Francisco, California',
-      bio: 'Photographer & travel enthusiast. Capturing moments around the world. Always seeking new adventures and connections. 📷🌍',
-      website: 'https://taylormorgan.photo',
-      created_at: '2023-08-12T00:00:00Z',
-      followers_count: 3420,
-      following_count: 2100,
-      posts_count: 567,
-      images: [
-        'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2',
-        'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2',
-        'https://images.pexels.com/photos/1559486/pexels-photo-1559486.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2'
-      ],
-      interests: [
-        {
-          id: '15',
-          user_id: '4',
-          interest_item_id: '247',
-          interest_item: {
-            id: '247',
-            interest_id: 'hobbies',
-            name: { en: 'Photography', tr: 'Fotoğrafçılık' },
-            emoji: '📸',
-            interest: {
-              id: 'hobbies',
-              name: { en: 'Hobbies', tr: 'Hobiler' }
-            }
-          }
-        },
-        {
-          id: '16',
-          user_id: '4',
-          interest_item_id: '221',
-          interest_item: {
-            id: '221',
-            interest_id: 'outdoor',
-            name: { en: 'Travel', tr: 'Seyahat' },
-            emoji: '✈️',
-            interest: {
-              id: 'outdoor',
-              name: { en: 'Outdoor', tr: 'Açık Hava' }
-            }
-          }
-        }
-      ],
-      occupation: 'Photographer',
-      education: 'Art School',
-      distance: '8 km away',
-      verified: true,
-      lastActive: '30 min ago'
-    },
-    {
-      id: 5,
-      name: 'Riley Parker',
-      displayname: 'Riley Parker',
-      username: 'rileyparker',
-      age: 27,
-      location: 'Seattle, Washington',
-      bio: 'Musician & coffee aficionado. Love indie rock, jazz, and late-night conversations. Looking for someone who shares my passion for music. 🎸☕',
-      website: 'https://rileyparker.music',
-      created_at: '2023-05-03T00:00:00Z',
-      followers_count: 1890,
-      following_count: 1200,
-      posts_count: 312,
-      images: [
-        'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2',
-        'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2',
-        'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2'
-      ],
-      interests: [
-        {
-          id: '17',
-          user_id: '5',
-          interest_item_id: '125',
-          interest_item: {
-            id: '125',
-            interest_id: 'entertainment',
-            name: { en: 'Music', tr: 'Müzik' },
-            emoji: '🎵',
-            interest: {
-              id: 'entertainment',
-              name: { en: 'Entertainment', tr: 'Eğlence' }
-            }
-          }
-        }
-      ],
-      occupation: 'Musician',
-      education: 'Music Conservatory',
-      distance: '12 km away',
-      verified: true,
-      lastActive: '15 min ago'
-    },
-    {
-      id: 6,
-      name: 'Casey Blake',
-      displayname: 'Casey Blake',
-      username: 'caseyblake',
-      age: 29,
-      location: 'Austin, Texas',
-      bio: 'Chef & food blogger. Passionate about cooking, sustainability, and bringing people together through food. 🍳🌱',
-      website: 'https://caseyblake.food',
-      created_at: '2023-02-18T00:00:00Z',
-      followers_count: 4560,
-      following_count: 2800,
-      posts_count: 789,
-      images: [
-        'https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2',
-        'https://images.pexels.com/photos/1102341/pexels-photo-1102341.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2',
-        'https://images.pexels.com/photos/3764119/pexels-photo-3764119.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&dpr=2'
-      ],
-      interests: [
-        {
-          id: '18',
-          user_id: '6',
-          interest_item_id: '88',
-          interest_item: {
-            id: '88',
-            interest_id: 'lifestyle',
-            name: { en: 'Cooking', tr: 'Yemek' },
-            emoji: '🍳',
-            interest: {
-              id: 'lifestyle',
-              name: { en: 'Lifestyle', tr: 'Yaşam Tarzı' }
-            }
-          }
-        }
-      ],
-      occupation: 'Chef',
-      education: 'Culinary Institute',
-      distance: '15 km away',
-      verified: true,
-      lastActive: '5 min ago'
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Calculate age from date_of_birth
+  const calculateAge = useCallback((dateOfBirth?: string): number => {
+    if (!dateOfBirth) return 0;
+    const birthDate = new Date(dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
     }
-  ]);
+    return age;
+  }, []);
+
+  // Map API user to Profile format
+  const mapApiUserToProfile = useCallback((apiUser: ApiUser): Profile => {
+    const images: string[] = [];
+    if (apiUser.avatar?.file?.url) {
+      images.push(apiUser.avatar.file.url);
+    }
+
+    return {
+      id: apiUser.id,
+      public_id: apiUser.public_id,
+      name: apiUser.displayname || apiUser.username || 'Unknown',
+      displayname: apiUser.displayname,
+      username: apiUser.username,
+      age: calculateAge(apiUser.date_of_birth),
+      location: apiUser.location?.display || apiUser.location?.city || 'Unknown',
+      bio: apiUser.bio || '',
+      website: apiUser.website,
+      images: images.length > 0 ? images : ['https://via.placeholder.com/400x600?text=No+Image'],
+      interests: apiUser.interests,
+      occupation: apiUser.occupation,
+      education: apiUser.education,
+      distance: 'Unknown', // TODO: Calculate distance if location data available
+      verified: false, // TODO: Add verified field from API if available
+      lastActive: undefined, // TODO: Add last_active field from API if available
+      created_at: apiUser.created_at,
+      followers_count: apiUser.followers_count,
+      following_count: apiUser.following_count,
+      posts_count: apiUser.posts_count,
+      fantasies: apiUser.fantasies,
+      user_attributes: apiUser.user_attributes,
+    };
+  }, [calculateAge]);
+
+  // Fetch profiles from API
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      try {
+        setIsLoading(true);
+        const response = await api.call<{ users: ApiUser[] } | ApiUser[]>(Actions.CMD_MATCH_GET_UNSEEN, {
+          method: "POST",
+          body: { limit: 100 },
+        });
+        
+        // Handle both array and object response formats
+        let apiUsers: ApiUser[] = [];
+        if (Array.isArray(response)) {
+          apiUsers = response;
+        } else if (response && typeof response === 'object' && 'users' in response) {
+          apiUsers = response.users;
+        }
+        
+        // Map API users to Profile format
+        const mappedProfiles = apiUsers.map(mapApiUserToProfile);
+        setProfiles(mappedProfiles);
+      } catch (error) {
+        console.error('Error fetching profiles:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfiles();
+  }, [mapApiUserToProfile]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -573,11 +213,74 @@ const MatchScreen: React.FC = () => {
   const [exitX, setExitX] = useState(0);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [showMatchAnimation, setShowMatchAnimation] = useState(false);
+  const [matchedProfile, setMatchedProfile] = useState<Profile | null>(null);
   const [historyTab, setHistoryTab] = useState<'liked' | 'passed' | 'matches'>('matches');
   const [likedProfiles, setLikedProfiles] = useState<Profile[]>([]);
+  const [likedProfilesCursor, setLikedProfilesCursor] = useState<string | null>(null);
+  const [isLoadingLiked, setIsLoadingLiked] = useState(false);
+  const [hasMoreLiked, setHasMoreLiked] = useState(true);
+  const [hasLoadedLiked, setHasLoadedLiked] = useState(false);
   const [passedProfiles, setPassedProfiles] = useState<Profile[]>([]);
+  const [passedProfilesCursor, setPassedProfilesCursor] = useState<string | null>(null);
+  const [isLoadingPassed, setIsLoadingPassed] = useState(false);
+  const [hasMorePassed, setHasMorePassed] = useState(true);
+  const [hasLoadedPassed, setHasLoadedPassed] = useState(false);
   const [matchedProfiles, setMatchedProfiles] = useState<Profile[]>([]);
+  const [matchedProfilesCursor, setMatchedProfilesCursor] = useState<string | null>(null);
+  const [isLoadingMatches, setIsLoadingMatches] = useState(false);
+  const [hasMoreMatches, setHasMoreMatches] = useState(true);
+  const [hasLoadedMatches, setHasLoadedMatches] = useState(false); // Track if matches have been loaded
+  const [processedProfiles, setProcessedProfiles] = useState<Set<string>>(new Set()); // Track processed profile IDs
   const cardRef = useRef<HTMLDivElement>(null);
+  const profilesRef = useRef<Profile[]>([]);
+  const processedProfilesRef = useRef<Set<string>>(new Set());
+  const currentIndexRef = useRef<number>(0);
+  const fetchMatchedProfilesRef = useRef<((cursor: string | null, limit: number) => Promise<void>) | null>(null);
+  const fetchLikedProfilesRef = useRef<((cursor: string | null, limit: number) => Promise<void>) | null>(null);
+  const fetchPassedProfilesRef = useRef<((cursor: string | null, limit: number) => Promise<void>) | null>(null);
+  const hasLoadedMatchesRef = useRef<boolean>(false);
+  const isLoadingMatchesRef = useRef<boolean>(false);
+  const hasLoadedLikedRef = useRef<boolean>(false);
+  const isLoadingLikedRef = useRef<boolean>(false);
+  const hasLoadedPassedRef = useRef<boolean>(false);
+  const isLoadingPassedRef = useRef<boolean>(false);
+  
+  // Keep refs in sync with state
+  useEffect(() => {
+    profilesRef.current = profiles;
+  }, [profiles]);
+  
+  useEffect(() => {
+    processedProfilesRef.current = processedProfiles;
+  }, [processedProfiles]);
+  
+  useEffect(() => {
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
+  
+  useEffect(() => {
+    hasLoadedMatchesRef.current = hasLoadedMatches;
+  }, [hasLoadedMatches]);
+  
+  useEffect(() => {
+    isLoadingMatchesRef.current = isLoadingMatches;
+  }, [isLoadingMatches]);
+  
+  useEffect(() => {
+    hasLoadedLikedRef.current = hasLoadedLiked;
+  }, [hasLoadedLiked]);
+  
+  useEffect(() => {
+    isLoadingLikedRef.current = isLoadingLiked;
+  }, [isLoadingLiked]);
+  
+  useEffect(() => {
+    hasLoadedPassedRef.current = hasLoadedPassed;
+  }, [hasLoadedPassed]);
+  
+  useEffect(() => {
+    isLoadingPassedRef.current = isLoadingPassed;
+  }, [isLoadingPassed]);
 
   // USER_ATTRIBUTES definition (same as ProfileScreen)
   const USER_ATTRIBUTES = [
@@ -627,44 +330,139 @@ const MatchScreen: React.FC = () => {
   const springX = useSpring(x, springConfig);
   const springRotate = useSpring(rotate, springConfig);
 
-  const handleSwipe = (direction: 'left' | 'right' = 'right') => {
+  const handleSwipe = async (direction: 'left' | 'right' = 'right', reactionType: 'like' | 'dislike' | 'superlike' = 'like') => {
     const targetX = direction === 'right' ? 600 : -600;
     const currentProfile = profiles[currentIndex];
 
-    // Profili history'ye ekle
-    if (direction === 'right') {
-      // Like edildi
-      if (!likedProfiles.find(p => p.id === currentProfile.id)) {
-        setLikedProfiles([...likedProfiles, currentProfile]);
-        // Rastgele match kontrolü (örnek: %30 şans)
-        if (Math.random() < 0.3 && !matchedProfiles.find(p => p.id === currentProfile.id)) {
-          setMatchedProfiles([...matchedProfiles, currentProfile]);
+    if (!currentProfile || !profiles.length) return;
+
+    // Check if already processed using ref (synchronous check)
+    if (processedProfilesRef.current.has(currentProfile.id)) {
+      // Already processed, remove from profiles list and move to next profile silently
+      const currentIdx = currentIndex;
+      
+      // Remove profile from list and update index
+      setProfiles(prev => {
+        const filtered = prev.filter(p => p.id !== currentProfile.id);
+        
+        // Update index based on filtered list
+        if (filtered.length === 0) {
+          setCurrentIndex(0);
+        } else {
+          // If current index is out of bounds, adjust it
+          const nextIdx = currentIdx >= filtered.length ? filtered.length - 1 : currentIdx;
+          setCurrentIndex(nextIdx);
+        }
+        setCurrentImageIndex(0);
+        
+        return filtered;
+      });
+      
+      // Reset motion values
+      x.set(0);
+      y.set(0);
+      
+      // Trigger exit animation
+      setExitX(targetX);
+      
+      return;
+    }
+
+    // Mark as processed immediately
+    setProcessedProfiles(prev => {
+      const newSet = new Set(prev).add(currentProfile.id);
+      // Update ref immediately for synchronous access
+      processedProfilesRef.current = newSet;
+      return newSet;
+    });
+
+    // Trigger exit animation immediately for better UX
+    setExitX(targetX);
+
+    // Determine reaction type based on direction and explicit type
+    let reaction: 'like' | 'dislike' | 'favorite' | 'bookmark' | 'superlike' = 'like';
+    if (reactionType === 'superlike') {
+      reaction = 'superlike';
+    } else if (direction === 'right') {
+      reaction = 'like';
+    } else {
+      reaction = 'dislike';
+    }
+
+    // Call API to create match/reaction (fire and forget for better UX)
+    api.call<MatchResponse>(Actions.CMD_MATCH_CREATE, {
+      method: "POST",
+      body: {
+        public_id: currentProfile.public_id,
+        reaction: reaction,
+      },
+    }).then((response) => {
+
+      // Handle response
+      if (response) {
+        if (reaction === 'like' || reaction === 'superlike') {
+          // Like edildi - history'ye ekle
+          setLikedProfiles(prev => {
+            if (!prev.find(p => p.id === currentProfile.id)) {
+              return [...prev, currentProfile];
+            }
+            return prev;
+          });
+
+          // Check if matched
+          if (response.matched) {
+            setMatchedProfiles(prev => {
+              if (!prev.find(p => p.id === currentProfile.id)) {
+                return [...prev, currentProfile];
+              }
+              return prev;
+            });
+            setMatchedProfile(currentProfile);
           setShowMatchAnimation(true);
           setTimeout(() => {
             setShowMatchAnimation(false);
+              setMatchedProfile(null);
           }, 2000);
         }
+        } else if (reaction === 'dislike') {
+          // Pass edildi - history'ye ekle
+          setPassedProfiles(prev => {
+            if (!prev.find(p => p.id === currentProfile.id)) {
+              return [...prev, currentProfile];
+            }
+            return prev;
+          });
+        }
       }
-    } else {
-      // Pass edildi
-      if (!passedProfiles.find(p => p.id === currentProfile.id)) {
-        setPassedProfiles([...passedProfiles, currentProfile]);
-      }
-    }
+    }).catch((error) => {
+      console.error('Error creating match:', error);
+      // Remove from processed set if API call failed, so user can retry
+      setProcessedProfiles(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(currentProfile.id);
+        // Update ref immediately
+        processedProfilesRef.current = newSet;
+        return newSet;
+      });
+    });
 
-    // Set exitX for exit animation (sola: -600, sağa: 600) - daha zarif mesafe
-    setExitX(targetX);
-
-    // Wait for exit animation to trigger before changing key
-    // AnimatePresence will handle the smooth exit, then show the new card
-    setTimeout(() => {
-      if (currentIndex < profiles.length - 1) {
-        setCurrentIndex(currentIndex + 1);
-      } else {
+    // Remove profile from profiles list immediately (don't wait for API)
+    const currentIdx = currentIndex;
+    setProfiles(prev => {
+      const filtered = prev.filter(p => p.id !== currentProfile.id);
+      
+      // Update index synchronously
+      if (filtered.length === 0) {
         setCurrentIndex(0);
+      } else {
+        // If current index is out of bounds, adjust it
+        const nextIdx = currentIdx >= filtered.length ? filtered.length - 1 : currentIdx;
+        setCurrentIndex(nextIdx);
       }
       setCurrentImageIndex(0);
-    }, 50); // Hızlı geçiş için delay azaltıldı
+      
+      return filtered;
+    });
   };
 
   const handleDragEnd = (_event: any, info: PanInfo) => {
@@ -728,6 +526,17 @@ const MatchScreen: React.FC = () => {
     }
   };
 
+  // Ensure currentIndex is always valid
+  useEffect(() => {
+    if (profiles.length > 0 && currentIndex >= profiles.length) {
+      setCurrentIndex(profiles.length - 1);
+      setCurrentImageIndex(0);
+    } else if (profiles.length === 0 && currentIndex !== 0) {
+      setCurrentIndex(0);
+      setCurrentImageIndex(0);
+    }
+  }, [profiles.length, currentIndex]);
+
   // Reset position when profile changes
   useEffect(() => {
     x.set(0);
@@ -738,6 +547,186 @@ const MatchScreen: React.FC = () => {
     setActiveTab('about');
   }, [currentIndex]);
 
+  // Reset processed profiles when profiles list changes (new profiles loaded)
+  useEffect(() => {
+    setProcessedProfiles(new Set());
+  }, [profiles.length]);
+
+  // Fetch matched profiles from API
+  const fetchMatchedProfiles = useCallback(async (cursor: string | null = null, limit: number = 20) => {
+    try {
+      setIsLoadingMatches(true);
+      const response = await api.call<{ users: ApiUser[]; cursor: string | null }>(Actions.CMD_MATCH_FETCH_MATCHED, {
+        method: "POST",
+        body: {
+          cursor: cursor,
+          limit: limit,
+        },
+      });
+      
+      if (response && response.users) {
+        const mappedMatches = response.users.map(mapApiUserToProfile);
+        
+        if (cursor) {
+          // Append to existing matches (pagination)
+          setMatchedProfiles(prev => [...prev, ...mappedMatches]);
+        } else {
+          // Initial load - replace matches
+          setMatchedProfiles(mappedMatches);
+        }
+        
+        // Update cursor for next page
+        setMatchedProfilesCursor(response.cursor);
+        setHasMoreMatches(response.cursor !== null && response.cursor !== undefined);
+      }
+    } catch (error) {
+      console.error('Error fetching matched profiles:', error);
+    } finally {
+      setIsLoadingMatches(false);
+    }
+  }, [mapApiUserToProfile]);
+
+  // Fetch liked profiles from API
+  const fetchLikedProfiles = useCallback(async (cursor: string | null = null, limit: number = 20) => {
+    try {
+      setIsLoadingLiked(true);
+      const response = await api.call<{ users: ApiUser[]; cursor: string | null }>(Actions.CMD_MATCH_FETCH_LIKED, {
+        method: "POST",
+        body: {
+          cursor: cursor,
+          limit: limit,
+        },
+      });
+      
+      if (response && response.users) {
+        const mappedLiked = response.users.map(mapApiUserToProfile);
+        
+        if (cursor) {
+          // Append to existing liked profiles (pagination)
+          setLikedProfiles(prev => [...prev, ...mappedLiked]);
+        } else {
+          // Initial load - replace liked profiles
+          setLikedProfiles(mappedLiked);
+        }
+        
+        // Update cursor for next page
+        setLikedProfilesCursor(response.cursor);
+        setHasMoreLiked(response.cursor !== null && response.cursor !== undefined);
+      }
+    } catch (error) {
+      console.error('Error fetching liked profiles:', error);
+    } finally {
+      setIsLoadingLiked(false);
+    }
+  }, [mapApiUserToProfile]);
+
+  // Fetch passed profiles from API
+  const fetchPassedProfiles = useCallback(async (cursor: string | null = null, limit: number = 20) => {
+    try {
+      setIsLoadingPassed(true);
+      const response = await api.call<{ users: ApiUser[]; cursor: string | null }>(Actions.CMD_MATCH_FETCH_PASSED, {
+        method: "POST",
+        body: {
+          cursor: cursor,
+          limit: limit,
+        },
+      });
+      
+      if (response && response.users) {
+        const mappedPassed = response.users.map(mapApiUserToProfile);
+        
+        if (cursor) {
+          // Append to existing passed profiles (pagination)
+          setPassedProfiles(prev => [...prev, ...mappedPassed]);
+        } else {
+          // Initial load - replace passed profiles
+          setPassedProfiles(mappedPassed);
+        }
+        
+        // Update cursor for next page
+        setPassedProfilesCursor(response.cursor);
+        setHasMorePassed(response.cursor !== null && response.cursor !== undefined);
+      }
+    } catch (error) {
+      console.error('Error fetching passed profiles:', error);
+    } finally {
+      setIsLoadingPassed(false);
+    }
+  }, [mapApiUserToProfile]);
+
+  // Keep function refs in sync
+  useEffect(() => {
+    fetchMatchedProfilesRef.current = fetchMatchedProfiles;
+  }, [fetchMatchedProfiles]);
+
+  useEffect(() => {
+    fetchLikedProfilesRef.current = fetchLikedProfiles;
+  }, [fetchLikedProfiles]);
+
+  useEffect(() => {
+    fetchPassedProfilesRef.current = fetchPassedProfiles;
+  }, [fetchPassedProfiles]);
+
+  // Load matched profiles when matches tab is selected (only once)
+  useEffect(() => {
+    if (historyTab === 'matches') {
+      // Check if we need to load matches
+      if (!hasLoadedMatchesRef.current && !isLoadingMatchesRef.current) {
+        setHasLoadedMatches(true);
+        fetchMatchedProfilesRef.current?.(null, 20);
+      }
+    } else {
+      // Reset flag when switching away from matches tab
+      setHasLoadedMatches(false);
+    }
+  }, [historyTab]); // Only depend on historyTab to avoid infinite loops
+
+  // Load liked profiles when liked tab is selected (only once)
+  useEffect(() => {
+    if (historyTab === 'liked') {
+      // Check if we need to load liked profiles
+      if (!hasLoadedLikedRef.current && !isLoadingLikedRef.current) {
+        setHasLoadedLiked(true);
+        fetchLikedProfilesRef.current?.(null, 20);
+      }
+    } else {
+      // Reset flag when switching away from liked tab
+      setHasLoadedLiked(false);
+    }
+  }, [historyTab]); // Only depend on historyTab to avoid infinite loops
+
+  // Load passed profiles when passed tab is selected (only once)
+  useEffect(() => {
+    if (historyTab === 'passed') {
+      // Check if we need to load passed profiles
+      if (!hasLoadedPassedRef.current && !isLoadingPassedRef.current) {
+        setHasLoadedPassed(true);
+        fetchPassedProfilesRef.current?.(null, 20);
+      }
+    } else {
+      // Reset flag when switching away from passed tab
+      setHasLoadedPassed(false);
+    }
+  }, [historyTab]); // Only depend on historyTab to avoid infinite loops
+
+  // Load all history data on initial mount
+  useEffect(() => {
+    // Load matches, liked, and passed profiles on page load
+    if (!hasLoadedMatchesRef.current && !isLoadingMatchesRef.current) {
+      setHasLoadedMatches(true);
+      fetchMatchedProfilesRef.current?.(null, 20);
+    }
+    if (!hasLoadedLikedRef.current && !isLoadingLikedRef.current) {
+      setHasLoadedLiked(true);
+      fetchLikedProfilesRef.current?.(null, 20);
+    }
+    if (!hasLoadedPassedRef.current && !isLoadingPassedRef.current) {
+      setHasLoadedPassed(true);
+      fetchPassedProfilesRef.current?.(null, 20);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
+
   // Format join date
   const formatJoinDate = (dateString?: string) => {
     if (!dateString) return '';
@@ -746,12 +735,79 @@ const MatchScreen: React.FC = () => {
     return `${t('profile.joined') || 'Joined'} ${date.toLocaleDateString(locale, { month: 'long', year: 'numeric' })}`;
   };
 
+  if (isLoading) {
+    return (
+      <Container>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+              Loading profiles...
+            </p>
+          </div>
+        </div>
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <div className='grid sm:grid-cols-2 grid-cols-1 gap-2'>
         <div className='w-full'>
+      {profiles.length === 0 ? (
+        <div className="flex items-center justify-center min-h-[60dvh] md:min-h-[75dvh]">
+          <div className="text-center">
+            <div className={`rounded-3xl flex flex-col gap-2 items-center p-8 mb-6 ${theme === 'dark' 
+              ? 'border border-white/10' 
+              : 'border border-gray-200/50'
+            }`}>
+              <Heart className={`w-16 h-16 mx-auto mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
+              <p className={`text-base font-semibold mb-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              No profiles to show right now. Come back soon!
+              </p>
+              <motion.button
+                className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all ${
+                  theme === 'dark'
+                    ? 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
+                    : 'bg-gray-900 text-white hover:bg-gray-800 border border-gray-300'
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={async () => {
+                  try {
+                    setIsLoading(true);
+                    const response = await api.call<{ users: ApiUser[] } | ApiUser[]>(Actions.CMD_MATCH_GET_UNSEEN, {
+                      method: "POST",
+                      body: { limit: 100 },
+                    });
+                    
+                    let apiUsers: ApiUser[] = [];
+                    if (Array.isArray(response)) {
+                      apiUsers = response;
+                    } else if (response && typeof response === 'object' && 'users' in response) {
+                      apiUsers = response.users;
+                    }
+                    
+                    const mappedProfiles = apiUsers.map(mapApiUserToProfile);
+                    setProfiles(mappedProfiles);
+                  } catch (error) {
+                    console.error('Error fetching profiles:', error);
+                  } finally {
+                    setIsLoading(false);
+                  }
+                }}
+                disabled={isLoading}
+              >
+                <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                <span>Refresh</span>
+              </motion.button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
       <AnimatePresence>
-        {showMatchAnimation && (
+        {showMatchAnimation && matchedProfile && (
           <motion.div
             className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
             initial={{ opacity: 0 }}
@@ -871,7 +927,7 @@ const MatchScreen: React.FC = () => {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.4 }}
                 >
-                  You and {currentProfile.name} liked each other
+                  You and {matchedProfile?.displayname || matchedProfile?.name || 'someone'} liked each other
                 </motion.p>
               </motion.div>
 
@@ -1736,6 +1792,7 @@ const MatchScreen: React.FC = () => {
               }`}
             whileHover={{ scale: 1.1, rotate: 180 }}
             whileTap={{ scale: 0.9 }}
+            onClick={() => handleSwipe('right', 'superlike')}
           >
             <Star className={`w-5 h-5 sm:w-6 sm:h-6 ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-600'}`} fill="currentColor" strokeWidth={2} />
           </motion.button>
@@ -1756,6 +1813,8 @@ const MatchScreen: React.FC = () => {
 
 
       </motion.div>
+      </>
+      )}
       </div>
 
       {/* History Section - Inline below buttons */}
@@ -1819,7 +1878,16 @@ const MatchScreen: React.FC = () => {
               {/* Matched Profiles */}
               {historyTab === 'matches' && (
                 <div className="space-y-4">
-                  {matchedProfiles.length === 0 ? (
+                  {isLoadingMatches && matchedProfiles.length === 0 ? (
+                    <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
+                      }`}>
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
+                      <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                        }`}>
+                        Loading matches...
+                      </p>
+                    </div>
+                  ) : matchedProfiles.length === 0 ? (
                     <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
                       }`}>
                       <Sparkles className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
@@ -1830,6 +1898,7 @@ const MatchScreen: React.FC = () => {
                       </p>
                     </div>
                   ) : (
+                    <>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                       {matchedProfiles.map((profile) => (
                         <motion.div
@@ -1877,6 +1946,31 @@ const MatchScreen: React.FC = () => {
                         </motion.div>
                       ))}
                     </div>
+                      {/* Load More Button */}
+                      {hasMoreMatches && (
+                        <div className="flex justify-center mt-6">
+                          <motion.button
+                            className={`px-6 py-3 rounded-full text-sm font-semibold transition-all ${theme === 'dark'
+                              ? 'bg-white/10 text-white hover:bg-white/20'
+                              : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                            }`}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => fetchMatchedProfiles(matchedProfilesCursor, 20)}
+                            disabled={isLoadingMatches}
+                          >
+                            {isLoadingMatches ? (
+                              <span className="flex items-center gap-2">
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+                                Loading...
+                              </span>
+                            ) : (
+                              'Load More'
+                            )}
+                          </motion.button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               )}
@@ -1884,7 +1978,16 @@ const MatchScreen: React.FC = () => {
               {/* Liked Profiles */}
               {historyTab === 'liked' && (
                 <div className="space-y-4">
-                  {likedProfiles.length === 0 ? (
+                  {isLoadingLiked && likedProfiles.length === 0 ? (
+                    <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
+                      }`}>
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
+                      <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                        }`}>
+                        Loading liked profiles...
+                      </p>
+                    </div>
+                  ) : likedProfiles.length === 0 ? (
                     <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
                       }`}>
                       <Heart className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
@@ -1895,6 +1998,7 @@ const MatchScreen: React.FC = () => {
                       </p>
                     </div>
                   ) : (
+                    <>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                       {likedProfiles.map((profile) => (
                         <motion.div
@@ -1902,6 +2006,9 @@ const MatchScreen: React.FC = () => {
                           className="relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer group"
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
                         >
                           <img
                             src={profile.images[0]}
@@ -1920,6 +2027,31 @@ const MatchScreen: React.FC = () => {
                         </motion.div>
                       ))}
                     </div>
+                      {/* Load More Button */}
+                      {hasMoreLiked && (
+                        <div className="flex justify-center mt-6">
+                          <motion.button
+                            className={`px-6 py-3 rounded-full text-sm font-semibold transition-all ${theme === 'dark'
+                              ? 'bg-white/10 text-white hover:bg-white/20'
+                              : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                            }`}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => fetchLikedProfilesRef.current?.(likedProfilesCursor, 20)}
+                            disabled={isLoadingLiked}
+                          >
+                            {isLoadingLiked ? (
+                              <span className="flex items-center gap-2">
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+                                Loading...
+                              </span>
+                            ) : (
+                              'Load More'
+                            )}
+                          </motion.button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               )}
@@ -1927,7 +2059,16 @@ const MatchScreen: React.FC = () => {
               {/* Passed Profiles */}
               {historyTab === 'passed' && (
                 <div className="space-y-4">
-                  {passedProfiles.length === 0 ? (
+                  {isLoadingPassed && passedProfiles.length === 0 ? (
+                    <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
+                      }`}>
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
+                      <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                        }`}>
+                        Loading passed profiles...
+                      </p>
+                    </div>
+                  ) : passedProfiles.length === 0 ? (
                     <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
                       }`}>
                       <Ghost className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
@@ -1938,6 +2079,7 @@ const MatchScreen: React.FC = () => {
                       </p>
                     </div>
                   ) : (
+                    <>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                       {passedProfiles.map((profile) => (
                         <motion.div
@@ -1945,6 +2087,9 @@ const MatchScreen: React.FC = () => {
                           className="relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer group opacity-60"
                           whileHover={{ scale: 1.02, opacity: 0.8 }}
                           whileTap={{ scale: 0.98 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 0.6, y: 0 }}
+                            transition={{ duration: 0.3 }}
                         >
                           <img
                             src={profile.images[0]}
@@ -1963,6 +2108,31 @@ const MatchScreen: React.FC = () => {
                         </motion.div>
                       ))}
                     </div>
+                      {/* Load More Button */}
+                      {hasMorePassed && (
+                        <div className="flex justify-center mt-6">
+                          <motion.button
+                            className={`px-6 py-3 rounded-full text-sm font-semibold transition-all ${theme === 'dark'
+                              ? 'bg-white/10 text-white hover:bg-white/20'
+                              : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                            }`}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => fetchPassedProfilesRef.current?.(passedProfilesCursor, 20)}
+                            disabled={isLoadingPassed}
+                          >
+                            {isLoadingPassed ? (
+                              <span className="flex items-center gap-2">
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+                                Loading...
+                              </span>
+                            ) : (
+                              'Load More'
+                            )}
+                          </motion.button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               )}
