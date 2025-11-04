@@ -96,16 +96,14 @@ export class MentionNode extends TextNode {
   }
 
   exportDOM(): DOMExportOutput {
-    const element = document.createElement('span');
+    const element = document.createElement('a');
     element.setAttribute('data-lexical-mention', 'true');
     if (this.__text !== this.__mention) {
       element.setAttribute('data-lexical-mention-name', this.__mention);
     }
-
-
-    console.log("exportDOM:",this.__mentionClass)
     
     element.className = `mention  ${this.__mentionClass}`;
+    element.href = `/${this.__text}`
     element.textContent = this.__text;
     return {element};
   }

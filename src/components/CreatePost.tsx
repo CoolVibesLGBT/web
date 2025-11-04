@@ -760,6 +760,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
   };
   
 
+  
+  
 
 
   return (
@@ -887,7 +889,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
               <div className="relative w-full max-w-full">
        
               <div className="w-full max-w-full">
-                <LexicalComposer initialConfig={editorConfig}>
+                <LexicalComposer  initialConfig={editorConfig}>
                   <div className="relative">
                     <HashtagPlugin/>
                     <ListPlugin/>
@@ -899,6 +901,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                     </div>
 
                     <RichTextPlugin
+                    
                       contentEditable={
                         <ContentEditable 
                           className="editor-input lexical-editor py-4 px-0 bg-red-500"
