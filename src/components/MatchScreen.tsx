@@ -931,7 +931,7 @@ const MatchScreen: React.FC = () => {
 
 
         {/* Cards Container */}
-        <div className="relative h-[75vh] sm:h-[80vh] min-h-[600px] sm:min-h-[650px]">
+        <div className="relative max-h-[60dvh] min-h-[60dvh] md:min-h-[75dvh] md:max-h-[75dvh]">
           {/* Next Card (Background) */}
           {nextProfile && (
             <motion.div
