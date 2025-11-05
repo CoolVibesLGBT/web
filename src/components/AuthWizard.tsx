@@ -772,7 +772,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         return (
           <div className="space-y-2 sm:space-y-4">
             {/* Selected Date Display */}
-            {selectedDate.day && selectedDate.month && selectedDate.year && (
+            {selectedDate.day > 0 && selectedDate.month > 0 && selectedDate.year > 0 && (
               <div className={`text-center p-2 sm:p-4 rounded-xl sm:rounded-2xl border ${theme === 'dark'
                 ? 'bg-gray-800/50 border-gray-700 text-white'
                 : 'bg-gray-50 border-gray-200 text-gray-900'
@@ -820,10 +820,10 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                   </button>
                 )}
                 {/* Month and Year buttons */}
-                <div className="flex items-center gap-1 sm:gap-2 flex-1 justify-center">
+                <div className="grid grid-cols-2 gap-2 w-full flex-1">
                   <button
                     type="button"
-                    className={`flex items-center gap-0.5 sm:gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-md sm:rounded-lg text-xs sm:text-base font-semibold transition-colors
+                    className={`w-full flex items-center justify-center gap-0.5 sm:gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-md sm:rounded-lg text-xs sm:text-base font-semibold transition-colors
                       ${viewMode === 'month'
                         ? (theme === 'dark'
                           ? 'bg-indigo-500 text-white'
@@ -840,7 +840,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                   </button>
                   <button
                     type="button"
-                    className={`flex items-center gap-0.5 sm:gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-md sm:rounded-lg text-xs sm:text-base font-semibold transition-colors
+                    className={`w-full flex items-center justify-center gap-0.5 sm:gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-md sm:rounded-lg text-xs sm:text-base font-semibold transition-colors
                       ${viewMode === 'year'
                         ? (theme === 'dark'
                           ? 'bg-indigo-500 text-white'
