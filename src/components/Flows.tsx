@@ -8,7 +8,7 @@ import Container from './Container';
 
 interface ApiPost {
   id: string;
-  public_id: number;
+  public_id: string;
   author_id: string;
   type: string;
   content: {
@@ -249,12 +249,12 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.2 }}
     >
-      {/* Create Post */}
-      <div className={`${theme === 'dark' ? 'bg-black border-b border-black' : 'bg-white border-b border-gray-100'}`}>
+      {/* Create Post - Hidden on mobile */}
+      <div className={`hidden lg:block ${theme === 'dark' ? 'bg-black border-b border-black' : 'bg-white border-b border-gray-100'}`}>
         <CreatePost
-        title='Create Post'
-        buttonText='Post'
-        placeholder='Every vibe tells a story. What’s yours? 🌈'
+          title="Create Post"
+          buttonText="Post"
+          placeholder="Every vibe tells a story. What's yours? 🌈"
           onPostCreated={() => {
             refreshPosts();
           }}

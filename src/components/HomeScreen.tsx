@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Plus } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Stories from './Stories';
 import Post from './Post';
 import Flows from './Flows';
 import Vibes from './Vibes';
+import CreatePost from './CreatePost';
 import { api } from '../services/api';
 
 // Import the ApiPost interface from Post component
@@ -153,6 +154,7 @@ const HomeScreen: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState('flows');
+  const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
 
   // Get selected post from URL or null
   const selectedPost = location.pathname.includes('/status/')
@@ -340,6 +342,61 @@ const HomeScreen: React.FC = () => {
           )}
         </main>
       </div>
+
+      {/* FAB Button - Mobile Only */}
+      {!selectedPost && (
+        <motion.button
+          onClick={() => setIsCreatePostOpen(true)}
+          className="lg:hidden fixed bottom-24 right-4 z-[60] w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          style={{
+            background: theme === 'dark'
+              ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+              : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+          }}
+        >
+          <Plus className="w-6 h-6 text-white" />
+        </motion.button>
+      )}
+
+      {/* CreatePost Modal - Mobile Full Screen */}
+      <AnimatePresence>
+        {isCreatePostOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[999] bg-black/80 backdrop-blur-sm lg:hidden"
+              onClick={() => setIsCreatePostOpen(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-[1000] lg:hidden overflow-y-auto"
+            >
+              <div className={`min-h-full ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+                <CreatePost
+                  title="Create Post"
+                  buttonText="Post"
+                  placeholder="Every vibe tells a story. What's yours? 🌈"
+                  canClose={true}
+                  onClose={() => setIsCreatePostOpen(false)}
+                  onPostCreated={() => {
+                    setIsCreatePostOpen(false);
+                    // Posts will be refreshed automatically or user can manually refresh
+                  }}
+                />
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
