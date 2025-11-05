@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useNavigate } from 'react-router-dom';
 import AuthWizard from './AuthWizard';
+import ProfileScreen from './ProfileScreen';
 import { 
   MessageCircle, 
   Search, 
@@ -19,7 +20,9 @@ import {
   Settings,
   PlusSquare,
   Lock,
-  Trash2
+  Trash2,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 
 interface MessageItemProps {
@@ -188,6 +191,7 @@ const MessagesScreen: React.FC = () => {
   const [messageMenuPosition, setMessageMenuPosition] = useState<{ x: number; y: number } | null>(null);
   const [showChatMenu, setShowChatMenu] = useState(false);
   const [openChatItemMenu, setOpenChatItemMenu] = useState<string | null>(null);
+  const [showProfile, setShowProfile] = useState(false);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -368,7 +372,7 @@ const MessagesScreen: React.FC = () => {
     {
       id: 'ersan',
       name: 'ersan',
-      username: 'ersanyakit',
+      username: 'aren',
       emojis: '🐶 🐱 🦊 🦌 🐻 🐼',
       avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
       avatarLetter: null,
@@ -876,19 +880,16 @@ const MessagesScreen: React.FC = () => {
           </div>
 
           {/* Chat Area */}
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode={isMobile ? "sync" : "wait"}>
             {selectedChat ? (
               <motion.div
                 key="chat-view"
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ 
-                  type: 'spring',
-                  stiffness: 400,
-                  damping: 30,
-                  mass: 0.5,
-                  duration: 0.25
+                initial={isMobile ? undefined : { opacity: 0 }}
+                animate={isMobile ? undefined : { opacity: 1 }}
+                exit={isMobile ? undefined : { opacity: 0 }}
+                transition={isMobile ? undefined : { 
+                  duration: 0.15,
+                  ease: 'easeOut'
                 }}
                 className="flex-1 flex flex-col min-h-0 min-w-0 relative z-10 h-full"
                 style={{
@@ -901,10 +902,7 @@ const MessagesScreen: React.FC = () => {
                 }}
               >
                 {/* Chat Header */}
-                <motion.div
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05, duration: 0.2, ease: 'easeOut' }}
+                <div
                   className={`flex-shrink-0 sticky top-0 z-50 p-3 sm:p-4 border-b ${
                     theme === 'dark' 
                       ? 'border-gray-800 bg-black/95 backdrop-blur-xl' 
@@ -934,11 +932,10 @@ const MessagesScreen: React.FC = () => {
                       {selectedPrivateChat ? (
                         <motion.button
                           onClick={() => {
-                            const username = selectedPrivateChat.username || selectedPrivateChat.name.toLowerCase();
-                            navigate(`/${username}`);
+                            setShowProfile(!showProfile);
                           }}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
+                          whileTap={{ scale: 0.95 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 17 }}
                           className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1 cursor-pointer"
                         >
                           <div className="relative flex-shrink-0">
@@ -978,6 +975,21 @@ const MessagesScreen: React.FC = () => {
                               theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                             }`}>@{selectedPrivateChat.username || selectedPrivateChat.name.toLowerCase()}</p>
                           </div>
+                          <motion.div
+                            animate={{ rotate: showProfile ? 180 : 0 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                            className="flex-shrink-0"
+                          >
+                            {showProfile ? (
+                              <ChevronUp className={`w-5 h-5 ${
+                                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                              }`} />
+                            ) : (
+                              <ChevronDown className={`w-5 h-5 ${
+                                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                              }`} />
+                            )}
+                          </motion.div>
                         </motion.button>
                       ) : null}
                     </div>
@@ -1027,27 +1039,56 @@ const MessagesScreen: React.FC = () => {
                       )}
                     </div>
                   </div>
-                </motion.div>
+                </div>
 
-                {/* Messages */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.08, duration: 0.2, ease: 'easeOut' }}
-                  className={`flex-1 overflow-y-auto p-3 sm:p-4 scrollbar-hide min-h-0 ${
-                    theme === 'dark' 
-                      ? 'bg-black' 
-                      : 'bg-white'
-                  }`}
-                  style={{ 
-                    flexGrow: 1,
-                    flexShrink: 1,
-                    minHeight: 0,
-                    overflowY: 'auto',
-                    paddingBottom: isMobile && selectedChat ? `${inputHeight + 16}px` : undefined
-                  }}
-                >
-                  <div className="space-y-3 max-w-4xl mx-auto">
+                {/* Messages or Profile */}
+                <AnimatePresence mode="wait">
+                  {showProfile && selectedPrivateChat ? (
+                    <motion.div
+                      key="profile-view"
+                      initial={{ opacity: 0, x: 8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -8 }}
+                      transition={{ 
+                        duration: 0.25,
+                        ease: [0.4, 0, 0.2, 1]
+                      }}
+                      className="flex-1 overflow-y-auto scrollbar-hide min-h-0"
+                      style={{ 
+                        flexGrow: 1,
+                        flexShrink: 1,
+                        minHeight: 0,
+                        overflowY: 'auto'
+                      }}
+                    >
+                      <div className="h-full">
+                        <ProfileScreen inline isEmbed username={selectedPrivateChat.username || selectedPrivateChat.name.toLowerCase()} />
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="messages-view"
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 8 }}
+                      transition={{ 
+                        duration: 0.25,
+                        ease: [0.4, 0, 0.2, 1]
+                      }}
+                      className={`flex-1 overflow-y-auto p-3 sm:p-4 scrollbar-hide min-h-0 ${
+                        theme === 'dark' 
+                          ? 'bg-black' 
+                          : 'bg-white'
+                      }`}
+                      style={{ 
+                        flexGrow: 1,
+                        flexShrink: 1,
+                        minHeight: 0,
+                        overflowY: 'auto',
+                        paddingBottom: isMobile && selectedChat ? `${inputHeight + 16}px` : undefined
+                      }}
+                    >
+                      <div className="space-y-3 max-w-4xl mx-auto">
                     {/* Date Separator */}
                     <div className="flex justify-center my-6">
                       <div className={`px-3 py-1 rounded-full ${
@@ -1129,15 +1170,15 @@ const MessagesScreen: React.FC = () => {
                         </div>
                       </div>
                     )}
-                  </div>
-                </motion.div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* Message Input Container - Fixed on Mobile */}
-                <motion.div 
+                {!showProfile && (
+                <div 
                   ref={inputContainerRef}
-                  initial={isMobile ? { y: 100, opacity: 0 } : false}
-                  animate={isMobile ? { y: 0, opacity: 1 } : false}
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                   className={`border-t w-full transition-all duration-300 ${
                     isMobile 
                       ? 'fixed bottom-0 left-0 right-0 z-50' 
@@ -1298,20 +1339,18 @@ const MessagesScreen: React.FC = () => {
                       </div>
                     </div>
                   )}
-                </motion.div>
+                </div>
+                )}
               </motion.div>
             ) : (
               <motion.div
                 key="chat-list-placeholder"
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 10 }}
-                transition={{ 
-                  type: 'spring',
-                  stiffness: 400,
-                  damping: 30,
-                  mass: 0.5,
-                  duration: 0.25
+                initial={isMobile ? undefined : { opacity: 0 }}
+                animate={isMobile ? undefined : { opacity: 1 }}
+                exit={isMobile ? undefined : { opacity: 0 }}
+                transition={isMobile ? undefined : { 
+                  duration: 0.15,
+                  ease: 'easeOut'
                 }}
                 className="flex-1 flex flex-col h-full w-full relative z-10 overflow-hidden"
               >

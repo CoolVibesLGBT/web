@@ -210,8 +210,15 @@ interface Media {
   user: User;
 }
 
-const ProfileScreen: React.FC = () => {
-  const { username } = useParams<{ username: string }>();
+interface ProfileScreenProps {
+  inline?: boolean;
+  isEmbed?: boolean;
+  username?: string;
+}
+
+const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed = false, username: propUsername }) => {
+  const { username: urlUsername } = useParams<{ username: string }>();
+  const username = propUsername || urlUsername;
   const navigate = useNavigate();
   const { theme } = useTheme();
   const { user: authUser, isAuthenticated, updateUser } = useAuth();
@@ -1532,52 +1539,54 @@ const ProfileScreen: React.FC = () => {
     );
   }
 
-  return (
-    <Container>
+  const content = (
+    <>
       {/* Header */}
-      <div ref={headerRef} className={`sticky top-0 z-30 ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}`}>
-        <div className="flex items-center px-4 py-3">
-          {isEditMode ? (
-            <>
-              <button
-                onClick={() => setIsEditMode(false)}
-                className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
-                  }`}
-              >
-                <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
-              </button>
-              <div className="flex-1">
-                <h1 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                  {t('profile.edit_profile')}
-                </h1>
-              </div>
-              <div className="w-12"></div>
-            </>
-          ) : (
-            <>
-          <button
-            onClick={handleBackClick}
-            className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
-              }`}
-          >
-            <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
-          </button>
-          <div className="flex-1">
-            <h1 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-              {user.displayname}
-            </h1>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-              {user.posts_count} {t('profile.posts')}
-            </p>
+      {!inline && (
+        <div ref={headerRef} className={`sticky top-0 z-30 ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}`}>
+          <div className="flex items-center px-4 py-3">
+            {isEditMode ? (
+              <>
+                <button
+                  onClick={() => setIsEditMode(false)}
+                  className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
+                    }`}
+                >
+                  <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
+                </button>
+                <div className="flex-1">
+                  <h1 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                    {t('profile.edit_profile')}
+                  </h1>
+                </div>
+                <div className="w-12"></div>
+              </>
+            ) : (
+              <>
+            <button
+              onClick={handleBackClick}
+              className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
+                }`}
+            >
+              <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
+            </button>
+            <div className="flex-1">
+              <h1 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                {user.displayname}
+              </h1>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                {user.posts_count} {t('profile.posts')}
+              </p>
+            </div>
+            <button className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
+              }`}>
+              <MoreHorizontal className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+            </button>
+              </>
+            )}
           </div>
-          <button className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
-            }`}>
-            <MoreHorizontal className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
-          </button>
-            </>
-          )}
         </div>
-      </div>
+      )}
 
       <div className="max-w-[1380px] mx-auto">
         {isEditMode ? (
@@ -1693,7 +1702,7 @@ const ProfileScreen: React.FC = () => {
                   </div>
 
                   {/* Edit Tabs */}
-                  <div className={`sticky z-20 border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'} backdrop-blur-sm ${theme === 'dark' ? 'bg-black/95' : 'bg-white/95'}`} style={{ top: `${headerHeight}px` }}>
+                  <div className={`sticky z-20 border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'} backdrop-blur-sm ${theme === 'dark' ? 'bg-black/95' : 'bg-white/95'}`} style={{ top: inline || isEmbed ? '0' : `${headerHeight}px` }}>
                     <div className="flex px-4 sm:px-6 relative">
                       {[
                         { id: 'profile', label: t('profile.profile_info') || 'Profile Info' },
@@ -2627,7 +2636,7 @@ const ProfileScreen: React.FC = () => {
           </div>
 
           {/* Tabs - Sticky */}
-          <div className={`sticky z-20 border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'} backdrop-blur-sm ${theme === 'dark' ? 'bg-black/95' : 'bg-white/95'}`} style={{ top: `${headerHeight}px` }}>
+          <div className={`sticky z-20 border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'} backdrop-blur-sm ${theme === 'dark' ? 'bg-black/95' : 'bg-white/95'}`} style={{ top: inline || isEmbed ? '0' : `${headerHeight}px` }}>
             <div className="flex relative">
               {[
                 { id: 'profile', label: t('profile.profile_tab') },
@@ -3130,7 +3139,16 @@ const ProfileScreen: React.FC = () => {
         </main>
         )}
       </div>
+    </>
+  );
 
+  if (inline) {
+    return <div className="h-full w-full">{content}</div>;
+  }
+
+  return (
+    <Container>
+      {content}
     </Container>
   );
 };
