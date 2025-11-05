@@ -5,6 +5,7 @@ import CreatePost from './CreatePost';
 import Post from './Post';
 import { api } from '../services/api';
 import Container from './Container';
+import { RefreshCw, AlertCircle } from 'lucide-react';
 
 interface ApiPost {
   id: string;
@@ -233,12 +234,17 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
 
   const refreshPosts = async () => {
     try {
+      setLoading(true);
+      setError(null);
       const response: TimelineResponse = await api.fetchTimeline({ limit: 10, cursor: "" });
       setPosts(response.posts);
       setNextCursor(response.next_cursor?.toString() || '');
       setHasMore(response.posts.length > 0);
     } catch (err) {
       console.error('Error refreshing posts:', err);
+      setError('Failed to load posts. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -269,9 +275,62 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
             Loading posts...
           </div>
         ) : error ? (
-          <div className={`p-8 text-center ${theme === 'dark' ? 'text-red-400' : 'text-red-500'}`}>
-            {error}
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-col items-center justify-center py-12 px-4"
+          >
+            <div className={`rounded-3xl overflow-hidden backdrop-blur-xl max-w-md w-full ${
+              theme === 'dark'
+                ? 'bg-white/5 border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]'
+                : 'bg-white border border-gray-200/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]'
+            }`}>
+              <div className="p-6 sm:p-8">
+                <div className="flex flex-col items-center text-center space-y-4">
+                  <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center backdrop-blur-xl ${
+                    theme === 'dark'
+                      ? 'bg-red-500/10 border border-red-500/20'
+                      : 'bg-red-50 border border-red-200/50'
+                  }`}>
+                    <AlertCircle className={`w-8 h-8 sm:w-10 sm:h-10 ${
+                      theme === 'dark' ? 'text-red-400' : 'text-red-500'
+                    }`} />
+                  </div>
+                  <div>
+                    <h3 className={`text-lg sm:text-xl font-semibold tracking-tight mb-2 ${
+                      theme === 'dark' ? 'text-white' : 'text-gray-900'
+                    }`}>
+                      Unable to Load Posts
+                    </h3>
+                    <p className={`text-sm sm:text-base font-medium ${
+                      theme === 'dark' ? 'text-white/60' : 'text-gray-500'
+                    }`}>
+                      We couldn't connect to the server. Please check your connection and try again.
+                    </p>
+                  </div>
+                  <motion.button
+                    onClick={refreshPosts}
+                    disabled={loading}
+                    className={`flex items-center gap-2.5 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl font-semibold text-sm sm:text-base transition-all duration-200 backdrop-blur-xl ${
+                      loading
+                        ? theme === 'dark'
+                          ? 'bg-gray-800/50 text-gray-500 cursor-not-allowed'
+                          : 'bg-gray-200/50 text-gray-400 cursor-not-allowed'
+                        : theme === 'dark'
+                        ? 'bg-white text-black hover:bg-gray-100 active:bg-gray-100'
+                        : 'bg-black text-white hover:bg-gray-800 active:bg-gray-800'
+                    }`}
+                    whileHover={!loading ? { scale: 1.02 } : {}}
+                    whileTap={!loading ? { scale: 0.98 } : {}}
+                  >
+                    <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 ${loading ? 'animate-spin' : ''}`} />
+                    <span>{loading ? 'Reloading...' : 'Reload'}</span>
+                  </motion.button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         ) : posts.length === 0 ? (
           <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
             No posts available

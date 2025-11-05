@@ -11,6 +11,7 @@ import NotificationsScreen from './components/NotificationsScreen';
 import SplashScreen from './components/SplashScreen';
 import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext.tsx';
+import { useSettings } from './contexts/SettingsContext';
 import AuthWizard from './components/AuthWizard';
 import { Home, Search, MapPin, Heart, MessageCircle, User, Building2, Menu, X, Sun, Moon, Languages, MoreHorizontal, Flame, FileText, Bell, ChevronRight, LogOut, EarIcon, Earth, EarthIcon, Spotlight, HandFist } from 'lucide-react';
 import PlacesScreen from './components/PlacesScreen';
@@ -36,6 +37,7 @@ function App() {
 
   const { theme, toggleTheme } = useTheme();
   const { user, isAuthenticated, logout } = useAuth();
+  const { showBottomBar, setShowBottomBar } = useSettings();
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation('common');
@@ -53,6 +55,7 @@ function App() {
       setActiveScreen('match');
     } else if (path === '/messages') {
       setActiveScreen('messages');
+      // Don't set bottom bar here - MessagesScreen manages it based on selectedChat
     } else if (path === '/notifications') {
       setActiveScreen('notifications');
     } else if (path === '/places') {
@@ -63,7 +66,15 @@ function App() {
       // Profile route like /username
       setActiveScreen('profile');
     }
-  }, [location.pathname]);
+    
+    // Show bottom bar if not on messages screen
+    // Note: MessagesScreen manages its own bottom bar visibility based on selectedChat
+    // Only set bottom bar for other screens, not for /messages
+    if (path !== '/messages') {
+      setShowBottomBar(true);
+    }
+    // For /messages, MessagesScreen will handle bottom bar visibility internally
+  }, [location.pathname, setShowBottomBar]);
 
   const mobileNavItems = [
     { id: 'pride', label: "Pride", icon: "/icons/pride.webp" },
@@ -542,6 +553,7 @@ function App() {
         )}
 
       {/* Clean Professional Bottom Bar */}
+      {showBottomBar && (
       <nav className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 ${
         theme === 'dark' 
           ? 'bg-black/95 border-t border-white/[0.08]' 
@@ -599,6 +611,7 @@ function App() {
           })}
         </div>
       </nav>
+      )}
 
       {/* Premium Mobile Menu - Enhanced Design */}
       <AnimatePresence

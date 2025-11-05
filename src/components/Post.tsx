@@ -5,6 +5,32 @@ import { useTheme } from '../contexts/ThemeContext';
 import PostReply from './PostReply';
 import VideoPlayer from './VideoPlayer';
 import { api } from '../services/api';
+import { $generateHtmlFromNodes } from '@lexical/html';
+import { createEditor, EditorState } from 'lexical';
+
+
+import { ContentEditable } from '@lexical/react/LexicalContentEditable';
+import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
+import { LexicalComposer } from '@lexical/react/LexicalComposer';
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+import {AutoFocusPlugin} from '@lexical/react/LexicalAutoFocusPlugin';
+import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
+
+import {HashtagPlugin} from '@lexical/react/LexicalHashtagPlugin';
+import {ListPlugin} from '@lexical/react/LexicalListPlugin';
+import {LinkPlugin} from '@lexical/react/LexicalLinkPlugin';
+
+import {HashtagNode} from '@lexical/hashtag';
+import {HeadingNode, QuoteNode} from '@lexical/rich-text';
+import {ListNode, ListItemNode} from '@lexical/list';
+import {LinkNode, AutoLinkNode} from '@lexical/link';
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
+import ToolbarPlugin from './Lexical/plugins/ToolbarPlugin';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import {  $generateNodesFromDOM } from '@lexical/html';
+import { $getRoot } from 'lexical';
+import { MentionNode } from './Lexical/nodes/MentionNode';
+import NewMentionsPlugin from './Lexical/plugins/MentionsPlugin';
 
 // API data structure interfaces
 interface ApiPost {
@@ -168,6 +194,74 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
   const { theme } = useTheme();
+  const [html, setHtml] = useState('');
+
+
+  const editorConfig = {
+    namespace: "CoolVibesEditor",
+    editable: true,
+    nodes:[HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode,MentionNode],
+    theme: {
+      paragraph: `mb-2 text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`,
+      heading: {
+        h1: `text-3xl font-bold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`,
+        h2: `text-2xl font-semibold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`,
+        h3: `text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`,
+      },
+      list: {
+        nested: {
+          listitem: `list-none`,
+        },
+        ol: `list-decimal list-inside mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`,
+        ul: `list-disc list-inside mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`,
+        listitem: `mb-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`,
+      },
+      quote: `border-l-4 border-gray-300 dark:border-gray-600 pl-4 py-2 my-2 italic ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`,
+      link: `${theme === 'dark' ? 'text-white underline' : 'text-gray-900 underline'}`,
+      text: {
+        bold: "font-semibold",
+        italic: "italic",
+        underline: "underline",
+        strikethrough: "line-through",
+      },
+       hashtag: "hashtag inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)]  bg-clip-text text-transparent  font-semibold hover:underline cursor-pointer",
+       mention:"mention font-semibold  font-md inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)]  bg-clip-text text-transparent  font-semibold hover:underline cursor-pointer"
+    },
+    onError(error: Error) {
+      console.error("Lexical Error:", error);
+    },
+  };
+  
+
+  const  lexicalJsonToHtml = (json: any) : string =>  {
+    const editor = createEditor(editorConfig);
+    const editorState = editor.parseEditorState(json);
+    let html = '';
+    editorState.read(() => {
+      html = $generateHtmlFromNodes(editor);
+    });
+    return html;
+  }
+
+  useEffect(() => {
+    const _content = post.content?.en || ""
+    if (!_content) return setHtml('');
+    try {
+      const parsed = JSON.parse(_content);
+      if (parsed.root) {
+        let _htmlString = lexicalJsonToHtml(parsed)
+        setHtml(_htmlString);
+      } else {
+        // JSON ama Lexical değil, direkt göster
+        setHtml(_content);
+      }
+    } catch {
+      // JSON değil, direkt HTML
+      setHtml(_content);
+    }
+  }, [post]);
+
+  
 
   // Fetch children (replies) when in detail view
   useEffect(() => {
@@ -409,7 +503,7 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
               color: theme === 'dark' ? '#ffffff' : '#111827'
             }}>
             <div
-              dangerouslySetInnerHTML={{ __html: post.content?.en || '' }}
+              dangerouslySetInnerHTML={{ __html: html }}
               style={{
                 color: theme === 'dark' ? '#ffffff' : '#111827'
               }}

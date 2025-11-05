@@ -299,10 +299,10 @@ const CreatePost: React.FC<CreatePostProps> = ({
         mentions = extractMentions(root);
       });
     }
-    
-    // Prepare post data with dot notation for polls
+
+    const contentJSON = editorInstance.getEditorState().toJSON()
     const postData = {
-      content: htmlContent || editorContent,
+      content: JSON.stringify(contentJSON),
       hashtags: hashtags,
       mentions: mentions,
       images: selectedImages,
@@ -563,8 +563,9 @@ const CreatePost: React.FC<CreatePostProps> = ({
 
         // Ensure container has proper dimensions
         const container = mapRef.current;
+        const isMobile = window.innerWidth < 640;
         container.style.width = '100%';
-        container.style.height = '288px';
+        container.style.height = isMobile ? '192px' : '256px';
         container.style.position = 'relative';
         container.style.zIndex = '1';
 
@@ -711,7 +712,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   
   
   const editorConfig = {
-    namespace: "TailwindRichText",
+    namespace: "CoolVibesEditor",
     editable: true,
     nodes:[HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode,MentionNode],
     theme: {
@@ -771,7 +772,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
 
       {/* Ultra-Professional Create Post Component */}
       <motion.div
-        className={`w-full ${isFullScreen ? 'h-full flex flex-col' : ''} transition-all duration-500 `}
+        className={`w-full ${isFullScreen ? 'h-full flex flex-col' : 'flex flex-col'} transition-all duration-500 `}
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ 
           opacity: 1, 
@@ -787,13 +788,13 @@ const CreatePost: React.FC<CreatePostProps> = ({
         } : {}}
       >
         {/* Compact Professional Header */}
-        <div className={`${isFullScreen ? 'px-6 py-2' : 'px-4 py-3'} border-b ${
+        <div className={`${isFullScreen ? 'px-3 sm:px-6 py-2' : 'px-3 sm:px-4 py-2 sm:py-3'} border-b flex-shrink-0 ${
           theme === 'dark' ? 'border-gray-800/30' : 'border-gray-200/30'
         }`}>
           <div className="flex items-center justify-between">
             {/* Left: Title Only */}
-            <div className="flex items-center">
-              <h2 className={`text-base font-semibold tracking-tight ${
+            <div className="flex items-center flex-1 min-w-0">
+              <h2 className={`text-sm sm:text-base font-semibold tracking-tight truncate ${
                 theme === 'dark' ? 'text-white' : 'text-gray-900'
               }`}>
                 {title}
@@ -801,44 +802,44 @@ const CreatePost: React.FC<CreatePostProps> = ({
             </div>
             
             {/* Right: Action Buttons */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1.5 sm:space-x-2">
               {/* Audience Selector - Compact */}
               <motion.button
-                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 ${
+                className={`flex items-center space-x-1 sm:space-x-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border transition-all duration-200 ${
                   theme === 'dark' 
-                    ? 'bg-gray-800/40 border-gray-700/50 text-gray-300 hover:bg-gray-700/50 hover:text-white' 
-                    : 'bg-gray-50/60 border-gray-200/60 text-gray-600 hover:bg-gray-100/80 hover:text-gray-800'
+                    ? 'bg-gray-800/40 border-gray-700/50 text-gray-300 hover:bg-gray-700/50 hover:text-white active:bg-gray-700/50' 
+                    : 'bg-gray-50/60 border-gray-200/60 text-gray-600 hover:bg-gray-100/80 hover:text-gray-800 active:bg-gray-100/80'
                 }`}
                 onClick={() => setIsExpanded(true)}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
                 {audienceOptions.find(opt => opt.value === audience)?.icon && 
-                  React.createElement(audienceOptions.find(opt => opt.value === audience)!.icon, { className: "w-3.5 h-3.5" })
+                  React.createElement(audienceOptions.find(opt => opt.value === audience)!.icon, { className: "w-3 h-3 sm:w-3.5 sm:h-3.5" })
                 }
-                <span className="text-xs font-medium">{audienceOptions.find(opt => opt.value === audience)?.label}</span>
+                <span className="text-[10px] sm:text-xs font-medium">{audienceOptions.find(opt => opt.value === audience)?.label}</span>
               </motion.button>
 
               {/* Full Screen Toggle Button - Compact */}
               <motion.button
                 onClick={toggleFullScreen}
-                className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 ${
+                className={`flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg transition-all duration-200 ${
                   isFullScreen
                     ? theme === 'dark'
-                      ? 'bg-white/15 text-white border border-white/20'
-                      : 'bg-black/8 text-black border border-black/15'
+                      ? 'bg-white/15 text-white border border-white/20 active:bg-white/20'
+                      : 'bg-black/8 text-black border border-black/15 active:bg-black/15'
                     : theme === 'dark'
-                    ? 'text-gray-400 hover:text-white hover:bg-gray-800/40'
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/60'
+                    ? 'text-gray-400 hover:text-white hover:bg-gray-800/40 active:bg-gray-800/40'
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/60 active:bg-gray-100/60'
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 title={isFullScreen ? "Exit full screen" : "Enter full screen"}
               >
                 {isFullScreen ? (
-                  <Minimize2 className="w-4 h-4" />
+                  <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 ) : (
-                  <Maximize2 className="w-4 h-4" />
+                  <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 )}
               </motion.button>
 
@@ -846,16 +847,16 @@ const CreatePost: React.FC<CreatePostProps> = ({
               {canClose && onClose && (
                 <motion.button
                   onClick={onClose}
-                  className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 ${
+                  className={`flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg transition-all duration-200 ${
                     theme === 'dark'
-                      ? 'text-gray-400 hover:text-white hover:bg-gray-800/40'
-                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/60'
+                      ? 'text-gray-400 hover:text-white hover:bg-gray-800/40 active:bg-gray-800/40'
+                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/60 active:bg-gray-100/60'
                   }`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   title="Close"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </motion.button>
               )}
             </div>
@@ -863,7 +864,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
         </div>
 
         {/* Main Content Area */}
-        <div className={`${isFullScreen ? 'px-6 py-1' : 'px-4 py-2'} w-full max-w-full`}>
+        <div className={`${isFullScreen ? 'px-3 sm:px-6 py-1' : 'px-3 sm:px-4 py-2'} w-full max-w-full flex-shrink-0`}>
           <div className="w-full max-w-full">
             {/* Content Input Area */}
             <div className="w-full max-w-full">
@@ -977,7 +978,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
         </div>
 
         {/* Professional Attachments Section - Scrollable */}
-        <div className={`w-full flex-1 ${isFullScreen ? 'px-6 py-2' : 'p-4'} overflow-y-auto scrollbar-hide`}>
+        <div className={`w-full ${isFullScreen ? 'flex-1' : ''} ${isFullScreen ? 'px-3 sm:px-6 py-2' : 'px-3 sm:p-4'} ${isFullScreen ? 'overflow-y-auto' : ''} scrollbar-hide`}>
         <AnimatePresence>
           {(selectedImages.length > 0 || selectedVideos.length > 0 || location || polls.length > 0 || isEventActive || isEmojiPickerOpen || isLocationPickerOpen) && (
             <motion.div
@@ -986,249 +987,436 @@ const CreatePost: React.FC<CreatePostProps> = ({
               exit={{ opacity: 0, height: 0 }}
               className={`w-full max-w-full`}
             >
-              {/* Professional Image Preview */}
-              {selectedImages.length > 0 && (
+              {/* Apple-Level Premium Media Gallery */}
+              {(selectedImages.length > 0 || selectedVideos.length > 0) && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-4"
+                  initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="mb-4 sm:mb-8"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center space-x-2">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                        theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'
+                  {/* Apple-Style Elegant Header with Glassmorphism */}
+                  <div className="flex items-center justify-between mb-3 sm:mb-5 gap-2">
+                    <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-xl flex-shrink-0 ${
+                        theme === 'dark' 
+                          ? 'bg-white/5 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]' 
+                          : 'bg-black/5 border border-black/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.08)]'
                       }`}>
-                        <Image className={`w-4 h-4 ${
-                          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                        <Image className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                          theme === 'dark' ? 'text-white/90' : 'text-gray-900/90'
                         }`} />
                       </div>
-                      <div>
-                        <h3 className={`font-semibold text-sm ${
+                      <div className="min-w-0 flex-1">
+                        <h3 className={`text-sm sm:text-base font-semibold tracking-tight truncate ${
                           theme === 'dark' ? 'text-white' : 'text-gray-900'
                         }`}>
-                          Images
+                          {selectedImages.length + selectedVideos.length} {selectedImages.length + selectedVideos.length === 1 ? 'Media' : 'Media'}
                         </h3>
-                        <p className={`text-xs ${
-                          theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                        <p className={`text-[10px] sm:text-xs font-medium tracking-wide truncate ${
+                          theme === 'dark' ? 'text-white/50' : 'text-gray-500'
                         }`}>
-                          {selectedImages.length} image{selectedImages.length > 1 ? 's' : ''} selected
+                          {selectedImages.length > 0 && `${selectedImages.length} image${selectedImages.length > 1 ? 's' : ''}`}
+                          {selectedImages.length > 0 && selectedVideos.length > 0 && ' · '}
+                          {selectedVideos.length > 0 && `${selectedVideos.length} video${selectedVideos.length > 1 ? 's' : ''}`}
                         </p>
                       </div>
                     </div>
-                    <button
-                      onClick={() => setSelectedImages([])}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${
+                    <motion.button
+                      onClick={() => {
+                        setSelectedImages([]);
+                        setSelectedVideos([]);
+                      }}
+                      className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-semibold transition-all duration-300 backdrop-blur-xl flex-shrink-0 ${
                         theme === 'dark'
-                          ? 'text-gray-400 hover:text-red-400 hover:bg-red-500/10 border border-gray-700 hover:border-red-500/30'
-                          : 'text-gray-600 hover:text-red-500 hover:bg-red-50 border border-gray-200 hover:border-red-200'
+                          ? 'bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/40'
+                          : 'bg-red-50 text-red-600 border border-red-200/50 hover:bg-red-100 hover:border-red-300'
                       }`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      Clear all
-                    </button>
+                      Clear All
+                    </motion.button>
                   </div>
 
-                  {/* Enhanced Media Grid - Compact and Scrollable */}
-                  <div className={`grid gap-2 w-full max-w-full ${
-                    selectedImages.length === 1 ? 'grid-cols-1' :
-                    selectedImages.length === 2 ? 'grid-cols-2' :
-                    selectedImages.length === 3 ? 'grid-cols-2 sm:grid-cols-3' :
-                    'grid-cols-2 sm:grid-cols-3'
-                  }`}>
-                    {selectedImages.map((file, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="relative group"
-                      >
-                        <div className={`relative rounded-xl overflow-hidden ${
-                          selectedImages.length === 1 ? 'h-40 sm:h-48' : 'h-24 sm:h-32'
-                        } ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={`Preview ${index + 1}`}
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                          />
+                  {/* Apple-Level Smart Media Grid */}
+                  {(() => {
+                    const totalMedia = selectedImages.length + selectedVideos.length;
+                    const allMedia = [
+                      ...selectedImages.map((file, idx) => ({ type: 'image', file, index: idx })),
+                      ...selectedVideos.map((file, idx) => ({ type: 'video', file, index: idx }))
+                    ];
 
-                          {/* File Type Badge */}
-                          <div className="absolute top-1.5 left-1.5">
-                            <div className={`px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/80 text-white`}>
-                              IMG
-                            </div>
-                          </div>
-
-                          {/* Remove Button */}
-                          <motion.button
-                            onClick={() => removeImage(index)}
-                            className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-red-500 text-white hover:bg-red-600 flex items-center justify-center shadow-lg transition-all duration-200"
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                          >
-                            <X className="w-3 h-3" />
-                          </motion.button>
-
-                          {/* Overlay for extra files */}
-                          {selectedImages.length > 6 && index === 5 && (
-                            <div className="absolute inset-0 bg-black/70 rounded-xl flex items-center justify-center">
-                              <div className="text-center">
-                                <Plus className="w-6 h-6 text-white mx-auto mb-0.5" />
-                                <span className="text-white font-bold text-sm">
-                                  +{selectedImages.length - 6}
-                                </span>
-                                <p className="text-white/80 text-[10px]">more</p>
+                    // Single media - Premium Full Width
+                    if (totalMedia === 1) {
+                      const media = allMedia[0];
+                      return (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.96 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                          className={`relative group rounded-2xl sm:rounded-3xl overflow-hidden ${
+                            theme === 'dark' 
+                              ? 'bg-white/5 border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]' 
+                              : 'bg-white border border-gray-200/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]'
+                          }`}
+                        >
+                          {media.type === 'image' ? (
+                            <>
+                              <img
+                                src={URL.createObjectURL(media.file)}
+                                alt="Preview"
+                                className="w-full h-auto max-h-[400px] sm:max-h-[600px] object-cover"
+                              />
+                              <motion.button
+                                onClick={() => removeImage(media.index)}
+                                className="absolute top-3 right-3 sm:top-5 sm:right-5 w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl backdrop-blur-2xl bg-black/60 border border-white/20 hover:bg-black/80 active:bg-black/80 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] transition-all duration-300"
+                                whileHover={{ scale: 1.08, rotate: 90 }}
+                                whileTap={{ scale: 0.92 }}
+                              >
+                                <X className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                              </motion.button>
+                            </>
+                          ) : (
+                            <>
+                              <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 aspect-video flex items-center justify-center">
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <motion.div
+                                    initial={{ scale: 0.8, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ delay: 0.2, duration: 0.5 }}
+                                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl backdrop-blur-2xl bg-white/10 border border-white/20 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]"
+                                  >
+                                    <Video className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+                                  </motion.div>
+                                </div>
+                                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-gradient-to-t from-black/95 via-black/80 to-transparent">
+                                  <p className="text-sm sm:text-base font-semibold text-white truncate">{media.file.name}</p>
+                                  <p className="text-xs sm:text-sm text-white/60 mt-1 sm:mt-1.5 font-medium">{(media.file.size / (1024 * 1024)).toFixed(1)} MB</p>
+                                </div>
+                                <motion.button
+                                  onClick={() => removeVideo(media.index)}
+                                  className="absolute top-3 right-3 sm:top-5 sm:right-5 w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl backdrop-blur-2xl bg-black/60 border border-white/20 hover:bg-black/80 active:bg-black/80 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] transition-all duration-300"
+                                  whileHover={{ scale: 1.08, rotate: 90 }}
+                                  whileTap={{ scale: 0.92 }}
+                                >
+                                  <X className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                                </motion.button>
                               </div>
-                            </div>
+                            </>
                           )}
+                        </motion.div>
+                      );
+                    }
+
+                    // Two media - Premium Side by Side
+                    if (totalMedia === 2) {
+                      return (
+                        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                          {allMedia.map((media, idx) => (
+                            <motion.div
+                              key={`${media.type}-${idx}`}
+                              initial={{ opacity: 0, scale: 0.96 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: idx * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                              className={`relative group rounded-2xl sm:rounded-3xl overflow-hidden backdrop-blur-xl ${
+                                theme === 'dark' 
+                                  ? 'bg-white/5 border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]' 
+                                  : 'bg-white border border-gray-200/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]'
+                              }`}
+                            >
+                              {media.type === 'image' ? (
+                                <>
+                                  <img
+                                    src={URL.createObjectURL(media.file)}
+                                    alt={`Preview ${idx + 1}`}
+                                    className="w-full h-full min-h-[160px] sm:min-h-[280px] object-cover"
+                                  />
+                                  <motion.button
+                                    onClick={() => removeImage(media.index)}
+                                    className="absolute top-2 right-2 sm:top-4 sm:right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl backdrop-blur-2xl bg-black/60 border border-white/20 hover:bg-black/80 active:bg-black/80 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"
+                                    whileHover={{ scale: 1.08, rotate: 90 }}
+                                    whileTap={{ scale: 0.92 }}
+                                  >
+                                    <X className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                                  </motion.button>
+                                </>
+                              ) : (
+                                <>
+                                  <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 aspect-square min-h-[160px] sm:min-h-[280px] flex items-center justify-center">
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                      <motion.div
+                                        initial={{ scale: 0.8, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        transition={{ delay: idx * 0.2 + 0.2, duration: 0.5 }}
+                                        className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl sm:rounded-3xl backdrop-blur-2xl bg-white/10 border border-white/20 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]"
+                                      >
+                                        <Video className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                                      </motion.div>
+                                    </div>
+                                    <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-black/95 via-black/80 to-transparent">
+                                      <p className="text-xs sm:text-sm font-semibold text-white truncate">{media.file.name}</p>
+                                      <p className="text-[10px] sm:text-xs text-white/60 mt-0.5 sm:mt-1 font-medium">{(media.file.size / (1024 * 1024)).toFixed(1)} MB</p>
+                                    </div>
+                                    <motion.button
+                                      onClick={() => removeVideo(media.index)}
+                                      className="absolute top-2 right-2 sm:top-4 sm:right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl backdrop-blur-2xl bg-black/60 border border-white/20 hover:bg-black/80 active:bg-black/80 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"
+                                      whileHover={{ scale: 1.08, rotate: 90 }}
+                                      whileTap={{ scale: 0.92 }}
+                                    >
+                                      <X className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                                    </motion.button>
+                                  </div>
+                                </>
+                              )}
+                            </motion.div>
+                          ))}
                         </div>
-                      </motion.div>
-                    ))}
-                  </div>
+                      );
+                    }
+
+                    // Three media - Apple-Style Layout
+                    if (totalMedia === 3) {
+                      return (
+                        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                          {/* Large left */}
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.96 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                            className={`row-span-2 relative group rounded-2xl sm:rounded-3xl overflow-hidden backdrop-blur-xl ${
+                              theme === 'dark' 
+                                ? 'bg-white/5 border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]' 
+                                : 'bg-white border border-gray-200/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]'
+                            }`}
+                          >
+                            {allMedia[0].type === 'image' ? (
+                              <>
+                                <img
+                                  src={URL.createObjectURL(allMedia[0].file)}
+                                  alt="Preview 1"
+                                  className="w-full h-full min-h-[300px] sm:min-h-[500px] object-cover"
+                                />
+                                <motion.button
+                                  onClick={() => removeImage(allMedia[0].index)}
+                                  className="absolute top-2 right-2 sm:top-4 sm:right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl backdrop-blur-2xl bg-black/60 border border-white/20 hover:bg-black/80 active:bg-black/80 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"
+                                  whileHover={{ scale: 1.08, rotate: 90 }}
+                                  whileTap={{ scale: 0.92 }}
+                                >
+                                  <X className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                                </motion.button>
+                              </>
+                            ) : (
+                              <>
+                                <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 aspect-[4/5] min-h-[300px] sm:min-h-[500px] flex items-center justify-center">
+                                  <div className="absolute inset-0 flex items-center justify-center">
+                                    <motion.div
+                                      initial={{ scale: 0.8, opacity: 0 }}
+                                      animate={{ scale: 1, opacity: 1 }}
+                                      transition={{ delay: 0.2, duration: 0.5 }}
+                                      className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl backdrop-blur-2xl bg-white/10 border border-white/20 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]"
+                                    >
+                                      <Video className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+                                    </motion.div>
+                                  </div>
+                                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 bg-gradient-to-t from-black/95 via-black/80 to-transparent">
+                                    <p className="text-sm sm:text-base font-semibold text-white truncate">{allMedia[0].file.name}</p>
+                                    <p className="text-xs sm:text-sm text-white/60 mt-1 sm:mt-1.5 font-medium">{(allMedia[0].file.size / (1024 * 1024)).toFixed(1)} MB</p>
+                                  </div>
+                                  <motion.button
+                                    onClick={() => removeVideo(allMedia[0].index)}
+                                    className="absolute top-2 right-2 sm:top-4 sm:right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl backdrop-blur-2xl bg-black/60 border border-white/20 hover:bg-black/80 active:bg-black/80 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"
+                                    whileHover={{ scale: 1.08, rotate: 90 }}
+                                    whileTap={{ scale: 0.92 }}
+                                  >
+                                    <X className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                                  </motion.button>
+                                </div>
+                              </>
+                            )}
+                          </motion.div>
+                          {/* Two small right */}
+                          {allMedia.slice(1).map((media, idx) => (
+                            <motion.div
+                              key={`${media.type}-${idx + 1}`}
+                              initial={{ opacity: 0, scale: 0.96 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: (idx + 1) * 0.15, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                              className={`relative group rounded-2xl sm:rounded-3xl overflow-hidden backdrop-blur-xl ${
+                                theme === 'dark' 
+                                  ? 'bg-white/5 border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]' 
+                                  : 'bg-white border border-gray-200/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]'
+                              }`}
+                            >
+                              {media.type === 'image' ? (
+                                <>
+                                  <img
+                                    src={URL.createObjectURL(media.file)}
+                                    alt={`Preview ${idx + 2}`}
+                                    className="w-full h-full min-h-[145px] sm:min-h-[245px] object-cover"
+                                  />
+                                  <motion.button
+                                    onClick={() => removeImage(media.index)}
+                                    className="absolute top-2 right-2 sm:top-3 sm:right-3 w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl backdrop-blur-2xl bg-black/60 border border-white/20 hover:bg-black/80 active:bg-black/80 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"
+                                    whileHover={{ scale: 1.08, rotate: 90 }}
+                                    whileTap={{ scale: 0.92 }}
+                                  >
+                                    <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                                  </motion.button>
+                                </>
+                              ) : (
+                                <>
+                                  <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 aspect-square min-h-[145px] sm:min-h-[245px] flex items-center justify-center">
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                      <motion.div
+                                        initial={{ scale: 0.8, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        transition={{ delay: (idx + 1) * 0.2 + 0.3, duration: 0.5 }}
+                                        className="w-10 h-10 sm:w-14 sm:h-14 rounded-2xl sm:rounded-3xl backdrop-blur-2xl bg-white/10 border border-white/20 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]"
+                                      >
+                                        <Video className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
+                                      </motion.div>
+                                    </div>
+                                    <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 bg-gradient-to-t from-black/95 via-black/80 to-transparent">
+                                      <p className="text-xs sm:text-sm font-semibold text-white truncate">{media.file.name}</p>
+                                      <p className="text-[10px] sm:text-xs text-white/60 mt-0.5 sm:mt-1 font-medium">{(media.file.size / (1024 * 1024)).toFixed(1)} MB</p>
+                                    </div>
+                                    <motion.button
+                                      onClick={() => removeVideo(media.index)}
+                                      className="absolute top-2 right-2 sm:top-3 sm:right-3 w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl backdrop-blur-2xl bg-black/60 border border-white/20 hover:bg-black/80 active:bg-black/80 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"
+                                      whileHover={{ scale: 1.08, rotate: 90 }}
+                                      whileTap={{ scale: 0.92 }}
+                                    >
+                                      <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                                    </motion.button>
+                                  </div>
+                                </>
+                              )}
+                            </motion.div>
+                          ))}
+                        </div>
+                      );
+                    }
+
+                    // Four or more - Apple-Level Grid Layout
+                    return (
+                      <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                        {allMedia.map((media, idx) => {
+                          // Show first 4, if more show overlay on 4th
+                          const showOverlay = idx === 3 && totalMedia > 4;
+                          return (
+                            <motion.div
+                              key={`${media.type}-${idx}`}
+                              initial={{ opacity: 0, scale: 0.96 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: idx * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                              className={`relative group rounded-2xl sm:rounded-3xl overflow-hidden backdrop-blur-xl ${
+                                theme === 'dark' 
+                                  ? 'bg-white/5 border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]' 
+                                  : 'bg-white border border-gray-200/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]'
+                              }`}
+                            >
+                              {media.type === 'image' ? (
+                                <>
+                                  <img
+                                    src={URL.createObjectURL(media.file)}
+                                    alt={`Preview ${idx + 1}`}
+                                    className="w-full h-full min-h-[140px] sm:min-h-[220px] object-cover"
+                                  />
+                                  {showOverlay && (
+                                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center rounded-2xl sm:rounded-3xl">
+                                      <div className="text-center">
+                                        <p className="text-xl sm:text-3xl font-bold text-white tracking-tight">+{totalMedia - 4}</p>
+                                        <p className="text-xs sm:text-sm text-white/80 mt-1 sm:mt-2 font-medium">more</p>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {!showOverlay && (
+                                    <motion.button
+                                      onClick={() => removeImage(media.index)}
+                                      className="absolute top-2 right-2 sm:top-3 sm:right-3 w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl backdrop-blur-2xl bg-black/60 border border-white/20 hover:bg-black/80 active:bg-black/80 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"
+                                      whileHover={{ scale: 1.08, rotate: 90 }}
+                                      whileTap={{ scale: 0.92 }}
+                                    >
+                                      <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                                    </motion.button>
+                                  )}
+                                </>
+                              ) : (
+                                <>
+                                  <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 aspect-square min-h-[140px] sm:min-h-[220px] flex items-center justify-center">
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                      <motion.div
+                                        initial={{ scale: 0.8, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        transition={{ delay: idx * 0.1 + 0.2, duration: 0.5 }}
+                                        className="w-10 h-10 sm:w-14 sm:h-14 rounded-2xl sm:rounded-3xl backdrop-blur-2xl bg-white/10 border border-white/20 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]"
+                                      >
+                                        <Video className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
+                                      </motion.div>
+                                    </div>
+                                    <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 bg-gradient-to-t from-black/95 via-black/80 to-transparent">
+                                      <p className="text-xs sm:text-sm font-semibold text-white truncate">{media.file.name}</p>
+                                      <p className="text-[10px] sm:text-xs text-white/60 mt-0.5 sm:mt-1 font-medium">{(media.file.size / (1024 * 1024)).toFixed(1)} MB</p>
+                                    </div>
+                                    {showOverlay && (
+                                      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center rounded-2xl sm:rounded-3xl">
+                                        <div className="text-center">
+                                          <p className="text-xl sm:text-3xl font-bold text-white tracking-tight">+{totalMedia - 4}</p>
+                                          <p className="text-xs sm:text-sm text-white/80 mt-1 sm:mt-2 font-medium">more</p>
+                                        </div>
+                                      </div>
+                                    )}
+                                    {!showOverlay && (
+                                      <motion.button
+                                        onClick={() => removeVideo(media.index)}
+                                        className="absolute top-2 right-2 sm:top-3 sm:right-3 w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl backdrop-blur-2xl bg-black/60 border border-white/20 hover:bg-black/80 active:bg-black/80 flex items-center justify-center shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"
+                                        whileHover={{ scale: 1.08, rotate: 90 }}
+                                        whileTap={{ scale: 0.92 }}
+                                      >
+                                        <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                                      </motion.button>
+                                    )}
+                                  </div>
+                                </>
+                              )}
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
                 </motion.div>
               )}
 
-              {/* Professional Video Preview */}
-              {selectedVideos.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-6"
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                        theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'
-                      }`}>
-                        <Video className={`w-5 h-5 ${
-                          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                        }`} />
-                      </div>
-                      <div>
-                        <h3 className={`font-bold text-base ${
-                          theme === 'dark' ? 'text-white' : 'text-gray-900'
-                        }`}>
-                          Videos
-                        </h3>
-                        <p className={`text-sm ${
-                          theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                        }`}>
-                          {selectedVideos.length} video{selectedVideos.length > 1 ? 's' : ''} selected
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => setSelectedVideos([])}
-                      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                        theme === 'dark'
-                          ? 'text-gray-400 hover:text-red-400 hover:bg-red-500/10 border border-gray-700 hover:border-red-500/30'
-                          : 'text-gray-600 hover:text-red-500 hover:bg-red-50 border border-gray-200 hover:border-red-200'
-                      }`}
-                    >
-                      Clear all
-                    </button>
-                  </div>
-
-                  {/* Video Grid */}
-                  <div className={`grid gap-2 sm:gap-3 w-full max-w-full overflow-hidden ${
-                    selectedVideos.length === 1 ? 'grid-cols-1' :
-                    selectedVideos.length === 2 ? 'grid-cols-2' :
-                    selectedVideos.length === 3 ? 'grid-cols-2 sm:grid-cols-3' :
-                    'grid-cols-2 sm:grid-cols-3'
-                  }`}>
-                    {selectedVideos.map((file, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="relative group"
-                      >
-                        <div className={`relative rounded-2xl overflow-hidden ${
-                          selectedVideos.length === 1 ? 'h-48' : 'h-32'
-                        } ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
-                          <div className="w-full h-full flex flex-col items-center justify-center space-y-2">
-                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                              theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
-                            }`}>
-                              <Video className={`w-6 h-6 ${
-                                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                              }`} />
-                            </div>
-                            <div className="text-center px-2">
-                              <p className={`text-xs font-medium truncate ${
-                                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-                              }`}>
-                                {file.name}
-                              </p>
-                              <p className={`text-xs ${
-                                theme === 'dark' ? 'text-gray-500' : 'text-gray-500'
-                              }`}>
-                                {(file.size / (1024 * 1024)).toFixed(1)} MB
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* File Type Badge */}
-                          <div className="absolute top-2 left-2">
-                            <div className={`px-2 py-1 rounded-lg text-xs font-bold bg-purple-500/80 text-white`}>
-                              VID
-                            </div>
-                          </div>
-
-                          {/* Remove Button */}
-                          <motion.button
-                            onClick={() => removeVideo(index)}
-                            className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500 text-white hover:bg-red-600 flex items-center justify-center shadow-lg transition-all duration-200"
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                          >
-                            <X className="w-4 h-4" />
-                          </motion.button>
-
-                          {/* Overlay for extra files */}
-                          {selectedVideos.length > 6 && index === 5 && (
-                            <div className="absolute inset-0 bg-black/70 rounded-2xl flex items-center justify-center">
-                              <div className="text-center">
-                                <Plus className="w-8 h-8 text-white mx-auto mb-1" />
-                                <span className="text-white font-bold text-lg">
-                                  +{selectedVideos.length - 6}
-                                </span>
-                                <p className="text-white/80 text-xs">more files</p>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Professional Polls Section */}
+              {/* Apple-Level Premium Polls Section */}
               {polls.length > 0 && (
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className="mb-4"
+                  initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="mb-4 sm:mb-8"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${
-                        theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
+                  {/* Apple-Style Header */}
+                  <div className="flex items-center justify-between mb-3 sm:mb-5 gap-2">
+                    <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-xl flex-shrink-0 ${
+                        theme === 'dark' 
+                          ? 'bg-white/5 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]' 
+                          : 'bg-black/5 border border-black/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.08)]'
                       }`}>
-                        <BarChart3 className={`w-4 h-4 ${
-                          theme === 'dark' ? 'text-white' : 'text-black'
+                        <BarChart3 className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                          theme === 'dark' ? 'text-white/90' : 'text-gray-900/90'
                         }`} />
                       </div>
-                      <div>
-                        <h3 className={`font-semibold text-sm ${
-                          theme === 'dark' ? 'text-white' : 'text-black'
+                      <div className="min-w-0 flex-1">
+                        <h3 className={`text-sm sm:text-base font-semibold tracking-tight truncate ${
+                          theme === 'dark' ? 'text-white' : 'text-gray-900'
                         }`}>
-                          Poll
+                          Poll{polls.length > 1 ? 's' : ''}
                         </h3>
-                        <p className={`text-xs ${
-                          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                        <p className={`text-[10px] sm:text-xs font-medium tracking-wide truncate ${
+                          theme === 'dark' ? 'text-white/50' : 'text-gray-500'
                         }`}>
                           {polls.length} question{polls.length > 1 ? 's' : ''}
                         </p>
@@ -1236,79 +1424,83 @@ const CreatePost: React.FC<CreatePostProps> = ({
                     </div>
                     <motion.button
                       onClick={() => setPolls([])}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+                      className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-semibold transition-all duration-300 backdrop-blur-xl flex-shrink-0 ${
                         theme === 'dark'
-                          ? 'text-gray-400 hover:text-white hover:bg-gray-800'
-                          : 'text-gray-500 hover:text-black hover:bg-gray-100'
+                          ? 'bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/40'
+                          : 'bg-red-50 text-red-600 border border-red-200/50 hover:bg-red-100 hover:border-red-300'
                       }`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      Clear
+                      Clear All
                     </motion.button>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-3 sm:space-y-4">
                     {polls.map((poll, pollIndex) => (
                       <motion.div
                         key={poll.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: pollIndex * 0.05, duration: 0.25 }}
-                        className={`rounded-xl overflow-hidden border ${
+                        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ delay: pollIndex * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                        className={`rounded-2xl sm:rounded-3xl overflow-hidden backdrop-blur-xl ${
                           theme === 'dark'
-                            ? 'bg-gray-900 border-gray-800'
-                            : 'bg-white border-gray-200'
+                            ? 'bg-white/5 border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]'
+                            : 'bg-white border border-gray-200/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]'
                         }`}
                       >
-                        {/* Poll Header */}
-                        <div className={`px-4 py-3 border-b ${
-                          theme === 'dark' ? 'border-gray-800' : 'border-gray-200'
+                        {/* Apple-Style Poll Header */}
+                        <div className={`px-4 sm:px-6 py-3 sm:py-4 border-b ${
+                          theme === 'dark' ? 'border-white/10' : 'border-gray-200/50'
                         }`}>
-                          <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-start justify-between gap-2 sm:gap-3">
                             <div className="flex-1 min-w-0">
                               <input
                                 type="text"
                                 placeholder="What would you like to ask?"
                                 value={poll.question}
                                 onChange={(e) => updatePollQuestion(poll.id, e.target.value)}
-                                className={`w-full px-0 py-1 text-sm font-semibold bg-transparent border-none focus:outline-none ${
+                                className={`w-full px-0 py-1.5 sm:py-2 text-sm sm:text-base font-semibold tracking-tight bg-transparent border-none focus:outline-none ${
                                   theme === 'dark' 
-                                    ? 'text-white placeholder:text-gray-500' 
-                                    : 'text-black placeholder:text-gray-400'
+                                    ? 'text-white placeholder:text-white/40' 
+                                    : 'text-gray-900 placeholder:text-gray-400'
                                 }`}
                               />
                             </div>
                             <motion.button
                               onClick={() => removePoll(poll.id)}
-                              className={`p-1.5 rounded-lg transition-colors flex-shrink-0 ${
+                              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl backdrop-blur-xl transition-all duration-300 flex items-center justify-center flex-shrink-0 ${
                                 theme === 'dark'
-                                  ? 'text-gray-500 hover:text-white hover:bg-gray-800'
-                                  : 'text-gray-400 hover:text-black hover:bg-gray-100'
+                                  ? 'bg-white/10 border border-white/20 hover:bg-white/20 active:bg-white/20'
+                                  : 'bg-gray-100 border border-gray-200/50 hover:bg-gray-200 active:bg-gray-200'
                               }`}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
+                              whileHover={{ scale: 1.08, rotate: 90 }}
+                              whileTap={{ scale: 0.92 }}
                             >
-                              <X className="w-4 h-4" />
+                              <X className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                                theme === 'dark' ? 'text-white' : 'text-gray-900'
+                              }`} />
                             </motion.button>
                           </div>
                         </div>
 
-                        {/* Poll Options */}
-                        <div className="px-4 py-3 space-y-2.5">
+                        {/* Apple-Style Poll Options */}
+                        <div className="px-4 sm:px-6 py-4 sm:py-5 space-y-2 sm:space-y-3">
                           {poll.options.map((option, optionIndex) => (
                             <motion.div
                               key={optionIndex}
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: optionIndex * 0.03 }}
-                              className="flex items-center gap-2.5"
+                              transition={{ delay: optionIndex * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                              className="flex items-center gap-2 sm:gap-3"
                             >
-                              <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                                theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
+                              <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 backdrop-blur-xl ${
+                                theme === 'dark' 
+                                  ? 'bg-white/5 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]' 
+                                  : 'bg-gray-100 border border-gray-200/50'
                               }`}>
-                                <span className={`text-xs font-bold ${
-                                  theme === 'dark' ? 'text-white' : 'text-black'
+                                <span className={`text-xs sm:text-sm font-bold tracking-tight ${
+                                  theme === 'dark' ? 'text-white' : 'text-gray-900'
                                 }`}>
                                   {optionIndex + 1}
                                 </span>
@@ -1318,61 +1510,63 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                 placeholder={`Option ${optionIndex + 1}`}
                                 value={option}
                                 onChange={(e) => updatePollOption(poll.id, optionIndex, e.target.value)}
-                                className={`flex-1 px-3 py-2 text-sm rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 ${
+                                className={`flex-1 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-xl sm:rounded-2xl border transition-all duration-300 focus:outline-none focus:ring-2 backdrop-blur-xl ${
                                   theme === 'dark'
-                                    ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-gray-600 focus:ring-gray-700'
-                                    : 'bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-400 focus:ring-gray-300'
+                                    ? 'bg-white/5 border-white/10 text-white placeholder-white/40 focus:border-white/30 focus:ring-white/20'
+                                    : 'bg-gray-50 border-gray-200/50 text-gray-900 placeholder-gray-400 focus:border-gray-300 focus:ring-gray-200'
                                 }`}
                               />
                               {poll.options.length > 2 && (
                                 <motion.button
                                   onClick={() => removePollOption(poll.id, optionIndex)}
-                                  className={`p-1.5 rounded-lg transition-colors flex-shrink-0 ${
+                                  className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl backdrop-blur-xl transition-all duration-300 flex items-center justify-center flex-shrink-0 ${
                                     theme === 'dark'
-                                      ? 'text-gray-500 hover:text-white hover:bg-gray-800'
-                                      : 'text-gray-400 hover:text-black hover:bg-gray-100'
+                                      ? 'bg-white/10 border border-white/20 hover:bg-white/20 active:bg-white/20'
+                                      : 'bg-gray-100 border border-gray-200/50 hover:bg-gray-200 active:bg-gray-200'
                                   }`}
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.95 }}
+                                  whileHover={{ scale: 1.08, rotate: 90 }}
+                                  whileTap={{ scale: 0.92 }}
                                 >
-                                  <X className="w-3.5 h-3.5" />
+                                  <X className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                                  }`} />
                                 </motion.button>
                               )}
                             </motion.div>
                           ))}
 
-                          {/* Add Option Button */}
+                          {/* Apple-Style Add Option Button */}
                           <motion.button
                             onClick={() => addPollOption(poll.id)}
-                            className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border transition-all duration-200 ${
+                            className={`w-full flex items-center justify-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl border transition-all duration-300 backdrop-blur-xl ${
                               theme === 'dark'
-                                ? 'border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800 hover:border-gray-600'
-                                : 'border-gray-300 text-gray-500 hover:text-black hover:bg-gray-50 hover:border-gray-400'
+                                ? 'border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 active:bg-white/10'
+                                : 'border-gray-200/50 text-gray-500 hover:text-gray-900 hover:bg-gray-50 hover:border-gray-300 active:bg-gray-50'
                             }`}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                           >
-                            <Plus className="w-4 h-4" />
-                            <span className="text-xs font-medium">Add option</span>
+                            <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+                            <span className="text-xs sm:text-sm font-semibold tracking-tight">Add option</span>
                           </motion.button>
                         </div>
 
-                        {/* Poll Duration */}
-                        <div className={`px-4 py-3 border-t ${
-                          theme === 'dark' ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-gray-50'
+                        {/* Apple-Style Poll Duration */}
+                        <div className={`px-4 sm:px-6 py-3 sm:py-4 border-t backdrop-blur-xl ${
+                          theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-gray-200/50 bg-gray-50/50'
                         }`}>
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <Clock className={`w-3.5 h-3.5 ${
-                                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                            <div className="flex items-center gap-2 sm:gap-3">
+                              <Clock className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                                theme === 'dark' ? 'text-white/60' : 'text-gray-500'
                               }`} />
-                              <span className={`text-xs font-medium ${
-                                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                              <span className={`text-xs sm:text-sm font-semibold tracking-tight ${
+                                theme === 'dark' ? 'text-white' : 'text-gray-900'
                               }`}>
                                 Duration
                               </span>
                             </div>
-                            <div className="flex items-center gap-1.5">
+                            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                               {[
                                 { value: '0', label: '∞' },
                                 { value: '1', label: '1d' },
@@ -1383,14 +1577,14 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                 <motion.button
                                   key={duration.value}
                                   onClick={() => updatePollDuration(poll.id, duration.value)}
-                                  className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+                                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 backdrop-blur-xl ${
                                     poll.duration === duration.value
                                       ? theme === 'dark'
-                                        ? 'bg-white text-black'
-                                        : 'bg-black text-white'
+                                        ? 'bg-white text-black shadow-[0_8px_32px_0_rgba(255,255,255,0.2)]'
+                                        : 'bg-black text-white shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]'
                                       : theme === 'dark'
-                                      ? 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white border border-gray-700'
-                                      : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-black border border-gray-300'
+                                      ? 'bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 active:bg-white/10'
+                                      : 'bg-gray-100 border border-gray-200/50 text-gray-500 hover:text-gray-900 hover:bg-gray-200 active:bg-gray-200'
                                   }`}
                                   whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.95 }}
@@ -1407,56 +1601,58 @@ const CreatePost: React.FC<CreatePostProps> = ({
                 </motion.div>
               )}
 
-              {/* Professional Location Display */}
+              {/* Apple-Level Premium Location Display */}
               {location && (
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className="mb-4"
+                  initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="mb-4 sm:mb-8"
                 >
-                  <div className={`rounded-xl overflow-hidden border ${
+                  <div className={`rounded-2xl sm:rounded-3xl overflow-hidden backdrop-blur-xl ${
                     theme === 'dark'
-                      ? 'bg-gray-900 border-gray-800'
-                      : 'bg-white border-gray-200'
+                      ? 'bg-white/5 border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]'
+                      : 'bg-white border border-gray-200/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]'
                   }`}>
                     {/* Map Preview */}
-                    <div className="relative h-56 overflow-hidden">
+                    <div className="relative h-48 sm:h-64 overflow-hidden">
                       <div
                         ref={mapRef}
                         className="w-full h-full relative"
                         style={{
                           zIndex: 1,
-                          minHeight: '224px',
-                          height: '224px',
+                          minHeight: '192px',
+                          height: '192px',
                           width: '100%'
                         }}
                       />
 
-                      {/* Location Info Card */}
+                      {/* Apple-Style Location Info Card */}
                       <motion.div
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="absolute bottom-3 left-3 right-3 z-10"
+                        transition={{ delay: 0.2, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-10"
                       >
-                        <div className={`rounded-xl border ${
+                        <div className={`rounded-xl sm:rounded-2xl backdrop-blur-2xl border ${
                           theme === 'dark'
-                            ? 'bg-gray-900 border-gray-700'
-                            : 'bg-white border-gray-300'
+                            ? 'bg-black/60 border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]'
+                            : 'bg-white/90 border-gray-200/50 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]'
                         }`}>
-                          <div className="p-3">
-                            <div className="flex items-center gap-3">
-                              <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                                theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
+                          <div className="p-3 sm:p-4">
+                            <div className="flex items-center gap-3 sm:gap-4">
+                              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-xl flex-shrink-0 ${
+                                theme === 'dark' 
+                                  ? 'bg-white/10 border border-white/20' 
+                                  : 'bg-gray-100 border border-gray-200/50'
                               }`}>
-                                <MapPin className={`w-4 h-4 ${
-                                  theme === 'dark' ? 'text-white' : 'text-black'
+                                <MapPin className={`w-5 h-5 sm:w-6 sm:h-6 ${
+                                  theme === 'dark' ? 'text-white' : 'text-gray-900'
                                 }`} />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className={`font-semibold text-sm truncate ${
-                                  theme === 'dark' ? 'text-white' : 'text-black'
+                                <p className={`font-semibold text-sm sm:text-base tracking-tight truncate ${
+                                  theme === 'dark' ? 'text-white' : 'text-gray-900'
                                 }`}>
                                   {(() => {
                                     const parts = location.address.split(',');
@@ -1465,8 +1661,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                     return city && country ? `${city}, ${country}` : location.address.split(',')[0];
                                   })()}
                                 </p>
-                                <p className={`text-xs mt-0.5 truncate ${
-                                  theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                                <p className={`text-xs sm:text-sm mt-0.5 sm:mt-1 font-medium tracking-wide truncate ${
+                                  theme === 'dark' ? 'text-white/60' : 'text-gray-500'
                                 }`}>
                                   {(() => {
                                     const parts = location.address.split(',');
@@ -1476,15 +1672,17 @@ const CreatePost: React.FC<CreatePostProps> = ({
                               </div>
                               <motion.button
                                 onClick={() => setLocation(null)}
-                                className={`p-1.5 rounded-lg transition-colors flex-shrink-0 ${
+                                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl backdrop-blur-xl transition-all duration-300 flex items-center justify-center flex-shrink-0 ${
                                   theme === 'dark'
-                                    ? 'text-gray-400 hover:text-white hover:bg-gray-800'
-                                    : 'text-gray-500 hover:text-black hover:bg-gray-100'
+                                    ? 'bg-white/10 border border-white/20 hover:bg-white/20 active:bg-white/20'
+                                    : 'bg-gray-100 border border-gray-200/50 hover:bg-gray-200 active:bg-gray-200'
                                 }`}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                                whileHover={{ scale: 1.08, rotate: 90 }}
+                                whileTap={{ scale: 0.92 }}
                               >
-                                <X className="w-4 h-4" />
+                                <X className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                                }`} />
                               </motion.button>
                             </div>
                           </div>
@@ -1495,40 +1693,42 @@ const CreatePost: React.FC<CreatePostProps> = ({
                 </motion.div>
               )}
 
-              {/* Professional Event Creation Section */}
+              {/* Apple-Level Premium Event Creation Section */}
               {isEventActive && (
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  transition={{ duration: 0.25 }}
-                  className="mb-4"
+                  initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 20, scale: 0.98 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="mb-4 sm:mb-8"
                 >
-                  <div className={`rounded-xl overflow-hidden border ${
+                  <div className={`rounded-2xl sm:rounded-3xl overflow-hidden backdrop-blur-xl ${
                     theme === 'dark'
-                      ? 'bg-gray-900 border-gray-800'
-                      : 'bg-white border-gray-200'
+                      ? 'bg-white/5 border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]'
+                      : 'bg-white border border-gray-200/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]'
                   }`}>
-                    <div className={`px-4 py-3 border-b ${
-                      theme === 'dark' ? 'border-gray-800' : 'border-gray-200'
+                    <div className={`px-4 sm:px-6 py-3 sm:py-4 border-b ${
+                      theme === 'dark' ? 'border-white/10' : 'border-gray-200/50'
                     }`}>
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-2.5">
-                          <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${
-                            theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
+                      <div className="flex items-center justify-between gap-2 sm:gap-3">
+                        <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                          <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-xl flex-shrink-0 ${
+                            theme === 'dark' 
+                              ? 'bg-white/5 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]' 
+                              : 'bg-black/5 border border-black/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.08)]'
                           }`}>
-                            <Calendar className={`w-4 h-4 ${
-                              theme === 'dark' ? 'text-white' : 'text-black'
+                            <Calendar className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                              theme === 'dark' ? 'text-white/90' : 'text-gray-900/90'
                             }`} />
                           </div>
-                          <div>
-                            <h3 className={`font-semibold text-sm ${
-                              theme === 'dark' ? 'text-white' : 'text-black'
+                          <div className="min-w-0">
+                            <h3 className={`font-semibold text-sm sm:text-base tracking-tight truncate ${
+                              theme === 'dark' ? 'text-white' : 'text-gray-900'
                             }`}>
                               Event
                             </h3>
-                            <p className={`text-xs ${
-                              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                            <p className={`text-[10px] sm:text-xs font-medium tracking-wide truncate ${
+                              theme === 'dark' ? 'text-white/50' : 'text-gray-500'
                             }`}>
                               Plan with community
                             </p>
@@ -1536,29 +1736,31 @@ const CreatePost: React.FC<CreatePostProps> = ({
                         </div>
                         <motion.button
                           onClick={() => setIsEventActive(false)}
-                          className={`p-1.5 rounded-lg transition-colors ${
+                          className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl backdrop-blur-xl transition-all duration-300 flex items-center justify-center flex-shrink-0 ${
                             theme === 'dark'
-                              ? 'text-gray-500 hover:text-white hover:bg-gray-800'
-                              : 'text-gray-400 hover:text-black hover:bg-gray-100'
+                              ? 'bg-white/10 border border-white/20 hover:bg-white/20 active:bg-white/20'
+                              : 'bg-gray-100 border border-gray-200/50 hover:bg-gray-200 active:bg-gray-200'
                           }`}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                          whileHover={{ scale: 1.08, rotate: 90 }}
+                          whileTap={{ scale: 0.92 }}
                         >
-                          <X className="w-4 h-4" />
+                          <X className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                            theme === 'dark' ? 'text-white' : 'text-gray-900'
+                          }`} />
                         </motion.button>
                       </div>
                     </div>
 
-                    <div className="px-4 py-4 space-y-3">
+                    <div className="px-4 sm:px-6 py-4 sm:py-6 space-y-3 sm:space-y-4">
                       <input
                         type="text"
                         placeholder="Event title"
                         value={eventTitle}
                         onChange={(e) => setEventTitle(e.target.value)}
-                        className={`w-full px-3 py-2.5 text-sm rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 ${
+                        className={`w-full px-3 sm:px-4 py-3 sm:py-3.5 text-sm sm:text-base rounded-xl sm:rounded-2xl border transition-all duration-300 focus:outline-none focus:ring-2 backdrop-blur-xl ${
                           theme === 'dark'
-                            ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-gray-600 focus:ring-gray-700'
-                            : 'bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-400 focus:ring-gray-300'
+                            ? 'bg-white/5 border-white/10 text-white placeholder-white/40 focus:border-white/30 focus:ring-white/20'
+                            : 'bg-gray-50 border-gray-200/50 text-gray-900 placeholder-gray-400 focus:border-gray-300 focus:ring-gray-200'
                         }`}
                       />
 
@@ -1566,33 +1768,33 @@ const CreatePost: React.FC<CreatePostProps> = ({
                         placeholder="Description (optional)"
                         value={eventDescription}
                         onChange={(e) => setEventDescription(e.target.value)}
-                        rows={3}
-                        className={`w-full px-3 py-2.5 text-sm rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 resize-none ${
+                        rows={4}
+                        className={`w-full px-3 sm:px-4 py-3 sm:py-3.5 text-sm sm:text-base rounded-xl sm:rounded-2xl border transition-all duration-300 focus:outline-none focus:ring-2 resize-none backdrop-blur-xl ${
                           theme === 'dark'
-                            ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-gray-600 focus:ring-gray-700'
-                            : 'bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-400 focus:ring-gray-300'
+                            ? 'bg-white/5 border-white/10 text-white placeholder-white/40 focus:border-white/30 focus:ring-white/20'
+                            : 'bg-gray-50 border-gray-200/50 text-gray-900 placeholder-gray-400 focus:border-gray-300 focus:ring-gray-200'
                         }`}
                       />
 
-                      <div className="grid grid-cols-2 gap-2.5">
+                      <div className="grid grid-cols-2 gap-2 sm:gap-3">
                         <input
                           type="date"
                           value={eventDate}
                           onChange={(e) => setEventDate(e.target.value)}
-                          className={`px-3 py-2.5 text-sm rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 ${
+                          className={`px-3 sm:px-4 py-3 sm:py-3.5 text-sm sm:text-base rounded-xl sm:rounded-2xl border transition-all duration-300 focus:outline-none focus:ring-2 backdrop-blur-xl ${
                             theme === 'dark'
-                              ? 'bg-gray-800 border-gray-700 text-white focus:border-gray-600 focus:ring-gray-700'
-                              : 'bg-white border-gray-300 text-black focus:border-gray-400 focus:ring-gray-300'
+                              ? 'bg-white/5 border-white/10 text-white focus:border-white/30 focus:ring-white/20'
+                              : 'bg-gray-50 border-gray-200/50 text-gray-900 focus:border-gray-300 focus:ring-gray-200'
                           }`}
                         />
                         <input
                           type="time"
                           value={eventTime}
                           onChange={(e) => setEventTime(e.target.value)}
-                          className={`px-3 py-2.5 text-sm rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 ${
+                          className={`px-3 sm:px-4 py-3 sm:py-3.5 text-sm sm:text-base rounded-xl sm:rounded-2xl border transition-all duration-300 focus:outline-none focus:ring-2 backdrop-blur-xl ${
                             theme === 'dark'
-                              ? 'bg-gray-800 border-gray-700 text-white focus:border-gray-600 focus:ring-gray-700'
-                              : 'bg-white border-gray-300 text-black focus:border-gray-400 focus:ring-gray-300'
+                              ? 'bg-white/5 border-white/10 text-white focus:border-white/30 focus:ring-white/20'
+                              : 'bg-gray-50 border-gray-200/50 text-gray-900 focus:border-gray-300 focus:ring-gray-200'
                           }`}
                         />
                       </div>
@@ -1805,135 +2007,135 @@ const CreatePost: React.FC<CreatePostProps> = ({
         </AnimatePresence>
         </div>
 
-        {/* Compact Action Bar - Sticky */}
-        <div className={`sticky bottom-0 flex items-center justify-between ${isFullScreen ? 'px-6 py-2' : 'px-4 py-2.5'} border-t w-full max-w-full ${
+        {/* Compact Action Bar */}
+        <div className={`flex items-center justify-between ${isFullScreen ? 'px-3 sm:px-6 py-2' : 'px-3 sm:px-4 py-2 sm:py-2.5'} ${parentPostId ? 'pb-3 sm:pb-2.5' : ''} border-t w-full max-w-full mt-auto flex-shrink-0 ${
           theme === 'dark' ? 'bg-black border-gray-800/30' : 'bg-white border-gray-200/30'
         }`}>
           {/* Compact Action Buttons */}
-          <div className="flex items-center space-x-0.5 flex-shrink-0">
+          <div className="flex items-center space-x-0.5 sm:space-x-1 flex-shrink-0">
             {/* Photo Upload */}
             <motion.button
               onClick={() => fileInputRef.current?.click()}
-              className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 flex-shrink-0 ${
+              className={`flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 rounded-lg transition-all duration-200 flex-shrink-0 ${
                 selectedImages.some(f => f.type.startsWith('image/'))
                   ? theme === 'dark'
                     ? 'bg-blue-500/15 text-blue-400'
                     : 'bg-blue-50 text-blue-600'
                   : theme === 'dark'
-                  ? 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50'
+                  ? 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50 active:bg-gray-800/50'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50 active:bg-gray-100/50'
               }`}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               title="Add photos"
             >
-              <Image className="w-4 h-4" />
+              <Image className="w-5 h-5 sm:w-4 sm:h-4" />
             </motion.button>
 
             {/* Video Upload */}
             <motion.button
               onClick={() => videoInputRef.current?.click()}
-              className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 flex-shrink-0 ${
+              className={`flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 rounded-lg transition-all duration-200 flex-shrink-0 ${
                 selectedVideos.length > 0
                   ? theme === 'dark'
                     ? 'bg-purple-500/15 text-purple-400'
                     : 'bg-purple-50 text-purple-600'
                   : theme === 'dark'
-                  ? 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50'
+                  ? 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50 active:bg-gray-800/50'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50 active:bg-gray-100/50'
               }`}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               title="Add videos"
             >
-              <Video className="w-4 h-4" />
+              <Video className="w-5 h-5 sm:w-4 sm:h-4" />
             </motion.button>
 
             {/* Poll */}
             <motion.button
               onClick={addPoll}
-              className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 flex-shrink-0 ${
+              className={`flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 rounded-lg transition-all duration-200 flex-shrink-0 ${
                 polls.length > 0
                   ? theme === 'dark'
                     ? 'bg-white/15 text-white'
                     : 'bg-black/10 text-black'
                   : theme === 'dark'
-                  ? 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50'
+                  ? 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50 active:bg-gray-800/50'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50 active:bg-gray-100/50'
               }`}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               title="Add a poll"
             >
-              <BarChart3 className="w-4 h-4" />
+              <BarChart3 className="w-5 h-5 sm:w-4 sm:h-4" />
             </motion.button>
 
             {/* Emoji */}
             <motion.button
               onClick={() => setIsEmojiPickerOpen(!isEmojiPickerOpen)}
-              className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 flex-shrink-0 ${
+              className={`flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 rounded-lg transition-all duration-200 flex-shrink-0 ${
                 isEmojiPickerOpen
                   ? theme === 'dark'
                     ? 'bg-yellow-500/15 text-yellow-400'
                     : 'bg-yellow-50 text-yellow-600'
                   : theme === 'dark'
-                  ? 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50'
+                  ? 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50 active:bg-gray-800/50'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50 active:bg-gray-100/50'
               }`}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               title="Add emoji"
             >
-              <Smile className="w-4 h-4" />
+              <Smile className="w-5 h-5 sm:w-4 sm:h-4" />
             </motion.button>
 
             {/* Event */}
             <motion.button
               onClick={() => setIsEventActive(!isEventActive)}
-              className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 flex-shrink-0 ${
+              className={`flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 rounded-lg transition-all duration-200 flex-shrink-0 ${
                 isEventActive
                   ? theme === 'dark'
                     ? 'bg-purple-500/15 text-purple-400'
                     : 'bg-purple-50 text-purple-600'
                   : theme === 'dark'
-                  ? 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50'
+                  ? 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50 active:bg-gray-800/50'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50 active:bg-gray-100/50'
               }`}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               title="Create event"
             >
-              <Calendar className="w-4 h-4" />
+              <Calendar className="w-5 h-5 sm:w-4 sm:h-4" />
             </motion.button>
 
             {/* Location */}
             <motion.button
               onClick={() => setIsLocationPickerOpen(!isLocationPickerOpen)}
-              className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 flex-shrink-0 ${
+              className={`flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 rounded-lg transition-all duration-200 flex-shrink-0 ${
                 location || isLocationPickerOpen
                   ? theme === 'dark'
                     ? 'bg-orange-500/15 text-orange-400'
                     : 'bg-orange-50 text-orange-600'
                   : theme === 'dark'
-                  ? 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50'
+                  ? 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50 active:bg-gray-800/50'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50 active:bg-gray-100/50'
               }`}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               title="Add location"
             >
-              <MapPin className="w-4 h-4" />
+              <MapPin className="w-5 h-5 sm:w-4 sm:h-4" />
             </motion.button>
           </div>
 
           {/* Compact Post Button */}
           <motion.button
             disabled={(!hasEditorContent && selectedImages.length === 0 && selectedVideos.length === 0) || isSubmitting || charCount > maxChars}
-            className={`px-5 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex-shrink-0 ${
+            className={`px-4 sm:px-5 py-2 rounded-lg font-semibold text-xs sm:text-sm transition-all duration-200 flex-shrink-0 ${
               hasEditorContent || selectedImages.length > 0 || selectedVideos.length > 0
                 ? theme === 'dark'
-                  ? 'bg-white text-black hover:bg-gray-100'
-                  : 'bg-black text-white hover:bg-gray-800'
+                  ? 'bg-white text-black hover:bg-gray-100 active:bg-gray-100'
+                  : 'bg-black text-white hover:bg-gray-800 active:bg-gray-800'
                 : theme === 'dark'
                   ? 'bg-gray-800/50 text-gray-500 cursor-not-allowed'
                   : 'bg-gray-200/50 text-gray-400 cursor-not-allowed'
@@ -1943,16 +2145,16 @@ const CreatePost: React.FC<CreatePostProps> = ({
             onClick={handleSubmit}
           >
             {isSubmitting ? (
-              <div className="flex items-center space-x-1.5">
-                <div className={`w-3 h-3 border-2 border-t-transparent rounded-full animate-spin ${
+              <div className="flex items-center space-x-1 sm:space-x-1.5">
+                <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 border-2 border-t-transparent rounded-full animate-spin ${
                   theme === 'dark' ? 'border-black' : 'border-white'
                 }`} />
-                <span>Publishing...</span>
+                <span className="text-xs sm:text-sm">Publishing...</span>
               </div>
             ) : (
-              <div className="flex items-center space-x-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>{buttonText}</span>
+              <div className="flex items-center space-x-1 sm:space-x-1.5">
+                <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                <span className="text-xs sm:text-sm">{buttonText}</span>
               </div>
             )}
           </motion.button>

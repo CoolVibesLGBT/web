@@ -206,7 +206,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
     const days: React.ReactNode[] = [];
     const today = new Date();
     for (let i = 0; i < firstDay; i++) {
-      days.push(<div key={`empty-${i}`} className="w-7 h-7 sm:w-10 sm:h-10" />);
+      days.push(<div key={`empty-${i}`} className="w-10 h-10 sm:w-10 sm:h-10" />);
     }
     for (let day = 1; day <= daysInMonth; day++) {
       const isSelected = selectedDate.day === day &&
@@ -220,11 +220,11 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         <motion.button
           key={day}
           onClick={() => handleDateSelect(day)}
-          className={`relative w-7 h-7 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium transition-all
+          className={`relative w-10 h-10 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm sm:text-sm font-medium transition-all
             ${isSelected
               ? (theme === 'dark'
-                ? 'bg-white text-gray-900 ring-1 sm:ring-2 ring-black/50'
-                : 'bg-gray-900 text-white ring-1 sm:ring-2 ring-black/50')
+                ? 'bg-white text-gray-900 ring-2 sm:ring-2 ring-black/50'
+                : 'bg-gray-900 text-white ring-2 sm:ring-2 ring-black/50')
               : (theme === 'dark'
                 ? 'text-white hover:bg-gray-700'
                 : 'text-gray-900 hover:bg-gray-100')
@@ -463,7 +463,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         return (
           <div className="space-y-2 sm:space-y-4">
             <div>
-              <label className={`block text-xs sm:text-sm font-medium mb-1 sm:mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              <label className={`block text-sm sm:text-sm font-medium mb-2 sm:mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                 {t('auth.nickname')}
               </label>
               <input
@@ -471,7 +471,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                 placeholder={t('auth.placeholder_nickname')}
                 value={formData.nickname}
                 onChange={(e) => updateFormData('nickname', e.target.value)}
-                className={`w-full px-3 sm:px-4 py-2.5 sm:py-4 rounded-xl sm:rounded-2xl border-2 focus:outline-none focus:border-opacity-100 transition-all text-sm sm:text-base ${theme === 'dark'
+                className={`w-full px-4 sm:px-4 py-4 sm:py-4 rounded-xl sm:rounded-2xl border-2 focus:outline-none focus:border-opacity-100 transition-all text-base sm:text-base ${theme === 'dark'
                   ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
                   : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
                   }`}
@@ -479,7 +479,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
               />
             </div>
             <div>
-              <label className={`block text-xs sm:text-sm font-medium mb-1 sm:mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              <label className={`block text-sm sm:text-sm font-medium mb-2 sm:mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                 {t('auth.password')}
               </label>
               <input
@@ -487,7 +487,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                 placeholder={t('auth.placeholder_password')}
                 value={formData.password}
                 onChange={(e) => updateFormData('password', e.target.value)}
-                className={`w-full px-3 sm:px-4 py-2.5 sm:py-4 rounded-xl sm:rounded-2xl border-2 focus:outline-none focus:border-opacity-100 transition-all text-sm sm:text-base ${theme === 'dark'
+                className={`w-full px-4 sm:px-4 py-4 sm:py-4 rounded-xl sm:rounded-2xl border-2 focus:outline-none focus:border-opacity-100 transition-all text-base sm:text-base ${theme === 'dark'
                   ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
                   : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
                   }`}
@@ -500,7 +500,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         return (
           <div className="space-y-2 sm:space-y-4">
             <div>
-              <label className={`block text-xs sm:text-sm font-medium mb-1 sm:mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              <label className={`block text-sm sm:text-sm font-medium mb-2 sm:mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                 {t('auth.nickname')}
               </label>
               <input
@@ -508,7 +508,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                 placeholder={t('auth.placeholder_nickname')}
                 value={formData.nickname}
                 onChange={(e) => updateFormData('nickname', e.target.value)}
-                className={`w-full px-3 sm:px-4 py-2.5 sm:py-4 rounded-xl sm:rounded-2xl border-2 focus:outline-none focus:border-opacity-100 transition-all text-sm sm:text-base ${theme === 'dark'
+                className={`w-full px-4 sm:px-4 py-4 sm:py-4 rounded-xl sm:rounded-2xl border-2 focus:outline-none focus:border-opacity-100 transition-all text-base sm:text-base ${theme === 'dark'
                   ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
                   : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
                   }`}
@@ -516,7 +516,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
               />
             </div>
             <div>
-              <label className={`block text-xs sm:text-sm font-medium mb-1 sm:mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              <label className={`block text-sm sm:text-sm font-medium mb-2 sm:mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                 {t('auth.password')}
               </label>
               <input
@@ -524,14 +524,14 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                 placeholder={t('auth.placeholder_password')}
                 value={formData.password}
                 onChange={(e) => updateFormData('password', e.target.value)}
-                className={`w-full px-3 sm:px-4 py-2.5 sm:py-4 rounded-xl sm:rounded-2xl border-2 focus:outline-none focus:border-opacity-100 transition-all text-sm sm:text-base ${theme === 'dark'
+                className={`w-full px-4 sm:px-4 py-4 sm:py-4 rounded-xl sm:rounded-2xl border-2 focus:outline-none focus:border-opacity-100 transition-all text-base sm:text-base ${theme === 'dark'
                   ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
                   : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
                   }`}
               />
             </div>
             <div>
-              <label className={`block text-xs sm:text-sm font-medium mb-1 sm:mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              <label className={`block text-sm sm:text-sm font-medium mb-2 sm:mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                 {t('auth.confirm_password')}
               </label>
               <input
@@ -539,7 +539,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                 placeholder={t('auth.placeholder_confirm_password')}
                 value={formData.confirmPassword}
                 onChange={(e) => updateFormData('confirmPassword', e.target.value)}
-                className={`w-full px-3 sm:px-4 py-2.5 sm:py-4 rounded-xl sm:rounded-2xl border-2 focus:outline-none focus:border-opacity-100 transition-all text-sm sm:text-base ${theme === 'dark'
+                className={`w-full px-4 sm:px-4 py-4 sm:py-4 rounded-xl sm:rounded-2xl border-2 focus:outline-none focus:border-opacity-100 transition-all text-base sm:text-base ${theme === 'dark'
                   ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
                   : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
                   }`}
@@ -773,57 +773,57 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
           <div className="space-y-2 sm:space-y-4">
             {/* Selected Date Display */}
             {selectedDate.day > 0 && selectedDate.month > 0 && selectedDate.year > 0 && (
-              <div className={`text-center p-2 sm:p-4 rounded-xl sm:rounded-2xl border ${theme === 'dark'
+              <div className={`text-center p-4 sm:p-4 rounded-xl sm:rounded-2xl border ${theme === 'dark'
                 ? 'bg-gray-800/50 border-gray-700 text-white'
                 : 'bg-gray-50 border-gray-200 text-gray-900'
                 }`}>
-                <div className="text-sm sm:text-lg font-semibold">
+                <div className="text-lg sm:text-lg font-semibold">
                   {selectedDate.day} {months[selectedDate.month - 1]} {selectedDate.year}
                 </div>
               </div>
             )}
             {/* Calendar */}
-            <div className={`p-2 sm:p-4 rounded-xl sm:rounded-2xl border ${theme === 'dark'
+            <div className={`p-4 sm:p-4 rounded-xl sm:rounded-2xl border ${theme === 'dark'
               ? 'bg-gray-800/30 border-gray-700'
               : 'bg-gray-50/30 border-gray-200'
               }`}>
               {/* Calendar Header */}
-              <div className="flex items-center justify-between mb-2 sm:mb-4">
+              <div className="flex items-center justify-between mb-4 sm:mb-4">
                 {/* Left/Right for year or decade navigation */}
                 {viewMode === 'day' && (
                   <button
                     type="button"
-                    className="rounded-full p-1 sm:p-1.5 transition-colors"
+                    className="rounded-full p-2 sm:p-1.5 transition-colors"
                     onClick={() => navigateMonth('prev')}
                   >
-                    <ChevronLeft className={`w-4 h-4 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`} />
+                    <ChevronLeft className={`w-5 h-5 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`} />
                   </button>
                 )}
                 {viewMode === 'month' && (
                   <button
                     type="button"
-                    className="rounded-full p-1 sm:p-1.5 transition-colors"
+                    className="rounded-full p-2 sm:p-1.5 transition-colors"
                     onClick={() => setCurrentYear(currentYear - 1)}
                     disabled={currentYear - 1 < minYear}
                   >
-                    <ChevronLeft className={`w-4 h-4 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} ${currentYear - 1 < minYear ? 'opacity-30' : ''}`} />
+                    <ChevronLeft className={`w-5 h-5 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} ${currentYear - 1 < minYear ? 'opacity-30' : ''}`} />
                   </button>
                 )}
                 {viewMode === 'year' && (
                   <button
                     type="button"
-                    className="rounded-full p-1 sm:p-1.5 transition-colors"
+                    className="rounded-full p-2 sm:p-1.5 transition-colors"
                     onClick={() => setDecadeStart(ds => Math.max(ds - 20, minYear))}
                     disabled={decadeStart - 20 < minYear}
                   >
-                    <ChevronLeft className={`w-4 h-4 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} ${decadeStart - 20 < minYear ? 'opacity-30' : ''}`} />
+                    <ChevronLeft className={`w-5 h-5 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} ${decadeStart - 20 < minYear ? 'opacity-30' : ''}`} />
                   </button>
                 )}
                 {/* Month and Year buttons */}
                 <div className="grid grid-cols-2 gap-2 w-full flex-1">
                   <button
                     type="button"
-                    className={`w-full flex items-center justify-center gap-0.5 sm:gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-md sm:rounded-lg text-xs sm:text-base font-semibold transition-colors
+                    className={`w-full flex items-center justify-center gap-1 sm:gap-1 px-3 sm:px-3 py-3 sm:py-2 rounded-md sm:rounded-lg text-base sm:text-base font-semibold transition-colors
                       ${viewMode === 'month'
                         ? (theme === 'dark'
                           ? 'bg-indigo-500 text-white'
@@ -834,13 +834,12 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                       }`}
                     onClick={() => setViewMode('month')}
                   >
-                    <span className="hidden sm:inline">{months[currentMonth]}</span>
-                    <span className="sm:hidden">{months[currentMonth].substring(0, 3)}</span>
-                    <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 ml-0.5 sm:ml-1 transition-transform ${viewMode === 'month' ? 'rotate-180' : ''}`} />
+                    <span>{months[currentMonth]}</span>
+                    <ChevronDown className={`w-4 h-4 sm:w-4 sm:h-4 ml-1 sm:ml-1 transition-transform ${viewMode === 'month' ? 'rotate-180' : ''}`} />
                   </button>
                   <button
                     type="button"
-                    className={`w-full flex items-center justify-center gap-0.5 sm:gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-md sm:rounded-lg text-xs sm:text-base font-semibold transition-colors
+                    className={`w-full flex items-center justify-center gap-1 sm:gap-1 px-3 sm:px-3 py-3 sm:py-2 rounded-md sm:rounded-lg text-base sm:text-base font-semibold transition-colors
                       ${viewMode === 'year'
                         ? (theme === 'dark'
                           ? 'bg-indigo-500 text-white'
@@ -852,36 +851,36 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                     onClick={() => setViewMode('year')}
                   >
                     {currentYear}
-                    <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 ml-0.5 sm:ml-1 transition-transform ${viewMode === 'year' ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-4 h-4 sm:w-4 sm:h-4 ml-1 sm:ml-1 transition-transform ${viewMode === 'year' ? 'rotate-180' : ''}`} />
                   </button>
                 </div>
                 {viewMode === 'day' && (
                   <button
                     type="button"
-                    className="rounded-full p-1 sm:p-1.5 transition-colors"
+                    className="rounded-full p-2 sm:p-1.5 transition-colors"
                     onClick={() => navigateMonth('next')}
                   >
-                    <ChevronRight className={`w-4 h-4 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`} />
+                    <ChevronRight className={`w-5 h-5 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`} />
                   </button>
                 )}
                 {viewMode === 'month' && (
                   <button
                     type="button"
-                    className="rounded-full p-1 sm:p-1.5 transition-colors"
+                    className="rounded-full p-2 sm:p-1.5 transition-colors"
                     onClick={() => setCurrentYear(currentYear + 1)}
                     disabled={currentYear + 1 > maxYear}
                   >
-                    <ChevronRight className={`w-4 h-4 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} ${currentYear + 1 > maxYear ? 'opacity-30' : ''}`} />
+                    <ChevronRight className={`w-5 h-5 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} ${currentYear + 1 > maxYear ? 'opacity-30' : ''}`} />
                   </button>
                 )}
                 {viewMode === 'year' && (
                   <button
                     type="button"
-                    className="rounded-full p-1 sm:p-1.5 transition-colors"
+                    className="rounded-full p-2 sm:p-1.5 transition-colors"
                     onClick={() => setDecadeStart(ds => Math.min(ds + 20, maxYear - 19))}
                     disabled={decadeStart + 20 > maxYear}
                   >
-                    <ChevronRight className={`w-4 h-4 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} ${decadeStart + 20 > maxYear ? 'opacity-30' : ''}`} />
+                    <ChevronRight className={`w-5 h-5 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} ${decadeStart + 20 > maxYear ? 'opacity-30' : ''}`} />
                   </button>
                 )}
               </div>
@@ -907,7 +906,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                               setCurrentYear(y);
                               setViewMode('month');
                             }}
-                            className={`rounded-md sm:rounded-lg px-1.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors
+                            className={`rounded-md sm:rounded-lg px-3 sm:px-3 py-3 sm:py-2 text-sm sm:text-sm font-medium transition-colors
                               ${currentYear === y
                                 ? (theme === 'dark'
                                   ? 'bg-white text-gray-900'
@@ -944,7 +943,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                             setCurrentMonth(idx);
                             setViewMode('day');
                           }}
-                          className={`rounded-md sm:rounded-lg px-1.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors
+                          className={`rounded-md sm:rounded-lg px-3 sm:px-3 py-3 sm:py-2 text-sm sm:text-sm font-medium transition-colors
                             ${currentMonth === idx
                               ? (theme === 'dark'
                                 ? 'bg-white text-gray-900'
@@ -969,9 +968,9 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                     transition={{ duration: 0.2 }}
                   >
                     {/* Days of Week */}
-                    <div className="grid grid-cols-7 gap-0.5 sm:gap-1 mb-1 sm:mb-2">
+                    <div className="grid grid-cols-7 gap-0.5 sm:gap-1 mb-2 sm:mb-2">
                       {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
-                        <div key={day} className={`text-center text-[10px] sm:text-xs font-medium py-1 sm:py-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                        <div key={day} className={`text-center text-xs sm:text-xs font-medium py-2 sm:py-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
                           }`}>
                           {day}
                         </div>
@@ -1112,35 +1111,35 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
               {currentStep > 0 ? (
                 <motion.button
                   onClick={handleBack}
-                  className={`flex-shrink-0 flex items-center justify-center px-3 sm:px-6 py-2.5 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-xs sm:text-base transition-all duration-200 whitespace-nowrap ${theme === 'dark'
+                  className={`flex-shrink-0 flex items-center justify-center px-4 sm:px-6 py-4 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-base transition-all duration-200 whitespace-nowrap ${theme === 'dark'
                     ? 'bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
                     }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <ArrowLeft className="w-3 h-3 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
-                  <span className="hidden sm:inline">{t('auth.back')}</span>
+                  <ArrowLeft className="w-5 h-5 sm:w-5 sm:h-5 mr-2 sm:mr-2" />
+                  <span>{t('auth.back')}</span>
                 </motion.button>
               ) : (
                 <motion.button
                   onClick={onClose}
-                  className={`flex-shrink-0 flex items-center justify-center px-3 sm:px-6 py-2.5 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-xs sm:text-base transition-all duration-200 whitespace-nowrap ${theme === 'dark'
+                  className={`flex-shrink-0 flex items-center justify-center px-4 sm:px-6 py-4 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-base transition-all duration-200 whitespace-nowrap ${theme === 'dark'
                     ? 'bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
                     }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <ArrowLeft className="w-3 h-3 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
-                  <span className="hidden sm:inline">{t('auth.back')}</span>
+                  <ArrowLeft className="w-5 h-5 sm:w-5 sm:h-5 mr-2 sm:mr-2" />
+                  <span>{t('auth.back')}</span>
                 </motion.button>
               )}
 
               <motion.button
                 onClick={handleNext}
                 disabled={!canProceed() || isLoading}
-                className={`flex-1 flex items-center justify-center px-3 sm:px-8 py-2.5 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-sm sm:text-lg transition-all duration-200 min-w-0 ${canProceed() && !isLoading
+                className={`flex-1 flex items-center justify-center px-4 sm:px-8 py-4 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-lg transition-all duration-200 min-w-0 ${canProceed() && !isLoading
                   ? theme === 'dark'
                     ? 'bg-white text-gray-900 hover:bg-gray-100 shadow-lg hover:shadow-white/25'
                     : 'bg-gray-900 text-white hover:bg-gray-800 shadow-lg hover:shadow-gray-900/25'
@@ -1156,8 +1155,8 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                   </div>
                 ) : (
                   <>
-                    <span className="text-sm sm:text-base whitespace-nowrap">{currentStep === (authMode === 'login' ? 3 : 6) ? (authMode === 'login' ? t('auth.sign_in') : t('auth.complete_registration')) : t('auth.continue')}</span>
-                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 flex-shrink-0" />
+                    <span className="text-base sm:text-base whitespace-nowrap">{currentStep === (authMode === 'login' ? 3 : 6) ? (authMode === 'login' ? t('auth.sign_in') : t('auth.complete_registration')) : t('auth.continue')}</span>
+                    <ArrowRight className="w-5 h-5 sm:w-5 sm:h-5 ml-2 flex-shrink-0" />
                   </>
                 )}
               </motion.button>

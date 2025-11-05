@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversation History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --ms-blue: #0078d4;
+            --ms-blue-hover: #106ebe;
+            --ms-gray-10: #faf9f8;
+            --ms-gray-20: #f3f2f1;
+            --ms-gray-30: #edebe9;
+            --ms-gray-40: #e1dfdd;
+            --ms-gray-50: #d2d0ce;
+            --ms-gray-130: #605e5c;
+            --ms-gray-160: #323130;
+            --ms-border: #e1dfdd;
+        }
+
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+            background-color: var(--ms-gray-20);
+            color: var(--ms-gray-160);
+        }
+
+        .conversation-container {
+            background: white;
+            border: 1px solid var(--ms-border);
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .conversation-header {
+            background: white;
+            border-bottom: 1px solid var(--ms-border);
+            padding: 16px 24px;
+        }
+
+        .header-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+            color: var(--ms-gray-160);
+        }
+
+        .header-id {
+            font-size: 11px;
+            color: var(--ms-gray-130);
+            font-family: 'Courier New', monospace;
+            margin-top: 2px;
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .header-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--ms-border);
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: var(--ms-gray-130);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-size: 13px;
+            color: var(--ms-gray-160);
+            font-weight: 600;
+        }
+
+        .ms-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 2px;
+            font-size: 12px;
+            font-weight: 600;
+            height: 24px;
+        }
+
+        .badge-channel {
+            background: var(--ms-gray-30);
+            color: var(--ms-gray-130);
+            border: 1px solid var(--ms-border);
+        }
+
+        .badge-status {
+            border: 1px solid var(--ms-border);
+        }
+
+        .badge-active { background: #dff6dd; color: #0b6a0b; }
+        .badge-pending-user { background: #fff4ce; color: #8a5d00; }
+        .badge-pending-agent { background: #deecf9; color: #004578; }
+        .badge-scheduled { background: #e1dfdd; color: #323130; }
+        .badge-completed { background: #e1dfdd; color: #323130; }
+        .badge-cancelled { background: #fde7e9; color: #a4262c; }
+
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            background: var(--ms-gray-10);
+        }
+
+        .messages-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .messages-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .messages-area::-webkit-scrollbar-thumb {
+            background: var(--ms-gray-50);
+            border-radius: 4px;
+        }
+
+        .messages-area::-webkit-scrollbar-thumb:hover {
+            background: var(--ms-gray-130);
+        }
+
+        .message-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+
+        .avatar-agent { background: #0078d4; }
+        .avatar-orchestrator { background: #8764b8; }
+        .avatar-user { background: #107c10; }
+        .avatar-operator { background: #d83b01; }
+        .avatar-system { background: #8a8886; }
+
+        .message-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .message-header-line {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+        }
+
+        .sender-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ms-gray-160);
+        }
+
+        .sender-id {
+            font-size: 10px;
+            color: var(--ms-gray-130);
+            font-family: 'Courier New', monospace;
+        }
+
+        .sender-type {
+            font-size: 11px;
+            color: var(--ms-gray-130);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--ms-gray-130);
+            margin-left: auto;
+        }
+
+        .message-id-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            background: var(--ms-gray-20);
+            border-radius: 2px;
+            color: var(--ms-gray-130);
+            font-family: 'Courier New', monospace;
+        }
+
+        .message-content-box {
+            background: white;
+            border: 1px solid var(--ms-border);
+            border-radius: 4px;
+            padding: 12px 16px;
+            position: relative;
+            max-width: 720px;
+        }
+
+        .message-content-box:hover {
+            border-color: var(--ms-gray-50);
+            box-shadow: 0 1.6px 3.6px rgba(0, 0, 0, 0.132), 0 0.3px 0.9px rgba(0, 0, 0, 0.108);
+        }
+
+        .message-content-box.type-agent { border-left: 3px solid #0078d4; }
+        .message-content-box.type-orchestrator { border-left: 3px solid #8764b8; }
+        .message-content-box.type-user { border-left: 3px solid #107c10; }
+        .message-content-box.type-operator { border-left: 3px solid #d83b01; }
+        .message-content-box.type-system { border-left: 3px solid #8a8886; }
+
+        .message-type-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--ms-gray-130);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .message-text {
+            font-size: 14px;
+            line-height: 20px;
+            color: var(--ms-gray-160);
+            word-wrap: break-word;
+        }
+
+        .message-metadata {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--ms-border);
+            font-size: 11px;
+            color: var(--ms-gray-130);
+        }
+
+        .related-message-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--ms-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .related-message-link:hover {
+            text-decoration: underline;
+        }
+
+        .attachment-image {
+            margin-top: 12px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--ms-border);
+            max-width: 100%;
+        }
+
+        .attachment-image img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+        }
+
+        .attachment-image img:hover {
+            opacity: 0.95;
+        }
+
+        .attachment-audio {
+            margin-top: 12px;
+        }
+
+        .attachment-audio audio {
+            width: 100%;
+            height: 32px;
+        }
+
+        .attachment-file {
+            margin-top: 12px;
+            padding: 12px;
+            background: var(--ms-gray-10);
+            border: 1px solid var(--ms-border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .attachment-file:hover {
+            background: var(--ms-gray-20);
+        }
+
+        .file-icon-box {
+            width: 40px;
+            height: 40px;
+            background: var(--ms-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            font-size: 20px;
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ms-gray-160);
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: var(--ms-gray-130);
+        }
+
+        .event-message {
+            text-align: center;
+            margin: 16px 0;
+        }
+
+        .event-divider {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: var(--ms-gray-30);
+            border-radius: 2px;
+            font-size: 12px;
+            color: var(--ms-gray-130);
+        }
+
+        .compose-section {
+            background: white;
+            border-top: 1px solid var(--ms-border);
+            padding: 20px 24px;
+        }
+
+        .compose-wrapper {
+            border: 1px solid var(--ms-border);
+            border-radius: 4px;
+            background: white;
+            transition: border-color 0.15s;
+        }
+
+        .compose-wrapper:focus-within {
+            border-color: var(--ms-blue);
+            outline: 1px solid var(--ms-blue);
+        }
+
+        .compose-input {
+            border: none;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-family: inherit;
+            width: 100%;
+            resize: none;
+            outline: none;
+        }
+
+        .compose-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border-top: 1px solid var(--ms-border);
+        }
+
+        .toolbar-left {
+            display: flex;
+            gap: 4px;
+        }
+
+        .ms-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 1px solid var(--ms-border);
+            background: white;
+            border-radius: 2px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            height: 32px;
+        }
+
+        .ms-button:hover {
+            background: var(--ms-gray-10);
+            border-color: var(--ms-gray-50);
+        }
+
+        .ms-button:active {
+            background: var(--ms-gray-20);
+        }
+
+        .ms-button-primary {
+            background: var(--ms-blue);
+            border-color: var(--ms-blue);
+            color: white;
+        }
+
+        .ms-button-primary:hover {
+            background: var(--ms-blue-hover);
+            border-color: var(--ms-blue-hover);
+        }
+
+        .ms-button-primary:active {
+            background: #005a9e;
+        }
+
+        .image-preview-box {
+            padding: 12px;
+            display: flex;
+            gap: 12px;
+            background: var(--ms-gray-10);
+            align-items: center;
+        }
+
+        .preview-thumbnail {
+            width: 60px;
+            height: 60px;
+            border-radius: 2px;
+            object-fit: cover;
+            border: 1px solid var(--ms-border);
+        }
+
+        .preview-info {
+            flex: 1;
+            font-size: 12px;
+        }
+
+        .preview-filename {
+            font-weight: 600;
+            color: var(--ms-gray-160);
+        }
+
+        .preview-remove {
+            padding: 4px 8px;
+            font-size: 12px;
+            height: 24px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--ms-gray-130);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            color: var(--ms-gray-50);
+            margin-bottom: 16px;
+        }
+
+        .empty-text {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-subtext {
+            font-size: 13px;
+            color: var(--ms-gray-130);
+        }
+
+        @media (max-width: 768px) {
+            .header-title-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .header-details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .message-content-box {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="conversation-container">
+        <!-- Header -->
+        <div class="conversation-header">
+            <div class="header-title-row">
+                <div>
+                    <h1 class="header-title">Conversation Group</h1>
+                    <div class="header-id">ID: <span id="conversationGroupId">-</span></div>
+                </div>
+                <div class="header-badges">
+                    <span class="ms-badge badge-channel" id="channelBadge">
+                        <i class="bi bi-globe"></i>
+                        <span id="channelText">Web</span>
+                    </span>
+                    <span class="ms-badge badge-status badge-active" id="statusBadge">Active</span>
+                </div>
+            </div>
+            
+            <div class="header-details-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Created At</span>
+                    <span class="detail-value" id="createdAt">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Last Message</span>
+                    <span class="detail-value" id="lastMessageAt">-</span>
+                </div>
+                <div class="detail-item" id="closedAtContainer" style="display: none;">
+                    <span class="detail-label">Closed At</span>
+                    <span class="detail-value" id="closedAt">-</span>
+                </div>
+                <div class="detail-item" id="sessionContainer" style="display: none;">
+                    <span class="detail-label">External Session ID</span>
+                    <span class="detail-value" id="externalSessionId">-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages Area -->
+        <div class="messages-area" id="messagesArea">
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">
+                    <i class="bi bi-chat-left-text"></i>
+                </div>
+                <div class="empty-text">No messages yet</div>
+                <div class="empty-subtext">Start a conversation using the message box below</div>
+            </div>
+        </div>
+
+        <!-- Compose Section -->
+        <div class="compose-section">
+            <div class="compose-wrapper">
+                <div id="imagePreviewBox"></div>
+                <textarea class="compose-input" id="messageInput" rows="3" placeholder="Type a message"></textarea>
+                <div class="compose-toolbar">
+                    <div class="toolbar-left">
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                        <button class="ms-button" onclick="document.getElementById('imageInput').click()">
+                            <i class="bi bi-image"></i>
+                            Attach image
+                        </button>
+                    </div>
+                    <button class="ms-button ms-button-primary" onclick="sendMessage()">
+                        <i class="bi bi-send"></i>
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sample comprehensive conversation data covering all properties
+        const conversationData = {
+            conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+            channel: 1, // WhatsApp
+            conversationStatus: 0, // Active
+            externalSessionId: "whatsapp_session_98765",
+            createdAt: "2025-11-01T08:30:00Z",
+            closedAt: null,
+            lastMessageAt: "2025-11-04T14:45:30Z",
+            messages: [
+                {
+                    messageId: 1,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "user_12345",
+                    senderName: "John Doe",
+                    createdAt: "2025-11-01T08:30:00Z",
+                    senderType: 2, // User
+                    type: 0, // Text
+                    content: "Hello, I need help tracking my sea freight shipment from Shanghai to Los Angeles.",
+                    metadataJson: null,
+                    relatedMessageId: null
+                },
+                {
+                    messageId: 2,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "agent_freight_001",
+                    senderName: "FreightBot AI",
+                    createdAt: "2025-11-01T08:30:15Z",
+                    senderType: 0, // Agent
+                    type: 0,
+                    content: "Hello John! I'm FreightBot, your AI shipping assistant. I'd be happy to help you track your sea freight shipment. Could you please provide me with your booking reference or container number?",
+                    metadataJson: null,
+                    relatedMessageId: null
+                },
+                {
+                    messageId: 3,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "user_12345",
+                    senderName: "John Doe",
+                    createdAt: "2025-11-01T08:32:00Z",
+                    senderType: 2,
+                    type: 1, // Image
+                    content: "Here's a photo of my booking confirmation",
+                    metadataJson: JSON.stringify({
+                        imageUrl: "https://via.placeholder.com/600x400/2196F3/FFFFFF?text=Booking+Confirmation+BOOK-2025-SEA-001",
+                        fileName: "booking_confirmation.jpg",
+                        fileSize: "245 KB",
+                        width: 600,
+                        height: 400
+                    }),
+                    relatedMessageId: 2
+                },
+                {
+                    messageId: 4,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "orchestrator_main",
+                    senderName: "Task Orchestrator",
+                    createdAt: "2025-11-01T08:32:30Z",
+                    senderType: 1, // Orchestrator
+                    type: 0,
+                    content: "Image received and analyzed. Extracted booking reference: BOOK-2025-SEA-001. Container: MSCU1234567. Initiating shipment tracking query...",
+                    metadataJson: JSON.stringify({
+                        extractedData: {
+                            bookingRef: "BOOK-2025-SEA-001",
+                            containerNo: "MSCU1234567",
+                            carrier: "Maersk",
+                            origin: "Shanghai, China",
+                            destination: "Los Angeles, USA"
+                        }
+                    }),
+                    relatedMessageId: 3
+                },
+                {
+                    messageId: 5,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "agent_freight_001",
+                    senderName: "FreightBot AI",
+                    createdAt: "2025-11-01T08:33:00Z",
+                    senderType: 0,
+                    type: 0,
+                    content: "Perfect! I found your shipment. Container MSCU1234567 departed Shanghai on October 28th and is currently in transit. Expected arrival at LA port is November 10th. Your cargo includes electronics - correct?",
+                    metadataJson: null,
+                    relatedMessageId: 4
+                },
+                {
+                    messageId: 6,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "user_12345",
+                    senderName: "John Doe",
+                    createdAt: "2025-11-01T08:35:00Z",
+                    senderType: 2,
+                    type: 0,
+                    content: "Yes, that's correct. Can you send me the full tracking details?",
+                    metadataJson: null,
+                    relatedMessageId: 5
+                },
+                {
+                    messageId: 7,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "agent_freight_001",
+                    senderName: "FreightBot AI",
+                    createdAt: "2025-11-01T08:35:30Z",
+                    senderType: 0,
+                    type: 4, // File
+                    content: "Here's your detailed tracking report in PDF format",
+                    metadataJson: JSON.stringify({
+                        fileUrl: "https://example.com/tracking-reports/BOOK-2025-SEA-001.pdf",
+                        fileName: "Shipment_Tracking_BOOK-2025-SEA-001.pdf",
+                        fileSize: "1.2 MB",
+                        mimeType: "application/pdf"
+                    }),
+                    relatedMessageId: 6
+                },
+                {
+                    messageId: 8,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "system",
+                    senderName: "System",
+                    createdAt: "2025-11-02T10:00:00Z",
+                    senderType: 4, // System
+                    type: 5, // Event
+                    content: "Conversation escalated to human operator - Complex customs inquiry detected",
+                    metadataJson: JSON.stringify({
+                        eventType: "escalation",
+                        reason: "complex_customs_inquiry",
+                        priority: "high"
+                    }),
+                    relatedMessageId: null
+                },
+                {
+                    messageId: 9,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "operator_sarah",
+                    senderName: "Sarah Williams",
+                    createdAt: "2025-11-02T10:05:00Z",
+                    senderType: 3, // Operator
+                    type: 0,
+                    content: "Hi John, this is Sarah from the customs support team. I see you have questions about customs clearance. I'm here to help you through the process.",
+                    metadataJson: null,
+                    relatedMessageId: 8
+                },
+                {
+                    messageId: 10,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "user_12345",
+                    senderName: "John Doe",
+                    createdAt: "2025-11-02T10:07:00Z",
+                    senderType: 2,
+                    type: 0,
+                    content: "Hi Sarah! Yes, I need to understand what documents are required for customs clearance in the US for electronics.",
+                    metadataJson: null,
+                    relatedMessageId: 9
+                },
+                {
+                    messageId: 11,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "operator_sarah",
+                    senderName: "Sarah Williams",
+                    createdAt: "2025-11-02T10:10:00Z",
+                    senderType: 3,
+                    type: 2, // Audio
+                    content: "I've recorded a detailed explanation of the customs requirements for your electronics shipment",
+                    metadataJson: JSON.stringify({
+                        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                        duration: "2:15",
+                        format: "mp3",
+                        transcript: "For electronics imports, you'll need: commercial invoice, packing list, bill of lading, and FCC compliance documentation..."
+                    }),
+                    relatedMessageId: 10
+                },
+                {
+                    messageId: 12,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "user_12345",
+                    senderName: "John Doe",
+                    createdAt: "2025-11-02T10:15:00Z",
+                    senderType: 2,
+                    type: 0,
+                    content: "Thank you Sarah! That's very helpful. Do I need to submit these before arrival?",
+                    metadataJson: null,
+                    relatedMessageId: 11
+                },
+                {
+                    messageId: 13,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "operator_sarah",
+                    senderName: "Sarah Williams",
+                    createdAt: "2025-11-02T10:18:00Z",
+                    senderType: 3,
+                    type: 0,
+                    content: "Yes, ideally you should submit them 72 hours before vessel arrival. I'll send you the submission portal link and walk you through the process. Let me also connect you with our customs broker.",
+                    metadataJson: null,
+                    relatedMessageId: 12
+                },
+                {
+                    messageId: 14,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "orchestrator_main",
+                    senderName: "Task Orchestrator",
+                    createdAt: "2025-11-03T09:00:00Z",
+                    senderType: 1,
+                    type: 0,
+                    content: "Scheduled reminder: Your vessel arrives in 7 days. Customs documents should be submitted by November 7th. Would you like me to check if all documents are ready?",
+                    metadataJson: JSON.stringify({
+                        taskType: "scheduled_reminder",
+                        dueDate: "2025-11-07T00:00:00Z",
+                        documentsRequired: ["commercial_invoice", "packing_list", "bill_of_lading", "fcc_compliance"]
+                    }),
+                    relatedMessageId: null
+                },
+                {
+                    messageId: 15,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "user_12345",
+                    senderName: "John Doe",
+                    createdAt: "2025-11-03T09:05:00Z",
+                    senderType: 2,
+                    type: 0,
+                    content: "Yes please! I want to make sure everything is in order.",
+                    metadataJson: null,
+                    relatedMessageId: 14
+                },
+                {
+                    messageId: 16,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "orchestrator_main",
+                    senderName: "Task Orchestrator",
+                    createdAt: "2025-11-03T09:05:30Z",
+                    senderType: 1,
+                    type: 0,
+                    content: "Checking document status... ✓ Commercial Invoice uploaded, ✓ Packing List uploaded, ⚠ Bill of Lading missing, ⚠ FCC Compliance certificate missing. You need to upload 2 more documents.",
+                    metadataJson: JSON.stringify({
+                        documentStatus: {
+                            commercialInvoice: { status: "uploaded", uploadedAt: "2025-11-02T14:00:00Z" },
+                            packingList: { status: "uploaded", uploadedAt: "2025-11-02T14:05:00Z" },
+                            billOfLading: { status: "missing", required: true },
+                            fccCompliance: { status: "missing", required: true }
+                        }
+                    }),
+                    relatedMessageId: 15
+                },
+                {
+                    messageId: 17,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "agent_freight_001",
+                    senderName: "FreightBot AI",
+                    createdAt: "2025-11-03T09:06:00Z",
+                    senderType: 0,
+                    type: 3, // Video
+                    content: "I've prepared a video tutorial on how to obtain and submit the Bill of Lading and FCC Compliance certificate",
+                    metadataJson: JSON.stringify({
+                        videoUrl: "https://example.com/tutorials/customs-documents.mp4",
+                        thumbnailUrl: "https://via.placeholder.com/400x225/FF5722/FFFFFF?text=Video+Tutorial",
+                        duration: "4:30",
+                        format: "mp4",
+                        resolution: "1080p"
+                    }),
+                    relatedMessageId: 16
+                },
+                {
+                    messageId: 18,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "user_12345",
+                    senderName: "John Doe",
+                    createdAt: "2025-11-04T11:00:00Z",
+                    senderType: 2,
+                    type: 1,
+                    content: "I've obtained the Bill of Lading. Here it is.",
+                    metadataJson: JSON.stringify({
+                        imageUrl: "https://via.placeholder.com/600x800/4CAF50/FFFFFF?text=Bill+of+Lading+MSCU1234567",
+                        fileName: "bill_of_lading.jpg",
+                        fileSize: "890 KB",
+                        width: 600,
+                        height: 800
+                    }),
+                    relatedMessageId: 17
+                },
+                {
+                    messageId: 19,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "orchestrator_main",
+                    senderName: "Task Orchestrator",
+                    createdAt: "2025-11-04T11:00:20Z",
+                    senderType: 1,
+                    type: 0,
+                    content: "Bill of Lading received and validated. Document has been automatically submitted to customs portal. Now you only need the FCC Compliance certificate.",
+                    metadataJson: JSON.stringify({
+                        validation: {
+                            documentType: "bill_of_lading",
+                            valid: true,
+                            containerNumber: "MSCU1234567",
+                            autoSubmitted: true,
+                            submissionTimestamp: "2025-11-04T11:00:20Z"
+                        }
+                    }),
+                    relatedMessageId: 18
+                },
+                {
+                    messageId: 20,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "operator_sarah",
+                    senderName: "Sarah Williams",
+                    createdAt: "2025-11-04T14:30:00Z",
+                    senderType: 3,
+                    type: 0,
+                    content: "Great progress John! I see you've uploaded the Bill of Lading. For the FCC compliance, I can help expedite that. I'll reach out to the manufacturer on your behalf to get the certificate. This usually takes 24-48 hours.",
+                    metadataJson: null,
+                    relatedMessageId: 19
+                },
+                {
+                    messageId: 21,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "user_12345",
+                    senderName: "John Doe",
+                    createdAt: "2025-11-04T14:35:00Z",
+                    senderType: 2,
+                    type: 0,
+                    content: "That would be amazing, Sarah! Thank you so much for your help.",
+                    metadataJson: null,
+                    relatedMessageId: 20
+                },
+                {
+                    messageId: 22,
+                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+                    senderId: "system",
+                    senderName: "System",
+                    createdAt: "2025-11-04T14:45:30Z",
+                    senderType: 4,
+                    type: 5,
+                    content: "Task created: Obtain FCC Compliance Certificate - Assigned to Sarah Williams - Due: Nov 6, 2025",
+                    metadataJson: JSON.stringify({
+                        eventType: "task_created",
+                        taskId: "TASK-2025-1104-001",
+                        assignedTo: "operator_sarah",
+                        dueDate: "2025-11-06T23:59:59Z",
+                        priority: "high",
+                        status: "assigned"
+                    }),
+                    relatedMessageId: 21
+                }
+            ]
+        };
+
+        let selectedImage = null;
+
+        const channelConfig = {
+            0: { icon: 'bi-globe', name: 'Web' },
+            1: { icon: 'bi-whatsapp', name: 'WhatsApp' },
+            2: { icon: 'bi-telegram', name: 'Telegram' },
+            3: { icon: 'bi-envelope', name: 'Email' },
+            4: { icon: 'bi-telephone', name: 'Phone Call' }
+        };
+
+        const statusConfig = {
+            0: { name: 'Active', class: 'badge-active' },
+            1: { name: 'Pending User', class: 'badge-pending-user' },
+            2: { name: 'Pending Agent', class: 'badge-pending-agent' },
+            3: { name: 'Scheduled', class: 'badge-scheduled' },
+            4: { name: 'Completed', class: 'badge-completed' },
+            5: { name: 'Cancelled', class: 'badge-cancelled' }
+        };
+
+        const senderTypes = ['Agent', 'Orchestrator', 'User', 'Operator', 'System'];
+        const messageTypeLabels = ['Text', 'Image', 'Audio', 'Video', 'File', 'Event'];
+        const messageTypeIcons = ['bi-chat-text', 'bi-image', 'bi-mic', 'bi-camera-video', 'bi-file-earmark', 'bi-calendar-event'];
+
+        function formatDateTime(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
+            if (diffMins < 10080) return `${Math.floor(diffMins / 1440)}d ago`;
+            
+            return date.toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function formatFullDate(dateString) {
+            if (!dateString) return '-';
+            return new Date(dateString).toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+        }
+
+        function renderMessage(message) {
+            if (message.type === 5) { // Event
+                return `
+                    <div class="event-message">
+                        <span class="event-divider">
+                            <i class="bi bi-info-circle"></i>
+                            ${message.content}
+                            ${message.messageId ? `<span class="message-id-badge">#${message.messageId}</span>` : ''}
+                        </span>
+                    </div>
+                `;
+            }
+
+            const senderType = senderTypes[message.senderType].toLowerCase();
+            
+            let attachmentHtml = '';
+            if (message.metadataJson) {
+                const metadata = JSON.parse(message.metadataJson);
+                
+                if (message.type === 1 && metadata.imageUrl) {
+                    attachmentHtml = `
+                        <div class="attachment-image">
+                            <img src="${metadata.imageUrl}" alt="${metadata.fileName || 'Image'}" 
+                                 onclick="window.open('${metadata.imageUrl}', '_blank')"
+                                 title="Click to open full size">
+                        </div>
+                    `;
+                } else if (message.type === 2 && metadata.audioUrl) {
+                    attachmentHtml = `
+                        <div class="attachment-audio">
+                            <audio controls>
+                                <source src="${metadata.audioUrl}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                            ${metadata.duration ? `<div style="font-size: 11px; color: var(--ms-gray-130); margin-top: 4px;">Duration: ${metadata.duration}</div>` : ''}
+                            ${metadata.transcript ? `<div style="font-size: 11px; color: var(--ms-gray-130); margin-top: 4px; font-style: italic;">Transcript available in metadata</div>` : ''}
+                        </div>
+                    `;
+                } else if (message.type === 3 && metadata.videoUrl) {
+                    attachmentHtml = `
+                        <div class="attachment-image">
+                            <img src="${metadata.thumbnailUrl || 'https://via.placeholder.com/400x225/666/FFFFFF?text=Video'}" 
+                                 alt="Video thumbnail" 
+                                 onclick="window.open('${metadata.videoUrl}', '_blank')"
+                                 title="Click to play video"
+                                 style="cursor: pointer;">
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                                <i class="bi bi-play-circle-fill"></i>
+                            </div>
+                            ${metadata.duration ? `<div style="font-size: 11px; color: var(--ms-gray-130); margin-top: 4px;">Duration: ${metadata.duration} | ${metadata.resolution || ''}</div>` : ''}
+                        </div>
+                    `;
+                } else if (message.type === 4 && metadata.fileUrl) {
+                    attachmentHtml = `
+                        <div class="attachment-file" onclick="window.open('${metadata.fileUrl}', '_blank')">
+                            <div class="file-icon-box">
+                                <i class="bi bi-file-earmark-text"></i>
+                            </div>
+                            <div class="file-details">
+                                <div class="file-name">${metadata.fileName || 'File'}</div>
+                                ${metadata.fileSize ? `<div class="file-size">${metadata.fileSize} | ${metadata.mimeType || 'Unknown type'}</div>` : ''}
+                            </div>
+                            <i class="bi bi-download" style="color: var(--ms-blue);"></i>
+                        </div>
+                    `;
+                }
+            }
+
+            let metadataDisplay = '';
+            if (message.relatedMessageId) {
+                metadataDisplay = `
+                    <div class="message-metadata">
+                        <a href="#message-${message.relatedMessageId}" class="related-message-link" onclick="scrollToMessage(${message.relatedMessageId})">
+                            <i class="bi bi-reply"></i>
+                            In reply to message #${message.relatedMessageId}
+                        </a>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="message-item" id="message-${message.messageId}">
+                    <div class="message-avatar avatar-${senderType}">
+                        ${getInitials(message.senderName)}
+                    </div>
+                    <div class="message-body">
+                        <div class="message-header-line">
+                            <span class="sender-name">${message.senderName}</span>
+                            <span class="sender-id">${message.senderId}</span>
+                            <span class="sender-type">${senderTypes[message.senderType]}</span>
+                            <span class="message-id-badge">#${message.messageId}</span>
+                            <span class="message-time">${formatDateTime(message.createdAt)}</span>
+                        </div>
+                        <div class="message-content-box type-${senderType}">
+                            ${message.type !== 0 ? `
+                                <div class="message-type-label">
+                                    <i class="bi ${messageTypeIcons[message.type]}"></i>
+                                    ${messageTypeLabels[message.type]}
+                                </div>
+                            ` : ''}
+                            <div class="message-text">${message.content}</div>
+                            ${attachmentHtml}
+                            ${metadataDisplay}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function scrollToMessage(messageId) {
+            const element = document.getElementById(`message-${messageId}`);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.style.animation = 'none';
+                setTimeout(() => {
+                    element.style.animation = 'highlight 1s ease-out';
+                }, 10);
+            }
+        }
+
+        function loadConversation() {
+            // Update header with all ConversationGroup properties
+            document.getElementById('conversationGroupId').textContent = conversationData.conversationGroupId;
+            
+            const channel = channelConfig[conversationData.channel];
+            document.getElementById('channelBadge').innerHTML = 
+                `<i class="bi ${channel.icon}"></i><span>${channel.name}</span>`;
+            
+            const status = statusConfig[conversationData.conversationStatus];
+            const statusBadge = document.getElementById('statusBadge');
+            statusBadge.className = `ms-badge badge-status ${status.class}`;
+            statusBadge.textContent = status.name;
+
+            document.getElementById('createdAt').textContent = formatFullDate(conversationData.createdAt);
+            document.getElementById('lastMessageAt').textContent = formatFullDate(conversationData.lastMessageAt);
+            
+            if (conversationData.closedAt) {
+                document.getElementById('closedAtContainer').style.display = 'block';
+                document.getElementById('closedAt').textContent = formatFullDate(conversationData.closedAt);
+            }
+            
+            if (conversationData.externalSessionId) {
+                document.getElementById('sessionContainer').style.display = 'block';
+                document.getElementById('externalSessionId').textContent = conversationData.externalSessionId;
+            }
+
+            // Render all messages
+            const messagesArea = document.getElementById('messagesArea');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (conversationData.messages.length === 0) {
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+                messagesArea.innerHTML = conversationData.messages.map(msg => renderMessage(msg)).join('');
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+            }
+        }
+
+        // Image attachment handling
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                selectedImage = file;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreviewBox').innerHTML = `
+                        <div class="image-preview-box">
+                            <img src="${e.target.result}" class="preview-thumbnail" alt="Preview">
+                            <div class="preview-info">
+                                <div class="preview-filename">${file.name}</div>
+                                <div style="color: var(--ms-gray-130);">${(file.size / 1024).toFixed(1)} KB</div>
+                            </div>
+                            <button class="ms-button preview-remove" onclick="removeImage()">Remove</button>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function removeImage() {
+            selectedImage = null;
+            document.getElementById('imagePreviewBox').innerHTML = '';
+            document.getElementById('imageInput').value = '';
+        }
+
+        function sendMessage() {
+            const content = document.getElementById('messageInput').value.trim();
+            
+            if (!content && !selectedImage) {
+                return;
+            }
+
+            const newMessage = {
+                messageId: conversationData.messages.length + 1,
+                conversationGroupId: conversationData.conversationGroupId,
+                senderId: "user_current",
+                senderName: "Current User",
+                createdAt: new Date().toISOString(),
+                senderType: 2, // User
+                type: selectedImage ? 1 : 0,
+                content: content || "Image attached",
+                metadataJson: selectedImage ? JSON.stringify({
+                    imageUrl: URL.createObjectURL(selectedImage),
+                    fileName: selectedImage.name,
+                    fileSize: `${(selectedImage.size / 1024).toFixed(1)} KB`
+                }) : null,
+                relatedMessageId: null
+            };
+
+            conversationData.messages.push(newMessage);
+            conversationData.lastMessageAt = newMessage.createdAt;
+
+            document.getElementById('messageInput').value = '';
+            removeImage();
+
+            loadConversation();
+
+            // TODO: Send to API
+            console.log('Sending message:', newMessage);
+        }
+
+        // Keyboard shortcut
+        document.getElementById('messageInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Add CSS animation for message highlighting
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes highlight {
+                0% { background-color: #fff4ce; }
+                100% { background-color: transparent; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initial load
+        loadConversation();
+    </script>
+</body>
+</html>

@@ -27,15 +27,21 @@ type SettingsContextShape = {
   settings: Record<SettingName, boolean>;
   viewMode: ViewMode;
   setViewMode: (mode: ViewMode) => void;
+  showBottomBar: boolean;
+  setShowBottomBar: (show: boolean) => void;
 };
 
-const Context: React.Context<SettingsContextShape> = createContext({
+const Context: React.Context<SettingsContextShape> = createContext<SettingsContextShape>({
   setOption: (_name: SettingName, _value: boolean) => {
     return;
   },
   settings: INITIAL_SETTINGS,
   viewMode: 'grid' as ViewMode,
   setViewMode: (_mode: ViewMode) => {
+    return;
+  },
+  showBottomBar: true as boolean,
+  setShowBottomBar: (_show: boolean) => {
     return;
   },
 });
@@ -47,6 +53,7 @@ export const SettingsContext = ({
 }): JSX.Element => {
   const [settings, setSettings] = useState(INITIAL_SETTINGS);
   const [viewMode, setViewModeState] = useState<ViewMode>('grid');
+  const [showBottomBar, setShowBottomBar] = useState(true);
 
   const setOption = useCallback((setting: SettingName, value: boolean) => {
     setSettings((options) => ({
@@ -70,8 +77,8 @@ export const SettingsContext = ({
   }, []);
 
   const contextValue = useMemo(() => {
-    return {setOption, settings, viewMode, setViewMode};
-  }, [setOption, settings, viewMode, setViewMode]);
+    return {setOption, settings, viewMode, setViewMode, showBottomBar, setShowBottomBar};
+  }, [setOption, settings, viewMode, setViewMode, showBottomBar]);
 
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;
 };
