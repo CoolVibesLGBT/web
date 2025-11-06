@@ -280,11 +280,7 @@ const HomeScreen: React.FC = () => {
           </div>
         )}
       </div>
-
-      <div className="w-full min-h-[100dvh] lg:max-w-[1380px] lg:mx-auto">
-
-
-        <main className={`flex-1 w-full min-w-0 lg:border-x ${theme === 'dark' ? 'lg:border-black' : 'lg:border-gray-100'}`}>
+      <main className={`flex-1 w-full min-w-0 lg:border-x ${theme === 'dark' ? 'lg:border-black' : 'lg:border-gray-100'}`} style={{ minHeight: 0, height: '100%' }}>
           {selectedPost ? (
             // Post Detail View
             <motion.div
@@ -341,10 +337,9 @@ const HomeScreen: React.FC = () => {
             </AnimatePresence>
           )}
         </main>
-      </div>
 
-      {/* FAB Button - Mobile Only */}
-      {!selectedPost && (
+      {/* FAB Button - Mobile Only, Flows Tab Only */}
+      {!selectedPost && activeTab === 'flows' && (
         <motion.button
           onClick={() => setIsCreatePostOpen(true)}
           className="lg:hidden fixed bottom-24 right-4 z-[60] w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all"

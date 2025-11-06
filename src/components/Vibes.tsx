@@ -138,6 +138,10 @@ export default function Vibes({ reels: initialReels }: ReelsProps) {
   const [savedReels, setSavedReels] = useState<Set<string>>(new Set());
   const [isPlaying, setIsPlaying] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [tabHeaderHeight, setTabHeaderHeight] = useState(0);
+  const [bottomBarHeight, setBottomBarHeight] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number>(0);
@@ -146,6 +150,115 @@ export default function Vibes({ reels: initialReels }: ReelsProps) {
 
   const currentReel = allReels[currentIndex];
   const displayReel = nextIndex !== null ? allReels[nextIndex] : currentReel;
+
+  // Detect mobile and calculate header/bottom bar heights
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Calculate header, tab header and bottom bar heights
+  useEffect(() => {
+    if (isMobile) {
+      // Mobile app header height (from App.tsx: py-3 + content ≈ 56px)
+      const mainHeaderHeight = 56;
+      setHeaderHeight(mainHeaderHeight);
+      
+      // Calculate tab header height dynamically
+      const calculateTabHeaderHeight = () => {
+        requestAnimationFrame(() => {
+          // Find the tab header in HomeScreen (sticky top-0 with z-40)
+          const tabHeader = document.querySelector('div.sticky.top-0.z-40.border-b') as HTMLElement;
+          if (tabHeader) {
+            const height = tabHeader.getBoundingClientRect().height;
+            setTabHeaderHeight(height);
+          } else {
+            // Fallback: py-4 + content ≈ 64px
+            setTabHeaderHeight(64);
+          }
+        });
+      };
+      
+      // Bottom navigation bar height (from App.tsx: py-3 + safe area)
+      const calculateBottomBarHeight = () => {
+        // Use requestAnimationFrame for accurate measurement
+        requestAnimationFrame(() => {
+          // Try multiple selectors to find bottom bar
+          const bottomBar = document.querySelector('nav.fixed.bottom-0') as HTMLElement;
+          if (bottomBar) {
+            // Get the actual rendered height
+            const rect = bottomBar.getBoundingClientRect();
+            const height = Math.ceil(rect.height); // Round up to ensure no gap
+            setBottomBarHeight(height);
+          } else {
+            // Fallback: typical bottom bar height with safe area
+            // Base height is typically 56px (py-3 = 12px top + 12px bottom + ~32px content)
+            // Safe area inset is handled by CSS, but we add it here for calculation
+            const safeAreaBottom = typeof window !== 'undefined' 
+              ? parseInt(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-bottom)') || '0', 10) || 0
+              : 0;
+            setBottomBarHeight(56 + safeAreaBottom);
+          }
+        });
+      };
+      
+      calculateTabHeaderHeight();
+      calculateBottomBarHeight();
+      
+      // Recalculate on resize
+      const handleResize = () => {
+        calculateTabHeaderHeight();
+        calculateBottomBarHeight();
+      };
+      window.addEventListener('resize', handleResize);
+      
+      const observer = new MutationObserver(() => {
+        calculateTabHeaderHeight();
+        calculateBottomBarHeight();
+      });
+      observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+      
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        observer.disconnect();
+      };
+    } else {
+      // Desktop: only calculate tab header height
+      setHeaderHeight(0);
+      setBottomBarHeight(0);
+      
+      const calculateTabHeaderHeight = () => {
+        requestAnimationFrame(() => {
+          // Find the tab header in HomeScreen (sticky top-0 with z-40)
+          const tabHeader = document.querySelector('div.sticky.top-0.z-40.border-b') as HTMLElement;
+          if (tabHeader) {
+            const height = tabHeader.getBoundingClientRect().height;
+            setTabHeaderHeight(height);
+          } else {
+            // Fallback: py-4 + content ≈ 64px
+            setTabHeaderHeight(64);
+          }
+        });
+      };
+      
+      calculateTabHeaderHeight();
+      
+      window.addEventListener('resize', calculateTabHeaderHeight);
+      const observer = new MutationObserver(() => {
+        calculateTabHeaderHeight();
+      });
+      observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+      
+      return () => {
+        window.removeEventListener('resize', calculateTabHeaderHeight);
+        observer.disconnect();
+      };
+    }
+  }, [isMobile]);
 
   useEffect(() => {
     if (displayReel.mediaType === 'video' && videoRef.current) {
@@ -242,15 +355,50 @@ export default function Vibes({ reels: initialReels }: ReelsProps) {
     }
   };
 
+  // Calculate total top offset (app header + tab header)
+  const totalTopOffset = isMobile ? headerHeight + tabHeaderHeight : 0;
+  
+  // Calculate container height and positioning
+  const containerStyle = isMobile
+    ? {
+        position: 'fixed' as const,
+        top: `${totalTopOffset}px`,
+        bottom: `${bottomBarHeight || 56}px`,
+        left: 0,
+        right: 0,
+        width: '100%',
+        // Don't set height when using top and bottom together
+        overflow: 'hidden' as const,
+        touchAction: 'pan-y' as const, // Allow vertical swipe for reel navigation
+        overscrollBehavior: 'none' as const,
+        WebkitOverflowScrolling: 'touch' as const,
+        zIndex: 10,
+      }
+    : {
+        position: 'relative' as const,
+        height: tabHeaderHeight > 0 ? `calc(100vh - ${tabHeaderHeight}px)` : '100vh',
+        marginTop: 0,
+      };
+
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-screen bg-black overflow-hidden"
+      className="flex flex-col w-full bg-black"
+      style={containerStyle}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onWheel={handleWheel}
     >
-      <div className="relative w-full h-full">
+      <div 
+        className="relative w-full flex-1 min-h-0"
+        style={{
+          flex: '1 1 auto',
+          minHeight: 0,
+          height: '100%',
+          overflow: 'hidden',
+          overscrollBehavior: 'none',
+        }}
+      >
         <div
           className={`absolute inset-0 transition-all duration-500 ease-out ${
             nextIndex === null ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
@@ -309,8 +457,8 @@ export default function Vibes({ reels: initialReels }: ReelsProps) {
         )}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent pt-32 transition-all duration-500 ease-out">
-        <div className="flex items-end justify-between">
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent pt-32 transition-all duration-500 ease-out z-10 pointer-events-none">
+        <div className="pointer-events-auto flex items-end justify-between">
           <div className="flex-1 pb-2">
             <div className="flex items-center gap-3 mb-3">
               <img
@@ -388,7 +536,7 @@ export default function Vibes({ reels: initialReels }: ReelsProps) {
         </div>
       </div>
 
-      <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-1 max-h-96 overflow-hidden">
+      <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-1 overflow-hidden z-20 pointer-events-none" style={{ maxHeight: 'calc(100% - 2rem)' }}>
         {allReels.slice(0, currentIndex + 5).map((_, index) => (
           <div
             key={index}
