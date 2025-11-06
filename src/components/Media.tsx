@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import VideoPlayer from './VideoPlayer';
 
@@ -16,6 +16,11 @@ const Media: React.FC<MediaProps> = ({ media }) => {
   const { theme } = useTheme();
   const isVideo = media.file?.mime_type?.startsWith('video/');
 
+
+  useEffect(()=>{
+    console.log(media)
+
+  },[])
   return (
     <div
       className={`break-inside-avoid mb-2 sm:mb-3 rounded-lg overflow-hidden cursor-pointer group`}

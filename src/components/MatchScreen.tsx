@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import Container from './Container';
 import { api } from '../services/api';
 import { Actions } from '../services/actions';
+import { getSafeImageURL } from '../helpers/helpers';
 
 interface Fantasy {
   id: string;
@@ -149,8 +150,8 @@ const MatchScreen: React.FC = () => {
   // Map API user to Profile format
   const mapApiUserToProfile = useCallback((apiUser: ApiUser): Profile => {
     const images: string[] = [];
-    if (apiUser.avatar?.file?.url) {
-      images.push(apiUser.avatar.file.url);
+    if (apiUser.avatar) {
+      images.push(getSafeImageURL(apiUser?.avatar,"small"));
     }
 
     return {

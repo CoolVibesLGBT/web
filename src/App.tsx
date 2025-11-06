@@ -22,6 +22,7 @@ import './i18n';
 import { useTranslation } from 'react-i18next';
 import { applicationName } from './appSettings.tsx';
 import LandingPage from './components/LandingPage.tsx';
+import { getSafeImageURL } from './helpers/helpers.tsx';
 
 
 
@@ -215,11 +216,7 @@ function App() {
                         <div className="relative">
                           <div className={`w-11 h-11 rounded-full ring-2 ${theme === 'dark' ? 'ring-white/20' : 'ring-black/20'}`}>
                             <img
-                              src={
-                                (user as any)?.avatar?.file?.url || 
-                                user?.profile_image_url || 
-                                `https://ui-avatars.com/api/?name=${user?.username || 'User'}&background=random`
-                              }
+                              src={getSafeImageURL((user as any)?.avatar,"thumbnail")}
                               alt="Profile"
                               className="w-full h-full rounded-full object-cover"
                             />
@@ -699,7 +696,7 @@ function App() {
                     } blur-sm`} />
                     <div className="relative">
                       <img
-                        src={user?.profile_image_url || "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2"}
+                        src={getSafeImageURL((user as any)?.avatar,"thumbnail")}
                         alt="Profile"
                         className="w-16 h-16 rounded-2xl object-cover ring-2 ring-white/10"
                       />

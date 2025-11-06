@@ -31,6 +31,8 @@ import {  $generateNodesFromDOM } from '@lexical/html';
 import { $getRoot } from 'lexical';
 import { MentionNode } from './Lexical/nodes/MentionNode';
 import NewMentionsPlugin from './Lexical/plugins/MentionsPlugin';
+import { defaultServiceServerId, serviceURL } from '../appSettings';
+import { getSafeImageURL } from '../helpers/helpers';
 
 // API data structure interfaces
 interface ApiPost {
@@ -782,11 +784,13 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
                         heightClass = 'h-full';
                       }
 
-                      const imageUrl = attachment.file.url;
+                      const imageUrl = getSafeImageURL(attachment,"small");
+                      if (!imageUrl) return null;
                       const isLoaded = loadedImages.has(imageUrl);
 
                       return (
                         <div key={index} className={`overflow-hidden rounded-2xl relative ${gridClass}`}>
+                          
                           {!isLoaded && <ImageShimmer className="absolute inset-0 w-full h-full" />}
                           <img
                             src={imageUrl}
@@ -1181,8 +1185,8 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
 
       {/* Image Gallery Modal */}
       {isGalleryOpen && imageAttachments.length > 0 && (() => {
-        const currentImage = imageAttachments[selectedImageIndex];
 
+        const currentImage = getSafeImageURL(imageAttachments[selectedImageIndex],"large");
         if (!currentImage) return null;
 
         return (
@@ -1271,7 +1275,7 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
             
 
                   {/* Shimmer loading effect for gallery image - Facebook style */}
-                  {!loadedImages.has(currentImage.file.url) && (
+                  {!loadedImages.has(currentImage) && (
                     <div className="absolute inset-0 rounded-xl sm:rounded-2xl overflow-hidden z-20">
                       <ImageShimmer className="absolute inset-0 w-full h-full" />
                     </div>
@@ -1279,19 +1283,19 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
 
                   {/* Foreground image - Mobile optimized */}
                   <img
-                    src={currentImage.file.url}
+                    src={currentImage}
                     alt={`Gallery image ${selectedImageIndex + 1} of ${imageAttachments.length}`}
-                    className={`relative max-w-full max-h-full object-cover rounded-xl sm:rounded-2xl shadow-2xl select-none transition-opacity duration-300 ${loadedImages.has(currentImage.file.url) ? 'opacity-100' : 'opacity-0'
+                    className={`relative max-w-full max-h-full object-cover rounded-xl sm:rounded-2xl shadow-2xl select-none transition-opacity duration-300 ${loadedImages.has(currentImage) ? 'opacity-100' : 'opacity-0'
                       }`}
                     style={{
-                      filter: loadedImages.has(currentImage.file.url) ? 'drop-shadow(0 0 40px rgba(0,0,0,0.15))' : 'none'
+                      filter: loadedImages.has(currentImage) ? 'drop-shadow(0 0 40px rgba(0,0,0,0.15))' : 'none'
                     }}
                     draggable={false}
-                    onLoad={() => handleImageLoad(currentImage.file.url)}
+                    onLoad={() => handleImageLoad(currentImage)}
                     onError={(e) => {
                       console.error('Image load error:', e);
                       // Mark as loaded even on error to hide shimmer
-                      handleImageLoad(currentImage.file.url);
+                      handleImageLoad(currentImage);
                     }}
                   />
                 </div>

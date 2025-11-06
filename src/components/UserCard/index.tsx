@@ -6,6 +6,7 @@ import { Heart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Git
 import { useTheme } from '../../contexts/ThemeContext';
 import GiftSelector from '../GiftSelector';
 import QuickMessages from '../QuickMessages';
+import { getSafeImageURL } from '../../helpers/helpers';
 
 interface UserCardProps {
   user: any;
@@ -51,7 +52,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
       >
         <div className="aspect-square relative">
           <motion.img
-            src={user?.avatar?.file?.url}
+            src={getSafeImageURL(user.avatar,"thumbnail")}
             alt={user.name}
             className="w-full h-full object-cover"
             whileTap={{ filter: 'blur(4px)' }}
@@ -77,7 +78,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
         onClick={handleProfileClick}
       >
         <div className="relative">
-          <img src={user?.avatar?.file?.url} alt={user.name} className="w-14 h-14 rounded-xl object-cover" />
+          <img src={getSafeImageURL(user.avatar,"small")} alt={user.name} className="w-14 h-14 rounded-xl object-cover" />
           {user.isOnline && (
             <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-black" />
           )}
@@ -114,7 +115,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
       onClick={handleProfileClick}
     >
       <div className="relative min-h-[512px]">
-        <img  src={user?.avatar?.file?.url} alt={user.name} className="w-full h-full min-h-[512px] object-cover" />
+        <img src={getSafeImageURL(user.avatar,"small")} alt={user.name} className="w-full h-full min-h-[512px] object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
         
         {user.isOnline && (

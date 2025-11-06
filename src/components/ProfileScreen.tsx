@@ -31,6 +31,7 @@ import { $getRoot, $createParagraphNode, $createTextNode } from 'lexical';
 import { ToolbarContext } from '../contexts/ToolbarContext';
 import Container from './Container';
 import AuthWizard from './AuthWizard';
+import { getSafeImageURL } from '../helpers/helpers';
 
 // ToolbarPlugin wrapper component
 const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (editor: any) => void }) => {
@@ -353,47 +354,30 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   // Helper functions to get image URLs - prefer authUser if viewing own profile
   const getProfileImageUrl = () => {
     // If viewing own profile and authUser has avatar, use it
-    if (isOwnProfile && authUser && (authUser as any).avatar?.file?.url) {
-      return (authUser as any).avatar.file.url;
+    if (isOwnProfile && authUser) {
+      return getSafeImageURL((authUser as any).avatar,"small")
     }
     // Check user state for avatar URL (multiple formats)
     if (user) {
-      // First check normalized profile_image_url
-      if ((user as any).profile_image_url) {
-        return (user as any).profile_image_url;
-      }
+   
       // Then check avatar.file.url structure from API
-      if ((user as any).avatar?.file?.url) {
-        return (user as any).avatar.file.url;
+      if ((user as any).avatar) {
+        return getSafeImageURL((user as any).avatar,"small")
       }
-    }
-    // Fallback to authUser's profile_image_url
-    if (authUser && (authUser as any).profile_image_url) {
-      return (authUser as any).profile_image_url;
     }
     return undefined;
   };
   
   const getCoverImageUrl = () => {
     // If viewing own profile and authUser has cover, use it
-    if (isOwnProfile && authUser && (authUser as any).cover?.file?.url) {
-      return (authUser as any).cover.file.url;
-    }
-    // Check user state for cover URL (multiple formats)
-    if (user) {
-      // First check normalized cover_image_url
-      if ((user as any).cover_image_url) {
-        return (user as any).cover_image_url;
-      }
-      // Then check cover.file.url structure from API
-      if ((user as any).cover?.file?.url) {
-        return (user as any).cover.file.url;
+    if (isOwnProfile && authUser ){
+      return getSafeImageURL((authUser as any).cover,"original");
+    } else if (user) {   
+      if ((user as any).cover) {
+        return getSafeImageURL((user as any).cover,"original");
       }
     }
-    // Fallback to authUser's cover_image_url
-    if (authUser && (authUser as any).cover_image_url) {
-      return (authUser as any).cover_image_url;
-    }
+   
     return undefined;
   };
 

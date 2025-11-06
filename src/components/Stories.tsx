@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import { api } from '../services/api';
 import { Actions } from '../services/actions';
 import { useAuth } from '../contexts/AuthContext';
+import { getSafeImageURL } from '../helpers/helpers';
 
 const Stories: React.FC = () => {
   const { theme } = useTheme();
@@ -76,12 +77,12 @@ const Stories: React.FC = () => {
           const isVideo = story?.media?.file?.mime_type?.startsWith('video/');
           const storyCover = isVideo 
             ? (user?.cover?.file?.url || user?.avatar?.file?.url || user?.profile_image_url || null)
-            : (story?.media?.file?.url || null);
+            : (getSafeImageURL(story.media,"small") || null);
           
           return {
             id: story.id,
             name: user?.displayname || user?.username || 'User',
-            avatar: user?.avatar?.file?.url || user?.profile_image_url || null,
+            avatar: getSafeImageURL(user.avatar,"small"),
             cover: storyCover,
             userCover: user?.cover?.file?.url || null,
             isOwn: story.user_id === authUser?.id,

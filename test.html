@@ -1,1248 +1,499 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conversation History</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        :root {
-            --ms-blue: #0078d4;
-            --ms-blue-hover: #106ebe;
-            --ms-gray-10: #faf9f8;
-            --ms-gray-20: #f3f2f1;
-            --ms-gray-30: #edebe9;
-            --ms-gray-40: #e1dfdd;
-            --ms-gray-50: #d2d0ce;
-            --ms-gray-130: #605e5c;
-            --ms-gray-160: #323130;
-            --ms-border: #e1dfdd;
-        }
-
-        * {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        body {
-            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
-            background-color: var(--ms-gray-20);
-            color: var(--ms-gray-160);
-        }
-
-        .conversation-container {
-            background: white;
-            border: 1px solid var(--ms-border);
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        .conversation-header {
-            background: white;
-            border-bottom: 1px solid var(--ms-border);
-            padding: 16px 24px;
-        }
-
-        .header-title-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .header-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin: 0;
-            color: var(--ms-gray-160);
-        }
-
-        .header-id {
-            font-size: 11px;
-            color: var(--ms-gray-130);
-            font-family: 'Courier New', monospace;
-            margin-top: 2px;
-        }
-
-        .header-badges {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .header-details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            padding-top: 12px;
-            border-top: 1px solid var(--ms-border);
-        }
-
-        .detail-item {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .detail-label {
-            font-size: 11px;
-            color: var(--ms-gray-130);
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .detail-value {
-            font-size: 13px;
-            color: var(--ms-gray-160);
-            font-weight: 600;
-        }
-
-        .ms-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            border-radius: 2px;
-            font-size: 12px;
-            font-weight: 600;
-            height: 24px;
-        }
-
-        .badge-channel {
-            background: var(--ms-gray-30);
-            color: var(--ms-gray-130);
-            border: 1px solid var(--ms-border);
-        }
-
-        .badge-status {
-            border: 1px solid var(--ms-border);
-        }
-
-        .badge-active { background: #dff6dd; color: #0b6a0b; }
-        .badge-pending-user { background: #fff4ce; color: #8a5d00; }
-        .badge-pending-agent { background: #deecf9; color: #004578; }
-        .badge-scheduled { background: #e1dfdd; color: #323130; }
-        .badge-completed { background: #e1dfdd; color: #323130; }
-        .badge-cancelled { background: #fde7e9; color: #a4262c; }
-
-        .messages-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-            background: var(--ms-gray-10);
-        }
-
-        .messages-area::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .messages-area::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .messages-area::-webkit-scrollbar-thumb {
-            background: var(--ms-gray-50);
-            border-radius: 4px;
-        }
-
-        .messages-area::-webkit-scrollbar-thumb:hover {
-            background: var(--ms-gray-130);
-        }
-
-        .message-item {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .message-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: white;
-            flex-shrink: 0;
-            text-transform: uppercase;
-        }
-
-        .avatar-agent { background: #0078d4; }
-        .avatar-orchestrator { background: #8764b8; }
-        .avatar-user { background: #107c10; }
-        .avatar-operator { background: #d83b01; }
-        .avatar-system { background: #8a8886; }
-
-        .message-body {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .message-header-line {
-            display: flex;
-            align-items: baseline;
-            gap: 8px;
-            margin-bottom: 4px;
-            flex-wrap: wrap;
-        }
-
-        .sender-name {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--ms-gray-160);
-        }
-
-        .sender-id {
-            font-size: 10px;
-            color: var(--ms-gray-130);
-            font-family: 'Courier New', monospace;
-        }
-
-        .sender-type {
-            font-size: 11px;
-            color: var(--ms-gray-130);
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .message-time {
-            font-size: 11px;
-            color: var(--ms-gray-130);
-            margin-left: auto;
-        }
-
-        .message-id-badge {
-            font-size: 10px;
-            padding: 2px 6px;
-            background: var(--ms-gray-20);
-            border-radius: 2px;
-            color: var(--ms-gray-130);
-            font-family: 'Courier New', monospace;
-        }
-
-        .message-content-box {
-            background: white;
-            border: 1px solid var(--ms-border);
-            border-radius: 4px;
-            padding: 12px 16px;
-            position: relative;
-            max-width: 720px;
-        }
-
-        .message-content-box:hover {
-            border-color: var(--ms-gray-50);
-            box-shadow: 0 1.6px 3.6px rgba(0, 0, 0, 0.132), 0 0.3px 0.9px rgba(0, 0, 0, 0.108);
-        }
-
-        .message-content-box.type-agent { border-left: 3px solid #0078d4; }
-        .message-content-box.type-orchestrator { border-left: 3px solid #8764b8; }
-        .message-content-box.type-user { border-left: 3px solid #107c10; }
-        .message-content-box.type-operator { border-left: 3px solid #d83b01; }
-        .message-content-box.type-system { border-left: 3px solid #8a8886; }
-
-        .message-type-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 11px;
-            color: var(--ms-gray-130);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .message-text {
-            font-size: 14px;
-            line-height: 20px;
-            color: var(--ms-gray-160);
-            word-wrap: break-word;
-        }
-
-        .message-metadata {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid var(--ms-border);
-            font-size: 11px;
-            color: var(--ms-gray-130);
-        }
-
-        .related-message-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            color: var(--ms-blue);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .related-message-link:hover {
-            text-decoration: underline;
-        }
-
-        .attachment-image {
-            margin-top: 12px;
-            border-radius: 4px;
-            overflow: hidden;
-            border: 1px solid var(--ms-border);
-            max-width: 100%;
-        }
-
-        .attachment-image img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            cursor: pointer;
-        }
-
-        .attachment-image img:hover {
-            opacity: 0.95;
-        }
-
-        .attachment-audio {
-            margin-top: 12px;
-        }
-
-        .attachment-audio audio {
-            width: 100%;
-            height: 32px;
-        }
-
-        .attachment-file {
-            margin-top: 12px;
-            padding: 12px;
-            background: var(--ms-gray-10);
-            border: 1px solid var(--ms-border);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: background 0.15s;
-        }
-
-        .attachment-file:hover {
-            background: var(--ms-gray-20);
-        }
-
-        .file-icon-box {
-            width: 40px;
-            height: 40px;
-            background: var(--ms-blue);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 2px;
-            font-size: 20px;
-        }
-
-        .file-details {
-            flex: 1;
-        }
-
-        .file-name {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--ms-gray-160);
-        }
-
-        .file-size {
-            font-size: 12px;
-            color: var(--ms-gray-130);
-        }
-
-        .event-message {
-            text-align: center;
-            margin: 16px 0;
-        }
-
-        .event-divider {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 16px;
-            background: var(--ms-gray-30);
-            border-radius: 2px;
-            font-size: 12px;
-            color: var(--ms-gray-130);
-        }
-
-        .compose-section {
-            background: white;
-            border-top: 1px solid var(--ms-border);
-            padding: 20px 24px;
-        }
-
-        .compose-wrapper {
-            border: 1px solid var(--ms-border);
-            border-radius: 4px;
-            background: white;
-            transition: border-color 0.15s;
-        }
-
-        .compose-wrapper:focus-within {
-            border-color: var(--ms-blue);
-            outline: 1px solid var(--ms-blue);
-        }
-
-        .compose-input {
-            border: none;
-            padding: 12px 16px;
-            font-size: 14px;
-            font-family: inherit;
-            width: 100%;
-            resize: none;
-            outline: none;
-        }
-
-        .compose-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            border-top: 1px solid var(--ms-border);
-        }
-
-        .toolbar-left {
-            display: flex;
-            gap: 4px;
-        }
-
-        .ms-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border: 1px solid var(--ms-border);
-            background: white;
-            border-radius: 2px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.15s;
-            height: 32px;
-        }
-
-        .ms-button:hover {
-            background: var(--ms-gray-10);
-            border-color: var(--ms-gray-50);
-        }
-
-        .ms-button:active {
-            background: var(--ms-gray-20);
-        }
-
-        .ms-button-primary {
-            background: var(--ms-blue);
-            border-color: var(--ms-blue);
-            color: white;
-        }
-
-        .ms-button-primary:hover {
-            background: var(--ms-blue-hover);
-            border-color: var(--ms-blue-hover);
-        }
-
-        .ms-button-primary:active {
-            background: #005a9e;
-        }
-
-        .image-preview-box {
-            padding: 12px;
-            display: flex;
-            gap: 12px;
-            background: var(--ms-gray-10);
-            align-items: center;
-        }
-
-        .preview-thumbnail {
-            width: 60px;
-            height: 60px;
-            border-radius: 2px;
-            object-fit: cover;
-            border: 1px solid var(--ms-border);
-        }
-
-        .preview-info {
-            flex: 1;
-            font-size: 12px;
-        }
-
-        .preview-filename {
-            font-weight: 600;
-            color: var(--ms-gray-160);
-        }
-
-        .preview-remove {
-            padding: 4px 8px;
-            font-size: 12px;
-            height: 24px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--ms-gray-130);
-        }
-
-        .empty-icon {
-            font-size: 48px;
-            color: var(--ms-gray-50);
-            margin-bottom: 16px;
-        }
-
-        .empty-text {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .empty-subtext {
-            font-size: 13px;
-            color: var(--ms-gray-130);
-        }
-
-        @media (max-width: 768px) {
-            .header-title-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-
-            .header-details-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .message-content-box {
-                max-width: 100%;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <title>HIV Destek Merkezi - Menü Konsept (HTML)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--
+    NOT: Bu dosya SADECE HTML. Görsel stiller ve etkileşim (CSS/JS) yok.
+    Ama ID'ler, class'lar ve aria-atribütleri interaktif hale getirmek için hazır.
+  -->
 </head>
 <body>
-    <div class="conversation-container">
-        <!-- Header -->
-        <div class="conversation-header">
-            <div class="header-title-row">
-                <div>
-                    <h1 class="header-title">Conversation Group</h1>
-                    <div class="header-id">ID: <span id="conversationGroupId">-</span></div>
-                </div>
-                <div class="header-badges">
-                    <span class="ms-badge badge-channel" id="channelBadge">
-                        <i class="bi bi-globe"></i>
-                        <span id="channelText">Web</span>
-                    </span>
-                    <span class="ms-badge badge-status badge-active" id="statusBadge">Active</span>
-                </div>
+
+  <!-- APP LAYOUT -->
+  <!-- 1. Sidebar (navigasyon) -->
+  <aside id="sidebar" role="navigation" aria-label="HIV Destek Merkezi Menüleri">
+    <h2 id="sidebar-title">Destek Merkezi</h2>
+
+    <!-- Ana menü listesi (tree) -->
+    <nav aria-labelledby="sidebar-title">
+      <ul role="menu">
+
+        <!-- 1. İlaç Takip & Hatırlatıcı -->
+        <li role="none">
+          <button role="menuitem" aria-expanded="false" aria-controls="panel-medicine">İlaç Takip &amp; Hatırlatıcı</button>
+          <ul id="panel-medicine" role="menu" aria-hidden="true">
+            <li role="none"><a role="menuitem" href="#medicine-overview">Genel Bakış</a></li>
+            <li role="none"><a role="menuitem" href="#medicine-add">İlaç Ekle / Düzenle</a></li>
+            <li role="none"><a role="menuitem" href="#medicine-calendar">Takvim &amp; Geçmiş</a></li>
+            <li role="none"><a role="menuitem" href="#medicine-stats">Uyum / İstatistikler</a></li>
+            <li role="none"><a role="menuitem" href="#medicine-reminders">Bildirim Ayarları</a></li>
+          </ul>
+        </li>
+
+        <!-- 2. Sağlık Günlüğü -->
+        <li role="none">
+          <button role="menuitem" aria-expanded="false" aria-controls="panel-health">Sağlık Günlüğü</button>
+          <ul id="panel-health" role="menu" aria-hidden="true">
+            <li role="none"><a role="menuitem" href="#health-overview">Genel Bakış</a></li>
+            <li role="none"><a role="menuitem" href="#health-tests">Test Sonuçları (CD4 / Viral Load)</a></li>
+            <li role="none"><a role="menuitem" href="#health-symptoms">Semptom Günlüğü</a></li>
+            <li role="none"><a role="menuitem" href="#health-appointments">Doktor Randevuları</a></li>
+          </ul>
+        </li>
+
+        <!-- 3. Destek Topluluğu -->
+        <li role="none">
+          <button role="menuitem" aria-expanded="false" aria-controls="panel-community">Destek Topluluğu</button>
+          <ul id="panel-community" role="menu" aria-hidden="true">
+            <li role="none"><a role="menuitem" href="#community-rooms">Kategoriler / Odalar</a></li>
+            <li role="none"><a role="menuitem" href="#community-forum">Forum</a></li>
+            <li role="none"><a role="menuitem" href="#community-chat">Anonim Sohbet (moderasyonlu)</a></li>
+            <li role="none"><a role="menuitem" href="#community-events">Etkinlikler</a></li>
+          </ul>
+        </li>
+
+        <!-- 4. Bilgi Merkezi -->
+        <li role="none">
+          <button role="menuitem" aria-expanded="false" aria-controls="panel-info">Bilgi Merkezi</button>
+          <ul id="panel-info" role="menu" aria-hidden="true">
+            <li role="none"><a role="menuitem" href="#info-basics">HIV Nedir?</a></li>
+            <li role="none"><a role="menuitem" href="#info-treatment">Tedavi Hakkında</a></li>
+            <li role="none"><a role="menuitem" href="#info-sideeffects">Yan Etkiler ve Yönetimi</a></li>
+            <li role="none"><a role="menuitem" href="#info-resources">Kaynaklar / PDF'ler</a></li>
+          </ul>
+        </li>
+
+        <!-- 5. Yardım & Hibe -->
+        <li role="none">
+          <button role="menuitem" aria-expanded="false" aria-controls="panel-aid">Yardım &amp; Hibe</button>
+          <ul id="panel-aid" role="menu" aria-hidden="true">
+            <li role="none"><a role="menuitem" href="#aid-overview">Genel Bilgi</a></li>
+            <li role="none"><a role="menuitem" href="#aid-apply">Hibe / Destek Başvurusu</a></li>
+            <li role="none"><a role="menuitem" href="#aid-donations">Bağış Yap / Al</a></li>
+            <li role="none"><a role="menuitem" href="#aid-locations">Yerel Merkezler</a></li>
+          </ul>
+        </li>
+
+        <!-- 6. Mental Sağlık -->
+        <li role="none">
+          <button role="menuitem" aria-expanded="false" aria-controls="panel-mental">Mental Sağlık</button>
+          <ul id="panel-mental" role="menu" aria-hidden="true">
+            <li role="none"><a role="menuitem" href="#mental-overview">Genel Destek</a></li>
+            <li role="none"><a role="menuitem" href="#mental-checkins">Günlük Check-in</a></li>
+            <li role="none"><a role="menuitem" href="#mental-therapy">Çevrimiçi Terapi Yönlendirme</a></li>
+            <li role="none"><a role="menuitem" href="#mental-resources">Meditasyon / Rehberler</a></li>
+          </ul>
+        </li>
+
+        <!-- 7. Gizlilik & Ayarlar -->
+        <li role="none">
+          <button role="menuitem" aria-expanded="false" aria-controls="panel-settings">Gizlilik &amp; Ayarlar</button>
+          <ul id="panel-settings" role="menu" aria-hidden="true">
+            <li role="none"><a role="menuitem" href="#settings-privacy">Gizlilik Tercihleri</a></li>
+            <li role="none"><a role="menuitem" href="#settings-notifications">Bildirim Ayarları</a></li>
+            <li role="none"><a role="menuitem" href="#settings-account">Hesap Yönetimi (takma ad, gizli mod)</a></li>
+          </ul>
+        </li>
+
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- 2. ANA İÇERİK -->
+  <main id="main" role="main" aria-label="HIV Destek Merkezi İçerik">
+
+    <!-- ------------------------
+         İLAÇ TAKİP BÖLÜMÜ
+         ------------------------ -->
+    <section id="medicine-overview" aria-labelledby="medicine-title">
+      <h1 id="medicine-title">İlaç Takip &amp; Hatırlatıcı — Genel Bakış</h1>
+
+      <!-- Özet kartı: hızlı bilgiler -->
+      <article aria-labelledby="med-summary-title">
+        <h2 id="med-summary-title">Bugün için Hatırlatıcılar</h2>
+        <!-- Buraya backend'den / JS'den doldurulacak liste gelecek -->
+        <ul aria-live="polite" id="today-reminders">
+          <li data-reminder-id="r1">08:00 — Zidovudin 300mg — <strong>Alındı / Beklemede</strong></li>
+          <li data-reminder-id="r2">20:00 — Lamivudin 150mg — <strong>Bekleniyor</strong></li>
+        </ul>
+      </article>
+
+      <!-- İlaç ekleme formu (detaylı) -->
+      <article aria-labelledby="med-add-title">
+        <h2 id="med-add-title">İlaç Ekle / Düzenle</h2>
+        <!-- FORM: (backend'e POST edilecek) -->
+        <form id="medication-form" method="post" action="/api/medications" novalidate>
+          <!-- hidden fields önerisi: id, user_id -->
+          <input type="hidden" name="med_id" value="" />
+
+          <label for="med-name">İlaç Adı *</label>
+          <input id="med-name" name="name" type="text" required placeholder="İlaç adı" />
+
+          <label for="med-dose">Dozaj *</label>
+          <input id="med-dose" name="dose" type="text" required placeholder="Örn: 1 tablet (300 mg)" />
+
+          <label for="med-form">Form (opsiyonel)</label>
+          <input id="med-form" name="form" type="text" placeholder="tablet / şurup / enjeksiyon" />
+
+          <label for="med-start">Başlangıç Tarihi *</label>
+          <input id="med-start" name="start_date" type="date" required />
+
+          <label for="med-end">Bitiş Tarihi (opsiyonel)</label>
+          <input id="med-end" name="end_date" type="date" />
+
+          <fieldset aria-labelledby="times-list-label">
+            <legend id="times-list-label">Kullanım Saatleri *</legend>
+            <!-- Repeated inputs, örn backend veya JS ile dinamik eklenir -->
+            <div class="time-item">
+              <label>Saat 1</label>
+              <input name="times[]" type="time" required />
+              <label>Miktar</label>
+              <input name="quantities[]" type="text" placeholder="örn: 1 tablet" />
             </div>
-            
-            <div class="header-details-grid">
-                <div class="detail-item">
-                    <span class="detail-label">Created At</span>
-                    <span class="detail-value" id="createdAt">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Last Message</span>
-                    <span class="detail-value" id="lastMessageAt">-</span>
-                </div>
-                <div class="detail-item" id="closedAtContainer" style="display: none;">
-                    <span class="detail-label">Closed At</span>
-                    <span class="detail-value" id="closedAt">-</span>
-                </div>
-                <div class="detail-item" id="sessionContainer" style="display: none;">
-                    <span class="detail-label">External Session ID</span>
-                    <span class="detail-value" id="externalSessionId">-</span>
-                </div>
+
+            <div class="time-item">
+              <label>Saat 2 (opsiyonel)</label>
+              <input name="times[]" type="time" />
+              <input name="quantities[]" type="text" placeholder="örn: 1 tablet" />
             </div>
+
+            <!-- Not: frontend JS ile + Saat Ekle butonu eklenebilir -->
+          </fieldset>
+
+          <label for="med-notes">Notlar / Yan Etki Bilgisi</label>
+          <textarea id="med-notes" name="notes" placeholder="Yan etki, aç/karnına alınma notu..."></textarea>
+
+          <label>
+            <input type="checkbox" name="enable_notifications" checked />
+            Bildirimleri etkinleştir
+          </label>
+
+          <button type="submit">Kaydet</button>
+        </form>
+      </article>
+
+      <!-- Takvim / Geçmiş -->
+      <article aria-labelledby="med-calendar-title" id="medicine-calendar">
+        <h2 id="med-calendar-title">Takvim &amp; Kullanım Geçmişi</h2>
+        <p>
+          (Burada kullanıcının geçmiş kayıtları, kaç doz atladığı, grafiksel özetler gösterilir.)
+        </p>
+
+        <!-- Örnek tablo formatı -->
+        <table aria-describedby="calendar-desc">
+          <caption id="calendar-desc">Son 30 güne ait ilaç alma kayıtları</caption>
+          <thead>
+            <tr><th>Tarih</th><th>İlaç</th><th>Saat</th><th>Durum</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>2025-11-01</td><td>Zidovudin</td><td>08:00</td><td>Alındı</td></tr>
+            <tr><td>2025-11-01</td><td>Lamivudin</td><td>20:00</td><td>Atlandı</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <!-- İstatistik -->
+      <article id="medicine-stats" aria-labelledby="med-stats-title">
+        <h2 id="med-stats-title">Uyum &amp; İstatistikler</h2>
+        <p>Örnek metrikler: %Uyum, Son 7 günün uyum grafiği, atlanan doz sayısı.</p>
+      </article>
+
+      <!-- Bildirim ayarları -->
+      <article id="medicine-reminders" aria-labelledby="med-reminders-title">
+        <h2 id="med-reminders-title">Bildirim &amp; Hatırlatma Ayarları</h2>
+        <p>Push / SMS / E-posta tercihleri, sessiz saatler, acil durum kişisi ekleme.</p>
+      </article>
+    </section>
+
+    <!-- ------------------------
+         SAĞLIK GÜNLÜĞÜ
+         ------------------------ -->
+    <section id="health-overview" aria-labelledby="health-title">
+      <h1 id="health-title">Sağlık Günlüğü</h1>
+
+      <article id="health-tests" aria-labelledby="health-tests-title">
+        <h2 id="health-tests-title">Test Sonuçları (CD4 / Viral Load)</h2>
+        <form id="test-result-form" method="post" action="/api/tests" novalidate>
+          <label for="test-date">Test Tarihi</label>
+          <input id="test-date" name="test_date" type="date" required />
+
+          <label for="cd4">CD4 (hücre / mm³)</label>
+          <input id="cd4" name="cd4" type="number" min="0" />
+
+          <label for="viral-load">Viral Load (kopya/ml)</label>
+          <input id="viral-load" name="viral_load" type="number" min="0" />
+
+          <label for="test-notes">Notlar</label>
+          <textarea id="test-notes" name="notes" placeholder="Doktorun notları veya yorumlar"></textarea>
+
+          <button type="submit">Kaydet</button>
+        </form>
+
+        <p>NOT: Test sonuçları grafiksel olarak gösterilir (örn. zaman serisi grafik).</p>
+      </article>
+
+      <article id="health-symptoms" aria-labelledby="health-symptoms-title">
+        <h2 id="health-symptoms-title">Semptom Günlüğü</h2>
+        <form id="symptom-form" method="post" action="/api/symptoms" novalidate>
+          <label for="symptom-date">Tarih</label>
+          <input id="symptom-date" name="date" type="date" required />
+
+          <label for="symptom-list">Semptomlar (çoklu seçim)</label>
+          <select id="symptom-list" name="symptoms[]" multiple size="6" aria-label="Semptomlar">
+            <option value="fatigue">Yorgunluk</option>
+            <option value="fever">Ateş</option>
+            <option value="nausea">Mide bulantısı</option>
+            <option value="diarrhea">İshal</option>
+            <option value="headache">Baş ağrısı</option>
+            <option value="others">Diğer</option>
+          </select>
+
+          <label for="symptom-note">Detay</label>
+          <textarea id="symptom-note" name="detail" placeholder="Ne hissettiniz? Süre?"></textarea>
+
+          <button type="submit">Kaydet</button>
+        </form>
+      </article>
+
+      <article id="health-appointments" aria-labelledby="health-appointments-title">
+        <h2 id="health-appointments-title">Doktor Randevuları</h2>
+        <form id="appointment-form" method="post" action="/api/appointments" novalidate>
+          <label for="appt-date">Randevu Tarihi &amp; Saati</label>
+          <input id="appt-date" name="datetime" type="datetime-local" required />
+
+          <label for="appt-doctor">Doktor / Klinik</label>
+          <input id="appt-doctor" name="doctor" type="text" />
+
+          <label for="appt-notes">Notlar</label>
+          <textarea id="appt-notes" name="notes"></textarea>
+
+          <button type="submit">Randevu Kaydet</button>
+        </form>
+      </article>
+    </section>
+
+    <!-- ------------------------
+         DESTEK TOPLULUĞU
+         ------------------------ -->
+    <section id="community-rooms" aria-labelledby="community-title">
+      <h1 id="community-title">Destek Topluluğu</h1>
+
+      <article id="community-rooms-list" aria-labelledby="community-rooms-title">
+        <h2 id="community-rooms-title">Kategoriler / Odalar</h2>
+        <p>Her kategori anonim takma adlarla katılım sağlar. Moderasyon ve raporlama araçları zorunlu.</p>
+
+        <ul>
+          <li><strong>Yeni tanı</strong> — İlk 3 ay için rehber ve destek</li>
+          <li><strong>İlaç yan etkileri</strong> — Deneyim ve çözümler</li>
+          <li><strong>Moral &amp; yaşam</strong> — Günlük deneyimler</li>
+          <li><strong>Gönüllü yardımlar</strong> — Yardım teklifleri</li>
+        </ul>
+      </article>
+
+      <article id="community-forum" aria-labelledby="community-forum-title">
+        <h2 id="community-forum-title">Forum</h2>
+        <p>Forum gönderi formu örneği (başlık, içerik, kategori, anonim seçim)</p>
+        <form id="forum-post-form" method="post" action="/api/forum" novalidate>
+          <label for="post-title">Başlık</label>
+          <input id="post-title" name="title" type="text" required />
+
+          <label for="post-body">İçerik</label>
+          <textarea id="post-body" name="body" required></textarea>
+
+          <label for="post-category">Kategori</label>
+          <select id="post-category" name="category">
+            <option value="new_diagnosis">Yeni tanı</option>
+            <option value="side_effects">Yan etkiler</option>
+            <option value="mental">Mental sağlık</option>
+          </select>
+
+          <label>
+            <input type="checkbox" name="anonymous" checked />
+            Gönderiyi anonim yap
+          </label>
+
+          <button type="submit">Gönder</button>
+        </form>
+      </article>
+
+      <article id="community-chat" aria-labelledby="community-chat-title">
+        <h2 id="community-chat-title">Anonim Sohbet (Moderasyonlu)</h2>
+        <p>Hızlı destek almak için sohbet odaları. Güvenlik: otomatik moderasyon, raporla butonu.</p>
+        <!-- sohbet arayüzü (JS ile canlı yapılacak) -->
+        <div aria-live="polite" id="chat-sample">
+          <p><em>Sohbet alanı: canlı mesajlar burada görünecek</em></p>
         </div>
+      </article>
 
-        <!-- Messages Area -->
-        <div class="messages-area" id="messagesArea">
-            <div class="empty-state" id="emptyState" style="display: none;">
-                <div class="empty-icon">
-                    <i class="bi bi-chat-left-text"></i>
-                </div>
-                <div class="empty-text">No messages yet</div>
-                <div class="empty-subtext">Start a conversation using the message box below</div>
-            </div>
-        </div>
+      <article id="community-events" aria-labelledby="community-events-title">
+        <h2 id="community-events-title">Etkinlikler</h2>
+        <p>Etkinlik takvimi, kayıt ve hatırlatıcı (ör. destek toplantıları, eğitimler)</p>
+      </article>
+    </section>
 
-        <!-- Compose Section -->
-        <div class="compose-section">
-            <div class="compose-wrapper">
-                <div id="imagePreviewBox"></div>
-                <textarea class="compose-input" id="messageInput" rows="3" placeholder="Type a message"></textarea>
-                <div class="compose-toolbar">
-                    <div class="toolbar-left">
-                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
-                        <button class="ms-button" onclick="document.getElementById('imageInput').click()">
-                            <i class="bi bi-image"></i>
-                            Attach image
-                        </button>
-                    </div>
-                    <button class="ms-button ms-button-primary" onclick="sendMessage()">
-                        <i class="bi bi-send"></i>
-                        Send
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- ------------------------
+         BILGI MERKEZI
+         ------------------------ -->
+    <section id="info-basics" aria-labelledby="info-title">
+      <h1 id="info-title">Bilgi Merkezi</h1>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Sample comprehensive conversation data covering all properties
-        const conversationData = {
-            conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-            channel: 1, // WhatsApp
-            conversationStatus: 0, // Active
-            externalSessionId: "whatsapp_session_98765",
-            createdAt: "2025-11-01T08:30:00Z",
-            closedAt: null,
-            lastMessageAt: "2025-11-04T14:45:30Z",
-            messages: [
-                {
-                    messageId: 1,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "user_12345",
-                    senderName: "John Doe",
-                    createdAt: "2025-11-01T08:30:00Z",
-                    senderType: 2, // User
-                    type: 0, // Text
-                    content: "Hello, I need help tracking my sea freight shipment from Shanghai to Los Angeles.",
-                    metadataJson: null,
-                    relatedMessageId: null
-                },
-                {
-                    messageId: 2,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "agent_freight_001",
-                    senderName: "FreightBot AI",
-                    createdAt: "2025-11-01T08:30:15Z",
-                    senderType: 0, // Agent
-                    type: 0,
-                    content: "Hello John! I'm FreightBot, your AI shipping assistant. I'd be happy to help you track your sea freight shipment. Could you please provide me with your booking reference or container number?",
-                    metadataJson: null,
-                    relatedMessageId: null
-                },
-                {
-                    messageId: 3,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "user_12345",
-                    senderName: "John Doe",
-                    createdAt: "2025-11-01T08:32:00Z",
-                    senderType: 2,
-                    type: 1, // Image
-                    content: "Here's a photo of my booking confirmation",
-                    metadataJson: JSON.stringify({
-                        imageUrl: "https://via.placeholder.com/600x400/2196F3/FFFFFF?text=Booking+Confirmation+BOOK-2025-SEA-001",
-                        fileName: "booking_confirmation.jpg",
-                        fileSize: "245 KB",
-                        width: 600,
-                        height: 400
-                    }),
-                    relatedMessageId: 2
-                },
-                {
-                    messageId: 4,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "orchestrator_main",
-                    senderName: "Task Orchestrator",
-                    createdAt: "2025-11-01T08:32:30Z",
-                    senderType: 1, // Orchestrator
-                    type: 0,
-                    content: "Image received and analyzed. Extracted booking reference: BOOK-2025-SEA-001. Container: MSCU1234567. Initiating shipment tracking query...",
-                    metadataJson: JSON.stringify({
-                        extractedData: {
-                            bookingRef: "BOOK-2025-SEA-001",
-                            containerNo: "MSCU1234567",
-                            carrier: "Maersk",
-                            origin: "Shanghai, China",
-                            destination: "Los Angeles, USA"
-                        }
-                    }),
-                    relatedMessageId: 3
-                },
-                {
-                    messageId: 5,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "agent_freight_001",
-                    senderName: "FreightBot AI",
-                    createdAt: "2025-11-01T08:33:00Z",
-                    senderType: 0,
-                    type: 0,
-                    content: "Perfect! I found your shipment. Container MSCU1234567 departed Shanghai on October 28th and is currently in transit. Expected arrival at LA port is November 10th. Your cargo includes electronics - correct?",
-                    metadataJson: null,
-                    relatedMessageId: 4
-                },
-                {
-                    messageId: 6,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "user_12345",
-                    senderName: "John Doe",
-                    createdAt: "2025-11-01T08:35:00Z",
-                    senderType: 2,
-                    type: 0,
-                    content: "Yes, that's correct. Can you send me the full tracking details?",
-                    metadataJson: null,
-                    relatedMessageId: 5
-                },
-                {
-                    messageId: 7,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "agent_freight_001",
-                    senderName: "FreightBot AI",
-                    createdAt: "2025-11-01T08:35:30Z",
-                    senderType: 0,
-                    type: 4, // File
-                    content: "Here's your detailed tracking report in PDF format",
-                    metadataJson: JSON.stringify({
-                        fileUrl: "https://example.com/tracking-reports/BOOK-2025-SEA-001.pdf",
-                        fileName: "Shipment_Tracking_BOOK-2025-SEA-001.pdf",
-                        fileSize: "1.2 MB",
-                        mimeType: "application/pdf"
-                    }),
-                    relatedMessageId: 6
-                },
-                {
-                    messageId: 8,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "system",
-                    senderName: "System",
-                    createdAt: "2025-11-02T10:00:00Z",
-                    senderType: 4, // System
-                    type: 5, // Event
-                    content: "Conversation escalated to human operator - Complex customs inquiry detected",
-                    metadataJson: JSON.stringify({
-                        eventType: "escalation",
-                        reason: "complex_customs_inquiry",
-                        priority: "high"
-                    }),
-                    relatedMessageId: null
-                },
-                {
-                    messageId: 9,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "operator_sarah",
-                    senderName: "Sarah Williams",
-                    createdAt: "2025-11-02T10:05:00Z",
-                    senderType: 3, // Operator
-                    type: 0,
-                    content: "Hi John, this is Sarah from the customs support team. I see you have questions about customs clearance. I'm here to help you through the process.",
-                    metadataJson: null,
-                    relatedMessageId: 8
-                },
-                {
-                    messageId: 10,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "user_12345",
-                    senderName: "John Doe",
-                    createdAt: "2025-11-02T10:07:00Z",
-                    senderType: 2,
-                    type: 0,
-                    content: "Hi Sarah! Yes, I need to understand what documents are required for customs clearance in the US for electronics.",
-                    metadataJson: null,
-                    relatedMessageId: 9
-                },
-                {
-                    messageId: 11,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "operator_sarah",
-                    senderName: "Sarah Williams",
-                    createdAt: "2025-11-02T10:10:00Z",
-                    senderType: 3,
-                    type: 2, // Audio
-                    content: "I've recorded a detailed explanation of the customs requirements for your electronics shipment",
-                    metadataJson: JSON.stringify({
-                        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-                        duration: "2:15",
-                        format: "mp3",
-                        transcript: "For electronics imports, you'll need: commercial invoice, packing list, bill of lading, and FCC compliance documentation..."
-                    }),
-                    relatedMessageId: 10
-                },
-                {
-                    messageId: 12,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "user_12345",
-                    senderName: "John Doe",
-                    createdAt: "2025-11-02T10:15:00Z",
-                    senderType: 2,
-                    type: 0,
-                    content: "Thank you Sarah! That's very helpful. Do I need to submit these before arrival?",
-                    metadataJson: null,
-                    relatedMessageId: 11
-                },
-                {
-                    messageId: 13,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "operator_sarah",
-                    senderName: "Sarah Williams",
-                    createdAt: "2025-11-02T10:18:00Z",
-                    senderType: 3,
-                    type: 0,
-                    content: "Yes, ideally you should submit them 72 hours before vessel arrival. I'll send you the submission portal link and walk you through the process. Let me also connect you with our customs broker.",
-                    metadataJson: null,
-                    relatedMessageId: 12
-                },
-                {
-                    messageId: 14,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "orchestrator_main",
-                    senderName: "Task Orchestrator",
-                    createdAt: "2025-11-03T09:00:00Z",
-                    senderType: 1,
-                    type: 0,
-                    content: "Scheduled reminder: Your vessel arrives in 7 days. Customs documents should be submitted by November 7th. Would you like me to check if all documents are ready?",
-                    metadataJson: JSON.stringify({
-                        taskType: "scheduled_reminder",
-                        dueDate: "2025-11-07T00:00:00Z",
-                        documentsRequired: ["commercial_invoice", "packing_list", "bill_of_lading", "fcc_compliance"]
-                    }),
-                    relatedMessageId: null
-                },
-                {
-                    messageId: 15,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "user_12345",
-                    senderName: "John Doe",
-                    createdAt: "2025-11-03T09:05:00Z",
-                    senderType: 2,
-                    type: 0,
-                    content: "Yes please! I want to make sure everything is in order.",
-                    metadataJson: null,
-                    relatedMessageId: 14
-                },
-                {
-                    messageId: 16,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "orchestrator_main",
-                    senderName: "Task Orchestrator",
-                    createdAt: "2025-11-03T09:05:30Z",
-                    senderType: 1,
-                    type: 0,
-                    content: "Checking document status... ✓ Commercial Invoice uploaded, ✓ Packing List uploaded, ⚠ Bill of Lading missing, ⚠ FCC Compliance certificate missing. You need to upload 2 more documents.",
-                    metadataJson: JSON.stringify({
-                        documentStatus: {
-                            commercialInvoice: { status: "uploaded", uploadedAt: "2025-11-02T14:00:00Z" },
-                            packingList: { status: "uploaded", uploadedAt: "2025-11-02T14:05:00Z" },
-                            billOfLading: { status: "missing", required: true },
-                            fccCompliance: { status: "missing", required: true }
-                        }
-                    }),
-                    relatedMessageId: 15
-                },
-                {
-                    messageId: 17,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "agent_freight_001",
-                    senderName: "FreightBot AI",
-                    createdAt: "2025-11-03T09:06:00Z",
-                    senderType: 0,
-                    type: 3, // Video
-                    content: "I've prepared a video tutorial on how to obtain and submit the Bill of Lading and FCC Compliance certificate",
-                    metadataJson: JSON.stringify({
-                        videoUrl: "https://example.com/tutorials/customs-documents.mp4",
-                        thumbnailUrl: "https://via.placeholder.com/400x225/FF5722/FFFFFF?text=Video+Tutorial",
-                        duration: "4:30",
-                        format: "mp4",
-                        resolution: "1080p"
-                    }),
-                    relatedMessageId: 16
-                },
-                {
-                    messageId: 18,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "user_12345",
-                    senderName: "John Doe",
-                    createdAt: "2025-11-04T11:00:00Z",
-                    senderType: 2,
-                    type: 1,
-                    content: "I've obtained the Bill of Lading. Here it is.",
-                    metadataJson: JSON.stringify({
-                        imageUrl: "https://via.placeholder.com/600x800/4CAF50/FFFFFF?text=Bill+of+Lading+MSCU1234567",
-                        fileName: "bill_of_lading.jpg",
-                        fileSize: "890 KB",
-                        width: 600,
-                        height: 800
-                    }),
-                    relatedMessageId: 17
-                },
-                {
-                    messageId: 19,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "orchestrator_main",
-                    senderName: "Task Orchestrator",
-                    createdAt: "2025-11-04T11:00:20Z",
-                    senderType: 1,
-                    type: 0,
-                    content: "Bill of Lading received and validated. Document has been automatically submitted to customs portal. Now you only need the FCC Compliance certificate.",
-                    metadataJson: JSON.stringify({
-                        validation: {
-                            documentType: "bill_of_lading",
-                            valid: true,
-                            containerNumber: "MSCU1234567",
-                            autoSubmitted: true,
-                            submissionTimestamp: "2025-11-04T11:00:20Z"
-                        }
-                    }),
-                    relatedMessageId: 18
-                },
-                {
-                    messageId: 20,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "operator_sarah",
-                    senderName: "Sarah Williams",
-                    createdAt: "2025-11-04T14:30:00Z",
-                    senderType: 3,
-                    type: 0,
-                    content: "Great progress John! I see you've uploaded the Bill of Lading. For the FCC compliance, I can help expedite that. I'll reach out to the manufacturer on your behalf to get the certificate. This usually takes 24-48 hours.",
-                    metadataJson: null,
-                    relatedMessageId: 19
-                },
-                {
-                    messageId: 21,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "user_12345",
-                    senderName: "John Doe",
-                    createdAt: "2025-11-04T14:35:00Z",
-                    senderType: 2,
-                    type: 0,
-                    content: "That would be amazing, Sarah! Thank you so much for your help.",
-                    metadataJson: null,
-                    relatedMessageId: 20
-                },
-                {
-                    messageId: 22,
-                    conversationGroupId: "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-                    senderId: "system",
-                    senderName: "System",
-                    createdAt: "2025-11-04T14:45:30Z",
-                    senderType: 4,
-                    type: 5,
-                    content: "Task created: Obtain FCC Compliance Certificate - Assigned to Sarah Williams - Due: Nov 6, 2025",
-                    metadataJson: JSON.stringify({
-                        eventType: "task_created",
-                        taskId: "TASK-2025-1104-001",
-                        assignedTo: "operator_sarah",
-                        dueDate: "2025-11-06T23:59:59Z",
-                        priority: "high",
-                        status: "assigned"
-                    }),
-                    relatedMessageId: 21
-                }
-            ]
-        };
+      <article id="info-basics-article" aria-labelledby="info-basics-title">
+        <h2 id="info-basics-title">HIV Nedir? Temel Bilgiler</h2>
+        <p>
+          (Burada kısa, güvenilir ve kaynaklı açıklamalar olacak. Ör: bulaşma yolları, korunma,
+          test önerileri... )
+        </p>
+      </article>
 
-        let selectedImage = null;
+      <article id="info-treatment" aria-labelledby="info-treatment-title">
+        <h2 id="info-treatment-title">Tedavi ve İlaçlar</h2>
+        <p>ART tedavisi, ilaç türleri, ilaç etkileşimleri, tedaviye uyumun önemi.</p>
+      </article>
 
-        const channelConfig = {
-            0: { icon: 'bi-globe', name: 'Web' },
-            1: { icon: 'bi-whatsapp', name: 'WhatsApp' },
-            2: { icon: 'bi-telegram', name: 'Telegram' },
-            3: { icon: 'bi-envelope', name: 'Email' },
-            4: { icon: 'bi-telephone', name: 'Phone Call' }
-        };
+      <article id="info-sideeffects" aria-labelledby="info-sideeffects-title">
+        <h2 id="info-sideeffects-title">Yan Etkiler ve Yönetimi</h2>
+        <p>Yan etki yönetim önerileri, ne zaman doktora başvurulmalı, acil durum işaretleri.</p>
+      </article>
 
-        const statusConfig = {
-            0: { name: 'Active', class: 'badge-active' },
-            1: { name: 'Pending User', class: 'badge-pending-user' },
-            2: { name: 'Pending Agent', class: 'badge-pending-agent' },
-            3: { name: 'Scheduled', class: 'badge-scheduled' },
-            4: { name: 'Completed', class: 'badge-completed' },
-            5: { name: 'Cancelled', class: 'badge-cancelled' }
-        };
+      <article id="info-resources" aria-labelledby="info-resources-title">
+        <h2 id="info-resources-title">Kaynaklar &amp; İndirilebilir</h2>
+        <ul>
+          <li><a href="#" download>Yeni Tanı Rehberi (PDF)</a></li>
+          <li><a href="#" download>İlaç Kullanım Kılavuzu (PDF)</a></li>
+          <li><a href="https://www.who.int/hiv" target="_blank" rel="noopener">WHO - HIV</a></li>
+        </ul>
+      </article>
+    </section>
 
-        const senderTypes = ['Agent', 'Orchestrator', 'User', 'Operator', 'System'];
-        const messageTypeLabels = ['Text', 'Image', 'Audio', 'Video', 'File', 'Event'];
-        const messageTypeIcons = ['bi-chat-text', 'bi-image', 'bi-mic', 'bi-camera-video', 'bi-file-earmark', 'bi-calendar-event'];
+    <!-- ------------------------
+         YARDIM & HIBE
+         ------------------------ -->
+    <section id="aid-overview" aria-labelledby="aid-title">
+      <h1 id="aid-title">Yardım &amp; Hibe</h1>
 
-        function formatDateTime(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diffMs = now - date;
-            const diffMins = Math.floor(diffMs / 60000);
-            
-            if (diffMins < 1) return 'Just now';
-            if (diffMins < 60) return `${diffMins}m ago`;
-            if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
-            if (diffMins < 10080) return `${Math.floor(diffMins / 1440)}d ago`;
-            
-            return date.toLocaleString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
+      <article id="aid-apply" aria-labelledby="aid-apply-title">
+        <h2 id="aid-apply-title">Hibe / Destek Başvurusu</h2>
+        <form id="aid-form" method="post" action="/api/aid" novalidate>
+          <label for="aid-type">Başvuru Türü</label>
+          <select id="aid-type" name="type" required>
+            <option value="financial">Maddi Destek</option>
+            <option value="medication">İlaç Desteği</option>
+            <option value="counseling">Psikolojik Destek</option>
+          </select>
 
-        function formatFullDate(dateString) {
-            if (!dateString) return '-';
-            return new Date(dateString).toLocaleString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-        }
+          <label for="aid-description">İhtiyaç Açıklaması</label>
+          <textarea id="aid-description" name="description" required></textarea>
 
-        function getInitials(name) {
-            return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-        }
+          <label for="aid-proof">Gerekli Belgeler (opsiyonel)</label>
+          <input id="aid-proof" name="documents" type="file" multiple />
 
-        function renderMessage(message) {
-            if (message.type === 5) { // Event
-                return `
-                    <div class="event-message">
-                        <span class="event-divider">
-                            <i class="bi bi-info-circle"></i>
-                            ${message.content}
-                            ${message.messageId ? `<span class="message-id-badge">#${message.messageId}</span>` : ''}
-                        </span>
-                    </div>
-                `;
-            }
+          <button type="submit">Başvuruyu Gönder</button>
+        </form>
+      </article>
 
-            const senderType = senderTypes[message.senderType].toLowerCase();
-            
-            let attachmentHtml = '';
-            if (message.metadataJson) {
-                const metadata = JSON.parse(message.metadataJson);
-                
-                if (message.type === 1 && metadata.imageUrl) {
-                    attachmentHtml = `
-                        <div class="attachment-image">
-                            <img src="${metadata.imageUrl}" alt="${metadata.fileName || 'Image'}" 
-                                 onclick="window.open('${metadata.imageUrl}', '_blank')"
-                                 title="Click to open full size">
-                        </div>
-                    `;
-                } else if (message.type === 2 && metadata.audioUrl) {
-                    attachmentHtml = `
-                        <div class="attachment-audio">
-                            <audio controls>
-                                <source src="${metadata.audioUrl}" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                            ${metadata.duration ? `<div style="font-size: 11px; color: var(--ms-gray-130); margin-top: 4px;">Duration: ${metadata.duration}</div>` : ''}
-                            ${metadata.transcript ? `<div style="font-size: 11px; color: var(--ms-gray-130); margin-top: 4px; font-style: italic;">Transcript available in metadata</div>` : ''}
-                        </div>
-                    `;
-                } else if (message.type === 3 && metadata.videoUrl) {
-                    attachmentHtml = `
-                        <div class="attachment-image">
-                            <img src="${metadata.thumbnailUrl || 'https://via.placeholder.com/400x225/666/FFFFFF?text=Video'}" 
-                                 alt="Video thumbnail" 
-                                 onclick="window.open('${metadata.videoUrl}', '_blank')"
-                                 title="Click to play video"
-                                 style="cursor: pointer;">
-                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
-                                <i class="bi bi-play-circle-fill"></i>
-                            </div>
-                            ${metadata.duration ? `<div style="font-size: 11px; color: var(--ms-gray-130); margin-top: 4px;">Duration: ${metadata.duration} | ${metadata.resolution || ''}</div>` : ''}
-                        </div>
-                    `;
-                } else if (message.type === 4 && metadata.fileUrl) {
-                    attachmentHtml = `
-                        <div class="attachment-file" onclick="window.open('${metadata.fileUrl}', '_blank')">
-                            <div class="file-icon-box">
-                                <i class="bi bi-file-earmark-text"></i>
-                            </div>
-                            <div class="file-details">
-                                <div class="file-name">${metadata.fileName || 'File'}</div>
-                                ${metadata.fileSize ? `<div class="file-size">${metadata.fileSize} | ${metadata.mimeType || 'Unknown type'}</div>` : ''}
-                            </div>
-                            <i class="bi bi-download" style="color: var(--ms-blue);"></i>
-                        </div>
-                    `;
-                }
-            }
+      <article id="aid-donations" aria-labelledby="aid-donations-title">
+        <h2 id="aid-donations-title">Bağış Yap / Al</h2>
+        <p>Bağış seçenekleri: kredi kartı, banka, kripto; güvenli ödeme entegrasyonu.</p>
+      </article>
 
-            let metadataDisplay = '';
-            if (message.relatedMessageId) {
-                metadataDisplay = `
-                    <div class="message-metadata">
-                        <a href="#message-${message.relatedMessageId}" class="related-message-link" onclick="scrollToMessage(${message.relatedMessageId})">
-                            <i class="bi bi-reply"></i>
-                            In reply to message #${message.relatedMessageId}
-                        </a>
-                    </div>
-                `;
-            }
+      <article id="aid-locations" aria-labelledby="aid-locations-title">
+        <h2 id="aid-locations-title">Yerel Merkezler &amp; Klinikler</h2>
+        <p>Konuma göre listelenmiş destek merkezleri (adres, telefon, çalışma saatleri).</p>
+        <!-- Harita için placeholder -->
+        <div id="map-placeholder" aria-hidden="true">[Harita bileşeni buraya gelecek]</div>
+      </article>
+    </section>
 
-            return `
-                <div class="message-item" id="message-${message.messageId}">
-                    <div class="message-avatar avatar-${senderType}">
-                        ${getInitials(message.senderName)}
-                    </div>
-                    <div class="message-body">
-                        <div class="message-header-line">
-                            <span class="sender-name">${message.senderName}</span>
-                            <span class="sender-id">${message.senderId}</span>
-                            <span class="sender-type">${senderTypes[message.senderType]}</span>
-                            <span class="message-id-badge">#${message.messageId}</span>
-                            <span class="message-time">${formatDateTime(message.createdAt)}</span>
-                        </div>
-                        <div class="message-content-box type-${senderType}">
-                            ${message.type !== 0 ? `
-                                <div class="message-type-label">
-                                    <i class="bi ${messageTypeIcons[message.type]}"></i>
-                                    ${messageTypeLabels[message.type]}
-                                </div>
-                            ` : ''}
-                            <div class="message-text">${message.content}</div>
-                            ${attachmentHtml}
-                            ${metadataDisplay}
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
+    <!-- ------------------------
+         MENTAL SAĞLIK
+         ------------------------ -->
+    <section id="mental-overview" aria-labelledby="mental-title">
+      <h1 id="mental-title">Mental Sağlık</h1>
 
-        function scrollToMessage(messageId) {
-            const element = document.getElementById(`message-${messageId}`);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                element.style.animation = 'none';
-                setTimeout(() => {
-                    element.style.animation = 'highlight 1s ease-out';
-                }, 10);
-            }
-        }
+      <article id="mental-checkins" aria-labelledby="mental-checkins-title">
+        <h2 id="mental-checkins-title">Günlük Check-in</h2>
+        <form id="mood-form" method="post" action="/api/mood" novalidate>
+          <label for="mood-date">Tarih</label>
+          <input id="mood-date" name="date" type="date" required />
 
-        function loadConversation() {
-            // Update header with all ConversationGroup properties
-            document.getElementById('conversationGroupId').textContent = conversationData.conversationGroupId;
-            
-            const channel = channelConfig[conversationData.channel];
-            document.getElementById('channelBadge').innerHTML = 
-                `<i class="bi ${channel.icon}"></i><span>${channel.name}</span>`;
-            
-            const status = statusConfig[conversationData.conversationStatus];
-            const statusBadge = document.getElementById('statusBadge');
-            statusBadge.className = `ms-badge badge-status ${status.class}`;
-            statusBadge.textContent = status.name;
+          <label for="mood-value">Ruh Hali (0-10)</label>
+          <input id="mood-value" name="value" type="number" min="0" max="10" required />
 
-            document.getElementById('createdAt').textContent = formatFullDate(conversationData.createdAt);
-            document.getElementById('lastMessageAt').textContent = formatFullDate(conversationData.lastMessageAt);
-            
-            if (conversationData.closedAt) {
-                document.getElementById('closedAtContainer').style.display = 'block';
-                document.getElementById('closedAt').textContent = formatFullDate(conversationData.closedAt);
-            }
-            
-            if (conversationData.externalSessionId) {
-                document.getElementById('sessionContainer').style.display = 'block';
-                document.getElementById('externalSessionId').textContent = conversationData.externalSessionId;
-            }
+          <label for="mood-note">Not</label>
+          <textarea id="mood-note" name="note"></textarea>
 
-            // Render all messages
-            const messagesArea = document.getElementById('messagesArea');
-            const emptyState = document.getElementById('emptyState');
-            
-            if (conversationData.messages.length === 0) {
-                emptyState.style.display = 'block';
-            } else {
-                emptyState.style.display = 'none';
-                messagesArea.innerHTML = conversationData.messages.map(msg => renderMessage(msg)).join('');
-                messagesArea.scrollTop = messagesArea.scrollHeight;
-            }
-        }
+          <button type="submit">Kaydet</button>
+        </form>
+      </article>
 
-        // Image attachment handling
-        document.getElementById('imageInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                selectedImage = file;
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('imagePreviewBox').innerHTML = `
-                        <div class="image-preview-box">
-                            <img src="${e.target.result}" class="preview-thumbnail" alt="Preview">
-                            <div class="preview-info">
-                                <div class="preview-filename">${file.name}</div>
-                                <div style="color: var(--ms-gray-130);">${(file.size / 1024).toFixed(1)} KB</div>
-                            </div>
-                            <button class="ms-button preview-remove" onclick="removeImage()">Remove</button>
-                        </div>
-                    `;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+      <article id="mental-therapy" aria-labelledby="mental-therapy-title">
+        <h2 id="mental-therapy-title">Çevrimiçi Terapi &amp; Danışman</h2>
+        <p>Terapi randevusu alma, güvenilir terapist listesi ve fiyat bilgileri.</p>
+      </article>
 
-        function removeImage() {
-            selectedImage = null;
-            document.getElementById('imagePreviewBox').innerHTML = '';
-            document.getElementById('imageInput').value = '';
-        }
+      <article id="mental-resources" aria-labelledby="mental-resources-title">
+        <h2 id="mental-resources-title">Meditasyon &amp; Rehberler</h2>
+        <p>Kısa meditasyon, nefes egzersizleri, kriz anı rehberi.</p>
+      </article>
+    </section>
 
-        function sendMessage() {
-            const content = document.getElementById('messageInput').value.trim();
-            
-            if (!content && !selectedImage) {
-                return;
-            }
+    <!-- ------------------------
+         GIZLILIK & AYARLAR
+         ------------------------ -->
+    <section id="settings-privacy" aria-labelledby="settings-title">
+      <h1 id="settings-title">Gizlilik &amp; Ayarlar</h1>
 
-            const newMessage = {
-                messageId: conversationData.messages.length + 1,
-                conversationGroupId: conversationData.conversationGroupId,
-                senderId: "user_current",
-                senderName: "Current User",
-                createdAt: new Date().toISOString(),
-                senderType: 2, // User
-                type: selectedImage ? 1 : 0,
-                content: content || "Image attached",
-                metadataJson: selectedImage ? JSON.stringify({
-                    imageUrl: URL.createObjectURL(selectedImage),
-                    fileName: selectedImage.name,
-                    fileSize: `${(selectedImage.size / 1024).toFixed(1)} KB`
-                }) : null,
-                relatedMessageId: null
-            };
+      <article id="settings-privacy-section" aria-labelledby="settings-privacy-title">
+        <h2 id="settings-privacy-title">Gizlilik Tercihleri</h2>
+        <form id="privacy-form" method="post" action="/api/privacy" novalidate>
+          <label>
+            <input type="checkbox" name="use_alias" checked />
+            Takma ad (anonim) kullan
+          </label>
 
-            conversationData.messages.push(newMessage);
-            conversationData.lastMessageAt = newMessage.createdAt;
+          <label>
+            <input type="checkbox" name="hide_hiv_status" checked />
+            Profilde HIV durumunu gizle
+          </label>
 
-            document.getElementById('messageInput').value = '';
-            removeImage();
+          <label>
+            <input type="checkbox" name="share_with_providers" />
+            Sağlık sağlayıcılarıyla verileri paylaş (açıkça izin ver)
+          </label>
 
-            loadConversation();
+          <button type="submit">Tercihleri Kaydet</button>
+        </form>
+      </article>
 
-            // TODO: Send to API
-            console.log('Sending message:', newMessage);
-        }
+      <article id="settings-notifications" aria-labelledby="settings-notifications-title">
+        <h2 id="settings-notifications-title">Bildirim Ayarları</h2>
+        <p>Push / E-posta / SMS tercihleri, sessiz saatler ve acil durum kişileri.</p>
+      </article>
 
-        // Keyboard shortcut
-        document.getElementById('messageInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
+      <article id="settings-account" aria-labelledby="settings-account-title">
+        <h2 id="settings-account-title">Hesap Yönetimi</h2>
+        <p>Hesap bilgileri, şifre değişikliği, bağlantılı cihazlar, oturum yönetimi.</p>
+      </article>
+    </section>
 
-        // Add CSS animation for message highlighting
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes highlight {
-                0% { background-color: #fff4ce; }
-                100% { background-color: transparent; }
-            }
-        `;
-        document.head.appendChild(style);
+  </main>
 
-        // Initial load
-        loadConversation();
-    </script>
+  <!-- FOOTER: küçük notlar -->
+  <footer role="contentinfo" aria-label="Sayfa Bilgisi">
+    <p>Bu konsept örneği: HIV Destek Merkezi - Menü &amp; içerik taslağı (sadece HTML).</p>
+    <p>Gizlilik ve güvenlik en öncelikli konudur. Canlı ortama geçirirken veri güvenliğine dikkat ediniz.</p>
+  </footer>
+
+  <!--
+    İPUÇLARI (yorum):
+    - Bu HTML'i interaktif yapmak için:
+      * Sidebar düğmelerine JS bağlayıp aria-expanded / aria-hidden toggling yap.
+      * Formların action'larını backend endpoint'lerine bağlayın.
+      * Canlı sohbet/yorum/örnek listeleri WebSocket / REST ile sağlayın.
+      * CSS ile responsive bir sidebar + content grid oluşturun.
+    - Her form field için server-side doğrulama zorunludur (gizlilik).
+  -->
 </body>
 </html>
