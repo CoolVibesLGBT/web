@@ -216,7 +216,7 @@ function App() {
                         <div className="relative">
                           <div className={`w-11 h-11 rounded-full ring-2 ${theme === 'dark' ? 'ring-white/20' : 'ring-black/20'}`}>
                             <img
-                              src={getSafeImageURL((user as any)?.avatar,"thumbnail")}
+                              src={getSafeImageURL((user as any)?.avatar,"icon")}
                               alt="Profile"
                               className="w-full h-full rounded-full object-cover"
                             />
@@ -696,7 +696,7 @@ function App() {
                     } blur-sm`} />
                     <div className="relative">
                       <img
-                        src={getSafeImageURL((user as any)?.avatar,"thumbnail")}
+                        src={getSafeImageURL((user as any)?.avatar,"icon")}
                         alt="Profile"
                         className="w-16 h-16 rounded-2xl object-cover ring-2 ring-white/10"
                       />

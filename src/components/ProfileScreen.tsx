@@ -355,14 +355,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const getProfileImageUrl = () => {
     // If viewing own profile and authUser has avatar, use it
     if (isOwnProfile && authUser) {
-      return getSafeImageURL((authUser as any).avatar,"small")
+      return getSafeImageURL((authUser as any).avatar,"icon")
     }
     // Check user state for avatar URL (multiple formats)
     if (user) {
    
       // Then check avatar.file.url structure from API
       if ((user as any).avatar) {
-        return getSafeImageURL((user as any).avatar,"small")
+        return getSafeImageURL((user as any).avatar,"icon")
       }
     }
     return undefined;
@@ -371,10 +371,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const getCoverImageUrl = () => {
     // If viewing own profile and authUser has cover, use it
     if (isOwnProfile && authUser ){
-      return getSafeImageURL((authUser as any).cover,"original");
+      return getSafeImageURL((authUser as any).cover,"large");
     } else if (user) {   
       if ((user as any).cover) {
-        return getSafeImageURL((user as any).cover,"original");
+        return getSafeImageURL((user as any).cover,"large");
       }
     }
    

@@ -82,7 +82,7 @@ const Stories: React.FC = () => {
           return {
             id: story.id,
             name: user?.displayname || user?.username || 'User',
-            avatar: getSafeImageURL(user.avatar,"small"),
+            avatar: getSafeImageURL(user.avatar,"icon"),
             cover: storyCover,
             userCover: user?.cover?.file?.url || null,
             isOwn: story.user_id === authUser?.id,
