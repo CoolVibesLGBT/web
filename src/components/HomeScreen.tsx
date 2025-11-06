@@ -244,7 +244,7 @@ const HomeScreen: React.FC = () => {
             >
               <div className='relative z-10 w-full flex flex-row gap-2 items-center justify-center'>
                 <img src={"/icons/flows.webp"} className='w-12 h-12' />
-                <span>Flows</span>
+                <span>Cool</span>
               </div>
            
               {activeTab === 'flows' && (

@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { useSocket } from '../contexts/SocketContext';
 import { defaultServiceServerId, serviceURL } from '../appSettings';
+import { useTranslation } from 'react-i18next';
 
 interface MessageItemProps {
   msg: { 
@@ -216,6 +217,7 @@ const MessagesScreen: React.FC = () => {
   const { setShowBottomBar } = useSettings();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation('common');
   const [activeFilter, setActiveFilter] = useState<'all' | 'unread' | 'groups' | 'unencrypted'>('all');
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [message, setMessage] = useState('');
@@ -229,7 +231,9 @@ const MessagesScreen: React.FC = () => {
   const videoInputRef = useRef<HTMLInputElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [inputHeight, setInputHeight] = useState(0);
+  const [headerHeight, setHeaderHeight] = useState(0);
   const inputContainerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
   const [messageMenuPosition, setMessageMenuPosition] = useState<{ x: number; y: number } | null>(null);
   const [showChatMenu, setShowChatMenu] = useState(false);
@@ -515,18 +519,61 @@ const MessagesScreen: React.FC = () => {
     };
   }, []);
 
+  // Calculate header height
+  useEffect(() => {
+    if (isMobile && headerRef.current && selectedChat) {
+      const updateHeaderHeight = () => {
+        if (headerRef.current) {
+          // Include main app header height (56px on mobile)
+          const mainHeaderHeight = 56;
+          const chatHeaderHeight = headerRef.current.offsetHeight;
+          setHeaderHeight(mainHeaderHeight + chatHeaderHeight);
+        }
+      };
+      // Use requestAnimationFrame for accurate measurement
+      requestAnimationFrame(() => {
+        updateHeaderHeight();
+      });
+      window.addEventListener('resize', updateHeaderHeight);
+      const observer = new MutationObserver(() => {
+        requestAnimationFrame(updateHeaderHeight);
+      });
+      if (headerRef.current) {
+        observer.observe(headerRef.current, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['style', 'class']
+        });
+      }
+      return () => {
+        window.removeEventListener('resize', updateHeaderHeight);
+        observer.disconnect();
+      };
+    } else if (!isMobile || !selectedChat) {
+      setHeaderHeight(0);
+    }
+  }, [isMobile, selectedChat]);
+
   // Calculate input height for mobile padding
   useEffect(() => {
     if (isMobile && inputContainerRef.current && selectedChat) {
       const updateHeight = () => {
         if (inputContainerRef.current) {
-          setInputHeight(inputContainerRef.current.offsetHeight);
+          // Get the actual height including padding
+          const inputContainerHeight = inputContainerRef.current.offsetHeight;
+          setInputHeight(inputContainerHeight);
         }
       };
-      updateHeight();
+      // Use requestAnimationFrame for accurate measurement
+      requestAnimationFrame(() => {
+        updateHeight();
+      });
       window.addEventListener('resize', updateHeight);
       // Use MutationObserver to watch for height changes (emoji picker, file preview)
-      const observer = new MutationObserver(updateHeight);
+      const observer = new MutationObserver(() => {
+        requestAnimationFrame(updateHeight);
+      });
       if (inputContainerRef.current) {
         observer.observe(inputContainerRef.current, {
           childList: true,
@@ -539,6 +586,8 @@ const MessagesScreen: React.FC = () => {
         window.removeEventListener('resize', updateHeight);
         observer.disconnect();
       };
+    } else if (!isMobile || !selectedChat) {
+      setInputHeight(0);
     }
   }, [isMobile, selectedChat, selectedImages, selectedVideos, showEmojiPicker]);
 
@@ -634,6 +683,7 @@ const MessagesScreen: React.FC = () => {
             type: string;
             participants?: Array<{
               user_id: string;
+              unread_count?: number;
               user?: {
                 id: string;
                 username?: string;
@@ -648,7 +698,7 @@ const MessagesScreen: React.FC = () => {
             }>;
             title?: { en?: string; tr?: string };
             last_message?: {
-              content?: string;
+              content?: string | { en?: string; tr?: string; [key: string]: string | undefined };
               created_at?: string;
             };
             unread_count?: number;
@@ -663,6 +713,11 @@ const MessagesScreen: React.FC = () => {
             // For private chats, find the other participant (not current user)
             const otherParticipant = chat.participants?.find(
               (p) => p.user_id !== user.id
+            );
+            
+            // Find current user's participant to get unread_count
+            const currentUserParticipant = chat.participants?.find(
+              (p) => p.user_id === user.id
             );
 
             const otherUser = otherParticipant?.user;
@@ -694,6 +749,20 @@ const MessagesScreen: React.FC = () => {
               }
             }
 
+            // Parse last message content - handle both object format {en: "...", tr: "..."} and string format
+            let lastMessageText = '';
+            if (chat.last_message?.content) {
+              if (typeof chat.last_message.content === 'string') {
+                lastMessageText = chat.last_message.content;
+              } else if (typeof chat.last_message.content === 'object') {
+                // Try to get content in preferred language (en first, then tr, then any available)
+                lastMessageText = chat.last_message.content.en || 
+                                 chat.last_message.content.tr || 
+                                 Object.values(chat.last_message.content).find((v: any) => v && typeof v === 'string') || 
+                                 '';
+              }
+            }
+
             return {
               id: otherUser?.id || chat.id, // Use user ID for display, fallback to chat ID
               chatId: chat.id, // Real chat ID from backend (UUID)
@@ -702,9 +771,9 @@ const MessagesScreen: React.FC = () => {
               emojis: '',
               avatar: avatar,
               avatarLetter: avatar ? null : avatarLetter,
-              lastMessage: chat.last_message?.content || '',
+              lastMessage: lastMessageText,
               lastTime: lastTime,
-              unread: chat.unread_count || 0,
+              unread: currentUserParticipant?.unread_count || 0,
               online: false, // TODO: Get online status from backend if available
               verified: false, // TODO: Get verified status from backend if available
               encrypted: chat.type !== 'private', // Assume group/channel chats are encrypted
@@ -1387,7 +1456,7 @@ const MessagesScreen: React.FC = () => {
               <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <h1 className={`text-lg sm:text-xl font-bold ${
                   theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>Chat</h1>
+                }`}>{t('messages.chat')}</h1>
                 <div className="flex items-center space-x-2">
                   <motion.button 
                     whileHover={{ scale: 1.05 }}
@@ -1429,7 +1498,7 @@ const MessagesScreen: React.FC = () => {
                 }`} />
                 <input
                   type="text"
-                  placeholder="Search"
+                  placeholder={t('messages.search')}
                   className={`relative w-full pl-10 pr-4 py-2 sm:py-3 rounded-full border-0 text-sm z-10 ${
                     theme === 'dark' 
                       ? 'bg-gray-800 text-white placeholder-gray-400' 
@@ -1454,7 +1523,7 @@ const MessagesScreen: React.FC = () => {
                       : 'bg-gray-200 text-gray-700'
                   }`}
                 >
-                  Tümü
+                  {t('messages.all')}
                 </motion.button>
                 <motion.button
                   onClick={() => setActiveFilter('unread')}
@@ -1470,7 +1539,7 @@ const MessagesScreen: React.FC = () => {
                       : 'bg-gray-200 text-gray-700'
                   }`}
                 >
-                  Okunmamış
+                  {t('messages.unread')}
                 </motion.button>
                 <motion.button
                   onClick={() => setActiveFilter('groups')}
@@ -1486,7 +1555,7 @@ const MessagesScreen: React.FC = () => {
                       : 'bg-gray-200 text-gray-700'
                   }`}
                 >
-                  Gruplar
+                  {t('messages.groups')}
                 </motion.button>
                 <motion.button
                   onClick={() => setActiveFilter('unencrypted')}
@@ -1502,7 +1571,7 @@ const MessagesScreen: React.FC = () => {
                       : 'bg-gray-200 text-gray-700'
                   }`}
                 >
-                  Şifrelenmemiş
+                  {t('messages.unencrypted')}
                 </motion.button>
               </div>
             </div>
@@ -1516,7 +1585,7 @@ const MessagesScreen: React.FC = () => {
                       theme === 'dark' ? 'border-white' : 'border-gray-900'
                     }`}></div>
                     <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                      Loading chats...
+                      {t('messages.loading_chats')}
                     </p>
                   </div>
                 </div>
@@ -1527,7 +1596,7 @@ const MessagesScreen: React.FC = () => {
                 return true;
               }).length === 0 ? (
                 <div className="flex items-center justify-center h-full text-gray-400 text-center p-8">
-                  No chats found.
+                  {t('messages.no_chats_found')}
                 </div>
               ) : chatsList.filter((chat: any) => {
                 if (activeFilter === 'all') return true;
@@ -1605,7 +1674,7 @@ const MessagesScreen: React.FC = () => {
                       <div className="mt-1">
                         {selectedChat === chat.id && otherUserTyping ? (
                           <p className={`text-xs sm:text-sm truncate text-green-500 font-medium`}>
-                            yazıyor...
+                            {t('messages.typing')}
                           </p>
                         ) : (
                           (chat.lastMessage || '').split('\n').slice(0, 2).map((line: string, idx: number) => (
@@ -1670,7 +1739,7 @@ const MessagesScreen: React.FC = () => {
                             }`}
                           >
                             <Trash2 className="w-4 h-4" />
-                            Sohbeti Sil
+                            {t('messages.delete_chat')}
                           </button>
                         </motion.div>
                       )}
@@ -1705,6 +1774,7 @@ const MessagesScreen: React.FC = () => {
               >
                 {/* Chat Header */}
                 <div
+                  ref={headerRef}
                   className={`flex-shrink-0 sticky top-0 z-50 p-3 sm:p-4 border-b ${
                     theme === 'dark' 
                       ? 'border-gray-800 bg-black/95 backdrop-blur-xl' 
@@ -1779,7 +1849,7 @@ const MessagesScreen: React.FC = () => {
                             }`}>@{selectedPrivateChat.username || selectedPrivateChat.name.toLowerCase()}</p>
                               {otherUserTyping && (
                                 <span className="text-xs font-medium text-green-500 flex-shrink-0">
-                                  yazıyor...
+                                  {t('messages.typing')}
                                 </span>
                                 
                               )}
@@ -1865,7 +1935,7 @@ const MessagesScreen: React.FC = () => {
                             }`}
                           >
                             <Trash2 className="w-4 h-4" />
-                            Mesaj Geçmişini Temizle
+                            {t('messages.clear_chat_history')}
                           </button>
                 </motion.div>
                       )}
@@ -1917,8 +1987,11 @@ const MessagesScreen: React.FC = () => {
                     flexGrow: 1,
                     flexShrink: 1,
                     minHeight: 0,
-                        overflowY: 'auto',
-                        paddingBottom: isMobile && selectedChat ? `${inputHeight + 16}px` : undefined
+                    overflowY: 'auto',
+                    ...(isMobile && selectedChat && headerHeight > 0 && inputHeight > 0 ? {
+                      maxHeight: `calc(100dvh - ${headerHeight}px - ${inputHeight}px)`,
+                      height: `calc(100dvh - ${headerHeight}px - ${inputHeight}px)`,
+                    } : {})
                   }}
                 >
                   <div className="space-y-3 max-w-4xl mx-auto">
@@ -1929,7 +2002,7 @@ const MessagesScreen: React.FC = () => {
                             theme === 'dark' ? 'border-white' : 'border-gray-900'
                           }`}></div>
                           <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                            Loading messages...
+                            {t('messages.loading_messages')}
                           </p>
                         </div>
                       </div>
@@ -1943,7 +2016,7 @@ const MessagesScreen: React.FC = () => {
                       }`}>
                         <span className={`text-xs font-medium ${
                           theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                        }`}>Bugün</span>
+                        }`}>{t('messages.today')}</span>
                       </div>
                     </div>
                         )}
@@ -1956,7 +2029,7 @@ const MessagesScreen: React.FC = () => {
                                 theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
                           }`} />
                               <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                                No messages yet
+                                {t('messages.no_messages_yet')}
                               </p>
                         </div>
                       </div>
@@ -2001,7 +2074,7 @@ const MessagesScreen: React.FC = () => {
                           }`}
                         >
                           <Trash2 className="w-4 h-4" />
-                          Mesajı Sil
+                          {t('messages.delete_message')}
                         </button>
                       </motion.div>
                     )}
@@ -2021,7 +2094,7 @@ const MessagesScreen: React.FC = () => {
                             <span className={`text-xs ${
                               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
                             }`}>
-                              {selectedPrivateChat?.name || 'User'} yazıyor...
+                              {selectedPrivateChat?.name || t('messages.user')} {t('messages.typing')}
                             </span>
                             <div className="flex space-x-1">
                               <div className={`w-2 h-2 rounded-full animate-bounce ${
@@ -2348,7 +2421,7 @@ const MessagesScreen: React.FC = () => {
                         value={message}
                         onChange={handleTyping}
                         onKeyPress={handleKeyPress}
-                        placeholder="Send message"
+                        placeholder={t('messages.send_message_placeholder')}
                         className={`w-full pl-24 pr-12 py-2.5 sm:py-3 rounded-full border-0 text-sm focus:outline-none focus:ring-2 focus:ring-offset-0 transition-all ${
                           theme === 'dark' 
                             ? 'bg-gray-800 text-white placeholder-gray-400 focus:ring-gray-600' 
@@ -2421,10 +2494,10 @@ const MessagesScreen: React.FC = () => {
                     }`} />
                     <h2 className={`text-xl font-semibold mb-2 ${
                       theme === 'dark' ? 'text-white' : 'text-gray-900'
-                    }`}>Select a conversation</h2>
+                    }`}>{t('messages.select_conversation')}</h2>
                     <p className={`${
                       theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                    }`}>Choose a group or private chat to start messaging</p>
+                    }`}>{t('messages.select_conversation_subtitle')}</p>
                   </div>
                 </div>
                 ) : null}

@@ -209,5 +209,26 @@
     "no_profiles_passed": "No profiles passed yet",
     "active": "Active",
     "match": "MATCH"
+  },
+  "messages": {
+    "chat": "Chat",
+    "search": "Search",
+    "all": "All",
+    "unread": "Unread",
+    "groups": "Groups",
+    "unencrypted": "Unencrypted",
+    "loading_chats": "Loading chats...",
+    "no_chats_found": "No chats found.",
+    "typing": "typing...",
+    "delete_chat": "Delete Chat",
+    "clear_chat_history": "Clear Chat History",
+    "loading_messages": "Loading messages...",
+    "today": "Today",
+    "no_messages_yet": "No messages yet",
+    "delete_message": "Delete Message",
+    "user": "User",
+    "send_message_placeholder": "Send message",
+    "select_conversation": "Select a conversation",
+    "select_conversation_subtitle": "Choose a group or private chat to start messaging"
   }
 }

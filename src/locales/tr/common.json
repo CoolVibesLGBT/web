@@ -209,5 +209,26 @@
     "no_profiles_passed": "Henüz pas geçilen profil yok",
     "active": "Aktif",
     "match": "EŞLEŞME"
+  },
+  "messages": {
+    "chat": "Sohbet",
+    "search": "Ara",
+    "all": "Tümü",
+    "unread": "Okunmamış",
+    "groups": "Gruplar",
+    "unencrypted": "Şifrelenmemiş",
+    "loading_chats": "Sohbetler yükleniyor...",
+    "no_chats_found": "Sohbet bulunamadı.",
+    "typing": "yazıyor...",
+    "delete_chat": "Sohbeti Sil",
+    "clear_chat_history": "Mesaj Geçmişini Temizle",
+    "loading_messages": "Mesajlar yükleniyor...",
+    "today": "Bugün",
+    "no_messages_yet": "Henüz mesaj yok",
+    "delete_message": "Mesajı Sil",
+    "user": "Kullanıcı",
+    "send_message_placeholder": "Mesaj gönder",
+    "select_conversation": "Bir sohbet seç",
+    "select_conversation_subtitle": "Mesajlaşmaya başlamak için bir grup veya özel sohbet seçin"
   }
 }
