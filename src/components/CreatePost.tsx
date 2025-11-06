@@ -752,11 +752,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
     editorState.read(() => {
       const root = $getRoot();
       const plainText = root.getTextContent();
-      
       setEditorContent(plainText);
       setHasEditorContent(plainText.trim().length > 0);
-      
-      console.log('Editor content:', plainText);
     });
   };
   

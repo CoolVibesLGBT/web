@@ -1,11 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useSettings } from '../contexts/SettingsContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import AuthWizard from './AuthWizard';
 import ProfileScreen from './ProfileScreen';
+import { api } from '../services/api';
+import { Actions } from '../services/actions';
 import { 
   MessageCircle, 
   Search, 
@@ -22,8 +24,11 @@ import {
   Lock,
   Trash2,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  RefreshCw
 } from 'lucide-react';
+import { useSocket } from '../contexts/SocketContext';
+import { parseJSON } from 'date-fns';
 
 interface MessageItemProps {
   msg: { id: string; text: string; time: string; sender: 'me' | 'other'; files?: Array<{ url: string; type: string; name: string }> };
@@ -172,9 +177,10 @@ const MessageItem: React.FC<MessageItemProps> = ({ msg, theme, onDelete, onConte
 
 const MessagesScreen: React.FC = () => {
   const { theme } = useTheme();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user,token } = useAuth();
   const { setShowBottomBar } = useSettings();
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeFilter, setActiveFilter] = useState<'all' | 'unread' | 'groups' | 'unencrypted'>('all');
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [message, setMessage] = useState('');
@@ -192,8 +198,41 @@ const MessagesScreen: React.FC = () => {
   const [showChatMenu, setShowChatMenu] = useState(false);
   const [openChatItemMenu, setOpenChatItemMenu] = useState<string | null>(null);
   const [showProfile, setShowProfile] = useState(false);
+  const [isRefreshingMessages, setIsRefreshingMessages] = useState(false);
+  const { socket, connected } = useSocket();
 
-  React.useEffect(() => {
+
+  
+  useEffect(() => {
+
+    console.log("selectedChat",selectedChat)
+    if (!socket) return;
+
+    if(selectedChat){
+      //socket.emit('auth', token); // 'room1' yerine istediğin kanal adı
+    }
+    socket.on('message', (msg: string) => {
+      var _json : any  = parseJSON(msg)
+      var action = _json?.action;
+      var data = _json?.message
+
+      console.dir(_json)
+      //setMessages(prev => [...prev, msg]);
+    });
+
+    socket.on('chat', (msg: string) => {
+      console.log("coder",msg)
+      //setMessages(prev => [...prev, msg]);
+    });
+
+    // Cleanup: bileşen kapanınca event listener'ı kaldır
+    return () => {
+      socket.off('message');
+    };
+  }, [socket,selectedChat]);
+
+
+  useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
     };
@@ -203,7 +242,7 @@ const MessagesScreen: React.FC = () => {
   }, []);
 
   // Calculate input height for mobile padding
-  React.useEffect(() => {
+  useEffect(() => {
     if (isMobile && inputContainerRef.current && selectedChat) {
       const updateHeight = () => {
         if (inputContainerRef.current) {
@@ -237,6 +276,178 @@ const MessagesScreen: React.FC = () => {
       setShowSidebar(false);
     }
   }, [selectedChat, isMobile]);
+
+  // Handle navigation state to open chat from MatchScreen
+  React.useEffect(() => {
+    const state = location.state as { openChat?: string; userId?: string; publicId?: number; username?: string } | null;
+    if (state?.openChat || state?.userId || state?.publicId) {
+      // Find chat by chat ID, username, or user ID
+      setChatsList(prev => {
+        const chatToOpen = prev.find(chat => {
+          // First try to find by real chat ID (from newly created chat)
+          if (state.openChat && (chat.chatId === state.openChat || chat.id === state.openChat)) {
+            return true;
+          }
+          // Then try username
+          if (state.username && chat.username === state.username) {
+            return true;
+          }
+          // Then try user ID
+          if (state.userId && chat.id === state.userId) {
+            return true;
+          }
+          return false;
+        });
+
+        if (chatToOpen) {
+          setSelectedChat(chatToOpen.id);
+          setShowSidebar(false);
+          return prev;
+        } else {
+          // Chat doesn't exist in list, create a temporary entry
+          // state.openChat must be the real chat ID from backend (from MatchScreen)
+          if (!state.openChat) {
+            console.error('Cannot create chat entry without chat ID');
+            return prev;
+          }
+          
+          const realChatId = state.openChat; // Real chat ID from backend
+          const displayId = state.userId || state.openChat || `temp-${Date.now()}`;
+          const chatName = state.username || state.openChat || 'User';
+          const newChat = {
+            id: displayId,
+            chatId: realChatId, // Real chat ID from backend - required for sending messages
+            name: chatName,
+            username: state.username || chatName.toLowerCase(),
+            emojis: '',
+            avatar: null as null,
+            avatarLetter: chatName.charAt(0).toUpperCase(),
+            lastMessage: '',
+            lastTime: 'now',
+            unread: 0,
+            online: true,
+            verified: false,
+            encrypted: false
+          };
+          
+          // Add to chat list if not already present
+          if (!prev.find(c => c.id === displayId || c.chatId === realChatId)) {
+            setSelectedChat(displayId);
+            setShowSidebar(false);
+            return [newChat, ...prev];
+          }
+          return prev;
+        }
+      });
+
+      // Clear navigation state
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname]);
+
+  // Fetch chats from backend
+  React.useEffect(() => {
+    const fetchChats = async () => {
+      if (!isAuthenticated || !user?.id) {
+        return;
+      }
+
+      try {
+        setIsLoadingChats(true);
+        const response = await api.call<{
+          chats?: Array<{
+            id: string;
+            type: string;
+            participants?: Array<{
+              user_id: string;
+              user?: {
+                id: string;
+                username?: string;
+                displayname?: string;
+                avatar?: {
+                  file?: {
+                    url?: string;
+                  };
+                };
+                public_id?: number;
+              };
+            }>;
+            title?: { en?: string; tr?: string };
+            last_message?: {
+              content?: string;
+              created_at?: string;
+            };
+            unread_count?: number;
+          }>;
+        }>(Actions.CMD_FETCH_CHATS, {
+          method: "POST",
+          body: {},
+        });
+
+        if (response?.chats && Array.isArray(response.chats)) {
+          const mappedChats = response.chats.map((chat) => {
+            // For private chats, find the other participant (not current user)
+            const otherParticipant = chat.participants?.find(
+              (p) => p.user_id !== user.id
+            );
+
+            const otherUser = otherParticipant?.user;
+            const displayName = otherUser?.displayname || otherUser?.username || 'Unknown';
+            const username = otherUser?.username || '';
+            const avatar = otherUser?.avatar?.file?.url || null;
+            const avatarLetter = displayName.charAt(0).toUpperCase();
+
+            // Format last message time
+            let lastTime = 'now';
+            if (chat.last_message?.created_at) {
+              const messageDate = new Date(chat.last_message.created_at);
+              const now = new Date();
+              const diffMs = now.getTime() - messageDate.getTime();
+              const diffMins = Math.floor(diffMs / 60000);
+              const diffHours = Math.floor(diffMs / 3600000);
+              const diffDays = Math.floor(diffMs / 86400000);
+
+              if (diffMins < 1) {
+                lastTime = 'now';
+              } else if (diffMins < 60) {
+                lastTime = `${diffMins} dk`;
+              } else if (diffHours < 24) {
+                lastTime = `${diffHours} sa`;
+              } else if (diffDays < 7) {
+                lastTime = `${diffDays} g`;
+              } else {
+                lastTime = messageDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+              }
+            }
+
+            return {
+              id: otherUser?.id || chat.id, // Use user ID for display, fallback to chat ID
+              chatId: chat.id, // Real chat ID from backend (UUID)
+              name: displayName,
+              username: username,
+              emojis: '',
+              avatar: avatar,
+              avatarLetter: avatar ? null : avatarLetter,
+              lastMessage: chat.last_message?.content || '',
+              lastTime: lastTime,
+              unread: chat.unread_count || 0,
+              online: false, // TODO: Get online status from backend if available
+              verified: false, // TODO: Get verified status from backend if available
+              encrypted: chat.type !== 'private', // Assume group/channel chats are encrypted
+            };
+          });
+
+          setChatsList(mappedChats);
+        }
+      } catch (error) {
+        console.error('Error fetching chats:', error);
+      } finally {
+        setIsLoadingChats(false);
+      }
+    };
+
+    fetchChats();
+  }, [isAuthenticated, user?.id]);
 
   // Ensure bottom bar is visible when component first mounts (chat list view)
   React.useEffect(() => {
@@ -312,128 +523,188 @@ const MessagesScreen: React.FC = () => {
   //   }
   // ];
 
-  const [chatsList, setChatsList] = useState([
-    {
-      id: 'kewl',
-      name: 'KEWL',
-      username: 'kewlswap',
-      emojis: '',
-      avatar: null,
-      avatarLetter: 'K',
-      lastMessage: 'asda\naasd...',
-      lastTime: '3 dk',
-      unread: 0,
-      online: true,
-      verified: true,
-      encrypted: false
-    },
-    {
-      id: 'tarla',
-      name: 'anal',
-      username: 'kewlswap',
-      emojis: '',
-      avatar: null,
-      avatarLetter: 'K',
-      lastMessage: 'asda\naasd...',
-      lastTime: '3 dk',
-      unread: 0,
-      online: true,
-      verified: true,
-      encrypted: false
-    },
-    {
-      id: 'oral',
-      name: 'Oral',
-      username: 'oral',
-      emojis: '',
-      avatar: null,
-      avatarLetter: 'K',
-      lastMessage: 'asda\naasd...',
-      lastTime: '3 dk',
-      unread: 0,
-      online: true,
-      verified: true,
-      encrypted: false
-    },
-    {
-      id: 'vajina',
-      name: 'vajina',
-      username: 'kewlswap',
-      emojis: '',
-      avatar: null,
-      avatarLetter: 'K',
-      lastMessage: 'asda\naasd...',
-      lastTime: '3 dk',
-      unread: 0,
-      online: true,
-      verified: true,
-      encrypted: false
-    },
-    {
-      id: 'ersan',
-      name: 'ersan',
-      username: 'aren',
-      emojis: '🐶 🐱 🦊 🦌 🐻 🐼',
-      avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
-      avatarLetter: null,
-      lastMessage: 'selam',
-      lastTime: '3m',
-      unread: 0,
-      online: true,
-      verified: false,
-      encrypted: false
-    },
-    {
-      id: 'alex',
-      name: 'Alex Chen',
-      username: 'alexchen',
-      emojis: '',
-      avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
-      lastMessage: 'Thanks for the support!',
-      lastTime: '5m',
-      unread: 2,
-      online: true,
-      verified: true,
-      encrypted: true
-    },
-    {
-      id: 'sam',
-      name: 'Sam Kim',
-      username: 'samkim',
-      emojis: '',
-      avatar: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
-      lastMessage: 'See you at the event!',
-      lastTime: '1h',
-      unread: 0,
-      online: false,
-      verified: false,
-      encrypted: true
-    },
-    {
-      id: 'jordan',
-      name: 'Jordan Lee',
-      username: 'jordanlee',
-      emojis: '',
-      avatar: 'https://images.pexels.com/photos/1559486/pexels-photo-1559486.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
-      lastMessage: 'Amazing community!',
-      lastTime: '2h',
-      unread: 1,
-      online: true,
-      verified: true,
-      encrypted: true
-    }
-  ]);
+  const [chatsList, setChatsList] = useState<Array<{
+    id: string;
+    chatId: string | null;
+    name: string;
+    username: string;
+    emojis: string;
+    avatar: string | null;
+    avatarLetter: string | null;
+    lastMessage: string;
+    lastTime: string;
+    unread: number;
+    online: boolean;
+    verified: boolean;
+    encrypted: boolean;
+  }>>([]);
+  const [isLoadingChats, setIsLoadingChats] = useState(false);
 
   const emojis = ['😊', '😂', '❤️', '👍', '🎉', '🔥', '💯', '✨', '🏳️‍🌈', '💪', '😍', '🤔', '😭', '😡', '🤗', '👏', '🙏', '💖', '💕', '💔', '😎', '🤩', '😴', '🤯', '🥳', '😇', '🤠', '👻', '🤖', '👽', '👾'];
 
   const selectedPrivateChat = chatsList.find(chat => chat.id === selectedChat);
 
   // Messages state - will be replaced with actual data later
-  const [messages, setMessages] = useState<Array<{ id: string; text: string; time: string; sender: 'me' | 'other'; files?: Array<{ url: string; type: string; name: string }> }>>([
-    { id: '1', text: 'selam', time: '00:24', sender: 'other' as const },
-    { id: '2', text: 'naber', time: '00:33', sender: 'me' as const },
-    { id: '3', text: 'asda\naasd\nasdad\nasda\nasda', time: '00:38', sender: 'me' as const }
-  ]);
+  const [messages, setMessages] = useState<Array<{ id: string; text: string; time: string; sender: 'me' | 'other'; files?: Array<{ url: string; type: string; name: string }> }>>([]);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+
+  // Fetch messages function (can be called manually or automatically)
+  const fetchMessages = React.useCallback(async (showRefreshing = false) => {
+    if (!selectedChat || !user?.id) {
+      setMessages([]);
+      return;
+    }
+
+    // Find the selected chat to get the real chat ID
+    const currentChat = chatsList.find(chat => chat.id === selectedChat);
+    
+    if (!currentChat?.chatId) {
+      console.error('Cannot fetch messages - chat ID not found', { selectedChat, currentChat });
+      setMessages([]);
+      return;
+    }
+
+    const realChatId = currentChat.chatId;
+
+    // Validate that chatId is a UUID format
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(realChatId)) {
+      console.error('Invalid chat ID format - cannot fetch messages', { chatId: realChatId });
+      setMessages([]);
+      return;
+    }
+
+    try {
+      if (showRefreshing) {
+        setIsRefreshingMessages(true);
+      } else {
+        setIsLoadingMessages(true);
+      }
+        const response = await api.call<{
+          messages?: Array<{
+            id: string;
+            public_id?: string;
+            author_id: string;
+            content?: {
+              en?: string;
+              tr?: string;
+              [key: string]: string | undefined;
+            };
+            text?: string;
+            created_at: string;
+            updated_at?: string;
+            deleted_at?: string | null;
+            author?: {
+              id: string;
+              username?: string;
+              displayname?: string;
+            };
+            attachments?: Array<{
+              id: string;
+              file?: {
+                url?: string;
+                mime_type?: string;
+                name?: string;
+              };
+              url?: string;
+              type?: string;
+              name?: string;
+            }>;
+            files?: Array<{
+              url: string;
+              type: string;
+              name: string;
+            }>;
+          }>;
+          success?: boolean;
+        }>(Actions.CMD_FETCH_MESSAGES, {
+          method: "POST",
+          body: {
+            chat_id: realChatId,
+          },
+        });
+
+        if (response?.messages && Array.isArray(response.messages)) {
+          const mappedMessages = response.messages.map((msg) => {
+            // Determine if message is from current user
+            const isFromMe = msg.author_id === user.id;
+
+            // Get message content - handle both object format {en: "...", tr: "..."} and string format
+            let messageText = '';
+            if (typeof msg.content === 'string') {
+              messageText = msg.content;
+            } else if (msg.content && typeof msg.content === 'object') {
+              // Try to get content in preferred language (en first, then tr, then any available)
+              messageText = msg.content.en || msg.content.tr || Object.values(msg.content).find(v => v && typeof v === 'string') || '';
+            }
+            // Fallback to text field if content is empty
+            if (!messageText && msg.text) {
+              messageText = msg.text;
+            }
+
+            // Format time
+            let messageTime = '00:00';
+            if (msg.created_at) {
+              const messageDate = new Date(msg.created_at);
+              messageTime = messageDate.toLocaleTimeString('tr-TR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+              });
+            }
+
+            // Map attachments/files
+            let files: Array<{ url: string; type: string; name: string }> | undefined = undefined;
+            if (msg.attachments && msg.attachments.length > 0) {
+              files = msg.attachments.map((att) => ({
+                url: att.file?.url || att.url || '',
+                type: att.file?.mime_type || att.type || 'application/octet-stream',
+                name: att.file?.name || att.name || 'file'
+              }));
+            } else if (msg.files && msg.files.length > 0) {
+              files = msg.files;
+            }
+
+            return {
+              id: msg.id,
+              text: messageText,
+              time: messageTime,
+              sender: isFromMe ? 'me' as const : 'other' as const,
+              files: files
+            };
+          });
+
+          // Sort messages by created_at (oldest first)
+          mappedMessages.sort((a, b) => {
+            const msgA = response.messages?.find(m => m.id === a.id);
+            const msgB = response.messages?.find(m => m.id === b.id);
+            if (!msgA?.created_at || !msgB?.created_at) return 0;
+            return new Date(msgA.created_at).getTime() - new Date(msgB.created_at).getTime();
+          });
+
+          setMessages(mappedMessages);
+        } else {
+          setMessages([]);
+        }
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+        setMessages([]);
+      } finally {
+        setIsLoadingMessages(false);
+        setIsRefreshingMessages(false);
+      }
+  }, [selectedChat, chatsList, user?.id]);
+
+  // Fetch messages when chat is selected
+  React.useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
+
+  // Handle refresh messages
+  const handleRefreshMessages = () => {
+    if (!isRefreshingMessages && !isLoadingMessages) {
+      fetchMessages(true);
+    }
+  };
 
   // Handle message deletion
   const handleDeleteMessage = (messageId: string) => {
@@ -503,28 +774,92 @@ const MessagesScreen: React.FC = () => {
     }
   }, [openChatItemMenu]);
 
-  const handleSendMessage = () => {
-    if (message.trim() || selectedFiles.length > 0) {
-      const files = selectedFiles.length > 0 
-        ? selectedFiles.map(file => ({
-            url: URL.createObjectURL(file),
+  const handleSendMessage = async () => {
+    if (!selectedChat || (!message.trim() && selectedFiles.length === 0)) {
+      return;
+    }
+
+    // Find the selected chat to get the real chat ID
+    const currentChat = chatsList.find(chat => chat.id === selectedChat);
+    
+    // Only use chatId field, never use id as fallback (id can be username or user ID)
+    if (!currentChat?.chatId) {
+      console.error('Chat ID not found - chat must be created first', { selectedChat, currentChat });
+      return;
+    }
+    
+    const realChatId = currentChat.chatId;
+    
+    // Validate that chatId is a UUID format (not a username or user ID)
+    // UUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (36 characters with hyphens)
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(realChatId)) {
+      console.error('Invalid chat ID format - must be UUID', { 
+        chatId: realChatId, 
+        selectedChat, 
+        currentChat 
+      });
+      return;
+    }
+    
+    console.log('Sending message with chat_id:', realChatId);
+
+    const messageText = message.trim();
+    // Store files before clearing state
+    const filesToSend = [...selectedFiles];
+    const files = filesToSend.length > 0 
+      ? filesToSend.map(file => ({
+          url: URL.createObjectURL(file),
+          type: file.type,
+          name: file.name
+        }))
+      : undefined;
+    
+    // Optimistically update UI
+    const tempMessageId = Date.now().toString();
+    const newMessage = {
+      id: tempMessageId,
+      text: messageText,
+      time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
+      sender: 'me' as const,
+      files: files
+    };
+    
+    // Add message to UI immediately
+    setMessages(prev => [...prev, newMessage]);
+    setMessage('');
+    setSelectedFiles([]);
+    setIsTyping(false);
+    setShowEmojiPicker(false);
+
+    // Send message to API
+    try {
+      const response = await api.call<{ message_id: string; id: string }>(Actions.CMD_SEND_MESSAGE, {
+        method: "POST",
+        body: {
+          chat_id: realChatId, // Use real chat ID from backend
+          content: messageText,
+          images: filesToSend.length > 0 ? filesToSend.map(file => ({
+            file: file,
             type: file.type,
             name: file.name
-          }))
-        : undefined;
-      
-      const newMessage = {
-        id: Date.now().toString(),
-        text: message.trim(),
-        time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
-        sender: 'me' as const,
-        files: files
-      };
-      setMessages(prev => [...prev, newMessage]);
-      setMessage('');
-      setSelectedFiles([]);
-      setIsTyping(false);
-      setShowEmojiPicker(false);
+          })) : undefined,
+        },
+      });
+
+      // Update message ID with server response if available
+      if (response?.message_id || response?.id) {
+        setMessages(prev => prev.map(msg => 
+          msg.id === tempMessageId 
+            ? { ...msg, id: response.message_id || response.id }
+            : msg
+        ));
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      // Remove message from UI if API call failed
+      setMessages(prev => prev.filter(msg => msg.id !== tempMessageId));
+      // Optionally show error message to user
     }
   };
 
@@ -724,7 +1059,18 @@ const MessagesScreen: React.FC = () => {
 
             {/* Chat List */}
             <div className="flex-1 overflow-y-auto scrollbar-hide min-h-0">
-              {chatsList.filter((chat: any) => {
+              {isLoadingChats ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center">
+                    <div className={`animate-spin rounded-full h-8 w-8 border-b-2 mx-auto mb-2 ${
+                      theme === 'dark' ? 'border-white' : 'border-gray-900'
+                    }`}></div>
+                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                      Loading chats...
+                    </p>
+                  </div>
+                </div>
+              ) : chatsList.filter((chat: any) => {
                 if (activeFilter === 'all') return true;
                 if (activeFilter === 'unread') return chat.unread > 0;
                 if (activeFilter === 'unencrypted') return !chat.encrypted;
@@ -914,7 +1260,7 @@ const MessagesScreen: React.FC = () => {
                     flexBasis: 'auto'
                   }}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-row gap-2 items-center justify-between">
                     <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
                       {/* Mobile back button */}
                       <motion.button 
@@ -975,26 +1321,48 @@ const MessagesScreen: React.FC = () => {
                               theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                             }`}>@{selectedPrivateChat.username || selectedPrivateChat.name.toLowerCase()}</p>
                           </div>
-                          <motion.div
-                            animate={{ rotate: showProfile ? 180 : 0 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                            className="flex-shrink-0"
-                          >
-                            {showProfile ? (
-                              <ChevronUp className={`w-5 h-5 ${
-                                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                              }`} />
-                            ) : (
-                              <ChevronDown className={`w-5 h-5 ${
-                                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                              }`} />
-                            )}
-                          </motion.div>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                           
+                            <motion.div
+                              animate={{ rotate: showProfile ? 180 : 0 }}
+                              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                              className="flex-shrink-0"
+                            >
+                              {showProfile ? (
+                                <ChevronUp className={`w-5 h-5 ${
+                                  theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                                }`} />
+                              ) : (
+                                <ChevronDown className={`w-5 h-5 ${
+                                  theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                                }`} />
+                              )}
+                            </motion.div>
+                          </div>
                         </motion.button>
                       ) : null}
                     </div>
                     {/* Chat Actions Menu */}
-                    <div className="relative flex-shrink-0">
+                    <div className="relative flex flex-row gap-2 flex-shrink-0">
+                    <motion.button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRefreshMessages();
+                              }}
+                              whileTap={{ scale: 0.95 }}
+                              disabled={isRefreshingMessages || isLoadingMessages}
+                              className={`p-2 rounded-lg transition-colors ${
+                                theme === 'dark' 
+                                  ? 'hover:bg-white/10 text-gray-400' 
+                                  : 'hover:bg-black/10 text-gray-500'
+                              } disabled:opacity-50`}
+                            >
+                              <RefreshCw 
+                                className={`w-5 h-5 ${
+                                  isRefreshingMessages ? 'animate-spin' : ''
+                                }`} 
+                              />
+                            </motion.button>
                       <motion.button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -1089,27 +1457,57 @@ const MessagesScreen: React.FC = () => {
                       }}
                     >
                       <div className="space-y-3 max-w-4xl mx-auto">
-                    {/* Date Separator */}
-                    <div className="flex justify-center my-6">
-                      <div className={`px-3 py-1 rounded-full ${
-                        theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'
-                      }`}>
-                        <span className={`text-xs font-medium ${
-                          theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                        }`}>Bugün</span>
+                    {isLoadingMessages ? (
+                      <div className="flex items-center justify-center py-12">
+                        <div className="text-center">
+                          <div className={`animate-spin rounded-full h-8 w-8 border-b-2 mx-auto mb-2 ${
+                            theme === 'dark' ? 'border-white' : 'border-gray-900'
+                          }`}></div>
+                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                            Loading messages...
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <>
+                        {/* Date Separator */}
+                        {messages.length > 0 && (
+                          <div className="flex justify-center my-6">
+                            <div className={`px-3 py-1 rounded-full ${
+                              theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'
+                            }`}>
+                              <span className={`text-xs font-medium ${
+                                theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                              }`}>Bugün</span>
+                            </div>
+                          </div>
+                        )}
 
-                    {/* Messages */}
-                    {messages.map((msg) => (
-                      <MessageItem
-                        key={msg.id}
-                        msg={msg}
-                        theme={theme}
-                        onDelete={handleDeleteMessage}
-                        onContextMenu={handleMessageContextMenu}
-                      />
-                    ))}
+                        {/* Messages */}
+                        {messages.length === 0 ? (
+                          <div className="flex items-center justify-center py-12">
+                            <div className="text-center">
+                              <MessageCircle className={`w-12 h-12 mx-auto mb-3 ${
+                                theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
+                              }`} />
+                              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                                No messages yet
+                              </p>
+                            </div>
+                          </div>
+                        ) : (
+                          messages.map((msg) => (
+                            <MessageItem
+                              key={msg.id}
+                              msg={msg}
+                              theme={theme}
+                              onDelete={handleDeleteMessage}
+                              onContextMenu={handleMessageContextMenu}
+                            />
+                          ))
+                        )}
+                      </>
+                    )}
 
                     {/* Message Context Menu */}
                     {selectedMessageId && selectedMessageId !== 'menu' && messageMenuPosition && (

@@ -1,0 +1,83 @@
+{
+    "messages": [
+        {
+            "public_id": "1986271311134986240",
+            "id": "e452cf33-c5a2-4a45-8a99-7e145ce29ca0",
+            "post_kind": "status",
+            "content_category": "normal",
+            "contentable_id": "ef8c919c-ab90-4f71-b38b-8c0dd4f1cc6a",
+            "contentable_type": "chat",
+            "author_id": "f7672f10-1d52-49f4-8f39-9aec2c21b4d5",
+            "content": {
+                "en": "analdan yedigime pisman oldum"
+            },
+            "published": true,
+            "created_at": "2025-11-06T09:00:58.368048+05:45",
+            "updated_at": "2025-11-06T09:00:58.369571+05:45",
+            "deleted_at": null,
+            "author": {
+                "public_id": "1986219126921629696",
+                "id": "f7672f10-1d52-49f4-8f39-9aec2c21b4d5",
+                "username": "haram",
+                "displayname": "haram",
+                "email": "",
+                "date_of_birth": "2000-11-02T05:45:00+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": false,
+                "created_at": "2025-11-06T05:33:36.688161+05:45",
+                "updated_at": "2025-11-06T05:33:36.688161+05:45",
+                "default_language": "en",
+                "languages": null,
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        },
+        {
+            "public_id": "1986271958798438400",
+            "id": "628c288b-e888-482e-9baf-fb0611fcf144",
+            "post_kind": "status",
+            "content_category": "normal",
+            "contentable_id": "ef8c919c-ab90-4f71-b38b-8c0dd4f1cc6a",
+            "contentable_type": "chat",
+            "author_id": "f7672f10-1d52-49f4-8f39-9aec2c21b4d5",
+            "content": {
+                "en": "gotten yedigime pisman oldum"
+            },
+            "published": true,
+            "created_at": "2025-11-06T09:03:32.783771+05:45",
+            "updated_at": "2025-11-06T09:03:32.784993+05:45",
+            "deleted_at": null,
+            "author": {
+                "public_id": "1986219126921629696",
+                "id": "f7672f10-1d52-49f4-8f39-9aec2c21b4d5",
+                "username": "haram",
+                "displayname": "haram",
+                "email": "",
+                "date_of_birth": "2000-11-02T05:45:00+05:45",
+                "gender_identities": null,
+                "sexual_orientations": null,
+                "user_role": "",
+                "is_active": false,
+                "created_at": "2025-11-06T05:33:36.688161+05:45",
+                "updated_at": "2025-11-06T05:33:36.688161+05:45",
+                "default_language": "en",
+                "languages": null,
+                "travel": {
+                    "visited_countries": null,
+                    "travel_frequency": "",
+                    "favorite_places": null
+                },
+                "social": {},
+                "deleted_at": null
+            }
+        }
+    ],
+    "success": true
+}

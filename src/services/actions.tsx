@@ -10,10 +10,14 @@ export const Actions = {
 
 
   // CHAT
-  CHAT_SEND_TEXT: "chat.send_text",
-  CHAT_SEND_GIF: "chat.send_gif",
-  CHAT_SEND_CALL: "chat.send_call",
-  CHAT_SEND_STICKER: "chat.send_sticker",
+  CMD_CHAT_CREATE: "chat.create",
+	CMD_TYPING         : "chat.typing",
+	CMD_SEND_MESSAGE   : "chat.send_message",   // Mesaj gönder
+	CMD_DELETE_CHAT    : "chat.delete_chat",    // Sohbeti sil
+	CMD_FETCH_CHATS    : "chat.fetch_chats",    // Sohbetleri getir
+	CMD_DELETE_MESSAGE : "chat.delete_message", // Mesajı sil
+	CMD_FETCH_MESSAGES : "chat.fetch_messages", // Mesajları getir
+  
 
   // USER
   USER_UPDATE_PROFILE: "user.update_profile",

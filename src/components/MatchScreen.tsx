@@ -3,7 +3,9 @@ import { motion, AnimatePresence, PanInfo, useMotionValue } from 'framer-motion'
 import { Heart, X, Star, MapPin, Briefcase, GraduationCap, MessageCircle, Camera, Shield, Sparkles, ChevronRight, Wine, Cigarette, Baby, PawPrint, Church, Eye, Paintbrush, Ruler, RulerDimensionLine, Palette, Users, Accessibility, PersonStanding, Drama, Vegan, HeartHandshake, Panda, Ghost, Frown, UserCircle, Rainbow, Smile, Banana, Link, Calendar, RefreshCw } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useApp } from '../contexts/AppContext';
+import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import Container from './Container';
 import { api } from '../services/api';
 import { Actions } from '../services/actions';
@@ -125,7 +127,9 @@ interface MatchResponse {
 const MatchScreen: React.FC = () => {
   const { theme } = useTheme();
   const { defaultLanguage } = useApp();
+  const { user } = useAuth();
   const { t } = useTranslation('common');
+  const navigate = useNavigate();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -717,6 +721,65 @@ const MatchScreen: React.FC = () => {
     const date = new Date(dateString);
     const locale = defaultLanguage === 'tr' ? 'tr-TR' : 'en-US';
     return `${t('profile.joined') || 'Joined'} ${date.toLocaleDateString(locale, { month: 'long', year: 'numeric' })}`;
+  };
+
+  // Handle send message - create chat and navigate
+  const handleSendMessage = async (profile: Profile) => {
+    if (!user?.id || !profile?.id) {
+      console.error('User or profile ID is missing');
+      return;
+    }
+
+    try {
+      // Create chat via API
+      const chatResponse = await api.call<{ 
+        chat: { 
+          id: string;
+          type: string;
+          participants?: Array<{
+            user_id: string;
+            user?: {
+              id: string;
+              username?: string;
+              displayname?: string;
+            };
+          }>;
+        };
+        success: boolean;
+      }>(Actions.CMD_CHAT_CREATE, {
+        method: "POST",
+        body: {
+          type: 'private',
+          participant_ids: [profile.id],
+        },
+      });
+
+      const chatId = chatResponse?.chat?.id;
+      
+      if (chatId) {
+        // Navigate to messages screen with chat ID
+        navigate('/messages', { 
+          state: { 
+            openChat: chatId,
+            userId: profile.id,
+            publicId: profile.public_id,
+            username: profile.username
+          } 
+        });
+      } else {
+        console.error('Chat creation failed - no chat ID returned');
+      }
+    } catch (error) {
+      console.error('Error creating chat:', error);
+      // Navigate anyway, MessagesScreen will handle creating a temporary chat
+      navigate('/messages', { 
+        state: { 
+          openChat: profile.username || profile.id,
+          userId: profile.id,
+          publicId: profile.public_id
+        } 
+      });
+    }
   };
 
   if (isLoading) {
@@ -1730,6 +1793,11 @@ const MatchScreen: React.FC = () => {
                                       }`}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
+                                    onClick={() => {
+                                      if (currentProfile) {
+                                        handleSendMessage(currentProfile);
+                                      }
+                                    }}
                                   >
                                     <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
                                     <span>{t('match.send_message') || 'Send Message'}</span>
@@ -1922,7 +1990,9 @@ const MatchScreen: React.FC = () => {
                             }}
                             onClick={(e) => {
                               e.stopPropagation();
-                              // Handle message action
+                              if (profile) {
+                                handleSendMessage(profile);
+                              }
                             }}
                           >
                             <MessageCircle className="w-5 h-5" strokeWidth={2.5} />

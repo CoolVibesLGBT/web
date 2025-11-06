@@ -1,0 +1,115 @@
+{
+    "chat": {
+        "id": "b8cf847b-0cd5-409f-aa72-723c15227b43",
+        "type": "private",
+        "title": {
+            "en": "Private Chat"
+        },
+        "description": {
+            "en": "A private chat is a secure, invite-only conversation between selected participants."
+        },
+        "creator_id": "f7672f10-1d52-49f4-8f39-9aec2c21b4d5",
+        "created_at": "2025-11-06T06:56:17.969894+05:45",
+        "updated_at": "2025-11-06T06:56:17.969894+05:45",
+        "deleted_at": null,
+        "participants": [
+            {
+                "id": "d5d532b0-5c27-4dfd-85a9-c7f389231a3e",
+                "chat_id": "b8cf847b-0cd5-409f-aa72-723c15227b43",
+                "user_id": "f7672f10-1d52-49f4-8f39-9aec2c21b4d5",
+                "role": "member",
+                "is_muted": false,
+                "joined_at": "0001-01-01T05:41:16+05:41",
+                "chat": {
+                    "id": "b8cf847b-0cd5-409f-aa72-723c15227b43",
+                    "type": "private",
+                    "title": {
+                        "en": "Private Chat"
+                    },
+                    "description": {
+                        "en": "A private chat is a secure, invite-only conversation between selected participants."
+                    },
+                    "creator_id": "f7672f10-1d52-49f4-8f39-9aec2c21b4d5",
+                    "created_at": "2025-11-06T06:56:17.969894+05:45",
+                    "updated_at": "2025-11-06T06:56:17.969894+05:45",
+                    "deleted_at": null
+                },
+                "user": {
+                    "public_id": "1986219126921629696",
+                    "id": "f7672f10-1d52-49f4-8f39-9aec2c21b4d5",
+                    "username": "haram",
+                    "displayname": "haram",
+                    "email": "",
+                    "date_of_birth": "2000-11-02T05:45:00+05:45",
+                    "gender_identities": null,
+                    "sexual_orientations": null,
+                    "user_role": "",
+                    "is_active": false,
+                    "created_at": "2025-11-06T05:33:36.688161+05:45",
+                    "updated_at": "2025-11-06T05:33:36.688161+05:45",
+                    "default_language": "en",
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "social": {},
+                    "deleted_at": null
+                },
+                "created_at": "2025-11-06T06:56:17.971103+05:45",
+                "updated_at": "2025-11-06T06:56:17.971103+05:45"
+            },
+            {
+                "id": "6287b4e3-d9f5-4229-8e4c-3a4674f61eba",
+                "chat_id": "b8cf847b-0cd5-409f-aa72-723c15227b43",
+                "user_id": "5efc411e-8b41-4e38-be2d-b6ee28a07712",
+                "role": "member",
+                "is_muted": false,
+                "joined_at": "0001-01-01T05:41:16+05:41",
+                "chat": {
+                    "id": "b8cf847b-0cd5-409f-aa72-723c15227b43",
+                    "type": "private",
+                    "title": {
+                        "en": "Private Chat"
+                    },
+                    "description": {
+                        "en": "A private chat is a secure, invite-only conversation between selected participants."
+                    },
+                    "creator_id": "f7672f10-1d52-49f4-8f39-9aec2c21b4d5",
+                    "created_at": "2025-11-06T06:56:17.969894+05:45",
+                    "updated_at": "2025-11-06T06:56:17.969894+05:45",
+                    "deleted_at": null
+                },
+                "user": {
+                    "public_id": "1986190801826222080",
+                    "id": "5efc411e-8b41-4e38-be2d-b6ee28a07712",
+                    "username": "aren",
+                    "displayname": "aren",
+                    "email": "",
+                    "date_of_birth": "2000-11-15T05:45:00+05:45",
+                    "gender_identities": null,
+                    "sexual_orientations": null,
+                    "user_role": "",
+                    "is_active": false,
+                    "created_at": "2025-11-06T03:41:03.454121+05:45",
+                    "updated_at": "2025-11-06T04:17:17.035182+05:45",
+                    "default_language": "en",
+                    "avatar_id": "fb7e93b5-a5c8-49b4-ac14-3cae1c9eea89",
+                    "cover_id": "6ae97225-7bdc-4a4a-9406-f5afd85ad331",
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "social": {},
+                    "deleted_at": null
+                },
+                "created_at": "2025-11-06T06:56:17.971103+05:45",
+                "updated_at": "2025-11-06T06:56:17.971103+05:45"
+            }
+        ]
+    },
+    "success": true
+}

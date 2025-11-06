@@ -32,13 +32,14 @@ const domainToSocketURL: Record<string, [string, string]> = {
   'coolvibes.app': ['wss://socket.coolvibes.app', 'wss://socket2.coolvibes.app'],
 };
 
-const defaultServiceURL: [string, string] = ['http://localhost:3001', 'http://localhost:3002'];
-const defaultSocketURL: [string, string] = ['ws://localhost:4001', 'ws://localhost:4002'];
+const defaultServiceURL: [string, string] = ['http://localhost:3001', 'http://localhost:3000'];
+const defaultSocketURL: [string, string] = ['ws://localhost:3002', 'ws://localhost:3003'];
 
 export const serviceURL = isDev
   ? defaultServiceURL
   : domainToServiceURL[hostName] || defaultServiceURL;
 
+export const defaultSocketServerId = 0
 export const socketURL = isDev
   ? defaultSocketURL
   : domainToSocketURL[hostName] || defaultSocketURL;
