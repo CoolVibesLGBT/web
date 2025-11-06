@@ -1543,49 +1543,49 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     <>
       {/* Header */}
       {!inline && (
-        <div ref={headerRef} className={`sticky top-0 z-30 ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}`}>
-          <div className="flex items-center px-4 py-3">
-            {isEditMode ? (
-              <>
-                <button
-                  onClick={() => setIsEditMode(false)}
-                  className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
-                    }`}
-                >
-                  <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
-                </button>
-                <div className="flex-1">
-                  <h1 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                    {t('profile.edit_profile')}
-                  </h1>
-                </div>
-                <div className="w-12"></div>
-              </>
-            ) : (
-              <>
-            <button
-              onClick={handleBackClick}
-              className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
-                }`}
-            >
-              <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
-            </button>
-            <div className="flex-1">
-              <h1 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                {user.displayname}
-              </h1>
-              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                {user.posts_count} {t('profile.posts')}
-              </p>
-            </div>
-            <button className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
-              }`}>
-              <MoreHorizontal className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
-            </button>
-              </>
-            )}
+      <div ref={headerRef} className={`sticky top-0 z-30 ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}`}>
+        <div className="flex items-center px-4 py-3">
+          {isEditMode ? (
+            <>
+              <button
+                onClick={() => setIsEditMode(false)}
+                className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
+                  }`}
+              >
+                <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
+              </button>
+              <div className="flex-1">
+                <h1 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                  {t('profile.edit_profile')}
+                </h1>
+              </div>
+              <div className="w-12"></div>
+            </>
+          ) : (
+            <>
+          <button
+            onClick={handleBackClick}
+            className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
+              }`}
+          >
+            <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
+          </button>
+          <div className="flex-1">
+            <h1 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+              {user.displayname}
+            </h1>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+              {user.posts_count} {t('profile.posts')}
+            </p>
           </div>
+          <button className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
+            }`}>
+            <MoreHorizontal className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+          </button>
+            </>
+          )}
         </div>
+      </div>
       )}
 
       <div className="max-w-[1380px] mx-auto">

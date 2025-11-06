@@ -214,7 +214,8 @@ const MatchScreen: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [matchPercentage] = useState(96);
   const [activeTab, setActiveTab] = useState<'about' | 'details' | 'interests' | 'fantasies'>('about');
-  const [exitX, setExitX] = useState(0);
+  const [exitingProfileId, setExitingProfileId] = useState<string | null>(null);
+  const [exitDirection, setExitDirection] = useState<'left' | 'right' | null>(null);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [showMatchAnimation, setShowMatchAnimation] = useState(false);
   const [matchedProfile, setMatchedProfile] = useState<Profile | null>(null);
@@ -319,7 +320,6 @@ const MatchScreen: React.FC = () => {
   const y = useMotionValue(0);
 
   const handleSwipe = async (direction: 'left' | 'right' = 'right', reactionType: 'like' | 'dislike' | 'superlike' = 'like') => {
-    const targetX = direction === 'right' ? 600 : -600;
     const currentProfile = profiles[currentIndex];
 
     if (!currentProfile || !profiles.length) return;
@@ -351,10 +351,14 @@ const MatchScreen: React.FC = () => {
       y.set(0);
       
       // Trigger exit animation
-      setExitX(targetX);
+      setExitingProfileId(currentProfile.id);
+      setExitDirection(direction);
       
       return;
     }
+
+    // Store profile reference before removing from list (for match animation)
+    const profileForMatch = { ...currentProfile };
 
     // Mark as processed immediately
     setProcessedProfiles(prev => {
@@ -365,7 +369,8 @@ const MatchScreen: React.FC = () => {
     });
 
     // Trigger exit animation immediately for better UX
-    setExitX(targetX);
+    setExitingProfileId(currentProfile.id);
+    setExitDirection(direction);
 
     // Determine reaction type based on direction and explicit type
     let reaction: 'like' | 'dislike' | 'favorite' | 'bookmark' | 'superlike' = 'like';
@@ -376,63 +381,6 @@ const MatchScreen: React.FC = () => {
     } else {
       reaction = 'dislike';
     }
-
-    // Call API to create match/reaction (fire and forget for better UX)
-    api.call<MatchResponse>(Actions.CMD_MATCH_CREATE, {
-      method: "POST",
-      body: {
-        public_id: currentProfile.public_id,
-        reaction: reaction,
-      },
-    }).then((response) => {
-
-      // Handle response
-      if (response) {
-        if (reaction === 'like' || reaction === 'superlike') {
-          // Like edildi - history'ye ekle
-          setLikedProfiles(prev => {
-            if (!prev.find(p => p.id === currentProfile.id)) {
-              return [...prev, currentProfile];
-            }
-            return prev;
-          });
-
-          // Check if matched
-          if (response.matched) {
-            setMatchedProfiles(prev => {
-              if (!prev.find(p => p.id === currentProfile.id)) {
-                return [...prev, currentProfile];
-              }
-              return prev;
-            });
-            setMatchedProfile(currentProfile);
-          setShowMatchAnimation(true);
-          setTimeout(() => {
-            setShowMatchAnimation(false);
-              setMatchedProfile(null);
-          }, 2000);
-        }
-        } else if (reaction === 'dislike') {
-          // Pass edildi - history'ye ekle
-          setPassedProfiles(prev => {
-            if (!prev.find(p => p.id === currentProfile.id)) {
-              return [...prev, currentProfile];
-            }
-            return prev;
-          });
-        }
-      }
-    }).catch((error) => {
-      console.error('Error creating match:', error);
-      // Remove from processed set if API call failed, so user can retry
-      setProcessedProfiles(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(currentProfile.id);
-        // Update ref immediately
-        processedProfilesRef.current = newSet;
-        return newSet;
-      });
-    });
 
     // Remove profile from profiles list immediately (don't wait for API)
     const currentIdx = currentIndex;
@@ -450,6 +398,69 @@ const MatchScreen: React.FC = () => {
       setCurrentImageIndex(0);
       
       return filtered;
+    });
+
+    // Call API to create match/reaction (fire and forget for better UX)
+    api.call<MatchResponse>(Actions.CMD_MATCH_CREATE, {
+      method: "POST",
+      body: {
+        public_id: currentProfile.public_id,
+        reaction: reaction,
+      },
+    }).then((response) => {
+      console.log('Match API response:', response);
+
+      // Handle response
+      if (response) {
+        if (reaction === 'like' || reaction === 'superlike') {
+          // Like edildi - history'ye ekle
+          setLikedProfiles(prev => {
+            if (!prev.find(p => p.id === profileForMatch.id)) {
+              return [...prev, profileForMatch];
+            }
+            return prev;
+          });
+
+          // Check if matched - use stored profile reference
+          if (response.matched === true) {
+            console.log('Match detected! Showing animation for profile:', profileForMatch);
+            setMatchedProfiles(prev => {
+              if (!prev.find(p => p.id === profileForMatch.id)) {
+                return [...prev, profileForMatch];
+              }
+              return prev;
+            });
+            setMatchedProfile(profileForMatch);
+          setShowMatchAnimation(true);
+          setTimeout(() => {
+            setShowMatchAnimation(false);
+              setMatchedProfile(null);
+          }, 2000);
+          } else {
+            console.log('No match - response.matched:', response.matched);
+        }
+        } else if (reaction === 'dislike') {
+          // Pass edildi - history'ye ekle
+          setPassedProfiles(prev => {
+            if (!prev.find(p => p.id === profileForMatch.id)) {
+              return [...prev, profileForMatch];
+            }
+            return prev;
+          });
+        }
+      } else {
+        console.log('No response from API');
+      }
+    }).catch((error) => {
+      console.error('Error creating match:', error);
+      // Remove from processed set if API call failed, so user can retry
+      setProcessedProfiles(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(currentProfile.id);
+        // Update ref immediately
+        processedProfilesRef.current = newSet;
+        return newSet;
+      });
     });
   };
 
@@ -531,8 +542,8 @@ const MatchScreen: React.FC = () => {
     y.set(0);
     setCurrentImageIndex(0);
     setShowBottomSheet(false);
-    setExitX(0);
     setActiveTab('about');
+    // Don't reset exitDirection here - let animation complete first
   }, [currentIndex]);
 
   // Reset processed profiles when profiles list changes (new profiles loaded)
@@ -1064,7 +1075,13 @@ const MatchScreen: React.FC = () => {
           )}
 
           {/* Current Card (Foreground) */}
-          <AnimatePresence mode="wait">
+          <AnimatePresence 
+            mode="wait"
+            onExitComplete={() => {
+              setExitingProfileId(null);
+              setExitDirection(null);
+            }}
+          >
             <motion.div
               key={currentProfile.id}
               ref={cardRef}
@@ -1072,10 +1089,14 @@ const MatchScreen: React.FC = () => {
               initial={{ scale: 0.96, opacity: 0, y: 20, x: 0, rotate: 0 }}
               animate={{ scale: 1, opacity: 1, y: 0, x: 0, rotate: 0 }}
               exit={{
-                x: exitX,
+                x: exitingProfileId === currentProfile.id && exitDirection 
+                  ? (exitDirection === 'right' ? 600 : -600)
+                  : 0,
                 opacity: 0,
                 scale: 0.9,
-                rotate: exitX > 0 ? 12 : -12,
+                rotate: exitingProfileId === currentProfile.id && exitDirection
+                  ? (exitDirection === 'right' ? 12 : -12)
+                  : 0,
                 transition: {
                   type: "spring",
                   damping: 40,
