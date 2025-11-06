@@ -15,6 +15,8 @@ interface Reel {
 
 interface ReelsProps {
   reels?: Reel[];
+  activeTab?: string;
+  onPostClick?: (postId: string, username: string) => void;
 }
 
 const generateReels = (): Reel[] => {
@@ -130,7 +132,7 @@ const generateReels = (): Reel[] => {
   }));
 };
 
-export default function Vibes({ reels: initialReels }: ReelsProps) {
+export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPostClick: _onPostClick }: ReelsProps) {
   const [allReels, setAllReels] = useState<Reel[]>(initialReels || generateReels());
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState<number | null>(null);
