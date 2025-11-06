@@ -25,13 +25,39 @@ import {
   Trash2,
   ChevronDown,
   ChevronUp,
-  RefreshCw
+  RefreshCw,
+  Image,
+  Video
 } from 'lucide-react';
 import { useSocket } from '../contexts/SocketContext';
-import { parseJSON } from 'date-fns';
+import { defaultServiceServerId, serviceURL } from '../appSettings';
 
 interface MessageItemProps {
-  msg: { id: string; text: string; time: string; sender: 'me' | 'other'; files?: Array<{ url: string; type: string; name: string }> };
+  msg: { 
+    id: string; 
+    text: string; 
+    time: string; 
+    sender: 'me' | 'other'; 
+    attachments?: Array<{
+      id: string;
+      file: {
+        id: string;
+        url: string;
+        mime_type: string;
+        name: string;
+        storage_path?: string;
+        variants?: {
+          image?: {
+            original?: { url: string };
+            small?: { url: string };
+            medium?: { url: string };
+            large?: { url: string };
+            thumbnail?: { url: string };
+          };
+        };
+      };
+    }>;
+  };
   theme: 'dark' | 'light';
   onDelete: (id: string) => void;
   onContextMenu: (e: React.MouseEvent, id: string) => void;
@@ -108,43 +134,52 @@ const MessageItem: React.FC<MessageItemProps> = ({ msg, theme, onDelete, onConte
           borderBottomRightRadius: msg.sender === 'me' ? '4px' : '16px'
         }}
       >
-        {/* Media Files */}
-        {msg.files && msg.files.length > 0 && (
+        {/* Media Files - Backend Format: attachments */}
+        {msg.attachments && msg.attachments.length > 0 && (
           <div className="mb-2 space-y-2">
-            {msg.files.map((file, idx) => (
-              <div key={idx} className="relative rounded-lg overflow-hidden">
-                {file.type.startsWith('image/') ? (
-                  <img
-                    src={file.url}
-                    alt={file.name}
-                    className="w-full max-w-xs rounded-lg object-cover"
-                    style={{ maxHeight: '300px' }}
-                  />
-                ) : file.type.startsWith('video/') ? (
-                  <video
-                    src={file.url}
-                    controls
-                    className="w-full max-w-xs rounded-lg object-cover"
-                    style={{ maxHeight: '300px' }}
-                  >
-                    Your browser does not support the video tag.
-                  </video>
-                ) : (
-                  <div className={`p-4 rounded-lg flex items-center space-x-3 ${
-                    theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'
-                  }`}>
-                    <Paperclip className={`w-5 h-5 ${
-                      theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                    }`} />
-                    <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-medium truncate ${
-                        theme === 'dark' ? 'text-white' : 'text-gray-900'
-                      }`}>{file.name}</p>
+            {msg.attachments.map((attachment, idx) => {
+              const file = attachment.file;
+              const imageUrl = file.variants?.image?.original?.url || 
+                              file.variants?.image?.large?.url || 
+                              file.variants?.image?.medium?.url || 
+                              file.variants?.image?.small?.url || 
+                              file.url;
+              
+              return (
+                <div key={attachment.id || idx} className="relative rounded-lg overflow-hidden">
+                  {file.mime_type?.startsWith('image/') ? (
+                    <img
+                      src={`${serviceURL[defaultServiceServerId]}${imageUrl}`}
+                      alt={file.name}
+                      className="w-full max-w-xs rounded-lg object-cover"
+                      style={{ maxHeight: '300px' }}
+                    />
+                  ) : file.mime_type?.startsWith('video/') ? (
+                    <video
+                      src={file.url || file.storage_path || ''}
+                      controls
+                      className="w-full max-w-xs rounded-lg object-cover"
+                      style={{ maxHeight: '300px' }}
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <div className={`p-4 rounded-lg flex items-center space-x-3 ${
+                      theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'
+                    }`}>
+                      <Paperclip className={`w-5 h-5 ${
+                        theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                      }`} />
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm font-medium truncate ${
+                          theme === 'dark' ? 'text-white' : 'text-gray-900'
+                        }`}>{file.name}</p>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            ))}
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
         
@@ -177,7 +212,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ msg, theme, onDelete, onConte
 
 const MessagesScreen: React.FC = () => {
   const { theme } = useTheme();
-  const { isAuthenticated, user,token } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { setShowBottomBar } = useSettings();
   const navigate = useNavigate();
   const location = useLocation();
@@ -185,11 +220,13 @@ const MessagesScreen: React.FC = () => {
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [selectedVideos, setSelectedVideos] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const imageInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [inputHeight, setInputHeight] = useState(0);
   const inputContainerRef = useRef<HTMLDivElement>(null);
@@ -199,37 +236,260 @@ const MessagesScreen: React.FC = () => {
   const [openChatItemMenu, setOpenChatItemMenu] = useState<string | null>(null);
   const [showProfile, setShowProfile] = useState(false);
   const [isRefreshingMessages, setIsRefreshingMessages] = useState(false);
-  const { socket, connected } = useSocket();
+  const { socket } = useSocket();
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastTypingSentRef = useRef<number>(0);
+  const typingIndicatorTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-
-  
+  // Handle socket messages
   useEffect(() => {
+    if (!socket || !user?.id) return;
 
-    console.log("selectedChat",selectedChat)
-    if (!socket) return;
+    const handleSocketMessage = (msg: string | object | any[]) => {
+      console.log('Socket message received (raw):', msg);
+      
+      try {
+        // Handle array format: ["chat_id", "json_string"]
+        let messageData: any;
+        if (Array.isArray(msg)) {
+          // If it's an array, the second element is the JSON string
+          if (msg.length > 1 && typeof msg[1] === 'string') {
+            messageData = JSON.parse(msg[1]);
+          } else {
+            // If array format is different, try to parse the whole array
+            messageData = msg;
+          }
+        } else if (typeof msg === 'string') {
+          // Parse message if it's a string
+          messageData = JSON.parse(msg);
+        } else {
+          // Already an object
+          messageData = msg;
+        }
+        
+        const action = messageData?.action;
+        const message = messageData?.message || messageData?.data;
 
-    if(selectedChat){
-      //socket.emit('auth', token); // 'room1' yerine istediğin kanal adı
-    }
-    socket.on('message', (msg: string) => {
-      var _json : any  = parseJSON(msg)
-      var action = _json?.action;
-      var data = _json?.message
+        console.log('Socket message parsed:', { action, message, messageData });
 
-      console.dir(_json)
-      //setMessages(prev => [...prev, msg]);
-    });
+        // Only process messages for the current chat
+        if (action === Actions.CMD_SEND_MESSAGE && message) {
+          // Get current chat from ref
+          const currentChat = chatsListRef.current.find((chat: any) => chat.id === selectedChat);
+          
+          // Check if message belongs to current chat
+          const messageChatId = message.contentable_id || message.chat_id;
+          
+          console.log('Processing message:', { 
+            messageChatId, 
+            currentChatId: currentChat?.chatId, 
+            selectedChat,
+            hasCurrentChat: !!currentChat
+          });
+          
+          // If we have a selected chat, only process messages for that chat
+          if (selectedChat && currentChat?.chatId && messageChatId && messageChatId !== currentChat.chatId) {
+            // Message is for a different chat, ignore it
+            console.log('Message ignored - different chat', { messageChatId, currentChatId: currentChat.chatId });
+            return;
+          }
 
-    socket.on('chat', (msg: string) => {
-      console.log("coder",msg)
-      //setMessages(prev => [...prev, msg]);
-    });
+          // Determine if message is from current user
+          const isFromMe = message.author_id === user.id;
 
-    // Cleanup: bileşen kapanınca event listener'ı kaldır
-    return () => {
-      socket.off('message');
+          // Get message content - handle both object format {en: "...", tr: "..."} and string format
+          let messageText = '';
+          if (typeof message.content === 'string') {
+            messageText = message.content;
+          } else if (message.content && typeof message.content === 'object') {
+            // Try to get content in preferred language (en first, then tr, then any available)
+            messageText = message.content.en || message.content.tr || Object.values(message.content).find((v: any) => v && typeof v === 'string') || '';
+          }
+          // Fallback to text field if content is empty
+          if (!messageText && message.text) {
+            messageText = message.text;
+          }
+
+          // Format time
+          let messageTime = '00:00';
+          if (message.created_at) {
+            const messageDate = new Date(message.created_at);
+            messageTime = messageDate.toLocaleTimeString('tr-TR', { 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            });
+          } else {
+            // If no timestamp, use current time
+            messageTime = new Date().toLocaleTimeString('tr-TR', { 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            });
+          }
+
+          // Use attachments directly from backend format - no mapping needed
+          // Create new message object
+          const newMessage = {
+            id: message.id || `socket-${Date.now()}`,
+            text: messageText,
+            time: messageTime,
+            sender: isFromMe ? 'me' as const : 'other' as const,
+            attachments: message.attachments || undefined
+          };
+
+          // Hide typing indicator when a new message arrives (from other user)
+          if (!isFromMe) {
+            setOtherUserTyping(false);
+            if (typingIndicatorTimeoutRef.current) {
+              clearTimeout(typingIndicatorTimeoutRef.current);
+              typingIndicatorTimeoutRef.current = null;
+            }
+          }
+
+          // Add message to UI (avoid duplicates by checking if message ID already exists)
+          // Also check if this is a duplicate of a recently sent message (to avoid duplicates from optimistic updates)
+          setMessages(prev => {
+            // Check if message already exists by ID
+            const existsById = prev.some(m => m.id === newMessage.id);
+            if (existsById) {
+              return prev;
+            }
+            
+            // If message is from current user, check for duplicate content (optimistic update)
+            // This prevents duplicate messages when we send a message optimistically and then receive it from socket
+            if (isFromMe) {
+              // Find the last message that matches our content and is from us
+              // This is likely the optimistic message we just added
+              const lastMessage = prev.length > 0 ? prev[prev.length - 1] : null;
+              
+              // Check if last message is from us, has same content, and has a temp ID
+              if (lastMessage && 
+                  lastMessage.sender === 'me' && 
+                  lastMessage.text === newMessage.text &&
+                  (lastMessage.id.startsWith('temp-') || lastMessage.id.startsWith('socket-'))) {
+                // Update the existing optimistic message with the real ID from socket
+                return prev.map(m => 
+                  m.id === lastMessage.id && m.text === newMessage.text
+                    ? { ...m, id: newMessage.id }
+                    : m
+                );
+              }
+              
+              // Also check for any message with same content from us (fallback)
+              const duplicate = prev.find(m => 
+                m.sender === 'me' && 
+                m.text === newMessage.text &&
+                (m.id.startsWith('temp-') || m.id.startsWith('socket-'))
+              );
+              
+              if (duplicate) {
+                // Update the existing message with the real ID from socket
+                return prev.map(m => 
+                  m.id === duplicate.id && m.text === newMessage.text
+                    ? { ...m, id: newMessage.id }
+                    : m
+                );
+              }
+            }
+            
+            // Add new message and sort by time
+            const updated = [...prev, newMessage];
+            // Sort messages by time (if we have timestamps, otherwise keep order)
+            return updated;
+          });
+        } else if (action === Actions.CMD_TYPING) {
+          // Handle typing indicator from socket
+          const typingData = messageData;
+          const typingChatId = typingData?.chatID || typingData?.chat_id;
+          const isTypingActive = typingData?.typing === true;
+          const typingUserId = typingData?.userID || typingData?.user_id;
+          
+          console.log('Typing indicator received:', { 
+            typingChatId, 
+            isTypingActive, 
+            typingUserId, 
+            currentUserId: user?.id,
+            selectedChat,
+            messageData,
+            allChats: chatsListRef.current.map((c: any) => ({ id: c.id, chatId: c.chatId }))
+          });
+          
+          // Get current chat from ref
+          const currentChat = chatsListRef.current.find((chat: any) => chat.id === selectedChat);
+          
+          console.log('Current chat:', { 
+            currentChat, 
+            currentChatId: currentChat?.chatId,
+            matches: typingChatId === currentChat?.chatId,
+            isOtherUser: typingUserId !== user?.id,
+            selectedChat
+          });
+          
+          // Only show typing indicator if it's for the current chat and from the other user
+          if (selectedChat && 
+              currentChat?.chatId && 
+              typingChatId === currentChat.chatId && 
+              typingUserId !== user?.id) {
+            console.log('✅ Showing typing indicator:', isTypingActive);
+            
+            // Clear any existing timeout
+            if (typingIndicatorTimeoutRef.current) {
+              clearTimeout(typingIndicatorTimeoutRef.current);
+              typingIndicatorTimeoutRef.current = null;
+            }
+            
+            if (isTypingActive) {
+              // Show typing indicator
+              setOtherUserTyping(true);
+              
+              // Set timeout to hide typing indicator after 3 seconds of inactivity
+              typingIndicatorTimeoutRef.current = setTimeout(() => {
+                console.log('Hiding typing indicator - 3 seconds of inactivity');
+                setOtherUserTyping(false);
+                typingIndicatorTimeoutRef.current = null;
+              }, 3000);
+            } else {
+              // If typing is false, hide immediately
+              console.log('Hiding typing indicator - typing stopped');
+              setOtherUserTyping(false);
+            }
+          } else {
+            console.log('❌ Typing indicator ignored:', {
+              hasSelectedChat: !!selectedChat,
+              hasCurrentChat: !!currentChat,
+              chatIdMatch: typingChatId === currentChat?.chatId,
+              isOtherUser: typingUserId !== user?.id,
+              typingChatId,
+              currentChatId: currentChat?.chatId,
+              selectedChat
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error processing socket message:', error);
+      }
     };
-  }, [socket,selectedChat]);
+
+    // Listen for socket messages
+    socket.on('message', handleSocketMessage);
+    socket.on('chat', handleSocketMessage);
+
+    // Cleanup: remove event listener when component unmounts or dependencies change
+    return () => {
+      socket.off('message', handleSocketMessage);
+      socket.off('chat', handleSocketMessage);
+      // Clear typing timeout on cleanup
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = null;
+      }
+      // Clear typing indicator timeout on cleanup
+      if (typingIndicatorTimeoutRef.current) {
+        clearTimeout(typingIndicatorTimeoutRef.current);
+        typingIndicatorTimeoutRef.current = null;
+      }
+    };
+  }, [socket, selectedChat, user?.id]);
 
 
   useEffect(() => {
@@ -239,6 +499,20 @@ const MessagesScreen: React.FC = () => {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Cleanup typing timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = null;
+      }
+      if (typingIndicatorTimeoutRef.current) {
+        clearTimeout(typingIndicatorTimeoutRef.current);
+        typingIndicatorTimeoutRef.current = null;
+      }
+    };
   }, []);
 
   // Calculate input height for mobile padding
@@ -266,7 +540,7 @@ const MessagesScreen: React.FC = () => {
         observer.disconnect();
       };
     }
-  }, [isMobile, selectedChat, selectedFiles, showEmojiPicker]);
+  }, [isMobile, selectedChat, selectedImages, selectedVideos, showEmojiPicker]);
 
   React.useEffect(() => {
     if (!selectedChat && isMobile) {
@@ -539,13 +813,45 @@ const MessagesScreen: React.FC = () => {
     encrypted: boolean;
   }>>([]);
   const [isLoadingChats, setIsLoadingChats] = useState(false);
+  
+  // Use ref to access current chatsList in socket handler
+  const chatsListRef = useRef(chatsList);
+  
+  // Update ref when chatsList changes
+  useEffect(() => {
+    chatsListRef.current = chatsList;
+  }, [chatsList]);
 
   const emojis = ['😊', '😂', '❤️', '👍', '🎉', '🔥', '💯', '✨', '🏳️‍🌈', '💪', '😍', '🤔', '😭', '😡', '🤗', '👏', '🙏', '💖', '💕', '💔', '😎', '🤩', '😴', '🤯', '🥳', '😇', '🤠', '👻', '🤖', '👽', '👾'];
 
   const selectedPrivateChat = chatsList.find(chat => chat.id === selectedChat);
 
-  // Messages state - will be replaced with actual data later
-  const [messages, setMessages] = useState<Array<{ id: string; text: string; time: string; sender: 'me' | 'other'; files?: Array<{ url: string; type: string; name: string }> }>>([]);
+  // Messages state - Backend format: attachments array
+  const [messages, setMessages] = useState<Array<{ 
+    id: string; 
+    text: string; 
+    time: string; 
+    sender: 'me' | 'other'; 
+    attachments?: Array<{
+      id: string;
+      file: {
+        id: string;
+        url: string;
+        mime_type: string;
+        name: string;
+        storage_path?: string;
+        variants?: {
+          image?: {
+            original?: { url: string };
+            small?: { url: string };
+            medium?: { url: string };
+            large?: { url: string };
+            thumbnail?: { url: string };
+          };
+        };
+      };
+    }>;
+  }>>([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
 
   // Fetch messages function (can be called manually or automatically)
@@ -601,19 +907,22 @@ const MessagesScreen: React.FC = () => {
             };
             attachments?: Array<{
               id: string;
-              file?: {
-                url?: string;
-                mime_type?: string;
-                name?: string;
+              file: {
+                id: string;
+                url: string;
+                mime_type: string;
+                name: string;
+                storage_path?: string;
+                variants?: {
+                  image?: {
+                    original?: { url: string };
+                    small?: { url: string };
+                    medium?: { url: string };
+                    large?: { url: string };
+                    thumbnail?: { url: string };
+                  };
+                };
               };
-              url?: string;
-              type?: string;
-              name?: string;
-            }>;
-            files?: Array<{
-              url: string;
-              type: string;
-              name: string;
             }>;
           }>;
           success?: boolean;
@@ -652,24 +961,13 @@ const MessagesScreen: React.FC = () => {
               });
             }
 
-            // Map attachments/files
-            let files: Array<{ url: string; type: string; name: string }> | undefined = undefined;
-            if (msg.attachments && msg.attachments.length > 0) {
-              files = msg.attachments.map((att) => ({
-                url: att.file?.url || att.url || '',
-                type: att.file?.mime_type || att.type || 'application/octet-stream',
-                name: att.file?.name || att.name || 'file'
-              }));
-            } else if (msg.files && msg.files.length > 0) {
-              files = msg.files;
-            }
-
+            // Use attachments directly from backend format - no mapping needed
             return {
               id: msg.id,
               text: messageText,
               time: messageTime,
               sender: isFromMe ? 'me' as const : 'other' as const,
-              files: files
+              attachments: msg.attachments || undefined
             };
           });
 
@@ -698,6 +996,23 @@ const MessagesScreen: React.FC = () => {
   React.useEffect(() => {
     fetchMessages();
   }, [fetchMessages]);
+
+  // Auto-scroll to bottom when new messages are added or chat is selected
+  useEffect(() => {
+    if (messagesContainerRef.current && messages.length > 0 && !isLoadingMessages) {
+      // Small delay to ensure DOM is updated
+      const scrollToBottom = () => {
+        if (messagesContainerRef.current) {
+          messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
+      };
+      
+      // Use requestAnimationFrame for smoother scrolling
+      requestAnimationFrame(() => {
+        setTimeout(scrollToBottom, 50);
+      });
+    }
+  }, [messages, isLoadingMessages, selectedChat]);
 
   // Handle refresh messages
   const handleRefreshMessages = () => {
@@ -775,7 +1090,8 @@ const MessagesScreen: React.FC = () => {
   }, [openChatItemMenu]);
 
   const handleSendMessage = async () => {
-    if (!selectedChat || (!message.trim() && selectedFiles.length === 0)) {
+    const totalMedia = selectedImages.length + selectedVideos.length;
+    if (!selectedChat || (!message.trim() && totalMedia === 0)) {
       return;
     }
 
@@ -806,31 +1122,58 @@ const MessagesScreen: React.FC = () => {
 
     const messageText = message.trim();
     // Store files before clearing state
-    const filesToSend = [...selectedFiles];
-    const files = filesToSend.length > 0 
-      ? filesToSend.map(file => ({
-          url: URL.createObjectURL(file),
-          type: file.type,
-          name: file.name
+    const imagesToSend = [...selectedImages];
+    const videosToSend = [...selectedVideos];
+    const allFiles = [...selectedImages, ...selectedVideos];
+    
+    // Create temporary attachments for optimistic update (will be replaced by backend response)
+    const tempAttachments = allFiles.length > 0 
+      ? allFiles.map((file, idx) => ({
+          id: `temp-attachment-${Date.now()}-${idx}`,
+          file: {
+            id: `temp-file-${Date.now()}-${idx}`,
+            url: URL.createObjectURL(file),
+            mime_type: file.type,
+            name: file.name,
+            variants: file.type.startsWith('image/') ? {
+              image: {
+                original: { url: URL.createObjectURL(file) }
+              }
+            } : undefined
+          }
         }))
       : undefined;
     
     // Optimistically update UI
-    const tempMessageId = Date.now().toString();
+    const tempMessageId = `temp-${Date.now()}`;
     const newMessage = {
       id: tempMessageId,
       text: messageText,
       time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
       sender: 'me' as const,
-      files: files
+      attachments: tempAttachments
     };
     
     // Add message to UI immediately
     setMessages(prev => [...prev, newMessage]);
-    setMessage('');
-    setSelectedFiles([]);
-    setIsTyping(false);
-    setShowEmojiPicker(false);
+      setMessage('');
+    setSelectedImages([]);
+    setSelectedVideos([]);
+      setIsTyping(false);
+      setShowEmojiPicker(false);
+    
+    // Clear typing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
+    
+    // Hide other user typing indicator when we send a message
+    setOtherUserTyping(false);
+    if (typingIndicatorTimeoutRef.current) {
+      clearTimeout(typingIndicatorTimeoutRef.current);
+      typingIndicatorTimeoutRef.current = null;
+    }
 
     // Send message to API
     try {
@@ -839,11 +1182,8 @@ const MessagesScreen: React.FC = () => {
         body: {
           chat_id: realChatId, // Use real chat ID from backend
           content: messageText,
-          images: filesToSend.length > 0 ? filesToSend.map(file => ({
-            file: file,
-            type: file.type,
-            name: file.name
-          })) : undefined,
+          images: imagesToSend.length > 0 ? imagesToSend : undefined,
+          videos: videosToSend.length > 0 ? videosToSend : undefined,
         },
       });
 
@@ -863,14 +1203,118 @@ const MessagesScreen: React.FC = () => {
     }
   };
 
-  const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessage(e.target.value);
-    setIsTyping(e.target.value.length > 0);
+  const handleTyping = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setMessage(value);
+    setIsTyping(value.length > 0);
+
+    // Send typing indicator to server on every keystroke
+    if (!selectedChat || !value.trim()) {
+      // Clear typing timeout if message is empty
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = null;
+      }
+      return;
+    }
+
+    // Find the selected chat to get the real chat ID
+    const currentChat = chatsList.find(chat => chat.id === selectedChat);
+    
+    if (!currentChat?.chatId) {
+      return;
+    }
+
+    const realChatId = currentChat.chatId;
+    
+    // Validate that chatId is a UUID format
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(realChatId)) {
+      return;
+    }
+
+    // Clear any existing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
+
+    // Send typing indicator on every keystroke (with minimal debounce to avoid too many API calls)
+    const now = Date.now();
+    if (now - lastTypingSentRef.current < 300) {
+      // If sent less than 300ms ago, debounce slightly
+      typingTimeoutRef.current = setTimeout(() => {
+        handleTypingIndicator(realChatId);
+      }, 300);
+    } else {
+      // Send immediately if enough time has passed
+      handleTypingIndicator(realChatId);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Handle Enter key to send message
+    if (e.key === 'Enter') {
+      handleSendMessage();
+      return;
+    }
+
+    // For other keys, trigger typing indicator immediately
+    // This ensures typing indicator is sent on every keypress
+    if (selectedChat) {
+      const currentChat = chatsList.find(chat => chat.id === selectedChat);
+      
+      if (currentChat?.chatId) {
+        const realChatId = currentChat.chatId;
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (uuidRegex.test(realChatId)) {
+          // Clear any existing timeout
+          if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current);
+            typingTimeoutRef.current = null;
+          }
+
+          // Send typing indicator immediately on keypress
+          const now = Date.now();
+          if (now - lastTypingSentRef.current >= 300) {
+            // If enough time has passed, send immediately
+            handleTypingIndicator(realChatId);
+          } else {
+            // Otherwise, schedule it
+            typingTimeoutRef.current = setTimeout(() => {
+              handleTypingIndicator(realChatId);
+            }, 300 - (now - lastTypingSentRef.current));
+          }
+        }
+      }
+    }
+  };
+
+  const handleTypingIndicator = async (chatId: string) => {
+    try {
+      console.log('Sending typing indicator for chat:', chatId);
+      const response = await api.call(Actions.CMD_TYPING, {
+        method: "POST",
+        body: {
+          chat_id: chatId,
+        },
+      });
+      console.log('Typing indicator sent successfully:', response);
+      lastTypingSentRef.current = Date.now();
+    } catch (error) {
+      console.error('Error sending typing indicator:', error);
+    }
   };
 
   const handleChatSelect = (chatId: string) => {
     setSelectedChat(chatId);
     setShowSidebar(false);
+    // Reset typing indicator when switching chats
+    if (typingIndicatorTimeoutRef.current) {
+      clearTimeout(typingIndicatorTimeoutRef.current);
+      typingIndicatorTimeoutRef.current = null;
+    }
+    setOtherUserTyping(false);
   };
 
   const handleEmojiClick = (emoji: string) => {
@@ -878,18 +1322,24 @@ const MessagesScreen: React.FC = () => {
     setShowEmojiPicker(false);
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    setSelectedFiles(prev => [...prev, ...files]);
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const imageFiles = files.filter(file => file.type.startsWith('image/'));
+    setSelectedImages(prev => [...prev, ...imageFiles]);
   };
 
-  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []).filter(file => file.type.startsWith('image/'));
-    setSelectedFiles(prev => [...prev, ...files]);
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const videoFiles = files.filter(file => file.type.startsWith('video/'));
+    setSelectedVideos(prev => [...prev, ...videoFiles]);
   };
 
-  const removeFile = (index: number) => {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  const removeImage = (index: number) => {
+    setSelectedImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const removeVideo = (index: number) => {
+    setSelectedVideos(prev => prev.filter((_, i) => i !== index));
   };
 
   const formatFileSize = (bytes: number) => {
@@ -1153,11 +1603,17 @@ const MessagesScreen: React.FC = () => {
                         </div>
                       </div>
                       <div className="mt-1">
-                        {(chat.lastMessage || '').split('\n').slice(0, 2).map((line: string, idx: number) => (
+                        {selectedChat === chat.id && otherUserTyping ? (
+                          <p className={`text-xs sm:text-sm truncate text-green-500 font-medium`}>
+                            yazıyor...
+                          </p>
+                        ) : (
+                          (chat.lastMessage || '').split('\n').slice(0, 2).map((line: string, idx: number) => (
                           <p key={idx} className={`text-xs sm:text-sm truncate ${
                             theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
                           }`}>{line}</p>
-                        ))}
+                          ))
+                        )}
                       </div>
                       {chat.unread > 0 && (
                         <div className="flex justify-end mt-1 sm:mt-2">
@@ -1317,9 +1773,17 @@ const MessagesScreen: React.FC = () => {
                                 </div>
                               )}
                             </div>
-                            <p className={`text-sm truncate mt-0.5 ${
+                            <div className="flex items-center gap-1.5 mt-0.5">
+                              <p className={`text-sm truncate ${
                               theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                             }`}>@{selectedPrivateChat.username || selectedPrivateChat.name.toLowerCase()}</p>
+                              {otherUserTyping && (
+                                <span className="text-xs font-medium text-green-500 flex-shrink-0">
+                                  yazıyor...
+                                </span>
+                                
+                              )}
+                            </div>
                           </div>
                           <div className="flex items-center gap-2 flex-shrink-0">
                            
@@ -1403,7 +1867,7 @@ const MessagesScreen: React.FC = () => {
                             <Trash2 className="w-4 h-4" />
                             Mesaj Geçmişini Temizle
                           </button>
-                        </motion.div>
+                </motion.div>
                       )}
                     </div>
                   </div>
@@ -1412,7 +1876,7 @@ const MessagesScreen: React.FC = () => {
                 {/* Messages or Profile */}
                 <AnimatePresence mode="wait">
                   {showProfile && selectedPrivateChat ? (
-                    <motion.div
+                <motion.div
                       key="profile-view"
                       initial={{ opacity: 0, x: 8 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -1443,20 +1907,21 @@ const MessagesScreen: React.FC = () => {
                         duration: 0.25,
                         ease: [0.4, 0, 0.2, 1]
                       }}
-                      className={`flex-1 overflow-y-auto p-3 sm:p-4 scrollbar-hide min-h-0 ${
-                        theme === 'dark' 
-                          ? 'bg-black' 
-                          : 'bg-white'
-                      }`}
-                      style={{ 
-                        flexGrow: 1,
-                        flexShrink: 1,
-                        minHeight: 0,
+                      ref={messagesContainerRef}
+                  className={`flex-1 overflow-y-auto p-3 sm:p-4 scrollbar-hide min-h-0 ${
+                    theme === 'dark' 
+                      ? 'bg-black' 
+                      : 'bg-white'
+                  }`}
+                  style={{ 
+                    flexGrow: 1,
+                    flexShrink: 1,
+                    minHeight: 0,
                         overflowY: 'auto',
                         paddingBottom: isMobile && selectedChat ? `${inputHeight + 16}px` : undefined
-                      }}
-                    >
-                      <div className="space-y-3 max-w-4xl mx-auto">
+                  }}
+                >
+                  <div className="space-y-3 max-w-4xl mx-auto">
                     {isLoadingMessages ? (
                       <div className="flex items-center justify-center py-12">
                         <div className="text-center">
@@ -1470,17 +1935,17 @@ const MessagesScreen: React.FC = () => {
                       </div>
                     ) : (
                       <>
-                        {/* Date Separator */}
+                    {/* Date Separator */}
                         {messages.length > 0 && (
-                          <div className="flex justify-center my-6">
-                            <div className={`px-3 py-1 rounded-full ${
-                              theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'
-                            }`}>
-                              <span className={`text-xs font-medium ${
-                                theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                              }`}>Bugün</span>
-                            </div>
-                          </div>
+                    <div className="flex justify-center my-6">
+                      <div className={`px-3 py-1 rounded-full ${
+                        theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'
+                      }`}>
+                        <span className={`text-xs font-medium ${
+                          theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                        }`}>Bugün</span>
+                      </div>
+                    </div>
                         )}
 
                         {/* Messages */}
@@ -1489,12 +1954,12 @@ const MessagesScreen: React.FC = () => {
                             <div className="text-center">
                               <MessageCircle className={`w-12 h-12 mx-auto mb-3 ${
                                 theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
-                              }`} />
+                          }`} />
                               <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                                 No messages yet
                               </p>
-                            </div>
-                          </div>
+                        </div>
+                      </div>
                         ) : (
                           messages.map((msg) => (
                             <MessageItem
@@ -1516,7 +1981,7 @@ const MessagesScreen: React.FC = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         className={`message-context-menu fixed z-50 rounded-lg shadow-lg border ${
-                          theme === 'dark' 
+                        theme === 'dark' 
                             ? 'bg-gray-800 border-gray-700' 
                             : 'bg-white border-gray-200'
                         }`}
@@ -1541,8 +2006,8 @@ const MessagesScreen: React.FC = () => {
                       </motion.div>
                     )}
 
-                    {/* Typing indicator */}
-                    {isTyping && (
+                    {/* Typing indicator - Other user typing */}
+                    {otherUserTyping && (
                       <div className="flex justify-start">
                         <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-4 py-2.5 rounded-2xl shadow-sm ${
                           theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-900 border border-gray-200'
@@ -1553,6 +2018,11 @@ const MessagesScreen: React.FC = () => {
                           borderBottomRightRadius: '16px'
                         }}>
                           <div className="flex items-center space-x-2">
+                            <span className={`text-xs ${
+                              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                            }`}>
+                              {selectedPrivateChat?.name || 'User'} yazıyor...
+                            </span>
                             <div className="flex space-x-1">
                               <div className={`w-2 h-2 rounded-full animate-bounce ${
                                 theme === 'dark' ? 'bg-gray-400' : 'bg-gray-600'
@@ -1568,8 +2038,8 @@ const MessagesScreen: React.FC = () => {
                         </div>
                       </div>
                     )}
-                      </div>
-                    </motion.div>
+                  </div>
+                </motion.div>
                   )}
                 </AnimatePresence>
 
@@ -1600,77 +2070,266 @@ const MessagesScreen: React.FC = () => {
                     flexDirection: 'column'
                   }}
                 >
-                  {/* Selected Files Preview */}
-                  {selectedFiles.length > 0 && (
-                    <div className="mb-2 space-y-2">
-                      {selectedFiles.map((file, index) => (
-                        <div key={index} className={`flex items-center justify-between p-2 rounded-lg ${
-                          theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
-                        }`}>
-                          <div className="flex items-center space-x-2 flex-1 min-w-0">
-                            {file.type.startsWith('image/') ? (
-                              <img
-                                src={URL.createObjectURL(file)}
-                                alt={file.name}
-                                className="w-8 h-8 rounded object-cover"
-                              />
-                            ) : (
-                              <Paperclip className="w-4 h-4" />
-                            )}
-                            <div className="min-w-0 flex-1">
-                              <p className={`text-sm truncate ${
-                                theme === 'dark' ? 'text-white' : 'text-gray-900'
-                              }`}>{file.name}</p>
-                              <p className={`text-xs ${
-                                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                              }`}>{formatFileSize(file.size)}</p>
+                {/* Selected Media Preview - CreatePost Style */}
+                {(() => {
+                  const totalMedia = selectedImages.length + selectedVideos.length;
+                  const allMedia = [
+                    ...selectedImages.map((file, idx) => ({ type: 'image', file, index: idx })),
+                    ...selectedVideos.map((file, idx) => ({ type: 'video', file, index: idx }))
+                  ];
+
+                  if (totalMedia === 0) return null;
+
+                  // Single media - Full Width
+                  if (totalMedia === 1) {
+                    const media = allMedia[0];
+                    return (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.96 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                        className="mb-3 relative group rounded-xl overflow-hidden"
+                      >
+                        {media.type === 'image' ? (
+                          <>
+                            <img
+                              src={URL.createObjectURL(media.file)}
+                              alt="Preview"
+                              className="w-full h-auto max-h-[200px] object-cover rounded-xl"
+                            />
+                            <motion.button
+                              onClick={() => removeImage(media.index)}
+                              className="absolute top-2 right-2 w-8 h-8 rounded-lg backdrop-blur-xl bg-black/60 border border-white/20 hover:bg-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                              whileHover={{ scale: 1.1, rotate: 90 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              <X className="w-4 h-4 text-white" />
+                            </motion.button>
+                          </>
+                        ) : (
+                          <>
+                            <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 aspect-video flex items-center justify-center rounded-xl">
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <motion.div
+                                  initial={{ scale: 0.8, opacity: 0 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  className="w-12 h-12 rounded-xl backdrop-blur-xl bg-white/10 border border-white/20 flex items-center justify-center"
+                                >
+                                  <Video className="w-6 h-6 text-white" />
+                                </motion.div>
+                              </div>
+                              <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/95 via-black/80 to-transparent rounded-b-xl">
+                                <p className="text-xs font-semibold text-white truncate">{media.file.name}</p>
+                                <p className="text-[10px] text-white/60 mt-0.5">{(media.file.size / (1024 * 1024)).toFixed(1)} MB</p>
+                              </div>
+                              <motion.button
+                                onClick={() => removeVideo(media.index)}
+                                className="absolute top-2 right-2 w-8 h-8 rounded-lg backdrop-blur-xl bg-black/60 border border-white/20 hover:bg-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                whileHover={{ scale: 1.1, rotate: 90 }}
+                                whileTap={{ scale: 0.9 }}
+                              >
+                                <X className="w-4 h-4 text-white" />
+                              </motion.button>
                             </div>
+                          </>
+                        )}
+                      </motion.div>
+                    );
+                  }
+
+                  // Two media - Side by Side
+                  if (totalMedia === 2) {
+                    return (
+                      <div className="mb-3 grid grid-cols-2 gap-2">
+                        {allMedia.map((media, idx) => (
+                          <motion.div
+                            key={`${media.type}-${idx}`}
+                            initial={{ opacity: 0, scale: 0.96 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: idx * 0.1 }}
+                            className="relative group rounded-xl overflow-hidden"
+                          >
+                            {media.type === 'image' ? (
+                              <>
+                                <img
+                                  src={URL.createObjectURL(media.file)}
+                                  alt={`Preview ${idx + 1}`}
+                                  className="w-full h-full min-h-[120px] object-cover rounded-xl"
+                                />
+                                <motion.button
+                                  onClick={() => removeImage(media.index)}
+                                  className="absolute top-1.5 right-1.5 w-7 h-7 rounded-lg backdrop-blur-xl bg-black/60 border border-white/20 hover:bg-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                  whileHover={{ scale: 1.1, rotate: 90 }}
+                                  whileTap={{ scale: 0.9 }}
+                                >
+                                  <X className="w-3.5 h-3.5 text-white" />
+                                </motion.button>
+                              </>
+                            ) : (
+                              <>
+                                <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 aspect-square min-h-[120px] flex items-center justify-center rounded-xl">
+                                  <div className="absolute inset-0 flex items-center justify-center">
+                                    <motion.div
+                                      initial={{ scale: 0.8, opacity: 0 }}
+                                      animate={{ scale: 1, opacity: 1 }}
+                                      className="w-10 h-10 rounded-xl backdrop-blur-xl bg-white/10 border border-white/20 flex items-center justify-center"
+                                    >
+                                      <Video className="w-5 h-5 text-white" />
+                                    </motion.div>
+                            </div>
+                                  <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/95 via-black/80 to-transparent rounded-b-xl">
+                                    <p className="text-[10px] font-semibold text-white truncate">{media.file.name}</p>
+                                    <p className="text-[9px] text-white/60 mt-0.5">{(media.file.size / (1024 * 1024)).toFixed(1)} MB</p>
                           </div>
                           <motion.button
-                            onClick={() => removeFile(index)}
-                            whileHover={{ scale: 1.1 }}
+                                    onClick={() => removeVideo(media.index)}
+                                    className="absolute top-1.5 right-1.5 w-7 h-7 rounded-lg backdrop-blur-xl bg-black/60 border border-white/20 hover:bg-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                    whileHover={{ scale: 1.1, rotate: 90 }}
                             whileTap={{ scale: 0.9 }}
-                            className={`p-1 rounded ${
-                              theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
-                            }`}
                           >
-                            <X className="w-4 h-4" />
+                                    <X className="w-3.5 h-3.5 text-white" />
                           </motion.button>
                         </div>
+                              </>
+                            )}
+                          </motion.div>
                       ))}
                     </div>
-                  )}
+                    );
+                  }
+
+                  // Three or more - Grid Layout
+                  return (
+                    <div className="mb-3 grid grid-cols-2 gap-2">
+                      {allMedia.slice(0, 4).map((media, idx) => {
+                        const showOverlay = idx === 3 && totalMedia > 4;
+                        return (
+                          <motion.div
+                            key={`${media.type}-${idx}`}
+                            initial={{ opacity: 0, scale: 0.96 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: idx * 0.05 }}
+                            className="relative group rounded-xl overflow-hidden"
+                          >
+                            {media.type === 'image' ? (
+                              <>
+                                <img
+                                  src={URL.createObjectURL(media.file)}
+                                  alt={`Preview ${idx + 1}`}
+                                  className="w-full h-full min-h-[100px] object-cover rounded-xl"
+                                />
+                                {showOverlay && (
+                                  <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center rounded-xl">
+                                    <p className="text-lg font-bold text-white">+{totalMedia - 4}</p>
+                  </div>
+                )}
+                                {!showOverlay && (
+                                  <motion.button
+                                    onClick={() => removeImage(media.index)}
+                                    className="absolute top-1.5 right-1.5 w-7 h-7 rounded-lg backdrop-blur-xl bg-black/60 border border-white/20 hover:bg-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                    whileHover={{ scale: 1.1, rotate: 90 }}
+                                    whileTap={{ scale: 0.9 }}
+                                  >
+                                    <X className="w-3.5 h-3.5 text-white" />
+                                  </motion.button>
+                                )}
+                              </>
+                            ) : (
+                              <>
+                                <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 aspect-square min-h-[100px] flex items-center justify-center rounded-xl">
+                                  <div className="absolute inset-0 flex items-center justify-center">
+                                    <motion.div
+                                      initial={{ scale: 0.8, opacity: 0 }}
+                                      animate={{ scale: 1, opacity: 1 }}
+                                      className="w-10 h-10 rounded-xl backdrop-blur-xl bg-white/10 border border-white/20 flex items-center justify-center"
+                                    >
+                                      <Video className="w-5 h-5 text-white" />
+                                    </motion.div>
+                                  </div>
+                                  <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/95 via-black/80 to-transparent rounded-b-xl">
+                                    <p className="text-[10px] font-semibold text-white truncate">{media.file.name}</p>
+                                    <p className="text-[9px] text-white/60 mt-0.5">{(media.file.size / (1024 * 1024)).toFixed(1)} MB</p>
+                                  </div>
+                                  {showOverlay && (
+                                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center rounded-xl">
+                                      <p className="text-lg font-bold text-white">+{totalMedia - 4}</p>
+                                    </div>
+                                  )}
+                                  {!showOverlay && (
+                                    <motion.button
+                                      onClick={() => removeVideo(media.index)}
+                                      className="absolute top-1.5 right-1.5 w-7 h-7 rounded-lg backdrop-blur-xl bg-black/60 border border-white/20 hover:bg-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                      whileHover={{ scale: 1.1, rotate: 90 }}
+                                      whileTap={{ scale: 0.9 }}
+                                    >
+                                      <X className="w-3.5 h-3.5 text-white" />
+                                    </motion.button>
+                                  )}
+                                </div>
+                              </>
+                            )}
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
 
                   <div className="flex items-center space-x-2">
+                    {/* Hidden File Inputs */}
                     <input
                       ref={fileInputRef}
                       type="file"
                       multiple
-                      onChange={handleFileSelect}
+                      accept="image/*"
+                      onChange={handleImageUpload}
                       className="hidden"
                     />
                     <input
-                      ref={imageInputRef}
+                      ref={videoInputRef}
                       type="file"
                       multiple
-                      accept="image/*"
-                      onChange={handleImageSelect}
+                      accept="video/*"
+                      onChange={handleVideoUpload}
                       className="hidden"
                     />
                     <div className="flex-1 relative">
                       <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
+                        {/* Image Upload Button */}
                         <motion.button 
                           onClick={() => fileInputRef.current?.click()}
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          className={`p-1.5 rounded-full ${
-                            theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
+                          className={`p-1.5 rounded-full transition-all duration-200 ${
+                            selectedImages.length > 0
+                              ? theme === 'dark'
+                                ? 'bg-blue-500/15 text-blue-400'
+                                : 'bg-blue-50 text-blue-600'
+                              : theme === 'dark'
+                              ? 'hover:bg-gray-700 text-gray-400'
+                              : 'hover:bg-gray-200 text-gray-600'
                           }`}
                         >
-                          <PlusSquare className={`w-4 h-4 ${
-                            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                          }`} />
+                          <Image className={`w-4 h-4`} />
                         </motion.button>
+                        {/* Video Upload Button */}
+                        <motion.button 
+                          onClick={() => videoInputRef.current?.click()}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className={`p-1.5 rounded-full transition-all duration-200 ${
+                            selectedVideos.length > 0
+                              ? theme === 'dark'
+                                ? 'bg-purple-500/15 text-purple-400'
+                                : 'bg-purple-50 text-purple-600'
+                              : theme === 'dark'
+                              ? 'hover:bg-gray-700 text-gray-400'
+                              : 'hover:bg-gray-200 text-gray-600'
+                          }`}
+                        >
+                          <Video className={`w-4 h-4`} />
+                        </motion.button>
+                        {/* Emoji Picker Button */}
                         <motion.button 
                           onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                           whileHover={{ scale: 1.1 }}
@@ -1688,20 +2347,20 @@ const MessagesScreen: React.FC = () => {
                         type="text"
                         value={message}
                         onChange={handleTyping}
-                        placeholder="Unencrypted message"
-                        className={`w-full pl-20 pr-12 py-2.5 sm:py-3 rounded-full border-0 text-sm focus:outline-none focus:ring-2 focus:ring-offset-0 transition-all ${
+                        onKeyPress={handleKeyPress}
+                        placeholder="Send message"
+                        className={`w-full pl-24 pr-12 py-2.5 sm:py-3 rounded-full border-0 text-sm focus:outline-none focus:ring-2 focus:ring-offset-0 transition-all ${
                           theme === 'dark' 
                             ? 'bg-gray-800 text-white placeholder-gray-400 focus:ring-gray-600' 
                             : 'bg-gray-100 text-gray-900 placeholder-gray-500 focus:ring-gray-300'
                         }`}
-                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                       />
                       <motion.button
                         onClick={handleSendMessage}
-                        disabled={!message.trim() && selectedFiles.length === 0}
+                        disabled={!message.trim() && selectedImages.length === 0 && selectedVideos.length === 0}
                         whileTap={{ scale: 0.95 }}
                         className={`absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 rounded-full transition-all hover:scale-105 ${
-                          (message.trim() || selectedFiles.length > 0)
+                          (message.trim() || selectedImages.length > 0 || selectedVideos.length > 0)
                             ? theme === 'dark'
                               ? 'bg-white text-black'
                               : 'bg-black text-white'

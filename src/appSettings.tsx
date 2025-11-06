@@ -35,6 +35,7 @@ const domainToSocketURL: Record<string, [string, string]> = {
 const defaultServiceURL: [string, string] = ['http://localhost:3001', 'http://localhost:3000'];
 const defaultSocketURL: [string, string] = ['ws://localhost:3002', 'ws://localhost:3003'];
 
+export const defaultServiceServerId = 0
 export const serviceURL = isDev
   ? defaultServiceURL
   : domainToServiceURL[hostName] || defaultServiceURL;
