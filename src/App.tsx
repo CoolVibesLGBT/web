@@ -124,7 +124,7 @@ function App() {
                 ? 'bg-gradient-to-br from-white to-gray-300 text-black'
                 : 'bg-gradient-to-br from-black to-gray-700 text-white'
               }`}>
-                <span className="text-sm font-bold">P</span>
+                <span className="text-sm font-bold">C</span>
               </div>
               <h1 className={`text-lg font-extrabold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                 {applicationName}
@@ -151,7 +151,7 @@ function App() {
                     ? 'bg-gradient-to-br from-white to-gray-300 text-black'
                     : 'bg-gradient-to-br from-black to-gray-700 text-white'
                   }`}>
-                  <span className="text-xl font-bold">P</span>
+                  <span className="text-xl font-bold">C</span>
                 </div>
                 <h1 className={`text-2xl font-extrabold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                   {applicationName}
