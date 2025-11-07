@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { applicationName } from './appSettings.tsx';
 import LandingPage from './components/LandingPage.tsx';
 import { getSafeImageURL } from './helpers/helpers.tsx';
+import TestPage from './components/TestPage.tsx';
 
 
 

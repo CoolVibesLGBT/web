@@ -530,7 +530,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
         left: 0,
         right: 0,
         width: '100%',
-        height: `calc(100vh - ${totalTopOffset}px)`,
+        height: `100dvh`,
         overflowX: 'hidden' as const,
         overflowY: 'hidden' as const,
         touchAction: 'pan-y' as const,

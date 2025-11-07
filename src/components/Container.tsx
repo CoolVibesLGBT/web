@@ -14,11 +14,12 @@ const Container: React.FC<ContainerProps> = ({ children, className = '' }) => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className={`
+        flex-1
         scrollbar-hide 
         max-h-[100dvh] 
         min-h-[100dvh] 
         h-[100dvh] 
-        !pb-[70dvh] 
+        !pb-[25dvh] 
         overflow-y-auto
         ${className}
       `}

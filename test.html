@@ -1,78 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TikTok Style Scroll</title>
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    background: #000;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-    height: 100vh;
-  }
-
-  .video {
-    height: 100vh;
-    width: 100%;
-    scroll-snap-align: start;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .video img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* Basit geçiş efekti için */
-  .video {
-    transition: transform 0.3s ease-in-out;
-  }
-
-  /* Gölgeli numara göstermek için */
-  .overlay {
-    position: absolute;
-    bottom: 40px;
-    right: 40px;
-    font-size: 3rem;
-    color: white;
-    text-shadow: 0 0 20px rgba(0,0,0,0.7);
-    font-family: Arial, sans-serif;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>3 Kolon Saf CSS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="h-screen overflow-hidden bg-gray-100">
+  <div class="flex h-full">
+    <!-- Sol Sidebar -->
+    <aside class="w-1/4 bg-white border-r border-gray-200 p-4 fixed left-0 top-0 h-full">
+      <h2 class="text-xl font-semibold mb-4">Sol Sidebar</h2>
+      <ul class="space-y-2">
+        <li><a href="#" class="block p-2 hover:bg-gray-100 rounded">Menü 1</a></li>
+        <li><a href="#" class="block p-2 hover:bg-gray-100 rounded">Menü 2</a></li>
+        <li><a href="#" class="block p-2 hover:bg-gray-100 rounded">Menü 3</a></li>
+      </ul>
+    </aside>
 
-  <div class="video"><img src="https://picsum.photos/id/1015/1080/1920" alt=""><div class="overlay">1</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1020/1080/1920" alt=""><div class="overlay">2</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1021/1080/1920" alt=""><div class="overlay">3</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1022/1080/1920" alt=""><div class="overlay">4</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1023/1080/1920" alt=""><div class="overlay">5</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1024/1080/1920" alt=""><div class="overlay">6</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1025/1080/1920" alt=""><div class="overlay">7</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1026/1080/1920" alt=""><div class="overlay">8</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1027/1080/1920" alt=""><div class="overlay">9</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1028/1080/1920" alt=""><div class="overlay">10</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1029/1080/1920" alt=""><div class="overlay">11</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1030/1080/1920" alt=""><div class="overlay">12</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1031/1080/1920" alt=""><div class="overlay">13</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1032/1080/1920" alt=""><div class="overlay">14</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1033/1080/1920" alt=""><div class="overlay">15</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1034/1080/1920" alt=""><div class="overlay">16</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1035/1080/1920" alt=""><div class="overlay">17</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1036/1080/1920" alt=""><div class="overlay">18</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1037/1080/1920" alt=""><div class="overlay">19</div></div>
-  <div class="video"><img src="https://picsum.photos/id/1038/1080/1920" alt=""><div class="overlay">20</div></div>
+    <!-- Orta Kolon -->
+    <main class="ml-[25%] w-1/2 h-full overflow-y-auto p-4 space-y-4 relative">
+      <!-- Storyler - sticky -->
+      <div class="sticky top-0 z-10 bg-gray-100 py-3">
+        <div class="flex space-x-3 overflow-x-auto">
+          <div class="w-16 h-16 bg-gray-300 rounded-full flex-shrink-0"></div>
+          <div class="w-16 h-16 bg-gray-300 rounded-full flex-shrink-0"></div>
+          <div class="w-16 h-16 bg-gray-300 rounded-full flex-shrink-0"></div>
+          <div class="w-16 h-16 bg-gray-300 rounded-full flex-shrink-0"></div>
+          <div class="w-16 h-16 bg-gray-300 rounded-full flex-shrink-0"></div>
+        </div>
+      </div>
 
+      <!-- Tabbar - sticky -->
+      <div class="sticky top-[64px] bg-white border-b border-gray-200 flex justify-around py-2 z-10">
+        <button class="px-4 py-1 rounded-lg bg-blue-500 text-white font-medium">Flows</button>
+        <button class="px-4 py-1 rounded-lg hover:bg-gray-100 font-medium">Cools</button>
+      </div>
+
+      <!-- İçerik -->
+      <div class="space-y-4">
+        <div class="bg-white p-4 rounded-lg shadow">İçerik 1</div>
+        <div class="bg-white p-4 rounded-lg shadow">İçerik 2</div>
+        <div class="bg-white p-4 rounded-lg shadow">İçerik 3</div>
+        <div class="bg-white p-4 rounded-lg shadow">İçerik 4</div>
+        <div class="bg-white p-4 rounded-lg shadow">İçerik 5</div>
+        <div class="bg-white p-4 rounded-lg shadow">İçerik 6</div>
+        <div class="bg-white p-4 rounded-lg shadow">İçerik 7</div>
+        <div class="bg-white p-4 rounded-lg shadow">İçerik 8</div>
+        <div class="bg-white p-4 rounded-lg shadow">İçerik 9</div>
+        <div class="bg-white p-4 rounded-lg shadow">İçerik 10</div>
+      </div>
+    </main>
+
+    <!-- Sağ Sidebar -->
+    <aside class="w-1/4 bg-white border-l border-gray-200 p-4 fixed right-0 top-0 h-full">
+      <h2 class="text-xl font-semibold mb-4">Sağ Sidebar</h2>
+      <p>Bilgi paneli</p>
+      <p>Ek alan</p>
+    </aside>
+  </div>
 </body>
 </html>

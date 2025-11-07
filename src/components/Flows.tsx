@@ -249,12 +249,7 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 20 }}
-      transition={{ duration: 0.2 }}
-    >
+    <div className='w-full'>
       {/* Create Post - Hidden on mobile */}
       <div className={`hidden lg:block ${theme === 'dark' ? 'bg-black border-b border-black' : 'bg-white border-b border-gray-100'}`}>
         <CreatePost
@@ -266,7 +261,7 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
           }}
         />
       </div>
-      <Container>
+ 
 
       {/* Posts Feed */}
       <div>
@@ -372,8 +367,8 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
           </div>
         )}
       </div>
-      </Container>
-    </motion.div>
+  
+      </div>
   );
 };
 
