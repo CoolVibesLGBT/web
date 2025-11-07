@@ -6,32 +6,13 @@ import PostReply from './PostReply';
 import VideoPlayer from './VideoPlayer';
 import { api } from '../services/api';
 import { $generateHtmlFromNodes } from '@lexical/html';
-import { createEditor, EditorState } from 'lexical';
-
-
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import {AutoFocusPlugin} from '@lexical/react/LexicalAutoFocusPlugin';
-import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
-
-import {HashtagPlugin} from '@lexical/react/LexicalHashtagPlugin';
-import {ListPlugin} from '@lexical/react/LexicalListPlugin';
-import {LinkPlugin} from '@lexical/react/LexicalLinkPlugin';
+import { createEditor } from 'lexical';
 
 import {HashtagNode} from '@lexical/hashtag';
 import {HeadingNode, QuoteNode} from '@lexical/rich-text';
 import {ListNode, ListItemNode} from '@lexical/list';
 import {LinkNode, AutoLinkNode} from '@lexical/link';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import ToolbarPlugin from './Lexical/plugins/ToolbarPlugin';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import {  $generateNodesFromDOM } from '@lexical/html';
-import { $getRoot } from 'lexical';
 import { MentionNode } from './Lexical/nodes/MentionNode';
-import NewMentionsPlugin from './Lexical/plugins/MentionsPlugin';
-import { defaultServiceServerId, serviceURL } from '../appSettings';
 import { getSafeImageURL } from '../helpers/helpers';
 
 // API data structure interfaces
@@ -179,17 +160,26 @@ interface PostProps {
   post: ApiPost;
   onPostClick?: (postId: string, username: string) => void;
   onProfileClick?: (username: string) => void;
-  isDetailView?: boolean;
   showChildren?: boolean;
   onRefreshParent?: () => void;
+  defaultShowReply?: boolean;
+  loadChildren?: boolean;
 }
 
-const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetailView, showChildren = false, onRefreshParent }) => {
+const Post: React.FC<PostProps> = ({
+  post,
+  onPostClick,
+  onProfileClick,
+  showChildren = false,
+  onRefreshParent,
+  defaultShowReply = false,
+  loadChildren = false,
+}) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedPollChoices, setSelectedPollChoices] = useState<Record<string, string>>({});
   const [eventStatus, setEventStatus] = useState<'going' | 'not_going' | 'maybe' | null>(null);
-  const [showReply, setShowReply] = useState(isDetailView || false);
+  const [showReply, setShowReply] = useState(defaultShowReply);
   const [children, setChildren] = useState<ApiPost[]>([]);
   const [loadingChildren, setLoadingChildren] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -198,6 +188,9 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
   const { theme } = useTheme();
   const [html, setHtml] = useState('');
 
+  useEffect(() => {
+    setShowReply(defaultShowReply);
+  }, [defaultShowReply]);
 
   const editorConfig = {
     namespace: "CoolVibesEditor",
@@ -267,7 +260,7 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
 
   // Fetch children (replies) when in detail view
   useEffect(() => {
-    if (isDetailView && post.public_id) {
+    if (loadChildren && post.public_id) {
       setLoadingChildren(true);
       api.fetchPost(post.public_id)
         .then((response) => {
@@ -282,7 +275,7 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
           setLoadingChildren(false);
         });
     }
-  }, [isDetailView, post.public_id]);
+  }, [loadChildren, post.public_id]);
 
   // Handle image load
   const handleImageLoad = useCallback((imageUrl: string) => {
@@ -1151,7 +1144,7 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
             }
 
             // Also refresh local children if in detail view
-            if (isDetailView) {
+            if (loadChildren) {
               api.fetchPost(post.id)
                 .then((response) => {
                   if (response.children) {
@@ -1167,7 +1160,7 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
       )}
 
       {/* Children (Replies) Section - Outside main post div */}
-      {(isDetailView || showChildren) && (
+      {(loadChildren || showChildren) && (
         <div className={`overflow-hidden border-b ${theme === 'dark'
             ? 'bg-black border-gray-800/40'
             : 'bg-white border-gray-100'
@@ -1190,7 +1183,6 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
                         post={child}
                         onPostClick={onPostClick}
                         onProfileClick={onProfileClick}
-                        isDetailView={false}
                         showChildren={true}
                         onRefreshParent={onRefreshParent}
                       />
@@ -1363,3 +1355,4 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
 };
 
 export default Post;
+export type { PostProps, ApiPost };

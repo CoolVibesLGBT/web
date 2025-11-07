@@ -264,7 +264,7 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
  
 
       {/* Posts Feed */}
-      <div>
+      <div className='pb-[25dvh] '>
         {loading ? (
           <div className={`p-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
             Loading posts...

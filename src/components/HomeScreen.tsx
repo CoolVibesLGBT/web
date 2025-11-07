@@ -4,7 +4,7 @@ import { ArrowLeft, Plus } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Stories from './Stories';
-import Post from './Post';
+import PostDetails from './PostDetails';
 import Flows from './Flows';
 import Vibes from './Vibes';
 import CreatePost from './CreatePost';
@@ -105,7 +105,7 @@ const HomeScreen: React.FC = () => {
         overflowY: 'auto',
         WebkitOverflowScrolling: 'touch',
       }}
-      className={`flex flex-col  overflow-y-auto  scrollbar-hide max-h-[100dvh]`}>
+      className={`flex flex-col  overflow-y-auto scrollbar-hide max-h-[100dvh]`}>
 
       <header className={`${theme == "dark" ? "bg-black" : "bg-white"} flex flex-col gap-0`}
 
@@ -224,11 +224,10 @@ const HomeScreen: React.FC = () => {
                 Loading post...
               </div>
             ) : selectedPostData ? (
-              <Post
+              <PostDetails
                 post={selectedPostData}
                 onPostClick={(postId, username) => handlePostClick(postId, username)}
                 onProfileClick={handleProfileClick}
-                isDetailView={true}
                 onRefreshParent={() => {
                   // Refresh the specific post when a reply is posted
                   const refreshPost = async () => {
