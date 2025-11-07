@@ -154,6 +154,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
     }
   }, [cursor]);
 
+  const TAB_BAR_HEIGHT = 120
   // İlk yükleme
   useEffect(() => {
     if (!initialReels) {
@@ -180,35 +181,9 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
       // Calculate tab header height dynamically
       const calculateTabHeaderHeight = () => {
         requestAnimationFrame(() => {
-          // Find the tab header in HomeScreen (sticky top-0 with z-40)
-          // Try multiple selectors to find the tab bar
-          let tabHeader = document.querySelector('div.sticky.top-0.z-40.border-b') as HTMLElement;
+ 
+             setTabHeaderHeight(TAB_BAR_HEIGHT);
           
-          // If not found, try alternative selector
-          if (!tabHeader) {
-            tabHeader = document.querySelector('[class*="sticky"][class*="top-0"][class*="z-40"]') as HTMLElement;
-          }
-          
-          // If still not found, look for element containing "Cool" and "Vibes" text
-          if (!tabHeader) {
-            const allSticky = document.querySelectorAll('[class*="sticky"]');
-            for (const el of allSticky) {
-              if (el.textContent?.includes('Cool') || el.textContent?.includes('Vibes')) {
-                tabHeader = el as HTMLElement;
-                break;
-              }
-            }
-          }
-          
-          if (tabHeader) {
-            const height = tabHeader.getBoundingClientRect().height;
-            console.log('Tab header height calculated:', height, 'element:', tabHeader);
-            setTabHeaderHeight(height);
-          } else {
-            // Fallback: py-4 + icon + text ≈ 80px
-            console.log('Tab header not found, using fallback height: 80px');
-            setTabHeaderHeight(80);
-          }
         });
       };
       
@@ -231,14 +206,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
       const calculateTabHeaderHeight = () => {
         requestAnimationFrame(() => {
           // Find the tab header in HomeScreen (sticky top-0 with z-40)
-          const tabHeader = document.querySelector('div.sticky.top-0.z-40.border-b') as HTMLElement;
-          if (tabHeader) {
-            const height = tabHeader.getBoundingClientRect().height;
-            setTabHeaderHeight(height);
-          } else {
-            // Fallback: py-4 + content ≈ 64px
-            setTabHeaderHeight(64);
-          }
+          setTabHeaderHeight(TAB_BAR_HEIGHT/2);
         });
       };
       
@@ -301,23 +269,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
     }
   }, [currentIndex, currentReel, isMuted]);
   
-  // Hide bottom navigation bar when Vibes is active
-  useEffect(() => {
-    if (isMobile) {
-      // Find and hide bottom navigation
-      const bottomNav = document.querySelector('nav.fixed.bottom-0') as HTMLElement;
-      if (bottomNav) {
-        bottomNav.style.display = 'none';
-      }
-      
-      return () => {
-        // Restore bottom navigation on unmount
-        if (bottomNav) {
-          bottomNav.style.display = '';
-        }
-      };
-    }
-  }, [isMobile]);
+ 
   
   // Setup scroll event listener to track current index
   useEffect(() => {
@@ -451,30 +403,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
     if (isMobile) {
       const calculateTopOffset = () => {
         requestAnimationFrame(() => {
-          // Tab bar element'ini bul
-          let tabBar = document.querySelector('div.sticky.top-0.z-40.border-b') as HTMLElement;
-          
-          if (!tabBar) {
-            // Alternative selector
-            const allSticky = document.querySelectorAll('[class*="sticky"]');
-            for (const el of allSticky) {
-              if (el.textContent?.includes('Cool') || el.textContent?.includes('Vibes')) {
-                tabBar = el as HTMLElement;
-                break;
-              }
-            }
-          }
-          
-          if (tabBar) {
-            const rect = tabBar.getBoundingClientRect();
-            const tabBarBottom = rect.bottom; // Tab bar'ın alt kenarı (viewport'a göre)
-            console.log('Tab bar bottom position:', tabBarBottom, 'height:', rect.height);
-            setCalculatedTopOffset(tabBarBottom);
-          } else {
-            // Fallback: tab header height kullan
-            console.log('Tab bar not found, using tabHeaderHeight:', tabHeaderHeight || 80);
-            setCalculatedTopOffset(tabHeaderHeight || 80);
-          }
+          setCalculatedTopOffset(TAB_BAR_HEIGHT);
         });
       };
       

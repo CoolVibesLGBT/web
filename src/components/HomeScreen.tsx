@@ -9,6 +9,7 @@ import Flows from './Flows';
 import Vibes from './Vibes';
 import CreatePost from './CreatePost';
 import { api } from '../services/api';
+import { useSettings } from '../contexts/SettingsContext';
 
 const MAX_HEADER_HEIGHT = 335;
 const MIN_HEADER_HEIGHT = 80;
@@ -20,6 +21,7 @@ const HomeScreen: React.FC = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState('flows');
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
+  const { showBottomBar, setShowBottomBar } = useSettings();
 
   // Get selected post from URL or null
   const selectedPost = location.pathname.includes('/status/')
@@ -156,7 +158,10 @@ const HomeScreen: React.FC = () => {
               // Tab Navigation
               <div className="flex">
                 <motion.button
-                  onClick={() => setActiveTab('flows')}
+                  onClick={() => {
+                    setActiveTab('flows')
+                    setShowBottomBar(true)
+                  }}
                   whileTap={{ scale: 0.98 }}
                   className={`flex-1 py-2 cursor-pointer font-semibold text-[15px] relative transition-all duration-200 ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-black/5'
                     } ${activeTab === 'flows'
@@ -180,6 +185,7 @@ const HomeScreen: React.FC = () => {
                 <motion.button
                   onClick={() => {
                     setActiveTab('vibes')
+                    setShowBottomBar(false)
                   }}
                   whileTap={{ scale: 0.98 }}
                   className={`flex-1 cursor-pointer py-2 font-semibold text-[15px] relative transition-all duration-200 ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-black/5'
