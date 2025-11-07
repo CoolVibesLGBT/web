@@ -112,7 +112,7 @@ const HomeScreen: React.FC = () => {
         style={{
            position: 'sticky',
           top: 0,
-          zIndex: 1999,
+          zIndex: 1,
           transition: 'height 0.45s cubic-bezier(0.22, 1, 0.36, 1)',
           willChange: 'height',
           
