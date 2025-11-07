@@ -305,6 +305,14 @@ body,
   display: block;
 }
 
+img{
+  -webkit-user-drag: none !important;
+  user-drag: none !important;
+  user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
 /* Brand gradient palette for buttons and pride flag backgrounds */
 .gay {
   --g-red: #d04b36;

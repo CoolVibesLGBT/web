@@ -546,12 +546,12 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
                     const posterUrl = getSafeImageURL(attachment, 'poster') || '';
                     
                     return (
-                      <VideoPlayer
-                        key={attachment.id || index}
+                    <VideoPlayer
+                      key={attachment.id || index}
                         src={videoUrl}
                         poster={posterUrl}
-                        className="w-full"
-                      />
+                      className="w-full"
+                    />
                     );
                   })}
                 </div>

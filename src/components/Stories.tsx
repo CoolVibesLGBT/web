@@ -297,7 +297,7 @@ const Stories: React.FC = () => {
 
         {/* Fixed "Your Story" Button - Always visible */}
         {!loadingStories && authUser && (
-          <div className="flex-shrink-0 z-20 relative">
+          <div className="flex-shrink-0 z-5 relative">
             <div className="relative group">
               <button
                 onClick={() => fileInputRef.current?.click()}

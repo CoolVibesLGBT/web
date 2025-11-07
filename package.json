@@ -25,6 +25,7 @@
     "axios": "^1.12.2",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.11",
+    "gsap": "^3.13.0",
     "i18next": "^23.11.5",
     "intersection-observer": "^0.12.2",
     "leaflet": "^1.9.4",
