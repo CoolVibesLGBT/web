@@ -120,7 +120,7 @@ const HomeScreen: React.FC = () => {
       >
 
 {
-  activeTab == "flows" &&     <div
+  activeTab == "flows" &&  !selectedPost &&   <div
   className={`flex-shrink-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] border-b ${theme === 'dark' ? 'border-black' : 'border-gray-100'}`}
   style={{
     opacity: headerVisibilityProgress,
