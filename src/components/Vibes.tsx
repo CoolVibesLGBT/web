@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Music, Play } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '../services/api';
 import { getSafeImageURL } from '../helpers/helpers';
 import { serviceURL, defaultServiceServerId } from '../appSettings';
@@ -143,6 +144,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
   const [likedReels, setLikedReels] = useState<Set<string>>(new Set());
   const [savedReels, setSavedReels] = useState<Set<string>>(new Set());
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [tabHeaderHeight, setTabHeaderHeight] = useState(0);
@@ -152,11 +154,15 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
   const [cursor, setCursor] = useState('');
   const [hasMore, setHasMore] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const nextVideoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number>(0);
   const touchStartTime = useRef<number>(0);
+  const touchLastY = useRef<number>(0);
+  const velocityY = useRef<number>(0);
   const lastScrollTime = useRef<number>(0);
   const isLoadingMoreRef = useRef(false);
+  const [touchOffset, setTouchOffset] = useState(0);
 
   const currentReel = allReels[currentIndex];
   const displayReel = nextIndex !== null ? allReels[nextIndex] : currentReel;
@@ -387,14 +393,38 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
   }, [isMobile]);
 
   useEffect(() => {
-    if (displayReel && displayReel.mediaType === 'video' && videoRef.current) {
-      if (isPlaying && nextIndex === null) {
-        videoRef.current.play();
-      } else {
-        videoRef.current.pause();
+    // Ana video kontrolü
+    if (currentReel && currentReel.mediaType === 'video' && videoRef.current) {
+      const video = videoRef.current;
+      
+      // Ses kontrolü
+      video.muted = isMuted;
+      
+      // Video yüklendiğinde ve geçişte otomatik başlat
+      if (nextIndex === null) {
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlaying(true);
+            })
+            .catch(err => {
+              console.log('Video play error:', err);
+              setIsPlaying(false);
+            });
+        }
       }
     }
-  }, [currentIndex, isPlaying, displayReel, nextIndex]);
+  }, [currentIndex, currentReel, nextIndex, isMuted]);
+  
+  useEffect(() => {
+    // Next video kontrolü - hazırlık için
+    if (nextIndex !== null && allReels[nextIndex]?.mediaType === 'video' && nextVideoRef.current) {
+      nextVideoRef.current.play().catch(err => {
+        console.log('Next video play error:', err);
+      });
+    }
+  }, [nextIndex, allReels]);
 
   useEffect(() => {
     // Son 3 item'a geldiğinde ve daha fazla veri varsa otomatik yükle
@@ -416,46 +446,154 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
   useEffect(() => {
     if (nextIndex !== null) {
       const timer = setTimeout(() => {
+        const wasGoingToStart = nextIndex === 0 && currentIndex === allReels.length - 1;
+        
         setCurrentIndex(nextIndex);
         setNextIndex(null);
         setIsTransitioning(false);
-      }, 450);
+        setTouchOffset(0); // Reset offset after transition
+        setIsMuted(true); // Yeni video sessiz başlasın
+        setIsPlaying(true); // Yeni video otomatik oynasın
+        
+        // Başa dönüldüyse, fresh data çek
+        if (wasGoingToStart) {
+          console.log('Loop completed - fetching fresh data');
+          fetchVibesFromAPI(false);
+        }
+      }, 350); // Daha hızlı transition (350ms)
       return () => clearTimeout(timer);
     }
-  }, [nextIndex]);
+  }, [nextIndex, currentIndex, allReels.length, fetchVibesFromAPI]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (isTransitioning) return;
     touchStartY.current = e.touches[0].clientY;
+    touchLastY.current = e.touches[0].clientY;
     touchStartTime.current = Date.now();
+    velocityY.current = 0;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (isTransitioning) return;
+    
+    // Prevent default to avoid scroll
+    e.preventDefault();
+    
+    const currentY = e.touches[0].clientY;
+    const diff = currentY - touchStartY.current;
+    const now = Date.now();
+    
+    // Velocity hesapla (px/ms) - son hareket için
+    const deltaY = currentY - touchLastY.current;
+    const deltaTime = now - touchStartTime.current;
+    velocityY.current = deltaY / Math.max(deltaTime, 1);
+    touchLastY.current = currentY;
+    
+    // Resistance effect - Direnç ekle (boundaries'e yaklaşırken)
+    let resistance = 1;
+    
+    // Sadece başta (index 0) rubber band effect - son videoda değil çünkü başa dönüyor
+    if (diff > 0 && currentIndex === 0) {
+      resistance = 0.25;
+    } 
+    // Son videoda ve daha fazla data varsa rubber band
+    else if (diff < 0 && currentIndex === allReels.length - 1 && hasMore) {
+      resistance = 0.25;
+    } 
+    // Çok fazla swipe, azalan direnç
+    else if (Math.abs(diff) > 150) {
+      resistance = 0.5;
+    }
+    
+    setTouchOffset(diff * resistance);
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
+    if (isTransitioning) return;
+    
     const touchEndY = e.changedTouches[0].clientY;
     const touchEndTime = Date.now();
     const diff = touchStartY.current - touchEndY;
     const timeDiff = touchEndTime - touchStartTime.current;
-
-    if (Math.abs(diff) > 30 && timeDiff < 500 && !isTransitioning) {
-      if (diff > 0 && currentIndex < allReels.length - 1) {
-        setNextIndex(currentIndex + 1);
-        setIsTransitioning(true);
+    
+    // Velocity-based decision (px/ms -> px/s for easier understanding)
+    const velocity = Math.abs(velocityY.current) * 1000;
+    const isQuickSwipe = velocity > 300; // 300px/s is quick
+    const isVeryQuickSwipe = velocity > 800; // 800px/s is very quick
+    
+    // Dynamic threshold based on velocity and time
+    let threshold = 80; // Default
+    if (isVeryQuickSwipe) {
+      threshold = 30; // Very low threshold for flick gestures
+    } else if (isQuickSwipe) {
+      threshold = 50; // Low threshold for quick swipes
+    } else if (timeDiff > 500) {
+      threshold = 100; // Higher threshold for slow swipes
+    }
+    
+    // Reset offset with animation
+    setTouchOffset(0);
+    
+    // Swipe decision - yeterli mesafe veya velocity varsa
+    const shouldSwipe = Math.abs(diff) > threshold || (isVeryQuickSwipe && Math.abs(diff) > 20);
+    
+    if (shouldSwipe && timeDiff < 1000) {
+      if (diff > 0) {
+        // Swipe up - next video
+        if (currentIndex < allReels.length - 1) {
+          setNextIndex(currentIndex + 1);
+          setIsTransitioning(true);
+        } else if (!hasMore) {
+          // Son videoda ve daha fazla data yok - başa dön
+          setNextIndex(0);
+          setIsTransitioning(true);
+          // Cursor'ı resetle, yeni data çekmeye hazır ol
+          setCursor('');
+          setHasMore(true);
+        }
       } else if (diff < 0 && currentIndex > 0) {
+        // Swipe down - previous video
         setNextIndex(currentIndex - 1);
         setIsTransitioning(true);
       }
     }
+    
+    // Reset refs
+    touchStartY.current = 0;
+    touchLastY.current = 0;
+    velocityY.current = 0;
   };
 
   const handleWheel = (e: React.WheelEvent) => {
+    if (isTransitioning) return;
+    
     const now = Date.now();
-    if (now - lastScrollTime.current < 600 || isTransitioning) return;
+    const timeSinceLastScroll = now - lastScrollTime.current;
+    
+    // Debounce - minimum 400ms aralık (daha responsive)
+    if (timeSinceLastScroll < 400) return;
+    
+    // Threshold - çok küçük scroll'ları ignore et
+    const scrollThreshold = 20;
+    if (Math.abs(e.deltaY) < scrollThreshold) return;
 
     lastScrollTime.current = now;
 
-    if (e.deltaY > 0 && currentIndex < allReels.length - 1) {
-      setNextIndex(currentIndex + 1);
-      setIsTransitioning(true);
+    if (e.deltaY > 0) {
+      // Scroll down - next video
+      if (currentIndex < allReels.length - 1) {
+        setNextIndex(currentIndex + 1);
+        setIsTransitioning(true);
+      } else if (!hasMore) {
+        // Son videoda ve daha fazla data yok - başa dön
+        setNextIndex(0);
+        setIsTransitioning(true);
+        // Cursor'ı resetle, yeni data çekmeye hazır ol
+        setCursor('');
+        setHasMore(true);
+      }
     } else if (e.deltaY < 0 && currentIndex > 0) {
+      // Scroll up - previous video
       setNextIndex(currentIndex - 1);
       setIsTransitioning(true);
     }
@@ -487,10 +625,30 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
     });
   };
 
-  const togglePlay = () => {
-    if (!currentReel) return;
-    if (currentReel.mediaType === 'video') {
-      setIsPlaying(!isPlaying);
+  const togglePlay = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Event bubbling'i engelle
+    
+    if (!currentReel || currentReel.mediaType !== 'video' || !videoRef.current) return;
+    
+    const video = videoRef.current;
+    
+    // İlk tıklamada sesi aç
+    if (isMuted) {
+      setIsMuted(false);
+      video.muted = false;
+    }
+    
+    // Video'nun gerçek durumunu kontrol et
+    if (video.paused) {
+      // Video durduysa, başlat
+      video.play().catch(err => {
+        console.log('Toggle play error:', err);
+      });
+      setIsPlaying(true);
+    } else {
+      // Video oynuyorsa, durdur
+      video.pause();
+      setIsPlaying(false);
     }
   };
 
@@ -508,15 +666,18 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
         width: '100%',
         // Don't set height when using top and bottom together
         overflow: 'hidden' as const,
-        touchAction: 'pan-y' as const, // Allow vertical swipe for reel navigation
+        touchAction: 'none' as const, // Disable default touch behavior
         overscrollBehavior: 'none' as const,
         WebkitOverflowScrolling: 'touch' as const,
+        WebkitUserSelect: 'none' as const,
+        userSelect: 'none' as const,
         zIndex: 10,
       }
     : {
         position: 'relative' as const,
         height: tabHeaderHeight > 0 ? `calc(100vh - ${tabHeaderHeight}px)` : '100vh',
         marginTop: 0,
+        touchAction: 'none' as const,
       };
 
   // Loading state
@@ -552,6 +713,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
       className="flex flex-col w-full bg-black"
       style={containerStyle}
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onWheel={handleWheel}
     >
@@ -566,9 +728,13 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
         }}
       >
         <div
-          className={`absolute inset-0 transition-all duration-500 ease-out ${
-            nextIndex === null ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-          }`}
+          className="absolute inset-0"
+          style={{
+            transform: `translateY(${touchOffset}px) scale(${nextIndex === null ? 1 : 0.92})`,
+            transition: touchOffset !== 0 ? 'none' : 'transform 0.35s cubic-bezier(0.33, 1, 0.68, 1)',
+            willChange: touchOffset !== 0 ? 'transform' : 'auto',
+            zIndex: nextIndex === null ? 2 : 1,
+          }}
         >
           {currentReel.mediaType === 'video' ? (
             <>
@@ -578,17 +744,37 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
                 className="absolute inset-0 w-full h-full object-cover"
                 loop
                 playsInline
+                muted={isMuted}
                 autoPlay
                 onClick={togglePlay}
                 poster={currentReel.posterUrl}
+                preload="auto"
               />
-              {!isPlaying && (
-                <div className="absolute inset-0 flex items-center justify-center z-10">
-                  <div className="bg-black/50 rounded-full p-6 backdrop-blur-sm">
-                    <Play className="w-16 h-16 text-white" fill="white" />
-                  </div>
-                </div>
-              )}
+              <AnimatePresence>
+                {!isPlaying && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    transition={{ 
+                      duration: 0.2,
+                      ease: [0.4, 0, 0.2, 1]
+                    }}
+                    className="absolute inset-0 flex items-center justify-center z-10"
+                    style={{ pointerEvents: 'none' }}
+                  >
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.85 }}
+                      onClick={togglePlay}
+                      className="bg-black/50 rounded-full p-6 backdrop-blur-sm cursor-pointer"
+                      style={{ pointerEvents: 'auto' }}
+                    >
+                      <Play className="w-16 h-16 text-white" fill="white" />
+                    </motion.button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </>
           ) : (
             <img
@@ -601,18 +787,25 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
 
         {nextIndex !== null && allReels[nextIndex] && (
           <div
-            className={`absolute inset-0 transition-all duration-500 ease-out ${
-              nextIndex !== null ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-            }`}
+            className="absolute inset-0"
+            style={{
+              transform: 'scale(1)',
+              transition: 'transform 0.35s cubic-bezier(0.33, 1, 0.68, 1)',
+              willChange: 'transform',
+              zIndex: 1,
+            }}
           >
             {allReels[nextIndex].mediaType === 'video' ? (
               <video
+                ref={nextVideoRef}
                 src={allReels[nextIndex].mediaUrl}
                 className="absolute inset-0 w-full h-full object-cover"
                 loop
                 playsInline
+                muted={true}
                 autoPlay
                 poster={allReels[nextIndex].posterUrl}
+                preload="auto"
               />
             ) : (
               <img
@@ -625,7 +818,15 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
         )}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent pt-32 transition-all duration-500 ease-out z-10 pointer-events-none">
+      <div 
+        className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent pt-32 pointer-events-none"
+        style={{
+          transform: `translateY(${touchOffset}px)`,
+          transition: touchOffset !== 0 ? 'none' : 'transform 0.35s cubic-bezier(0.33, 1, 0.68, 1)',
+          willChange: touchOffset !== 0 ? 'transform' : 'auto',
+          zIndex: 10,
+        }}
+      >
         <div className="pointer-events-auto flex items-end justify-between">
           <div className="flex-1 pb-2">
             <div className="flex items-center gap-3 mb-3">
@@ -704,7 +905,16 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
         </div>
       </div>
 
-      <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-1 overflow-hidden z-20 pointer-events-none" style={{ maxHeight: 'calc(100% - 2rem)' }}>
+      <div 
+        className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-1 overflow-hidden pointer-events-none" 
+        style={{ 
+          maxHeight: 'calc(100% - 2rem)',
+          transform: `translateY(calc(-50% + ${touchOffset}px))`,
+          transition: touchOffset !== 0 ? 'none' : 'transform 0.35s cubic-bezier(0.33, 1, 0.68, 1)',
+          willChange: touchOffset !== 0 ? 'transform' : 'auto',
+          zIndex: 20,
+        }}
+      >
         {allReels.slice(0, currentIndex + 5).map((_, index) => (
           <div
             key={index}

@@ -205,8 +205,8 @@ const HomeScreen: React.FC = () => {
   return (
     <div className={`scrollbar-hide max-h-[100dvh]  overflow-y-auto ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
 
-      {/* Stories Above Tabs - Only show when not in post detail view */}
-      {!selectedPost && (
+      {/* Stories Above Tabs - Only show when not in post detail view and not in vibes tab */}
+      {!selectedPost && activeTab === 'flows' && (
         <div className={`border-b ${theme === 'dark' ? 'border-black' : 'border-gray-100'} p-4`}>
           <Stories />
         </div>
