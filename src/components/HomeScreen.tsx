@@ -107,31 +107,33 @@ const HomeScreen: React.FC = () => {
       }}
       className={`flex flex-col  overflow-y-auto scrollbar-hide max-h-[100dvh]`}>
 
+{
+          activeTab == "flows" && !selectedPost && <div
+            className={`flex-shrink-0 px-1 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] border-b ${theme === 'dark' ? 'border-black' : 'border-gray-100'}`}
+            style={{
+              opacity: headerVisibilityProgress,
+              transform: `translateY(${(1 - headerVisibilityProgress) * -0}px)`,
+              pointerEvents: headerVisibilityProgress < 0.2 ? 'none' : 'auto',
+              height: headerHeight == MIN_HEADER_HEIGHT ? 0 : "190px"
+            }}>
+            <Stories />
+          </div>
+        }
+
       <header className={`${theme == "dark" ? "bg-black" : "bg-white"} flex flex-col gap-0`}
 
         style={{
-           position: 'sticky',
+          position: 'sticky',
           top: 0,
           zIndex: 1,
           transition: 'height 0.45s cubic-bezier(0.22, 1, 0.36, 1)',
           willChange: 'height',
-          
+
         }}
       >
 
-{
-  activeTab == "flows" &&  !selectedPost &&   <div
-  className={`flex-shrink-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] border-b ${theme === 'dark' ? 'border-black' : 'border-gray-100'}`}
-  style={{
-    opacity: headerVisibilityProgress,
-    transform: `translateY(${(1 - headerVisibilityProgress) * -0}px)`,
-    pointerEvents: headerVisibilityProgress < 0.2 ? 'none' : 'auto',
-    height:headerHeight == MIN_HEADER_HEIGHT ? 0 : "190px"
-  }}>
-  <Stories />
-</div>
-}
-    
+      
+
         <div className='w-full flex-grow'>
           <div className={`z-40 border-b  ${theme === 'dark' ? 'bg-black border-gray-800/50' : 'bg-white border-gray-100/50'}`}>
             {selectedPost ? (

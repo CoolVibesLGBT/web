@@ -164,12 +164,12 @@ function App() {
               {[
                 { id: 'pride',label: "Pride", icon: HandFist },
                 { id: 'nearby', label: t('app.nav.nearby'), icon: MapPin },
-                { id: 'search', label: t('app.nav.explore'), icon: Search },
+                //{ id: 'search', label: t('app.nav.explore'), icon: Search },
                 { id: 'match', label: t('app.nav.matches'), icon: Heart },
                 { id: 'messages', label: t('app.nav.messages'), icon: MessageCircle },
                 { id: 'notifications', label: t('app.nav.notifications'), icon: Bell },
-                { id: 'places', label: t('app.nav.places'), icon: Building2 },
-                { id: 'classifieds', label: t('app.nav.classifieds'), icon: FileText },
+                //{ id: 'places', label: t('app.nav.places'), icon: Building2 },
+                //{ id: 'classifieds', label: t('app.nav.classifieds'), icon: FileText },
                 { id: 'profile', label: t('app.nav.profile'), icon: User },
               ].map((item) => {
                 const Icon = item.icon;
