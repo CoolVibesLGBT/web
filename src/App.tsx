@@ -68,10 +68,14 @@ function App() {
       setActiveScreen('profile');
     }
     
+    // Hide bottom bar on post detail screen (/:username/status/:postId)
+    if (path.includes('/status/')) {
+      setShowBottomBar(false);
+    }
     // Show bottom bar if not on messages screen
     // Note: MessagesScreen manages its own bottom bar visibility based on selectedChat
     // Only set bottom bar for other screens, not for /messages
-    if (path !== '/messages') {
+    else if (path !== '/messages') {
       setShowBottomBar(true);
     }
     // For /messages, MessagesScreen will handle bottom bar visibility internally

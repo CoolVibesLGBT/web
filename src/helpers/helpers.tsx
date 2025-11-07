@@ -39,15 +39,22 @@ export function getSafeImageURL(
     attachment: any,
     variant: string = "small"
   ): string | null {
-    console.log("GELENAttachments",attachment)
     var serviceURI = serviceURL[defaultServiceServerId]
     try {
-      const path = attachment?.file?.variants?.image?.[variant]?.url;
+      // Try multiple path structures:
+      // 1. attachment.file.variants.image[variant].url (for nested file structure like avatar/cover)
+      // 2. attachment.variants.image[variant].url (for direct file structure like media)
+      // 3. attachment.file.variants.video[variant].url (for video files)
+      // 4. attachment.variants.video[variant].url (for direct video structure)
+      let path = attachment?.file?.variants?.image?.[variant]?.url || 
+                 attachment?.variants?.image?.[variant]?.url ||
+                 attachment?.file?.variants?.video?.[variant]?.url ||
+                 attachment?.variants?.video?.[variant]?.url;
+      
       if (!path) return null;
   
       // Eğer path mutlak değilse base URL ile birleştir
       const url = path.startsWith("http") ? new URL(path) : new URL(path, serviceURI);
-
   
       // Sadece http veya https izin ver
       if (!["https:", "http:"].includes(url.protocol)) {
@@ -55,7 +62,6 @@ export function getSafeImageURL(
         return null;
       }
 
-      console.log('URL',url)
       return url.href.toString();
       
     } catch (err) {
@@ -67,6 +73,5 @@ export function getSafeImageURL(
   
   // ✅ Kolay kullanım fonksiyonu
   export function getImageURL(attachment: any, variant: string = "small"): string | null {
-    const serviceURL = "https://cdn.mydomain.com/";
-    return getSafeImageURL(attachment, serviceURL, variant);
+    return getSafeImageURL(attachment, variant);
   }

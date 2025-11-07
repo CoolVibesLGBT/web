@@ -533,13 +533,27 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
               // Render video attachments first (YouTube quality)
               const videoRender = videoCount > 0 && (
                 <div className="space-y-4 mb-4">
-                  {videoAttachments.map((attachment, index) => (
-                    <VideoPlayer
-                      key={attachment.id || index}
-                      src={attachment.file.url}
-                      className="w-full"
-                    />
-                  ))}
+                  {videoAttachments.map((attachment, index) => {
+                    // Video URL'ini variants'tan al - Öncelik: high > medium > low > preview > original
+                    const videoUrl = getSafeImageURL(attachment, 'high') || 
+                                    getSafeImageURL(attachment, 'medium') || 
+                                    getSafeImageURL(attachment, 'low') || 
+                                    getSafeImageURL(attachment, 'preview') || 
+                                    getSafeImageURL(attachment, 'original') || 
+                                    attachment.file.url;
+                    
+                    // Poster URL'ini al
+                    const posterUrl = getSafeImageURL(attachment, 'poster') || '';
+                    
+                    return (
+                      <VideoPlayer
+                        key={attachment.id || index}
+                        src={videoUrl}
+                        poster={posterUrl}
+                        className="w-full"
+                      />
+                    );
+                  })}
                 </div>
               );
 
@@ -564,7 +578,8 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
 
               // Pinterest-style image grid layouts - All images visible
               if (imageCount === 1) {
-                const imageUrl = imageAttachments[0].file.url;
+                const imageUrl = getSafeImageURL(imageAttachments[0], "medium");
+                if (!imageUrl) return null;
                 const isLoaded = loadedImages.has(imageUrl);
 
                 return (
@@ -595,7 +610,8 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
                     {videoRender}
                     <div className="grid grid-cols-2 gap-2">
                       {imageAttachments.map((attachment, index) => {
-                        const imageUrl = attachment.file.url;
+                        const imageUrl = getSafeImageURL(attachment, "medium");
+                        if (!imageUrl) return null;
                         const isLoaded = loadedImages.has(imageUrl);
 
                         return (
@@ -620,9 +636,10 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
               }
 
               if (imageCount === 3) {
-                const firstImageUrl = imageAttachments[0].file.url;
-                const secondImageUrl = imageAttachments[1].file.url;
-                const thirdImageUrl = imageAttachments[2].file.url;
+                const firstImageUrl = getSafeImageURL(imageAttachments[0], "medium");
+                const secondImageUrl = getSafeImageURL(imageAttachments[1], "medium");
+                const thirdImageUrl = getSafeImageURL(imageAttachments[2], "medium");
+                if (!firstImageUrl || !secondImageUrl || !thirdImageUrl) return null;
                 const firstLoaded = loadedImages.has(firstImageUrl);
                 const secondLoaded = loadedImages.has(secondImageUrl);
                 const thirdLoaded = loadedImages.has(thirdImageUrl);
@@ -681,7 +698,8 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
                     {videoRender}
                     <div className="grid grid-cols-2 gap-2">
                       {imageAttachments.map((attachment, index) => {
-                        const imageUrl = attachment.file.url;
+                        const imageUrl = getSafeImageURL(attachment, "medium");
+                        if (!imageUrl) return null;
                         const isLoaded = loadedImages.has(imageUrl);
 
                         return (
@@ -707,7 +725,8 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
 
               // 5 images: Pinterest-style masonry grid
               if (imageCount === 5) {
-                const firstImageUrl = imageAttachments[0].file.url;
+                const firstImageUrl = getSafeImageURL(imageAttachments[0], "medium");
+                if (!firstImageUrl) return null;
                 const firstLoaded = loadedImages.has(firstImageUrl);
 
                 return (
@@ -728,7 +747,8 @@ const Post: React.FC<PostProps> = ({ post, onPostClick, onProfileClick, isDetail
                         />
                       </div>
                       {imageAttachments.slice(1, 5).map((attachment, idx) => {
-                        const imageUrl = attachment.file.url;
+                        const imageUrl = getSafeImageURL(attachment, "medium");
+                        if (!imageUrl) return null;
                         const isLoaded = loadedImages.has(imageUrl);
 
                         return (

@@ -1,0 +1,2264 @@
+{
+    "medias": {
+        "items": [
+            {
+                "media": {
+                    "public_id": "1986633805103894528",
+                    "id": "2e52beb8-a099-4d64-8567-e8e6518c5a8b",
+                    "file_id": "e812e3fc-72c1-444d-a9ca-c0dd6e8161e3",
+                    "owner_id": "c1cdbc32-c329-43c0-be13-c673d0a8e0d4",
+                    "owner_type": "post",
+                    "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "role": "post",
+                    "is_public": true,
+                    "file": {
+                        "id": "e812e3fc-72c1-444d-a9ca-c0dd6e8161e3",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c1cdbc32-c329-43c0-be13-c673d0a8e0d4/394676ed-9154-4c3d-985c-294344af3714.mov",
+                        "mime_type": "video/quicktime",
+                        "size": 3393443,
+                        "name": "0bd47f5c41a849d9a32dd423f65dd564.mov",
+                        "width": 720,
+                        "height": 1280,
+                        "variants": {
+                            "video": {
+                                "poster": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c1cdbc32-c329-43c0-be13-c673d0a8e0d4/394676ed-9154-4c3d-985c-294344af3714_poster.jpg",
+                                    "width": 720,
+                                    "height": 1280,
+                                    "format": "jpg",
+                                    "size": 171079
+                                },
+                                "low": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c1cdbc32-c329-43c0-be13-c673d0a8e0d4/394676ed-9154-4c3d-985c-294344af3714_low.mp4",
+                                    "width": 270,
+                                    "height": 480,
+                                    "format": "mp4",
+                                    "size": 123533
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c1cdbc32-c329-43c0-be13-c673d0a8e0d4/394676ed-9154-4c3d-985c-294344af3714_medium.mp4",
+                                    "width": 406,
+                                    "height": 720,
+                                    "format": "mp4",
+                                    "size": 416637
+                                },
+                                "high": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c1cdbc32-c329-43c0-be13-c673d0a8e0d4/394676ed-9154-4c3d-985c-294344af3714_high.mp4",
+                                    "width": 608,
+                                    "height": 1080,
+                                    "format": "mp4",
+                                    "size": 877457
+                                },
+                                "preview": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c1cdbc32-c329-43c0-be13-c673d0a8e0d4/394676ed-9154-4c3d-985c-294344af3714_preview.mp4",
+                                    "width": 202,
+                                    "height": 360,
+                                    "format": "mp4",
+                                    "size": 43767
+                                }
+                            }
+                        },
+                        "created_at": "2025-11-07T09:01:23.665961+05:45"
+                    },
+                    "created_at": "2025-11-07T09:01:23.665961+05:45",
+                    "updated_at": "2025-11-07T09:01:23.665961+05:45"
+                },
+                "user": {
+                    "public_id": "1986597228017356800",
+                    "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "socket_id": "1",
+                    "username": "can",
+                    "displayname": "can",
+                    "email": "",
+                    "date_of_birth": "2000-11-01T05:45:00+05:45",
+                    "gender_identities": null,
+                    "sexual_orientations": null,
+                    "user_role": "",
+                    "is_active": false,
+                    "created_at": "2025-11-07T06:36:03.008498+05:45",
+                    "updated_at": "2025-11-07T09:22:15.445458+05:45",
+                    "last_online": "2025-11-07T09:22:15.444067+05:45",
+                    "default_language": "en",
+                    "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                    "avatar": {
+                        "public_id": "1986597931674767360",
+                        "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                        "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                            "mime_type": "image/jpeg",
+                            "size": 215138,
+                            "name": "1669041186022.jpeg",
+                            "width": 1440,
+                            "height": 1080,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 24248
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 58636
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 18908
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 65802
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 218210
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                        "width": 1440,
+                                        "height": 1080,
+                                        "format": "jpeg",
+                                        "size": 215138
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:50.773396+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:50.773397+05:45",
+                        "updated_at": "2025-11-07T06:38:50.773397+05:45"
+                    },
+                    "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                    "cover": {
+                        "public_id": "1986597947621511168",
+                        "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                        "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "cover",
+                        "is_public": true,
+                        "file": {
+                            "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 112630,
+                            "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                            "width": 1920,
+                            "height": 672,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 10232
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 23986
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                        "width": 1280,
+                                        "height": 720,
+                                        "format": "webp",
+                                        "size": 352408
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                        "width": 1920,
+                                        "height": 1080,
+                                        "format": "webp",
+                                        "size": 466872
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                        "width": 2560,
+                                        "height": 1440,
+                                        "format": "webp",
+                                        "size": 468034
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                        "width": 1920,
+                                        "height": 672,
+                                        "format": "jpg",
+                                        "size": 112630
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:54.575474+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:54.575474+05:45",
+                        "updated_at": "2025-11-07T06:38:54.575474+05:45"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "social": {},
+                    "deleted_at": null
+                }
+            },
+            {
+                "media": {
+                    "public_id": "1986632935368822784",
+                    "id": "bf18c78c-adec-48e7-85b1-7fb8a901701e",
+                    "file_id": "26ffbe4b-20ea-43e3-91e7-b70282ba8126",
+                    "owner_id": "36282aad-911b-4602-b375-946b85300bc7",
+                    "owner_type": "post",
+                    "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "role": "post",
+                    "is_public": true,
+                    "file": {
+                        "id": "26ffbe4b-20ea-43e3-91e7-b70282ba8126",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/36282aad-911b-4602-b375-946b85300bc7/4fc3810a-9dc9-4e30-b39c-2f0322584a5e.mov",
+                        "mime_type": "video/quicktime",
+                        "size": 5440909,
+                        "name": "0b4e1d609cb44fc0ac99cb1bd01341b1.mov",
+                        "created_at": "2025-11-07T08:57:56.305211+05:45"
+                    },
+                    "created_at": "2025-11-07T08:57:56.305211+05:45",
+                    "updated_at": "2025-11-07T08:57:56.305211+05:45"
+                },
+                "user": {
+                    "public_id": "1986597228017356800",
+                    "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "socket_id": "1",
+                    "username": "can",
+                    "displayname": "can",
+                    "email": "",
+                    "date_of_birth": "2000-11-01T05:45:00+05:45",
+                    "gender_identities": null,
+                    "sexual_orientations": null,
+                    "user_role": "",
+                    "is_active": false,
+                    "created_at": "2025-11-07T06:36:03.008498+05:45",
+                    "updated_at": "2025-11-07T09:22:15.445458+05:45",
+                    "last_online": "2025-11-07T09:22:15.444067+05:45",
+                    "default_language": "en",
+                    "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                    "avatar": {
+                        "public_id": "1986597931674767360",
+                        "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                        "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                            "mime_type": "image/jpeg",
+                            "size": 215138,
+                            "name": "1669041186022.jpeg",
+                            "width": 1440,
+                            "height": 1080,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 24248
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 58636
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 18908
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 65802
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 218210
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                        "width": 1440,
+                                        "height": 1080,
+                                        "format": "jpeg",
+                                        "size": 215138
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:50.773396+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:50.773397+05:45",
+                        "updated_at": "2025-11-07T06:38:50.773397+05:45"
+                    },
+                    "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                    "cover": {
+                        "public_id": "1986597947621511168",
+                        "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                        "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "cover",
+                        "is_public": true,
+                        "file": {
+                            "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 112630,
+                            "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                            "width": 1920,
+                            "height": 672,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 10232
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 23986
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                        "width": 1280,
+                                        "height": 720,
+                                        "format": "webp",
+                                        "size": 352408
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                        "width": 1920,
+                                        "height": 1080,
+                                        "format": "webp",
+                                        "size": 466872
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                        "width": 2560,
+                                        "height": 1440,
+                                        "format": "webp",
+                                        "size": 468034
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                        "width": 1920,
+                                        "height": 672,
+                                        "format": "jpg",
+                                        "size": 112630
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:54.575474+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:54.575474+05:45",
+                        "updated_at": "2025-11-07T06:38:54.575474+05:45"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "social": {},
+                    "deleted_at": null
+                }
+            },
+            {
+                "media": {
+                    "public_id": "1986632068766896128",
+                    "id": "d78859b6-6f47-4783-b930-aa7836d01140",
+                    "file_id": "ff0df0d8-46e2-45ee-ae3f-7299997ad423",
+                    "owner_id": "269cc38e-a96e-4d36-b36e-f0bb3d148a57",
+                    "owner_type": "post",
+                    "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "role": "post",
+                    "is_public": true,
+                    "file": {
+                        "id": "ff0df0d8-46e2-45ee-ae3f-7299997ad423",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/269cc38e-a96e-4d36-b36e-f0bb3d148a57/8cc24dd6-e947-45f3-b1d7-2b4f454e4dd0.mov",
+                        "mime_type": "video/quicktime",
+                        "size": 3393443,
+                        "name": "0bd47f5c41a849d9a32dd423f65dd564.mov",
+                        "created_at": "2025-11-07T08:54:29.69071+05:45"
+                    },
+                    "created_at": "2025-11-07T08:54:29.69071+05:45",
+                    "updated_at": "2025-11-07T08:54:29.69071+05:45"
+                },
+                "user": {
+                    "public_id": "1986597228017356800",
+                    "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "socket_id": "1",
+                    "username": "can",
+                    "displayname": "can",
+                    "email": "",
+                    "date_of_birth": "2000-11-01T05:45:00+05:45",
+                    "gender_identities": null,
+                    "sexual_orientations": null,
+                    "user_role": "",
+                    "is_active": false,
+                    "created_at": "2025-11-07T06:36:03.008498+05:45",
+                    "updated_at": "2025-11-07T09:22:15.445458+05:45",
+                    "last_online": "2025-11-07T09:22:15.444067+05:45",
+                    "default_language": "en",
+                    "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                    "avatar": {
+                        "public_id": "1986597931674767360",
+                        "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                        "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                            "mime_type": "image/jpeg",
+                            "size": 215138,
+                            "name": "1669041186022.jpeg",
+                            "width": 1440,
+                            "height": 1080,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 24248
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 58636
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 18908
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 65802
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 218210
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                        "width": 1440,
+                                        "height": 1080,
+                                        "format": "jpeg",
+                                        "size": 215138
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:50.773396+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:50.773397+05:45",
+                        "updated_at": "2025-11-07T06:38:50.773397+05:45"
+                    },
+                    "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                    "cover": {
+                        "public_id": "1986597947621511168",
+                        "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                        "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "cover",
+                        "is_public": true,
+                        "file": {
+                            "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 112630,
+                            "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                            "width": 1920,
+                            "height": 672,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 10232
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 23986
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                        "width": 1280,
+                                        "height": 720,
+                                        "format": "webp",
+                                        "size": 352408
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                        "width": 1920,
+                                        "height": 1080,
+                                        "format": "webp",
+                                        "size": 466872
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                        "width": 2560,
+                                        "height": 1440,
+                                        "format": "webp",
+                                        "size": 468034
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                        "width": 1920,
+                                        "height": 672,
+                                        "format": "jpg",
+                                        "size": 112630
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:54.575474+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:54.575474+05:45",
+                        "updated_at": "2025-11-07T06:38:54.575474+05:45"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "social": {},
+                    "deleted_at": null
+                }
+            },
+            {
+                "media": {
+                    "public_id": "1986613337680515072",
+                    "id": "06c26491-e091-4334-9c67-15aeacbc5575",
+                    "file_id": "b70d2a3e-0683-4142-a6df-839212f1afbd",
+                    "owner_id": "b3a5d6b1-18dd-4dee-89c3-763dc8256f75",
+                    "owner_type": "post",
+                    "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "role": "post",
+                    "is_public": true,
+                    "file": {
+                        "id": "b70d2a3e-0683-4142-a6df-839212f1afbd",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/b3a5d6b1-18dd-4dee-89c3-763dc8256f75/e87224cf-de37-42ce-9f18-4cb0e8e77e48.jpg",
+                        "mime_type": "image/jpeg",
+                        "size": 106317,
+                        "name": "pride-month-2022-round-logo-with-rainbow-flag-banner-pride-symbol-lgbt-sexual-minorities-gays-and-lesbians-background-love-is-love-template-designer-sign-icon-colorful-rainbow-isolated-on-black-vector.jpg",
+                        "width": 1920,
+                        "height": 1280,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/b3a5d6b1-18dd-4dee-89c3-763dc8256f75/e87224cf-de37-42ce-9f18-4cb0e8e77e48_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 7314
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/b3a5d6b1-18dd-4dee-89c3-763dc8256f75/e87224cf-de37-42ce-9f18-4cb0e8e77e48_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 19384
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/b3a5d6b1-18dd-4dee-89c3-763dc8256f75/e87224cf-de37-42ce-9f18-4cb0e8e77e48_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 56994
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/b3a5d6b1-18dd-4dee-89c3-763dc8256f75/e87224cf-de37-42ce-9f18-4cb0e8e77e48_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 116352
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/b3a5d6b1-18dd-4dee-89c3-763dc8256f75/e87224cf-de37-42ce-9f18-4cb0e8e77e48_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1440,
+                                    "format": "webp",
+                                    "size": 226918
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/b3a5d6b1-18dd-4dee-89c3-763dc8256f75/e87224cf-de37-42ce-9f18-4cb0e8e77e48.jpg",
+                                    "width": 1920,
+                                    "height": 1280,
+                                    "format": "jpg",
+                                    "size": 106317
+                                }
+                            }
+                        },
+                        "created_at": "2025-11-07T07:40:03.851885+05:45"
+                    },
+                    "created_at": "2025-11-07T07:40:03.851885+05:45",
+                    "updated_at": "2025-11-07T07:40:03.851885+05:45"
+                },
+                "user": {
+                    "public_id": "1986597228017356800",
+                    "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "socket_id": "1",
+                    "username": "can",
+                    "displayname": "can",
+                    "email": "",
+                    "date_of_birth": "2000-11-01T05:45:00+05:45",
+                    "gender_identities": null,
+                    "sexual_orientations": null,
+                    "user_role": "",
+                    "is_active": false,
+                    "created_at": "2025-11-07T06:36:03.008498+05:45",
+                    "updated_at": "2025-11-07T09:22:15.445458+05:45",
+                    "last_online": "2025-11-07T09:22:15.444067+05:45",
+                    "default_language": "en",
+                    "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                    "avatar": {
+                        "public_id": "1986597931674767360",
+                        "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                        "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                            "mime_type": "image/jpeg",
+                            "size": 215138,
+                            "name": "1669041186022.jpeg",
+                            "width": 1440,
+                            "height": 1080,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 24248
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 58636
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 18908
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 65802
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 218210
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                        "width": 1440,
+                                        "height": 1080,
+                                        "format": "jpeg",
+                                        "size": 215138
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:50.773396+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:50.773397+05:45",
+                        "updated_at": "2025-11-07T06:38:50.773397+05:45"
+                    },
+                    "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                    "cover": {
+                        "public_id": "1986597947621511168",
+                        "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                        "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "cover",
+                        "is_public": true,
+                        "file": {
+                            "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 112630,
+                            "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                            "width": 1920,
+                            "height": 672,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 10232
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 23986
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                        "width": 1280,
+                                        "height": 720,
+                                        "format": "webp",
+                                        "size": 352408
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                        "width": 1920,
+                                        "height": 1080,
+                                        "format": "webp",
+                                        "size": 466872
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                        "width": 2560,
+                                        "height": 1440,
+                                        "format": "webp",
+                                        "size": 468034
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                        "width": 1920,
+                                        "height": 672,
+                                        "format": "jpg",
+                                        "size": 112630
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:54.575474+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:54.575474+05:45",
+                        "updated_at": "2025-11-07T06:38:54.575474+05:45"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "social": {},
+                    "deleted_at": null
+                }
+            },
+            {
+                "media": {
+                    "public_id": "1986613301320093696",
+                    "id": "bbacc624-ff74-4e2f-9b80-702525f1c0f6",
+                    "file_id": "0938003d-9abe-4842-ab04-7b8717ecc605",
+                    "owner_id": "8ac78f5b-ad9e-4c4e-9106-def05670104b",
+                    "owner_type": "post",
+                    "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "role": "post",
+                    "is_public": true,
+                    "file": {
+                        "id": "0938003d-9abe-4842-ab04-7b8717ecc605",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/8ac78f5b-ad9e-4c4e-9106-def05670104b/33296d3a-7d14-4e34-aabc-e132dd485d06.png",
+                        "mime_type": "image/png",
+                        "size": 293096,
+                        "name": "Ekran Resmi 2025-11-01 23.20.12.png",
+                        "width": 2596,
+                        "height": 1504,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/8ac78f5b-ad9e-4c4e-9106-def05670104b/33296d3a-7d14-4e34-aabc-e132dd485d06_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 4802
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/8ac78f5b-ad9e-4c4e-9106-def05670104b/33296d3a-7d14-4e34-aabc-e132dd485d06_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 12620
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/8ac78f5b-ad9e-4c4e-9106-def05670104b/33296d3a-7d14-4e34-aabc-e132dd485d06_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 31870
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/8ac78f5b-ad9e-4c4e-9106-def05670104b/33296d3a-7d14-4e34-aabc-e132dd485d06_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 55904
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/8ac78f5b-ad9e-4c4e-9106-def05670104b/33296d3a-7d14-4e34-aabc-e132dd485d06_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1440,
+                                    "format": "webp",
+                                    "size": 84604
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/8ac78f5b-ad9e-4c4e-9106-def05670104b/33296d3a-7d14-4e34-aabc-e132dd485d06.png",
+                                    "width": 2596,
+                                    "height": 1504,
+                                    "format": "png",
+                                    "size": 293096
+                                }
+                            }
+                        },
+                        "created_at": "2025-11-07T07:39:55.183488+05:45"
+                    },
+                    "created_at": "2025-11-07T07:39:55.183488+05:45",
+                    "updated_at": "2025-11-07T07:39:55.183488+05:45"
+                },
+                "user": {
+                    "public_id": "1986597228017356800",
+                    "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "socket_id": "1",
+                    "username": "can",
+                    "displayname": "can",
+                    "email": "",
+                    "date_of_birth": "2000-11-01T05:45:00+05:45",
+                    "gender_identities": null,
+                    "sexual_orientations": null,
+                    "user_role": "",
+                    "is_active": false,
+                    "created_at": "2025-11-07T06:36:03.008498+05:45",
+                    "updated_at": "2025-11-07T09:22:15.445458+05:45",
+                    "last_online": "2025-11-07T09:22:15.444067+05:45",
+                    "default_language": "en",
+                    "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                    "avatar": {
+                        "public_id": "1986597931674767360",
+                        "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                        "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                            "mime_type": "image/jpeg",
+                            "size": 215138,
+                            "name": "1669041186022.jpeg",
+                            "width": 1440,
+                            "height": 1080,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 24248
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 58636
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 18908
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 65802
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 218210
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                        "width": 1440,
+                                        "height": 1080,
+                                        "format": "jpeg",
+                                        "size": 215138
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:50.773396+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:50.773397+05:45",
+                        "updated_at": "2025-11-07T06:38:50.773397+05:45"
+                    },
+                    "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                    "cover": {
+                        "public_id": "1986597947621511168",
+                        "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                        "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "cover",
+                        "is_public": true,
+                        "file": {
+                            "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 112630,
+                            "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                            "width": 1920,
+                            "height": 672,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 10232
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 23986
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                        "width": 1280,
+                                        "height": 720,
+                                        "format": "webp",
+                                        "size": 352408
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                        "width": 1920,
+                                        "height": 1080,
+                                        "format": "webp",
+                                        "size": 466872
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                        "width": 2560,
+                                        "height": 1440,
+                                        "format": "webp",
+                                        "size": 468034
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                        "width": 1920,
+                                        "height": 672,
+                                        "format": "jpg",
+                                        "size": 112630
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:54.575474+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:54.575474+05:45",
+                        "updated_at": "2025-11-07T06:38:54.575474+05:45"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "social": {},
+                    "deleted_at": null
+                }
+            },
+            {
+                "media": {
+                    "public_id": "1986607853045026816",
+                    "id": "ab098da8-24b8-4e48-8b25-34a6c63282a9",
+                    "file_id": "40a1856d-2aeb-4040-8bda-07188dd6adb2",
+                    "owner_id": "c6f5a79c-16fd-41e7-8b2a-ff7c79641cea",
+                    "owner_type": "post",
+                    "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "role": "post",
+                    "is_public": true,
+                    "file": {
+                        "id": "40a1856d-2aeb-4040-8bda-07188dd6adb2",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632.png",
+                        "mime_type": "image/png",
+                        "size": 83785,
+                        "name": "Ekran Resmi 2025-11-04 20.17.30.png",
+                        "width": 2582,
+                        "height": 364,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 1060
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 2134
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 5062
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 9086
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1440,
+                                    "format": "webp",
+                                    "size": 14586
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632.png",
+                                    "width": 2582,
+                                    "height": 364,
+                                    "format": "png",
+                                    "size": 83785
+                                }
+                            }
+                        },
+                        "created_at": "2025-11-07T07:18:16.199371+05:45"
+                    },
+                    "created_at": "2025-11-07T07:18:16.199371+05:45",
+                    "updated_at": "2025-11-07T07:18:16.199371+05:45"
+                },
+                "user": {
+                    "public_id": "1986597228017356800",
+                    "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "socket_id": "1",
+                    "username": "can",
+                    "displayname": "can",
+                    "email": "",
+                    "date_of_birth": "2000-11-01T05:45:00+05:45",
+                    "gender_identities": null,
+                    "sexual_orientations": null,
+                    "user_role": "",
+                    "is_active": false,
+                    "created_at": "2025-11-07T06:36:03.008498+05:45",
+                    "updated_at": "2025-11-07T09:22:15.445458+05:45",
+                    "last_online": "2025-11-07T09:22:15.444067+05:45",
+                    "default_language": "en",
+                    "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                    "avatar": {
+                        "public_id": "1986597931674767360",
+                        "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                        "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                            "mime_type": "image/jpeg",
+                            "size": 215138,
+                            "name": "1669041186022.jpeg",
+                            "width": 1440,
+                            "height": 1080,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 24248
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 58636
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 18908
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 65802
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 218210
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                        "width": 1440,
+                                        "height": 1080,
+                                        "format": "jpeg",
+                                        "size": 215138
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:50.773396+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:50.773397+05:45",
+                        "updated_at": "2025-11-07T06:38:50.773397+05:45"
+                    },
+                    "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                    "cover": {
+                        "public_id": "1986597947621511168",
+                        "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                        "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "cover",
+                        "is_public": true,
+                        "file": {
+                            "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 112630,
+                            "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                            "width": 1920,
+                            "height": 672,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 10232
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 23986
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                        "width": 1280,
+                                        "height": 720,
+                                        "format": "webp",
+                                        "size": 352408
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                        "width": 1920,
+                                        "height": 1080,
+                                        "format": "webp",
+                                        "size": 466872
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                        "width": 2560,
+                                        "height": 1440,
+                                        "format": "webp",
+                                        "size": 468034
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                        "width": 1920,
+                                        "height": 672,
+                                        "format": "jpg",
+                                        "size": 112630
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:54.575474+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:54.575474+05:45",
+                        "updated_at": "2025-11-07T06:38:54.575474+05:45"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "social": {},
+                    "deleted_at": null
+                }
+            },
+            {
+                "media": {
+                    "public_id": "1986607852193583104",
+                    "id": "623dbd55-ebe0-47c3-97d1-5710ec64cb80",
+                    "file_id": "bfe6204b-06c6-4e20-8798-60ae877a724f",
+                    "owner_id": "c6f5a79c-16fd-41e7-8b2a-ff7c79641cea",
+                    "owner_type": "post",
+                    "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "role": "post",
+                    "is_public": true,
+                    "file": {
+                        "id": "bfe6204b-06c6-4e20-8798-60ae877a724f",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706.png",
+                        "mime_type": "image/png",
+                        "size": 1213219,
+                        "name": "Ekran Resmi 2025-11-04 12.27.36.png",
+                        "width": 1776,
+                        "height": 1178,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 10368
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 26344
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 73532
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 138762
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1440,
+                                    "format": "webp",
+                                    "size": 263512
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706.png",
+                                    "width": 1776,
+                                    "height": 1178,
+                                    "format": "png",
+                                    "size": 1213219
+                                }
+                            }
+                        },
+                        "created_at": "2025-11-07T07:18:15.995834+05:45"
+                    },
+                    "created_at": "2025-11-07T07:18:15.995834+05:45",
+                    "updated_at": "2025-11-07T07:18:15.995834+05:45"
+                },
+                "user": {
+                    "public_id": "1986597228017356800",
+                    "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "socket_id": "1",
+                    "username": "can",
+                    "displayname": "can",
+                    "email": "",
+                    "date_of_birth": "2000-11-01T05:45:00+05:45",
+                    "gender_identities": null,
+                    "sexual_orientations": null,
+                    "user_role": "",
+                    "is_active": false,
+                    "created_at": "2025-11-07T06:36:03.008498+05:45",
+                    "updated_at": "2025-11-07T09:22:15.445458+05:45",
+                    "last_online": "2025-11-07T09:22:15.444067+05:45",
+                    "default_language": "en",
+                    "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                    "avatar": {
+                        "public_id": "1986597931674767360",
+                        "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                        "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                            "mime_type": "image/jpeg",
+                            "size": 215138,
+                            "name": "1669041186022.jpeg",
+                            "width": 1440,
+                            "height": 1080,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 24248
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 58636
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 18908
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 65802
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 218210
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                        "width": 1440,
+                                        "height": 1080,
+                                        "format": "jpeg",
+                                        "size": 215138
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:50.773396+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:50.773397+05:45",
+                        "updated_at": "2025-11-07T06:38:50.773397+05:45"
+                    },
+                    "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                    "cover": {
+                        "public_id": "1986597947621511168",
+                        "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                        "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "cover",
+                        "is_public": true,
+                        "file": {
+                            "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 112630,
+                            "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                            "width": 1920,
+                            "height": 672,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 10232
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 23986
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                        "width": 1280,
+                                        "height": 720,
+                                        "format": "webp",
+                                        "size": 352408
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                        "width": 1920,
+                                        "height": 1080,
+                                        "format": "webp",
+                                        "size": 466872
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                        "width": 2560,
+                                        "height": 1440,
+                                        "format": "webp",
+                                        "size": 468034
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                        "width": 1920,
+                                        "height": 672,
+                                        "format": "jpg",
+                                        "size": 112630
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:54.575474+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:54.575474+05:45",
+                        "updated_at": "2025-11-07T06:38:54.575474+05:45"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "social": {},
+                    "deleted_at": null
+                }
+            },
+            {
+                "media": {
+                    "public_id": "1986607846791319552",
+                    "id": "43959ebc-9bb3-4867-9e22-a2d49972b21c",
+                    "file_id": "b9d11c2d-9397-4d8a-b8d7-9ca88a5ed980",
+                    "owner_id": "c6f5a79c-16fd-41e7-8b2a-ff7c79641cea",
+                    "owner_type": "post",
+                    "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "role": "post",
+                    "is_public": true,
+                    "file": {
+                        "id": "b9d11c2d-9397-4d8a-b8d7-9ca88a5ed980",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363.png",
+                        "mime_type": "image/png",
+                        "size": 70149,
+                        "name": "Ekran Resmi 2025-11-03 00.41.45.png",
+                        "width": 1552,
+                        "height": 1612,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 478
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 968
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 2312
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 3940
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1440,
+                                    "format": "webp",
+                                    "size": 6706
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363.png",
+                                    "width": 1552,
+                                    "height": 1612,
+                                    "format": "png",
+                                    "size": 70149
+                                }
+                            }
+                        },
+                        "created_at": "2025-11-07T07:18:14.70718+05:45"
+                    },
+                    "created_at": "2025-11-07T07:18:14.70718+05:45",
+                    "updated_at": "2025-11-07T07:18:14.70718+05:45"
+                },
+                "user": {
+                    "public_id": "1986597228017356800",
+                    "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "socket_id": "1",
+                    "username": "can",
+                    "displayname": "can",
+                    "email": "",
+                    "date_of_birth": "2000-11-01T05:45:00+05:45",
+                    "gender_identities": null,
+                    "sexual_orientations": null,
+                    "user_role": "",
+                    "is_active": false,
+                    "created_at": "2025-11-07T06:36:03.008498+05:45",
+                    "updated_at": "2025-11-07T09:22:15.445458+05:45",
+                    "last_online": "2025-11-07T09:22:15.444067+05:45",
+                    "default_language": "en",
+                    "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                    "avatar": {
+                        "public_id": "1986597931674767360",
+                        "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                        "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                            "mime_type": "image/jpeg",
+                            "size": 215138,
+                            "name": "1669041186022.jpeg",
+                            "width": 1440,
+                            "height": 1080,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 24248
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 58636
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 18908
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 65802
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 218210
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                        "width": 1440,
+                                        "height": 1080,
+                                        "format": "jpeg",
+                                        "size": 215138
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:50.773396+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:50.773397+05:45",
+                        "updated_at": "2025-11-07T06:38:50.773397+05:45"
+                    },
+                    "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                    "cover": {
+                        "public_id": "1986597947621511168",
+                        "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                        "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "cover",
+                        "is_public": true,
+                        "file": {
+                            "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 112630,
+                            "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                            "width": 1920,
+                            "height": 672,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 10232
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 23986
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                        "width": 1280,
+                                        "height": 720,
+                                        "format": "webp",
+                                        "size": 352408
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                        "width": 1920,
+                                        "height": 1080,
+                                        "format": "webp",
+                                        "size": 466872
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                        "width": 2560,
+                                        "height": 1440,
+                                        "format": "webp",
+                                        "size": 468034
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                        "width": 1920,
+                                        "height": 672,
+                                        "format": "jpg",
+                                        "size": 112630
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:54.575474+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:54.575474+05:45",
+                        "updated_at": "2025-11-07T06:38:54.575474+05:45"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "social": {},
+                    "deleted_at": null
+                }
+            },
+            {
+                "media": {
+                    "public_id": "1986607845830823936",
+                    "id": "a4847c49-541e-43cb-8040-ad1c1e9335f6",
+                    "file_id": "ca1f4c82-9859-4953-8496-c596921fac07",
+                    "owner_id": "c6f5a79c-16fd-41e7-8b2a-ff7c79641cea",
+                    "owner_type": "post",
+                    "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "role": "post",
+                    "is_public": true,
+                    "file": {
+                        "id": "ca1f4c82-9859-4953-8496-c596921fac07",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35.png",
+                        "mime_type": "image/png",
+                        "size": 191596,
+                        "name": "Ekran Resmi 2025-11-03 00.33.56.png",
+                        "width": 2540,
+                        "height": 1588,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 1694
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 3868
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 9776
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 16828
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1440,
+                                    "format": "webp",
+                                    "size": 28370
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35.png",
+                                    "width": 2540,
+                                    "height": 1588,
+                                    "format": "png",
+                                    "size": 191596
+                                }
+                            }
+                        },
+                        "created_at": "2025-11-07T07:18:14.47834+05:45"
+                    },
+                    "created_at": "2025-11-07T07:18:14.47834+05:45",
+                    "updated_at": "2025-11-07T07:18:14.47834+05:45"
+                },
+                "user": {
+                    "public_id": "1986597228017356800",
+                    "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "socket_id": "1",
+                    "username": "can",
+                    "displayname": "can",
+                    "email": "",
+                    "date_of_birth": "2000-11-01T05:45:00+05:45",
+                    "gender_identities": null,
+                    "sexual_orientations": null,
+                    "user_role": "",
+                    "is_active": false,
+                    "created_at": "2025-11-07T06:36:03.008498+05:45",
+                    "updated_at": "2025-11-07T09:22:15.445458+05:45",
+                    "last_online": "2025-11-07T09:22:15.444067+05:45",
+                    "default_language": "en",
+                    "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                    "avatar": {
+                        "public_id": "1986597931674767360",
+                        "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                        "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                            "mime_type": "image/jpeg",
+                            "size": 215138,
+                            "name": "1669041186022.jpeg",
+                            "width": 1440,
+                            "height": 1080,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 24248
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 58636
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 18908
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 65802
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 218210
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                        "width": 1440,
+                                        "height": 1080,
+                                        "format": "jpeg",
+                                        "size": 215138
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:50.773396+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:50.773397+05:45",
+                        "updated_at": "2025-11-07T06:38:50.773397+05:45"
+                    },
+                    "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                    "cover": {
+                        "public_id": "1986597947621511168",
+                        "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                        "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "cover",
+                        "is_public": true,
+                        "file": {
+                            "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 112630,
+                            "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                            "width": 1920,
+                            "height": 672,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 10232
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 23986
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                        "width": 1280,
+                                        "height": 720,
+                                        "format": "webp",
+                                        "size": 352408
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                        "width": 1920,
+                                        "height": 1080,
+                                        "format": "webp",
+                                        "size": 466872
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                        "width": 2560,
+                                        "height": 1440,
+                                        "format": "webp",
+                                        "size": 468034
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                        "width": 1920,
+                                        "height": 672,
+                                        "format": "jpg",
+                                        "size": 112630
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:54.575474+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:54.575474+05:45",
+                        "updated_at": "2025-11-07T06:38:54.575474+05:45"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "social": {},
+                    "deleted_at": null
+                }
+            },
+            {
+                "media": {
+                    "public_id": "1986607844375400448",
+                    "id": "bcff49ef-802d-48bd-8ff7-85263967c1d8",
+                    "file_id": "0df19bfd-db5b-48b2-8286-253459ada99c",
+                    "owner_id": "c6f5a79c-16fd-41e7-8b2a-ff7c79641cea",
+                    "owner_type": "post",
+                    "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "role": "post",
+                    "is_public": true,
+                    "file": {
+                        "id": "0df19bfd-db5b-48b2-8286-253459ada99c",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8.png",
+                        "mime_type": "image/png",
+                        "size": 245378,
+                        "name": "Ekran Resmi 2025-11-03 00.28.03.png",
+                        "width": 2602,
+                        "height": 1590,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 1570
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 3802
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 9836
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 18744
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1440,
+                                    "format": "webp",
+                                    "size": 32618
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8.png",
+                                    "width": 2602,
+                                    "height": 1590,
+                                    "format": "png",
+                                    "size": 245378
+                                }
+                            }
+                        },
+                        "created_at": "2025-11-07T07:18:14.131634+05:45"
+                    },
+                    "created_at": "2025-11-07T07:18:14.131634+05:45",
+                    "updated_at": "2025-11-07T07:18:14.131634+05:45"
+                },
+                "user": {
+                    "public_id": "1986597228017356800",
+                    "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                    "socket_id": "1",
+                    "username": "can",
+                    "displayname": "can",
+                    "email": "",
+                    "date_of_birth": "2000-11-01T05:45:00+05:45",
+                    "gender_identities": null,
+                    "sexual_orientations": null,
+                    "user_role": "",
+                    "is_active": false,
+                    "created_at": "2025-11-07T06:36:03.008498+05:45",
+                    "updated_at": "2025-11-07T09:22:15.445458+05:45",
+                    "last_online": "2025-11-07T09:22:15.444067+05:45",
+                    "default_language": "en",
+                    "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                    "avatar": {
+                        "public_id": "1986597931674767360",
+                        "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                        "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                            "mime_type": "image/jpeg",
+                            "size": 215138,
+                            "name": "1669041186022.jpeg",
+                            "width": 1440,
+                            "height": 1080,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 24248
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 58636
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 18908
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 65802
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 218210
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                        "width": 1440,
+                                        "height": 1080,
+                                        "format": "jpeg",
+                                        "size": 215138
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:50.773396+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:50.773397+05:45",
+                        "updated_at": "2025-11-07T06:38:50.773397+05:45"
+                    },
+                    "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                    "cover": {
+                        "public_id": "1986597947621511168",
+                        "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                        "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                        "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "owner_type": "user",
+                        "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                        "role": "cover",
+                        "is_public": true,
+                        "file": {
+                            "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 112630,
+                            "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                            "width": 1920,
+                            "height": 672,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 10232
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 23986
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                        "width": 1280,
+                                        "height": 720,
+                                        "format": "webp",
+                                        "size": 352408
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                        "width": 1920,
+                                        "height": 1080,
+                                        "format": "webp",
+                                        "size": 466872
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                        "width": 2560,
+                                        "height": 1440,
+                                        "format": "webp",
+                                        "size": 468034
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                        "width": 1920,
+                                        "height": 672,
+                                        "format": "jpg",
+                                        "size": 112630
+                                    }
+                                }
+                            },
+                            "created_at": "2025-11-07T06:38:54.575474+05:45"
+                        },
+                        "created_at": "2025-11-07T06:38:54.575474+05:45",
+                        "updated_at": "2025-11-07T06:38:54.575474+05:45"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "social": {},
+                    "deleted_at": null
+                }
+            }
+        ],
+        "next_cursor": 1986607844375400448
+    }
+}

@@ -1,0 +1,903 @@
+{
+    "has_more": true,
+    "medias": [
+        {
+            "public_id": "1986607853045026816",
+            "id": "ab098da8-24b8-4e48-8b25-34a6c63282a9",
+            "file_id": "40a1856d-2aeb-4040-8bda-07188dd6adb2",
+            "owner_id": "c6f5a79c-16fd-41e7-8b2a-ff7c79641cea",
+            "owner_type": "post",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "40a1856d-2aeb-4040-8bda-07188dd6adb2",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632.png",
+                "mime_type": "image/png",
+                "size": 83785,
+                "name": "Ekran Resmi 2025-11-04 20.17.30.png",
+                "width": 2582,
+                "height": 364,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632_portrait_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 1060
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632_portrait_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 2134
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632_portrait_sm.webp",
+                            "width": 480,
+                            "height": 720,
+                            "format": "webp",
+                            "size": 5062
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632_portrait_md.webp",
+                            "width": 720,
+                            "height": 1080,
+                            "format": "webp",
+                            "size": 9086
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632_portrait_lg.webp",
+                            "width": 1080,
+                            "height": 1440,
+                            "format": "webp",
+                            "size": 14586
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/5d339c10-dc44-418d-93fd-751d88408632.png",
+                            "width": 2582,
+                            "height": 364,
+                            "format": "png",
+                            "size": 83785
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T07:18:16.199371+05:45"
+            },
+            "created_at": "2025-11-07T07:18:16.199371+05:45",
+            "updated_at": "2025-11-07T07:18:16.199371+05:45"
+        },
+        {
+            "public_id": "1986607852193583104",
+            "id": "623dbd55-ebe0-47c3-97d1-5710ec64cb80",
+            "file_id": "bfe6204b-06c6-4e20-8798-60ae877a724f",
+            "owner_id": "c6f5a79c-16fd-41e7-8b2a-ff7c79641cea",
+            "owner_type": "post",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "bfe6204b-06c6-4e20-8798-60ae877a724f",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706.png",
+                "mime_type": "image/png",
+                "size": 1213219,
+                "name": "Ekran Resmi 2025-11-04 12.27.36.png",
+                "width": 1776,
+                "height": 1178,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706_portrait_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 10368
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706_portrait_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 26344
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706_portrait_sm.webp",
+                            "width": 480,
+                            "height": 720,
+                            "format": "webp",
+                            "size": 73532
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706_portrait_md.webp",
+                            "width": 720,
+                            "height": 1080,
+                            "format": "webp",
+                            "size": 138762
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706_portrait_lg.webp",
+                            "width": 1080,
+                            "height": 1440,
+                            "format": "webp",
+                            "size": 263512
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/f51f16cf-c66c-4450-9d07-9e367dce5706.png",
+                            "width": 1776,
+                            "height": 1178,
+                            "format": "png",
+                            "size": 1213219
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T07:18:15.995834+05:45"
+            },
+            "created_at": "2025-11-07T07:18:15.995834+05:45",
+            "updated_at": "2025-11-07T07:18:15.995834+05:45"
+        },
+        {
+            "public_id": "1986607846791319552",
+            "id": "43959ebc-9bb3-4867-9e22-a2d49972b21c",
+            "file_id": "b9d11c2d-9397-4d8a-b8d7-9ca88a5ed980",
+            "owner_id": "c6f5a79c-16fd-41e7-8b2a-ff7c79641cea",
+            "owner_type": "post",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "b9d11c2d-9397-4d8a-b8d7-9ca88a5ed980",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363.png",
+                "mime_type": "image/png",
+                "size": 70149,
+                "name": "Ekran Resmi 2025-11-03 00.41.45.png",
+                "width": 1552,
+                "height": 1612,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363_portrait_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 478
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363_portrait_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 968
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363_portrait_sm.webp",
+                            "width": 480,
+                            "height": 720,
+                            "format": "webp",
+                            "size": 2312
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363_portrait_md.webp",
+                            "width": 720,
+                            "height": 1080,
+                            "format": "webp",
+                            "size": 3940
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363_portrait_lg.webp",
+                            "width": 1080,
+                            "height": 1440,
+                            "format": "webp",
+                            "size": 6706
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/6c376799-6665-4e0e-8c00-88db211da363.png",
+                            "width": 1552,
+                            "height": 1612,
+                            "format": "png",
+                            "size": 70149
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T07:18:14.70718+05:45"
+            },
+            "created_at": "2025-11-07T07:18:14.70718+05:45",
+            "updated_at": "2025-11-07T07:18:14.70718+05:45"
+        },
+        {
+            "public_id": "1986607845830823936",
+            "id": "a4847c49-541e-43cb-8040-ad1c1e9335f6",
+            "file_id": "ca1f4c82-9859-4953-8496-c596921fac07",
+            "owner_id": "c6f5a79c-16fd-41e7-8b2a-ff7c79641cea",
+            "owner_type": "post",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "ca1f4c82-9859-4953-8496-c596921fac07",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35.png",
+                "mime_type": "image/png",
+                "size": 191596,
+                "name": "Ekran Resmi 2025-11-03 00.33.56.png",
+                "width": 2540,
+                "height": 1588,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35_portrait_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 1694
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35_portrait_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 3868
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35_portrait_sm.webp",
+                            "width": 480,
+                            "height": 720,
+                            "format": "webp",
+                            "size": 9776
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35_portrait_md.webp",
+                            "width": 720,
+                            "height": 1080,
+                            "format": "webp",
+                            "size": 16828
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35_portrait_lg.webp",
+                            "width": 1080,
+                            "height": 1440,
+                            "format": "webp",
+                            "size": 28370
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/e79a35bc-e9d9-4e7e-8b0e-f0dc5969de35.png",
+                            "width": 2540,
+                            "height": 1588,
+                            "format": "png",
+                            "size": 191596
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T07:18:14.47834+05:45"
+            },
+            "created_at": "2025-11-07T07:18:14.47834+05:45",
+            "updated_at": "2025-11-07T07:18:14.47834+05:45"
+        },
+        {
+            "public_id": "1986607844375400448",
+            "id": "bcff49ef-802d-48bd-8ff7-85263967c1d8",
+            "file_id": "0df19bfd-db5b-48b2-8286-253459ada99c",
+            "owner_id": "c6f5a79c-16fd-41e7-8b2a-ff7c79641cea",
+            "owner_type": "post",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "0df19bfd-db5b-48b2-8286-253459ada99c",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8.png",
+                "mime_type": "image/png",
+                "size": 245378,
+                "name": "Ekran Resmi 2025-11-03 00.28.03.png",
+                "width": 2602,
+                "height": 1590,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8_portrait_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 1570
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8_portrait_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 3802
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8_portrait_sm.webp",
+                            "width": 480,
+                            "height": 720,
+                            "format": "webp",
+                            "size": 9836
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8_portrait_md.webp",
+                            "width": 720,
+                            "height": 1080,
+                            "format": "webp",
+                            "size": 18744
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8_portrait_lg.webp",
+                            "width": 1080,
+                            "height": 1440,
+                            "format": "webp",
+                            "size": 32618
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/b3a527db-11ad-4442-9cb7-8404d15079b8.png",
+                            "width": 2602,
+                            "height": 1590,
+                            "format": "png",
+                            "size": 245378
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T07:18:14.131634+05:45"
+            },
+            "created_at": "2025-11-07T07:18:14.131634+05:45",
+            "updated_at": "2025-11-07T07:18:14.131634+05:45"
+        },
+        {
+            "public_id": "1986607841280004096",
+            "id": "03fb9625-f526-41c1-9186-b2dbed2ac19d",
+            "file_id": "2afdbb37-531d-4698-b365-9096a588831d",
+            "owner_id": "c6f5a79c-16fd-41e7-8b2a-ff7c79641cea",
+            "owner_type": "post",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "2afdbb37-531d-4698-b365-9096a588831d",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/7c4ecc6f-ffb3-4819-ae2a-5e500351fde0.png",
+                "mime_type": "image/png",
+                "size": 236011,
+                "name": "Ekran Resmi 2025-11-03 00.24.37.png",
+                "width": 2552,
+                "height": 1582,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/7c4ecc6f-ffb3-4819-ae2a-5e500351fde0_portrait_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 1764
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/7c4ecc6f-ffb3-4819-ae2a-5e500351fde0_portrait_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 4004
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/7c4ecc6f-ffb3-4819-ae2a-5e500351fde0_portrait_sm.webp",
+                            "width": 480,
+                            "height": 720,
+                            "format": "webp",
+                            "size": 9920
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/7c4ecc6f-ffb3-4819-ae2a-5e500351fde0_portrait_md.webp",
+                            "width": 720,
+                            "height": 1080,
+                            "format": "webp",
+                            "size": 18898
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/7c4ecc6f-ffb3-4819-ae2a-5e500351fde0_portrait_lg.webp",
+                            "width": 1080,
+                            "height": 1440,
+                            "format": "webp",
+                            "size": 33028
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/7c4ecc6f-ffb3-4819-ae2a-5e500351fde0.png",
+                            "width": 2552,
+                            "height": 1582,
+                            "format": "png",
+                            "size": 236011
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T07:18:13.393571+05:45"
+            },
+            "created_at": "2025-11-07T07:18:13.393571+05:45",
+            "updated_at": "2025-11-07T07:18:13.393571+05:45"
+        },
+        {
+            "public_id": "1986607838130081792",
+            "id": "6b928ced-c1f0-4019-9da1-ea788ea8f35e",
+            "file_id": "56a7529d-bb4c-4275-a562-973f85680cc0",
+            "owner_id": "c6f5a79c-16fd-41e7-8b2a-ff7c79641cea",
+            "owner_type": "post",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "56a7529d-bb4c-4275-a562-973f85680cc0",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/22dffb79-7321-4183-8081-6076287b0a52.png",
+                "mime_type": "image/png",
+                "size": 293096,
+                "name": "Ekran Resmi 2025-11-01 23.20.12.png",
+                "width": 2596,
+                "height": 1504,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/22dffb79-7321-4183-8081-6076287b0a52_portrait_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 4802
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/22dffb79-7321-4183-8081-6076287b0a52_portrait_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 12620
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/22dffb79-7321-4183-8081-6076287b0a52_portrait_sm.webp",
+                            "width": 480,
+                            "height": 720,
+                            "format": "webp",
+                            "size": 31870
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/22dffb79-7321-4183-8081-6076287b0a52_portrait_md.webp",
+                            "width": 720,
+                            "height": 1080,
+                            "format": "webp",
+                            "size": 55904
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/22dffb79-7321-4183-8081-6076287b0a52_portrait_lg.webp",
+                            "width": 1080,
+                            "height": 1440,
+                            "format": "webp",
+                            "size": 84604
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/c6f5a79c-16fd-41e7-8b2a-ff7c79641cea/22dffb79-7321-4183-8081-6076287b0a52.png",
+                            "width": 2596,
+                            "height": 1504,
+                            "format": "png",
+                            "size": 293096
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T07:18:12.64229+05:45"
+            },
+            "created_at": "2025-11-07T07:18:12.64229+05:45",
+            "updated_at": "2025-11-07T07:18:12.64229+05:45"
+        },
+        {
+            "public_id": "1986603850965979136",
+            "id": "14c797c5-181d-4a67-b067-5704179e2eaa",
+            "file_id": "f34cd55a-0c97-4cd1-8051-238260f3da26",
+            "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "owner_type": "user",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "story",
+            "is_public": true,
+            "file": {
+                "id": "f34cd55a-0c97-4cd1-8051-238260f3da26",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173.jpg",
+                "mime_type": "image/jpeg",
+                "size": 224201,
+                "name": "1000_F_343145027_5FAySOOAuX31BVp6BZPIPoWgZDN4U4QP.jpg",
+                "width": 1000,
+                "height": 667,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173_portrait_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 10080
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173_portrait_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 27070
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173_portrait_sm.webp",
+                            "width": 480,
+                            "height": 720,
+                            "format": "webp",
+                            "size": 80980
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173_portrait_md.webp",
+                            "width": 720,
+                            "height": 1080,
+                            "format": "webp",
+                            "size": 164936
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173_portrait_lg.webp",
+                            "width": 1080,
+                            "height": 1440,
+                            "format": "webp",
+                            "size": 287558
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173.jpg",
+                            "width": 1000,
+                            "height": 667,
+                            "format": "jpg",
+                            "size": 224201
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T07:02:22.042943+05:45"
+            },
+            "created_at": "2025-11-07T07:02:22.042943+05:45",
+            "updated_at": "2025-11-07T07:02:22.042943+05:45"
+        },
+        {
+            "public_id": "1986599627075358720",
+            "id": "5d57c9c8-ef3b-4e7c-b68b-c4b2868956cf",
+            "file_id": "267cfcb8-cc46-4879-b67a-d7f6e48a604f",
+            "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "owner_type": "user",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "story",
+            "is_public": true,
+            "file": {
+                "id": "267cfcb8-cc46-4879-b67a-d7f6e48a604f",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a.png",
+                "mime_type": "image/png",
+                "size": 293096,
+                "name": "Ekran Resmi 2025-11-01 23.20.12.png",
+                "width": 2596,
+                "height": 1504,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a_portrait_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 4802
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a_portrait_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 12620
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a_portrait_sm.webp",
+                            "width": 480,
+                            "height": 720,
+                            "format": "webp",
+                            "size": 31870
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a_portrait_md.webp",
+                            "width": 720,
+                            "height": 1080,
+                            "format": "webp",
+                            "size": 55904
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a_portrait_lg.webp",
+                            "width": 1080,
+                            "height": 1440,
+                            "format": "webp",
+                            "size": 84604
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a.png",
+                            "width": 2596,
+                            "height": 1504,
+                            "format": "png",
+                            "size": 293096
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T06:45:34.989077+05:45"
+            },
+            "created_at": "2025-11-07T06:45:34.989077+05:45",
+            "updated_at": "2025-11-07T06:45:34.989077+05:45"
+        },
+        {
+            "public_id": "1986597947621511168",
+            "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+            "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+            "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "owner_type": "user",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "cover",
+            "is_public": true,
+            "file": {
+                "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                "mime_type": "image/jpeg",
+                "size": 112630,
+                "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                "width": 1920,
+                "height": 672,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 10232
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 23986
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                            "width": 1280,
+                            "height": 720,
+                            "format": "webp",
+                            "size": 352408
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                            "width": 1920,
+                            "height": 1080,
+                            "format": "webp",
+                            "size": 466872
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                            "width": 2560,
+                            "height": 1440,
+                            "format": "webp",
+                            "size": 468034
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                            "width": 1920,
+                            "height": 672,
+                            "format": "jpg",
+                            "size": 112630
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T06:38:54.575474+05:45"
+            },
+            "created_at": "2025-11-07T06:38:54.575474+05:45",
+            "updated_at": "2025-11-07T06:38:54.575474+05:45"
+        },
+        {
+            "public_id": "1986597931674767360",
+            "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+            "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+            "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "owner_type": "user",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+                "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                "mime_type": "image/jpeg",
+                "size": 215138,
+                "name": "1669041186022.jpeg",
+                "width": 1440,
+                "height": 1080,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 24248
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 58636
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 18908
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                            "width": 256,
+                            "height": 256,
+                            "format": "webp",
+                            "size": 65802
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                            "width": 512,
+                            "height": 512,
+                            "format": "webp",
+                            "size": 218210
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                            "width": 1440,
+                            "height": 1080,
+                            "format": "jpeg",
+                            "size": 215138
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T06:38:50.773396+05:45"
+            },
+            "created_at": "2025-11-07T06:38:50.773397+05:45",
+            "updated_at": "2025-11-07T06:38:50.773397+05:45"
+        },
+        {
+            "public_id": "1986597312264146944",
+            "id": "c2cdb0a4-b5df-4ebd-9fa4-f9fe6ca25d26",
+            "file_id": "b74b2ee3-deb6-4be3-a35b-1edd7fe86c99",
+            "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "owner_type": "user",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "story",
+            "is_public": true,
+            "file": {
+                "id": "b74b2ee3-deb6-4be3-a35b-1edd7fe86c99",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19.png",
+                "mime_type": "image/png",
+                "size": 293096,
+                "name": "Ekran Resmi 2025-11-01 23.20.12.png",
+                "width": 2596,
+                "height": 1504,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19_portrait_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 4802
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19_portrait_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 12620
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19_portrait_sm.webp",
+                            "width": 480,
+                            "height": 720,
+                            "format": "webp",
+                            "size": 31870
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19_portrait_md.webp",
+                            "width": 720,
+                            "height": 1080,
+                            "format": "webp",
+                            "size": 55904
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19_portrait_lg.webp",
+                            "width": 1080,
+                            "height": 1440,
+                            "format": "webp",
+                            "size": 84604
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19.png",
+                            "width": 2596,
+                            "height": 1504,
+                            "format": "png",
+                            "size": 293096
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T06:36:23.095042+05:45"
+            },
+            "created_at": "2025-11-07T06:36:23.095042+05:45",
+            "updated_at": "2025-11-07T06:36:23.095042+05:45"
+        },
+        {
+            "public_id": "1986597280190304256",
+            "id": "769c971b-2f63-4e9b-afb1-552da00f829f",
+            "file_id": "bbfb4f91-1393-40fb-b4cd-df2f61387200",
+            "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "owner_type": "user",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "story",
+            "is_public": true,
+            "file": {
+                "id": "bbfb4f91-1393-40fb-b4cd-df2f61387200",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0.jpg",
+                "mime_type": "image/jpeg",
+                "size": 224201,
+                "name": "1000_F_343145027_5FAySOOAuX31BVp6BZPIPoWgZDN4U4QP.jpg",
+                "width": 1000,
+                "height": 667,
+                "variants": {
+                    "image": {
+                        "icon": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0_portrait_icon.webp",
+                            "width": 128,
+                            "height": 128,
+                            "format": "webp",
+                            "size": 10080
+                        },
+                        "thumbnail": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0_portrait_thumb.webp",
+                            "width": 240,
+                            "height": 240,
+                            "format": "webp",
+                            "size": 27070
+                        },
+                        "small": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0_portrait_sm.webp",
+                            "width": 480,
+                            "height": 720,
+                            "format": "webp",
+                            "size": 80980
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0_portrait_md.webp",
+                            "width": 720,
+                            "height": 1080,
+                            "format": "webp",
+                            "size": 164936
+                        },
+                        "large": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0_portrait_lg.webp",
+                            "width": 1080,
+                            "height": 1440,
+                            "format": "webp",
+                            "size": 287558
+                        },
+                        "original": {
+                            "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0.jpg",
+                            "width": 1000,
+                            "height": 667,
+                            "format": "jpg",
+                            "size": 224201
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T06:36:15.44743+05:45"
+            },
+            "created_at": "2025-11-07T06:36:15.44743+05:45",
+            "updated_at": "2025-11-07T06:36:15.44743+05:45"
+        }
+    ],
+    "next_cursor": "1986597280190304256"
+}

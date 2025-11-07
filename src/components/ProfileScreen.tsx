@@ -205,6 +205,19 @@ interface Media {
     name: string;
     created_at: string;
     url: string;
+    variants?: {
+      image?: {
+        icon?: { url: string; width: number; height: number; format: string; size: number };
+        thumbnail?: { url: string; width: number; height: number; format: string; size: number };
+        small?: { url: string; width: number; height: number; format: string; size: number };
+        medium?: { url: string; width: number; height: number; format: string; size: number };
+        large?: { url: string; width: number; height: number; format: string; size: number };
+        original?: { url: string; width: number; height: number; format: string; size: number };
+      };
+      video?: {
+        preview?: { url: string };
+      };
+    };
   };
   created_at: string;
   updated_at: string;
@@ -1424,13 +1437,20 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         });
         
         // Set medias from API response
+        let allMedias: any[] = [];
+        
         if (response && response.medias) {
-          setMedias(response.medias);
+          allMedias = response.medias;
         } else if (response && Array.isArray(response)) {
-          setMedias(response);
+          allMedias = response;
         } else {
-          setMedias([]);
+          allMedias = [];
         }
+        
+        // Filter only post medias (exclude stories, avatars, covers, etc.)
+        const postMedias = allMedias.filter((media: any) => media.role === 'post');
+        
+        setMedias(postMedias);
       } catch (err: any) {
         console.error('Error fetching medias:', err);
         setError(err.response?.data?.message || 'Failed to load medias');
@@ -3038,10 +3058,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                   ) : (
                     <div className="p-4">
                       <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-2 sm:gap-3">
-                        {medias
-                          .map((media) => (
-                            <Media key={media.id} media={media} />
-                          ))}
+                        {medias.map((media) => (
+                          <Media key={media.id} media={media} />
+                        ))}
                       </div>
                     </div>
                   )}

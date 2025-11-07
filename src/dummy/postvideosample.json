@@ -1,0 +1,148 @@
+{
+    "public_id": "1986640915615191040",
+    "id": "ecd64e9b-09ad-4232-8ede-8aab3277e409",
+    "post_kind": "status",
+    "content_category": "normal",
+    "contentable_type": "post",
+    "author_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+    "content": {
+        "en": "{\"root\":{\"children\":[],\"direction\":null,\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+    },
+    "published": true,
+    "created_at": "2025-11-07T09:29:38.943803+05:45",
+    "updated_at": "2025-11-07T09:29:44.788696+05:45",
+    "deleted_at": null,
+    "author": {
+        "public_id": "1986597228017356800",
+        "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+        "socket_id": "a",
+        "username": "can",
+        "displayname": "can",
+        "email": "",
+        "date_of_birth": "2000-11-01T05:45:00+05:45",
+        "gender_identities": null,
+        "sexual_orientations": null,
+        "user_role": "",
+        "is_active": false,
+        "created_at": "2025-11-07T06:36:03.008498+05:45",
+        "updated_at": "2025-11-07T09:38:12.895869+05:45",
+        "last_online": "2025-11-07T09:38:12.895539+05:45",
+        "default_language": "en",
+        "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+        "avatar": {
+            "public_id": "1986597931674767360",
+            "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+            "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+            "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "owner_type": "user",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "avatar",
+            "is_public": true,
+            "file": {
+                "id": "00000000-0000-0000-0000-000000000000",
+                "url": "",
+                "storage_path": "",
+                "mime_type": "",
+                "size": 0,
+                "name": "",
+                "created_at": "0001-01-01T00:00:00Z"
+            },
+            "created_at": "2025-11-07T06:38:50.773397+05:45",
+            "updated_at": "2025-11-07T06:38:50.773397+05:45"
+        },
+        "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+        "cover": {
+            "public_id": "1986597947621511168",
+            "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+            "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+            "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "owner_type": "user",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "cover",
+            "is_public": true,
+            "file": {
+                "id": "00000000-0000-0000-0000-000000000000",
+                "url": "",
+                "storage_path": "",
+                "mime_type": "",
+                "size": 0,
+                "name": "",
+                "created_at": "0001-01-01T00:00:00Z"
+            },
+            "created_at": "2025-11-07T06:38:54.575474+05:45",
+            "updated_at": "2025-11-07T06:38:54.575474+05:45"
+        },
+        "languages": null,
+        "travel": {
+            "visited_countries": null,
+            "travel_frequency": "",
+            "favorite_places": null
+        },
+        "social": {},
+        "deleted_at": null
+    },
+    "attachments": [
+        {
+            "public_id": "1986640940122509312",
+            "id": "f53b3074-f561-4919-bd49-3dba7a5bcd03",
+            "file_id": "f021a269-b15b-4dc0-89f7-5b0682384df8",
+            "owner_id": "ecd64e9b-09ad-4232-8ede-8aab3277e409",
+            "owner_type": "post",
+            "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+            "role": "post",
+            "is_public": true,
+            "file": {
+                "id": "f021a269-b15b-4dc0-89f7-5b0682384df8",
+                "url": "",
+                "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/ecd64e9b-09ad-4232-8ede-8aab3277e409/315e803b-4f14-41d8-b8b0-aacb0a7d9680.mov",
+                "mime_type": "video/quicktime",
+                "size": 10492787,
+                "name": "0BD3DB6B-78B6-4286-B47B-58CD3B3A679C (1).mov",
+                "width": 720,
+                "height": 1280,
+                "variants": {
+                    "video": {
+                        "poster": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/ecd64e9b-09ad-4232-8ede-8aab3277e409/315e803b-4f14-41d8-b8b0-aacb0a7d9680_poster.jpg",
+                            "width": 720,
+                            "height": 1280,
+                            "format": "jpg",
+                            "size": 139770
+                        },
+                        "low": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/ecd64e9b-09ad-4232-8ede-8aab3277e409/315e803b-4f14-41d8-b8b0-aacb0a7d9680_low.mp4",
+                            "width": 270,
+                            "height": 480,
+                            "format": "mp4",
+                            "size": 700827
+                        },
+                        "medium": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/ecd64e9b-09ad-4232-8ede-8aab3277e409/315e803b-4f14-41d8-b8b0-aacb0a7d9680_medium.mp4",
+                            "width": 406,
+                            "height": 720,
+                            "format": "mp4",
+                            "size": 2189816
+                        },
+                        "high": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/ecd64e9b-09ad-4232-8ede-8aab3277e409/315e803b-4f14-41d8-b8b0-aacb0a7d9680_high.mp4",
+                            "width": 608,
+                            "height": 1080,
+                            "format": "mp4",
+                            "size": 4776918
+                        },
+                        "preview": {
+                            "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/posts/2025-11-07/ecd64e9b-09ad-4232-8ede-8aab3277e409/315e803b-4f14-41d8-b8b0-aacb0a7d9680_preview.mp4",
+                            "width": 202,
+                            "height": 360,
+                            "format": "mp4",
+                            "size": 83605
+                        }
+                    }
+                },
+                "created_at": "2025-11-07T09:29:44.786899+05:45"
+            },
+            "created_at": "2025-11-07T09:29:44.786899+05:45",
+            "updated_at": "2025-11-07T09:29:44.786899+05:45"
+        }
+    ]
+}

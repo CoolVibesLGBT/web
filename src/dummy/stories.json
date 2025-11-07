@@ -1,764 +1,1663 @@
 {
-    "stories": [
+  "stories": [
       {
-        "id": "09222f8d-dd32-4960-ac42-5846a8996b80",
-        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-        "user": {
-          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "public_id": 1.9846181998276157e+18,
-          "username": "fuck",
-          "displayname": "fuck",
-          "email": "",
-          "date_of_birth": "2000-11-16T05:45:00+05:45",
-          "gender_identities": null,
-          "sexual_orientations": null,
-          "user_role": "",
-          "is_active": false,
-          "created_at": "2025-11-01T19:32:05.919641+05:45",
-          "updated_at": "2025-11-01T21:03:16.788324+05:45",
-          "default_language": "en",
-          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-          "avatar": {
-            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:16.785578+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:16.785578+05:45",
-            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          "id": "ece9acc0-0897-46b9-8323-939769602dd7",
+          "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+          "user": {
+              "public_id": "1986597228017356800",
+              "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "socket_id": "a",
+              "username": "can",
+              "displayname": "can",
+              "email": "",
+              "date_of_birth": "2000-11-01T05:45:00+05:45",
+              "gender_identities": null,
+              "sexual_orientations": null,
+              "user_role": "",
+              "is_active": false,
+              "created_at": "2025-11-07T06:36:03.008498+05:45",
+              "updated_at": "2025-11-07T09:38:12.895869+05:45",
+              "last_online": "2025-11-07T09:38:12.895539+05:45",
+              "default_language": "en",
+              "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+              "avatar": {
+                  "public_id": "1986597931674767360",
+                  "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                  "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                  "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "owner_type": "user",
+                  "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "role": "avatar",
+                  "is_public": true,
+                  "file": {
+                      "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                      "url": "",
+                      "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                      "mime_type": "image/jpeg",
+                      "size": 215138,
+                      "name": "1669041186022.jpeg",
+                      "width": 1440,
+                      "height": 1080,
+                      "variants": {
+                          "image": {
+                              "icon": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 24248
+                              },
+                              "thumbnail": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                  "width": 240,
+                                  "height": 240,
+                                  "format": "webp",
+                                  "size": 58636
+                              },
+                              "small": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 18908
+                              },
+                              "medium": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                  "width": 256,
+                                  "height": 256,
+                                  "format": "webp",
+                                  "size": 65802
+                              },
+                              "large": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                  "width": 512,
+                                  "height": 512,
+                                  "format": "webp",
+                                  "size": 218210
+                              },
+                              "original": {
+                                  "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                  "width": 1440,
+                                  "height": 1080,
+                                  "format": "jpeg",
+                                  "size": 215138
+                              }
+                          }
+                      },
+                      "created_at": "2025-11-07T06:38:50.773396+05:45"
+                  },
+                  "created_at": "2025-11-07T06:38:50.773397+05:45",
+                  "updated_at": "2025-11-07T06:38:50.773397+05:45"
+              },
+              "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+              "cover": {
+                  "public_id": "1986597947621511168",
+                  "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                  "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                  "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "owner_type": "user",
+                  "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "role": "cover",
+                  "is_public": true,
+                  "file": {
+                      "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                      "url": "",
+                      "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                      "mime_type": "image/jpeg",
+                      "size": 112630,
+                      "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                      "width": 1920,
+                      "height": 672,
+                      "variants": {
+                          "image": {
+                              "icon": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 10232
+                              },
+                              "thumbnail": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                  "width": 240,
+                                  "height": 240,
+                                  "format": "webp",
+                                  "size": 23986
+                              },
+                              "small": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                  "width": 1280,
+                                  "height": 720,
+                                  "format": "webp",
+                                  "size": 352408
+                              },
+                              "medium": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                  "width": 1920,
+                                  "height": 1080,
+                                  "format": "webp",
+                                  "size": 466872
+                              },
+                              "large": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                  "width": 2560,
+                                  "height": 1440,
+                                  "format": "webp",
+                                  "size": 468034
+                              },
+                              "original": {
+                                  "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                  "width": 1920,
+                                  "height": 672,
+                                  "format": "jpg",
+                                  "size": 112630
+                              }
+                          }
+                      },
+                      "created_at": "2025-11-07T06:38:54.575474+05:45"
+                  },
+                  "created_at": "2025-11-07T06:38:54.575474+05:45",
+                  "updated_at": "2025-11-07T06:38:54.575474+05:45"
+              },
+              "languages": null,
+              "travel": {
+                  "visited_countries": null,
+                  "travel_frequency": "",
+                  "favorite_places": null
+              },
+              "social": {},
+              "deleted_at": null
           },
-          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-          "cover": {
-            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:12.902124+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:12.902124+05:45",
-            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          "media_id": "06797b10-2288-4cac-bc11-4946de11c109",
+          "media": {
+              "public_id": "1986642354555064320",
+              "id": "06797b10-2288-4cac-bc11-4946de11c109",
+              "file_id": "c5b40446-a69c-40b6-ab8d-87b29e8d5899",
+              "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "owner_type": "user",
+              "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "role": "story",
+              "is_public": true,
+              "file": {
+                  "id": "c5b40446-a69c-40b6-ab8d-87b29e8d5899",
+                  "url": "",
+                  "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/76fecb50-aef9-48c5-9db4-420f8ec09c74.mov",
+                  "mime_type": "video/quicktime",
+                  "size": 2019752,
+                  "name": "-6507923333815448298 (1).mov",
+                  "width": 464,
+                  "height": 824,
+                  "variants": {
+                      "video": {
+                          "poster": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/76fecb50-aef9-48c5-9db4-420f8ec09c74_poster.jpg",
+                              "width": 464,
+                              "height": 824,
+                              "format": "jpg",
+                              "size": 38289
+                          },
+                          "low": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/76fecb50-aef9-48c5-9db4-420f8ec09c74_low.mp4",
+                              "width": 270,
+                              "height": 480,
+                              "format": "mp4",
+                              "size": 425856
+                          },
+                          "medium": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/76fecb50-aef9-48c5-9db4-420f8ec09c74_medium.mp4",
+                              "width": 406,
+                              "height": 720,
+                              "format": "mp4",
+                              "size": 1240557
+                          },
+                          "high": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/76fecb50-aef9-48c5-9db4-420f8ec09c74_high.mp4",
+                              "width": 608,
+                              "height": 1080,
+                              "format": "mp4",
+                              "size": 2564025
+                          },
+                          "preview": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/76fecb50-aef9-48c5-9db4-420f8ec09c74_preview.mp4",
+                              "width": 202,
+                              "height": 360,
+                              "format": "mp4",
+                              "size": 58759
+                          }
+                      }
+                  },
+                  "created_at": "2025-11-07T09:35:22.014897+05:45"
+              },
+              "created_at": "2025-11-07T09:35:22.014897+05:45",
+              "updated_at": "2025-11-07T09:35:22.014897+05:45"
           },
-          "languages": null,
-          "travel": {
-            "visited_countries": null,
-            "travel_frequency": "",
-            "favorite_places": null
-          },
-          "social": {
-  
-          },
+          "expires_at": "2025-11-08T09:35:22.017316+05:45",
+          "is_expired": false,
+          "is_archived": false,
+          "created_at": "2025-11-07T09:35:22.017316+05:45",
+          "updated_at": "2025-11-07T09:35:22.017316+05:45",
           "deleted_at": null
-        },
-        "media_id": "e6bfe206-28ea-46a3-8de8-6cee561f7247",
-        "media": {
-          "id": "e6bfe206-28ea-46a3-8de8-6cee561f7247",
-          "file_id": "50176eda-e40d-4b8b-9bda-b0512fd3eb40",
-          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "owner_type": "user",
-          "role": "story",
-          "is_public": true,
-          "file": {
-            "id": "50176eda-e40d-4b8b-9bda-b0512fd3eb40",
-            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/3b6c9ba7-0572-437c-8d08-0fcaba388dcd.jpg",
-            "mime_type": "image/jpeg",
-            "size": 91141,
-            "name": "355105234_786737842956948_6752831177010586657_n.jpg",
-            "created_at": "2025-11-01T20:57:50.888664+05:45",
-            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/3b6c9ba7-0572-437c-8d08-0fcaba388dcd.jpg"
-          },
-          "created_at": "2025-11-01T20:57:50.888664+05:45",
-          "updated_at": "2025-11-01T20:57:50.888664+05:45"
-        },
-        "expires_at": "2025-11-02T20:57:50.890881+05:45",
-        "is_expired": false,
-        "is_archived": false,
-        "created_at": "2025-11-01T20:57:50.890881+05:45",
-        "updated_at": "2025-11-01T20:57:50.890881+05:45",
-        "deleted_at": null
       },
       {
-        "id": "f7dd6f9f-b215-459d-a763-80cc0fad6603",
-        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-        "user": {
-          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "public_id": 1.9846181998276157e+18,
-          "username": "fuck",
-          "displayname": "fuck",
-          "email": "",
-          "date_of_birth": "2000-11-16T05:45:00+05:45",
-          "gender_identities": null,
-          "sexual_orientations": null,
-          "user_role": "",
-          "is_active": false,
-          "created_at": "2025-11-01T19:32:05.919641+05:45",
-          "updated_at": "2025-11-01T21:03:16.788324+05:45",
-          "default_language": "en",
-          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-          "avatar": {
-            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:16.785578+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:16.785578+05:45",
-            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          "id": "1aa5c972-6e5c-43b5-a98d-9542030c725b",
+          "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+          "user": {
+              "public_id": "1986597228017356800",
+              "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "socket_id": "a",
+              "username": "can",
+              "displayname": "can",
+              "email": "",
+              "date_of_birth": "2000-11-01T05:45:00+05:45",
+              "gender_identities": null,
+              "sexual_orientations": null,
+              "user_role": "",
+              "is_active": false,
+              "created_at": "2025-11-07T06:36:03.008498+05:45",
+              "updated_at": "2025-11-07T09:38:12.895869+05:45",
+              "last_online": "2025-11-07T09:38:12.895539+05:45",
+              "default_language": "en",
+              "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+              "avatar": {
+                  "public_id": "1986597931674767360",
+                  "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                  "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                  "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "owner_type": "user",
+                  "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "role": "avatar",
+                  "is_public": true,
+                  "file": {
+                      "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                      "url": "",
+                      "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                      "mime_type": "image/jpeg",
+                      "size": 215138,
+                      "name": "1669041186022.jpeg",
+                      "width": 1440,
+                      "height": 1080,
+                      "variants": {
+                          "image": {
+                              "icon": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 24248
+                              },
+                              "thumbnail": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                  "width": 240,
+                                  "height": 240,
+                                  "format": "webp",
+                                  "size": 58636
+                              },
+                              "small": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 18908
+                              },
+                              "medium": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                  "width": 256,
+                                  "height": 256,
+                                  "format": "webp",
+                                  "size": 65802
+                              },
+                              "large": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                  "width": 512,
+                                  "height": 512,
+                                  "format": "webp",
+                                  "size": 218210
+                              },
+                              "original": {
+                                  "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                  "width": 1440,
+                                  "height": 1080,
+                                  "format": "jpeg",
+                                  "size": 215138
+                              }
+                          }
+                      },
+                      "created_at": "2025-11-07T06:38:50.773396+05:45"
+                  },
+                  "created_at": "2025-11-07T06:38:50.773397+05:45",
+                  "updated_at": "2025-11-07T06:38:50.773397+05:45"
+              },
+              "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+              "cover": {
+                  "public_id": "1986597947621511168",
+                  "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                  "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                  "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "owner_type": "user",
+                  "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "role": "cover",
+                  "is_public": true,
+                  "file": {
+                      "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                      "url": "",
+                      "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                      "mime_type": "image/jpeg",
+                      "size": 112630,
+                      "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                      "width": 1920,
+                      "height": 672,
+                      "variants": {
+                          "image": {
+                              "icon": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 10232
+                              },
+                              "thumbnail": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                  "width": 240,
+                                  "height": 240,
+                                  "format": "webp",
+                                  "size": 23986
+                              },
+                              "small": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                  "width": 1280,
+                                  "height": 720,
+                                  "format": "webp",
+                                  "size": 352408
+                              },
+                              "medium": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                  "width": 1920,
+                                  "height": 1080,
+                                  "format": "webp",
+                                  "size": 466872
+                              },
+                              "large": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                  "width": 2560,
+                                  "height": 1440,
+                                  "format": "webp",
+                                  "size": 468034
+                              },
+                              "original": {
+                                  "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                  "width": 1920,
+                                  "height": 672,
+                                  "format": "jpg",
+                                  "size": 112630
+                              }
+                          }
+                      },
+                      "created_at": "2025-11-07T06:38:54.575474+05:45"
+                  },
+                  "created_at": "2025-11-07T06:38:54.575474+05:45",
+                  "updated_at": "2025-11-07T06:38:54.575474+05:45"
+              },
+              "languages": null,
+              "travel": {
+                  "visited_countries": null,
+                  "travel_frequency": "",
+                  "favorite_places": null
+              },
+              "social": {},
+              "deleted_at": null
           },
-          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-          "cover": {
-            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:12.902124+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:12.902124+05:45",
-            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          "media_id": "0ecbb913-5617-4354-afd5-8f5a51f2dddf",
+          "media": {
+              "public_id": "1986642258241261568",
+              "id": "0ecbb913-5617-4354-afd5-8f5a51f2dddf",
+              "file_id": "0cc1f965-2a41-4483-8a93-9e9ad796a611",
+              "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "owner_type": "user",
+              "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "role": "story",
+              "is_public": true,
+              "file": {
+                  "id": "0cc1f965-2a41-4483-8a93-9e9ad796a611",
+                  "url": "",
+                  "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8075656d-f558-4de4-a3b6-1e6f1d657536.mov",
+                  "mime_type": "video/quicktime",
+                  "size": 157054,
+                  "name": "-8394891766206445590.mov",
+                  "width": 464,
+                  "height": 824,
+                  "variants": {
+                      "video": {
+                          "low": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8075656d-f558-4de4-a3b6-1e6f1d657536_low.mp4",
+                              "width": 270,
+                              "height": 480,
+                              "format": "mp4",
+                              "size": 36178
+                          },
+                          "medium": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8075656d-f558-4de4-a3b6-1e6f1d657536_medium.mp4",
+                              "width": 406,
+                              "height": 720,
+                              "format": "mp4",
+                              "size": 108823
+                          },
+                          "high": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8075656d-f558-4de4-a3b6-1e6f1d657536_high.mp4",
+                              "width": 608,
+                              "height": 1080,
+                              "format": "mp4",
+                              "size": 229655
+                          },
+                          "preview": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8075656d-f558-4de4-a3b6-1e6f1d657536_preview.mp4",
+                              "width": 202,
+                              "height": 360,
+                              "format": "mp4",
+                              "size": 15734
+                          }
+                      }
+                  },
+                  "created_at": "2025-11-07T09:34:59.051663+05:45"
+              },
+              "created_at": "2025-11-07T09:34:59.051663+05:45",
+              "updated_at": "2025-11-07T09:34:59.051663+05:45"
           },
-          "languages": null,
-          "travel": {
-            "visited_countries": null,
-            "travel_frequency": "",
-            "favorite_places": null
-          },
-          "social": {
-  
-          },
+          "expires_at": "2025-11-08T09:34:59.055079+05:45",
+          "is_expired": false,
+          "is_archived": false,
+          "created_at": "2025-11-07T09:34:59.055079+05:45",
+          "updated_at": "2025-11-07T09:34:59.055079+05:45",
           "deleted_at": null
-        },
-        "media_id": "f49bb687-37f8-48ae-9391-c3c063d463e7",
-        "media": {
-          "id": "f49bb687-37f8-48ae-9391-c3c063d463e7",
-          "file_id": "ac7c7e8d-11d4-45cd-81b6-bd9dff2f592e",
-          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "owner_type": "user",
-          "role": "story",
-          "is_public": true,
-          "file": {
-            "id": "ac7c7e8d-11d4-45cd-81b6-bd9dff2f592e",
-            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/c99f2c49-89d3-424b-95eb-ebfd58c8ba51.jpg",
-            "mime_type": "image/jpeg",
-            "size": 91141,
-            "name": "355105234_786737842956948_6752831177010586657_n.jpg",
-            "created_at": "2025-11-01T20:57:38.592665+05:45",
-            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/c99f2c49-89d3-424b-95eb-ebfd58c8ba51.jpg"
-          },
-          "created_at": "2025-11-01T20:57:38.592666+05:45",
-          "updated_at": "2025-11-01T20:57:38.592666+05:45"
-        },
-        "expires_at": "2025-11-02T20:57:38.599238+05:45",
-        "is_expired": false,
-        "is_archived": false,
-        "created_at": "2025-11-01T20:57:38.599239+05:45",
-        "updated_at": "2025-11-01T20:57:38.599239+05:45",
-        "deleted_at": null
       },
       {
-        "id": "46c2035c-a779-44d3-92cd-e505f31a9457",
-        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-        "user": {
-          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "public_id": 1.9846181998276157e+18,
-          "username": "fuck",
-          "displayname": "fuck",
-          "email": "",
-          "date_of_birth": "2000-11-16T05:45:00+05:45",
-          "gender_identities": null,
-          "sexual_orientations": null,
-          "user_role": "",
-          "is_active": false,
-          "created_at": "2025-11-01T19:32:05.919641+05:45",
-          "updated_at": "2025-11-01T21:03:16.788324+05:45",
-          "default_language": "en",
-          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-          "avatar": {
-            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:16.785578+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:16.785578+05:45",
-            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          "id": "c9c33814-7441-4d19-84d1-fa9fec2f7775",
+          "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+          "user": {
+              "public_id": "1986597228017356800",
+              "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "socket_id": "a",
+              "username": "can",
+              "displayname": "can",
+              "email": "",
+              "date_of_birth": "2000-11-01T05:45:00+05:45",
+              "gender_identities": null,
+              "sexual_orientations": null,
+              "user_role": "",
+              "is_active": false,
+              "created_at": "2025-11-07T06:36:03.008498+05:45",
+              "updated_at": "2025-11-07T09:38:12.895869+05:45",
+              "last_online": "2025-11-07T09:38:12.895539+05:45",
+              "default_language": "en",
+              "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+              "avatar": {
+                  "public_id": "1986597931674767360",
+                  "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                  "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                  "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "owner_type": "user",
+                  "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "role": "avatar",
+                  "is_public": true,
+                  "file": {
+                      "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                      "url": "",
+                      "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                      "mime_type": "image/jpeg",
+                      "size": 215138,
+                      "name": "1669041186022.jpeg",
+                      "width": 1440,
+                      "height": 1080,
+                      "variants": {
+                          "image": {
+                              "icon": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 24248
+                              },
+                              "thumbnail": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                  "width": 240,
+                                  "height": 240,
+                                  "format": "webp",
+                                  "size": 58636
+                              },
+                              "small": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 18908
+                              },
+                              "medium": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                  "width": 256,
+                                  "height": 256,
+                                  "format": "webp",
+                                  "size": 65802
+                              },
+                              "large": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                  "width": 512,
+                                  "height": 512,
+                                  "format": "webp",
+                                  "size": 218210
+                              },
+                              "original": {
+                                  "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                  "width": 1440,
+                                  "height": 1080,
+                                  "format": "jpeg",
+                                  "size": 215138
+                              }
+                          }
+                      },
+                      "created_at": "2025-11-07T06:38:50.773396+05:45"
+                  },
+                  "created_at": "2025-11-07T06:38:50.773397+05:45",
+                  "updated_at": "2025-11-07T06:38:50.773397+05:45"
+              },
+              "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+              "cover": {
+                  "public_id": "1986597947621511168",
+                  "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                  "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                  "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "owner_type": "user",
+                  "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "role": "cover",
+                  "is_public": true,
+                  "file": {
+                      "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                      "url": "",
+                      "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                      "mime_type": "image/jpeg",
+                      "size": 112630,
+                      "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                      "width": 1920,
+                      "height": 672,
+                      "variants": {
+                          "image": {
+                              "icon": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 10232
+                              },
+                              "thumbnail": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                  "width": 240,
+                                  "height": 240,
+                                  "format": "webp",
+                                  "size": 23986
+                              },
+                              "small": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                  "width": 1280,
+                                  "height": 720,
+                                  "format": "webp",
+                                  "size": 352408
+                              },
+                              "medium": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                  "width": 1920,
+                                  "height": 1080,
+                                  "format": "webp",
+                                  "size": 466872
+                              },
+                              "large": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                  "width": 2560,
+                                  "height": 1440,
+                                  "format": "webp",
+                                  "size": 468034
+                              },
+                              "original": {
+                                  "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                  "width": 1920,
+                                  "height": 672,
+                                  "format": "jpg",
+                                  "size": 112630
+                              }
+                          }
+                      },
+                      "created_at": "2025-11-07T06:38:54.575474+05:45"
+                  },
+                  "created_at": "2025-11-07T06:38:54.575474+05:45",
+                  "updated_at": "2025-11-07T06:38:54.575474+05:45"
+              },
+              "languages": null,
+              "travel": {
+                  "visited_countries": null,
+                  "travel_frequency": "",
+                  "favorite_places": null
+              },
+              "social": {},
+              "deleted_at": null
           },
-          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-          "cover": {
-            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:12.902124+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:12.902124+05:45",
-            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          "media_id": "14c797c5-181d-4a67-b067-5704179e2eaa",
+          "media": {
+              "public_id": "1986603850965979136",
+              "id": "14c797c5-181d-4a67-b067-5704179e2eaa",
+              "file_id": "f34cd55a-0c97-4cd1-8051-238260f3da26",
+              "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "owner_type": "user",
+              "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "role": "story",
+              "is_public": true,
+              "file": {
+                  "id": "f34cd55a-0c97-4cd1-8051-238260f3da26",
+                  "url": "",
+                  "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173.jpg",
+                  "mime_type": "image/jpeg",
+                  "size": 224201,
+                  "name": "1000_F_343145027_5FAySOOAuX31BVp6BZPIPoWgZDN4U4QP.jpg",
+                  "width": 1000,
+                  "height": 667,
+                  "variants": {
+                      "image": {
+                          "icon": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173_portrait_icon.webp",
+                              "width": 128,
+                              "height": 128,
+                              "format": "webp",
+                              "size": 10080
+                          },
+                          "thumbnail": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173_portrait_thumb.webp",
+                              "width": 240,
+                              "height": 240,
+                              "format": "webp",
+                              "size": 27070
+                          },
+                          "small": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173_portrait_sm.webp",
+                              "width": 480,
+                              "height": 720,
+                              "format": "webp",
+                              "size": 80980
+                          },
+                          "medium": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173_portrait_md.webp",
+                              "width": 720,
+                              "height": 1080,
+                              "format": "webp",
+                              "size": 164936
+                          },
+                          "large": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173_portrait_lg.webp",
+                              "width": 1080,
+                              "height": 1440,
+                              "format": "webp",
+                              "size": 287558
+                          },
+                          "original": {
+                              "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/d0335c34-7d93-4e3d-bd3e-29252b53d173.jpg",
+                              "width": 1000,
+                              "height": 667,
+                              "format": "jpg",
+                              "size": 224201
+                          }
+                      }
+                  },
+                  "created_at": "2025-11-07T07:02:22.042943+05:45"
+              },
+              "created_at": "2025-11-07T07:02:22.042943+05:45",
+              "updated_at": "2025-11-07T07:02:22.042943+05:45"
           },
-          "languages": null,
-          "travel": {
-            "visited_countries": null,
-            "travel_frequency": "",
-            "favorite_places": null
-          },
-          "social": {
-  
-          },
+          "expires_at": "2025-11-08T07:02:22.048827+05:45",
+          "is_expired": false,
+          "is_archived": false,
+          "created_at": "2025-11-07T07:02:22.048827+05:45",
+          "updated_at": "2025-11-07T07:02:22.048827+05:45",
           "deleted_at": null
-        },
-        "media_id": "e982ddc3-271a-4af0-a8a1-11e1b45a053e",
-        "media": {
-          "id": "e982ddc3-271a-4af0-a8a1-11e1b45a053e",
-          "file_id": "2b6509f3-8e06-4603-856d-75c7a694ec87",
-          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "owner_type": "user",
-          "role": "story",
-          "is_public": true,
-          "file": {
-            "id": "2b6509f3-8e06-4603-856d-75c7a694ec87",
-            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/43f5ba5c-bfe4-41e1-8284-4e4fa15c04a6.mov",
-            "mime_type": "video/quicktime",
-            "size": 7295721,
-            "name": "0c36eb68bdaa44b895417f0208865c5d.mov",
-            "created_at": "2025-11-01T20:19:59.389066+05:45",
-            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/43f5ba5c-bfe4-41e1-8284-4e4fa15c04a6.mov"
-          },
-          "created_at": "2025-11-01T20:19:59.389066+05:45",
-          "updated_at": "2025-11-01T20:19:59.389066+05:45"
-        },
-        "expires_at": "2025-11-02T20:19:59.390787+05:45",
-        "is_expired": false,
-        "is_archived": false,
-        "created_at": "2025-11-01T20:19:59.390787+05:45",
-        "updated_at": "2025-11-01T20:19:59.390787+05:45",
-        "deleted_at": null
       },
       {
-        "id": "14543026-71c0-487a-ad36-a213e3075d7e",
-        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-        "user": {
-          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "public_id": 1.9846181998276157e+18,
-          "username": "fuck",
-          "displayname": "fuck",
-          "email": "",
-          "date_of_birth": "2000-11-16T05:45:00+05:45",
-          "gender_identities": null,
-          "sexual_orientations": null,
-          "user_role": "",
-          "is_active": false,
-          "created_at": "2025-11-01T19:32:05.919641+05:45",
-          "updated_at": "2025-11-01T21:03:16.788324+05:45",
-          "default_language": "en",
-          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-          "avatar": {
-            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:16.785578+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:16.785578+05:45",
-            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          "id": "c18117b8-5041-42d7-a9aa-19cfa0ac4808",
+          "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+          "user": {
+              "public_id": "1986597228017356800",
+              "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "socket_id": "a",
+              "username": "can",
+              "displayname": "can",
+              "email": "",
+              "date_of_birth": "2000-11-01T05:45:00+05:45",
+              "gender_identities": null,
+              "sexual_orientations": null,
+              "user_role": "",
+              "is_active": false,
+              "created_at": "2025-11-07T06:36:03.008498+05:45",
+              "updated_at": "2025-11-07T09:38:12.895869+05:45",
+              "last_online": "2025-11-07T09:38:12.895539+05:45",
+              "default_language": "en",
+              "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+              "avatar": {
+                  "public_id": "1986597931674767360",
+                  "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                  "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                  "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "owner_type": "user",
+                  "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "role": "avatar",
+                  "is_public": true,
+                  "file": {
+                      "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                      "url": "",
+                      "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                      "mime_type": "image/jpeg",
+                      "size": 215138,
+                      "name": "1669041186022.jpeg",
+                      "width": 1440,
+                      "height": 1080,
+                      "variants": {
+                          "image": {
+                              "icon": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 24248
+                              },
+                              "thumbnail": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                  "width": 240,
+                                  "height": 240,
+                                  "format": "webp",
+                                  "size": 58636
+                              },
+                              "small": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 18908
+                              },
+                              "medium": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                  "width": 256,
+                                  "height": 256,
+                                  "format": "webp",
+                                  "size": 65802
+                              },
+                              "large": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                  "width": 512,
+                                  "height": 512,
+                                  "format": "webp",
+                                  "size": 218210
+                              },
+                              "original": {
+                                  "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                  "width": 1440,
+                                  "height": 1080,
+                                  "format": "jpeg",
+                                  "size": 215138
+                              }
+                          }
+                      },
+                      "created_at": "2025-11-07T06:38:50.773396+05:45"
+                  },
+                  "created_at": "2025-11-07T06:38:50.773397+05:45",
+                  "updated_at": "2025-11-07T06:38:50.773397+05:45"
+              },
+              "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+              "cover": {
+                  "public_id": "1986597947621511168",
+                  "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                  "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                  "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "owner_type": "user",
+                  "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "role": "cover",
+                  "is_public": true,
+                  "file": {
+                      "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                      "url": "",
+                      "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                      "mime_type": "image/jpeg",
+                      "size": 112630,
+                      "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                      "width": 1920,
+                      "height": 672,
+                      "variants": {
+                          "image": {
+                              "icon": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 10232
+                              },
+                              "thumbnail": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                  "width": 240,
+                                  "height": 240,
+                                  "format": "webp",
+                                  "size": 23986
+                              },
+                              "small": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                  "width": 1280,
+                                  "height": 720,
+                                  "format": "webp",
+                                  "size": 352408
+                              },
+                              "medium": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                  "width": 1920,
+                                  "height": 1080,
+                                  "format": "webp",
+                                  "size": 466872
+                              },
+                              "large": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                  "width": 2560,
+                                  "height": 1440,
+                                  "format": "webp",
+                                  "size": 468034
+                              },
+                              "original": {
+                                  "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                  "width": 1920,
+                                  "height": 672,
+                                  "format": "jpg",
+                                  "size": 112630
+                              }
+                          }
+                      },
+                      "created_at": "2025-11-07T06:38:54.575474+05:45"
+                  },
+                  "created_at": "2025-11-07T06:38:54.575474+05:45",
+                  "updated_at": "2025-11-07T06:38:54.575474+05:45"
+              },
+              "languages": null,
+              "travel": {
+                  "visited_countries": null,
+                  "travel_frequency": "",
+                  "favorite_places": null
+              },
+              "social": {},
+              "deleted_at": null
           },
-          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-          "cover": {
-            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:12.902124+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:12.902124+05:45",
-            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          "media_id": "5d57c9c8-ef3b-4e7c-b68b-c4b2868956cf",
+          "media": {
+              "public_id": "1986599627075358720",
+              "id": "5d57c9c8-ef3b-4e7c-b68b-c4b2868956cf",
+              "file_id": "267cfcb8-cc46-4879-b67a-d7f6e48a604f",
+              "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "owner_type": "user",
+              "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "role": "story",
+              "is_public": true,
+              "file": {
+                  "id": "267cfcb8-cc46-4879-b67a-d7f6e48a604f",
+                  "url": "",
+                  "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a.png",
+                  "mime_type": "image/png",
+                  "size": 293096,
+                  "name": "Ekran Resmi 2025-11-01 23.20.12.png",
+                  "width": 2596,
+                  "height": 1504,
+                  "variants": {
+                      "image": {
+                          "icon": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a_portrait_icon.webp",
+                              "width": 128,
+                              "height": 128,
+                              "format": "webp",
+                              "size": 4802
+                          },
+                          "thumbnail": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a_portrait_thumb.webp",
+                              "width": 240,
+                              "height": 240,
+                              "format": "webp",
+                              "size": 12620
+                          },
+                          "small": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a_portrait_sm.webp",
+                              "width": 480,
+                              "height": 720,
+                              "format": "webp",
+                              "size": 31870
+                          },
+                          "medium": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a_portrait_md.webp",
+                              "width": 720,
+                              "height": 1080,
+                              "format": "webp",
+                              "size": 55904
+                          },
+                          "large": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a_portrait_lg.webp",
+                              "width": 1080,
+                              "height": 1440,
+                              "format": "webp",
+                              "size": 84604
+                          },
+                          "original": {
+                              "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/089c9f0a-2580-4d79-a976-7bf62dc14a4a.png",
+                              "width": 2596,
+                              "height": 1504,
+                              "format": "png",
+                              "size": 293096
+                          }
+                      }
+                  },
+                  "created_at": "2025-11-07T06:45:34.989077+05:45"
+              },
+              "created_at": "2025-11-07T06:45:34.989077+05:45",
+              "updated_at": "2025-11-07T06:45:34.989077+05:45"
           },
-          "languages": null,
-          "travel": {
-            "visited_countries": null,
-            "travel_frequency": "",
-            "favorite_places": null
-          },
-          "social": {
-  
-          },
+          "expires_at": "2025-11-08T06:45:34.992749+05:45",
+          "is_expired": false,
+          "is_archived": false,
+          "created_at": "2025-11-07T06:45:34.992749+05:45",
+          "updated_at": "2025-11-07T06:45:34.992749+05:45",
           "deleted_at": null
-        },
-        "media_id": "e2d8aea8-ab34-44cf-8307-422c92cf3f27",
-        "media": {
-          "id": "e2d8aea8-ab34-44cf-8307-422c92cf3f27",
-          "file_id": "d10fc82a-dbb7-4e45-ba00-11e90a1f3262",
-          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "owner_type": "user",
-          "role": "story",
-          "is_public": true,
-          "file": {
-            "id": "d10fc82a-dbb7-4e45-ba00-11e90a1f3262",
-            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/d8f90e2f-3f1e-410b-8cf9-d36359800107.jpeg",
-            "mime_type": "image/jpeg",
-            "size": 215138,
-            "name": "1669041186022.jpeg",
-            "created_at": "2025-11-01T20:19:36.78046+05:45",
-            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/d8f90e2f-3f1e-410b-8cf9-d36359800107.jpeg"
-          },
-          "created_at": "2025-11-01T20:19:36.780461+05:45",
-          "updated_at": "2025-11-01T20:19:36.780461+05:45"
-        },
-        "expires_at": "2025-11-02T20:19:36.784097+05:45",
-        "is_expired": false,
-        "is_archived": false,
-        "created_at": "2025-11-01T20:19:36.784098+05:45",
-        "updated_at": "2025-11-01T20:19:36.784098+05:45",
-        "deleted_at": null
       },
       {
-        "id": "b48ae8fd-3def-4b35-a711-110c8bc38ad4",
-        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-        "user": {
-          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "public_id": 1.9846181998276157e+18,
-          "username": "fuck",
-          "displayname": "fuck",
-          "email": "",
-          "date_of_birth": "2000-11-16T05:45:00+05:45",
-          "gender_identities": null,
-          "sexual_orientations": null,
-          "user_role": "",
-          "is_active": false,
-          "created_at": "2025-11-01T19:32:05.919641+05:45",
-          "updated_at": "2025-11-01T21:03:16.788324+05:45",
-          "default_language": "en",
-          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-          "avatar": {
-            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:16.785578+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:16.785578+05:45",
-            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          "id": "db696bd9-a9e2-4a37-b26c-2d47b9f777a0",
+          "user_id": "f2bb1712-bede-4b86-ae70-d843ac7a7171",
+          "user": {
+              "public_id": "1986599410376642560",
+              "id": "f2bb1712-bede-4b86-ae70-d843ac7a7171",
+              "socket_id": "e",
+              "username": "aren",
+              "displayname": "aren",
+              "email": "",
+              "date_of_birth": "2000-11-09T05:45:00+05:45",
+              "gender_identities": null,
+              "sexual_orientations": null,
+              "user_role": "",
+              "is_active": false,
+              "created_at": "2025-11-07T06:44:43.324185+05:45",
+              "updated_at": "2025-11-07T06:51:41.413454+05:45",
+              "last_online": "2025-11-07T06:51:41.41227+05:45",
+              "default_language": "en",
+              "languages": null,
+              "travel": {
+                  "visited_countries": null,
+                  "travel_frequency": "",
+                  "favorite_places": null
+              },
+              "social": {},
+              "deleted_at": null
           },
-          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-          "cover": {
-            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:12.902124+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:12.902124+05:45",
-            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          "media_id": "ac683315-774b-4cc2-b2b4-481c50e38b5b",
+          "media": {
+              "public_id": "1986599462734139392",
+              "id": "ac683315-774b-4cc2-b2b4-481c50e38b5b",
+              "file_id": "3ff2536a-ec84-44b6-8128-65f91d881ecf",
+              "owner_id": "f2bb1712-bede-4b86-ae70-d843ac7a7171",
+              "owner_type": "user",
+              "user_id": "f2bb1712-bede-4b86-ae70-d843ac7a7171",
+              "role": "story",
+              "is_public": true,
+              "file": {
+                  "id": "3ff2536a-ec84-44b6-8128-65f91d881ecf",
+                  "url": "",
+                  "storage_path": "./static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/a70d97ca-18b6-42a1-8ca7-b9e9960cff80.gif",
+                  "mime_type": "image/gif",
+                  "size": 2488468,
+                  "name": "calendar.gif",
+                  "width": 640,
+                  "height": 640,
+                  "variants": {
+                      "image": {
+                          "icon": {
+                              "url": "static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/a70d97ca-18b6-42a1-8ca7-b9e9960cff80_portrait_icon.webp",
+                              "width": 128,
+                              "height": 128,
+                              "format": "webp",
+                              "size": 5382
+                          },
+                          "thumbnail": {
+                              "url": "static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/a70d97ca-18b6-42a1-8ca7-b9e9960cff80_portrait_thumb.webp",
+                              "width": 240,
+                              "height": 240,
+                              "format": "webp",
+                              "size": 9842
+                          },
+                          "small": {
+                              "url": "static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/a70d97ca-18b6-42a1-8ca7-b9e9960cff80_portrait_sm.webp",
+                              "width": 480,
+                              "height": 720,
+                              "format": "webp",
+                              "size": 18074
+                          },
+                          "medium": {
+                              "url": "static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/a70d97ca-18b6-42a1-8ca7-b9e9960cff80_portrait_md.webp",
+                              "width": 720,
+                              "height": 1080,
+                              "format": "webp",
+                              "size": 8192
+                          },
+                          "large": {
+                              "url": "static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/a70d97ca-18b6-42a1-8ca7-b9e9960cff80_portrait_lg.webp",
+                              "width": 1080,
+                              "height": 1440,
+                              "format": "webp",
+                              "size": 8406
+                          },
+                          "original": {
+                              "url": "/static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/a70d97ca-18b6-42a1-8ca7-b9e9960cff80.gif",
+                              "width": 640,
+                              "height": 640,
+                              "format": "gif",
+                              "size": 2488468
+                          }
+                      }
+                  },
+                  "created_at": "2025-11-07T06:44:55.807005+05:45"
+              },
+              "created_at": "2025-11-07T06:44:55.807005+05:45",
+              "updated_at": "2025-11-07T06:44:55.807005+05:45"
           },
-          "languages": null,
-          "travel": {
-            "visited_countries": null,
-            "travel_frequency": "",
-            "favorite_places": null
-          },
-          "social": {
-  
-          },
+          "expires_at": "2025-11-08T06:44:55.808601+05:45",
+          "is_expired": false,
+          "is_archived": false,
+          "created_at": "2025-11-07T06:44:55.808601+05:45",
+          "updated_at": "2025-11-07T06:44:55.808601+05:45",
           "deleted_at": null
-        },
-        "media_id": "9f1efb0a-35a6-4b2d-a4e6-abad00374c95",
-        "media": {
-          "id": "9f1efb0a-35a6-4b2d-a4e6-abad00374c95",
-          "file_id": "eb78e9aa-778e-4924-925a-34268e612c17",
-          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "owner_type": "user",
-          "role": "story",
-          "is_public": true,
-          "file": {
-            "id": "eb78e9aa-778e-4924-925a-34268e612c17",
-            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/23a57ee1-31f9-4a03-87d5-00b49f84b0ce.jpeg",
-            "mime_type": "image/jpeg",
-            "size": 403528,
-            "name": "ersanalex.jpeg",
-            "created_at": "2025-11-01T20:19:32.600822+05:45",
-            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/23a57ee1-31f9-4a03-87d5-00b49f84b0ce.jpeg"
-          },
-          "created_at": "2025-11-01T20:19:32.600822+05:45",
-          "updated_at": "2025-11-01T20:19:32.600822+05:45"
-        },
-        "expires_at": "2025-11-02T20:19:32.604521+05:45",
-        "is_expired": false,
-        "is_archived": false,
-        "created_at": "2025-11-01T20:19:32.604521+05:45",
-        "updated_at": "2025-11-01T20:19:32.604521+05:45",
-        "deleted_at": null
       },
       {
-        "id": "3ed3d536-da56-4731-b932-dbed0cc57fc3",
-        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-        "user": {
-          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "public_id": 1.9846181998276157e+18,
-          "username": "fuck",
-          "displayname": "fuck",
-          "email": "",
-          "date_of_birth": "2000-11-16T05:45:00+05:45",
-          "gender_identities": null,
-          "sexual_orientations": null,
-          "user_role": "",
-          "is_active": false,
-          "created_at": "2025-11-01T19:32:05.919641+05:45",
-          "updated_at": "2025-11-01T21:03:16.788324+05:45",
-          "default_language": "en",
-          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-          "avatar": {
-            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:16.785578+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:16.785578+05:45",
-            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          "id": "44839d58-ad19-424f-9dfb-83a3a2c50b18",
+          "user_id": "f2bb1712-bede-4b86-ae70-d843ac7a7171",
+          "user": {
+              "public_id": "1986599410376642560",
+              "id": "f2bb1712-bede-4b86-ae70-d843ac7a7171",
+              "socket_id": "e",
+              "username": "aren",
+              "displayname": "aren",
+              "email": "",
+              "date_of_birth": "2000-11-09T05:45:00+05:45",
+              "gender_identities": null,
+              "sexual_orientations": null,
+              "user_role": "",
+              "is_active": false,
+              "created_at": "2025-11-07T06:44:43.324185+05:45",
+              "updated_at": "2025-11-07T06:51:41.413454+05:45",
+              "last_online": "2025-11-07T06:51:41.41227+05:45",
+              "default_language": "en",
+              "languages": null,
+              "travel": {
+                  "visited_countries": null,
+                  "travel_frequency": "",
+                  "favorite_places": null
+              },
+              "social": {},
+              "deleted_at": null
           },
-          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-          "cover": {
-            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:12.902124+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:12.902124+05:45",
-            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          "media_id": "ae8c757e-4fae-4d55-a95c-63008b879ea1",
+          "media": {
+              "public_id": "1986599438927269888",
+              "id": "ae8c757e-4fae-4d55-a95c-63008b879ea1",
+              "file_id": "d104d537-ac11-43a1-9269-24807a174db8",
+              "owner_id": "f2bb1712-bede-4b86-ae70-d843ac7a7171",
+              "owner_type": "user",
+              "user_id": "f2bb1712-bede-4b86-ae70-d843ac7a7171",
+              "role": "story",
+              "is_public": true,
+              "file": {
+                  "id": "d104d537-ac11-43a1-9269-24807a174db8",
+                  "url": "",
+                  "storage_path": "./static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/f805aa33-7f13-4333-8dcd-de5662c53225.gif",
+                  "mime_type": "image/gif",
+                  "size": 1474602,
+                  "name": "banner.gif",
+                  "width": 640,
+                  "height": 640,
+                  "variants": {
+                      "image": {
+                          "icon": {
+                              "url": "static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/f805aa33-7f13-4333-8dcd-de5662c53225_portrait_icon.webp",
+                              "width": 128,
+                              "height": 128,
+                              "format": "webp",
+                              "size": 8094
+                          },
+                          "thumbnail": {
+                              "url": "static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/f805aa33-7f13-4333-8dcd-de5662c53225_portrait_thumb.webp",
+                              "width": 240,
+                              "height": 240,
+                              "format": "webp",
+                              "size": 15616
+                          },
+                          "small": {
+                              "url": "static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/f805aa33-7f13-4333-8dcd-de5662c53225_portrait_sm.webp",
+                              "width": 480,
+                              "height": 720,
+                              "format": "webp",
+                              "size": 32108
+                          },
+                          "medium": {
+                              "url": "static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/f805aa33-7f13-4333-8dcd-de5662c53225_portrait_md.webp",
+                              "width": 720,
+                              "height": 1080,
+                              "format": "webp",
+                              "size": 12660
+                          },
+                          "large": {
+                              "url": "static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/f805aa33-7f13-4333-8dcd-de5662c53225_portrait_lg.webp",
+                              "width": 1080,
+                              "height": 1440,
+                              "format": "webp",
+                              "size": 13044
+                          },
+                          "original": {
+                              "url": "/static/uploads/users/f2bb1712-bede-4b86-ae70-d843ac7a7171/stories/2025-11-07/f805aa33-7f13-4333-8dcd-de5662c53225.gif",
+                              "width": 640,
+                              "height": 640,
+                              "format": "gif",
+                              "size": 1474602
+                          }
+                      }
+                  },
+                  "created_at": "2025-11-07T06:44:50.131661+05:45"
+              },
+              "created_at": "2025-11-07T06:44:50.131661+05:45",
+              "updated_at": "2025-11-07T06:44:50.131661+05:45"
           },
-          "languages": null,
-          "travel": {
-            "visited_countries": null,
-            "travel_frequency": "",
-            "favorite_places": null
-          },
-          "social": {
-  
-          },
+          "expires_at": "2025-11-08T06:44:50.138859+05:45",
+          "is_expired": false,
+          "is_archived": false,
+          "created_at": "2025-11-07T06:44:50.138859+05:45",
+          "updated_at": "2025-11-07T06:44:50.138859+05:45",
           "deleted_at": null
-        },
-        "media_id": "7fc07320-b171-444e-b8bd-e3aa56671018",
-        "media": {
-          "id": "7fc07320-b171-444e-b8bd-e3aa56671018",
-          "file_id": "4ae66f42-e64c-4cf6-9d42-1cfdc88066a8",
-          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "owner_type": "user",
-          "role": "story",
-          "is_public": true,
-          "file": {
-            "id": "4ae66f42-e64c-4cf6-9d42-1cfdc88066a8",
-            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/ff465226-6fc4-458c-aec9-abdc760e5c1c.jpeg",
-            "mime_type": "image/jpeg",
-            "size": 215138,
-            "name": "1669041186022.jpeg",
-            "created_at": "2025-11-01T20:15:55.238254+05:45",
-            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/ff465226-6fc4-458c-aec9-abdc760e5c1c.jpeg"
-          },
-          "created_at": "2025-11-01T20:15:55.238254+05:45",
-          "updated_at": "2025-11-01T20:15:55.238254+05:45"
-        },
-        "expires_at": "2025-11-02T20:15:55.239522+05:45",
-        "is_expired": false,
-        "is_archived": false,
-        "created_at": "2025-11-01T20:15:55.239522+05:45",
-        "updated_at": "2025-11-01T20:15:55.239523+05:45",
-        "deleted_at": null
       },
       {
-        "id": "9c739e0c-8e20-47c1-8021-207d42b2c359",
-        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-        "user": {
-          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "public_id": 1.9846181998276157e+18,
-          "username": "fuck",
-          "displayname": "fuck",
-          "email": "",
-          "date_of_birth": "2000-11-16T05:45:00+05:45",
-          "gender_identities": null,
-          "sexual_orientations": null,
-          "user_role": "",
-          "is_active": false,
-          "created_at": "2025-11-01T19:32:05.919641+05:45",
-          "updated_at": "2025-11-01T21:03:16.788324+05:45",
-          "default_language": "en",
-          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-          "avatar": {
-            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:16.785578+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:16.785578+05:45",
-            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          "id": "87e8a863-45a7-431a-8cc8-c7e92c122548",
+          "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+          "user": {
+              "public_id": "1986597228017356800",
+              "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "socket_id": "a",
+              "username": "can",
+              "displayname": "can",
+              "email": "",
+              "date_of_birth": "2000-11-01T05:45:00+05:45",
+              "gender_identities": null,
+              "sexual_orientations": null,
+              "user_role": "",
+              "is_active": false,
+              "created_at": "2025-11-07T06:36:03.008498+05:45",
+              "updated_at": "2025-11-07T09:38:12.895869+05:45",
+              "last_online": "2025-11-07T09:38:12.895539+05:45",
+              "default_language": "en",
+              "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+              "avatar": {
+                  "public_id": "1986597931674767360",
+                  "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                  "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                  "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "owner_type": "user",
+                  "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "role": "avatar",
+                  "is_public": true,
+                  "file": {
+                      "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                      "url": "",
+                      "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                      "mime_type": "image/jpeg",
+                      "size": 215138,
+                      "name": "1669041186022.jpeg",
+                      "width": 1440,
+                      "height": 1080,
+                      "variants": {
+                          "image": {
+                              "icon": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 24248
+                              },
+                              "thumbnail": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                  "width": 240,
+                                  "height": 240,
+                                  "format": "webp",
+                                  "size": 58636
+                              },
+                              "small": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 18908
+                              },
+                              "medium": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                  "width": 256,
+                                  "height": 256,
+                                  "format": "webp",
+                                  "size": 65802
+                              },
+                              "large": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                  "width": 512,
+                                  "height": 512,
+                                  "format": "webp",
+                                  "size": 218210
+                              },
+                              "original": {
+                                  "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                  "width": 1440,
+                                  "height": 1080,
+                                  "format": "jpeg",
+                                  "size": 215138
+                              }
+                          }
+                      },
+                      "created_at": "2025-11-07T06:38:50.773396+05:45"
+                  },
+                  "created_at": "2025-11-07T06:38:50.773397+05:45",
+                  "updated_at": "2025-11-07T06:38:50.773397+05:45"
+              },
+              "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+              "cover": {
+                  "public_id": "1986597947621511168",
+                  "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                  "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                  "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "owner_type": "user",
+                  "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "role": "cover",
+                  "is_public": true,
+                  "file": {
+                      "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                      "url": "",
+                      "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                      "mime_type": "image/jpeg",
+                      "size": 112630,
+                      "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                      "width": 1920,
+                      "height": 672,
+                      "variants": {
+                          "image": {
+                              "icon": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 10232
+                              },
+                              "thumbnail": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                  "width": 240,
+                                  "height": 240,
+                                  "format": "webp",
+                                  "size": 23986
+                              },
+                              "small": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                  "width": 1280,
+                                  "height": 720,
+                                  "format": "webp",
+                                  "size": 352408
+                              },
+                              "medium": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                  "width": 1920,
+                                  "height": 1080,
+                                  "format": "webp",
+                                  "size": 466872
+                              },
+                              "large": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                  "width": 2560,
+                                  "height": 1440,
+                                  "format": "webp",
+                                  "size": 468034
+                              },
+                              "original": {
+                                  "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                  "width": 1920,
+                                  "height": 672,
+                                  "format": "jpg",
+                                  "size": 112630
+                              }
+                          }
+                      },
+                      "created_at": "2025-11-07T06:38:54.575474+05:45"
+                  },
+                  "created_at": "2025-11-07T06:38:54.575474+05:45",
+                  "updated_at": "2025-11-07T06:38:54.575474+05:45"
+              },
+              "languages": null,
+              "travel": {
+                  "visited_countries": null,
+                  "travel_frequency": "",
+                  "favorite_places": null
+              },
+              "social": {},
+              "deleted_at": null
           },
-          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-          "cover": {
-            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:12.902124+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:12.902124+05:45",
-            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          "media_id": "c2cdb0a4-b5df-4ebd-9fa4-f9fe6ca25d26",
+          "media": {
+              "public_id": "1986597312264146944",
+              "id": "c2cdb0a4-b5df-4ebd-9fa4-f9fe6ca25d26",
+              "file_id": "b74b2ee3-deb6-4be3-a35b-1edd7fe86c99",
+              "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "owner_type": "user",
+              "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "role": "story",
+              "is_public": true,
+              "file": {
+                  "id": "b74b2ee3-deb6-4be3-a35b-1edd7fe86c99",
+                  "url": "",
+                  "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19.png",
+                  "mime_type": "image/png",
+                  "size": 293096,
+                  "name": "Ekran Resmi 2025-11-01 23.20.12.png",
+                  "width": 2596,
+                  "height": 1504,
+                  "variants": {
+                      "image": {
+                          "icon": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19_portrait_icon.webp",
+                              "width": 128,
+                              "height": 128,
+                              "format": "webp",
+                              "size": 4802
+                          },
+                          "thumbnail": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19_portrait_thumb.webp",
+                              "width": 240,
+                              "height": 240,
+                              "format": "webp",
+                              "size": 12620
+                          },
+                          "small": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19_portrait_sm.webp",
+                              "width": 480,
+                              "height": 720,
+                              "format": "webp",
+                              "size": 31870
+                          },
+                          "medium": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19_portrait_md.webp",
+                              "width": 720,
+                              "height": 1080,
+                              "format": "webp",
+                              "size": 55904
+                          },
+                          "large": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19_portrait_lg.webp",
+                              "width": 1080,
+                              "height": 1440,
+                              "format": "webp",
+                              "size": 84604
+                          },
+                          "original": {
+                              "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/8d14b948-116b-468d-a566-c1fcaa5aab19.png",
+                              "width": 2596,
+                              "height": 1504,
+                              "format": "png",
+                              "size": 293096
+                          }
+                      }
+                  },
+                  "created_at": "2025-11-07T06:36:23.095042+05:45"
+              },
+              "created_at": "2025-11-07T06:36:23.095042+05:45",
+              "updated_at": "2025-11-07T06:36:23.095042+05:45"
           },
-          "languages": null,
-          "travel": {
-            "visited_countries": null,
-            "travel_frequency": "",
-            "favorite_places": null
-          },
-          "social": {
-  
-          },
+          "expires_at": "2025-11-08T06:36:23.096917+05:45",
+          "is_expired": false,
+          "is_archived": false,
+          "created_at": "2025-11-07T06:36:23.096917+05:45",
+          "updated_at": "2025-11-07T06:36:23.096917+05:45",
           "deleted_at": null
-        },
-        "media_id": "a7bb0bff-3a2d-40b7-a79d-f03bad69cb23",
-        "media": {
-          "id": "a7bb0bff-3a2d-40b7-a79d-f03bad69cb23",
-          "file_id": "8ee99ef9-b080-4b89-9c65-76f50e5527d4",
-          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "owner_type": "user",
-          "role": "story",
-          "is_public": true,
-          "file": {
-            "id": "8ee99ef9-b080-4b89-9c65-76f50e5527d4",
-            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/98ece547-8791-462a-ae57-be447049f8e1.jpeg",
-            "mime_type": "image/jpeg",
-            "size": 215138,
-            "name": "1669041186022.jpeg",
-            "created_at": "2025-11-01T20:14:30.341165+05:45",
-            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/98ece547-8791-462a-ae57-be447049f8e1.jpeg"
-          },
-          "created_at": "2025-11-01T20:14:30.341167+05:45",
-          "updated_at": "2025-11-01T20:14:30.341167+05:45"
-        },
-        "expires_at": "2025-11-02T20:14:30.343596+05:45",
-        "is_expired": false,
-        "is_archived": false,
-        "created_at": "2025-11-01T20:14:30.343596+05:45",
-        "updated_at": "2025-11-01T20:14:30.343596+05:45",
-        "deleted_at": null
       },
       {
-        "id": "4b3d2117-f1d4-4dd2-8c3e-8dd0abb9d975",
-        "user_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-        "user": {
-          "id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "public_id": 1.9846181998276157e+18,
-          "username": "fuck",
-          "displayname": "fuck",
-          "email": "",
-          "date_of_birth": "2000-11-16T05:45:00+05:45",
-          "gender_identities": null,
-          "sexual_orientations": null,
-          "user_role": "",
-          "is_active": false,
-          "created_at": "2025-11-01T19:32:05.919641+05:45",
-          "updated_at": "2025-11-01T21:03:16.788324+05:45",
-          "default_language": "en",
-          "avatar_id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-          "avatar": {
-            "id": "3ba8d632-d7e9-47a1-8404-fbdacaa583cb",
-            "file_id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "9b63f3ec-6ee0-46ec-808e-a97ace8b01e4",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:16.785578+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/ae0f4484-762f-4391-9582-6657f683a929.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:16.785578+05:45",
-            "updated_at": "2025-11-01T21:03:16.785578+05:45"
+          "id": "8f15ce2c-2133-46ba-9f0e-3abf5b6a5c20",
+          "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+          "user": {
+              "public_id": "1986597228017356800",
+              "id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "socket_id": "a",
+              "username": "can",
+              "displayname": "can",
+              "email": "",
+              "date_of_birth": "2000-11-01T05:45:00+05:45",
+              "gender_identities": null,
+              "sexual_orientations": null,
+              "user_role": "",
+              "is_active": false,
+              "created_at": "2025-11-07T06:36:03.008498+05:45",
+              "updated_at": "2025-11-07T09:38:12.895869+05:45",
+              "last_online": "2025-11-07T09:38:12.895539+05:45",
+              "default_language": "en",
+              "avatar_id": "6b3e59d3-774f-4123-a215-0667039799b4",
+              "avatar": {
+                  "public_id": "1986597931674767360",
+                  "id": "6b3e59d3-774f-4123-a215-0667039799b4",
+                  "file_id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                  "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "owner_type": "user",
+                  "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "role": "avatar",
+                  "is_public": true,
+                  "file": {
+                      "id": "e4e3a15f-0714-4615-a888-bea860ab6c82",
+                      "url": "",
+                      "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                      "mime_type": "image/jpeg",
+                      "size": 215138,
+                      "name": "1669041186022.jpeg",
+                      "width": 1440,
+                      "height": 1080,
+                      "variants": {
+                          "image": {
+                              "icon": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_icon.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 24248
+                              },
+                              "thumbnail": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_thumb.webp",
+                                  "width": 240,
+                                  "height": 240,
+                                  "format": "webp",
+                                  "size": 58636
+                              },
+                              "small": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_sm.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 18908
+                              },
+                              "medium": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_md.webp",
+                                  "width": 256,
+                                  "height": 256,
+                                  "format": "webp",
+                                  "size": 65802
+                              },
+                              "large": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4_square_lg.webp",
+                                  "width": 512,
+                                  "height": 512,
+                                  "format": "webp",
+                                  "size": 218210
+                              },
+                              "original": {
+                                  "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/avatar/2025-11-07/96c113b7-7143-4927-9380-6383aedc3da4.jpeg",
+                                  "width": 1440,
+                                  "height": 1080,
+                                  "format": "jpeg",
+                                  "size": 215138
+                              }
+                          }
+                      },
+                      "created_at": "2025-11-07T06:38:50.773396+05:45"
+                  },
+                  "created_at": "2025-11-07T06:38:50.773397+05:45",
+                  "updated_at": "2025-11-07T06:38:50.773397+05:45"
+              },
+              "cover_id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+              "cover": {
+                  "public_id": "1986597947621511168",
+                  "id": "d2dc8c0e-2730-4b33-8423-55f7fcf1feba",
+                  "file_id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                  "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "owner_type": "user",
+                  "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+                  "role": "cover",
+                  "is_public": true,
+                  "file": {
+                      "id": "505b44c1-4773-4c24-b1e9-508b5122363f",
+                      "url": "",
+                      "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                      "mime_type": "image/jpeg",
+                      "size": 112630,
+                      "name": "be-yourself-phrase-with-lgbtqia-flag-on-background-vector.jpg",
+                      "width": 1920,
+                      "height": 672,
+                      "variants": {
+                          "image": {
+                              "icon": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_icon.webp",
+                                  "width": 128,
+                                  "height": 128,
+                                  "format": "webp",
+                                  "size": 10232
+                              },
+                              "thumbnail": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_thumb.webp",
+                                  "width": 240,
+                                  "height": 240,
+                                  "format": "webp",
+                                  "size": 23986
+                              },
+                              "small": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_sm.webp",
+                                  "width": 1280,
+                                  "height": 720,
+                                  "format": "webp",
+                                  "size": 352408
+                              },
+                              "medium": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_md.webp",
+                                  "width": 1920,
+                                  "height": 1080,
+                                  "format": "webp",
+                                  "size": 466872
+                              },
+                              "large": {
+                                  "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846_landscape_lg.webp",
+                                  "width": 2560,
+                                  "height": 1440,
+                                  "format": "webp",
+                                  "size": 468034
+                              },
+                              "original": {
+                                  "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/cover/2025-11-07/cfadf3cd-9299-491f-9c75-38b380a4e846.jpg",
+                                  "width": 1920,
+                                  "height": 672,
+                                  "format": "jpg",
+                                  "size": 112630
+                              }
+                          }
+                      },
+                      "created_at": "2025-11-07T06:38:54.575474+05:45"
+                  },
+                  "created_at": "2025-11-07T06:38:54.575474+05:45",
+                  "updated_at": "2025-11-07T06:38:54.575474+05:45"
+              },
+              "languages": null,
+              "travel": {
+                  "visited_countries": null,
+                  "travel_frequency": "",
+                  "favorite_places": null
+              },
+              "social": {},
+              "deleted_at": null
           },
-          "cover_id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-          "cover": {
-            "id": "e3421e54-231f-47a3-95cc-b92531e8b176",
-            "file_id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-            "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-            "owner_type": "user",
-            "role": "avatar",
-            "is_public": true,
-            "file": {
-              "id": "d73a4f9a-c7ae-4f4c-ab33-ecc5a6506b10",
-              "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg",
-              "mime_type": "image/jpeg",
-              "size": 442927,
-              "name": "Gye23A2XcAAmuKW.jpeg",
-              "created_at": "2025-11-01T21:03:12.902124+05:45",
-              "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/media/85ed4437-5a18-4eed-aed7-bf88550447e9.jpeg"
-            },
-            "created_at": "2025-11-01T21:03:12.902124+05:45",
-            "updated_at": "2025-11-01T21:03:12.902124+05:45"
+          "media_id": "769c971b-2f63-4e9b-afb1-552da00f829f",
+          "media": {
+              "public_id": "1986597280190304256",
+              "id": "769c971b-2f63-4e9b-afb1-552da00f829f",
+              "file_id": "bbfb4f91-1393-40fb-b4cd-df2f61387200",
+              "owner_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "owner_type": "user",
+              "user_id": "45ce99f9-0d32-4669-94b3-98088aaec454",
+              "role": "story",
+              "is_public": true,
+              "file": {
+                  "id": "bbfb4f91-1393-40fb-b4cd-df2f61387200",
+                  "url": "",
+                  "storage_path": "./static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0.jpg",
+                  "mime_type": "image/jpeg",
+                  "size": 224201,
+                  "name": "1000_F_343145027_5FAySOOAuX31BVp6BZPIPoWgZDN4U4QP.jpg",
+                  "width": 1000,
+                  "height": 667,
+                  "variants": {
+                      "image": {
+                          "icon": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0_portrait_icon.webp",
+                              "width": 128,
+                              "height": 128,
+                              "format": "webp",
+                              "size": 10080
+                          },
+                          "thumbnail": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0_portrait_thumb.webp",
+                              "width": 240,
+                              "height": 240,
+                              "format": "webp",
+                              "size": 27070
+                          },
+                          "small": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0_portrait_sm.webp",
+                              "width": 480,
+                              "height": 720,
+                              "format": "webp",
+                              "size": 80980
+                          },
+                          "medium": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0_portrait_md.webp",
+                              "width": 720,
+                              "height": 1080,
+                              "format": "webp",
+                              "size": 164936
+                          },
+                          "large": {
+                              "url": "static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0_portrait_lg.webp",
+                              "width": 1080,
+                              "height": 1440,
+                              "format": "webp",
+                              "size": 287558
+                          },
+                          "original": {
+                              "url": "/static/uploads/users/45ce99f9-0d32-4669-94b3-98088aaec454/stories/2025-11-07/11340d66-2053-457c-9afd-03d4ce3d4fc0.jpg",
+                              "width": 1000,
+                              "height": 667,
+                              "format": "jpg",
+                              "size": 224201
+                          }
+                      }
+                  },
+                  "created_at": "2025-11-07T06:36:15.44743+05:45"
+              },
+              "created_at": "2025-11-07T06:36:15.44743+05:45",
+              "updated_at": "2025-11-07T06:36:15.44743+05:45"
           },
-          "languages": null,
-          "travel": {
-            "visited_countries": null,
-            "travel_frequency": "",
-            "favorite_places": null
-          },
-          "social": {
-  
-          },
+          "expires_at": "2025-11-08T06:36:15.45746+05:45",
+          "is_expired": false,
+          "is_archived": false,
+          "created_at": "2025-11-07T06:36:15.45746+05:45",
+          "updated_at": "2025-11-07T06:36:15.45746+05:45",
           "deleted_at": null
-        },
-        "media_id": "91f6e466-79a6-4664-b92f-0a8465de218a",
-        "media": {
-          "id": "91f6e466-79a6-4664-b92f-0a8465de218a",
-          "file_id": "ff2252f3-f0ed-4574-9432-d96192bcd403",
-          "owner_id": "de46da89-7608-4b41-99c8-8d0972ea7d64",
-          "owner_type": "user",
-          "role": "story",
-          "is_public": true,
-          "file": {
-            "id": "ff2252f3-f0ed-4574-9432-d96192bcd403",
-            "storage_path": "./static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/c6644678-8e5e-4c06-99e6-e14dfdf4d802.jpeg",
-            "mime_type": "image/jpeg",
-            "size": 215138,
-            "name": "1669041186022.jpeg",
-            "created_at": "2025-11-01T20:13:19.444916+05:45",
-            "url": "http://localhost:3001/static/users/de46da89-7608-4b41-99c8-8d0972ea7d64/stories/c6644678-8e5e-4c06-99e6-e14dfdf4d802.jpeg"
-          },
-          "created_at": "2025-11-01T20:13:19.444916+05:45",
-          "updated_at": "2025-11-01T20:13:19.444916+05:45"
-        },
-        "expires_at": "2025-11-02T20:13:19.447657+05:45",
-        "is_expired": false,
-        "is_archived": false,
-        "created_at": "2025-11-01T20:13:19.447658+05:45",
-        "updated_at": "2025-11-01T20:13:19.447658+05:45",
-        "deleted_at": null
       }
-    ]
-  }
+  ]
+}

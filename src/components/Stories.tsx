@@ -75,16 +75,25 @@ const Stories: React.FC = () => {
         const transformedStories = sortedStories.map((story: any) => {
           const user = story.user;
           const isVideo = story?.media?.file?.mime_type?.startsWith('video/');
-          const storyCover = isVideo 
-            ? (user?.cover?.file?.url || user?.avatar?.file?.url || user?.profile_image_url || null)
-            : (getSafeImageURL(story.media,"small") || null);
+          
+          let storyCover = null;
+          if (isVideo) {
+            // Video için poster kullan, yoksa user cover/avatar
+            storyCover = getSafeImageURL(story.media, 'poster') || 
+                        getSafeImageURL(user?.cover, 'medium') || 
+                        getSafeImageURL(user?.avatar, 'medium') || 
+                        null;
+          } else {
+            // Image için medium variant kullan
+            storyCover = getSafeImageURL(story.media, 'medium') || null;
+          }
           
           return {
             id: story.id,
             name: user?.displayname || user?.username || 'User',
-            avatar: getSafeImageURL(user.avatar,"icon"),
+            avatar: getSafeImageURL(user.avatar, 'icon'),
             cover: storyCover,
-            userCover: user?.cover?.file?.url || null,
+            userCover: getSafeImageURL(user?.cover, 'medium') || null,
             isOwn: story.user_id === authUser?.id,
             hasStory: true,
             storyId: story.id,
@@ -217,16 +226,25 @@ const Stories: React.FC = () => {
         const transformedStories = sortedStories.map((story: any) => {
           const user = story.user;
           const isVideo = story?.media?.file?.mime_type?.startsWith('video/');
-          const storyCover = isVideo 
-            ? (user?.cover?.file?.url || user?.avatar?.file?.url || user?.profile_image_url || null)
-            : (story?.media?.file?.url || null);
+          
+          let storyCover = null;
+          if (isVideo) {
+            // Video için poster kullan, yoksa user cover/avatar
+            storyCover = getSafeImageURL(story.media, 'poster') || 
+                        getSafeImageURL(user?.cover, 'medium') || 
+                        getSafeImageURL(user?.avatar, 'medium') || 
+                        null;
+          } else {
+            // Image için medium variant kullan
+            storyCover = getSafeImageURL(story.media, 'medium') || null;
+          }
           
           return {
             id: story.id,
             name: user?.displayname || user?.username || 'User',
-            avatar: user?.avatar?.file?.url || user?.profile_image_url || null,
+            avatar: getSafeImageURL(user.avatar, 'icon'),
             cover: storyCover,
-            userCover: user?.cover?.file?.url || null,
+            userCover: getSafeImageURL(user?.cover, 'medium') || null,
             isOwn: story.user_id === authUser?.id,
             hasStory: true,
             storyId: story.id,
@@ -511,9 +529,25 @@ const Stories: React.FC = () => {
                   {/* Story Media (Image or Video) */}
                   {(() => {
                     const isVideoMedia = selectedStoryData.storyMedia?.file?.mime_type?.startsWith('video/');
-                    const mediaUrl = isVideoMedia 
-                      ? selectedStoryData.storyMedia?.file?.url 
-                      : selectedStoryData.cover;
+                    
+                    let mediaUrl = '';
+                    let posterUrl = '';
+                    
+                    if (isVideoMedia) {
+                      // Video için - variants'tan al
+                      // Öncelik: high > medium > low > preview > original
+                      mediaUrl = getSafeImageURL(selectedStoryData.storyMedia, 'high') || 
+                                getSafeImageURL(selectedStoryData.storyMedia, 'medium') || 
+                                getSafeImageURL(selectedStoryData.storyMedia, 'low') || 
+                                getSafeImageURL(selectedStoryData.storyMedia, 'preview') || 
+                                getSafeImageURL(selectedStoryData.storyMedia, 'original') || 
+                                selectedStoryData.storyMedia?.file?.url || '';
+                      
+                      // Poster'ı al
+                      posterUrl = getSafeImageURL(selectedStoryData.storyMedia, 'poster') || '';
+                    } else {
+                      mediaUrl = selectedStoryData.cover || '';
+                    }
                     
                     if (!mediaUrl) return null;
                     
@@ -524,6 +558,7 @@ const Stories: React.FC = () => {
                         animate={{ scale: 1 }}
                         transition={{ duration: 0.6 }}
                         src={mediaUrl}
+                        poster={posterUrl}
                         className="w-full h-full rounded-3xl object-cover"
                         controls
                         autoPlay

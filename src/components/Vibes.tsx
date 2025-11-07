@@ -1,10 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Music, Play } from 'lucide-react';
+import { api } from '../services/api';
+import { getSafeImageURL } from '../helpers/helpers';
+import { serviceURL, defaultServiceServerId } from '../appSettings';
 
 interface Reel {
   id: string;
   mediaUrl: string;
   mediaType: 'video' | 'image';
+  posterUrl?: string; // Video için poster image
   username: string;
   avatar: string;
   description: string;
@@ -133,7 +137,7 @@ const generateReels = (): Reel[] => {
 };
 
 export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPostClick: _onPostClick }: ReelsProps) {
-  const [allReels, setAllReels] = useState<Reel[]>(initialReels || generateReels());
+  const [allReels, setAllReels] = useState<Reel[]>(initialReels || []);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState<number | null>(null);
   const [likedReels, setLikedReels] = useState<Set<string>>(new Set());
@@ -144,6 +148,9 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
   const [tabHeaderHeight, setTabHeaderHeight] = useState(0);
   const [bottomBarHeight, setBottomBarHeight] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [cursor, setCursor] = useState('');
+  const [hasMore, setHasMore] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number>(0);
@@ -152,6 +159,113 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
 
   const currentReel = allReels[currentIndex];
   const displayReel = nextIndex !== null ? allReels[nextIndex] : currentReel;
+
+  // Fetch vibes from API
+  const fetchVibesFromAPI = async (loadMore = false) => {
+    try {
+      setIsLoading(true);
+      const response = await api.fetchVibes({
+        limit: 10,
+        cursor: loadMore ? cursor : '',
+      });
+
+      console.log('Vibes API Response:', response);
+
+      // API'den gelen veriyi Reel formatına dönüştür
+      const mediaItems = response.medias?.items || [];
+      const newReels: Reel[] = mediaItems
+        .filter((item: any) => item.media?.role === 'post') // Sadece post'ları al (story'leri hariç tut)
+        .map((item: any) => {
+          const media = item.media;
+          const user = item.user;
+          
+          // Mime type'a göre video mu image mi belirle
+          const mimeType = media.file?.mime_type || '';
+          const isVideo = mimeType.startsWith('video/');
+          
+          // Medya URL'ini güvenli bir şekilde al
+          let mediaUrl = '';
+          let posterUrl = '';
+          
+          if (isVideo) {
+            // Video için - variants varsa kullan
+            // Öncelik: high > medium > low > preview > original > storage_path
+            mediaUrl = getSafeImageURL(media, 'high') || 
+                      getSafeImageURL(media, 'medium') || 
+                      getSafeImageURL(media, 'low') || 
+                      getSafeImageURL(media, 'preview') || 
+                      getSafeImageURL(media, 'original') || '';
+            
+            // Eğer variants'tan bulamadıysak, storage_path'i dene
+            if (!mediaUrl && media.file?.storage_path) {
+              const serviceURI = serviceURL[defaultServiceServerId];
+              const path = media.file.storage_path.replace(/^\.\//, '');
+              mediaUrl = `${serviceURI}/${path}`;
+            }
+            
+            // Video poster'ı al
+            posterUrl = getSafeImageURL(media, 'poster') || '';
+          } else {
+            // Image için - helper fonksiyonunu kullan
+            // Öncelik: large > medium > small > original
+            mediaUrl = getSafeImageURL(media, 'large') || 
+                      getSafeImageURL(media, 'medium') || 
+                      getSafeImageURL(media, 'small') || 
+                      getSafeImageURL(media, 'original') || '';
+          }
+
+          // User avatar'ını al
+          const avatarUrl = user?.avatar 
+            ? (getSafeImageURL(user.avatar, 'small') || getSafeImageURL(user.avatar, 'medium') || '')
+            : 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100';
+
+          return {
+            id: media.id || media.public_id,
+            mediaUrl: mediaUrl,
+            mediaType: isVideo ? 'video' : 'image',
+            posterUrl: isVideo ? posterUrl : undefined,
+            username: user?.username || user?.displayname || 'Kullanıcı',
+            avatar: avatarUrl,
+            description: media.file?.name?.replace(/\.(jpg|jpeg|png|webp|gif|mp4|mov)$/i, '') || 'Vibe',
+            music: 'Orijinal Ses',
+            likes: Math.floor(Math.random() * 10000) + 100, // Random like sayısı
+            comments: Math.floor(Math.random() * 1000) + 10, // Random yorum sayısı
+          };
+        });
+
+      if (loadMore) {
+        setAllReels(prev => [...prev, ...newReels]);
+      } else {
+        setAllReels(newReels);
+      }
+
+      // Cursor'ı güncelle - eğer next_cursor varsa daha fazla veri var demektir
+      if (response.medias?.next_cursor) {
+        setCursor(response.medias.next_cursor.toString());
+        setHasMore(true);
+      } else {
+        setCursor('');
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error('Vibes yüklenirken hata:', error);
+      // Hata durumunda fallback olarak örnek data kullan
+      if (!loadMore && allReels.length === 0) {
+        setAllReels(generateReels());
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // İlk yükleme
+  useEffect(() => {
+    if (!initialReels) {
+      fetchVibesFromAPI();
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
 
   // Detect mobile and calculate header/bottom bar heights
   useEffect(() => {
@@ -263,19 +377,20 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
   }, [isMobile]);
 
   useEffect(() => {
-    if (displayReel.mediaType === 'video' && videoRef.current) {
+    if (displayReel && displayReel.mediaType === 'video' && videoRef.current) {
       if (isPlaying && nextIndex === null) {
         videoRef.current.play();
       } else {
         videoRef.current.pause();
       }
     }
-  }, [currentIndex, isPlaying, displayReel.mediaType, nextIndex]);
+  }, [currentIndex, isPlaying, displayReel, nextIndex]);
 
   useEffect(() => {
-    if (currentIndex >= allReels.length - 3) {
-      const newReels = generateReels();
-      setAllReels(prev => [...prev, ...newReels]);
+    // Son 3 item'a geldiğinde ve daha fazla veri varsa otomatik yükle
+    if (currentIndex >= allReels.length - 3 && !isLoading && hasMore && cursor) {
+      console.log('Load more triggered, cursor:', cursor);
+      fetchVibesFromAPI(true);
     }
   }, [currentIndex, allReels.length]);
 
@@ -302,7 +417,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
     const timeDiff = touchEndTime - touchStartTime.current;
 
     if (Math.abs(diff) > 30 && timeDiff < 500 && !isTransitioning) {
-      if (diff > 0) {
+      if (diff > 0 && currentIndex < allReels.length - 1) {
         setNextIndex(currentIndex + 1);
         setIsTransitioning(true);
       } else if (diff < 0 && currentIndex > 0) {
@@ -318,7 +433,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
 
     lastScrollTime.current = now;
 
-    if (e.deltaY > 0) {
+    if (e.deltaY > 0 && currentIndex < allReels.length - 1) {
       setNextIndex(currentIndex + 1);
       setIsTransitioning(true);
     } else if (e.deltaY < 0 && currentIndex > 0) {
@@ -328,6 +443,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
   };
 
   const toggleLike = () => {
+    if (!currentReel) return;
     setLikedReels(prev => {
       const newSet = new Set(prev);
       if (newSet.has(currentReel.id)) {
@@ -340,6 +456,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
   };
 
   const toggleSave = () => {
+    if (!currentReel) return;
     setSavedReels(prev => {
       const newSet = new Set(prev);
       if (newSet.has(currentReel.id)) {
@@ -352,6 +469,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
   };
 
   const togglePlay = () => {
+    if (!currentReel) return;
     if (currentReel.mediaType === 'video') {
       setIsPlaying(!isPlaying);
     }
@@ -381,6 +499,33 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
         height: tabHeaderHeight > 0 ? `calc(100vh - ${tabHeaderHeight}px)` : '100vh',
         marginTop: 0,
       };
+
+  // Loading state
+  if (isLoading && allReels.length === 0) {
+    return (
+      <div
+        className="flex flex-col items-center justify-center w-full bg-black"
+        style={containerStyle}
+      >
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+          <p className="text-white text-sm">Vibes yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // No data state
+  if (!currentReel) {
+    return (
+      <div
+        className="flex flex-col items-center justify-center w-full bg-black"
+        style={containerStyle}
+      >
+        <p className="text-white text-sm">Henüz vibe yok</p>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -416,6 +561,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
                 playsInline
                 autoPlay
                 onClick={togglePlay}
+                poster={currentReel.posterUrl}
               />
               {!isPlaying && (
                 <div className="absolute inset-0 flex items-center justify-center z-10">
@@ -434,7 +580,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
           )}
         </div>
 
-        {nextIndex !== null && (
+        {nextIndex !== null && allReels[nextIndex] && (
           <div
             className={`absolute inset-0 transition-all duration-500 ease-out ${
               nextIndex !== null ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
@@ -447,6 +593,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
                 loop
                 playsInline
                 autoPlay
+                poster={allReels[nextIndex].posterUrl}
               />
             ) : (
               <img

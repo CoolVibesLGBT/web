@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { useTheme } from '../contexts/ThemeContext';
+import React from 'react';
 import VideoPlayer from './VideoPlayer';
+import { getSafeImageURL } from '../helpers/helpers';
 
 interface MediaProps {
   media: {
@@ -8,19 +8,31 @@ interface MediaProps {
     file: {
       url: string;
       mime_type: string;
+      variants?: {
+        image?: {
+          small?: { url: string };
+          medium?: { url: string };
+          large?: { url: string };
+          original?: { url: string };
+        };
+        video?: {
+          preview?: { url: string };
+        };
+      };
     };
   };
 }
 
 const Media: React.FC<MediaProps> = ({ media }) => {
-  const { theme } = useTheme();
   const isVideo = media.file?.mime_type?.startsWith('video/');
 
+  // Get safe image URL using the helper
+  const imageUrl = getSafeImageURL(media.file, 'medium') || media.file?.url;
 
-  useEffect(()=>{
-    console.log(media)
+  if (!imageUrl && !isVideo) {
+    return null;
+  }
 
-  },[])
   return (
     <div
       className={`break-inside-avoid mb-2 sm:mb-3 rounded-lg overflow-hidden cursor-pointer group`}
@@ -33,7 +45,7 @@ const Media: React.FC<MediaProps> = ({ media }) => {
       ) : (
         <div className="relative">
           <img
-            src={media.file.url}
+            src={imageUrl}
             alt=""
             className="w-full h-auto rounded-lg"
             loading="lazy"

@@ -2,3 +2,6 @@
 package-lock.json
 node_modules
 ./node_modules
+./dummy
+src/dummy
+./src/dummy
