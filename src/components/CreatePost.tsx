@@ -763,7 +763,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
 
 
   return (
-    <div className={`${isFullScreen ? "fixed left-0 top-0 w-full  z-[999] min-h-[100dvh] h-[100dvh] max-h-[100dvh] overflow-y-scroll scrollbar-hide" : "scrollbar-hide"} ${theme === 'dark' ? "bg-black" : "bg-white"} `}>
+    <div className={`${isFullScreen ? "fixed left-0 top-0 w-full  z-[2147483647] min-h-[100dvh] h-[100dvh] max-h-[100dvh] overflow-y-scroll scrollbar-hide" : "scrollbar-hide"} ${theme === 'dark' ? "bg-black" : "bg-white"} `}>
 
 
 
