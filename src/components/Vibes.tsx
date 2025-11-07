@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Music, Play } from 'lucide-react';
 import { api } from '../services/api';
 import { getSafeImageURL } from '../helpers/helpers';
@@ -156,17 +156,23 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
   const touchStartY = useRef<number>(0);
   const touchStartTime = useRef<number>(0);
   const lastScrollTime = useRef<number>(0);
+  const isLoadingMoreRef = useRef(false);
 
   const currentReel = allReels[currentIndex];
   const displayReel = nextIndex !== null ? allReels[nextIndex] : currentReel;
 
   // Fetch vibes from API
-  const fetchVibesFromAPI = async (loadMore = false) => {
+  const fetchVibesFromAPI = useCallback(async (loadMore = false) => {
     try {
       setIsLoading(true);
+      
+      // loadMore ise mevcut cursor'ı kullan, değilse boş string
+      const currentCursor = loadMore ? cursor : '';
+      console.log('Fetching vibes with cursor:', currentCursor, 'loadMore:', loadMore);
+      
       const response = await api.fetchVibes({
         limit: 10,
-        cursor: loadMore ? cursor : '',
+        cursor: currentCursor,
       });
 
       console.log('Vibes API Response:', response);
@@ -241,31 +247,35 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
 
       // Cursor'ı güncelle - eğer next_cursor varsa daha fazla veri var demektir
       if (response.medias?.next_cursor) {
-        setCursor(response.medias.next_cursor.toString());
+        const newCursor = response.medias.next_cursor.toString();
+        console.log('New cursor received:', newCursor);
+        setCursor(newCursor);
         setHasMore(true);
       } else {
+        console.log('No more cursor - end of data');
         setCursor('');
         setHasMore(false);
       }
     } catch (error) {
       console.error('Vibes yüklenirken hata:', error);
       // Hata durumunda fallback olarak örnek data kullan
-      if (!loadMore && allReels.length === 0) {
-        setAllReels(generateReels());
+      if (!loadMore) {
+        setAllReels(prev => prev.length === 0 ? generateReels() : prev);
       }
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [cursor]);
 
   // İlk yükleme
   useEffect(() => {
     if (!initialReels) {
-      fetchVibesFromAPI();
+      fetchVibesFromAPI(false);
     } else {
       setIsLoading(false);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // İlk yükleme sadece bir kez çalışmalı
 
   // Detect mobile and calculate header/bottom bar heights
   useEffect(() => {
@@ -388,11 +398,20 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
 
   useEffect(() => {
     // Son 3 item'a geldiğinde ve daha fazla veri varsa otomatik yükle
-    if (currentIndex >= allReels.length - 3 && !isLoading && hasMore && cursor) {
-      console.log('Load more triggered, cursor:', cursor);
-      fetchVibesFromAPI(true);
+    const shouldLoadMore = currentIndex >= allReels.length - 3 && 
+                          !isLoading && 
+                          hasMore && 
+                          cursor && 
+                          !isLoadingMoreRef.current;
+    
+    if (shouldLoadMore) {
+      console.log('Load more triggered, cursor:', cursor, 'currentIndex:', currentIndex, 'length:', allReels.length);
+      isLoadingMoreRef.current = true;
+      fetchVibesFromAPI(true).finally(() => {
+        isLoadingMoreRef.current = false;
+      });
     }
-  }, [currentIndex, allReels.length]);
+  }, [currentIndex, allReels.length, cursor, hasMore, isLoading, fetchVibesFromAPI]);
 
   useEffect(() => {
     if (nextIndex !== null) {
