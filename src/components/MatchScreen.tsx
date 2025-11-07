@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, PanInfo, useMotionValue } from 'framer-motion';
-import { Heart, X, Star, MapPin, Briefcase, GraduationCap, MessageCircle, Camera, Shield, Sparkles, ChevronRight, Wine, Cigarette, Baby, PawPrint, Church, Eye, Paintbrush, Ruler, RulerDimensionLine, Palette, Users, Accessibility, PersonStanding, Drama, Vegan, HeartHandshake, Panda, Ghost, Frown, UserCircle, Rainbow, Smile, Banana, Link, Calendar, RefreshCw } from 'lucide-react';
+import { Heart, X, Star, MapPin, Camera, Shield, Sparkles, MessageCircle, Ghost, RefreshCw, Info } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import { useApp } from '../contexts/AppContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Container from './Container';
+import ProfileScreen from './ProfileScreen';
 import { api } from '../services/api';
 import { Actions } from '../services/actions';
 import { getSafeImageURL } from '../helpers/helpers';
@@ -127,7 +127,6 @@ interface MatchResponse {
 
 const MatchScreen: React.FC = () => {
   const { theme } = useTheme();
-  const { defaultLanguage } = useApp();
   const { user } = useAuth();
   const { t } = useTranslation('common');
   const navigate = useNavigate();
@@ -151,7 +150,10 @@ const MatchScreen: React.FC = () => {
   const mapApiUserToProfile = useCallback((apiUser: ApiUser): Profile => {
     const images: string[] = [];
     if (apiUser.avatar) {
-      images.push(getSafeImageURL(apiUser?.avatar,"small"));
+      const imageUrl = getSafeImageURL(apiUser.avatar, "small");
+      if (imageUrl) {
+        images.push(imageUrl);
+      }
     }
 
     return {
@@ -214,34 +216,29 @@ const MatchScreen: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [matchPercentage] = useState(96);
-  const [activeTab, setActiveTab] = useState<'about' | 'details' | 'interests' | 'fantasies'>('about');
   const [exitingProfileId, setExitingProfileId] = useState<string | null>(null);
   const [exitDirection, setExitDirection] = useState<'left' | 'right' | null>(null);
-  const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const [showMatchAnimation, setShowMatchAnimation] = useState(false);
   const [matchedProfile, setMatchedProfile] = useState<Profile | null>(null);
-  const [historyTab, setHistoryTab] = useState<'liked' | 'passed' | 'matches'>('matches');
   const [likedProfiles, setLikedProfiles] = useState<Profile[]>([]);
-  const [likedProfilesCursor, setLikedProfilesCursor] = useState<string | null>(null);
   const [isLoadingLiked, setIsLoadingLiked] = useState(false);
-  const [hasMoreLiked, setHasMoreLiked] = useState(true);
   const [hasLoadedLiked, setHasLoadedLiked] = useState(false);
   const [passedProfiles, setPassedProfiles] = useState<Profile[]>([]);
-  const [passedProfilesCursor, setPassedProfilesCursor] = useState<string | null>(null);
   const [isLoadingPassed, setIsLoadingPassed] = useState(false);
-  const [hasMorePassed, setHasMorePassed] = useState(true);
   const [hasLoadedPassed, setHasLoadedPassed] = useState(false);
   const [matchedProfiles, setMatchedProfiles] = useState<Profile[]>([]);
-  const [matchedProfilesCursor, setMatchedProfilesCursor] = useState<string | null>(null);
   const [isLoadingMatches, setIsLoadingMatches] = useState(false);
-  const [hasMoreMatches, setHasMoreMatches] = useState(true);
-  const [hasLoadedMatches, setHasLoadedMatches] = useState(false); // Track if matches have been loaded
+  const [hasLoadedMatches, setHasLoadedMatches] = useState(false);
+  const [expandedMatches, setExpandedMatches] = useState(false);
+  const [expandedLiked, setExpandedLiked] = useState(false);
+  const [expandedPassed, setExpandedPassed] = useState(false);
   const [processedProfiles, setProcessedProfiles] = useState<Set<string>>(new Set()); // Track processed profile IDs
   const cardRef = useRef<HTMLDivElement>(null);
   const processedProfilesRef = useRef<Set<string>>(new Set());
-  const fetchMatchedProfilesRef = useRef<((cursor: string | null, limit: number) => Promise<void>) | null>(null);
-  const fetchLikedProfilesRef = useRef<((cursor: string | null, limit: number) => Promise<void>) | null>(null);
-  const fetchPassedProfilesRef = useRef<((cursor: string | null, limit: number) => Promise<void>) | null>(null);
+  const fetchMatchedProfilesRef = useRef<((limit: number) => Promise<void>) | null>(null);
+  const fetchLikedProfilesRef = useRef<((limit: number) => Promise<void>) | null>(null);
+  const fetchPassedProfilesRef = useRef<((limit: number) => Promise<void>) | null>(null);
   const hasLoadedMatchesRef = useRef<boolean>(false);
   const isLoadingMatchesRef = useRef<boolean>(false);
   const hasLoadedLikedRef = useRef<boolean>(false);
@@ -253,6 +250,12 @@ const MatchScreen: React.FC = () => {
   useEffect(() => {
     processedProfilesRef.current = processedProfiles;
   }, [processedProfiles]);
+
+  // Debug: Track match animation state changes
+  useEffect(() => {
+    console.log('🎭 showMatchAnimation changed:', showMatchAnimation);
+    console.log('👤 matchedProfile:', matchedProfile ? `${matchedProfile.name} (ID: ${matchedProfile.id})` : 'null');
+  }, [showMatchAnimation, matchedProfile]);
   
   useEffect(() => {
     hasLoadedMatchesRef.current = hasLoadedMatches;
@@ -278,115 +281,56 @@ const MatchScreen: React.FC = () => {
     isLoadingPassedRef.current = isLoadingPassed;
   }, [isLoadingPassed]);
 
-  // USER_ATTRIBUTES definition (same as ProfileScreen)
-  const USER_ATTRIBUTES = [
-    { field: 'gender_identity', label: t('profile.gender_identity'), icon: UserCircle },
-    { field: 'sexual_orientation', label: t('profile.sexual_orientation'), icon: Rainbow },
-    { field: 'sex_role', label: t('profile.sex_role'), icon: Smile },
-    { field: 'height', label: t('profile.height'), icon: Ruler },
-    { field: 'weight', label: t('profile.weight'), icon: RulerDimensionLine },
-    { field: 'hair_color', label: t('profile.hair_color'), icon: Paintbrush },
-    { field: 'eye_color', label: t('profile.eye_color'), icon: Eye },
-    { field: 'skin_color', label: t('profile.skin_color'), icon: Palette },
-    { field: 'body_type', label: t('profile.body_type'), icon: PersonStanding },
-    { field: 'ethnicity', label: t('profile.ethnicity'), icon: Users },
-    { field: 'zodiac_sign', label: t('profile.zodiac_sign'), icon: Sparkles },
-    { field: 'circumcision', label: t('profile.circumcision'), icon: Banana },
-    { field: 'physical_disability', label: t('profile.physical_disability'), icon: Accessibility },
-    { field: 'smoking', label: t('profile.smoking'), icon: Cigarette },
-    { field: 'drinking', label: t('profile.drinking'), icon: Wine },
-    { field: 'religion', label: t('profile.religion'), icon: Church },
-    { field: 'education', label: t('profile.education_level'), icon: GraduationCap },
-    { field: 'relationship_status', label: t('profile.relationship_status'), icon: Heart },
-    { field: 'pets', label: t('profile.pets'), icon: PawPrint },
-    { field: 'personality', label: t('profile.personality'), icon: Drama },
-    { field: 'kids_preference', label: t('profile.kids'), icon: Baby },
-    { field: 'dietary', label: t('profile.dietary'), icon: Vegan },
-    { field: 'hiv_aids_status', label: t('profile.hiv_aids_status'), icon: HeartHandshake },
-    { field: 'bdsm_interest', label: t('profile.bdsm_interest'), icon: Panda },
-    { field: 'bdsm_plays', label: t('profile.bdsm_plays'), icon: Ghost },
-    { field: 'bdsm_roles', label: t('profile.bdsm_roles'), icon: Frown },
-  ];
-
-  // Fantasy category names (same as ProfileScreen)
-  const fantasyCategoryNames: Record<string, Record<string, string>> = {
-    joy_or_tabu: { en: 'Joy or Taboo', tr: 'Zevk veya Tabu' },
-    sexual_adventure: { en: 'Sexual Adventure', tr: 'Cinsel Macera' },
-    physical_pref: { en: 'Physical Preference', tr: 'Fiziksel Tercih' },
-    sexual_pref: { en: 'Sexual Preference', tr: 'Cinsel Tercih' },
-    amusement: { en: 'Amusement', tr: 'Eğlence' },
-  };
-
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const handleSwipe = async (direction: 'left' | 'right' = 'right', reactionType: 'like' | 'dislike' | 'superlike' = 'like') => {
+  const handleSwipe = async (direction: 'left' | 'right', reactionType: 'like' | 'dislike' | 'superlike') => {
     const currentProfile = profiles[currentIndex];
 
     if (!currentProfile || !profiles.length) return;
 
     // Check if already processed using ref (synchronous check)
     if (processedProfilesRef.current.has(currentProfile.id)) {
-      // Already processed, remove from profiles list and move to next profile silently
-      const currentIdx = currentIndex;
-      
-      // Remove profile from list and update index
-      setProfiles(prev => {
-        const filtered = prev.filter(p => p.id !== currentProfile.id);
-        
-        // Update index based on filtered list
-        if (filtered.length === 0) {
-          setCurrentIndex(0);
-        } else {
-          // If current index is out of bounds, adjust it
-          const nextIdx = currentIdx >= filtered.length ? filtered.length - 1 : currentIdx;
-          setCurrentIndex(nextIdx);
-        }
-        setCurrentImageIndex(0);
-        
-        return filtered;
-      });
-      
-      // Reset motion values
-      x.set(0);
-      y.set(0);
-      
-      // Trigger exit animation
-      setExitingProfileId(currentProfile.id);
-      setExitDirection(direction);
-      
-      return;
+      return; // Already processed, ignore
     }
 
-    // Store profile reference before removing from list (for match animation)
+    // Store profile reference BEFORE any state changes (for match animation)
     const profileForMatch = { ...currentProfile };
+    const profileId = currentProfile.id;
 
     // Mark as processed immediately
     setProcessedProfiles(prev => {
-      const newSet = new Set(prev).add(currentProfile.id);
+      const newSet = new Set(prev).add(profileId);
       // Update ref immediately for synchronous access
       processedProfilesRef.current = newSet;
       return newSet;
     });
 
-    // Trigger exit animation immediately for better UX
-    setExitingProfileId(currentProfile.id);
-    setExitDirection(direction);
-
-    // Determine reaction type based on direction and explicit type
+    // Determine reaction type - reactionType parameter takes priority
     let reaction: 'like' | 'dislike' | 'favorite' | 'bookmark' | 'superlike' = 'like';
     if (reactionType === 'superlike') {
       reaction = 'superlike';
-    } else if (direction === 'right') {
+    } else if (reactionType === 'dislike') {
+      reaction = 'dislike';
+    } else if (reactionType === 'like') {
       reaction = 'like';
     } else {
-      reaction = 'dislike';
+      // Fallback to direction if reactionType not provided (shouldn't happen)
+      reaction = direction === 'right' ? 'like' : 'dislike';
     }
 
-    // Remove profile from profiles list immediately (don't wait for API)
+    // Reset motion values BEFORE exit animation
+    x.set(0);
+    y.set(0);
+
+    // Trigger exit animation IMMEDIATELY with correct direction
+    setExitingProfileId(profileId);
+    setExitDirection(direction);
+
+    // Remove profile from profiles list AFTER setting exit animation
     const currentIdx = currentIndex;
     setProfiles(prev => {
-      const filtered = prev.filter(p => p.id !== currentProfile.id);
+      const filtered = prev.filter(p => p.id !== profileId);
       
       // Update index synchronously
       if (filtered.length === 0) {
@@ -401,68 +345,90 @@ const MatchScreen: React.FC = () => {
       return filtered;
     });
 
-    // Call API to create match/reaction (fire and forget for better UX)
-    api.call<MatchResponse>(Actions.CMD_MATCH_CREATE, {
-      method: "POST",
-      body: {
-        public_id: currentProfile.public_id,
-        reaction: reaction,
-      },
-    }).then((response) => {
-      console.log('Match API response:', response);
+    // Call API to create match/reaction
+    try {
+      const response = await api.call<MatchResponse>(Actions.CMD_MATCH_CREATE, {
+        method: "POST",
+        body: {
+          public_id: currentProfile.public_id,
+          reaction: reaction,
+        },
+      });
+
+      console.log('🔍 Match API response:', JSON.stringify(response, null, 2));
 
       // Handle response
       if (response) {
         if (reaction === 'like' || reaction === 'superlike') {
-          // Like edildi - history'ye ekle
-          setLikedProfiles(prev => {
-            if (!prev.find(p => p.id === profileForMatch.id)) {
-              return [...prev, profileForMatch];
-            }
-            return prev;
-          });
-
-          // Check if matched - use stored profile reference
-          if (response.matched === true) {
-            console.log('Match detected! Showing animation for profile:', profileForMatch);
+          // Check if matched FIRST - CRITICAL: Check response.matched explicitly
+          console.log('🔎 Checking match status - response.matched:', response.matched, 'type:', typeof response.matched);
+          
+          const isMatched = response.matched === true || 
+            (typeof response.matched === 'string' && (response.matched as string).toLowerCase() === 'true') ||
+            (typeof response.matched === 'number' && response.matched === 1);
+          
+          console.log('🎯 isMatched result:', isMatched);
+          
+          if (isMatched) {
+            console.log('✅ Match detected! Showing animation for profile:', profileForMatch);
+            console.log('🎬 Setting match animation states...');
+            
+            // Add to matched profiles ONLY (not to liked profiles)
             setMatchedProfiles(prev => {
-              if (!prev.find(p => p.id === profileForMatch.id)) {
+              if (!prev.find(p => p.id === profileId)) {
                 return [...prev, profileForMatch];
               }
               return prev;
             });
+            
+            // Remove from liked profiles if it was added before (shouldn't happen but just in case)
+            setLikedProfiles(prev => prev.filter(p => p.id !== profileId));
+            
+            // Show match animation IMMEDIATELY
+            console.log('🎭 Triggering match animation NOW!');
             setMatchedProfile(profileForMatch);
-          setShowMatchAnimation(true);
-          setTimeout(() => {
-            setShowMatchAnimation(false);
+            setShowMatchAnimation(true);
+            
+            // Hide animation after 2.5 seconds
+            setTimeout(() => {
+              console.log('🎬 Hiding match animation...');
+              setShowMatchAnimation(false);
               setMatchedProfile(null);
-          }, 2000);
+            }, 2500);
           } else {
-            console.log('No match - response.matched:', response.matched);
-        }
+            console.log('❌ No match - response.matched:', response.matched, typeof response.matched);
+            
+            // No match - add to liked profiles only
+            setLikedProfiles(prev => {
+              if (!prev.find(p => p.id === profileId)) {
+                return [...prev, profileForMatch];
+              }
+              return prev;
+            });
+          }
         } else if (reaction === 'dislike') {
           // Pass edildi - history'ye ekle
           setPassedProfiles(prev => {
-            if (!prev.find(p => p.id === profileForMatch.id)) {
+            if (!prev.find(p => p.id === profileId)) {
               return [...prev, profileForMatch];
             }
             return prev;
           });
         }
       } else {
-        console.log('No response from API');
+        console.log('⚠️ No response from API');
       }
-    }).catch((error) => {
-      console.error('Error creating match:', error);
+    } catch (error) {
+      console.error('❌ Error creating match:', error);
       // Remove from processed set if API call failed, so user can retry
       setProcessedProfiles(prev => {
         const newSet = new Set(prev);
-        newSet.delete(currentProfile.id);
+        newSet.delete(profileId);
         // Update ref immediately
         processedProfilesRef.current = newSet;
         return newSet;
       });
-    });
+    }
   };
 
   const handleDragEnd = (_event: any, info: PanInfo) => {
@@ -472,18 +438,18 @@ const MatchScreen: React.FC = () => {
     // Check velocity first (fast swipe)
     if (Math.abs(info.velocity.x) > velocityThreshold) {
       if (info.velocity.x > 0) {
-        handleSwipe('right');
+        handleSwipe('right', 'like');
       } else {
-        handleSwipe('left');
+        handleSwipe('left', 'dislike');
       }
       return;
     }
 
     // Check offset (slow drag)
     if (info.offset.x > threshold) {
-      handleSwipe('right');
+      handleSwipe('right', 'like');
     } else if (info.offset.x < -threshold) {
-      handleSwipe('left');
+      handleSwipe('left', 'dislike');
     } else {
       // Spring back to center
       x.set(0);
@@ -542,8 +508,7 @@ const MatchScreen: React.FC = () => {
     x.set(0);
     y.set(0);
     setCurrentImageIndex(0);
-    setShowBottomSheet(false);
-    setActiveTab('about');
+    setShowProfileModal(false);
     // Don't reset exitDirection here - let animation complete first
   }, [currentIndex]);
 
@@ -553,31 +518,20 @@ const MatchScreen: React.FC = () => {
   }, [profiles.length]);
 
   // Fetch matched profiles from API
-  const fetchMatchedProfiles = useCallback(async (cursor: string | null = null, limit: number = 20) => {
+  const fetchMatchedProfiles = useCallback(async (limit: number = 20) => {
     try {
       setIsLoadingMatches(true);
       const response = await api.call<{ users: ApiUser[]; cursor: string | null }>(Actions.CMD_MATCH_FETCH_MATCHED, {
         method: "POST",
         body: {
-          cursor: cursor,
+          cursor: null,
           limit: limit,
         },
       });
       
       if (response && response.users) {
         const mappedMatches = response.users.map(mapApiUserToProfile);
-        
-        if (cursor) {
-          // Append to existing matches (pagination)
-          setMatchedProfiles(prev => [...prev, ...mappedMatches]);
-        } else {
-          // Initial load - replace matches
-          setMatchedProfiles(mappedMatches);
-        }
-        
-        // Update cursor for next page
-        setMatchedProfilesCursor(response.cursor);
-        setHasMoreMatches(response.cursor !== null && response.cursor !== undefined);
+        setMatchedProfiles(mappedMatches);
       }
     } catch (error) {
       console.error('Error fetching matched profiles:', error);
@@ -587,31 +541,20 @@ const MatchScreen: React.FC = () => {
   }, [mapApiUserToProfile]);
 
   // Fetch liked profiles from API
-  const fetchLikedProfiles = useCallback(async (cursor: string | null = null, limit: number = 20) => {
+  const fetchLikedProfiles = useCallback(async (limit: number = 20) => {
     try {
       setIsLoadingLiked(true);
       const response = await api.call<{ users: ApiUser[]; cursor: string | null }>(Actions.CMD_MATCH_FETCH_LIKED, {
         method: "POST",
         body: {
-          cursor: cursor,
+          cursor: null,
           limit: limit,
         },
       });
       
       if (response && response.users) {
         const mappedLiked = response.users.map(mapApiUserToProfile);
-        
-        if (cursor) {
-          // Append to existing liked profiles (pagination)
-          setLikedProfiles(prev => [...prev, ...mappedLiked]);
-        } else {
-          // Initial load - replace liked profiles
-          setLikedProfiles(mappedLiked);
-        }
-        
-        // Update cursor for next page
-        setLikedProfilesCursor(response.cursor);
-        setHasMoreLiked(response.cursor !== null && response.cursor !== undefined);
+        setLikedProfiles(mappedLiked);
       }
     } catch (error) {
       console.error('Error fetching liked profiles:', error);
@@ -621,31 +564,20 @@ const MatchScreen: React.FC = () => {
   }, [mapApiUserToProfile]);
 
   // Fetch passed profiles from API
-  const fetchPassedProfiles = useCallback(async (cursor: string | null = null, limit: number = 20) => {
+  const fetchPassedProfiles = useCallback(async (limit: number = 20) => {
     try {
       setIsLoadingPassed(true);
       const response = await api.call<{ users: ApiUser[]; cursor: string | null }>(Actions.CMD_MATCH_FETCH_PASSED, {
         method: "POST",
         body: {
-          cursor: cursor,
+          cursor: null,
           limit: limit,
         },
       });
       
       if (response && response.users) {
         const mappedPassed = response.users.map(mapApiUserToProfile);
-        
-        if (cursor) {
-          // Append to existing passed profiles (pagination)
-          setPassedProfiles(prev => [...prev, ...mappedPassed]);
-        } else {
-          // Initial load - replace passed profiles
-          setPassedProfiles(mappedPassed);
-        }
-        
-        // Update cursor for next page
-        setPassedProfilesCursor(response.cursor);
-        setHasMorePassed(response.cursor !== null && response.cursor !== undefined);
+        setPassedProfiles(mappedPassed);
       }
     } catch (error) {
       console.error('Error fetching passed profiles:', error);
@@ -667,73 +599,23 @@ const MatchScreen: React.FC = () => {
     fetchPassedProfilesRef.current = fetchPassedProfiles;
   }, [fetchPassedProfiles]);
 
-  // Load matched profiles when matches tab is selected (only once)
-  useEffect(() => {
-    if (historyTab === 'matches') {
-      // Check if we need to load matches
-      if (!hasLoadedMatchesRef.current && !isLoadingMatchesRef.current) {
-        setHasLoadedMatches(true);
-        fetchMatchedProfilesRef.current?.(null, 20);
-      }
-    } else {
-      // Reset flag when switching away from matches tab
-      setHasLoadedMatches(false);
-    }
-  }, [historyTab]); // Only depend on historyTab to avoid infinite loops
-
-  // Load liked profiles when liked tab is selected (only once)
-  useEffect(() => {
-    if (historyTab === 'liked') {
-      // Check if we need to load liked profiles
-      if (!hasLoadedLikedRef.current && !isLoadingLikedRef.current) {
-        setHasLoadedLiked(true);
-        fetchLikedProfilesRef.current?.(null, 20);
-      }
-    } else {
-      // Reset flag when switching away from liked tab
-      setHasLoadedLiked(false);
-    }
-  }, [historyTab]); // Only depend on historyTab to avoid infinite loops
-
-  // Load passed profiles when passed tab is selected (only once)
-  useEffect(() => {
-    if (historyTab === 'passed') {
-      // Check if we need to load passed profiles
-      if (!hasLoadedPassedRef.current && !isLoadingPassedRef.current) {
-        setHasLoadedPassed(true);
-        fetchPassedProfilesRef.current?.(null, 20);
-      }
-    } else {
-      // Reset flag when switching away from passed tab
-      setHasLoadedPassed(false);
-    }
-  }, [historyTab]); // Only depend on historyTab to avoid infinite loops
-
   // Load all history data on initial mount
   useEffect(() => {
     // Load matches, liked, and passed profiles on page load
     if (!hasLoadedMatchesRef.current && !isLoadingMatchesRef.current) {
       setHasLoadedMatches(true);
-      fetchMatchedProfilesRef.current?.(null, 20);
+      fetchMatchedProfilesRef.current?.(20);
     }
     if (!hasLoadedLikedRef.current && !isLoadingLikedRef.current) {
       setHasLoadedLiked(true);
-      fetchLikedProfilesRef.current?.(null, 20);
+      fetchLikedProfilesRef.current?.(20);
     }
     if (!hasLoadedPassedRef.current && !isLoadingPassedRef.current) {
       setHasLoadedPassed(true);
-      fetchPassedProfilesRef.current?.(null, 20);
+      fetchPassedProfilesRef.current?.(20);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run once on mount
-
-  // Format join date
-  const formatJoinDate = (dateString?: string) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const locale = defaultLanguage === 'tr' ? 'tr-TR' : 'en-US';
-    return `${t('profile.joined') || 'Joined'} ${date.toLocaleDateString(locale, { month: 'long', year: 'numeric' })}`;
-  };
 
   // Handle send message - create chat and navigate
   const handleSendMessage = async (profile: Profile) => {
@@ -810,65 +692,12 @@ const MatchScreen: React.FC = () => {
   }
 
   return (
-    <Container>
-      <div className='grid sm:grid-cols-2 grid-cols-1 gap-2'>
-        <div className='w-full'>
-      {profiles.length === 0 ? (
-        <div className="flex items-center justify-center p-4 h-[100dvh] min-h-[60dvh] md:min-h-[75dvh]">
-          <div className="text-center">
-            <div className={`rounded-3xl flex flex-col gap-2 h-[100dvh] justify-center items-center p-8 mb-6 ${theme === 'dark' 
-              ? 'bg-white/5' 
-              : 'bg-gray-50'
-            }`}>
-              <Heart className={`w-16 h-16 mx-auto mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
-              <p className={`text-base font-semibold mb-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-              {t('match.no_profiles') || 'No profiles to show right now. Come back soon!'}
-              </p>
-              <motion.button
-                className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all ${
-                  theme === 'dark'
-                    ? 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
-                    : 'bg-gray-900 text-white hover:bg-gray-800 border border-gray-300'
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={async () => {
-                  try {
-                    setIsLoading(true);
-                    const response = await api.call<{ users: ApiUser[] } | ApiUser[]>(Actions.CMD_MATCH_GET_UNSEEN, {
-                      method: "POST",
-                      body: { limit: 100 },
-                    });
-                    
-                    let apiUsers: ApiUser[] = [];
-                    if (Array.isArray(response)) {
-                      apiUsers = response;
-                    } else if (response && typeof response === 'object' && 'users' in response) {
-                      apiUsers = response.users;
-                    }
-                    
-                    const mappedProfiles = apiUsers.map(mapApiUserToProfile);
-                    setProfiles(mappedProfiles);
-                  } catch (error) {
-                    console.error('Error fetching profiles:', error);
-                  } finally {
-                    setIsLoading(false);
-                  }
-                }}
-                disabled={isLoading}
-              >
-                <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                <span>{t('match.refresh') || 'Refresh'}</span>
-              </motion.button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
+    <>
+      {/* Match Animation - Outside Container for full screen display */}
       <AnimatePresence>
         {showMatchAnimation && matchedProfile && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+            className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -1036,6 +865,60 @@ const MatchScreen: React.FC = () => {
         )}
       </AnimatePresence>
 
+      <Container>
+        <div className='w-full'>
+      {profiles.length === 0 ? (
+        <div className="flex items-center justify-center p-4 h-[100dvh] min-h-[60dvh] md:min-h-[75dvh]">
+          <div className="text-center">
+            <div className={`rounded-3xl flex flex-col gap-2 h-[100dvh] justify-center items-center p-8 mb-6 ${theme === 'dark' 
+              ? 'bg-white/5' 
+              : 'bg-gray-50'
+            }`}>
+              <Heart className={`w-16 h-16 mx-auto mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
+              <p className={`text-base font-semibold mb-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              {t('match.no_profiles') || 'No profiles to show right now. Come back soon!'}
+              </p>
+              <motion.button
+                className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all ${
+                  theme === 'dark'
+                    ? 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
+                    : 'bg-gray-900 text-white hover:bg-gray-800 border border-gray-300'
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={async () => {
+                  try {
+                    setIsLoading(true);
+                    const response = await api.call<{ users: ApiUser[] } | ApiUser[]>(Actions.CMD_MATCH_GET_UNSEEN, {
+                      method: "POST",
+                      body: { limit: 100 },
+                    });
+                    
+                    let apiUsers: ApiUser[] = [];
+                    if (Array.isArray(response)) {
+                      apiUsers = response;
+                    } else if (response && typeof response === 'object' && 'users' in response) {
+                      apiUsers = response.users;
+                    }
+                    
+                    const mappedProfiles = apiUsers.map(mapApiUserToProfile);
+                    setProfiles(mappedProfiles);
+                  } catch (error) {
+                    console.error('Error fetching profiles:', error);
+                  } finally {
+                    setIsLoading(false);
+                  }
+                }}
+                disabled={isLoading}
+              >
+                <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                <span>{t('match.refresh') || 'Refresh'}</span>
+              </motion.button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
       <motion.div
         className="w-full max-w-md mx-auto  p-4"
         initial={{ opacity: 0 }}
@@ -1079,45 +962,53 @@ const MatchScreen: React.FC = () => {
           <AnimatePresence 
             mode="wait"
             onExitComplete={() => {
+              // Reset exit state after animation completes
               setExitingProfileId(null);
               setExitDirection(null);
             }}
           >
-            <motion.div
-              key={currentProfile.id}
-              ref={cardRef}
-              className="absolute inset-0 z-10"
-              initial={{ scale: 0.96, opacity: 0, y: 20, x: 0, rotate: 0 }}
-              animate={{ scale: 1, opacity: 1, y: 0, x: 0, rotate: 0 }}
-              exit={{
-                x: exitingProfileId === currentProfile.id && exitDirection 
-                  ? (exitDirection === 'right' ? 600 : -600)
-                  : 0,
-                opacity: 0,
-                scale: 0.9,
-                rotate: exitingProfileId === currentProfile.id && exitDirection
-                  ? (exitDirection === 'right' ? 12 : -12)
-                  : 0,
-                transition: {
+            {currentProfile && (
+              <motion.div
+                key={currentProfile.id}
+                ref={cardRef}
+                className="absolute inset-0 z-10"
+                initial={{ scale: 0.96, opacity: 0, y: 20, x: 0, rotate: 0 }}
+                animate={{ 
+                  scale: 1, 
+                  opacity: 1, 
+                  y: 0, 
+                  x: 0, 
+                  rotate: 0 
+                }}
+                exit={{
+                  x: exitingProfileId === currentProfile.id && exitDirection 
+                    ? (exitDirection === 'right' ? 800 : -800)
+                    : 0,
+                  opacity: 0,
+                  scale: 0.85,
+                  rotate: exitingProfileId === currentProfile.id && exitDirection
+                    ? (exitDirection === 'right' ? 15 : -15)
+                    : 0,
+                  transition: {
+                    type: "spring",
+                    damping: 35,
+                    stiffness: 400,
+                    mass: 0.5,
+                    duration: 0.3
+                  }
+                }}
+                transition={{
                   type: "spring",
-                  damping: 40,
-                  stiffness: 300,
-                  mass: 0.6,
-                  duration: 0.25,
-                  ease: [0.4, 0, 0.6, 1]
-                }
-              }}
-              transition={{
-                type: "spring",
-                damping: 25,
-                stiffness: 400
-              }}
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.2}
-              onDragEnd={handleDragEnd}
-              whileDrag={{ cursor: 'grabbing' }}
-            >
+                  damping: 25,
+                  stiffness: 400
+                }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.2}
+                onDragEnd={handleDragEnd}
+                whileDrag={{ cursor: 'grabbing' }}
+                style={{ x, y }}
+              >
               <div
                 className={`h-full rounded-[28px] sm:rounded-[32px] overflow-hidden relative ${theme === 'dark'
                     ? 'bg-[#111111] shadow-2xl shadow-black/60'
@@ -1249,29 +1140,29 @@ const MatchScreen: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Bottom Sheet Toggle Button - Professional & Compact */}
+                      {/* View Profile Button */}
                       <motion.button
-                        className="mt-3 sm:mt-4 backdrop-blur-xl bg-white/15 hover:bg-white/25 active:bg-white/30 p-2 sm:p-2.5 rounded-full border border-white/40 flex items-center justify-center gap-1.5 transition-all duration-200 shadow-lg"
+                        className="mt-3 sm:mt-4 backdrop-blur-xl bg-white/15 hover:bg-white/25 active:bg-white/30 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border border-white/40 flex items-center justify-center gap-2 transition-all duration-200 shadow-lg"
                         whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.25)' }}
                         whileTap={{ scale: 0.98 }}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setShowBottomSheet(true);
+                          setShowProfileModal(true);
                         }}
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 20 }}
                       >
-                        <span className="text-[11px] sm:text-xs font-semibold text-white tracking-tight">{t('match.profile') || 'Profile'}</span>
-                        <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" strokeWidth={3} />
+                        <Info className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" strokeWidth={2.5} />
+                        <span className="text-[11px] sm:text-xs font-semibold text-white tracking-tight">{t('match.view_profile') || 'View Profile'}</span>
                       </motion.button>
                     </motion.div>
                   </div>
                 </div>
 
-                {/* Bottom Sheet - Inside Card */}
+                {/* Profile Bottom Sheet - Inside Card */}
                 <AnimatePresence>
-                  {showBottomSheet && (
+                  {showProfileModal && (
                     <>
                       {/* Backdrop inside card */}
                       <motion.div
@@ -1280,25 +1171,24 @@ const MatchScreen: React.FC = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        onClick={() => setShowBottomSheet(false)}
+                        onClick={() => setShowProfileModal(false)}
                         transition={{ duration: 0.2 }}
                       />
 
-                      {/* Bottom Sheet */}
+                      {/* Compact Profile Sheet */}
                       <motion.div
-                        key={`sheet-${currentProfile.id}`}
-                        className={`absolute bottom-0 left-0 right-0 z-30 ${theme === 'dark' ? 'bg-[#111111]' : 'bg-white'
+                        key={`profile-${currentProfile.id}`}
+                        className={`absolute bottom-0 left-0 right-0 z-40 ${theme === 'dark' ? 'bg-[#111111]' : 'bg-white'
                           } rounded-t-[32px] shadow-2xl`}
                         style={{ maxHeight: '85%' }}
                         initial={{ y: '100%' }}
                         animate={{ y: 0 }}
                         exit={{ y: '100%' }}
-                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                        transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
                       >
                         {/* Handle Bar */}
                         <div className="flex justify-center pt-3 pb-2">
-                          <div className={`w-12 h-1.5 rounded-full ${theme === 'dark' ? 'bg-white/20' : 'bg-gray-300'
-                            }`} />
+                          <div className={`w-12 h-1.5 rounded-full ${theme === 'dark' ? 'bg-white/20' : 'bg-gray-300'}`} />
                         </div>
 
                         {/* Header */}
@@ -1308,525 +1198,21 @@ const MatchScreen: React.FC = () => {
                           </h2>
                           <motion.button
                             className={`p-2 rounded-full ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
-                            onClick={() => setShowBottomSheet(false)}
+                            onClick={() => setShowProfileModal(false)}
                             whileTap={{ scale: 0.95 }}
                           >
                             <X className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-black'}`} />
                           </motion.button>
                         </div>
 
-                        {/* Scrollable Content */}
+                        {/* Scrollable Profile Content */}
                         <div className="overflow-y-auto" style={{ maxHeight: 'calc(85vh - 100px)' }}>
-                          <div className="p-4 sm:p-6">
-                            {/* Tabs Navigation */}
-                            <div className={`flex gap-1.5 sm:gap-2 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b overflow-x-auto scrollbar-hide ${theme === 'dark' ? 'border-white/10' : 'border-gray-200'
-                              }`}>
-                              {[
-                                { id: 'about' as const, label: t('match.about') || 'About', count: null },
-                                { id: 'details' as const, label: t('match.attributes') || 'Attributes', count: currentProfile.user_attributes?.filter(ua => ua.attribute?.name).length || 0 },
-                                { id: 'interests' as const, label: t('match.interests') || 'Interests', count: currentProfile.interests?.length || 0 },
-                                { id: 'fantasies' as const, label: t('match.fantasies') || 'Fantasies', count: currentProfile.fantasies?.length || 0 }
-                              ].map((tab) => (
-                                <motion.button
-                                  key={tab.id}
-                                  onClick={() => setActiveTab(tab.id)}
-                                  className={`px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${activeTab === tab.id
-                                      ? theme === 'dark'
-                                        ? 'bg-white text-black'
-                                        : 'bg-black text-white'
-                                      : theme === 'dark'
-                                        ? 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
-                                        : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-black'
-                                    }`}
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  {tab.label}
-                                  {tab.count !== null && tab.count > 0 && (
-                                    <span className={`ml-1.5 sm:ml-2 px-1.5 sm:px-2 py-0.5 rounded-full text-[10px] sm:text-xs ${activeTab === tab.id
-                                        ? theme === 'dark'
-                                          ? 'bg-black/10'
-                                          : 'bg-white/20'
-                                        : theme === 'dark'
-                                          ? 'bg-white/10'
-                                          : 'bg-gray-200'
-                                      }`}>
-                                      {tab.count}
-                                    </span>
-                                  )}
-                                </motion.button>
-                              ))}
-                            </div>
-
-                            {/* Tab Content */}
-                            <AnimatePresence mode="wait">
-                              <motion.div
-                                key={activeTab}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-                                className="space-y-6"
-                              >
-                                {/* About Tab */}
-                                {activeTab === 'about' && (
-                                  <div className="space-y-6">
-                                    {/* User Info */}
-                                    <div>
-                                      <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                        }`}>{t('match.profile') || 'Profile'}</h3>
-                                      <div className="space-y-3">
-                                        {currentProfile.displayname && (
-                                          <div className={`flex items-center p-4 rounded-2xl border transition-all ${theme === 'dark'
-                                              ? 'bg-white/5 border-white/10 hover:bg-white/10'
-                                              : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-                                            }`}>
-                                            <div className="flex-1">
-                                              <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                                }`}>{t('match.display_name') || 'Display Name'}</p>
-                                              <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'
-                                                }`}>{currentProfile.displayname}</p>
-                                            </div>
-                                          </div>
-                                        )}
-                                        {currentProfile.username && (
-                                          <div className={`flex items-center p-4 rounded-2xl border transition-all ${theme === 'dark'
-                                              ? 'bg-white/5 border-white/10 hover:bg-white/10'
-                                              : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-                                            }`}>
-                                            <div className="flex-1">
-                                              <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                                }`}>{t('match.username') || 'Username'}</p>
-                                              <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'
-                                                }`}>@{currentProfile.username}</p>
-                                            </div>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
-
-                                    {/* Bio */}
-                                    <div>
-                                      <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                        }`}>{t('match.bio') || 'Bio'}</h3>
-                                      <p className={`text-base leading-relaxed font-light ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-                                        }`}>{currentProfile.bio}</p>
-                                    </div>
-
-                                    {/* Meta Info */}
-                                    {(currentProfile.website || currentProfile.created_at) && (
-                                      <div>
-                                        <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                          }`}>{t('match.information') || 'Information'}</h3>
-                                        <div className="space-y-3">
-                                          {currentProfile.website && (
-                                            <div className={`flex items-center p-4 rounded-2xl border transition-all ${theme === 'dark'
-                                                ? 'bg-white/5 border-white/10 hover:bg-white/10'
-                                                : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-                                              }`}>
-                                              <div className={`p-2.5 rounded-xl mr-4 ${theme === 'dark' ? 'bg-white/10' : 'bg-white'
-                                                }`}>
-                                                <Link className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-black'
-                                                  }`} strokeWidth={2} />
-                                              </div>
-                                              <div className="flex-1 min-w-0">
-                                                <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                                  }`}>{t('match.website') || 'Website'}</p>
-                                                <a
-                                                  href={currentProfile.website}
-                                                  target="_blank"
-                                                  rel="noopener noreferrer"
-                                                  className={`text-sm font-semibold hover:underline truncate block ${theme === 'dark' ? 'text-white' : 'text-black'
-                                                    }`}
-                                                >
-                                                  {currentProfile.website.replace(/^https?:\/\//, '')}
-                                                </a>
-                                              </div>
-                                            </div>
-                                          )}
-                                          {currentProfile.created_at && (
-                                            <div className={`flex items-center p-4 rounded-2xl border transition-all ${theme === 'dark'
-                                                ? 'bg-white/5 border-white/10 hover:bg-white/10'
-                                                : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-                                              }`}>
-                                              <div className={`p-2.5 rounded-xl mr-4 ${theme === 'dark' ? 'bg-white/10' : 'bg-white'
-                                                }`}>
-                                                <Calendar className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-black'
-                                                  }`} strokeWidth={2} />
-                                              </div>
-                                              <div>
-                                                <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                                  }`}>{t('match.joined') || 'Joined'}</p>
-                                                <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'
-                                                  }`}>{formatJoinDate(currentProfile.created_at)}</p>
-                                              </div>
-                                            </div>
-                                          )}
-                                        </div>
-                                      </div>
-                                    )}
-
-                                    {/* Stats */}
-                                    {(currentProfile.followers_count !== undefined || currentProfile.following_count !== undefined || currentProfile.posts_count !== undefined) && (
-                                      <div>
-                                        <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                          }`}>{t('match.stats') || 'Stats'}</h3>
-                                        <div className={`rounded-[18px] overflow-hidden ${theme === 'dark'
-                                          ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
-                                          : 'bg-white backdrop-blur-xl border border-black/[0.06]'
-                                          }`}>
-                                          <div className="flex items-center justify-around p-4">
-                                            {currentProfile.posts_count !== undefined && (
-                                              <div className="text-center">
-                                                <p className={`text-[22px] font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                                                  {(currentProfile.posts_count ?? 0).toLocaleString()}
-                                                </p>
-                                                <p className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                                                  {t('profile.posts') || 'Posts'}
-                                                </p>
-                                              </div>
-                                            )}
-                                            {currentProfile.following_count !== undefined && (
-                                              <div className="text-center">
-                                                <p className={`text-[22px] font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                                                  {(currentProfile.following_count ?? 0).toLocaleString()}
-                                                </p>
-                                                <p className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                                                  {t('profile.following') || 'Following'}
-                                                </p>
-                                              </div>
-                                            )}
-                                            {currentProfile.followers_count !== undefined && (
-                                              <div className="text-center">
-                                                <p className={`text-[22px] font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                                                  {(currentProfile.followers_count ?? 0).toLocaleString()}
-                                                </p>
-                                                <p className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                                                  {t('profile.followers') || 'Followers'}
-                                                </p>
-                                              </div>
-                                            )}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    )}
-
-                                    {/* Professional Info in About */}
-                                    {(currentProfile.occupation || currentProfile.education) && (
-                                      <div>
-                                        <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                          }`}>{t('match.professional') || 'Professional'}</h3>
-                                        <div className="space-y-3">
-                                          {currentProfile.occupation && (
-                                            <div className={`flex items-center p-4 rounded-2xl border transition-all ${theme === 'dark'
-                                                ? 'bg-white/5 border-white/10 hover:bg-white/10'
-                                                : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-                                              }`}>
-                                              <div className={`p-2.5 rounded-xl mr-4 ${theme === 'dark' ? 'bg-white/10' : 'bg-white'
-                                                }`}>
-                                                <Briefcase className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-black'
-                                                  }`} strokeWidth={2} />
-                                              </div>
-                                              <div>
-                                                <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                                  }`}>{t('match.occupation') || 'Occupation'}</p>
-                                                <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'
-                                                  }`}>{currentProfile.occupation}</p>
-                                              </div>
-                                            </div>
-                                          )}
-                                          {currentProfile.education && (
-                                            <div className={`flex items-center p-4 rounded-2xl border transition-all ${theme === 'dark'
-                                                ? 'bg-white/5 border-white/10 hover:bg-white/10'
-                                                : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-                                              }`}>
-                                              <div className={`p-2.5 rounded-xl mr-4 ${theme === 'dark' ? 'bg-white/10' : 'bg-white'
-                                                }`}>
-                                                <GraduationCap className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-black'
-                                                  }`} strokeWidth={2} />
-                                              </div>
-                                              <div>
-                                                <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                                  }`}>{t('match.education') || 'Education'}</p>
-                                                <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'
-                                                  }`}>{currentProfile.education}</p>
-                                              </div>
-                                            </div>
-                                          )}
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
-                                )}
-
-                                {/* Details Tab - Attributes */}
-                                {activeTab === 'details' && (
-                                  <div className="space-y-6">
-                                    <div>
-                                      <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                        }`}>{t('match.attributes') || 'Attributes'}</h3>
-                                      <div className={`rounded-[18px] overflow-hidden ${theme === 'dark'
-                                        ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
-                                        : 'bg-white backdrop-blur-xl border border-black/[0.06]'
-                                        }`}>
-                                        {USER_ATTRIBUTES.map((item, index) => {
-                                          // Find attribute from user_attributes
-                                          const currentUserAttribute = currentProfile.user_attributes?.find(
-                                            (ua: any) => ua.category_type === item.field
-                                          );
-
-                                          // Get display value
-                                          let displayValue = '';
-                                          let hasValue = false;
-
-                                          if (currentUserAttribute?.attribute?.name) {
-                                            displayValue = currentUserAttribute.attribute.name[defaultLanguage] ||
-                                              currentUserAttribute.attribute.name.en ||
-                                              Object.values(currentUserAttribute.attribute.name)[0] || '';
-                                            hasValue = !!displayValue;
-                                          }
-
-                                          if (!hasValue) {
-                                            displayValue = t('profile.select_option');
-                                          }
-
-                                          const isLast = index === USER_ATTRIBUTES.length - 1;
-
-                                          return (
-                                            <div
-                                              key={item.field}
-                                              className={`group flex items-center justify-between px-4 py-3 transition-all duration-200 ${!isLast ? `border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}` : ''
-                                                } ${theme === 'dark' ? 'hover:bg-white/[0.03] active:bg-white/[0.05]' : 'hover:bg-black/[0.02] active:bg-black/[0.03]'}`}
-                                            >
-                                              <div className="flex items-center gap-3 min-w-0 flex-1">
-                                                <div className={`p-2.5 rounded-[10px] transition-all duration-200 ${theme === 'dark'
-                                                  ? 'bg-white/[0.08] group-hover:bg-white/[0.12]'
-                                                  : 'bg-black/[0.04] group-hover:bg-black/[0.06]'
-                                                  }`}>
-                                                  <item.icon className={`w-7 h-7 ${theme === 'dark' ? 'text-white/90' : 'text-black/90'}`} />
-                                                </div>
-                                                <span className={`text-[15px] font-medium tracking-[-0.011em] ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                                                  {item.label}
-                                                </span>
-                                              </div>
-                                              <div className="flex items-center gap-2 flex-shrink-0">
-                                                {!hasValue && (
-                                                  <div className={`w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-yellow-400/80' : 'bg-yellow-500/80'}`} />
-                                                )}
-                                                <span className={`text-[13px] font-medium tracking-[-0.006em] whitespace-nowrap ${hasValue
-                                                  ? (theme === 'dark' ? 'text-gray-400' : 'text-gray-500')
-                                                  : (theme === 'dark' ? 'text-yellow-400/90' : 'text-yellow-600/90')
-                                                  }`}>
-                                                  {displayValue}
-                                                </span>
-                                              </div>
-                                            </div>
-                                          );
-                                        })}
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
-
-                                {/* Interests Tab */}
-                                {activeTab === 'interests' && (
-                                  <div>
-                                    <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                      }`}>{t('match.interests') || 'Interests'}</h3>
-                                    {(() => {
-                                      const interestsSource = currentProfile.interests;
-
-                                      if (!interestsSource || interestsSource.length === 0) {
-                                        return (
-                                          <div className={`text-center py-16 rounded-[18px] ${theme === 'dark'
-                                            ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
-                                            : 'bg-white/95 backdrop-blur-xl border border-black/[0.06]'
-                                            }`}>
-                                            <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${theme === 'dark' ? 'bg-white/[0.08]' : 'bg-black/[0.04]'}`}>
-                                              <Heart className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
-                                            </div>
-                                            <p className={`text-[15px] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_interests_added')}</p>
-                                          </div>
-                                        );
-                                      }
-
-                                      // Group interests by category
-                                      const interestsByCategory: Record<string, Array<{ id: string; name: string; emoji?: string; categoryId: string; categoryName: string }>> = {};
-
-                                      interestsSource.forEach((interest: any) => {
-                                        if (typeof interest === 'object' && interest !== null && interest.interest_item) {
-                                          const itemName = interest.interest_item.name[defaultLanguage] ||
-                                            interest.interest_item.name.en ||
-                                            Object.values(interest.interest_item.name)[0] ||
-                                            `Interest ${interest.interest_item.id}`;
-
-                                          const categoryId = interest.interest_item.interest_id || interest.interest_item.interest?.id || 'other';
-                                          const categoryName = interest.interest_item.interest?.name?.[defaultLanguage] ||
-                                            interest.interest_item.interest?.name?.en ||
-                                            (interest.interest_item.interest?.name ? Object.values(interest.interest_item.interest.name)[0] : null) ||
-                                            'Other';
-
-                                          if (!interestsByCategory[categoryId]) {
-                                            interestsByCategory[categoryId] = [];
-                                          }
-
-                                          interestsByCategory[categoryId].push({
-                                            id: interest.interest_item.id || interest.id,
-                                            name: itemName,
-                                            emoji: interest.interest_item.emoji,
-                                            categoryId,
-                                            categoryName,
-                                          });
-                                        }
-                                      });
-
-                                      return (
-                                        <div className="space-y-3">
-                                          {Object.entries(interestsByCategory).map(([categoryId, categoryInterests]) => {
-                                            const categoryName = categoryInterests[0]?.categoryName || 'Other';
-                                            return (
-                                              <div
-                                                key={categoryId}
-                                                className={`rounded-[18px] overflow-hidden ${theme === 'dark'
-                                                  ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
-                                                  : 'bg-white backdrop-blur-xl border border-black/[0.06]'
-                                                  }`}
-                                              >
-                                                <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
-                                                  <h3 className={`text-[11px] font-bold uppercase tracking-[0.08em] ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
-                                                    {categoryName}
-                                                  </h3>
-                                                </div>
-                                                <div className="p-3.5 flex flex-wrap gap-2">
-                                                  {categoryInterests.map((item, index) => (
-                                                    <motion.span
-                                                      key={item.id}
-                                                      className={`inline-flex items-center gap-1.5 px-4 py-2 text-[14px] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
-                                                        ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
-                                                        : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
-                                                        }`}
-                                                      initial={{ opacity: 0, scale: 0 }}
-                                                      animate={{ opacity: 1, scale: 1 }}
-                                                      transition={{ delay: 0.7 + index * 0.05, duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-                                                    >
-                                                      {item.emoji && <span className="text-[15px] leading-none">{item.emoji}</span>}
-                                                      <span>{item.name}</span>
-                                                    </motion.span>
-                                                  ))}
-                                                </div>
-                                              </div>
-                                            );
-                                          })}
-                                        </div>
-                                      );
-                                    })()}
-                                  </div>
-                                )}
-
-                                {/* Fantasies Tab */}
-                                {activeTab === 'fantasies' && (
-                                  <div>
-                                    <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                                      }`}>{t('match.fantasies_preferences') || 'Fantasies & Preferences'}</h3>
-                                    {currentProfile.fantasies && currentProfile.fantasies.length > 0 ? (
-                                      (() => {
-                                        // Group fantasies by category
-                                        const fantasiesByCategory: Record<string, typeof currentProfile.fantasies> = {};
-                                        currentProfile.fantasies.forEach((f) => {
-                                          const categoryId = f.fantasy?.category || 'other';
-                                          if (!fantasiesByCategory[categoryId]) {
-                                            fantasiesByCategory[categoryId] = [];
-                                          }
-                                          fantasiesByCategory[categoryId].push(f);
-                                        });
-
-                                        return (
-                                          <div className="space-y-3">
-                                            {Object.entries(fantasiesByCategory).map(([categoryId, categoryFantasies]) => {
-                                              const categoryName = fantasyCategoryNames[categoryId]?.[defaultLanguage] ||
-                                                fantasyCategoryNames[categoryId]?.en ||
-                                                categoryId;
-                                              return (
-                                                <div
-                                                  key={categoryId}
-                                                  className={`rounded-[18px] overflow-hidden ${theme === 'dark'
-                                                    ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
-                                                    : 'bg-white backdrop-blur-xl border border-black/[0.06]'
-                                                    }`}
-                                                >
-                                                  <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
-                                                    <h3 className={`text-[11px] font-bold uppercase tracking-[0.08em] ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
-                                                      {categoryName}
-                                                    </h3>
-                                                  </div>
-                                                  <div className="p-3.5 flex flex-wrap gap-2">
-                                                    {categoryFantasies.map((f, index) => {
-                                                      const translation = f.fantasy?.translations?.find(t => t.language === defaultLanguage) ||
-                                                        f.fantasy?.translations?.find(t => t.language === 'en') ||
-                                                        f.fantasy?.translations?.[0];
-                                                      const label = translation?.label || `Fantasy ${f.fantasy_id || f.id}`;
-                                                      return (
-                                                        <motion.span
-                                                          key={f.id || f.fantasy_id}
-                                                          className={`px-4 py-2 text-[14px] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
-                                                            ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
-                                                            : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
-                                                            }`}
-                                                          initial={{ opacity: 0, scale: 0 }}
-                                                          animate={{ opacity: 1, scale: 1 }}
-                                                          transition={{ delay: 0.9 + index * 0.05, duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-                                                        >
-                                                          {label}
-                                                        </motion.span>
-                                                      );
-                                                    })}
-                                                  </div>
-                                                </div>
-                                              );
-                                            })}
-                                          </div>
-                                        );
-                                      })()
-                                    ) : (
-                                      <div className={`text-center py-16 rounded-[18px] ${theme === 'dark'
-                                        ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
-                                        : 'bg-white/95 backdrop-blur-xl border border-black/[0.06]'
-                                        }`}>
-                                        <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${theme === 'dark' ? 'bg-white/[0.08]' : 'bg-black/[0.04]'}`}>
-                                          <Sparkles className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
-                                        </div>
-                                        <p className={`text-[15px] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_fantasies_added')}</p>
-                                      </div>
-                                    )}
-                                  </div>
-                                )}
-
-                                {/* Action Buttons at Bottom */}
-                                <motion.div
-                                  className="pt-4 sm:pt-6 pb-3 sm:pb-4"
-                                  initial={{ opacity: 0, y: 20 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{ duration: 0.3 }}
-                                >
-                                  <motion.button
-                                    className={`w-full flex items-center justify-center gap-2 sm:gap-3 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-sm sm:text-base transition-all ${theme === 'dark'
-                                        ? 'bg-white text-black hover:bg-gray-100'
-                                        : 'bg-black text-white hover:bg-gray-900'
-                                      }`}
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    onClick={() => {
-                                      if (currentProfile) {
-                                        handleSendMessage(currentProfile);
-                                      }
-                                    }}
-                                  >
-                                    <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
-                                    <span>{t('match.send_message') || 'Send Message'}</span>
-                                  </motion.button>
-                                </motion.div>
-                              </motion.div>
-                            </AnimatePresence>
+                          <div className={`${theme === 'dark' ? 'bg-[#111111]' : 'bg-white'}`}>
+                            <ProfileScreen 
+                              inline={true}
+                              isEmbed={true}
+                              username={currentProfile.username}
+                            />
                           </div>
                         </div>
                       </motion.div>
@@ -1834,7 +1220,8 @@ const MatchScreen: React.FC = () => {
                   )}
                 </AnimatePresence>
               </div>
-            </motion.div>
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
 
@@ -1853,7 +1240,7 @@ const MatchScreen: React.FC = () => {
               }`}
             whileHover={{ scale: 1.1, rotate: -15 }}
             whileTap={{ scale: 0.9 }}
-            onClick={() => handleSwipe('left')}
+            onClick={() => handleSwipe('left', 'dislike')}
           >
             <X className={`w-6 h-6 sm:w-7 sm:h-7 ${theme === 'dark' ? 'text-red-400' : 'text-red-600'}`} strokeWidth={2.5} />
           </motion.button>
@@ -1879,7 +1266,7 @@ const MatchScreen: React.FC = () => {
               }`}
             whileHover={{ scale: 1.1, rotate: 15 }}
             whileTap={{ scale: 0.9 }}
-            onClick={() => handleSwipe('right')}
+            onClick={() => handleSwipe('right', 'like')}
           >
             <Heart className="w-6 h-6 sm:w-7 sm:h-7" fill="currentColor" strokeWidth={2} />
           </motion.button>
@@ -1889,335 +1276,278 @@ const MatchScreen: React.FC = () => {
       </motion.div>
       </>
       )}
-      </div>
-
-      {/* History Section - Inline below buttons */}
-      <motion.div
-        className="mt-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.2 }}
-      >
-        {/* Tabs */}
-        <div className={`flex gap-2 px-4 mb-4 overflow-x-auto scrollbar-hide ${theme === 'dark' ? '' : ''
-          }`}>
-          {[
-            { id: 'matches' as const, label: t('match.my_matches') || 'My Matches', icon: Sparkles, count: matchedProfiles.length },
-            { id: 'liked' as const, label: t('match.liked') || 'Liked', icon: Heart, count: likedProfiles.length },
-            { id: 'passed' as const, label: t('match.passed') || 'Passed', icon: Ghost, count: passedProfiles.length }
-          ].map((tab) => (
-            <motion.button
-              key={tab.id}
-              onClick={() => setHistoryTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${historyTab === tab.id
-                  ? theme === 'dark'
-                    ? 'bg-white text-black'
-                    : 'bg-black text-white'
-                  : theme === 'dark'
-                    ? 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
-                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-black'
-                }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <tab.icon className="w-4 h-4" />
-              <span>{tab.label}</span>
-              {tab.count > 0 && (
-                <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${historyTab === tab.id
-                    ? theme === 'dark'
-                      ? 'bg-black/10'
-                      : 'bg-white/20'
-                    : theme === 'dark'
-                      ? 'bg-white/10'
-                      : 'bg-gray-200'
-                  }`}>
-                  {tab.count}
-                </span>
-              )}
-            </motion.button>
-          ))}
         </div>
 
-        {/* Content */}
-        <div className={`w-full overflow-hidden`}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={historyTab}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="p-4 sm:p-6"
-            >
-              {/* Matched Profiles */}
-              {historyTab === 'matches' && (
-                <div className="space-y-4">
-                  {isLoadingMatches && matchedProfiles.length === 0 ? (
-                    <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
-                      }`}>
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
-                      <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                        }`}>
-                        {t('match.loading_matches') || 'Loading matches...'}
-                      </p>
+      {/* History Section - Side by side on desktop, stacked on mobile */}
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6 px-4 pb-6">
+        {/* Matches Column */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Sparkles className={`w-5 h-5 ${theme === 'dark' ? 'text-pink-400' : 'text-pink-500'}`} />
+              <h3 className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                {t('match.my_matches') || 'Matches'}
+              </h3>
+            </div>
+            {matchedProfiles.length > 0 && (
+              <span className={`px-2.5 py-0.5 text-xs font-bold rounded-full ${theme === 'dark' ? 'bg-white/10 text-white' : 'bg-gray-200 text-black'}`}>
+                {matchedProfiles.length}
+              </span>
+            )}
+          </div>
+          
+          {isLoadingMatches && matchedProfiles.length === 0 ? (
+            <div className={`text-center py-8 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'}`}>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white mx-auto mb-2"></div>
+              <p className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                {t('match.loading') || 'Loading...'}
+              </p>
+            </div>
+          ) : matchedProfiles.length === 0 ? (
+            <div className={`text-center py-8 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'}`}>
+              <Sparkles className={`w-8 h-8 mx-auto mb-2 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+              <p className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                {t('match.no_matches') || 'No matches'}
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                {(expandedMatches ? matchedProfiles : matchedProfiles.slice(0, 6)).map((profile) => (
+                  <motion.div
+                    key={profile.id}
+                    className="relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer group"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <img
+                      src={profile.images[0]}
+                      alt={profile.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-2">
+                      <h3 className="text-white font-semibold text-xs truncate">
+                        {profile.name}, {profile.age}
+                      </h3>
                     </div>
-                  ) : matchedProfiles.length === 0 ? (
-                    <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
-                      }`}>
-                      <Sparkles className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
-                        }`} />
-                      <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                        }`}>
-                        {t('match.no_matches') || 'No matches yet'}
-                      </p>
+                    <div className="absolute top-2 right-2">
+                      <Sparkles className="w-4 h-4 text-pink-500" fill="currentColor" />
                     </div>
-                  ) : (
-                    <>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                      {matchedProfiles.map((profile) => (
-                        <motion.div
-                          key={profile.id}
-                          className="relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer group"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <img
-                            src={profile.images[0]}
-                            alt={profile.name}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                          <div className="absolute bottom-0 left-0 right-0 p-3">
-                            <h3 className="text-white font-semibold text-sm truncate">
-                              {profile.name}, {profile.age}
-                            </h3>
-                          </div>
-                          <div className="absolute top-2 right-2">
-                            <Sparkles className="w-5 h-5 text-pink-500" fill="currentColor" />
-                          </div>
-                          {/* Send Message Button - Icon */}
-                          <motion.button
-                            className={`absolute bottom-3 right-3 w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-xl text-white bg-white/20 rounded-full border border-white/30`}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ 
-                              type: "spring",
-                              stiffness: 300,
-                              damping: 20
-                            }}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (profile) {
-                                handleSendMessage(profile);
-                              }
-                            }}
-                          >
-                            <MessageCircle className="w-5 h-5" strokeWidth={2.5} />
-                          </motion.button>
-                        </motion.div>
-                      ))}
-                    </div>
-                      {/* Load More Button */}
-                      {hasMoreMatches && (
-                        <div className="flex justify-center mt-6">
-                          <motion.button
-                            className={`px-6 py-3 rounded-full text-sm font-semibold transition-all ${theme === 'dark'
-                              ? 'bg-white/10 text-white hover:bg-white/20'
-                              : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-                            }`}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => fetchMatchedProfiles(matchedProfilesCursor, 20)}
-                            disabled={isLoadingMatches}
-                          >
-                            {isLoadingMatches ? (
-                              <span className="flex items-center gap-2">
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
-                                {t('match.loading') || 'Loading...'}
-                              </span>
-                            ) : (
-                              t('match.load_more') || 'Load More'
-                            )}
-                          </motion.button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
+                    <motion.button
+                      className="absolute bottom-2 right-2 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-xl text-white bg-white/20 border border-white/30"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSendMessage(profile);
+                      }}
+                    >
+                      <MessageCircle className="w-4 h-4" strokeWidth={2.5} />
+                    </motion.button>
+                  </motion.div>
+                ))}
+              </div>
+              {matchedProfiles.length > 6 && (
+                <motion.button
+                  className={`w-full py-2.5 text-sm font-semibold rounded-xl transition-all ${
+                    theme === 'dark' 
+                      ? 'bg-white/10 text-white hover:bg-white/15 border border-white/10' 
+                      : 'bg-gray-100 text-gray-900 hover:bg-gray-200 border border-gray-200'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setExpandedMatches(!expandedMatches)}
+                >
+                  {expandedMatches 
+                    ? t('match.show_less') || 'Show Less'
+                    : `${t('match.view_all') || 'View All'} (${matchedProfiles.length})`
+                  }
+                </motion.button>
               )}
+            </div>
+          )}
+        </motion.div>
 
-              {/* Liked Profiles */}
-              {historyTab === 'liked' && (
-                <div className="space-y-4">
-                  {isLoadingLiked && likedProfiles.length === 0 ? (
-                    <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
-                      }`}>
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
-                      <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                        }`}>
-                        {t('match.loading_liked') || 'Loading liked profiles...'}
-                      </p>
+        {/* Liked Column */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Heart className={`w-5 h-5 ${theme === 'dark' ? 'text-pink-400' : 'text-pink-500'}`} />
+              <h3 className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                {t('match.liked') || 'Liked'}
+              </h3>
+            </div>
+            {likedProfiles.length > 0 && (
+              <span className={`px-2.5 py-0.5 text-xs font-bold rounded-full ${theme === 'dark' ? 'bg-white/10 text-white' : 'bg-gray-200 text-black'}`}>
+                {likedProfiles.length}
+              </span>
+            )}
+          </div>
+          
+          {isLoadingLiked && likedProfiles.length === 0 ? (
+            <div className={`text-center py-8 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'}`}>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white mx-auto mb-2"></div>
+              <p className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                {t('match.loading') || 'Loading...'}
+              </p>
+            </div>
+          ) : likedProfiles.length === 0 ? (
+            <div className={`text-center py-8 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'}`}>
+              <Heart className={`w-8 h-8 mx-auto mb-2 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+              <p className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                {t('match.no_profiles_liked') || 'No likes'}
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                {(expandedLiked ? likedProfiles : likedProfiles.slice(0, 6)).map((profile) => (
+                  <motion.div
+                    key={profile.id}
+                    className="relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer group"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <img
+                      src={profile.images[0]}
+                      alt={profile.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-2">
+                      <h3 className="text-white font-semibold text-xs truncate">
+                        {profile.name}, {profile.age}
+                      </h3>
                     </div>
-                  ) : likedProfiles.length === 0 ? (
-                    <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
-                      }`}>
-                      <Heart className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
-                        }`} />
-                      <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                        }`}>
-                        {t('match.no_profiles_liked') || 'No profiles liked yet'}
-                      </p>
+                    <div className="absolute top-2 right-2">
+                      <Heart className="w-4 h-4 text-pink-500" fill="currentColor" />
                     </div>
-                  ) : (
-                    <>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                      {likedProfiles.map((profile) => (
-                        <motion.div
-                          key={profile.id}
-                          className="relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer group"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                          <img
-                            src={profile.images[0]}
-                            alt={profile.name}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                          <div className="absolute bottom-0 left-0 right-0 p-3">
-                            <h3 className="text-white font-semibold text-sm truncate">
-                              {profile.name}, {profile.age}
-                            </h3>
-                          </div>
-                          <div className="absolute top-2 right-2">
-                            <Heart className="w-5 h-5 text-pink-500" fill="currentColor" />
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                      {/* Load More Button */}
-                      {hasMoreLiked && (
-                        <div className="flex justify-center mt-6">
-                          <motion.button
-                            className={`px-6 py-3 rounded-full text-sm font-semibold transition-all ${theme === 'dark'
-                              ? 'bg-white/10 text-white hover:bg-white/20'
-                              : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-                            }`}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => fetchLikedProfilesRef.current?.(likedProfilesCursor, 20)}
-                            disabled={isLoadingLiked}
-                          >
-                            {isLoadingLiked ? (
-                              <span className="flex items-center gap-2">
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
-                                {t('match.loading') || 'Loading...'}
-                              </span>
-                            ) : (
-                              t('match.load_more') || 'Load More'
-                            )}
-                          </motion.button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
+                  </motion.div>
+                ))}
+              </div>
+              {likedProfiles.length > 6 && (
+                <motion.button
+                  className={`w-full py-2.5 text-sm font-semibold rounded-xl transition-all ${
+                    theme === 'dark' 
+                      ? 'bg-white/10 text-white hover:bg-white/15 border border-white/10' 
+                      : 'bg-gray-100 text-gray-900 hover:bg-gray-200 border border-gray-200'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setExpandedLiked(!expandedLiked)}
+                >
+                  {expandedLiked 
+                    ? t('match.show_less') || 'Show Less'
+                    : `${t('match.view_all') || 'View All'} (${likedProfiles.length})`
+                  }
+                </motion.button>
               )}
+            </div>
+          )}
+        </motion.div>
 
-              {/* Passed Profiles */}
-              {historyTab === 'passed' && (
-                <div className="space-y-4">
-                  {isLoadingPassed && passedProfiles.length === 0 ? (
-                    <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
-                      }`}>
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
-                      <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                        }`}>
-                        {t('match.loading_passed') || 'Loading passed profiles...'}
-                      </p>
+        {/* Passed Column */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.3 }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Ghost className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+              <h3 className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                {t('match.passed') || 'Passed'}
+              </h3>
+            </div>
+            {passedProfiles.length > 0 && (
+              <span className={`px-2.5 py-0.5 text-xs font-bold rounded-full ${theme === 'dark' ? 'bg-white/10 text-white' : 'bg-gray-200 text-black'}`}>
+                {passedProfiles.length}
+              </span>
+            )}
+          </div>
+          
+          {isLoadingPassed && passedProfiles.length === 0 ? (
+            <div className={`text-center py-8 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'}`}>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white mx-auto mb-2"></div>
+              <p className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                {t('match.loading') || 'Loading...'}
+              </p>
+            </div>
+          ) : passedProfiles.length === 0 ? (
+            <div className={`text-center py-8 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'}`}>
+              <Ghost className={`w-8 h-8 mx-auto mb-2 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+              <p className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                {t('match.no_profiles_passed') || 'No passes'}
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                {(expandedPassed ? passedProfiles : passedProfiles.slice(0, 6)).map((profile) => (
+                  <motion.div
+                    key={profile.id}
+                    className="relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer group opacity-60"
+                    whileHover={{ scale: 1.02, opacity: 0.8 }}
+                    whileTap={{ scale: 0.98 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 0.6, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <img
+                      src={profile.images[0]}
+                      alt={profile.name}
+                      className="w-full h-full object-cover grayscale"
+                    />
+                    <div className="absolute inset-0 bg-black/50" />
+                    <div className="absolute bottom-0 left-0 right-0 p-2">
+                      <h3 className="text-white font-semibold text-xs truncate">
+                        {profile.name}, {profile.age}
+                      </h3>
                     </div>
-                  ) : passedProfiles.length === 0 ? (
-                    <div className={`text-center py-12 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
-                      }`}>
-                      <Ghost className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
-                        }`} />
-                      <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                        }`}>
-                        {t('match.no_profiles_passed') || 'No profiles passed yet'}
-                      </p>
+                    <div className="absolute top-2 right-2">
+                      <Ghost className="w-4 h-4 text-red-500" strokeWidth={3} />
                     </div>
-                  ) : (
-                    <>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                      {passedProfiles.map((profile) => (
-                        <motion.div
-                          key={profile.id}
-                          className="relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer group opacity-60"
-                          whileHover={{ scale: 1.02, opacity: 0.8 }}
-                          whileTap={{ scale: 0.98 }}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 0.6, y: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                          <img
-                            src={profile.images[0]}
-                            alt={profile.name}
-                            className="w-full h-full object-cover grayscale"
-                          />
-                          <div className="absolute inset-0 bg-black/50" />
-                          <div className="absolute bottom-0 left-0 right-0 p-3">
-                            <h3 className="text-white font-semibold text-sm truncate">
-                              {profile.name}, {profile.age}
-                            </h3>
-                          </div>
-                          <div className="absolute top-2 right-2">
-                            <Ghost className="w-5 h-5 text-red-500" strokeWidth={3} />
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                      {/* Load More Button */}
-                      {hasMorePassed && (
-                        <div className="flex justify-center mt-6">
-                          <motion.button
-                            className={`px-6 py-3 rounded-full text-sm font-semibold transition-all ${theme === 'dark'
-                              ? 'bg-white/10 text-white hover:bg-white/20'
-                              : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-                            }`}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => fetchPassedProfilesRef.current?.(passedProfilesCursor, 20)}
-                            disabled={isLoadingPassed}
-                          >
-                            {isLoadingPassed ? (
-                              <span className="flex items-center gap-2">
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
-                                {t('match.loading') || 'Loading...'}
-                              </span>
-                            ) : (
-                              t('match.load_more') || 'Load More'
-                            )}
-                          </motion.button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
+                  </motion.div>
+                ))}
+              </div>
+              {passedProfiles.length > 6 && (
+                <motion.button
+                  className={`w-full py-2.5 text-sm font-semibold rounded-xl transition-all ${
+                    theme === 'dark' 
+                      ? 'bg-white/10 text-white hover:bg-white/15 border border-white/10' 
+                      : 'bg-gray-100 text-gray-900 hover:bg-gray-200 border border-gray-200'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setExpandedPassed(!expandedPassed)}
+                >
+                  {expandedPassed 
+                    ? t('match.show_less') || 'Show Less'
+                    : `${t('match.view_all') || 'View All'} (${passedProfiles.length})`
+                  }
+                </motion.button>
               )}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </motion.div>
+            </div>
+          )}
+        </motion.div>
       </div>
     </Container>
+    </>
   );
 };
 

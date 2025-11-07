@@ -208,7 +208,10 @@
     "loading_passed": "Loading passed profiles...",
     "no_profiles_passed": "No profiles passed yet",
     "active": "Active",
-    "match": "MATCH"
+    "match": "MATCH",
+    "view_all": "View All",
+    "show_less": "Show Less",
+    "view_profile": "View Profile"
   },
   "messages": {
     "chat": "Chat",

@@ -208,7 +208,10 @@
     "loading_passed": "Pas geçilen profiller yükleniyor...",
     "no_profiles_passed": "Henüz pas geçilen profil yok",
     "active": "Aktif",
-    "match": "EŞLEŞME"
+    "match": "EŞLEŞME",
+    "view_all": "Tümünü Gör",
+    "show_less": "Daha Az Göster",
+    "view_profile": "Profili Gör"
   },
   "messages": {
     "chat": "Sohbet",
