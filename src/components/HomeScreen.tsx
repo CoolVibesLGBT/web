@@ -297,36 +297,22 @@ const HomeScreen: React.FC = () => {
       {/* CreatePost Modal - Mobile Full Screen */}
       <AnimatePresence>
         {isCreatePostOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[999] bg-black/80 backdrop-blur-sm lg:hidden"
-              onClick={() => setIsCreatePostOpen(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[1000] lg:hidden overflow-y-auto"
-            >
-              <div className={`min-h-full ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+         
                 <CreatePost
                   title="Create Post"
                   buttonText="Post"
+                  fullScreen={true}
+                  
                   placeholder="Every vibe tells a story. What's yours? 🌈"
                   canClose={true}
                   onClose={() => setIsCreatePostOpen(false)}
                   onPostCreated={() => {
+
                     setIsCreatePostOpen(false);
                     // Posts will be refreshed automatically or user can manually refresh
                   }}
                 />
-              </div>
-            </motion.div>
-          </>
+        
         )}
       </AnimatePresence>
     </div>

@@ -71,93 +71,6 @@ const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (edito
   );
 };
 
-// Popular LGBTQ+ friendly locations
-const popularLocations = [
-  {
-    name: "New York City",
-    country: "🇺🇸 USA",
-    description: "Birthplace of Stonewall, massive Pride parades, queer history",
-    lat: 40.7128,
-    lng: -74.0060
-  },
-  {
-    name: "São Paulo",
-    country: "🇧🇷 Brazil",
-    description: "World's largest Pride parade, huge queer scene",
-    lat: -23.5505,
-    lng: -46.6333
-  },
-  {
-    name: "Berlin",
-    country: "🇩🇪 Germany",
-    description: "Liberal culture, historic queer bars, intense nightlife",
-    lat: 52.5200,
-    lng: 13.4050
-  },
-  {
-    name: "San Francisco",
-    country: "🇺🇸 USA",
-    description: "Castro district, LGBT history museums, heart of activism",
-    lat: 37.7749,
-    lng: -122.4194
-  },
-  {
-    name: "Madrid",
-    country: "🇪🇸 Spain",
-    description: "One of Europe's biggest Pride events, Chueca neighborhood",
-    lat: 40.4168,
-    lng: -3.7038
-  },
-  {
-    name: "Tel Aviv",
-    country: "🇮🇱 Israel",
-    description: "One of Middle East's most liberal cities, vibrant beach and nightlife",
-    lat: 32.0853,
-    lng: 34.7818
-  },
-  {
-    name: "Bangkok",
-    country: "🇹🇭 Thailand",
-    description: "Asia's queer capital, open drag culture and free atmosphere",
-    lat: 13.7563,
-    lng: 100.5018
-  },
-  {
-    name: "Toronto",
-    country: "🇨🇦 Canada",
-    description: "Canada's largest Pride event, Church-Wellesley district",
-    lat: 43.6532,
-    lng: -79.3832
-  },
-  {
-    name: "Amsterdam",
-    country: "🇳🇱 Netherlands",
-    description: "Marriage equality pioneer, canal Pride events",
-    lat: 52.3676,
-    lng: 4.9041
-  },
-  {
-    name: "Mexico City",
-    country: "🇲🇽 Mexico",
-    description: "Rising queer culture in Latin America, huge festivals",
-    lat: 19.4326,
-    lng: -99.1332
-  },
-  {
-    name: "Taipei",
-    country: "🇹🇼 Taiwan",
-    description: "First in Asia to legalize same-sex marriage, free and modern capital",
-    lat: 25.0330,
-    lng: 121.5654
-  },
-  {
-    name: "Istanbul",
-    country: "🇹🇷 Turkey",
-    description: "Strong queer resistance despite challenges, intense cultural production and alternative scenes",
-    lat: 41.0082,
-    lng: 28.9784
-  }
-];
 
 interface CreatePostProps {
   title?: string;
@@ -166,6 +79,7 @@ interface CreatePostProps {
   placeholder?: string;
   buttonText?: string;
   parentPostId?: string;
+  fullScreen?:boolean;
   onReply?: (content: string, parentPostId?: string) => void;
   onPostCreated?: () => void;
 }
@@ -178,6 +92,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   buttonText = "Post",
   parentPostId,
   onReply,
+  fullScreen = false,
   onPostCreated
 }) => {
   const [postText, setPostText] = useState('');
@@ -203,7 +118,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   const [emojiSearchQuery, setEmojiSearchQuery] = useState('');
   const [selectedEmojiCategory, setSelectedEmojiCategory] = useState('smileys');
   const [isGettingLocation, setIsGettingLocation] = useState(false);
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(fullScreen);
   const { theme } = useTheme();
   const maxChars = 500;
   const fileInputRef = useRef<HTMLInputElement>(null);
