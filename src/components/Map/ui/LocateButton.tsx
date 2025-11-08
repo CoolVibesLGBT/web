@@ -47,10 +47,12 @@ export const LocateButton = () => {
         <LocateFixed size={AppConfig.ui.mapIconSize} />
       </button>
       {userPosition && (
-        <CustomMarker
-          item={user}
-        />
-      )}
+  <CustomMarker
+    item={{
+      user
+    }}
+  />
+)}
     </>
   )
 }
