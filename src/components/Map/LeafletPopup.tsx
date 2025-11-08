@@ -56,7 +56,7 @@ const LeafletPopup = ({
 
   return (
     <div className='w-full'>
-      ersan2
+      coolvibes
       </div>
   )
 }
