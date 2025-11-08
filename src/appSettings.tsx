@@ -32,7 +32,7 @@ const domainToSocketURL: Record<string, [string, string]> = {
   'coolvibes.app': ['wss://socket.coolvibes.app', 'wss://socket2.coolvibes.app'],
 };
 
-const remoteDebug = true
+const remoteDebug = false
 const defaultServiceURL: [string, string] = remoteDebug ? ['https://api.coolvibes.app', 'https://api.coolvibes.app'] : ['http://localhost:3001', 'http://localhost:3000'];
 const defaultSocketURL: [string, string] = remoteDebug ? ['wss://socket.coolvibes.app', 'wss://socket2.coolvibes.app'] : ['ws://localhost:3002', 'ws://localhost:3003'];
 
