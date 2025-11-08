@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
-import { Filter, Search, Users, Grid, List, Square, ChevronDown, RefreshCw, MapPin, Users2, X } from 'lucide-react';
+import { Filter, Search, Users, Grid, List, Square, ChevronDown, RefreshCw, MapPin, Users2, X, Map as MapIcon } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { UserCard } from './UserCard';
@@ -11,6 +11,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { globalState, GlobalState } from '../state/nearby'; // atomun tanımlı olduğu dosya
 import Container from './Container';
+import Map from './Map';
 
 
 const NearbyScreen: React.FC = () => {
@@ -109,6 +110,8 @@ const NearbyScreen: React.FC = () => {
     fetchNearbyUsers(true);
   };
 
+  const isMapView = viewMode === 'map';
+
 
 
   return (
@@ -197,6 +200,18 @@ const NearbyScreen: React.FC = () => {
                 >
                   <Square className="w-3.5 h-3.5" />
                 </motion.button>
+                <motion.button
+                  onClick={() => setViewMode('map')}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-2.5 py-1.5 rounded-lg transition-all ${viewMode === 'map'
+                    ? theme === 'dark' ? 'bg-white text-black' : 'bg-gray-900 text-white'
+                    : theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  title="Map View"
+                >
+                  <MapIcon className="w-3.5 h-3.5" />
+                </motion.button>
               </div>
 
               <motion.button
@@ -220,149 +235,155 @@ const NearbyScreen: React.FC = () => {
         </div>
       </div>
 
-      <div
 
-        className="w-full mx-auto max-w-7xl relative"
-        style={{ touchAction: 'pan-y', WebkitOverflowScrolling: 'touch' }}>
+      {isMapView ? (
+        <div className="w-full mt-0">
+          <Map />
+        </div>
+      ) : (
+        <div
+          className="w-full mx-auto max-w-7xl relative"
+          style={{ touchAction: 'pan-y', WebkitOverflowScrolling: 'touch' }}>
 
 
-        {/* Content Wrapper with Non-native Scroll */}
-        <motion.div className="w-full p-2 min-h-full">
-          {/* Users - Different layouts based on viewMode */}
-          {!loadingUsers && state.nearbyUsers.length === 0 && !error ? (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`rounded-2xl p-12 md:p-16 text-center ${theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}
-            >
-              <div className="max-w-md mx-auto">
-                <div className={`w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
-                  <Users className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-400'}`} />
+          {/* Content Wrapper with Non-native Scroll */}
+          <motion.div className="w-full p-2 min-h-full">
+            {/* Users - Different layouts based on viewMode */}
+            {!loadingUsers && state.nearbyUsers.length === 0 && !error ? (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`rounded-2xl p-12 md:p-16 text-center ${theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}
+              >
+                <div className="max-w-md mx-auto">
+                  <div className={`w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+                    <Users className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-400'}`} />
+                  </div>
+                  <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                    No matches found
+                  </h3>
                 </div>
-                <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                  No matches found
-                </h3>
-              </div>
-            </motion.div>
-          ) : (
-            <>
-              {viewMode === 'grid' && (
-                <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                  {state.nearbyUsers.map((user: any, index) => (
-                    <motion.div
-                    key={`view_grid_item${index}`}
-                
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.05 }}
-                    >
-                      <UserCard user={user} viewMode={'compact'} />
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-
-              {viewMode === 'list' && (
-                <div className="space-y-3">
-                  {state.nearbyUsers.map((user: any, index) => (
-                    <motion.div
-                      key={user.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.03 }}
-                    >
-                      <UserCard user={user} viewMode={'list'} />
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-
-              {viewMode === 'card' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-                  {state.nearbyUsers.map((user: any, index) => (
-                    <motion.div
-                      key={user.id}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <UserCard user={user} viewMode={'card'} />
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-
-              <div className='w-full p-2 flex items-center justify-center'>
-                {state.nearByCursor && !loadingMore && (
-                  <motion.button
-                    onClick={() =>{
-                      setLoadingMore(true)
-                      fetchNearbyUsers()
-                    }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`px-6 py-3 rounded-xl font-medium text-sm transition-all ${theme === 'dark'
-                        ? 'bg-white text-black hover:bg-gray-200'
-                        : 'bg-gray-900 text-white hover:bg-gray-800'
-                      }`}
-                  >
-                    Load More
-                  </motion.button>
+              </motion.div>
+            ) : (
+              <>
+                {viewMode === 'grid' && (
+                  <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                    {state.nearbyUsers.map((user: any, index) => (
+                      <motion.div
+                      key={`view_grid_item${index}`}
+                  
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.05 }}
+                      >
+                        <UserCard user={user} viewMode={'compact'} />
+                      </motion.div>
+                    ))}
+                  </div>
                 )}
-              </div>
 
-        
+                {viewMode === 'list' && (
+                  <div className="space-y-3">
+                    {state.nearbyUsers.map((user: any, index) => (
+                      <motion.div
+                        key={user.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.03 }}
+                      >
+                        <UserCard user={user} viewMode={'list'} />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
 
-          {loadingMore || loadingUsers && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`rounded-2xl p-12 md:p-16 text-center ${theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}
-            >
-              <div className="max-w-md mx-auto">
-                <div className={`w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
-                  <RefreshCw className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-400'} animate-spin`} />
+                {viewMode === 'card' && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+                    {state.nearbyUsers.map((user: any, index) => (
+                      <motion.div
+                        key={user.id}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.05 }}
+                      >
+                        <UserCard user={user} viewMode={'card'} />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+
+                <div className='w-full p-2 flex items-center justify-center'>
+                  {state.nearByCursor && !loadingMore && (
+                    <motion.button
+                      onClick={() =>{
+                        setLoadingMore(true)
+                        fetchNearbyUsers()
+                      }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`px-6 py-3 rounded-xl font-medium text-sm transition-all ${theme === 'dark'
+                          ? 'bg-white text-black hover:bg-gray-200'
+                          : 'bg-gray-900 text-white hover:bg-gray-800'
+                        }`}
+                    >
+                      Load More
+                    </motion.button>
+                  )}
                 </div>
-                <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                  Loading nearby users...
-                </h3>
-                <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                  Finding people in your area
-                </p>
-              </div>
-            </motion.div>
-          )}
 
-          {/* Error State */}
-          {error && !loadingUsers && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`rounded-2xl p-6 mb-4 border ${theme === 'dark'
-                ? 'bg-red-900/20 border-red-700 text-red-300'
-                : 'bg-red-50 border-red-200 text-red-700'
-                }`}
-            >
-              <p className="text-sm font-medium">{error}</p>
-              <motion.button
-                onClick={handleRefresh}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`mt-4 px-4 py-2 rounded-xl text-sm font-medium ${theme === 'dark'
-                  ? 'bg-red-900/40 hover:bg-red-900/60'
-                  : 'bg-red-100 hover:bg-red-200'
+          
+
+            {loadingMore || loadingUsers && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`rounded-2xl p-12 md:p-16 text-center ${theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}
+              >
+                <div className="max-w-md mx-auto">
+                  <div className={`w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+                    <RefreshCw className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-400'} animate-spin`} />
+                  </div>
+                  <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                    Loading nearby users...
+                  </h3>
+                  <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Finding people in your area
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Error State */}
+            {error && !loadingUsers && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`rounded-2xl p-6 mb-4 border ${theme === 'dark'
+                  ? 'bg-red-900/20 border-red-700 text-red-300'
+                  : 'bg-red-50 border-red-200 text-red-700'
                   }`}
               >
-                Try Again
-              </motion.button>
-            </motion.div>
-          )}
+                <p className="text-sm font-medium">{error}</p>
+                <motion.button
+                  onClick={handleRefresh}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`mt-4 px-4 py-2 rounded-xl text-sm font-medium ${theme === 'dark'
+                    ? 'bg-red-900/40 hover:bg-red-900/60'
+                    : 'bg-red-100 hover:bg-red-200'
+                    }`}
+                >
+                  Try Again
+                </motion.button>
+              </motion.div>
+            )}
 
-         
-            </>
-          )}
-        </motion.div>
-      </div>
+           
+              </>
+            )}
+          </motion.div>
+        </div>
+      )}
       </Container>
   );
 };

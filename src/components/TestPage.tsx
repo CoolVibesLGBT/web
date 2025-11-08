@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Map from './Map';
 
 const MAX_HEADER_HEIGHT = 200;
 const MIN_HEADER_HEIGHT = 80;
@@ -35,40 +36,9 @@ const TestPage: React.FC = () => {
         WebkitOverflowScrolling: 'touch',
       }}
     >
-      <header
-        style={{
-          height: headerHeight,
-          backgroundColor: '#1E40AF', // Tailwind 'blue-800'
-          color: 'white',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: headerHeight / 4, // Font büyüklüğü header ile orantılı
-          position: 'sticky',
-          top: 0,
-          zIndex: 100,
-          transition: 'height 0.2s ease-out, font-size 0.2s ease-out',
-        }}
-      >
-        Scaling Header
-      </header>
 
-      <main style={{ padding: 16 }}>
-        {Array.from({ length: 30 }).map((_, i) => (
-          <div
-            key={i}
-            style={{
-              marginBottom: 16,
-              backgroundColor: '#f3f4f6', // Tailwind 'gray-100'
-              padding: 16,
-              borderRadius: 8,
-              boxShadow: '0 1px 3px rgb(0 0 0 / 0.1)',
-            }}
-          >
-            Content item {i + 1}
-          </div>
-        ))}
-      </main>
+<Map/>
+ 
     </div>
   );
 };

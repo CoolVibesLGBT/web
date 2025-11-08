@@ -20,7 +20,7 @@ import {
 import { DEFAULT_SETTINGS, INITIAL_SETTINGS, SettingName } from '../appSettings';
 
 
-type ViewMode = 'grid' | 'list' | 'card';
+type ViewMode = 'grid' | 'list' | 'card' | 'map';
 
 type SettingsContextShape = {
   setOption: (name: SettingName, value: boolean) => void;
@@ -36,7 +36,7 @@ const Context: React.Context<SettingsContextShape> = createContext<SettingsConte
     return;
   },
   settings: INITIAL_SETTINGS,
-  viewMode: 'grid' as ViewMode,
+  viewMode: 'map' as ViewMode,
   setViewMode: (_mode: ViewMode) => {
     return;
   },
@@ -52,7 +52,7 @@ export const SettingsContext = ({
   children: ReactNode;
 }): JSX.Element => {
   const [settings, setSettings] = useState(INITIAL_SETTINGS);
-  const [viewMode, setViewModeState] = useState<ViewMode>('grid');
+  const [viewMode, setViewModeState] = useState<ViewMode>('map');
   const [showBottomBar, setShowBottomBar] = useState(true);
 
   const setOption = useCallback((setting: SettingName, value: boolean) => {
@@ -71,7 +71,7 @@ export const SettingsContext = ({
   // Load viewMode from localStorage on mount
   React.useEffect(() => {
     const savedViewMode = localStorage.getItem('viewMode') as ViewMode | null;
-    if (savedViewMode && ['grid', 'list', 'card'].includes(savedViewMode)) {
+    if (savedViewMode && ['grid', 'list', 'card', 'map'].includes(savedViewMode)) {
       setViewModeState(savedViewMode);
     }
   }, []);

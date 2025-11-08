@@ -377,7 +377,8 @@ function App() {
               <Route path="/" element={<HomeScreen />} />
               <Route path="/home" element={<HomeScreen />} />
               <Route path="/pride" element={<HomeScreen />} />
-              
+              <Route path="/testpage" element={<TestPage />} />
+
               {/* Profile Routes */}
               <Route path="/:username" element={<ProfileScreen />} />
               <Route path="/:username/status/:postId" element={<HomeScreen />} />
