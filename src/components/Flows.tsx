@@ -253,6 +253,7 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
       {/* Create Post - Hidden on mobile */}
       <div className={`hidden lg:block ${theme === 'dark' ? 'bg-black border-b border-black' : 'bg-white border-b border-gray-100'}`}>
         <CreatePost
+        fullScreen={false}
           title="Create Post"
           buttonText="Post"
           placeholder="Every vibe tells a story. What's yours? 🌈"

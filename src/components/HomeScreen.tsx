@@ -278,7 +278,9 @@ const HomeScreen: React.FC = () => {
       {/* FAB Button - Mobile Only, Flows Tab Only */}
       {!selectedPost && activeTab === 'flows' && (
         <motion.button
-          onClick={() => setIsCreatePostOpen(true)}
+          onClick={() => {
+            setIsCreatePostOpen(true)
+          }}
           className="lg:hidden fixed bottom-24 right-4 z-[60] w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -309,7 +311,7 @@ const HomeScreen: React.FC = () => {
                   onPostCreated={() => {
 
                     setIsCreatePostOpen(false);
-                    // Posts will be refreshed automatically or user can manually refresh
+                  
                   }}
                 />
         
