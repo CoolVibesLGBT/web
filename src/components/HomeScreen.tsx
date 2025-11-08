@@ -281,7 +281,7 @@ const HomeScreen: React.FC = () => {
           onClick={() => {
             setIsCreatePostOpen(true)
           }}
-          className="lg:hidden fixed bottom-24 right-4 z-[60] w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all"
+          className="lg:hidden fixed bottom-24 right-4 z-[10] w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           whileHover={{ scale: 1.1 }}
