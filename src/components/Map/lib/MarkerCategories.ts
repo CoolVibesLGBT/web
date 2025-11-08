@@ -29,7 +29,7 @@ const MarkerCategories: MarkerCategoryType = {
   [Category.USER]: {
     name: 'USER',
     icon: Users,
-    color: colors.green[400],
+    color: colors.white,
   },
   [Category.TREASURY]: {
     name: 'TREASURY',

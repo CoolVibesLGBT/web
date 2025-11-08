@@ -12,7 +12,7 @@ export const AppConfig = {
     menuIconSize: 16,
     topBarIconSize: 0,
   },
-  initialZoom:8,
+  initialZoom:18,
   baseCenter: [-37.8199,144.9834] as LatLngExpression, 
   baseCenterAvax: [27.9881,86.925] as LatLngExpression 
 }
