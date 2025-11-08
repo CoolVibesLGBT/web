@@ -59,6 +59,32 @@ const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (edito
 };
 
 // User interface
+type UserLocation =
+  | string
+  | {
+      id?: string;
+      contentable_id?: string;
+      contentable_type?: string;
+      country_code?: string;
+      address?: string;
+      city?: string;
+      country?: string;
+      region?: string;
+      timezone?: string;
+      display?: string;
+      latitude?: number | null;
+      longitude?: number | null;
+      location_point?: {
+        lat?: number;
+        lng?: number;
+      };
+      created_at?: string;
+      updated_at?: string;
+      deleted_at?: string | null;
+    }
+  | null
+  | undefined;
+
 interface User {
   id: string;
   public_id: number;
@@ -131,7 +157,7 @@ interface User {
   social: unknown;
   deleted_at: string | null;
   bio?: string;
-  location?: string;
+  location?: UserLocation;
   website?: string;
   profile_image_url?: string;
   cover_image_url?: string;
@@ -229,6 +255,40 @@ interface ProfileScreenProps {
   isEmbed?: boolean;
   username?: string;
 }
+
+const getLocationDisplay = (location: UserLocation): string => {
+  if (!location) {
+    return '';
+  }
+
+  if (typeof location === 'string') {
+    return location;
+  }
+
+  if (typeof location === 'object') {
+    if (location.display) {
+      return location.display;
+    }
+
+    const parts = [location.city, location.country].filter(
+      (part): part is string => Boolean(part)
+    );
+
+    if (parts.length > 0) {
+      return parts.join(', ');
+    }
+
+    if (location.region) {
+      return location.region;
+    }
+
+    if (location.country_code) {
+      return location.country_code;
+    }
+  }
+
+  return '';
+};
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed = false, username: propUsername }) => {
   const { username: urlUsername } = useParams<{ username: string }>();
@@ -1825,12 +1885,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             </label>
                             <input
                               type="text"
-                              value={typeof user?.location === 'string' ? user.location : (user?.location as any)?.display || ''}
+                              value={getLocationDisplay(user?.location)}
                               onChange={(e) => {
                                 const locationValue = e.target.value;
                                 setEditFormData({ 
                                   ...editFormData, 
-                                  location: locationValue as any
+                                  location: locationValue
                                 });
                               }}
                               className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${theme === 'dark'
@@ -2600,10 +2660,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
             {/* Meta Info */}
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-3 text-sm">
-              {user.location && (
+              {getLocationDisplay(user.location) && (
                 <div className={`flex items-center ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
                   <MapPin className="w-4 h-4 mr-1" />
-                  <span>{user.location}</span>
+                  <span>{getLocationDisplay(user.location)}</span>
                 </div>
               )}
               {user.website && (
