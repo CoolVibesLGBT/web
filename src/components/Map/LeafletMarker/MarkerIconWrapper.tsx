@@ -26,7 +26,7 @@ const GroupIcon = ({ group, color, label }: { group: any, color: any, label: any
       >
         <div className="flex flex-col gap-2 items-center justify-center min-w-[60px] min-h-[60px] max-w-[60px] max-h-[60px]">
           <img
-            src={"/icons/pin.png"}
+            src={"/icons/marker.webp"}
             alt="Map Icon"
             className="perspective-image rounded-full opacity-100 w-[60px] h-[60px]"
           />
