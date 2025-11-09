@@ -267,7 +267,7 @@ const NearbyScreen: React.FC = () => {
             ) : (
               <>
                 {viewMode === 'grid' && (
-                  <div className="grid grid-cols-4 sm:grid-cols-4 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {state.nearbyUsers.map((user: any, index) => (
                       <motion.div
                       key={`view_grid_item${index}`}

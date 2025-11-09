@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Heart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Github, HeartHandshake, Banana, Carrot, Coffee, Baby, Gift, MessageCircleHeart, UserPlus, Flag } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Heart, Mail, Gift, MapPin } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import GiftSelector from '../GiftSelector';
 import QuickMessages from '../QuickMessages';
@@ -13,193 +12,279 @@ interface UserCardProps {
   viewMode?: 'compact' | 'list' | 'card';
 }
 
+const getLocation = (user: any): string => {
+  if (user.location) {
+    if (typeof user.location === 'string') {
+      return user.location.trim();
+    }
+    if (typeof user.location === 'object') {
+      return user.location.display?.trim() || '';
+    }
+  }
+  return '';
+};
+
 export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) => {
   const { theme } = useTheme();
   const navigate = useNavigate();
   const [isGiftSelectorOpen, setIsGiftSelectorOpen] = useState(false);
   const [isQuickMessageSelectorOpen, setIsQuickMessageSelectorOpen] = useState(false);
+  const [liked, setLiked] = useState(false);
 
-  // Get username from user object (prioritize username, fallback to name slug)
-  const getUsername = () => {
-    if (user.username) return user.username;
-    if (user.name) return user.name.toLowerCase().replace(/\s+/g, '');
-    return 'profile';
-  };
+  const getUsername = () =>
+    user.username ||
+    user.name?.toLowerCase().replace(/\s+/g, '') ||
+    'profile';
 
-  const handleProfileClick = () => {
-    navigate(`/${getUsername()}`);
-  };
+  const handleProfileClick = () => navigate(`/${getUsername()}`);
 
-  const handleGiftSelect = (gift: any) => {
-    console.log(`Sending ${gift.name} to ${user.name}`);
-    // Here you can add your gift sending logic
-  };
+  const baseCardStyle =
+    theme === 'dark'
+      ? 'bg-[#0a0a0a] border border-[#1c1c1c] text-white'
+      : 'bg-[#ffffff] border border-[#e5e5e5] text-black';
 
-  const handleQuickMessageSelect = (message:any) => {
-        console.log(`Sending ${message.text} to ${user.name}`);
+  const baseButtonStyle =
+    theme === 'dark'
+      ? 'border border-[#333] text-gray-300 hover:bg-[#222] hover:text-white'
+      : 'border border-[#ddd] text-gray-700 hover:bg-[#f5f5f5] hover:text-black';
 
-  }
+  const location = getLocation(user);
 
-  // Compact view (for grid mode)
+  // Compact View
   if (viewMode === 'compact') {
     return (
       <motion.div
-        className={`relative rounded-xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] ${
-          theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'
-        }`}
+        className={`relative rounded-xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] ${baseCardStyle}`}
         onTap={handleProfileClick}
         whileTap={{ scale: 0.98 }}
       >
-        <div className="aspect-square relative">
-          <motion.img
-            src={getSafeImageURL(user.avatar,"icon")}
-            alt={user.name}
-            className="w-full h-full object-cover"
-            whileTap={{ filter: 'blur(4px)' }}
-            transition={{ duration: 0.2 }}
-          />
-          {true &&(
-            <div className="absolute top-2 right-2 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-black" />
-          )}
-        </div>
+        <div className="group w-full max-w-sm overflow-hidden rounded-xl shadow-md flex flex-col">
+          <div className="relative flex-shrink-0 h-64">
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: `linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 25%, rgba(0,0,0,0) 60%), url("${getSafeImageURL(
+                  user.avatar,
+                  'large'
+                )}")`,
+              }}
+            ></div>
+            {/* "YENI" etiketi kaldırıldı */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+              <div className="flex items-baseline gap-2">
+                <h2 className="text-2xl font-semibold tracking-wide">
+                  {user.name || user.displayname || 'İsim Yok'},{' '}
+                </h2>
+                <span className="text-2xl font-light">{user.age || ''}</span>
+                {user.isOnline && <div className="w-2.5 h-2.5 rounded-full bg-green-500 ml-1"></div>}
+              </div>
+              <p className="text-sm font-medium opacity-90">
+                {location || 'Bilinmeyen konum'}
+              </p>
+            </div>
+          </div>
 
-        
+          <div
+            className={`p-4 flex flex-col flex-grow ${
+              theme === 'dark' ? 'bg-[#111]' : 'bg-[#fafafa]'
+            }`}
+          >
+            {/* Bio kaldırıldı */}
+            <div className="flex items-center gap-3 ml-2">
+              <motion.button
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={(e) => e.stopPropagation()}
+                className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
+              >
+                <Mail className="w-5 h-5" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={(e) => e.stopPropagation()}
+                className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
+                onClickCapture={() => setIsGiftSelectorOpen(true)}
+              >
+                <Gift className="w-5 h-5" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLiked((prev) => !prev);
+                }}
+                className={`p-2 rounded-full transition-all ${
+                  liked ? 'text-red-500' : baseButtonStyle
+                }`}
+              >
+                <Heart className="w-5 h-5" />
+              </motion.button>
+            </div>
+          </div>
+        </div>
       </motion.div>
     );
   }
 
-  // List view
+  // List View
   if (viewMode === 'list') {
     return (
-      <div
-        className={`flex items-center gap-4 p-3 rounded-xl cursor-pointer transition-all hover:bg-opacity-50 ${
-          theme === 'dark' ? 'bg-gray-900 hover:bg-gray-800' : 'bg-gray-50 hover:bg-gray-100'
-        }`}
+      <motion.div
+        whileHover={{ scale: 1.01 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         onClick={handleProfileClick}
+        className={`group flex items-center gap-4 w-full rounded-xl px-4 py-3 cursor-pointer transition-all duration-300 ${baseCardStyle}`}
       >
-        <div className="relative">
-          <img src={getSafeImageURL(user.avatar,"small")} alt={user.name} className="w-14 h-14 rounded-xl scale-150 object-cover" />
+        <div className="relative flex-shrink-0">
+          <img
+            src={getSafeImageURL(user.avatar, 'medium')}
+            alt={user.name || user.displayname || 'profile'}
+            className="w-16 h-16 rounded-xl object-cover shadow-md group-hover:scale-105 transition-transform duration-300"
+          />
           {user.isOnline && (
-            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-black" />
+            <div className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-green-500 border-2 border-black animate-pulse" />
           )}
         </div>
+
         <div className="flex-1 min-w-0">
-          <h3 className={`font-bold text-base truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-            {user.displayname}
-          </h3>
-          <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-            {user.age} · {user.distance}
-          </p>
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-lg truncate">
+              {user.displayname || user.name || 'İsim Yok'}
+            </h3>
+            <span className="text-sm opacity-70">{user.age || ''}</span>
+          </div>
+
+          <div className="flex items-center gap-1 text-sm mt-0.5 opacity-80">
+            <MapPin className="w-4 h-4" />
+            {location || 'Bilinmeyen konum'}
+          </div>
+          {/* Bio kaldırıldı */}
         </div>
-        <div className="flex flex-wrap gap-1">
-          {user && user.intersts && user.interests.length > 0 && user.interests.slice(0, 2).map((interest, idx) => (
-            <span key={idx} className={`text-xs px-2 py-1 rounded-full ${theme === 'dark' ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-700'}`}>
-              {interest}
-            </span>
-          ))}
+
+        <div className="flex-shrink-0 flex items-center gap-3 ml-2">
+          <motion.button
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={(e) => e.stopPropagation()}
+            className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
+          >
+            <Mail className="w-5 h-5" />
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsGiftSelectorOpen(true);
+            }}
+            className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
+          >
+            <Gift className="w-5 h-5" />
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setLiked((prev) => !prev);
+            }}
+            className={`p-2 rounded-full transition-all ${
+              liked ? 'text-red-500' : baseButtonStyle
+            }`}
+          >
+            <Heart className="w-5 h-5" />
+          </motion.button>
         </div>
-        
-        <GiftSelector isOpen={isGiftSelectorOpen} onClose={() => setIsGiftSelectorOpen(false)} onSelectGift={handleGiftSelect} userName={user.name} />
-        <QuickMessages isOpen={isQuickMessageSelectorOpen} onClose={() => setIsQuickMessageSelectorOpen(false)} userName={user.name} onSendMessage={handleQuickMessageSelect} />
-      </div>
+      </motion.div>
     );
   }
 
-  // Card view (default - full detailed card)
+  // Card View (Full)
   return (
     <div
       key={user.id}
-      className={`select-none relative rounded-xl overflow-hidden transition-all duration-300 cursor-pointer ${
-        theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'
-      }`}
+      className={`select-none relative rounded-xl overflow-hidden transition-all duration-300 cursor-pointer ${baseCardStyle}`}
       onClick={handleProfileClick}
     >
-      <div className="relative min-h-[512px]">
-        <img src={getSafeImageURL(user.avatar,"large")} alt={user.name} className="w-full h-full scale-150 min-h-[512px] object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-        
-        {user.isOnline && (
-          <div className="absolute top-4 right-4 flex items-center space-x-2">
-            <div className="flex items-center space-x-1 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5">
-              <div className="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-white text-sm font-medium">Online</span>
+      <div className="w-full max-w-sm overflow-hidden rounded-xl flex flex-col transition-transform duration-300 hover:scale-105">
+        <div
+          className="relative flex-grow flex flex-col justify-end bg-cover bg-center"
+          style={{
+            backgroundImage: `linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 25%, rgba(0,0,0,0) 60%), url("${getSafeImageURL(
+              user.avatar,
+              'large'
+            )}")`,
+            aspectRatio: '3/4',
+          }}
+        >
+          {/* "YENI" etiketi kaldırıldı */}
+          <div className="p-4 pt-8">
+            <div className="flex items-center gap-2 text-white">
+              <p className="text-[20px]">
+                <span className="font-bold">{user.name || user.displayname || 'İsim Yok'},{' '}</span>{' '}
+                <span className="font-normal">{user.age || ''}</span>
+              </p>
+              {user.isOnline && <div className="h-2 w-2 rounded-full bg-green-500 border-2 border-white" />}
             </div>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm hover:bg-black/60 flex items-center justify-center transition-all duration-200 cursor-pointer border border-white/20"
-            >
-              <Flag className="w-4 h-4 text-white" />
-            </motion.button>
-          </div>
-        )}
-        
-        {!user.isOnline && (
-          <div className="absolute top-4 right-4">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm hover:bg-black/60 flex items-center justify-center transition-all duration-200 cursor-pointer border border-white/20"
-            >
-              <Flag className="w-4 h-4 text-white" />
-            </motion.button>
-          </div>
-        )}
-        
-        <div className="absolute bottom-4 left-4">
-          <div className="flex items-center space-x-1 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5">
-            <MapPin className="w-4 h-4 text-white" />
-            <span className="text-white text-sm font-medium">{user.distance}</span>
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-6">
-          <div className="mb-4">
-            <h3 className="text-lg font-bold text-white truncate">{user.displayname}</h3>
-            <p className="text-sm text-gray-200">{user.age} years old</p>
-          </div>
+        <div className={`p-4 ${theme === 'dark' ? 'bg-[#0f0f0f]' : 'bg-[#f9f9f9]'}`}>
+          {/* Bio kaldırıldı */}
 
-          <div className="flex flex-wrap gap-2 mb-6">
-            {user && user.intersts && user.interests.length > 0 && user.interests.slice(0, 2).map((interest, idx) => (
-              <span key={idx} className="px-3 py-1.5 rounded-full text-sm font-medium bg-white/20 backdrop-blur-sm text-white">
-                {interest}
-              </span>
-            ))}
-          </div>
+          <div className="my-4 h-px opacity-20 bg-current" />
 
-          <div className="absolute flex flex-col gap-2 right-3 -top-[280px] itens-end justify-center gap-2 mt-2">
-            {[
-              { icon: <HeartHandshake className="w-5 h-5" />, label: 'Touch', color: 'text-white/50', action: () => {} },
-              { icon: <Banana className="w-5 h-5" />, label: 'Banana', color: 'text-white/50', action: () => {} },
-              { icon: <Carrot className="w-5 h-5" />, label: 'Carrot', color: 'text-white/50', action: () => {} },
-              { icon: <Coffee className="w-5 h-5" />, label: 'Coffee', color: 'text-white/50', action: () => {} },
-              { icon: <Heart className="w-5 h-5" />, label: 'Like', color: 'text-white/50', action: () => {} },
-              { icon: <Baby className="w-5 h-5" />, label: 'Kiss', color: 'text-white/50', action: () => {} },
-              { icon: <Gift className="w-5 h-5" />, label: 'Gift', color: 'text-white/50', action: () => { setIsGiftSelectorOpen(true); }},
-              { icon: <MessageCircleHeart className="w-5 h-5" />, label: 'Message', color: 'text-white/50', action: () => { setIsQuickMessageSelectorOpen(true); } },
-              { icon: <UserPlus className="w-5 h-5" />, label: 'Follow', color: 'text-white/50', action: () => {} },
-            ].map(({ icon, label, color, action }, idx) => (
-              <motion.button
-                key={idx}
-                whileHover={{ scale: 1.12 }}
-                whileTap={{ scale: 0.92 }}
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); action(); }}
-                className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/30 text-white transition-all cursor-pointer border border-white/30 hover:bg-white/30"
-              >
-                <div className={`${color} group-hover:text-white`}>{icon}</div>
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
-                  <div className="bg-black/90 backdrop-blur-sm text-white text-xs rounded-lg py-1 px-3 whitespace-nowrap shadow-lg border border-white/20">
-                    {label}
-                  </div>
-                </div>
-              </motion.button>
-            ))}
+          <div className="flex items-center gap-3 ml-2">
+            <motion.button
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={(e) => e.stopPropagation()}
+              className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
+            >
+              <Mail className="w-5 h-5" />
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsGiftSelectorOpen(true);
+              }}
+              className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
+            >
+              <Gift className="w-5 h-5" />
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setLiked((prev) => !prev);
+              }}
+              className={`p-2 rounded-full transition-all ${
+                liked ? 'text-red-500' : baseButtonStyle
+              }`}
+            >
+              <Heart className="w-5 h-5" />
+            </motion.button>
           </div>
         </div>
       </div>
 
-      <GiftSelector isOpen={isGiftSelectorOpen} onClose={() => setIsGiftSelectorOpen(false)} onSelectGift={handleGiftSelect} userName={user.name} />
-      <QuickMessages isOpen={isQuickMessageSelectorOpen} onClose={() => setIsQuickMessageSelectorOpen(false)} userName={user.name} onSendMessage={handleQuickMessageSelect} />
+      <GiftSelector
+        isOpen={isGiftSelectorOpen}
+        onClose={() => setIsGiftSelectorOpen(false)}
+        onSelectGift={() => {}}
+        userName={user.name}
+      />
+      <QuickMessages
+        isOpen={isQuickMessageSelectorOpen}
+        onClose={() => setIsQuickMessageSelectorOpen(false)}
+        userName={user.name}
+        onSendMessage={() => {}}
+      />
     </div>
   );
-}
+};
