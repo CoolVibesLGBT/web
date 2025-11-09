@@ -63,26 +63,26 @@ const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (edito
 type UserLocation =
   | string
   | {
-      id?: string;
-      contentable_id?: string;
-      contentable_type?: string;
-      country_code?: string;
-      address?: string;
-      city?: string;
-      country?: string;
-      region?: string;
-      timezone?: string;
-      display?: string;
-      latitude?: number | null;
-      longitude?: number | null;
-      location_point?: {
-        lat?: number;
-        lng?: number;
-      };
-      created_at?: string;
-      updated_at?: string;
-      deleted_at?: string | null;
-    }
+    id?: string;
+    contentable_id?: string;
+    contentable_type?: string;
+    country_code?: string;
+    address?: string;
+    city?: string;
+    country?: string;
+    region?: string;
+    timezone?: string;
+    display?: string;
+    latitude?: number | null;
+    longitude?: number | null;
+    location_point?: {
+      lat?: number;
+      lng?: number;
+    };
+    created_at?: string;
+    updated_at?: string;
+    deleted_at?: string | null;
+  }
   | null
   | undefined;
 
@@ -427,15 +427,14 @@ const BirthdatePicker: React.FC<BirthdatePickerProps> = ({ value, onChange, them
           type="button"
           disabled={isDisabled}
           onClick={() => handleDateSelect(day)}
-          className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
-            isSelected
+          className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all ${isSelected
               ? theme === 'dark'
                 ? 'bg-white text-gray-900 ring-2 ring-black/50'
                 : 'bg-gray-900 text-white ring-2 ring-black/50'
               : theme === 'dark'
-              ? 'text-white hover:bg-gray-700'
-              : 'text-gray-900 hover:bg-gray-200'
-          } ${isDisabled ? 'opacity-40 cursor-not-allowed hover:bg-transparent' : ''}`}
+                ? 'text-white hover:bg-gray-700'
+                : 'text-gray-900 hover:bg-gray-200'
+            } ${isDisabled ? 'opacity-40 cursor-not-allowed hover:bg-transparent' : ''}`}
           whileHover={!isDisabled ? { scale: 1.05 } : undefined}
           whileTap={!isDisabled ? { scale: 0.95 } : undefined}
         >
@@ -478,9 +477,8 @@ const BirthdatePicker: React.FC<BirthdatePickerProps> = ({ value, onChange, them
           <button
             type="button"
             onClick={handleClear}
-            className={`text-xs font-semibold transition-colors ${
-              theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-800'
-            }`}
+            className={`text-xs font-semibold transition-colors ${theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-800'
+              }`}
           >
             {t('profile.clear_date', { defaultValue: 'Clear' })}
           </button>
@@ -488,20 +486,18 @@ const BirthdatePicker: React.FC<BirthdatePickerProps> = ({ value, onChange, them
       </div>
 
       <div
-        className={`rounded-2xl border p-4 ${
-          theme === 'dark' ? 'bg-gray-900/60 border-gray-800' : 'bg-white border-gray-200 shadow-sm'
-        }`}
+        className={`rounded-2xl border p-4 ${theme === 'dark' ? 'bg-gray-900/60 border-gray-800' : 'bg-white border-gray-200 shadow-sm'
+          }`}
       >
         <div className="flex items-center justify-between mb-4">
           <button
             type="button"
-            className={`p-2 rounded-full transition-colors ${
-              canGoPrevMonth
+            className={`p-2 rounded-full transition-colors ${canGoPrevMonth
                 ? theme === 'dark'
                   ? 'hover:bg-gray-800 text-gray-300'
                   : 'hover:bg-gray-100 text-gray-600'
                 : 'opacity-30 cursor-not-allowed'
-            }`}
+              }`}
             onClick={() => navigateMonth('prev')}
             disabled={!canGoPrevMonth}
           >
@@ -511,15 +507,14 @@ const BirthdatePicker: React.FC<BirthdatePickerProps> = ({ value, onChange, them
           <div className="grid grid-cols-2 gap-2 flex-1 mx-2">
             <button
               type="button"
-              className={`flex items-center justify-center gap-1 rounded-lg py-2 font-semibold transition-colors ${
-                viewMode === 'month'
+              className={`flex items-center justify-center gap-1 rounded-lg py-2 font-semibold transition-colors ${viewMode === 'month'
                   ? theme === 'dark'
                     ? 'bg-indigo-500 text-white'
                     : 'bg-indigo-100 text-indigo-900'
                   : theme === 'dark'
-                  ? 'bg-gray-800 text-white hover:bg-gray-700'
-                  : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-              }`}
+                    ? 'bg-gray-800 text-white hover:bg-gray-700'
+                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                }`}
               onClick={() => setViewMode(viewMode === 'month' ? 'day' : 'month')}
             >
               {months[currentMonth]}
@@ -529,15 +524,14 @@ const BirthdatePicker: React.FC<BirthdatePickerProps> = ({ value, onChange, them
             </button>
             <button
               type="button"
-              className={`flex items-center justify-center gap-1 rounded-lg py-2 font-semibold transition-colors ${
-                viewMode === 'year'
+              className={`flex items-center justify-center gap-1 rounded-lg py-2 font-semibold transition-colors ${viewMode === 'year'
                   ? theme === 'dark'
                     ? 'bg-indigo-500 text-white'
                     : 'bg-indigo-100 text-indigo-900'
                   : theme === 'dark'
-                  ? 'bg-gray-800 text-white hover:bg-gray-700'
-                  : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-              }`}
+                    ? 'bg-gray-800 text-white hover:bg-gray-700'
+                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                }`}
               onClick={() => setViewMode(viewMode === 'year' ? 'day' : 'year')}
             >
               {currentYear}
@@ -549,13 +543,12 @@ const BirthdatePicker: React.FC<BirthdatePickerProps> = ({ value, onChange, them
 
           <button
             type="button"
-            className={`p-2 rounded-full transition-colors ${
-              canGoNextMonth
+            className={`p-2 rounded-full transition-colors ${canGoNextMonth
                 ? theme === 'dark'
                   ? 'hover:bg-gray-800 text-gray-300'
                   : 'hover:bg-gray-100 text-gray-600'
                 : 'opacity-30 cursor-not-allowed'
-            }`}
+              }`}
             onClick={() => navigateMonth('next')}
             disabled={!canGoNextMonth}
           >
@@ -579,15 +572,14 @@ const BirthdatePicker: React.FC<BirthdatePickerProps> = ({ value, onChange, them
                       key={year}
                       type="button"
                       onClick={() => handleYearSelect(year)}
-                      className={`rounded-lg py-2 text-sm font-medium transition-colors ${
-                        currentYear === year
+                      className={`rounded-lg py-2 text-sm font-medium transition-colors ${currentYear === year
                           ? theme === 'dark'
                             ? 'bg-white text-gray-900'
                             : 'bg-gray-900 text-white'
                           : theme === 'dark'
-                          ? 'text-white hover:bg-gray-800'
-                          : 'text-gray-900 hover:bg-gray-200'
-                      }`}
+                            ? 'text-white hover:bg-gray-800'
+                            : 'text-gray-900 hover:bg-gray-200'
+                        }`}
                     >
                       {year}
                     </button>
@@ -599,9 +591,8 @@ const BirthdatePicker: React.FC<BirthdatePickerProps> = ({ value, onChange, them
               <div className="flex items-center justify-between mt-3">
                 <button
                   type="button"
-                  className={`text-xs font-semibold transition-colors ${
-                    theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
-                  } ${decadeStart <= minYear ? 'opacity-30 cursor-not-allowed' : ''}`}
+                  className={`text-xs font-semibold transition-colors ${theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
+                    } ${decadeStart <= minYear ? 'opacity-30 cursor-not-allowed' : ''}`}
                   onClick={() => setDecadeStart((start) => Math.max(start - 20, minYear))}
                   disabled={decadeStart <= minYear}
                 >
@@ -612,9 +603,8 @@ const BirthdatePicker: React.FC<BirthdatePickerProps> = ({ value, onChange, them
                 </span>
                 <button
                   type="button"
-                  className={`text-xs font-semibold transition-colors ${
-                    theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
-                  } ${decadeStart + 20 > maxYear ? 'opacity-30 cursor-not-allowed' : ''}`}
+                  className={`text-xs font-semibold transition-colors ${theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
+                    } ${decadeStart + 20 > maxYear ? 'opacity-30 cursor-not-allowed' : ''}`}
                   onClick={() => setDecadeStart((start) => Math.min(start + 20, maxYear - 19))}
                   disabled={decadeStart + 20 > maxYear}
                 >
@@ -638,15 +628,14 @@ const BirthdatePicker: React.FC<BirthdatePickerProps> = ({ value, onChange, them
                     key={month}
                     type="button"
                     onClick={() => handleMonthSelect(index)}
-                    className={`rounded-lg py-2 text-sm font-medium transition-colors ${
-                      currentMonth === index
+                    className={`rounded-lg py-2 text-sm font-medium transition-colors ${currentMonth === index
                         ? theme === 'dark'
                           ? 'bg-white text-gray-900'
                           : 'bg-gray-900 text-white'
                         : theme === 'dark'
-                        ? 'text-white hover:bg-gray-800'
-                        : 'text-gray-900 hover:bg-gray-200'
-                    }`}
+                          ? 'text-white hover:bg-gray-800'
+                          : 'text-gray-900 hover:bg-gray-200'
+                      }`}
                   >
                     {month}
                   </button>
@@ -915,9 +904,8 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange, theme,
             <button
               type="button"
               onClick={handleClear}
-              className={`text-xs font-semibold transition-colors ${
-                theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-800'
-              }`}
+              className={`text-xs font-semibold transition-colors ${theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-800'
+                }`}
             >
               {t('profile.clear_location', { defaultValue: 'Clear location' })}
             </button>
@@ -929,15 +917,13 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange, theme,
             type="button"
             onClick={handleDetectLocation}
             disabled={isDetecting}
-            className={`inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition-all ${
-              isDetecting
+            className={`inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition-all ${isDetecting
                 ? 'opacity-70 cursor-wait'
                 : ''
-            } ${
-              theme === 'dark'
+              } ${theme === 'dark'
                 ? 'bg-white text-black hover:bg-gray-200 disabled:hover:bg-white/90'
                 : 'bg-black text-white hover:bg-gray-900 disabled:hover:bg-black/90'
-            }`}
+              }`}
           >
             {isDetecting ? (
               <>
@@ -969,11 +955,10 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange, theme,
             value={manualValue}
             onChange={handleManualChange}
             placeholder={t('profile.location_placeholder', { defaultValue: 'City, Country' })}
-            className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${
-              theme === 'dark'
+            className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${theme === 'dark'
                 ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-white'
                 : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
-            }`}
+              }`}
           />
         </div>
       </div>
@@ -1016,17 +1001,17 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const [updatingAttributes, setUpdatingAttributes] = useState<Record<string, boolean>>({});
   const [editTab, setEditTab] = useState<'profile' | 'attributes' | 'interests' | 'fantasies'>('profile');
   const isEditModeRef = useRef(false);
-  
+
   // Interests state
   const [interestView, setInterestView] = useState<'list' | 'detail'>('list');
   const [selectedInterestCategory, setSelectedInterestCategory] = useState<string | null>(null);
   const [updatingInterests, setUpdatingInterests] = useState(false);
-  
+
   // Fantasies state
   const [fantasyView, setFantasyView] = useState<'list' | 'detail'>('list');
   const [selectedFantasyCategory, setSelectedFantasyCategory] = useState<string | null>(null);
   const [updatingFantasies, setUpdatingFantasies] = useState(false);
-  
+
   // Password update state
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
@@ -1161,7 +1146,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       setIsUpdatingPassword(false);
     }
   };
-  
+
   // Bio editor state
   const [bioEditorInstance, setBioEditorInstance] = useState<any>(null);
   const privacyLevels = React.useMemo(() => Object.values(PrivacyLevel), []);
@@ -1209,14 +1194,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       console.error("Lexical Error:", error);
     },
   }), [theme]);
-  
+
   // Bio editor onChange handler
   const handleBioChange = (editorState: any) => {
     if (!bioEditorInstance) return;
-    
+
     editorState.read(() => {
       const htmlString = $generateHtmlFromNodes(bioEditorInstance, null);
-      
+
       // Update editFormData with HTML content
       setEditFormData({
         ...editFormData,
@@ -1224,7 +1209,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       });
     });
   };
-  
+
   // Initialize bio editor content when user data loads or edit mode opens
   const bioInitializedRef = useRef(false);
   useEffect(() => {
@@ -1257,43 +1242,43 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       bioInitializedRef.current = false;
     }
   }, [isEditMode, user?.bio, bioEditorInstance]);
-  
+
   // Check if viewing own profile
   const isOwnProfile = isAuthenticated && authUser && user && (authUser.username === user.username || authUser.id === user.id);
-  
+
   // Helper functions to get image URLs - prefer authUser if viewing own profile
   const getProfileImageUrl = () => {
     // If viewing own profile and authUser has avatar, use it
     if (isOwnProfile && authUser) {
-      return getSafeImageURL((authUser as any).avatar,"icon")
+      return getSafeImageURL((authUser as any).avatar, "icon")
     }
     // Check user state for avatar URL (multiple formats)
     if (user) {
-   
+
       // Then check avatar.file.url structure from API
       if ((user as any).avatar) {
-        return getSafeImageURL((user as any).avatar,"icon")
+        return getSafeImageURL((user as any).avatar, "icon")
       }
     }
     return undefined;
   };
-  
+
   const getCoverImageUrl = () => {
     // If viewing own profile and authUser has cover, use it
-    if (isOwnProfile && authUser ){
-      return getSafeImageURL((authUser as any).cover,"large");
-    } else if (user) {   
+    if (isOwnProfile && authUser) {
+      return getSafeImageURL((authUser as any).cover, "large");
+    } else if (user) {
       if ((user as any).cover) {
-        return getSafeImageURL((user as any).cover,"large");
+        return getSafeImageURL((user as any).cover, "large");
       }
     }
-   
+
     return undefined;
   };
 
   // Build fieldOptions from API data
   const fieldOptions: Record<string, Array<{ id: string; name: string; display_order: number }>> = {};
-  
+
   if (appData?.attributes) {
     appData.attributes.forEach((group) => {
       const sortedAttributes = [...group.attributes].sort((a, b) => a.display_order - b.display_order);
@@ -1304,7 +1289,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       }));
     });
   }
-  
+
   // Add gender_identities to fieldOptions
   if (appData?.gender_identities) {
     const sortedGenderIdentities = [...appData.gender_identities].sort((a, b) => a.display_order - b.display_order);
@@ -1314,7 +1299,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       display_order: item.display_order,
     }));
   }
-  
+
   // Add sexual_orientations to fieldOptions
   if (appData?.sexual_orientations) {
     const sortedSexualOrientations = [...appData.sexual_orientations].sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
@@ -1324,7 +1309,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       display_order: item.display_order || 0,
     }));
   }
-  
+
   // Add sexual_roles to fieldOptions
   if (appData?.sexual_roles) {
     const sortedSexualRoles = [...appData.sexual_roles].sort((a, b) => a.display_order - b.display_order);
@@ -1338,7 +1323,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   // Build interestOptions from API data
   const interestOptions: Record<string, Array<{ id: string; name: string; emoji?: string; interest_id: string }>> = {};
   const interestCategories: Array<{ id: string; name: string }> = [];
-  
+
   if (appData?.interests) {
     appData.interests.forEach((interest) => {
       const categoryName = interest.name[defaultLanguage] || interest.name.en || Object.values(interest.name)[0] || '';
@@ -1346,7 +1331,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         id: interest.id,
         name: categoryName,
       });
-      
+
       interestOptions[interest.id] = (interest.items || []).map(item => ({
         id: item.id,
         name: item.name[defaultLanguage] || item.name.en || Object.values(item.name)[0] || '',
@@ -1378,7 +1363,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     const interestsSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as any).interests : user?.interests;
     if (!interestsSource || !appData?.interests) return {};
     const grouped: Record<string, Array<{ id: string; name: string; emoji?: string }>> = {};
-    
+
     interestsSource.forEach((userInterest: any) => {
       if (typeof userInterest === 'object' && userInterest !== null) {
         const interestItem = userInterest.interest_item;
@@ -1388,9 +1373,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             if (!grouped[categoryId]) {
               grouped[categoryId] = [];
             }
-            const itemName = interestItem.name[defaultLanguage] || 
-                           interestItem.name.en || 
-                           Object.values(interestItem.name)[0] || '';
+            const itemName = interestItem.name[defaultLanguage] ||
+              interestItem.name.en ||
+              Object.values(interestItem.name)[0] || '';
             grouped[categoryId].push({
               id: interestItem.id || String(userInterest.interest_item_id),
               name: itemName,
@@ -1400,14 +1385,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         }
       }
     });
-    
+
     return grouped;
   }, [user?.interests, authUser, isEditMode, isAuthenticated, isOwnProfile, appData?.interests, defaultLanguage]);
 
   // Build fantasyOptions and fantasyCategories from API data
   const fantasyOptions: Record<string, Array<{ id: string; name: string; description: string }>> = {};
   const fantasyCategories: Array<{ id: string; name: string }> = [];
-  
+
   // Category name translations
   if (appData?.fantasies) {
     // Group fantasies by slug (category identifier)
@@ -1419,30 +1404,30 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       }
       fantasiesByCategory[categorySlug].push(fantasy);
     });
-    
+
     // Build categories and options
     Object.keys(fantasiesByCategory).forEach((categorySlug) => {
       // Get category name from the first fantasy in this category
       const firstFantasy = fantasiesByCategory[categorySlug][0];
-      const categoryName = firstFantasy.category[defaultLanguage] || 
-                          firstFantasy.category.en || 
-                          Object.values(firstFantasy.category)[0] || 
-                          categorySlug;
-      
+      const categoryName = firstFantasy.category[defaultLanguage] ||
+        firstFantasy.category.en ||
+        Object.values(firstFantasy.category)[0] ||
+        categorySlug;
+
       fantasyCategories.push({
         id: categorySlug,
         name: categoryName,
       });
-      
+
       fantasyOptions[categorySlug] = fantasiesByCategory[categorySlug].map((fantasy) => {
-        const label = fantasy.label[defaultLanguage] || 
-                     fantasy.label.en || 
-                     Object.values(fantasy.label)[0] || 
-                     `Fantasy ${fantasy.id}`;
-        const description = fantasy.description[defaultLanguage] || 
-                           fantasy.description.en || 
-                           Object.values(fantasy.description)[0] || 
-                           '';
+        const label = fantasy.label[defaultLanguage] ||
+          fantasy.label.en ||
+          Object.values(fantasy.label)[0] ||
+          `Fantasy ${fantasy.id}`;
+        const description = fantasy.description[defaultLanguage] ||
+          fantasy.description.en ||
+          Object.values(fantasy.description)[0] ||
+          '';
         return {
           id: fantasy.id,
           name: label,
@@ -1466,7 +1451,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     const fantasiesSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as any).fantasies : user?.fantasies;
     if (!fantasiesSource || !appData?.fantasies) return {};
     const grouped: Record<string, Array<{ id: string; name: string }>> = {};
-    
+
     fantasiesSource.forEach((userFantasy: any) => {
       if (typeof userFantasy === 'object' && userFantasy !== null) {
         const fantasyId = userFantasy.fantasy_id || userFantasy.id;
@@ -1478,10 +1463,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             if (!grouped[categorySlug]) {
               grouped[categorySlug] = [];
             }
-            const fantasyName = fantasy.label[defaultLanguage] || 
-                               fantasy.label.en || 
-                               Object.values(fantasy.label)[0] || 
-                               '';
+            const fantasyName = fantasy.label[defaultLanguage] ||
+              fantasy.label.en ||
+              Object.values(fantasy.label)[0] ||
+              '';
             grouped[categorySlug].push({
               id: fantasyId,
               name: fantasyName,
@@ -1490,7 +1475,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         }
       }
     });
-    
+
     return grouped;
   }, [user?.fantasies, authUser, isEditMode, isAuthenticated, isOwnProfile, appData?.fantasies, defaultLanguage]);
 
@@ -1558,28 +1543,28 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     const options = fieldOptions[field] || [];
     const selectedOption = options.find(opt => opt.id === value);
     const attributeId = selectedOption ? selectedOption.id : value;
-    
+
     if (!attributeId) {
       console.error(`No attribute ID found for field ${field}`);
       return;
     }
-    
+
     // Set loading state for this field
     setUpdatingAttributes({ ...updatingAttributes, [field]: true });
-    
+
     // Check if this is a sexual identity field (gender_identity, sexual_orientation, sex_role)
     const isSexualIdentityField = ['gender_identity', 'sexual_orientation', 'sex_role'].includes(field);
-    
+
     // Immediately save to backend
     try {
       let response;
-      
+
       if (isSexualIdentityField) {
         // Use CMD_USER_UPDATE_IDENTIFY for sexual identity fields
-        const bodyKey = field === 'gender_identity' ? 'gender_identity_id' 
-                      : field === 'sexual_orientation' ? 'sexual_orientation_id' 
-                      : 'sexual_role_id';
-        
+        const bodyKey = field === 'gender_identity' ? 'gender_identity_id'
+          : field === 'sexual_orientation' ? 'sexual_orientation_id'
+            : 'sexual_role_id';
+
         response = await api.call(Actions.CMD_USER_UPDATE_IDENTIFY, {
           method: "POST",
           body: { [bodyKey]: attributeId },
@@ -1591,7 +1576,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           body: { attribute_id: attributeId },
         });
       }
-      
+
       // Update auth context - always update if authenticated
       if (isAuthenticated && authUser) {
         // If response contains updated user, use that
@@ -1608,7 +1593,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             const attributeData = options.find(opt => opt.id === attributeId);
             if (attributeData) {
               const updatedUserData: any = { ...authUser };
-              
+
               if (field === 'gender_identity') {
                 // Store as array to match API structure
                 updatedUserData.gender_identities = [{
@@ -1633,7 +1618,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                 // Also set sexual_role_id for API compatibility
                 updatedUserData.sexual_role_id = attributeId;
               }
-              
+
               updateUser(updatedUserData);
               // Also update local user state if viewing own profile
               if (user && (authUser.id === user.id || authUser.username === user.username)) {
@@ -1645,7 +1630,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             const existingAttributes = authUser.user_attributes || [];
             const otherAttributes = existingAttributes.filter(ua => ua.category_type !== field);
             const attributeData = options.find(opt => opt.id === attributeId);
-            
+
             if (attributeData) {
               const newAttribute = {
                 id: `temp-${Date.now()}`,
@@ -1659,12 +1644,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                   name: { [defaultLanguage]: attributeData.name } as Record<string, string>,
                 },
               };
-              
+
               const updatedUserData = {
                 ...authUser,
                 user_attributes: [...otherAttributes, newAttribute],
               } as any;
-              
+
               updateUser(updatedUserData);
               // Also update local user state if viewing own profile
               if (user && (authUser.id === user.id || authUser.username === user.username)) {
@@ -1681,7 +1666,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       // Clear loading state
       setUpdatingAttributes({ ...updatingAttributes, [field]: false });
     }
-    
+
     // Go back to list view
     setAttributeView('list');
     setSelectedField(null);
@@ -1702,21 +1687,21 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const handleInterestItemToggle = async (itemId: string) => {
     const currentSelected = userSelectedInterestIds || [];
     const isSelected = currentSelected.includes(itemId);
-    
+
     setUpdatingInterests(true);
     setError(null); // Clear previous errors
-    
+
     // Optimistically update UI
     const newSelected = isSelected
       ? currentSelected.filter((id: string) => id !== itemId)
       : [...currentSelected, itemId];
-    
+
     // Update local state immediately for better UX
     if (user) {
       // Update interests - maintain object structure if it exists, otherwise create new format
       const currentInterests = user.interests || [];
       let updatedInterests: typeof currentInterests;
-      
+
       if (isSelected) {
         // Remove interest
         updatedInterests = currentInterests.filter((interest: any) => {
@@ -1730,10 +1715,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         const interestItem = Object.values(interestOptions).flat().find(item => item.id === itemId);
         if (interestItem) {
           // Find the category this item belongs to
-          const category = interestCategories.find(cat => 
+          const category = interestCategories.find(cat =>
             interestOptions[cat.id]?.some(item => item.id === itemId)
           );
-          
+
           if (category) {
             const newInterest = {
               id: `temp-${Date.now()}`,
@@ -1758,20 +1743,20 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           updatedInterests = currentInterests;
         }
       }
-      
+
       setUser({
         ...user,
         interests: updatedInterests,
       });
     }
-    
+
     try {
       // Update via API using CMD_USER_UPDATE_INTEREST
       const response = await api.call(Actions.CMD_USER_UPDATE_INTEREST, {
         method: "POST",
         body: { interest_id: itemId },
       });
-      
+
       // Update auth context - use response if available, otherwise use local state
       if (isAuthenticated && authUser) {
         if (response?.user) {
@@ -1790,7 +1775,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       }
     } catch (err: any) {
       console.error('Error updating interests:', err);
-      
+
       // Revert optimistic update on error
       if (user) {
         // Revert to previous interests state (before the change)
@@ -1808,7 +1793,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             // We removed it, so re-add it
             const interestItem = Object.values(interestOptions).flat().find(item => item.id === itemId);
             if (interestItem) {
-              const category = interestCategories.find(cat => 
+              const category = interestCategories.find(cat =>
                 interestOptions[cat.id]?.some(item => item.id === itemId)
               );
               if (category) {
@@ -1847,7 +1832,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           }
         }
       }
-      
+
       // Set error message - will be displayed in the error section (doesn't cause screen to disappear)
       const errorMessage = err.response?.data?.message || err.message || 'Failed to update interests';
       setError(errorMessage);
@@ -1864,10 +1849,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const handleFantasyItemToggle = async (fantasyId: string) => {
     const currentSelected = userSelectedFantasyIds || [];
     const isSelected = currentSelected.includes(fantasyId);
-    
+
     setUpdatingFantasies(true);
     setError(null); // Clear previous errors
-    
+
     // Update local state immediately for better UX
     if (user) {
       const currentFantasies = user.fantasies || [];
@@ -1900,14 +1885,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         }
       }
     }
-    
+
     try {
       // Update via API using CMD_USER_UPDATE_FANTASY
       const response = await api.call(Actions.CMD_USER_UPDATE_FANTASY, {
         method: "POST",
         body: { fantasy_id: fantasyId },
       });
-      
+
       // Update auth context - use response if available, otherwise use local state
       if (isAuthenticated && authUser) {
         if (response?.user) {
@@ -1926,7 +1911,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       }
     } catch (err: any) {
       console.error('Error updating fantasies:', err);
-      
+
       // Revert optimistic update on error
       if (user) {
         const currentFantasies = user.fantasies || [];
@@ -1959,7 +1944,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           });
         }
       }
-      
+
       // Set error message - will be displayed in the error section (doesn't cause screen to disappear)
       const errorMessage = err.response?.data?.message || err.message || 'Failed to update fantasies';
       setError(errorMessage);
@@ -1978,7 +1963,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         setEditTab('profile');
         isEditModeRef.current = true;
       }
-      
+
       // Reset image previews
       setProfileImagePreview(null);
       setCoverImagePreview(null);
@@ -1993,7 +1978,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       // Reset fantasy view
       setFantasyView('list');
       setSelectedFantasyCategory(null);
-      
+
       // Initialize form data if user is available
       if (user) {
         const normalizedDateOfBirth = user.date_of_birth ? user.date_of_birth.split('T')[0] : '';
@@ -2001,7 +1986,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           username: user.username,
           displayname: user.displayname,
           email: user.email || '',
-          bio: user.bio || '',
+          bio: user.bio && user.default_language ? user.bio[user.default_language] || '' : '',
           website: user.website || '',
           languages: user.languages || [],
           date_of_birth: normalizedDateOfBirth || undefined,
@@ -2016,7 +2001,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       isEditModeRef.current = false;
     }
   }, [isEditMode, resetPasswordForm]); // Only depend on isEditMode, not user
-  
+
   // Update form data when user changes (but don't reset tab or other states)
   useEffect(() => {
     if (isEditMode && user && isEditModeRef.current) {
@@ -2026,7 +2011,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         username: user.username,
         displayname: user.displayname,
         email: user.email || '',
-        bio: user.bio || '',
+        bio: user.bio && user.default_language ? user.bio[user.default_language] || '' : '',
         website: user.website || '',
         languages: user.languages || [],
         date_of_birth: normalizedDateOfBirth || undefined,
@@ -2054,7 +2039,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           method: "POST",
           body: { avatar: file },
         });
-        
+
         // Update local state with new image URL from API response
         if (response?.user?.avatar?.file?.url) {
           const imageUrl = response.user.avatar.file.url;
@@ -2089,7 +2074,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           method: "POST",
           body: { cover: file },
         });
-        
+
         // Update local state with new image URL from API response
         if (response?.user?.cover?.file?.url) {
           const imageUrl = response.user.cover.file.url;
@@ -2109,25 +2094,25 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
   const handleSaveProfile = async () => {
     if (!user) return;
-    
+
     setIsSaving(true);
     setError(null);
     try {
       // Create FormData if there are images to upload
       const formData = new FormData();
-      
+
       // Add profile image if selected
       if (profileImageFile) {
         formData.append('profile_image', profileImageFile);
       }
-      
+
       // Add cover image if selected
       if (coverImageFile) {
         formData.append('cover_image', coverImageFile);
       }
-      
+
       const payload: Record<string, any> = {};
-      
+
       // Add other form data
       Object.keys(editFormData).forEach(key => {
         const value = editFormData[key as keyof typeof editFormData];
@@ -2138,30 +2123,30 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             let normalized: string;
             if (Array.isArray(value) || (typeof value === 'object' && value !== null)) {
               normalized = JSON.stringify(value);
-          } else {
+            } else {
               normalized = String(value);
             }
             formData.append(key, normalized);
           }
         }
       });
-      
+
       // If there are images, send FormData, otherwise send regular object
       if (profileImageFile || coverImageFile) {
         await api.updateProfile(formData as any);
       } else {
         await api.updateProfile(payload);
       }
-      
+
       // Update local user state
-      const updatedUser = { 
-        ...user, 
+      const updatedUser = {
+        ...user,
         ...editFormData,
         profile_image_url: profileImagePreview || user.profile_image_url,
         cover_image_url: coverImagePreview || user.cover_image_url,
       };
       setUser(updatedUser);
-      
+
       // Update auth context user if it's the same user
       if (isOwnProfile && authUser) {
         // Filter out location string, only keep valid User fields
@@ -2173,7 +2158,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           ...(coverImagePreview && { cover_image_url: coverImagePreview }),
         });
       }
-      
+
       setIsEditMode(false);
     } catch (err: any) {
       console.error('Error updating profile:', err);
@@ -2191,9 +2176,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         setHeaderHeight(height);
       }
     };
-    
+
     updateHeaderHeight();
-    
+
     // Update on resize
     window.addEventListener('resize', updateHeaderHeight);
     return () => window.removeEventListener('resize', updateHeaderHeight);
@@ -2203,19 +2188,19 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   useEffect(() => {
     const fetchUserData = async () => {
       console.log('ProfileScreen - fetchUserData called, username:', username);
-      
+
       if (!username) {
         console.log('ProfileScreen - No username, returning early');
         return;
       }
-      
+
       try {
         setLoading(true);
         setError(null);
-        
+
         // Check if viewing own profile and authUser exists
         const isOwn = isAuthenticated && authUser && (authUser.username === username || authUser.id === username);
-        
+
         // If viewing own profile, use authUser data immediately for better UX
         if (isOwn && authUser) {
           console.log('ProfileScreen - Using own profile data from authUser');
@@ -2236,26 +2221,26 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           setLoading(false);
           return;
         }
-        
+
         // Fetch user profile from API using POST with nickname
         console.log('ProfileScreen - Fetching profile for username:', username);
         const requestBody = { nickname: username };
         console.log('ProfileScreen - Request body:', requestBody);
-        
+
         const response = await api.call(Actions.USER_FETCH_PROFILE, {
           method: "POST",
           body: requestBody,
         });
-        
+
         console.log('ProfileScreen - API response:', response);
-        
+
         // Handle different response structures
         let userData = response?.user || response;
-        
+
         if (!userData) {
           throw new Error('User not found');
         }
-        
+
         // Normalize avatar and cover URLs from API response structure
         // API returns avatar.file.url and cover.file.url, we need to extract them
         const followerCountFromEngagements =
@@ -2274,9 +2259,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           followers_count: followerCountFromEngagements,
           following_count: followingCountFromEngagements,
         };
-        
+
         console.log('ProfileScreen - Normalized user data:', normalizedUserData);
-        
+
         // Set user data
         setUser(normalizedUserData as unknown as ProfileUser);
       } catch (err: any) {
@@ -2305,14 +2290,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       try {
         setPostsLoading(true);
         setError(null);
-        
+
         let response;
-        
+
         if (activeTab === 'posts') {
           // Fetch user posts
           response = await api.call(Actions.CMD_USER_POSTS, {
             method: "POST",
-            body: { 
+            body: {
               user_id: user?.public_id,
               limit: 20,
               cursor: ""
@@ -2322,7 +2307,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           // Fetch user replies
           response = await api.call(Actions.CMD_USER_POST_REPLIES, {
             method: "POST",
-            body: { 
+            body: {
               user_id: user?.public_id,
               limit: 20,
               cursor: ""
@@ -2332,14 +2317,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           // Fetch user liked posts
           response = await api.call(Actions.CMD_USER_POST_LIKES, {
             method: "POST",
-            body: { 
+            body: {
               user_id: user?.public_id,
               limit: 20,
               cursor: ""
             },
           });
         }
-        
+
         // Set posts from API response
         if (response && response.posts) {
           setPosts(response.posts);
@@ -2372,19 +2357,19 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       try {
         setMediasLoading(true);
         setError(null);
-        
+
         const response = await api.call(Actions.CMD_USER_POST_MEDIA, {
           method: "POST",
-          body: { 
+          body: {
             user_id: user?.public_id,
             limit: 50,
             cursor: ""
           },
         });
-        
+
         // Set medias from API response
         let allMedias: any[] = [];
-        
+
         if (response && response.medias) {
           allMedias = response.medias;
         } else if (response && Array.isArray(response)) {
@@ -2392,10 +2377,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         } else {
           allMedias = [];
         }
-        
+
         // Filter only post medias (exclude stories, avatars, covers, etc.)
         const postMedias = allMedias.filter((media: any) => media.role === 'post');
-        
+
         setMedias(postMedias);
       } catch (err: any) {
         console.error('Error fetching medias:', err);
@@ -2550,49 +2535,49 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     <>
       {/* Header */}
       {!inline && (
-      <div ref={headerRef} className={`sticky top-0 z-30 ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}`}>
-        <div className="flex items-center px-4 py-3">
-          {isEditMode ? (
-            <>
-              <button
-                onClick={() => setIsEditMode(false)}
-                className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
-                  }`}
-              >
-                <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
-              </button>
-              <div className="flex-1">
-                <h1 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                  {t('profile.edit_profile')}
-                </h1>
-              </div>
-              <div className="w-12"></div>
-            </>
-          ) : (
-            <>
-          <button
-            onClick={handleBackClick}
-            className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
-              }`}
-          >
-            <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
-          </button>
-          <div className="flex-1">
-            <h1 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-              {user.displayname}
-            </h1>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-              {user.posts_count} {t('profile.posts')}
-            </p>
+        <div ref={headerRef} className={`sticky top-0 z-30 ${theme === 'dark' ? 'bg-black' : 'bg-white'} border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}`}>
+          <div className="flex items-center px-4 py-3">
+            {isEditMode ? (
+              <>
+                <button
+                  onClick={() => setIsEditMode(false)}
+                  className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
+                    }`}
+                >
+                  <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
+                </button>
+                <div className="flex-1">
+                  <h1 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                    {t('profile.edit_profile')}
+                  </h1>
+                </div>
+                <div className="w-12"></div>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={handleBackClick}
+                  className={`p-2 rounded-full transition-all duration-200 mr-3 ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
+                    }`}
+                >
+                  <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
+                </button>
+                <div className="flex-1">
+                  <h1 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                    {user.displayname}
+                  </h1>
+                  <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                    {user.posts_count} {t('profile.posts')}
+                  </p>
+                </div>
+                <button className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
+                  }`}>
+                  <MoreHorizontal className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+                </button>
+              </>
+            )}
           </div>
-          <button className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
-            }`}>
-            <MoreHorizontal className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
-          </button>
-            </>
-          )}
         </div>
-      </div>
       )}
 
       <div className="max-w-[1380px] mx-auto">
@@ -2634,8 +2619,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                           ? 'opacity-50 cursor-not-allowed'
                           : ''
                           } ${theme === 'dark'
-                          ? 'bg-black/50 hover:bg-black/70 text-white'
-                          : 'bg-white/90 hover:bg-white text-gray-900'
+                            ? 'bg-black/50 hover:bg-black/70 text-white'
+                            : 'bg-white/90 hover:bg-white text-gray-900'
                           }`}
                       >
                         {uploadingCoverImage ? (
@@ -2682,8 +2667,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             ? 'opacity-50 cursor-not-allowed'
                             : ''
                             } ${theme === 'dark'
-                            ? 'bg-black text-white border-gray-700 hover:bg-gray-800'
-                            : 'bg-white text-gray-900 border-gray-200 hover:bg-gray-100'
+                              ? 'bg-black text-white border-gray-700 hover:bg-gray-800'
+                              : 'bg-white text-gray-900 border-gray-200 hover:bg-gray-100'
                             }`}
                         >
                           {uploadingProfileImage ? (
@@ -2721,8 +2706,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                           key={tab.id}
                           onClick={() => setEditTab(tab.id as any)}
                           className={`flex-1 py-3 font-semibold text-sm relative transition-colors ${editTab === tab.id
-                              ? theme === 'dark' ? 'text-white' : 'text-black'
-                              : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
+                            ? theme === 'dark' ? 'text-white' : 'text-black'
+                            : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
                             }`}
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
@@ -2732,9 +2717,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             <motion.div
                               className={`absolute bottom-0 left-0 right-0 h-1 rounded-t-full ${theme === 'dark' ? 'bg-white' : 'bg-black'}`}
                               layoutId="editModeTabIndicator"
-                              transition={{ 
-                                type: "spring", 
-                                stiffness: 380, 
+                              transition={{
+                                type: "spring",
+                                stiffness: 380,
                                 damping: 30,
                                 mass: 0.8
                               }}
@@ -2775,7 +2760,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                               className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${theme === 'dark'
                                 ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
                                 : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
-                              }`}
+                                }`}
                             />
                           </div>
 
@@ -2810,11 +2795,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                 })
                               }
                               placeholder={t('profile.email_placeholder')}
-                              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${
-                                theme === 'dark'
+                              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${theme === 'dark'
                                   ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
                                   : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
-                              }`}
+                                }`}
                               autoComplete="email"
                             />
                           </div>
@@ -2827,21 +2811,21 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             <div className={`w-full px-2 rounded-xl border-2 focus-within:border-opacity-100 transition-all ${theme === 'dark'
                               ? 'bg-gray-800 border-gray-700 focus-within:border-white'
                               : 'bg-gray-50 border-gray-200 focus-within:border-gray-900'
-                            }`}>
+                              }`}>
                               <LexicalComposer initialConfig={bioEditorConfig}>
                                 <div className="relative">
                                   <HashtagPlugin />
                                   <ListPlugin />
                                   <LinkPlugin />
-                                  <NewMentionsPlugin/>
-                                  
+                                  <NewMentionsPlugin />
+
                                   <div className="-mx-2 mt-1">
                                     <ToolbarPluginWrapper setEditorInstance={setBioEditorInstance} />
                                   </div>
 
                                   <RichTextPlugin
                                     contentEditable={
-                                      <ContentEditable 
+                                      <ContentEditable
                                         className="editor-input lexical-editor px-4 py-3"
                                         style={{
                                           minHeight: '120px',
@@ -2888,11 +2872,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
                           {/* Date of Birth */}
                           <div
-                            className={`rounded-2xl border p-5 ${
-                              theme === 'dark'
+                            className={`rounded-2xl border p-5 ${theme === 'dark'
                                 ? 'bg-gray-900/60 border-gray-800'
                                 : 'bg-white border-gray-200 shadow-sm'
-                            }`}
+                              }`}
                           >
                             <button
                               type="button"
@@ -2929,8 +2912,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                     <BirthdatePicker
                                       value={editFormData.date_of_birth as string}
                                       onChange={(newValue) =>
-                                setEditFormData({ 
-                                  ...editFormData, 
+                                        setEditFormData({
+                                          ...editFormData,
                                           date_of_birth: newValue,
                                         })
                                       }
@@ -2978,15 +2961,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                         privacy_level: level,
                                       })
                                     }
-                                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border ${
-                                      isActive
+                                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border ${isActive
                                         ? theme === 'dark'
                                           ? 'bg-white text-black border-white shadow-lg shadow-white/10'
                                           : 'bg-black text-white border-black shadow-lg shadow-black/10'
                                         : theme === 'dark'
-                                        ? 'bg-gray-900 border-gray-700 text-gray-300 hover:bg-gray-800'
-                                        : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-100'
-                                    }`}
+                                          ? 'bg-gray-900 border-gray-700 text-gray-300 hover:bg-gray-800'
+                                          : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-100'
+                                      }`}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                   >
@@ -2999,11 +2981,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
                           {isOwnProfile && (
                             <div
-                              className={`rounded-2xl border p-5 ${
-                                theme === 'dark'
+                              className={`rounded-2xl border p-5 ${theme === 'dark'
                                   ? 'bg-gray-900/60 border-gray-800'
                                   : 'bg-white border-gray-200 shadow-sm'
-                              }`}
+                                }`}
                             >
                               <button
                                 type="button"
@@ -3012,9 +2993,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                               >
                                 <div className="flex items-start gap-3">
                                   <div
-                                    className={`p-2.5 rounded-xl ${
-                                      theme === 'dark' ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'
-                                    }`}
+                                    className={`p-2.5 rounded-xl ${theme === 'dark' ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'
+                                      }`}
                                   >
                                     <Lock className="w-5 h-5" />
                                   </div>
@@ -3030,9 +3010,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                 <motion.div
                                   animate={{ rotate: isPasswordSectionOpen ? 180 : 0 }}
                                   transition={{ duration: 0.2 }}
-                                  className={`mt-1 ${
-                                    theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                                  }`}
+                                  className={`mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                                    }`}
                                 >
                                   <ChevronDown className="w-5 h-5" />
                                 </motion.div>
@@ -3053,15 +3032,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                         <motion.div
                                           initial={{ opacity: 0, y: -6 }}
                                           animate={{ opacity: 1, y: 0 }}
-                                          className={`text-sm font-medium rounded-xl px-3 py-2 border ${
-                                            passwordMessage.type === 'success'
+                                          className={`text-sm font-medium rounded-xl px-3 py-2 border ${passwordMessage.type === 'success'
                                               ? theme === 'dark'
                                                 ? 'bg-emerald-500/10 border-emerald-400/30 text-emerald-200'
                                                 : 'bg-emerald-50 border-emerald-200 text-emerald-700'
                                               : theme === 'dark'
                                                 ? 'bg-red-500/10 border-red-400/40 text-red-200'
                                                 : 'bg-red-50 border-red-200 text-red-600'
-                                          }`}
+                                            }`}
                                         >
                                           {passwordMessage.text}
                                         </motion.div>
@@ -3079,11 +3057,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                               onChange={(e) => handlePasswordInputChange('currentPassword', e.target.value)}
                                               placeholder={t('profile.password_current_placeholder')}
                                               autoComplete="current-password"
-                                              className={`w-full px-4 py-3 pr-11 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${
-                                                theme === 'dark'
+                                              className={`w-full px-4 py-3 pr-11 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${theme === 'dark'
                                                   ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-white'
                                                   : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
-                                              }`}
+                                                }`}
                                             />
                                             <button
                                               type="button"
@@ -3107,11 +3084,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                               onChange={(e) => handlePasswordInputChange('newPassword', e.target.value)}
                                               placeholder={t('profile.password_new_placeholder')}
                                               autoComplete="new-password"
-                                              className={`w-full px-4 py-3 pr-11 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${
-                                                theme === 'dark'
+                                              className={`w-full px-4 py-3 pr-11 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${theme === 'dark'
                                                   ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-white'
                                                   : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
-                                              }`}
+                                                }`}
                                             />
                                             <button
                                               type="button"
@@ -3135,11 +3111,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                               onChange={(e) => handlePasswordInputChange('confirmNewPassword', e.target.value)}
                                               placeholder={t('profile.password_confirm_placeholder')}
                                               autoComplete="new-password"
-                                              className={`w-full px-4 py-3 pr-11 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${
-                                                theme === 'dark'
+                                              className={`w-full px-4 py-3 pr-11 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${theme === 'dark'
                                                   ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-white'
                                                   : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
-                                              }`}
+                                                }`}
                                             />
                                             <button
                                               type="button"
@@ -3158,13 +3133,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                           type="button"
                                           onClick={handlePasswordSubmit}
                                           disabled={isUpdatingPassword}
-                                          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                                            isUpdatingPassword
+                                          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${isUpdatingPassword
                                               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                               : theme === 'dark'
                                                 ? 'bg-white text-black hover:bg-gray-200'
                                                 : 'bg-black text-white hover:bg-gray-900'
-                                          }`}
+                                            }`}
                                         >
                                           {isUpdatingPassword ? (
                                             <>
@@ -3198,247 +3172,247 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                         >
                           {/* Attributes List - iOS tableView style */}
                           <div className="relative">
-                    {/* List View */}
-                    <motion.div
-                      animate={{ 
-                        x: attributeView === 'list' ? 0 : '-100%',
-                        opacity: attributeView === 'list' ? 1 : 0
-                      }}
-                      transition={{ 
-                        type: 'spring', 
-                        damping: 35, 
-                        stiffness: 400,
-                        mass: 0.8
-                      }}
-                      className={`relative ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}`}
-                      style={{ 
-                        pointerEvents: attributeView === 'list' ? 'auto' : 'none',
-                        willChange: 'transform, opacity'
-                      }}
-                    >
-                      {/* List Header */}
-                      <div className={`px-4 py-4 flex items-center ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}`}>
-                        <h3 className={`text-base font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                          {t('profile.attributes')}
-                        </h3>
-                      </div>
-                      
-                      {/* List Content */}
-                      <div className={`rounded-xl overflow-hidden ${theme === 'dark' ? 'bg-gray-900/50' : 'bg-white'} border ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
-                        {USER_ATTRIBUTES.map((item, index) => {
-                          const isLast = index === USER_ATTRIBUTES.length - 1;
-                          const isLoading = updatingAttributes[item.field] || false;
-                          const options = fieldOptions[item.field] || [];
-                          
-                          // Get current value
-                          const userToCheck = isEditMode && isAuthenticated ? authUser : user;
-                          let currentAttributeId = '';
-                          let selectedOption = null;
-                          let hasValue = false;
-                          let displayValue = t('profile.select_option');
-                          
-                          // Check if this is a sexual identity field
-                          if (item.field === 'gender_identity') {
-                            // Check both structures: direct array or nested in sexual_identities
-                            const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
-                            const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
-                            if (genderIdentity?.id) {
-                              currentAttributeId = genderIdentity.id;
-                              selectedOption = options.find((opt: any) => opt.id === currentAttributeId);
-                              if (selectedOption) {
-                                displayValue = selectedOption.name;
-                                hasValue = true;
-                              } else if (genderIdentity.name) {
-                                displayValue = genderIdentity.name[defaultLanguage] || genderIdentity.name.en || Object.values(genderIdentity.name)[0] || t('profile.select_option');
-                                hasValue = !!displayValue && displayValue !== t('profile.select_option');
-                              }
-                            }
-                          } else if (item.field === 'sexual_orientation') {
-                            // Check both structures: direct array or nested in sexual_identities
-                            const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
-                            const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
-                            if (sexualOrientation?.id) {
-                              currentAttributeId = sexualOrientation.id;
-                              selectedOption = options.find((opt: any) => opt.id === currentAttributeId);
-                              if (selectedOption) {
-                                displayValue = selectedOption.name;
-                                hasValue = true;
-                              } else if (sexualOrientation.name) {
-                                displayValue = sexualOrientation.name[defaultLanguage] || sexualOrientation.name.en || Object.values(sexualOrientation.name)[0] || t('profile.select_option');
-                                hasValue = !!displayValue && displayValue !== t('profile.select_option');
-                              }
-                            }
-                          } else if (item.field === 'sex_role') {
-                            // Check multiple structures: sexual_role, sex_role, or nested in sexual_identities
-                            const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
-                            if (sexRole?.id) {
-                              currentAttributeId = sexRole.id;
-                              selectedOption = options.find((opt: any) => opt.id === currentAttributeId);
-                              if (selectedOption) {
-                                displayValue = selectedOption.name;
-                                hasValue = true;
-                              } else if (sexRole.name) {
-                                displayValue = sexRole.name[defaultLanguage] || sexRole.name.en || Object.values(sexRole.name)[0] || t('profile.select_option');
-                                hasValue = !!displayValue && displayValue !== t('profile.select_option');
-                              }
-                            }
-                          } else {
-                            // Regular attribute from user_attributes
-                            const currentUserAttribute = userToCheck?.user_attributes?.find(
-                              (ua: any) => ua.category_type === item.field
-                            );
-                            
-                            currentAttributeId = currentUserAttribute?.attribute_id || '';
-                            selectedOption = currentAttributeId 
-                              ? options.find((opt: any) => opt.id === currentAttributeId)
-                              : null;
-                            
-                            // If option found, use its name, otherwise try to use attribute.name from user_attributes
-                            hasValue = !!(selectedOption || (currentUserAttribute?.attribute?.name));
-                            displayValue = selectedOption 
-                              ? selectedOption.name
-                              : currentUserAttribute?.attribute?.name
-                              ? (currentUserAttribute.attribute.name[defaultLanguage] || currentUserAttribute.attribute.name.en || Object.values(currentUserAttribute.attribute.name)[0] || t('profile.select_option'))
-                              : t('profile.select_option');
-                          }
-                          
-                          return (
-                            <button
-                              key={item.field}
-                              type="button"
-                              onClick={() => handleFieldClick(item.field)}
-                              disabled={isLoading}
-                              className={`w-full px-4 py-4 flex items-center justify-between transition-colors ${isLoading ? 'opacity-50 cursor-default' : ''} ${!isLast ? `border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}` : ''} ${theme === 'dark'
-                                ? 'text-white hover:bg-gray-800/50 active:bg-gray-800'
-                                : 'text-gray-900 hover:bg-gray-50 active:bg-gray-100'
-                              }`}
+                            {/* List View */}
+                            <motion.div
+                              animate={{
+                                x: attributeView === 'list' ? 0 : '-100%',
+                                opacity: attributeView === 'list' ? 1 : 0
+                              }}
+                              transition={{
+                                type: 'spring',
+                                damping: 35,
+                                stiffness: 400,
+                                mass: 0.8
+                              }}
+                              className={`relative ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}`}
+                              style={{
+                                pointerEvents: attributeView === 'list' ? 'auto' : 'none',
+                                willChange: 'transform, opacity'
+                              }}
                             >
-                              <div className="flex items-center gap-3 flex-1 min-w-0">
-                                <item.icon className={`w-7 h-7 flex-shrink-0 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
-                                <span className="font-medium text-base flex-1 text-left">{item.label}</span>
+                              {/* List Header */}
+                              <div className={`px-4 py-4 flex items-center ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}`}>
+                                <h3 className={`text-base font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                  {t('profile.attributes')}
+                                </h3>
                               </div>
-                              <div className="flex items-center gap-2 flex-shrink-0 ml-3">
-                                {!hasValue && (
-                                  <AlertTriangle className={`w-4 h-4 flex-shrink-0 ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-500'}`} />
-                                )}
-                                <span className={`text-sm ${hasValue 
-                                  ? (theme === 'dark' ? 'text-gray-300' : 'text-gray-700')
-                                  : (theme === 'dark' ? 'text-yellow-400' : 'text-yellow-600')
-                                } truncate max-w-[120px]`}>
-                                  {displayValue}
-                                </span>
-                                {isLoading ? (
-                                  <div className={`w-4 h-4 border-2 ${theme === 'dark' ? 'border-gray-500 border-t-gray-300' : 'border-gray-400 border-t-gray-600'} rounded-full animate-spin flex-shrink-0`} />
+
+                              {/* List Content */}
+                              <div className={`rounded-xl overflow-hidden ${theme === 'dark' ? 'bg-gray-900/50' : 'bg-white'} border ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
+                                {USER_ATTRIBUTES.map((item, index) => {
+                                  const isLast = index === USER_ATTRIBUTES.length - 1;
+                                  const isLoading = updatingAttributes[item.field] || false;
+                                  const options = fieldOptions[item.field] || [];
+
+                                  // Get current value
+                                  const userToCheck = isEditMode && isAuthenticated ? authUser : user;
+                                  let currentAttributeId = '';
+                                  let selectedOption = null;
+                                  let hasValue = false;
+                                  let displayValue = t('profile.select_option');
+
+                                  // Check if this is a sexual identity field
+                                  if (item.field === 'gender_identity') {
+                                    // Check both structures: direct array or nested in sexual_identities
+                                    const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
+                                    const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
+                                    if (genderIdentity?.id) {
+                                      currentAttributeId = genderIdentity.id;
+                                      selectedOption = options.find((opt: any) => opt.id === currentAttributeId);
+                                      if (selectedOption) {
+                                        displayValue = selectedOption.name;
+                                        hasValue = true;
+                                      } else if (genderIdentity.name) {
+                                        displayValue = genderIdentity.name[defaultLanguage] || genderIdentity.name.en || Object.values(genderIdentity.name)[0] || t('profile.select_option');
+                                        hasValue = !!displayValue && displayValue !== t('profile.select_option');
+                                      }
+                                    }
+                                  } else if (item.field === 'sexual_orientation') {
+                                    // Check both structures: direct array or nested in sexual_identities
+                                    const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
+                                    const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
+                                    if (sexualOrientation?.id) {
+                                      currentAttributeId = sexualOrientation.id;
+                                      selectedOption = options.find((opt: any) => opt.id === currentAttributeId);
+                                      if (selectedOption) {
+                                        displayValue = selectedOption.name;
+                                        hasValue = true;
+                                      } else if (sexualOrientation.name) {
+                                        displayValue = sexualOrientation.name[defaultLanguage] || sexualOrientation.name.en || Object.values(sexualOrientation.name)[0] || t('profile.select_option');
+                                        hasValue = !!displayValue && displayValue !== t('profile.select_option');
+                                      }
+                                    }
+                                  } else if (item.field === 'sex_role') {
+                                    // Check multiple structures: sexual_role, sex_role, or nested in sexual_identities
+                                    const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
+                                    if (sexRole?.id) {
+                                      currentAttributeId = sexRole.id;
+                                      selectedOption = options.find((opt: any) => opt.id === currentAttributeId);
+                                      if (selectedOption) {
+                                        displayValue = selectedOption.name;
+                                        hasValue = true;
+                                      } else if (sexRole.name) {
+                                        displayValue = sexRole.name[defaultLanguage] || sexRole.name.en || Object.values(sexRole.name)[0] || t('profile.select_option');
+                                        hasValue = !!displayValue && displayValue !== t('profile.select_option');
+                                      }
+                                    }
+                                  } else {
+                                    // Regular attribute from user_attributes
+                                    const currentUserAttribute = userToCheck?.user_attributes?.find(
+                                      (ua: any) => ua.category_type === item.field
+                                    );
+
+                                    currentAttributeId = currentUserAttribute?.attribute_id || '';
+                                    selectedOption = currentAttributeId
+                                      ? options.find((opt: any) => opt.id === currentAttributeId)
+                                      : null;
+
+                                    // If option found, use its name, otherwise try to use attribute.name from user_attributes
+                                    hasValue = !!(selectedOption || (currentUserAttribute?.attribute?.name));
+                                    displayValue = selectedOption
+                                      ? selectedOption.name
+                                      : currentUserAttribute?.attribute?.name
+                                        ? (currentUserAttribute.attribute.name[defaultLanguage] || currentUserAttribute.attribute.name.en || Object.values(currentUserAttribute.attribute.name)[0] || t('profile.select_option'))
+                                        : t('profile.select_option');
+                                  }
+
+                                  return (
+                                    <button
+                                      key={item.field}
+                                      type="button"
+                                      onClick={() => handleFieldClick(item.field)}
+                                      disabled={isLoading}
+                                      className={`w-full px-4 py-4 flex items-center justify-between transition-colors ${isLoading ? 'opacity-50 cursor-default' : ''} ${!isLast ? `border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}` : ''} ${theme === 'dark'
+                                        ? 'text-white hover:bg-gray-800/50 active:bg-gray-800'
+                                        : 'text-gray-900 hover:bg-gray-50 active:bg-gray-100'
+                                        }`}
+                                    >
+                                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                                        <item.icon className={`w-7 h-7 flex-shrink-0 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+                                        <span className="font-medium text-base flex-1 text-left">{item.label}</span>
+                                      </div>
+                                      <div className="flex items-center gap-2 flex-shrink-0 ml-3">
+                                        {!hasValue && (
+                                          <AlertTriangle className={`w-4 h-4 flex-shrink-0 ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-500'}`} />
+                                        )}
+                                        <span className={`text-sm ${hasValue
+                                          ? (theme === 'dark' ? 'text-gray-300' : 'text-gray-700')
+                                          : (theme === 'dark' ? 'text-yellow-400' : 'text-yellow-600')
+                                          } truncate max-w-[120px]`}>
+                                          {displayValue}
+                                        </span>
+                                        {isLoading ? (
+                                          <div className={`w-4 h-4 border-2 ${theme === 'dark' ? 'border-gray-500 border-t-gray-300' : 'border-gray-400 border-t-gray-600'} rounded-full animate-spin flex-shrink-0`} />
+                                        ) : (
+                                          <ChevronRight className={`w-5 h-5 flex-shrink-0 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+                                        )}
+                                      </div>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </motion.div>
+
+                            {/* Detail View */}
+                            <motion.div
+                              animate={{
+                                x: attributeView === 'detail' ? 0 : '100%',
+                                opacity: attributeView === 'detail' ? 1 : 0
+                              }}
+                              transition={{
+                                type: 'spring',
+                                damping: 35,
+                                stiffness: 400,
+                                mass: 0.8
+                              }}
+                              className={`absolute inset-0 ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'} z-10`}
+                              style={{
+                                pointerEvents: attributeView === 'detail' ? 'auto' : 'none',
+                                willChange: 'transform, opacity'
+                              }}
+                            >
+                              {/* Detail Header */}
+                              <div className={`px-4 py-4 flex items-center ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}`}>
+                                <button
+                                  onClick={() => {
+                                    setAttributeView('list');
+                                    setSelectedField(null);
+                                  }}
+                                  className={`p-2 rounded-full transition-colors ${theme === 'dark'
+                                    ? 'hover:bg-gray-800 text-gray-400 hover:text-gray-300'
+                                    : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+                                    }`}
+                                >
+                                  <ArrowLeft className="w-5 h-5" />
+                                </button>
+                                <h2 className={`text-lg font-bold flex-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                  {selectedField ? (fieldLabels[selectedField] || selectedField) : ''}
+                                </h2>
+                              </div>
+
+                              {/* Options List */}
+                              <div className={`rounded-xl overflow-hidden ${theme === 'dark' ? 'bg-gray-900/50' : 'bg-white'} border ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
+                                {selectedField && fieldOptions[selectedField] && fieldOptions[selectedField].length > 0 ? (
+                                  fieldOptions[selectedField].map((option, index) => {
+                                    // Get current value
+                                    const userToCheck = isEditMode && isAuthenticated ? authUser : user;
+                                    let currentAttributeId = '';
+                                    let isSelected = false;
+
+                                    // Check if this is a sexual identity field
+                                    if (selectedField === 'gender_identity') {
+                                      const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
+                                      const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
+                                      currentAttributeId = genderIdentity?.id || '';
+                                      isSelected = currentAttributeId === option.id;
+                                    } else if (selectedField === 'sexual_orientation') {
+                                      const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
+                                      const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
+                                      currentAttributeId = sexualOrientation?.id || '';
+                                      isSelected = currentAttributeId === option.id;
+                                    } else if (selectedField === 'sex_role') {
+                                      const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
+                                      currentAttributeId = sexRole?.id || '';
+                                      isSelected = currentAttributeId === option.id;
+                                    } else {
+                                      // Regular attribute from user_attributes
+                                      const currentUserAttribute = userToCheck?.user_attributes?.find(
+                                        (ua: any) => ua.category_type === selectedField
+                                      );
+                                      currentAttributeId = currentUserAttribute?.attribute_id || '';
+                                      isSelected = currentAttributeId === option.id;
+                                    }
+
+                                    const isLast = index === fieldOptions[selectedField].length - 1;
+                                    return (
+                                      <button
+                                        key={option.id}
+                                        onClick={() => handleFieldOptionSelect(selectedField, option.id)}
+                                        className={`w-full px-4 py-4 text-left flex items-center justify-between transition-colors ${!isLast ? `border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}` : ''} ${isSelected
+                                          ? theme === 'dark'
+                                            ? 'bg-gray-800/50 text-white'
+                                            : 'bg-gray-50 text-gray-900'
+                                          : theme === 'dark'
+                                            ? 'border-gray-800 text-gray-300 hover:bg-gray-800/30 active:bg-gray-800'
+                                            : 'border-gray-100 text-gray-900 hover:bg-gray-50 active:bg-gray-100'
+                                          }`}
+                                      >
+                                        <span className="text-base font-medium">{option.name}</span>
+                                        {isSelected && (
+                                          <Check className={`w-5 h-5 flex-shrink-0 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
+                                        )}
+                                      </button>
+                                    );
+                                  })
                                 ) : (
-                                  <ChevronRight className={`w-5 h-5 flex-shrink-0 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+                                  <div className={`px-4 py-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    <p className="text-sm">{t('profile.no_options_available') || 'No options available for this attribute'}</p>
+                                  </div>
                                 )}
                               </div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </motion.div>
-
-                    {/* Detail View */}
-                    <motion.div
-                      animate={{ 
-                        x: attributeView === 'detail' ? 0 : '100%',
-                        opacity: attributeView === 'detail' ? 1 : 0
-                      }}
-                      transition={{ 
-                        type: 'spring', 
-                        damping: 35, 
-                        stiffness: 400,
-                        mass: 0.8
-                      }}
-                      className={`absolute inset-0 ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'} z-10`}
-                      style={{ 
-                        pointerEvents: attributeView === 'detail' ? 'auto' : 'none',
-                        willChange: 'transform, opacity'
-                      }}
-                    >
-                      {/* Detail Header */}
-                      <div className={`px-4 py-4 flex items-center ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}`}>
-                        <button
-                          onClick={() => {
-                            setAttributeView('list');
-                            setSelectedField(null);
-                          }}
-                          className={`p-2 rounded-full transition-colors ${theme === 'dark'
-                            ? 'hover:bg-gray-800 text-gray-400 hover:text-gray-300'
-                            : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
-                          }`}
-                        >
-                          <ArrowLeft className="w-5 h-5" />
-                        </button>
-                        <h2 className={`text-lg font-bold flex-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                          {selectedField ? (fieldLabels[selectedField] || selectedField) : ''}
-                        </h2>
-                      </div>
-
-                      {/* Options List */}
-                      <div className={`rounded-xl overflow-hidden ${theme === 'dark' ? 'bg-gray-900/50' : 'bg-white'} border ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
-                        {selectedField && fieldOptions[selectedField] && fieldOptions[selectedField].length > 0 ? (
-                          fieldOptions[selectedField].map((option, index) => {
-                            // Get current value
-                            const userToCheck = isEditMode && isAuthenticated ? authUser : user;
-                            let currentAttributeId = '';
-                            let isSelected = false;
-                            
-                            // Check if this is a sexual identity field
-                            if (selectedField === 'gender_identity') {
-                              const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
-                              const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
-                              currentAttributeId = genderIdentity?.id || '';
-                              isSelected = currentAttributeId === option.id;
-                            } else if (selectedField === 'sexual_orientation') {
-                              const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
-                              const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
-                              currentAttributeId = sexualOrientation?.id || '';
-                              isSelected = currentAttributeId === option.id;
-                            } else if (selectedField === 'sex_role') {
-                              const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
-                              currentAttributeId = sexRole?.id || '';
-                              isSelected = currentAttributeId === option.id;
-                            } else {
-                              // Regular attribute from user_attributes
-                              const currentUserAttribute = userToCheck?.user_attributes?.find(
-                                (ua: any) => ua.category_type === selectedField
-                              );
-                              currentAttributeId = currentUserAttribute?.attribute_id || '';
-                              isSelected = currentAttributeId === option.id;
-                            }
-                            
-                            const isLast = index === fieldOptions[selectedField].length - 1;
-                            return (
-                              <button
-                                key={option.id}
-                                onClick={() => handleFieldOptionSelect(selectedField, option.id)}
-                                className={`w-full px-4 py-4 text-left flex items-center justify-between transition-colors ${!isLast ? `border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}` : ''} ${isSelected
-                                    ? theme === 'dark'
-                                      ? 'bg-gray-800/50 text-white'
-                                      : 'bg-gray-50 text-gray-900'
-                                    : theme === 'dark'
-                                      ? 'border-gray-800 text-gray-300 hover:bg-gray-800/30 active:bg-gray-800'
-                                      : 'border-gray-100 text-gray-900 hover:bg-gray-50 active:bg-gray-100'
-                                  }`}
-                              >
-                                <span className="text-base font-medium">{option.name}</span>
-                                {isSelected && (
-                                  <Check className={`w-5 h-5 flex-shrink-0 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
-                                )}
-                              </button>
-                            );
-                          })
-                        ) : (
-                          <div className={`px-4 py-8 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                            <p className="text-sm">{t('profile.no_options_available') || 'No options available for this attribute'}</p>
-                          </div>
-                        )}
+                            </motion.div>
                           </div>
                         </motion.div>
-                      </div>
-                    </motion.div>
                       )}
                       {editTab === 'interests' && (
                         <motion.div
@@ -3453,18 +3427,18 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                           <div className="relative">
                             {/* List View */}
                             <motion.div
-                              animate={{ 
+                              animate={{
                                 x: interestView === 'list' ? 0 : '-100%',
                                 opacity: interestView === 'list' ? 1 : 0
                               }}
-                              transition={{ 
-                                type: 'spring', 
-                                damping: 35, 
+                              transition={{
+                                type: 'spring',
+                                damping: 35,
                                 stiffness: 400,
                                 mass: 0.8
                               }}
                               className={`relative ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}`}
-                              style={{ 
+                              style={{
                                 pointerEvents: interestView === 'list' ? 'auto' : 'none',
                                 willChange: 'transform, opacity'
                               }}
@@ -3475,7 +3449,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                   {t('profile.interests')}
                                 </h3>
                               </div>
-                              
+
                               {/* List Content */}
                               <div className={`rounded-xl overflow-hidden ${theme === 'dark' ? 'bg-gray-900/50' : 'bg-white'} border ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
                                 {interestCategories.map((category, index) => {
@@ -3484,7 +3458,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                   const selectedCount = categoryItems.filter(item => userSelectedInterestIds.includes(item.id)).length;
                                   const hasSelections = selectedCount > 0;
                                   const selectedItems = userSelectedInterestsByCategory[category.id] || [];
-                                  
+
                                   return (
                                     <button
                                       key={category.id}
@@ -3494,7 +3468,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                       className={`w-full px-4 py-4 flex items-center justify-between transition-colors ${updatingInterests ? 'opacity-50 cursor-default' : ''} ${!isLast ? `border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}` : ''} ${theme === 'dark'
                                         ? 'text-white hover:bg-gray-800/50 active:bg-gray-800'
                                         : 'text-gray-900 hover:bg-gray-50 active:bg-gray-100'
-                                      }`}
+                                        }`}
                                     >
                                       <div className="flex items-center gap-3 flex-1 min-w-0">
                                         <span className="font-medium text-base flex-1 text-left">{category.name}</span>
@@ -3506,7 +3480,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                                 className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${theme === 'dark'
                                                   ? 'bg-gray-800 text-gray-200 border border-gray-700'
                                                   : 'bg-gray-100 text-gray-700 border border-gray-200'
-                                                }`}
+                                                  }`}
                                               >
                                                 {item.emoji && <span>{item.emoji}</span>}
                                                 <span className="truncate max-w-[60px]">{item.name}</span>
@@ -3536,18 +3510,18 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
                             {/* Detail View */}
                             <motion.div
-                              animate={{ 
+                              animate={{
                                 x: interestView === 'detail' ? 0 : '100%',
                                 opacity: interestView === 'detail' ? 1 : 0
                               }}
-                              transition={{ 
-                                type: 'spring', 
-                                damping: 35, 
+                              transition={{
+                                type: 'spring',
+                                damping: 35,
                                 stiffness: 400,
                                 mass: 0.8
                               }}
                               className={`absolute inset-0 ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'} z-10`}
-                              style={{ 
+                              style={{
                                 pointerEvents: interestView === 'detail' ? 'auto' : 'none',
                                 willChange: 'transform, opacity'
                               }}
@@ -3562,7 +3536,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                   className={`p-2 rounded-full transition-colors ${theme === 'dark'
                                     ? 'hover:bg-gray-800 text-gray-400 hover:text-gray-300'
                                     : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
-                                  }`}
+                                    }`}
                                 >
                                   <ArrowLeft className="w-5 h-5" />
                                 </button>
@@ -3583,12 +3557,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                         onClick={() => handleInterestItemToggle(item.id)}
                                         disabled={updatingInterests}
                                         className={`w-full px-4 py-4 text-left flex items-center justify-between transition-colors ${!isLast ? `border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}` : ''} ${isSelected
-                                            ? theme === 'dark'
-                                              ? 'bg-gray-800/50 text-white'
-                                              : 'bg-gray-50 text-gray-900'
-                                            : theme === 'dark'
-                                              ? 'border-gray-800 text-gray-300 hover:bg-gray-800/30 active:bg-gray-800'
-                                              : 'border-gray-100 text-gray-900 hover:bg-gray-50 active:bg-gray-100'
+                                          ? theme === 'dark'
+                                            ? 'bg-gray-800/50 text-white'
+                                            : 'bg-gray-50 text-gray-900'
+                                          : theme === 'dark'
+                                            ? 'border-gray-800 text-gray-300 hover:bg-gray-800/30 active:bg-gray-800'
+                                            : 'border-gray-100 text-gray-900 hover:bg-gray-50 active:bg-gray-100'
                                           } ${updatingInterests ? 'opacity-50 cursor-wait' : ''}`}
                                       >
                                         <div className="flex items-center gap-3 flex-1">
@@ -3626,18 +3600,18 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                           <div className="relative">
                             {/* List View */}
                             <motion.div
-                              animate={{ 
+                              animate={{
                                 x: fantasyView === 'list' ? 0 : '-100%',
                                 opacity: fantasyView === 'list' ? 1 : 0
                               }}
-                              transition={{ 
-                                type: 'spring', 
-                                damping: 35, 
+                              transition={{
+                                type: 'spring',
+                                damping: 35,
                                 stiffness: 400,
                                 mass: 0.8
                               }}
                               className={`relative ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}`}
-                              style={{ 
+                              style={{
                                 pointerEvents: fantasyView === 'list' ? 'auto' : 'none',
                                 willChange: 'transform, opacity'
                               }}
@@ -3648,7 +3622,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                   {t('profile.fantasies')}
                                 </h3>
                               </div>
-                              
+
                               {/* List Content */}
                               <div className={`rounded-xl overflow-hidden ${theme === 'dark' ? 'bg-gray-900/50' : 'bg-white'} border ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
                                 {fantasyCategories.map((category, index) => {
@@ -3657,7 +3631,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                   const selectedCount = categoryItems.filter(item => userSelectedFantasyIds.includes(item.id)).length;
                                   const hasSelections = selectedCount > 0;
                                   const selectedItems = userSelectedFantasiesByCategory[category.id] || [];
-                                  
+
                                   return (
                                     <button
                                       key={category.id}
@@ -3667,7 +3641,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                       className={`w-full px-4 py-4 flex items-center justify-between transition-colors ${updatingFantasies ? 'opacity-50 cursor-default' : ''} ${!isLast ? `border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}` : ''} ${theme === 'dark'
                                         ? 'text-white hover:bg-gray-800/50 active:bg-gray-800'
                                         : 'text-gray-900 hover:bg-gray-50 active:bg-gray-100'
-                                      }`}
+                                        }`}
                                     >
                                       <div className="flex items-center gap-3 flex-1 min-w-0">
                                         <span className="font-medium text-base flex-1 text-left">{category.name}</span>
@@ -3679,7 +3653,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                                 className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${theme === 'dark'
                                                   ? 'bg-gray-800 text-gray-200 border border-gray-700'
                                                   : 'bg-gray-100 text-gray-700 border border-gray-200'
-                                                }`}
+                                                  }`}
                                               >
                                                 <span className="truncate max-w-[80px]">{item.name}</span>
                                               </span>
@@ -3708,18 +3682,18 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
                             {/* Detail View */}
                             <motion.div
-                              animate={{ 
+                              animate={{
                                 x: fantasyView === 'detail' ? 0 : '100%',
                                 opacity: fantasyView === 'detail' ? 1 : 0
                               }}
-                              transition={{ 
-                                type: 'spring', 
-                                damping: 35, 
+                              transition={{
+                                type: 'spring',
+                                damping: 35,
                                 stiffness: 400,
                                 mass: 0.8
                               }}
                               className={`absolute inset-0 ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'} z-10`}
-                              style={{ 
+                              style={{
                                 pointerEvents: fantasyView === 'detail' ? 'auto' : 'none',
                                 willChange: 'transform, opacity'
                               }}
@@ -3734,7 +3708,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                   className={`p-2 rounded-full transition-colors ${theme === 'dark'
                                     ? 'hover:bg-gray-800 text-gray-400 hover:text-gray-300'
                                     : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
-                                  }`}
+                                    }`}
                                 >
                                   <ArrowLeft className="w-5 h-5" />
                                 </button>
@@ -3755,12 +3729,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                         onClick={() => handleFantasyItemToggle(item.id)}
                                         disabled={updatingFantasies}
                                         className={`w-full px-4 py-4 text-left flex items-center justify-between transition-colors ${!isLast ? `border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'}` : ''} ${isSelected
-                                            ? theme === 'dark'
-                                              ? 'bg-gray-800/50 text-white'
-                                              : 'bg-gray-50 text-gray-900'
-                                            : theme === 'dark'
-                                              ? 'border-gray-800 text-gray-300 hover:bg-gray-800/30 active:bg-gray-800'
-                                              : 'border-gray-100 text-gray-900 hover:bg-gray-50 active:bg-gray-100'
+                                          ? theme === 'dark'
+                                            ? 'bg-gray-800/50 text-white'
+                                            : 'bg-gray-50 text-gray-900'
+                                          : theme === 'dark'
+                                            ? 'border-gray-800 text-gray-300 hover:bg-gray-800/30 active:bg-gray-800'
+                                            : 'border-gray-100 text-gray-900 hover:bg-gray-50 active:bg-gray-100'
                                           } ${updatingFantasies ? 'opacity-50 cursor-wait' : ''}`}
                                       >
                                         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -3792,7 +3766,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                     </AnimatePresence>
                   </div>
 
-              {error && (
+                  {error && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -3820,10 +3794,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                       onClick={handleSaveProfile}
                       disabled={isSaving}
                       className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 ${isSaving
-                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          : theme === 'dark'
-                            ? 'bg-white text-black hover:bg-gray-200'
-                            : 'bg-black text-white hover:bg-gray-900'
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        : theme === 'dark'
+                          ? 'bg-white text-black hover:bg-gray-200'
+                          : 'bg-black text-white hover:bg-gray-900'
                         }`}
                     >
                       {isSaving ? (
@@ -3845,331 +3819,484 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           </main>
         ) : (
           // Profile View
-        <main className={`flex-1 w-full min-w-0 ${theme === 'dark' ? 'border-x border-black' : 'border-x border-gray-100'}`}>
+          <main className={`flex-1 w-full min-w-0 ${theme === 'dark' ? 'border-x border-black' : 'border-x border-gray-100'}`}>
 
-          {/* Cover Photo */}
-          <div className={`h-48  relative ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
-            {getCoverImageUrl() ? (
-              <img
-                src={getCoverImageUrl() || ''}
-                alt="Cover"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className={`w-full h-full ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`} />
-            )}
-          </div>
+            {/* Cover Photo */}
+            <div className={`h-48  relative ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
+              {getCoverImageUrl() ? (
+                <img
+                  src={getCoverImageUrl() || ''}
+                  alt="Cover"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className={`w-full h-full ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`} />
+              )}
+            </div>
 
-          {/* Profile Info */}
-          <div className="px-4">
-            {/* Profile Picture & Edit Button Row */}
-            <div className="flex items-end justify-between -mt-16 mb-3 relative">
-              {/* Profile Picture */}
-              <div className={`relative w-32 h-32 rounded-full border-4 ${theme === 'dark' ? 'border-black' : 'border-white'} ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'} z-10`}>
+            {/* Profile Info */}
+            <div className="px-4">
+              {/* Profile Picture & Edit Button Row */}
+              <div className="flex items-end justify-between -mt-16 mb-3 relative">
+                {/* Profile Picture */}
+                <div className={`relative w-32 h-32 rounded-full border-4 ${theme === 'dark' ? 'border-black' : 'border-white'} ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'} z-10`}>
                   <img
-                  src={getProfileImageUrl() || `https://ui-avatars.com/api/?name=${user.username}&background=random`}
+                    src={getProfileImageUrl() || `https://ui-avatars.com/api/?name=${user.username}&background=random`}
                     alt={user.displayname}
                     className="w-full h-full gay rounded-full object-cover"
                   />
-              </div>
+                </div>
 
-              {/* Action Button */}
-              {isOwnProfile ? (
-                <button
-                  onClick={() => setIsEditMode(true)}
-                  className={`px-4 py-1.5 rounded-full font-bold text-sm transition-colors border relative z-10 ${theme === 'dark'
+                {/* Action Button */}
+                {isOwnProfile ? (
+                  <button
+                    onClick={() => setIsEditMode(true)}
+                    className={`px-4 py-1.5 rounded-full font-bold text-sm transition-colors border relative z-10 ${theme === 'dark'
                       ? 'border-gray-700 hover:bg-gray-900'
                       : 'border-gray-300 hover:bg-gray-50'
-                    }`}
-                >
-                  {t('profile.edit_profile_button')}
-                </button>
-              ) : (
-                <div className="flex gap-2 relative z-10">
-              <button
-                onClick={handleFollowClick}
-                    className={`px-4 py-1.5 rounded-full font-bold text-sm transition-colors ${isFollowing
-                        ? `border ${theme === 'dark' ? 'border-gray-700 hover:bg-gray-900' : 'border-gray-300 hover:bg-gray-50'}`
-                    : theme === 'dark'
-                      ? 'bg-white text-black hover:bg-gray-200'
-                      : 'bg-black text-white hover:bg-gray-900'
-                  }`}
-              >
-                {isFollowing ? t('profile.following') : t('profile.follow')}
-              </button>
-                  <button
-                    className={`px-2 py-1.5 rounded-full transition-colors border ${theme === 'dark'
-                        ? 'border-gray-700 hover:bg-gray-900'
-                        : 'border-gray-300 hover:bg-gray-50'
                       }`}
                   >
-                    <MoreHorizontal className="w-5 h-5" />
-              </button>
-                </div>
+                    {t('profile.edit_profile_button')}
+                  </button>
+                ) : (
+                  <div className="flex gap-2 relative z-10">
+                    <button
+                      onClick={handleFollowClick}
+                      className={`px-4 py-1.5 rounded-full font-bold text-sm transition-colors ${isFollowing
+                        ? `border ${theme === 'dark' ? 'border-gray-700 hover:bg-gray-900' : 'border-gray-300 hover:bg-gray-50'}`
+                        : theme === 'dark'
+                          ? 'bg-white text-black hover:bg-gray-200'
+                          : 'bg-black text-white hover:bg-gray-900'
+                        }`}
+                    >
+                      {isFollowing ? t('profile.following') : t('profile.follow')}
+                    </button>
+                    <button
+                      className={`px-2 py-1.5 rounded-full transition-colors border ${theme === 'dark'
+                        ? 'border-gray-700 hover:bg-gray-900'
+                        : 'border-gray-300 hover:bg-gray-50'
+                        }`}
+                    >
+                      <MoreHorizontal className="w-5 h-5" />
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* User Info */}
+              <div className="mb-3">
+                <h2 className={`text-xl font-bold leading-6 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                  {user.displayname}
+                </h2>
+                <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+                  @{user.username}
+                </p>
+              </div>
+
+              {/* Bio */}
+              {user.bio && user.default_language && user.bio[user.default_language] && (
+                <p className={`text-sm mb-3 leading-relaxed ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                  <span
+                    dangerouslySetInnerHTML={{ __html: user.bio[user.default_language] }}
+                  />
+                </p>
               )}
-            </div>
 
-            {/* User Info */}
-            <div className="mb-3">
-              <h2 className={`text-xl font-bold leading-6 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                {user.displayname}
-              </h2>
-              <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
-                @{user.username}
-              </p>
-            </div>
-
-            {/* Bio */}
-            {user.bio && (
-              <p className={`text-sm mb-3 leading-relaxed ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                {user.bio}
-              </p>
-            )}
-
-            {/* Meta Info */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-3 text-sm">
-              {getLocationDisplay(user.location) && (
+              {/* Meta Info */}
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-3 text-sm">
+                {getLocationDisplay(user.location) && (
+                  <div className={`flex items-center ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+                    <MapPin className="w-4 h-4 mr-1" />
+                    <span>{getLocationDisplay(user.location)}</span>
+                  </div>
+                )}
+                {user.website && (
+                  <div className={`flex items-center ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+                    <Link className="w-4 h-4 mr-1" />
+                    <a href={user.website} className="hover:underline" target="_blank" rel="noopener noreferrer">
+                      {user.website.replace(/^https?:\/\//, '')}
+                    </a>
+                  </div>
+                )}
                 <div className={`flex items-center ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
-                  <MapPin className="w-4 h-4 mr-1" />
-                  <span>{getLocationDisplay(user.location)}</span>
+                  <Calendar className="w-4 h-4 mr-1" />
+                  <span>{formatJoinDate(user.created_at)}</span>
                 </div>
-              )}
-              {user.website && (
-                <div className={`flex items-center ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
-                  <Link className="w-4 h-4 mr-1" />
-                  <a href={user.website} className="hover:underline" target="_blank" rel="noopener noreferrer">
-                    {user.website.replace(/^https?:\/\//, '')}
-                  </a>
-                </div>
-              )}
-              <div className={`flex items-center ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
-                <Calendar className="w-4 h-4 mr-1" />
-                <span>{formatJoinDate(user.created_at)}</span>
+              </div>
+
+
+
+              {/* Stats */}
+              <div className="flex gap-5 mb-4">
+                <button
+                  type="button"
+                  onClick={() => handleEngagementNavigate('followings')}
+                  className={`text-sm hover:underline ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}
+                >
+                  <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                    {followingCountDisplay.toLocaleString()}
+                  </span>
+                  <span className="ml-1">{followingLabel}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleEngagementNavigate('followers')}
+                  className={`text-sm hover:underline ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}
+                >
+                  <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                    {followerCountDisplay.toLocaleString()}
+                  </span>
+                  <span className="ml-1">{followersLabel}</span>
+                </button>
               </div>
             </div>
 
-
-
-            {/* Stats */}
-            <div className="flex gap-5 mb-4">
-              <button
-                type="button"
-                onClick={() => handleEngagementNavigate('followings')}
-                className={`text-sm hover:underline ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}
-              >
-                <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                  {followingCountDisplay.toLocaleString()}
-                </span>
-                <span className="ml-1">{followingLabel}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleEngagementNavigate('followers')}
-                className={`text-sm hover:underline ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}
-              >
-                <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                  {followerCountDisplay.toLocaleString()}
-                </span>
-                <span className="ml-1">{followersLabel}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Tabs - Sticky */}
-          <div className={`sticky z-20 border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'} backdrop-blur-sm ${theme === 'dark' ? 'bg-black/95' : 'bg-white/95'}`} style={{ top: inline || isEmbed ? '0' : `${headerHeight}px` }}>
-            <div className="flex relative">
-              {[
-                { id: 'profile', label: t('profile.profile_tab') },
-                { id: 'posts', label: t('profile.posts_tab') },
-                { id: 'replies', label: t('profile.replies_tab') },
-                { id: 'media', label: t('profile.media_tab') },
-                { id: 'likes', label: t('profile.likes_tab') },
-              ].map((tab) => (
-                <motion.button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex-1 py-4 font-bold text-sm relative transition-colors ${activeTab === tab.id
+            {/* Tabs - Sticky */}
+            <div className={`sticky z-20 border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'} backdrop-blur-sm ${theme === 'dark' ? 'bg-black/95' : 'bg-white/95'}`} style={{ top: inline || isEmbed ? '0' : `${headerHeight}px` }}>
+              <div className="flex relative">
+                {[
+                  { id: 'profile', label: t('profile.profile_tab') },
+                  { id: 'posts', label: t('profile.posts_tab') },
+                  { id: 'replies', label: t('profile.replies_tab') },
+                  { id: 'media', label: t('profile.media_tab') },
+                  { id: 'likes', label: t('profile.likes_tab') },
+                ].map((tab) => (
+                  <motion.button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as any)}
+                    className={`flex-1 py-4 font-bold text-sm relative transition-colors ${activeTab === tab.id
                       ? theme === 'dark' ? 'text-white' : 'text-black'
                       : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-600 hover:text-gray-800'
-                    }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="relative z-10">{tab.label}</span>
-                  {activeTab === tab.id && (
-                    <motion.div
-                      className={`absolute bottom-0 left-0 right-0 h-1 rounded-t-full ${theme === 'dark' ? 'bg-white' : 'bg-black'}`}
-                      layoutId="profileViewTabIndicator"
-                      transition={{ 
-                        type: "spring", 
-                        stiffness: 380, 
-                        damping: 30,
-                        mass: 0.8
-                      }}
-                    />
-                  )}
-                </motion.button>
-              ))}
+                      }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span className="relative z-10">{tab.label}</span>
+                    {activeTab === tab.id && (
+                      <motion.div
+                        className={`absolute bottom-0 left-0 right-0 h-1 rounded-t-full ${theme === 'dark' ? 'bg-white' : 'bg-black'}`}
+                        layoutId="profileViewTabIndicator"
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 30,
+                          mass: 0.8
+                        }}
+                      />
+                    )}
+                  </motion.button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className='w-full min-h-[100dvh]'>
-            {/* Profile */}
-            {activeTab === 'profile' && (
-              <div className="px-4 py-6 space-y-10">
-                {/* Attributes Section */}
-                <div className="w-full">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className={`text-[22px] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                      {t('profile.attributes')}
-                    </h2>
-                    <span className={`text-[13px] font-semibold ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
-                      {USER_ATTRIBUTES.filter(attr => {
-                        const ua = user?.user_attributes?.find((u: any) => u.category_type === attr.field);
-                        return !!(ua?.attribute?.name);
-                      }).length} / {USER_ATTRIBUTES.length}
-                    </span>
-                  </div>
-                  <div className={`rounded-[18px] overflow-hidden ${theme === 'dark' 
-                    ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]' 
-                    : 'bg-white backdrop-blur-xl border border-black/[0.06]'
-                  }`}>
-                    {USER_ATTRIBUTES.map((item, index) => {
-                      // Get display value - use authUser if viewing own profile in edit context, otherwise use user
-                      const userToCheck = (isOwnProfile && isAuthenticated && authUser) ? authUser : user;
-                      let displayValue = '';
-                      let hasValue = false;
-                      
-                      // Check if this is a sexual identity field
-                      if (item.field === 'gender_identity') {
-                        // Check both structures: direct array or nested in sexual_identities
-                        const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
-                        const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
-                        if (genderIdentity?.name) {
-                          displayValue = genderIdentity.name[defaultLanguage] || 
-                                        genderIdentity.name.en || 
-                                        Object.values(genderIdentity.name)[0] || '';
-                          hasValue = !!displayValue;
-                        }
-                      } else if (item.field === 'sexual_orientation') {
-                        // Check both structures: direct array or nested in sexual_identities
-                        const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
-                        const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
-                        if (sexualOrientation?.name) {
-                          displayValue = sexualOrientation.name[defaultLanguage] || 
-                                        sexualOrientation.name.en || 
-                                        Object.values(sexualOrientation.name)[0] || '';
-                          hasValue = !!displayValue;
-                        }
-                      } else if (item.field === 'sex_role') {
-                        // Check multiple structures: sexual_role, sex_role, or nested in sexual_identities
-                        const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
-                        if (sexRole?.name) {
-                          displayValue = sexRole.name[defaultLanguage] || 
-                                        sexRole.name.en || 
-                                        Object.values(sexRole.name)[0] || '';
-                          hasValue = !!displayValue;
-                        }
-                      } else {
-                        // Regular attribute from user_attributes
-                        const currentUserAttribute = userToCheck?.user_attributes?.find(
-                          (ua: any) => ua.category_type === item.field
-                        );
-                        
-                        if (currentUserAttribute?.attribute?.name) {
-                          displayValue = currentUserAttribute.attribute.name[defaultLanguage] || 
-                                        currentUserAttribute.attribute.name.en || 
-                                        Object.values(currentUserAttribute.attribute.name)[0] || '';
-                          hasValue = !!displayValue;
-                        }
-                        
-                        if (item.field === 'relationship_status' && !hasValue) {
-                          displayValue = userToCheck?.relationship_status || '';
-                          hasValue = !!displayValue;
-                        }
-                      }
-                      
-                      if (!hasValue) {
-                        displayValue = t('profile.select_option');
-                      }
-                      
-                      const isLast = index === USER_ATTRIBUTES.length - 1;
-                      
-                      return (
-                        <div 
-                          key={item.field} 
-                          className={`group flex items-center justify-between px-4 py-3 transition-all duration-200 ${
-                            !isLast ? `border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}` : ''
-                          } ${theme === 'dark' ? 'hover:bg-white/[0.03] active:bg-white/[0.05]' : 'hover:bg-black/[0.02] active:bg-black/[0.03]'}`}
-                        >
-                          <div className="flex items-center gap-3 min-w-0 flex-1">
-                            <div className={`p-2.5 rounded-[10px] transition-all duration-200 ${theme === 'dark' 
-                              ? 'bg-white/[0.08] group-hover:bg-white/[0.12]' 
-                              : 'bg-black/[0.04] group-hover:bg-black/[0.06]'
-                            }`}>
-                              <item.icon className={`w-7 h-7 ${theme === 'dark' ? 'text-white/90' : 'text-black/90'}`} />
-                            </div>
-                            <span className={`text-[15px] font-medium tracking-[-0.011em] ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                              {item.label}
-                            </span>
-                            </div>
-                          <div className="flex items-center gap-2 flex-shrink-0">
-                            {!hasValue && (
-                              <div className={`w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-yellow-400/80' : 'bg-yellow-500/80'}`} />
-                            )}
-                            <span className={`text-[13px] font-medium tracking-[-0.006em] whitespace-nowrap ${hasValue 
-                              ? (theme === 'dark' ? 'text-gray-400' : 'text-gray-500')
-                              : (theme === 'dark' ? 'text-yellow-400/90' : 'text-yellow-600/90')
-                            }`}>
-                              {displayValue}
-                            </span>
-                          </div>
-                      </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Fantasies Section */}
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className={`text-[22px] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                      {t('profile.fantasies')}
-                    </h2>
-                    {user.fantasies && user.fantasies.length > 0 && (
+            <div className='w-full min-h-[100dvh]'>
+              {/* Profile */}
+              {activeTab === 'profile' && (
+                <div className="px-4 py-6 space-y-10">
+                  {/* Attributes Section */}
+                  <div className="w-full">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className={`text-[22px] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                        {t('profile.attributes')}
+                      </h2>
                       <span className={`text-[13px] font-semibold ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
-                        {user.fantasies.length}
+                        {USER_ATTRIBUTES.filter(attr => {
+                          const ua = user?.user_attributes?.find((u: any) => u.category_type === attr.field);
+                          return !!(ua?.attribute?.name);
+                        }).length} / {USER_ATTRIBUTES.length}
                       </span>
+                    </div>
+                    <div className={`rounded-[18px] overflow-hidden ${theme === 'dark'
+                      ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
+                      : 'bg-white backdrop-blur-xl border border-black/[0.06]'
+                      }`}>
+                      {USER_ATTRIBUTES.map((item, index) => {
+                        // Get display value - use authUser if viewing own profile in edit context, otherwise use user
+                        const userToCheck = (isOwnProfile && isAuthenticated && authUser) ? authUser : user;
+                        let displayValue = '';
+                        let hasValue = false;
+
+                        // Check if this is a sexual identity field
+                        if (item.field === 'gender_identity') {
+                          // Check both structures: direct array or nested in sexual_identities
+                          const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
+                          const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
+                          if (genderIdentity?.name) {
+                            displayValue = genderIdentity.name[defaultLanguage] ||
+                              genderIdentity.name.en ||
+                              Object.values(genderIdentity.name)[0] || '';
+                            hasValue = !!displayValue;
+                          }
+                        } else if (item.field === 'sexual_orientation') {
+                          // Check both structures: direct array or nested in sexual_identities
+                          const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
+                          const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
+                          if (sexualOrientation?.name) {
+                            displayValue = sexualOrientation.name[defaultLanguage] ||
+                              sexualOrientation.name.en ||
+                              Object.values(sexualOrientation.name)[0] || '';
+                            hasValue = !!displayValue;
+                          }
+                        } else if (item.field === 'sex_role') {
+                          // Check multiple structures: sexual_role, sex_role, or nested in sexual_identities
+                          const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
+                          if (sexRole?.name) {
+                            displayValue = sexRole.name[defaultLanguage] ||
+                              sexRole.name.en ||
+                              Object.values(sexRole.name)[0] || '';
+                            hasValue = !!displayValue;
+                          }
+                        } else {
+                          // Regular attribute from user_attributes
+                          const currentUserAttribute = userToCheck?.user_attributes?.find(
+                            (ua: any) => ua.category_type === item.field
+                          );
+
+                          if (currentUserAttribute?.attribute?.name) {
+                            displayValue = currentUserAttribute.attribute.name[defaultLanguage] ||
+                              currentUserAttribute.attribute.name.en ||
+                              Object.values(currentUserAttribute.attribute.name)[0] || '';
+                            hasValue = !!displayValue;
+                          }
+
+                          if (item.field === 'relationship_status' && !hasValue) {
+                            displayValue = userToCheck?.relationship_status || '';
+                            hasValue = !!displayValue;
+                          }
+                        }
+
+                        if (!hasValue) {
+                          displayValue = t('profile.select_option');
+                        }
+
+                        const isLast = index === USER_ATTRIBUTES.length - 1;
+
+                        return (
+                          <div
+                            key={item.field}
+                            className={`group flex items-center justify-between px-4 py-3 transition-all duration-200 ${!isLast ? `border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}` : ''
+                              } ${theme === 'dark' ? 'hover:bg-white/[0.03] active:bg-white/[0.05]' : 'hover:bg-black/[0.02] active:bg-black/[0.03]'}`}
+                          >
+                            <div className="flex items-center gap-3 min-w-0 flex-1">
+                              <div className={`p-2.5 rounded-[10px] transition-all duration-200 ${theme === 'dark'
+                                ? 'bg-white/[0.08] group-hover:bg-white/[0.12]'
+                                : 'bg-black/[0.04] group-hover:bg-black/[0.06]'
+                                }`}>
+                                <item.icon className={`w-7 h-7 ${theme === 'dark' ? 'text-white/90' : 'text-black/90'}`} />
+                              </div>
+                              <span className={`text-[15px] font-medium tracking-[-0.011em] ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                                {item.label}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              {!hasValue && (
+                                <div className={`w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-yellow-400/80' : 'bg-yellow-500/80'}`} />
+                              )}
+                              <span className={`text-[13px] font-medium tracking-[-0.006em] whitespace-nowrap ${hasValue
+                                ? (theme === 'dark' ? 'text-gray-400' : 'text-gray-500')
+                                : (theme === 'dark' ? 'text-yellow-400/90' : 'text-yellow-600/90')
+                                }`}>
+                                {displayValue}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Fantasies Section */}
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className={`text-[22px] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                        {t('profile.fantasies')}
+                      </h2>
+                      {user.fantasies && user.fantasies.length > 0 && (
+                        <span className={`text-[13px] font-semibold ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                          {user.fantasies.length}
+                        </span>
+                      )}
+                    </div>
+                    {user.fantasies && user.fantasies.length > 0 ? (
+                      (() => {
+                        // Group fantasies by category slug
+                        const fantasiesByCategory: Record<string, typeof user.fantasies> = {};
+                        user.fantasies.forEach((f) => {
+                          const categorySlug = f.fantasy?.slug || 'other';
+                          if (!fantasiesByCategory[categorySlug]) {
+                            fantasiesByCategory[categorySlug] = [];
+                          }
+                          fantasiesByCategory[categorySlug].push(f);
+                        });
+
+                        return (
+                          <div className="space-y-3">
+                            {Object.entries(fantasiesByCategory).map(([categorySlug, categoryFantasies]) => {
+                              // Get category name from the first fantasy in this group
+                              const firstFantasy = categoryFantasies[0]?.fantasy;
+                              const categoryName = firstFantasy?.category?.[defaultLanguage] ||
+                                firstFantasy?.category?.en ||
+                                (firstFantasy?.category ? Object.values(firstFantasy.category)[0] : null) ||
+                                categorySlug;
+                              return (
+                                <div
+                                  key={categorySlug}
+                                  className={`rounded-[18px] overflow-hidden ${theme === 'dark'
+                                    ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
+                                    : 'bg-white backdrop-blur-xl border border-black/[0.06]'
+                                    }`}
+                                >
+                                  <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
+                                    <h3 className={`text-[11px] font-bold uppercase tracking-[0.08em] ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                                      {categoryName}
+                                    </h3>
+                                  </div>
+                                  <div className="p-3.5 flex flex-wrap gap-2">
+                                    {categoryFantasies.map((f) => {
+                                      const label = f.fantasy?.label?.[defaultLanguage] ||
+                                        f.fantasy?.label?.en ||
+                                        Object.values(f.fantasy?.label || {})[0] ||
+                                        `Fantasy ${f.fantasy_id || f.id}`;
+                                      return (
+                                        <span
+                                          key={f.id || f.fantasy_id}
+                                          className={`px-4 py-2 text-[14px] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
+                                            ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
+                                            : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
+                                            }`}
+                                        >
+                                          {label}
+                                        </span>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        );
+                      })()
+                    ) : (
+                      <div className={`text-center py-16 rounded-[18px] ${theme === 'dark'
+                        ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
+                        : 'bg-white/95 backdrop-blur-xl border border-black/[0.06]'
+                        }`}>
+                        <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${theme === 'dark' ? 'bg-white/[0.08]' : 'bg-black/[0.04]'}`}>
+                          <Sparkles className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
+                        </div>
+                        <p className={`text-[15px] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_fantasies_added')}</p>
+                      </div>
                     )}
                   </div>
-                  {user.fantasies && user.fantasies.length > 0 ? (
-                    (() => {
-                      // Group fantasies by category slug
-                      const fantasiesByCategory: Record<string, typeof user.fantasies> = {};
-                      user.fantasies.forEach((f) => {
-                        const categorySlug = f.fantasy?.slug || 'other';
-                        if (!fantasiesByCategory[categorySlug]) {
-                          fantasiesByCategory[categorySlug] = [];
+
+                  {/* Interests Section */}
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className={`text-[22px] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                        {t('profile.interests')}
+                      </h2>
+                      {(() => {
+                        const interestsSource = (isOwnProfile && isAuthenticated && authUser && (authUser as any).interests)
+                          ? (authUser as any).interests
+                          : user?.interests;
+                        if (interestsSource && interestsSource.length > 0) {
+                          return (
+                            <span className={`text-[13px] font-semibold ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                              {interestsSource.length}
+                            </span>
+                          );
                         }
-                        fantasiesByCategory[categorySlug].push(f);
+                        return null;
+                      })()}
+                    </div>
+                    {(() => {
+                      // Use authUser.interests if viewing own profile, otherwise use user.interests
+                      const interestsSource = (isOwnProfile && isAuthenticated && authUser && (authUser as any).interests)
+                        ? (authUser as any).interests
+                        : user?.interests;
+
+                      if (!interestsSource || interestsSource.length === 0) {
+                        return (
+                          <div className={`text-center py-16 rounded-[18px] ${theme === 'dark'
+                            ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
+                            : 'bg-white/95 backdrop-blur-xl border border-black/[0.06]'
+                            }`}>
+                            <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${theme === 'dark' ? 'bg-white/[0.08]' : 'bg-black/[0.04]'}`}>
+                              <Heart className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
+                            </div>
+                            <p className={`text-[15px] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_interests_added')}</p>
+                          </div>
+                        );
+                      }
+
+                      // Group interests by category
+                      const interestsByCategory: Record<string, Array<{ id: string; name: string; emoji?: string; categoryId: string; categoryName: string }>> = {};
+
+                      interestsSource.forEach((interest: any) => {
+                        if (typeof interest === 'object' && interest !== null && interest.interest_item) {
+                          const itemName = interest.interest_item.name[defaultLanguage] ||
+                            interest.interest_item.name.en ||
+                            Object.values(interest.interest_item.name)[0] ||
+                            `Interest ${interest.interest_item.id}`;
+
+                          const categoryId = interest.interest_item.interest_id || interest.interest_item.interest?.id || 'other';
+                          const categoryName = interest.interest_item.interest?.name?.[defaultLanguage] ||
+                            interest.interest_item.interest?.name?.en ||
+                            (interest.interest_item.interest?.name ? Object.values(interest.interest_item.interest.name)[0] : null) ||
+                            'Other';
+
+                          if (!interestsByCategory[categoryId]) {
+                            interestsByCategory[categoryId] = [];
+                          }
+
+                          interestsByCategory[categoryId].push({
+                            id: interest.interest_item.id || interest.id,
+                            name: itemName,
+                            emoji: interest.interest_item.emoji,
+                            categoryId,
+                            categoryName,
+                          });
+                        } else {
+                          const interestNameById: Record<number, string> = {
+                            247: '3D printing',
+                            175: 'Acting',
+                            21: 'Action films',
+                            253: 'Adventure',
+                            125: 'Afrobeats',
+                            88: 'Animal lover',
+                            228: 'Badminton',
+                            229: 'Graduate degree or higher',
+                            221: 'Exercising',
+                            136: 'Sci-fi books',
+                            25: 'Sci-fi films',
+                          };
+
+                          const categoryId = 'uncategorized';
+                          if (!interestsByCategory[categoryId]) {
+                            interestsByCategory[categoryId] = [];
+                          }
+
+                          interestsByCategory[categoryId].push({
+                            id: String(interest),
+                            name: typeof interest === 'number' ? (interestNameById[interest] || `Interest #${interest}`) : String(interest),
+                            emoji: undefined,
+                            categoryId,
+                            categoryName: 'Other',
+                          });
+                        }
                       });
 
                       return (
                         <div className="space-y-3">
-                          {Object.entries(fantasiesByCategory).map(([categorySlug, categoryFantasies]) => {
-                            // Get category name from the first fantasy in this group
-                            const firstFantasy = categoryFantasies[0]?.fantasy;
-                            const categoryName = firstFantasy?.category?.[defaultLanguage] || 
-                                               firstFantasy?.category?.en || 
-                                               (firstFantasy?.category ? Object.values(firstFantasy.category)[0] : null) ||
-                                               categorySlug;
+                          {Object.entries(interestsByCategory).map(([categoryId, categoryInterests]) => {
+                            const categoryName = categoryInterests[0]?.categoryName || 'Other';
                             return (
-                              <div 
-                                key={categorySlug} 
-                                className={`rounded-[18px] overflow-hidden ${theme === 'dark' 
-                                  ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]' 
+                              <div
+                                key={categoryId}
+                                className={`rounded-[18px] overflow-hidden ${theme === 'dark'
+                                  ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]'
                                   : 'bg-white backdrop-blur-xl border border-black/[0.06]'
-                                }`}
+                                  }`}
                               >
                                 <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
                                   <h3 className={`text-[11px] font-bold uppercase tracking-[0.08em] ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
@@ -4177,305 +4304,153 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                   </h3>
                                 </div>
                                 <div className="p-3.5 flex flex-wrap gap-2">
-                                  {categoryFantasies.map((f) => {
-                                    const label = f.fantasy?.label?.[defaultLanguage] || 
-                                                 f.fantasy?.label?.en || 
-                                                 Object.values(f.fantasy?.label || {})[0] || 
-                                                 `Fantasy ${f.fantasy_id || f.id}`;
-                                    return (
-                        <span
-                                        key={f.id || f.fantasy_id}
-                                        className={`px-4 py-2 text-[14px] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
-                                            ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
-                                            : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
-                                          }`}
-                                      >
-                                        {label}
-                        </span>
-                                    );
-                                  })}
-                    </div>
+                                  {categoryInterests.map((item) => (
+                                    <span
+                                      key={item.id}
+                                      className={`inline-flex items-center gap-1.5 px-4 py-2 text-[14px] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
+                                        ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
+                                        : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
+                                        }`}
+                                    >
+                                      {item.emoji && <span className="text-[15px] leading-none">{item.emoji}</span>}
+                                      <span>{item.name}</span>
+                                    </span>
+                                  ))}
+                                </div>
                               </div>
                             );
                           })}
                         </div>
                       );
-                    })()
-                  ) : (
-                    <div className={`text-center py-16 rounded-[18px] ${theme === 'dark' 
-                      ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]' 
-                      : 'bg-white/95 backdrop-blur-xl border border-black/[0.06]'
-                    }`}>
-                      <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${theme === 'dark' ? 'bg-white/[0.08]' : 'bg-black/[0.04]'}`}>
-                        <Sparkles className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
-                      </div>
-                      <p className={`text-[15px] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_fantasies_added')}</p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Interests Section */}
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className={`text-[22px] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                      {t('profile.interests')}
-                    </h2>
-                  {(() => {
-                      const interestsSource = (isOwnProfile && isAuthenticated && authUser && (authUser as any).interests) 
-                        ? (authUser as any).interests 
-                        : user?.interests;
-                      if (interestsSource && interestsSource.length > 0) {
-                        return (
-                          <span className={`text-[13px] font-semibold ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
-                            {interestsSource.length}
-                          </span>
-                        );
-                      }
-                      return null;
                     })()}
                   </div>
-                  {(() => {
-                    // Use authUser.interests if viewing own profile, otherwise use user.interests
-                    const interestsSource = (isOwnProfile && isAuthenticated && authUser && (authUser as any).interests) 
-                      ? (authUser as any).interests 
-                      : user?.interests;
-                    
-                    if (!interestsSource || interestsSource.length === 0) {
-                      return (
-                        <div className={`text-center py-16 rounded-[18px] ${theme === 'dark' 
-                          ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]' 
-                          : 'bg-white/95 backdrop-blur-xl border border-black/[0.06]'
-                        }`}>
-                          <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${theme === 'dark' ? 'bg-white/[0.08]' : 'bg-black/[0.04]'}`}>
-                            <Heart className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
-                          </div>
-                          <p className={`text-[15px] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_interests_added')}</p>
-                        </div>
-                      );
-                    }
-                    
-                    // Group interests by category
-                    const interestsByCategory: Record<string, Array<{ id: string; name: string; emoji?: string; categoryId: string; categoryName: string }>> = {};
-                    
-                    interestsSource.forEach((interest: any) => {
-                      if (typeof interest === 'object' && interest !== null && interest.interest_item) {
-                        const itemName = interest.interest_item.name[defaultLanguage] || 
-                                       interest.interest_item.name.en || 
-                                       Object.values(interest.interest_item.name)[0] || 
-                                       `Interest ${interest.interest_item.id}`;
-                        
-                        const categoryId = interest.interest_item.interest_id || interest.interest_item.interest?.id || 'other';
-                        const categoryName = interest.interest_item.interest?.name?.[defaultLanguage] ||
-                                           interest.interest_item.interest?.name?.en ||
-                                           (interest.interest_item.interest?.name ? Object.values(interest.interest_item.interest.name)[0] : null) ||
-                                           'Other';
-                        
-                        if (!interestsByCategory[categoryId]) {
-                          interestsByCategory[categoryId] = [];
-                        }
-                        
-                        interestsByCategory[categoryId].push({
-                          id: interest.interest_item.id || interest.id,
-                          name: itemName,
-                          emoji: interest.interest_item.emoji,
-                          categoryId,
-                          categoryName,
-                        });
-                      } else {
-                    const interestNameById: Record<number, string> = {
-                      247: '3D printing',
-                      175: 'Acting',
-                      21: 'Action films',
-                      253: 'Adventure',
-                      125: 'Afrobeats',
-                      88: 'Animal lover',
-                      228: 'Badminton',
-                      229: 'Graduate degree or higher',
-                      221: 'Exercising',
-                      136: 'Sci-fi books',
-                      25: 'Sci-fi films',
-                    };
-                        
-                        const categoryId = 'uncategorized';
-                        if (!interestsByCategory[categoryId]) {
-                          interestsByCategory[categoryId] = [];
-                        }
-                        
-                        interestsByCategory[categoryId].push({
-                          id: String(interest),
-                          name: typeof interest === 'number' ? (interestNameById[interest] || `Interest #${interest}`) : String(interest),
-                          emoji: undefined,
-                          categoryId,
-                          categoryName: 'Other',
-                        });
-                      }
-                    });
-                    
-                    return (
-                      <div className="space-y-3">
-                        {Object.entries(interestsByCategory).map(([categoryId, categoryInterests]) => {
-                          const categoryName = categoryInterests[0]?.categoryName || 'Other';
-                          return (
-                            <div 
-                              key={categoryId} 
-                              className={`rounded-[18px] overflow-hidden ${theme === 'dark' 
-                                ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 backdrop-blur-xl border border-white/[0.06]' 
-                                : 'bg-white backdrop-blur-xl border border-black/[0.06]'
-                              }`}
-                            >
-                              <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
-                                <h3 className={`text-[11px] font-bold uppercase tracking-[0.08em] ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
-                                  {categoryName}
-                                </h3>
-                              </div>
-                              <div className="p-3.5 flex flex-wrap gap-2">
-                                {categoryInterests.map((item) => (
-                          <span
-                                    key={item.id}
-                                    className={`inline-flex items-center gap-1.5 px-4 py-2 text-[14px] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
-                                        ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
-                                        : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
-                                      }`}
-                                  >
-                                    {item.emoji && <span className="text-[15px] leading-none">{item.emoji}</span>}
-                                    <span>{item.name}</span>
-                          </span>
-                        ))}
-                      </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    );
-                  })()}
                 </div>
-              </div>
-            )}
-
-            {/* Posts / Media Masonry / Likes */}
-            <div className={activeTab === 'profile' ? 'hidden' : ''}>
-              {activeTab === 'media' ? (
-                // Media Masonry Grid
-                <>
-                  {mediasLoading ? (
-                    <div className="flex items-center justify-center py-16">
-                      <div className="flex flex-col items-center gap-4">
-                        <div className={`w-12 h-12 border-4 ${theme === 'dark' ? 'border-gray-800 border-t-white' : 'border-gray-200 border-t-black'} rounded-full animate-spin`} />
-                        <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                          {t('profile.loading_media')}
-                        </p>
-                      </div>
-                    </div>
-                  ) : medias.length === 0 ? (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex items-center justify-center py-20"
-                    >
-                      <div className="flex flex-col items-center gap-4 max-w-sm mx-auto px-4">
-                        <div className={`w-20 h-20 rounded-full flex items-center justify-center ${theme === 'dark' 
-                          ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 border border-white/[0.06]' 
-                          : 'bg-gradient-to-br from-gray-50 to-white border border-black/[0.06]'
-                        }`}>
-                          <ImageIcon className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                        </div>
-                        <div className="text-center">
-                          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                            {t('profile.no_media_yet')}
-                          </h3>
-                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
-                            {isOwnProfile && t('profile.media_appear_here')}
-                            {!isOwnProfile && `@${user.username} ${t('profile.no_media_from_user')}`}
-                          </p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    <div className="p-4">
-                      <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-2 sm:gap-3">
-                        {medias.map((media) => (
-                          <Media key={media.id} media={media} />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </>
-              ) : (
-                // Regular Posts / Replies / Likes
-                <>
-                  {postsLoading ? (
-                    <div className="flex items-center justify-center py-16">
-                      <div className="flex flex-col items-center gap-4">
-                        <div className={`w-12 h-12 border-4 ${theme === 'dark' ? 'border-gray-800 border-t-white' : 'border-gray-200 border-t-black'} rounded-full animate-spin`} />
-                        <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                          {activeTab === 'posts' && t('profile.loading_posts')}
-                          {activeTab === 'replies' && t('profile.loading_replies')}
-                          {activeTab === 'likes' && t('profile.loading_likes')}
-                        </p>
-                      </div>
-                    </div>
-                  ) : posts.length === 0 ? (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex items-center justify-center py-20"
-                    >
-                      <div className="flex flex-col items-center gap-4 max-w-sm mx-auto px-4">
-                        <div className={`w-20 h-20 rounded-full flex items-center justify-center ${theme === 'dark' 
-                          ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 border border-white/[0.06]' 
-                          : 'bg-gradient-to-br from-gray-50 to-white border border-black/[0.06]'
-                        }`}>
-                          {activeTab === 'posts' && (
-                            <FileText className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                          )}
-                          {activeTab === 'replies' && (
-                            <MessageCircle className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                          )}
-                          {activeTab === 'likes' && (
-                            <Heart className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                          )}
-                        </div>
-                        <div className="text-center">
-                          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                            {activeTab === 'posts' && t('profile.no_posts_yet')}
-                            {activeTab === 'replies' && t('profile.no_replies_yet')}
-                            {activeTab === 'likes' && t('profile.no_likes_yet')}
-                          </h3>
-                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
-                            {activeTab === 'posts' && isOwnProfile && t('profile.share_thoughts')}
-                            {activeTab === 'posts' && !isOwnProfile && `@${user.username} ${t('profile.no_posts_from_user')}`}
-                            {activeTab === 'replies' && isOwnProfile && t('profile.replies_appear_here')}
-                            {activeTab === 'replies' && !isOwnProfile && `@${user.username} ${t('profile.no_replies_from_user')}`}
-                            {activeTab === 'likes' && isOwnProfile && t('profile.likes_appear_here')}
-                            {activeTab === 'likes' && !isOwnProfile && `@${user.username} ${t('profile.no_likes_from_user')}`}
-                          </p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    posts.map((post, index) => (
-                      <motion.div
-                        key={post.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        className={`${theme === 'dark' ? 'bg-black' : 'bg-white'}`}
-                      >
-                        <Post
-                          post={post as any}
-                          onPostClick={(postId, username) => navigate(`/${username}/status/${postId}`)}
-                          onProfileClick={(username) => navigate(`/${username}`)}
-                        />
-                      </motion.div>
-                    ))
-                  )}
-                </>
               )}
+
+              {/* Posts / Media Masonry / Likes */}
+              <div className={activeTab === 'profile' ? 'hidden' : ''}>
+                {activeTab === 'media' ? (
+                  // Media Masonry Grid
+                  <>
+                    {mediasLoading ? (
+                      <div className="flex items-center justify-center py-16">
+                        <div className="flex flex-col items-center gap-4">
+                          <div className={`w-12 h-12 border-4 ${theme === 'dark' ? 'border-gray-800 border-t-white' : 'border-gray-200 border-t-black'} rounded-full animate-spin`} />
+                          <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                            {t('profile.loading_media')}
+                          </p>
+                        </div>
+                      </div>
+                    ) : medias.length === 0 ? (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                        className="flex items-center justify-center py-20"
+                      >
+                        <div className="flex flex-col items-center gap-4 max-w-sm mx-auto px-4">
+                          <div className={`w-20 h-20 rounded-full flex items-center justify-center ${theme === 'dark'
+                            ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 border border-white/[0.06]'
+                            : 'bg-gradient-to-br from-gray-50 to-white border border-black/[0.06]'
+                            }`}>
+                            <ImageIcon className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+                          </div>
+                          <div className="text-center">
+                            <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                              {t('profile.no_media_yet')}
+                            </h3>
+                            <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+                              {isOwnProfile && t('profile.media_appear_here')}
+                              {!isOwnProfile && `@${user.username} ${t('profile.no_media_from_user')}`}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <div className="p-4">
+                        <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-2 sm:gap-3">
+                          {medias.map((media) => (
+                            <Media key={media.id} media={media} />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  // Regular Posts / Replies / Likes
+                  <>
+                    {postsLoading ? (
+                      <div className="flex items-center justify-center py-16">
+                        <div className="flex flex-col items-center gap-4">
+                          <div className={`w-12 h-12 border-4 ${theme === 'dark' ? 'border-gray-800 border-t-white' : 'border-gray-200 border-t-black'} rounded-full animate-spin`} />
+                          <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                            {activeTab === 'posts' && t('profile.loading_posts')}
+                            {activeTab === 'replies' && t('profile.loading_replies')}
+                            {activeTab === 'likes' && t('profile.loading_likes')}
+                          </p>
+                        </div>
+                      </div>
+                    ) : posts.length === 0 ? (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                        className="flex items-center justify-center py-20"
+                      >
+                        <div className="flex flex-col items-center gap-4 max-w-sm mx-auto px-4">
+                          <div className={`w-20 h-20 rounded-full flex items-center justify-center ${theme === 'dark'
+                            ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 border border-white/[0.06]'
+                            : 'bg-gradient-to-br from-gray-50 to-white border border-black/[0.06]'
+                            }`}>
+                            {activeTab === 'posts' && (
+                              <FileText className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+                            )}
+                            {activeTab === 'replies' && (
+                              <MessageCircle className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+                            )}
+                            {activeTab === 'likes' && (
+                              <Heart className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+                            )}
+                          </div>
+                          <div className="text-center">
+                            <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                              {activeTab === 'posts' && t('profile.no_posts_yet')}
+                              {activeTab === 'replies' && t('profile.no_replies_yet')}
+                              {activeTab === 'likes' && t('profile.no_likes_yet')}
+                            </h3>
+                            <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+                              {activeTab === 'posts' && isOwnProfile && t('profile.share_thoughts')}
+                              {activeTab === 'posts' && !isOwnProfile && `@${user.username} ${t('profile.no_posts_from_user')}`}
+                              {activeTab === 'replies' && isOwnProfile && t('profile.replies_appear_here')}
+                              {activeTab === 'replies' && !isOwnProfile && `@${user.username} ${t('profile.no_replies_from_user')}`}
+                              {activeTab === 'likes' && isOwnProfile && t('profile.likes_appear_here')}
+                              {activeTab === 'likes' && !isOwnProfile && `@${user.username} ${t('profile.no_likes_from_user')}`}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      posts.map((post, index) => (
+                        <motion.div
+                          key={post.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          className={`${theme === 'dark' ? 'bg-black' : 'bg-white'}`}
+                        >
+                          <Post
+                            post={post as any}
+                            onPostClick={(postId, username) => navigate(`/${username}/status/${postId}`)}
+                            onProfileClick={(username) => navigate(`/${username}`)}
+                          />
+                        </motion.div>
+                      ))
+                    )}
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        </main>
+          </main>
         )}
       </div>
 
