@@ -51,7 +51,8 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
   const location = getLocation(user);
 
   // Compact View
-  if (viewMode === 'compact') {
+
+  const CompactView = () => {
     return (
       <motion.div
         className={`relative rounded-xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] ${baseCardStyle}`}
@@ -125,13 +126,12 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
           </div>
         </div>
       </motion.div>
-    );
+    )
   }
 
-  // List View
-  if (viewMode === 'list') {
+  const ListView = () => {
     return (
-      <motion.div
+            <motion.div
         whileHover={{ scale: 1.01 }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         onClick={handleProfileClick}
@@ -198,16 +198,17 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
           </motion.button>
         </div>
       </motion.div>
-    );
+    )
   }
 
-  // Card View (Full)
-  return (
-    <div
-      key={user.id}
-      className={`select-none relative rounded-xl overflow-hidden transition-all duration-300 cursor-pointer ${baseCardStyle}`}
-      onClick={handleProfileClick}
-    >
+
+  const CardView = () => {
+    return(
+    <motion.div
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        onClick={handleProfileClick}
+        className={`group overflow-hidden flex items-center gap-4 w-full rounded-xl cursor-pointer transition-all duration-300 ${baseCardStyle}`}
+      >
       <div className="w-full max-w-sm overflow-hidden rounded-xl flex flex-col transition-transform duration-300 hover:scale-105">
         <div
           className="relative flex-grow flex flex-col justify-end bg-cover bg-center"
@@ -232,9 +233,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
         </div>
 
         <div className={`p-4 ${theme === 'dark' ? 'bg-[#0f0f0f]' : 'bg-[#f9f9f9]'}`}>
-          {/* Bio kaldırıldı */}
 
-          <div className="my-4 h-px opacity-20 bg-current" />
 
           <div className="flex items-center gap-3 ml-2">
             <motion.button
@@ -273,6 +272,17 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
         </div>
       </div>
 
+    
+    </motion.div>
+    )
+  } 
+  // Card View (Full)
+  return (
+ <div className='w-full'>
+
+    {
+      viewMode == "compact" ? <CompactView/> : viewMode == "list" ? <ListView/> : <CardView/>
+    }
       <GiftSelector
         isOpen={isGiftSelectorOpen}
         onClose={() => setIsGiftSelectorOpen(false)}
@@ -285,6 +295,6 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
         userName={user.name}
         onSendMessage={() => {}}
       />
-    </div>
+</div>
   );
 };

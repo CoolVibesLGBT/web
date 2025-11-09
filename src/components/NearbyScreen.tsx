@@ -265,13 +265,13 @@ const NearbyScreen: React.FC = () => {
                 </div>
               </motion.div>
             ) : (
-              <>
+              <div className='w-full flex-col py-2'>
                 {viewMode === 'grid' && (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {state.nearbyUsers.map((user: any, index) => (
                       <motion.div
-                      key={`view_grid_item${index}`}
-                  
+                        key={`view_grid_item${index}`}
+
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.05 }}
@@ -315,15 +315,15 @@ const NearbyScreen: React.FC = () => {
                 <div className='w-full p-2 flex items-center justify-center'>
                   {state.nearByCursor && !loadingMore && (
                     <motion.button
-                      onClick={() =>{
+                      onClick={() => {
                         setLoadingMore(true)
                         fetchNearbyUsers()
                       }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className={`px-6 py-3 rounded-xl font-medium text-sm transition-all ${theme === 'dark'
-                          ? 'bg-white text-black hover:bg-gray-200'
-                          : 'bg-gray-900 text-white hover:bg-gray-800'
+                        ? 'bg-white text-black hover:bg-gray-200'
+                        : 'bg-gray-900 text-white hover:bg-gray-800'
                         }`}
                     >
                       Load More
@@ -331,60 +331,60 @@ const NearbyScreen: React.FC = () => {
                   )}
                 </div>
 
-          
 
-            {loadingMore || loadingUsers && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`rounded-2xl p-12 md:p-16 text-center ${theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}
-              >
-                <div className="max-w-md mx-auto">
-                  <div className={`w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
-                    <RefreshCw className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-400'} animate-spin`} />
-                  </div>
-                  <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                    Loading nearby users...
-                  </h3>
-                  <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Finding people in your area
-                  </p>
-                </div>
-              </motion.div>
-            )}
 
-            {/* Error State */}
-            {error && !loadingUsers && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`rounded-2xl p-6 mb-4 border ${theme === 'dark'
-                  ? 'bg-red-900/20 border-red-700 text-red-300'
-                  : 'bg-red-50 border-red-200 text-red-700'
-                  }`}
-              >
-                <p className="text-sm font-medium">{error}</p>
-                <motion.button
-                  onClick={handleRefresh}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`mt-4 px-4 py-2 rounded-xl text-sm font-medium ${theme === 'dark'
-                    ? 'bg-red-900/40 hover:bg-red-900/60'
-                    : 'bg-red-100 hover:bg-red-200'
-                    }`}
-                >
-                  Try Again
-                </motion.button>
-              </motion.div>
-            )}
+                {loadingMore || loadingUsers && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`rounded-2xl p-12 md:p-16 text-center ${theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}
+                  >
+                    <div className="max-w-md mx-auto">
+                      <div className={`w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+                        <RefreshCw className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-400'} animate-spin`} />
+                      </div>
+                      <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        Loading nearby users...
+                      </h3>
+                      <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                        Finding people in your area
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
 
-           
-              </>
+                {/* Error State */}
+                {error && !loadingUsers && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`rounded-2xl p-6 mb-4 border ${theme === 'dark'
+                      ? 'bg-red-900/20 border-red-700 text-red-300'
+                      : 'bg-red-50 border-red-200 text-red-700'
+                      }`}
+                  >
+                    <p className="text-sm font-medium">{error}</p>
+                    <motion.button
+                      onClick={handleRefresh}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`mt-4 px-4 py-2 rounded-xl text-sm font-medium ${theme === 'dark'
+                        ? 'bg-red-900/40 hover:bg-red-900/60'
+                        : 'bg-red-100 hover:bg-red-200'
+                        }`}
+                    >
+                      Try Again
+                    </motion.button>
+                  </motion.div>
+                )}
+
+
+              </div>
             )}
           </motion.div>
         </div>
       )}
-      </Container>
+    </Container>
   );
 };
 
