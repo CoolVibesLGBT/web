@@ -26,7 +26,7 @@ export const ZoomInButton = () => {
     <>
       <button
           
-        style={{ zIndex: 400 }}
+        style={{ zIndex: 1 }}
         className=" absolute top-[264px] right-3 p-2  "
         onClick={() => handleClick()}
       >

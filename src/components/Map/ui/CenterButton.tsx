@@ -44,7 +44,7 @@ export const CenterButton = ({ center, zoom }: CenterButtonProps) => {
   return (
     <button
 
-    style={{ zIndex: 400 }}
+    style={{ zIndex: 1 }}
 
       className={`absolute top-[75px] right-3   p-2`}
       onClick={() => handleClick()}

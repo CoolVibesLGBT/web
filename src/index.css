@@ -18,6 +18,31 @@ html, body {
  /*
  custom styles for leaflet
 */
+.leaflet-zoom-box {
+	width: 0;
+	height: 0;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	z-index: 800;
+	}
+/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */
+.leaflet-overlay-pane svg {
+	-moz-user-select: none;
+	}
+
+.leaflet-control-attribution,
+ .leaflet-control{
+display:none !important;
+  }
+.leaflet-pane         { z-index: 1!important; }
+
+.leaflet-tile-pane    { z-index: 1 !important; }
+.leaflet-overlay-pane { z-index: 1!important; }
+.leaflet-shadow-pane  { z-index: 1!important; }
+.leaflet-marker-pane  { z-index: 1!important; }
+.leaflet-tooltip-pane   { z-index: 1!important; }
+.leaflet-popup-pane   { z-index: 1!important; }
+
 
 .leaflet-marker-icon.leaflet-div-icon {
   background: none;

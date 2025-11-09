@@ -25,6 +25,7 @@ export const Actions = {
   CMD_USER_UPDATE_ATTRIBUTE : "user.update_attribute",
 	CMD_USER_UPDATE_INTEREST  : "user.update_interest",
 	CMD_USER_UPDATE_FANTASY   : "user.update_fantasy",
+  CMD_USER_UPDATE_PASSWORD  : "user.update_password",
 
   CMD_USER_FOLLOW        : "user.follow",
 	CMD_USER_UNFOLLOW      : "user.unfollow",
@@ -59,7 +60,10 @@ export const Actions = {
 	CMD_MATCH_FETCH_PASSED  : "match.fetch.passed" , // Geçilen kullanıcıları getirme
 
 
-  CMD_SEARCH_LOOKUP_USER : "search.user.lookup"
+  CMD_SEARCH_LOOKUP_USER : "search.user.lookup",
+
+  CMD_USER_FETCH_ENGAGEMENTS : "user.fetch_engagements",
+	CMD_SEARCH_TRENDS      : "search.trends",
 
 
 } as const;

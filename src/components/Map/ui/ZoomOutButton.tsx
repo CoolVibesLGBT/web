@@ -27,7 +27,7 @@ export const ZoomOutButton = () => {
     <>
       <button
     
-        style={{ zIndex: 400 }}
+        style={{ zIndex:1  }}
         className=" absolute top-[200px] right-3 p-2  "
         onClick={() => handleClick()}
       >

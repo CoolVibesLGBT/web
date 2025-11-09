@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import MatchScreen from './components/MatchScreen';
 import NearbyScreen from './components/NearbyScreen';
 import ProfileScreen from './components/ProfileScreen';
+import ProfileEngagementsScreen from './components/ProfileEngagementsScreen';
 import SearchScreen from './components/SearchScreen';
 import MessagesScreen from './components/MessagesScreen';
 import NotificationsScreen from './components/NotificationsScreen';
@@ -13,7 +14,9 @@ import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext.tsx';
 import { useSettings } from './contexts/SettingsContext';
 import AuthWizard from './components/AuthWizard';
-import { Home, Search, MapPin, Heart, MessageCircle, User, Building2, Menu, X, Sun, Moon, Languages, MoreHorizontal, Flame, FileText, Bell, ChevronRight, LogOut, EarIcon, Earth, EarthIcon, Spotlight, HandFist } from 'lucide-react';
+import { Home, Search, MapPin, Heart, MessageCircle, User, Building2, Menu, X, Sun, Moon, Languages, MoreHorizontal, FileText, Bell, ChevronRight, LogOut, EarIcon, Earth, EarthIcon, HandFist, TrendingUp, Filter, ArrowUpRight } from 'lucide-react';
+import TrendsPanel, { NormalizedTrend } from './components/TrendsPanel';
+import PopularUsersPanel from './components/PopularUsersPanel';
 import PlacesScreen from './components/PlacesScreen';
 import HomeScreen from './components/HomeScreen';
 import LanguageSelector from './components/LanguageSelector.tsx';
@@ -94,7 +97,20 @@ function App() {
     { id: 'profile', label: t('app.nav.profile'), icon: "/icons/profile.webp" },
   ];
 
-  
+  const handleTrendSelect = React.useCallback((trend: NormalizedTrend) => {
+    if (trend?.url) {
+      window.open(trend.url, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    const query = trend?.query || trend?.label;
+    if (query && query.trim().length > 0) {
+      navigate(`/search?q=${encodeURIComponent(query)}`);
+    } else {
+      navigate('/search');
+    }
+  }, [navigate]);
+
 
   
   return (
@@ -379,7 +395,10 @@ function App() {
               <Route path="/pride" element={<HomeScreen />} />
               <Route path="/testpage" element={<TestPage />} />
 
-              {/* Profile Routes */}
+              <Route
+                path="/:username/:engagementType"
+                element={<ProfileEngagementsScreen />}
+              />
               <Route path="/:username" element={<ProfileScreen />} />
               <Route path="/:username/status/:postId" element={<HomeScreen />} />
               
@@ -405,150 +424,83 @@ function App() {
         {location.pathname !== '/messages' && location.pathname !== '/landing' && location.pathname !== '/classifieds' && location.pathname !== '/places' && location.pathname !== '/match' && (
         <aside className={`hidden xl:flex scrollbar-hide flex-col w-[380px]`}>
           <div className="p-5 sticky top-0 h-screen scrollbar-hide overflow-y-auto space-y-4">
-            
-            {/* Spotlight Section */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className={`rounded-2xl overflow-hidden ${theme === 'dark' ? 'bg-gray-950 border border-gray-900' : 'bg-white border border-gray-200'}`}
+              transition={{ duration: 0.35 }}
+              className={`relative overflow-hidden rounded-2xl ${theme === 'dark' ? 'bg-gradient-to-br from-indigo-500/20 via-purple-500/10 to-transparent border border-indigo-500/40' : 'bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-white border border-indigo-100/80 shadow-sm'}`}
             >
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <Flame className="w-5 h-5 text-red-500" />
-                    <h2 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                      {t('app.new_matches')}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className={`absolute -top-10 -right-10 w-48 h-48 rounded-full blur-3xl ${theme === 'dark' ? 'bg-indigo-500/30' : 'bg-indigo-300/30'}`} />
+                <div className={`absolute -bottom-16 -left-12 w-56 h-56 rounded-full blur-3xl ${theme === 'dark' ? 'bg-purple-500/20' : 'bg-purple-300/25'}`} />
+              </div>
+              <div className="relative p-5 space-y-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className={`text-[10px] font-semibold uppercase tracking-[0.4em] ${theme === 'dark' ? 'text-indigo-200/70' : 'text-indigo-500/80'}`}>
+                      {t('app.trending_title')}
+                    </p>
+                    <h2 className={`text-xl font-bold leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                      {t('app.trending_hero_title')}
                     </h2>
+                    <p className={`mt-2 text-sm ${theme === 'dark' ? 'text-indigo-100/80' : 'text-gray-600'}`}>
+                      {t('app.trending_hero_description')}
+                    </p>
                   </div>
-                  <span className={`text-xs font-bold px-3 py-1 rounded-full ${theme === 'dark' ? 'bg-red-500/10 text-red-400' : 'bg-red-50 text-red-600'}`}>
-                    3
-                  </span>
+                  <div className={`p-3 rounded-2xl ${theme === 'dark' ? 'bg-white/10 text-white' : 'bg-white text-indigo-500 shadow'}`}>
+                    <TrendingUp className="w-7 h-7" />
+                  </div>
                 </div>
-                
-                <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
-                  {[
-                    { name: 'Alex', age: 28, avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', isNew: true, mutual: 'New York' },
-                    { name: 'Jordan', age: 25, avatar: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', isNew: true, mutual: 'Los Angeles' },
-                    { name: 'Sam', age: 30, avatar: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', isNew: true, mutual: 'San Francisco' },
-                  ].map((match, index) => (
-                    <div 
-                      key={index} 
-                      className="flex-shrink-0 w-28 cursor-pointer group"
-                      onClick={() => {
-                        navigate(`/${match.name.toLowerCase()}`);
-                      }}
-                    >
-                      <div className="relative">
-                        <div className={`w-full aspect-square rounded-2xl overflow-hidden transition-all duration-200 ${match.isNew ? 'ring-2 ring-red-500' : 'ring-2 ring-transparent'} group-hover:ring-2 group-hover:ring-opacity-50 ${match.isNew ? 'group-hover:ring-red-500' : 'group-hover:ring-gray-400'}`}>
-                          <img
-                            src={match.avatar}
-                            alt={match.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-                        {match.isNew && (
-                          <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full border-2 border-white dark:border-gray-950"></div>
-                        )}
-                        <div className="absolute bottom-1 left-1 right-1">
-                          <div className="backdrop-blur-sm bg-black/70 rounded-lg px-2 py-1">
-                            <p className="text-white text-[10px] font-bold">{t('app.new')}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-center mt-2">
-                        <p className={`text-sm font-bold truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                          {match.name}, {match.age}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <button
+                  type="button"
+                  onClick={() => navigate('/search')}
+                  className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all ${
+                    theme === 'dark'
+                      ? 'bg-white text-black hover:bg-gray-200'
+                      : 'bg-gray-900 text-white hover:bg-gray-800'
+                  }`}
+                >
+                  <Search className="w-4 h-4" />
+                  {t('app.trending_hero_cta')}
+                </button>
               </div>
             </motion.div>
 
-            {/* Suggested Matches */}
+            <PopularUsersPanel limit={6} />
+
+            <TrendsPanel limit={20} onTrendSelect={handleTrendSelect} />
+
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 }}
-              className={`rounded-2xl overflow-hidden ${theme === 'dark' ? 'bg-gray-950 border border-gray-900' : 'bg-white border border-gray-200'}`}
+              transition={{ duration: 0.35 }}
+              className={`rounded-2xl p-5 ${theme === 'dark' ? 'bg-gray-950 border border-gray-900' : 'bg-white border border-gray-200 shadow-sm'}`}
             >
-              <div className="p-4">
-                <div className="mb-3">
-                  <h2 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                    {t('app.suggested_matches')}
-                  </h2>
-                  <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                    {t('app.based_on_preferences')}
+              <div className="flex items-start gap-3 mb-4">
+                <div className={`p-2.5 rounded-xl ${theme === 'dark' ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'}`}>
+                  <Filter className="w-5 h-5" />
+                </div>
+                <div className="flex-1">
+                  <h3 className={`text-base font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                    {t('app.trending_saved_title')}
+                  </h3>
+                  <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                    {t('app.trending_saved_description')}
                   </p>
                 </div>
-                
-                <div className="space-y-2">
-                  {[
-                    { name: 'Alex Rivera', age: 28, username: 'alexr', avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', mutual: '8 mutual friends', isOnline: true, location: 'New York, NY', verified: true },
-                    { name: 'Jordan Smith', age: 25, username: 'jordansmith', avatar: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', mutual: '12 mutual friends', isOnline: false, location: 'Los Angeles, CA', verified: false },
-                    { name: 'Taylor Davis', age: 30, username: 'taylord', avatar: 'https://images.pexels.com/photos/1102341/pexels-photo-1102341.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2', mutual: '15 mutual friends', isOnline: true, location: 'San Francisco, CA', verified: true },
-                  ].map((user, index) => (
-                    <div 
-                      key={index} 
-                      className="group cursor-pointer rounded-xl p-2 transition-all duration-200"
-                      style={{ backgroundColor: theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)' }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)';
-                      }}
-                      onClick={() => {
-                        navigate(`/${user.username}`);
-                      }}
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center space-x-2.5 flex-1 min-w-0">
-                          <div className="relative flex-shrink-0">
-                            <div className={`w-12 h-12 rounded-xl overflow-hidden ${user.isOnline ? 'ring-2 ring-green-500/50' : ''}`}>
-                              <img
-                                src={user.avatar}
-                                alt={user.name}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            {user.isOnline && (
-                              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-950"></div>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-1">
-                              <p className={`font-bold text-sm truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                {user.name}
-                              </p>
-                              {user.verified && (
-                                <svg className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M23 12l-2.44-2.78.34-3.68-3.61-.82-1.89-3.18L12 2.96 8.6 1.54 6.71 4.72l-3.61.82.34 3.68L1 12l2.44 2.78-.34 3.68 3.61.82 1.89 3.18L12 21.04l3.4 1.42 1.89-3.18 3.61-.82-.34-3.68L23 12zm-10.29 4.8l-4.5-4.31 1.39-1.32 3.11 2.97 5.98-6.03 1.39 1.37-7.37 7.32z"/>
-                                </svg>
-                              )}
-                            </div>
-                            <p className={`text-xs truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                              {user.age} · {user.location}
-                            </p>
-                          </div>
-                        </div>
-                        <button 
-                          onClick={(e) => e.stopPropagation()}
-                          className={`flex-shrink-0 px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
-                            theme === 'dark'
-                              ? 'bg-white text-black hover:bg-gray-200'
-                              : 'bg-black text-white hover:bg-gray-900'
-                          }`}
-                        >
-                          {t('app.connect')}
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
               </div>
+              <button
+                type="button"
+                onClick={() => navigate('/search')}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                  theme === 'dark'
+                    ? 'bg-white/10 text-white hover:bg-white/15'
+                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                }`}
+              >
+                {t('app.trending_saved_action')}
+                <ArrowUpRight className="w-4 h-4" />
+              </button>
             </motion.div>
 
           </div>

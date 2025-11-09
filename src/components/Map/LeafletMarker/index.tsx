@@ -12,6 +12,7 @@ import LeafletDivIcon from '../LeafletDivIcon';
 import LeafletPopup from '../LeafletPopup';
 import { decodeGeoHash } from '../lib/helper/geocoder';
 import { getSafeImageURL } from '../../../helpers/helpers';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -21,6 +22,7 @@ export interface CustomMarkerProps {
 
 export const CustomMarker = ({ item }: CustomMarkerProps) => {
   const { map } = useMapContext();
+  const navigate = useNavigate()
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -37,21 +39,23 @@ export const CustomMarker = ({ item }: CustomMarkerProps) => {
  
   const handleMarkerClick = useCallback(() => {
     if (!map) return;
-   // const clampZoom = map.getZoom();// <  AppConfig.maxZoom ? 14 : 14;
-   // map.setView(decodeGeoHash(place.geohash), clampZoom, { animate: false });
+    const clampZoom = map.getZoom();// <  AppConfig.maxZoom ? 14 : 14;
+    map.setView(decodeGeoHash(item), clampZoom, { animate: false });
     //setIsModalOpen(true);
-    
+    navigate(`/${item.username}`, { replace: true });
   }, [map]);
 
 
 
-   const generateAlphaColorFromIndex = (index: bigint): string => {
+   const generateAlphaColorFromIndex = (_index: any): string => {
     // Hash benzeri bir algoritma ile tutarlı bir renk üret
     const getChannel = (seed: bigint): number => {
       const sinValue = Math.sin(Number(seed % BigInt(Number.MAX_SAFE_INTEGER)));
       return (Math.abs(sinValue) * 256) % 256;
     };
   
+    console.log("generateAlphaColorFromIndex",_index)
+    var index = _index ? BigInt(_index) : BigInt(0);
     const r = Math.floor(getChannel(index * BigInt(123456)));
     const g = Math.floor(getChannel(index * BigInt(789101)));
     const b = Math.floor(getChannel(index * BigInt(112131)));
@@ -72,7 +76,7 @@ export const CustomMarker = ({ item }: CustomMarkerProps) => {
               image: getSafeImageURL(item?.avatar,"icon"),
               data:item
             }}   
-            color= {generateAlphaColorFromIndex(BigInt(item?.public_id))}  
+            color= {generateAlphaColorFromIndex(item?.public_id)}  
             label={item?.username }   
           />
         ),

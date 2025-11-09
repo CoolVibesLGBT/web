@@ -47,7 +47,6 @@ const CreateMarkerClusterGroup = (
     spiderfyOnEveryZoom: false,  // Yalnızca max zoomda yayılma
     zoomToBoundsOnClick: true,  // Küme tıklandığında zoom yapılsın
     spiderfyDistanceMultiplier: 10,  // İşaretçilerin yayılma mesafesi
-
     iconCreateFunction: (cluster) => {
       const customIcon = LeafletDivIcon({
         source: (

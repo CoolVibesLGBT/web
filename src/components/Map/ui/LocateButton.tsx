@@ -40,7 +40,7 @@ export const LocateButton = () => {
     <>
       <button
         
-        style={{ zIndex: 400 }}
+        style={{ zIndex: 1 }}
         className=" absolute top-[138px] right-3 p-2  "
         onClick={() => handleClick()}
       >

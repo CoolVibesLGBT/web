@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Calendar, MapPin, Link, MoreHorizontal, Heart, Baby, Cigarette, Wine, Ruler, PawPrint, Church, GraduationCap, Eye, Palette, Users, Accessibility, Paintbrush, RulerDimensionLine, Vegan, PersonStanding, Sparkles, Drama, Banana, Save, Camera, Image as ImageIcon, ChevronRight, Check, HeartHandshake, AlertTriangle, FileText, MessageCircle, Panda, Ghost, Frown, Rainbow, Transgender, Rabbit } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Link, MoreHorizontal, Heart, Baby, Cigarette, Wine, Ruler, PawPrint, Church, GraduationCap, Eye, EyeOff, Lock, Palette, Users, Accessibility, Paintbrush, RulerDimensionLine, Vegan, PersonStanding, Sparkles, Drama, Banana, Save, Camera, Image as ImageIcon, ChevronRight, Check, HeartHandshake, AlertTriangle, FileText, MessageCircle, Panda, Ghost, Frown, Rainbow, Transgender, Rabbit, ChevronLeft, ChevronDown, LocateFixed } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useApp } from '../contexts/AppContext';
@@ -32,12 +32,13 @@ import { ToolbarContext } from '../contexts/ToolbarContext';
 import Container from './Container';
 import AuthWizard from './AuthWizard';
 import { getSafeImageURL } from '../helpers/helpers';
+import NewMentionsPlugin from './Lexical/plugins/MentionsPlugin';
 
 // ToolbarPlugin wrapper component
 const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (editor: any) => void }) => {
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
-  const [isLinkEditMode, setIsLinkEditMode] = useState(false);
+  const [, setIsLinkEditMode] = useState(false);
 
   // Set editor instance when available
   React.useEffect(() => {
@@ -85,7 +86,16 @@ type UserLocation =
   | null
   | undefined;
 
-interface User {
+interface UserEngagementCounts {
+  follower_count?: number;
+  following_count?: number;
+}
+
+interface UserEngagements {
+  counts?: UserEngagementCounts;
+}
+
+interface ProfileUser {
   id: string;
   public_id: number;
   username: string;
@@ -176,6 +186,8 @@ interface User {
       name: Record<string, string>;
     };
   }>;
+  engagements?: UserEngagements;
+  privacy_level?: PrivacyLevel;
 }
 
 // Post interface (simplified for profile)
@@ -191,7 +203,7 @@ interface ProfilePost {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-  author: User;
+  author: ProfileUser;
   attachments: Array<{
     id: string;
     file_id: string;
@@ -247,8 +259,423 @@ interface Media {
   };
   created_at: string;
   updated_at: string;
-  user: User;
+  user: ProfileUser;
 }
+
+export enum PrivacyLevel {
+  Public = "public",
+  FriendsOnly = "friends_only",
+  FollowersOnly = "followers_only",
+  MutualsOnly = "mutuals_only",
+  Private = "private",
+}
+
+interface BirthdatePickerProps {
+  value?: string;
+  onChange: (value?: string) => void;
+  theme: string;
+  t: (key: string, options?: Record<string, any>) => string;
+}
+
+interface LocationPickerProps {
+  value?: UserLocation | string | null;
+  onChange: (value?: UserLocation | string | null) => void;
+  theme: string;
+  t: (key: string, options?: Record<string, any>) => string;
+}
+
+const BirthdatePicker: React.FC<BirthdatePickerProps> = ({ value, onChange, theme, t }) => {
+  const today = React.useMemo(() => new Date(), []);
+  const minYear = today.getFullYear() - 80;
+  const maxYear = today.getFullYear() - 18;
+
+  const parseDate = React.useCallback(() => {
+    if (!value) {
+      return { day: 0, month: 0, year: 0 };
+    }
+    const [year, month, day] = value.split('-').map(Number);
+    if (!year || !month || !day) {
+      return { day: 0, month: 0, year: 0 };
+    }
+    return { day, month, year };
+  }, [value]);
+
+  const initialParsed = parseDate();
+  const defaultYear = React.useMemo(() => {
+    if (initialParsed.year) return initialParsed.year;
+    return Math.min(Math.max(today.getFullYear() - 25, minYear), maxYear);
+  }, [initialParsed.year, maxYear, minYear, today]);
+
+  const months = React.useMemo(
+    () => [
+      t('months.january'),
+      t('months.february'),
+      t('months.march'),
+      t('months.april'),
+      t('months.may'),
+      t('months.june'),
+      t('months.july'),
+      t('months.august'),
+      t('months.september'),
+      t('months.october'),
+      t('months.november'),
+      t('months.december'),
+    ],
+    [t]
+  );
+
+  const [selectedDate, setSelectedDate] = React.useState(initialParsed);
+  const [viewMode, setViewMode] = React.useState<'day' | 'month' | 'year'>('day');
+  const [currentYear, setCurrentYear] = React.useState(() =>
+    Math.min(Math.max(initialParsed.year || defaultYear, minYear), maxYear)
+  );
+  const [currentMonth, setCurrentMonth] = React.useState(() =>
+    initialParsed.month ? initialParsed.month - 1 : today.getMonth()
+  );
+  const [decadeStart, setDecadeStart] = React.useState(() =>
+    Math.floor((initialParsed.year || defaultYear) / 20) * 20
+  );
+
+  React.useEffect(() => {
+    const parsed = parseDate();
+    setSelectedDate(parsed);
+    if (parsed.year) {
+      setCurrentYear(Math.min(Math.max(parsed.year, minYear), maxYear));
+      setCurrentMonth(parsed.month ? parsed.month - 1 : 0);
+      setDecadeStart(Math.floor(parsed.year / 20) * 20);
+    }
+  }, [parseDate, minYear, maxYear]);
+
+  const getDaysInMonth = (month: number, year: number) => new Date(year, month + 1, 0).getDate();
+  const getFirstDayOfMonth = (month: number, year: number) => new Date(year, month, 1).getDay();
+
+  const canGoPrevMonth =
+    currentYear > minYear || (currentYear === minYear && currentMonth > 0);
+  const canGoNextMonth =
+    currentYear < maxYear || (currentYear === maxYear && currentMonth < 11);
+
+  const navigateMonth = (direction: 'prev' | 'next') => {
+    if (direction === 'prev') {
+      if (!canGoPrevMonth) return;
+      if (currentMonth === 0) {
+        setCurrentYear((year) => Math.max(year - 1, minYear));
+        setCurrentMonth(11);
+      } else {
+        setCurrentMonth((month) => month - 1);
+      }
+    } else {
+      if (!canGoNextMonth) return;
+      if (currentMonth === 11) {
+        setCurrentYear((year) => Math.min(year + 1, maxYear));
+        setCurrentMonth(0);
+      } else {
+        setCurrentMonth((month) => month + 1);
+      }
+    }
+  };
+
+  const formatDate = (day: number, month: number, year: number) => {
+    const safeMonth = String(month).padStart(2, '0');
+    const safeDay = String(day).padStart(2, '0');
+    return `${year}-${safeMonth}-${safeDay}`;
+  };
+
+  const handleDateSelect = (day: number) => {
+    const next = { day, month: currentMonth + 1, year: currentYear };
+    setSelectedDate(next);
+    onChange(formatDate(next.day, next.month, next.year));
+  };
+
+  const handleYearSelect = (year: number) => {
+    setCurrentYear(year);
+    setViewMode('month');
+  };
+
+  const handleMonthSelect = (monthIndex: number) => {
+    setCurrentMonth(monthIndex);
+    setViewMode('day');
+  };
+
+  const handleClear = () => {
+    setSelectedDate({ day: 0, month: 0, year: 0 });
+    onChange(undefined);
+  };
+
+  const renderCalendarDays = () => {
+    const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+    const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
+    const days: React.ReactNode[] = [];
+    for (let i = 0; i < firstDay; i++) {
+      days.push(<div key={`empty-${i}`} className="w-10 h-10" />);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const isSelected =
+        selectedDate.day === day &&
+        selectedDate.month === currentMonth + 1 &&
+        selectedDate.year === currentYear;
+
+      const formatted = formatDate(day, currentMonth + 1, currentYear);
+      const isDisabled =
+        currentYear < minYear ||
+        currentYear > maxYear ||
+        formatted > formatDate(today.getDate(), today.getMonth() + 1, today.getFullYear());
+
+      days.push(
+        <motion.button
+          key={day}
+          type="button"
+          disabled={isDisabled}
+          onClick={() => handleDateSelect(day)}
+          className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
+            isSelected
+              ? theme === 'dark'
+                ? 'bg-white text-gray-900 ring-2 ring-black/50'
+                : 'bg-gray-900 text-white ring-2 ring-black/50'
+              : theme === 'dark'
+              ? 'text-white hover:bg-gray-700'
+              : 'text-gray-900 hover:bg-gray-200'
+          } ${isDisabled ? 'opacity-40 cursor-not-allowed hover:bg-transparent' : ''}`}
+          whileHover={!isDisabled ? { scale: 1.05 } : undefined}
+          whileTap={!isDisabled ? { scale: 0.95 } : undefined}
+        >
+          {day}
+        </motion.button>
+      );
+    }
+
+    return days;
+  };
+
+  const decadeYears = React.useMemo(() => {
+    const start = Math.max(Math.floor(decadeStart / 20) * 20, minYear);
+    const years: (number | null)[] = [];
+    for (let i = 0; i < 20; i += 1) {
+      const year = start + i;
+      if (year > maxYear) {
+        years.push(null);
+      } else {
+        years.push(year);
+      }
+    }
+    return years;
+  }, [decadeStart, maxYear, minYear]);
+
+  const dayNames = React.useMemo(
+    () => ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+    []
+  );
+
+  return (
+    <div className={`space-y-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+      <div className="flex items-center justify-between">
+        <div className="text-sm font-medium">
+          {selectedDate.day > 0 && selectedDate.month > 0 && selectedDate.year > 0
+            ? `${selectedDate.day} ${months[selectedDate.month - 1]} ${selectedDate.year}`
+            : t('profile.date_of_birth_placeholder', { defaultValue: 'Select your birthdate' })}
+        </div>
+        {selectedDate.day > 0 && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className={`text-xs font-semibold transition-colors ${
+              theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-800'
+            }`}
+          >
+            {t('profile.clear_date', { defaultValue: 'Clear' })}
+          </button>
+        )}
+      </div>
+
+      <div
+        className={`rounded-2xl border p-4 ${
+          theme === 'dark' ? 'bg-gray-900/60 border-gray-800' : 'bg-white border-gray-200 shadow-sm'
+        }`}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <button
+            type="button"
+            className={`p-2 rounded-full transition-colors ${
+              canGoPrevMonth
+                ? theme === 'dark'
+                  ? 'hover:bg-gray-800 text-gray-300'
+                  : 'hover:bg-gray-100 text-gray-600'
+                : 'opacity-30 cursor-not-allowed'
+            }`}
+            onClick={() => navigateMonth('prev')}
+            disabled={!canGoPrevMonth}
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          <div className="grid grid-cols-2 gap-2 flex-1 mx-2">
+            <button
+              type="button"
+              className={`flex items-center justify-center gap-1 rounded-lg py-2 font-semibold transition-colors ${
+                viewMode === 'month'
+                  ? theme === 'dark'
+                    ? 'bg-indigo-500 text-white'
+                    : 'bg-indigo-100 text-indigo-900'
+                  : theme === 'dark'
+                  ? 'bg-gray-800 text-white hover:bg-gray-700'
+                  : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+              }`}
+              onClick={() => setViewMode(viewMode === 'month' ? 'day' : 'month')}
+            >
+              {months[currentMonth]}
+              <ChevronDown
+                className={`w-4 h-4 transition-transform ${viewMode === 'month' ? 'rotate-180' : ''}`}
+              />
+            </button>
+            <button
+              type="button"
+              className={`flex items-center justify-center gap-1 rounded-lg py-2 font-semibold transition-colors ${
+                viewMode === 'year'
+                  ? theme === 'dark'
+                    ? 'bg-indigo-500 text-white'
+                    : 'bg-indigo-100 text-indigo-900'
+                  : theme === 'dark'
+                  ? 'bg-gray-800 text-white hover:bg-gray-700'
+                  : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+              }`}
+              onClick={() => setViewMode(viewMode === 'year' ? 'day' : 'year')}
+            >
+              {currentYear}
+              <ChevronDown
+                className={`w-4 h-4 transition-transform ${viewMode === 'year' ? 'rotate-180' : ''}`}
+              />
+            </button>
+          </div>
+
+          <button
+            type="button"
+            className={`p-2 rounded-full transition-colors ${
+              canGoNextMonth
+                ? theme === 'dark'
+                  ? 'hover:bg-gray-800 text-gray-300'
+                  : 'hover:bg-gray-100 text-gray-600'
+                : 'opacity-30 cursor-not-allowed'
+            }`}
+            onClick={() => navigateMonth('next')}
+            disabled={!canGoNextMonth}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+
+        <AnimatePresence mode="wait" initial={false}>
+          {viewMode === 'year' && (
+            <motion.div
+              key="year-view"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="grid grid-cols-5 gap-2">
+                {decadeYears.map((year, index) =>
+                  year ? (
+                    <button
+                      key={year}
+                      type="button"
+                      onClick={() => handleYearSelect(year)}
+                      className={`rounded-lg py-2 text-sm font-medium transition-colors ${
+                        currentYear === year
+                          ? theme === 'dark'
+                            ? 'bg-white text-gray-900'
+                            : 'bg-gray-900 text-white'
+                          : theme === 'dark'
+                          ? 'text-white hover:bg-gray-800'
+                          : 'text-gray-900 hover:bg-gray-200'
+                      }`}
+                    >
+                      {year}
+                    </button>
+                  ) : (
+                    <div key={`empty-${index}`} />
+                  )
+                )}
+              </div>
+              <div className="flex items-center justify-between mt-3">
+                <button
+                  type="button"
+                  className={`text-xs font-semibold transition-colors ${
+                    theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
+                  } ${decadeStart <= minYear ? 'opacity-30 cursor-not-allowed' : ''}`}
+                  onClick={() => setDecadeStart((start) => Math.max(start - 20, minYear))}
+                  disabled={decadeStart <= minYear}
+                >
+                  {t('profile.previous', { defaultValue: 'Previous' })}
+                </button>
+                <span className="text-xs text-gray-500">
+                  {decadeStart} – {decadeStart + 19}
+                </span>
+                <button
+                  type="button"
+                  className={`text-xs font-semibold transition-colors ${
+                    theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
+                  } ${decadeStart + 20 > maxYear ? 'opacity-30 cursor-not-allowed' : ''}`}
+                  onClick={() => setDecadeStart((start) => Math.min(start + 20, maxYear - 19))}
+                  disabled={decadeStart + 20 > maxYear}
+                >
+                  {t('profile.next', { defaultValue: 'Next' })}
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {viewMode === 'month' && (
+            <motion.div
+              key="month-view"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="grid grid-cols-3 gap-2">
+                {months.map((month, index) => (
+                  <button
+                    key={month}
+                    type="button"
+                    onClick={() => handleMonthSelect(index)}
+                    className={`rounded-lg py-2 text-sm font-medium transition-colors ${
+                      currentMonth === index
+                        ? theme === 'dark'
+                          ? 'bg-white text-gray-900'
+                          : 'bg-gray-900 text-white'
+                        : theme === 'dark'
+                        ? 'text-white hover:bg-gray-800'
+                        : 'text-gray-900 hover:bg-gray-200'
+                    }`}
+                  >
+                    {month}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {viewMode === 'day' && (
+            <motion.div
+              key="day-view"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="grid grid-cols-7 gap-1 text-xs font-semibold mb-2 text-center text-gray-500">
+                {dayNames.map((day) => (
+                  <span key={day}>{day}</span>
+                ))}
+              </div>
+              <div className="grid grid-cols-7 gap-1">{renderCalendarDays()}</div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
 
 interface ProfileScreenProps {
   inline?: boolean;
@@ -290,6 +717,270 @@ const getLocationDisplay = (location: UserLocation): string => {
   return '';
 };
 
+const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange, theme, t }) => {
+  const [status, setStatus] = React.useState<string>('');
+  const [isDetecting, setIsDetecting] = React.useState(false);
+  const currentDisplay = React.useMemo(() => getLocationDisplay((value ?? null) as UserLocation), [value]);
+  const [manualValue, setManualValue] = React.useState(currentDisplay);
+
+  React.useEffect(() => {
+    setManualValue(currentDisplay);
+  }, [currentDisplay]);
+
+  const getPositionWithTimeout = React.useCallback((options: PositionOptions, timeoutMs = 10000) => {
+    return new Promise<GeolocationPosition>((resolve, reject) => {
+      let settled = false;
+      const timer = window.setTimeout(() => {
+        if (!settled) {
+          settled = true;
+          reject(new Error('Location request timed out'));
+        }
+      }, timeoutMs);
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          if (!settled) {
+            settled = true;
+            window.clearTimeout(timer);
+            resolve(pos);
+          }
+        },
+        (error) => {
+          if (!settled) {
+            settled = true;
+            window.clearTimeout(timer);
+            reject(error);
+          }
+        },
+        options
+      );
+    });
+  }, []);
+
+  const fetchIpFallback = React.useCallback(async () => {
+    const providers = [
+      'https://ipapi.co/json/',
+      'https://ipinfo.io/json?token=17064ceadbe842',
+    ];
+
+    for (const url of providers) {
+      try {
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) {
+          continue;
+        }
+
+        const data = await response.json();
+        const locStr: string | undefined = data.loc || (data.latitude && data.longitude ? `${data.latitude},${data.longitude}` : undefined);
+        const [latStr, lngStr] = (locStr || '').split(',');
+        const latitude = parseFloat(data.latitude ?? latStr);
+        const longitude = parseFloat(data.longitude ?? lngStr);
+
+        if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+          return {
+            country_code: (data.country_code || data.country || '').toString().toUpperCase(),
+            country: (data.country_name || data.country || '').toString(),
+            address: data.city || '',
+            city: (data.city || '').toString(),
+            region: (data.region || data.region_name || '').toString(),
+            latitude,
+            longitude,
+            timezone: (data.timezone || '').toString(),
+            display: data.city ? `${data.city}, ${data.country_name || data.country || ''}` : `${latitude.toFixed(3)}, ${longitude.toFixed(3)}`,
+          };
+        }
+      } catch (error) {
+        console.warn('IP fallback failed:', error);
+      }
+    }
+
+    throw new Error('IP geolocation failed');
+  }, []);
+
+  const saveLocation = React.useCallback((nextLocation?: UserLocation | string | null) => {
+    onChange(nextLocation ?? null);
+  }, [onChange]);
+
+  const handleDetectLocation = React.useCallback(async () => {
+    if (isDetecting) {
+      return;
+    }
+
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      setStatus(t('location.geo_api_unavailable', { defaultValue: 'Geolocation is not available in this browser.' }));
+      return;
+    }
+
+    setIsDetecting(true);
+    setStatus(t('location.requesting_permission', { defaultValue: 'Requesting location permission…' }));
+
+    try {
+      try {
+        if ('permissions' in navigator && typeof (navigator as any).permissions?.query === 'function') {
+          const permissionStatus = await (navigator as any).permissions.query({ name: 'geolocation' });
+          if (permissionStatus.state === 'denied') {
+            setStatus(t('location.permission_denied', { defaultValue: 'Location permission denied. Update browser settings to enable.' }));
+            setIsDetecting(false);
+            return;
+          }
+        }
+      } catch (error) {
+        console.warn('Unable to query geolocation permission:', error);
+      }
+
+      setStatus(t('location.fetching_accurate', { defaultValue: 'Fetching accurate location…' }));
+      const position = await getPositionWithTimeout({ enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }, 12000);
+      const { latitude, longitude } = position.coords;
+
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+        const data = await response.json();
+        const address = data.address || {};
+        const detectedLocation: UserLocation = {
+          country_code: address.country_code?.toUpperCase() || '',
+          country: address.country || '',
+          address: address.city || address.town || address.village || '',
+          city: address.city || address.town || address.village || '',
+          region: address.state || '',
+          latitude,
+          longitude,
+          timezone: '',
+          display: `${address.city || address.town || address.village || latitude.toFixed(3)}, ${address.country || ''}`,
+        };
+
+        saveLocation(detectedLocation);
+        setStatus(t('location.detected', { defaultValue: 'Location detected successfully.' }));
+      } catch (error) {
+        console.warn('Reverse geocoding failed, falling back to coordinates.', error);
+        const fallbackLocation: UserLocation = {
+          latitude,
+          longitude,
+          display: `${latitude.toFixed(3)}, ${longitude.toFixed(3)}`,
+        };
+        saveLocation(fallbackLocation);
+        setStatus(t('location.detected_no_address', { defaultValue: 'Coordinates detected, but address lookup failed.' }));
+      }
+    } catch (geoError) {
+      console.warn('Geolocation failed, attempting IP fallback.', geoError);
+      setStatus(t('location.trying_ip', { defaultValue: 'Trying approximate location via IP…' }));
+      try {
+        const ipLocation = await fetchIpFallback();
+        saveLocation(ipLocation as UserLocation);
+        setStatus(t('location.approximate_detected', { defaultValue: 'Approximate location detected.' }));
+      } catch (ipError) {
+        console.error('IP location failed:', ipError);
+        setStatus(t('location.failed', { defaultValue: 'Unable to detect location. Please enter it manually.' }));
+      }
+    } finally {
+      setIsDetecting(false);
+    }
+  }, [fetchIpFallback, getPositionWithTimeout, isDetecting, saveLocation, t]);
+
+  const handleManualChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextValue = event.target.value;
+    setManualValue(nextValue);
+
+    if (!nextValue.trim()) {
+      saveLocation(null);
+      setStatus('');
+      return;
+    }
+
+    saveLocation(nextValue.trim());
+    setStatus(t('profile.location_manual_saved', { defaultValue: 'Using manually entered location.' }));
+  };
+
+  const handleClear = () => {
+    setManualValue('');
+    saveLocation(null);
+    setStatus('');
+  };
+
+  const hintMessage = status || t('profile.location_hint', { defaultValue: 'Grant permission to detect your city or enter it manually.' });
+
+  return (
+    <div className={`space-y-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+      <div
+        className={`rounded-2xl border p-4 ${theme === 'dark' ? 'bg-gray-900/60 border-gray-800' : 'bg-white border-gray-200 shadow-sm'}`}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <div className="text-sm font-medium">
+            {currentDisplay || t('profile.location_placeholder', { defaultValue: 'City, Country' })}
+          </div>
+          {(currentDisplay || manualValue) && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className={`text-xs font-semibold transition-colors ${
+                theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-800'
+              }`}
+            >
+              {t('profile.clear_location', { defaultValue: 'Clear location' })}
+            </button>
+          )}
+        </div>
+
+        <div className="mt-4 flex flex-col sm:flex-row gap-3">
+          <button
+            type="button"
+            onClick={handleDetectLocation}
+            disabled={isDetecting}
+            className={`inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition-all ${
+              isDetecting
+                ? 'opacity-70 cursor-wait'
+                : ''
+            } ${
+              theme === 'dark'
+                ? 'bg-white text-black hover:bg-gray-200 disabled:hover:bg-white/90'
+                : 'bg-black text-white hover:bg-gray-900 disabled:hover:bg-black/90'
+            }`}
+          >
+            {isDetecting ? (
+              <>
+                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                <span>{t('location.detecting', { defaultValue: 'Detecting…' })}</span>
+              </>
+            ) : (
+              <>
+                <LocateFixed className="w-4 h-4" />
+                <span>
+                  {t('profile.detect_location', {
+                    defaultValue: t('auth.allow_location', { defaultValue: 'Detect my location' }),
+                  })}
+                </span>
+              </>
+            )}
+          </button>
+          <div className={`flex-1 text-xs leading-relaxed ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+            {hintMessage}
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <label className={`block text-xs font-semibold mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+            {t('profile.location_manual_entry', { defaultValue: 'Or enter manually' })}
+          </label>
+          <input
+            type="text"
+            value={manualValue}
+            onChange={handleManualChange}
+            placeholder={t('profile.location_placeholder', { defaultValue: 'City, Country' })}
+            className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${
+              theme === 'dark'
+                ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-white'
+                : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
+            }`}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed = false, username: propUsername }) => {
   const { username: urlUsername } = useParams<{ username: string }>();
   const username = propUsername || urlUsername;
@@ -298,7 +989,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const { user: authUser, isAuthenticated, updateUser } = useAuth();
   const { data: appData, defaultLanguage } = useApp();
   const { t } = useTranslation('common');
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<ProfileUser | null>(null);
   const [posts, setPosts] = useState<ProfilePost[]>([]);
   const [medias, setMedias] = useState<Media[]>([]);
   const [loading, setLoading] = useState(true);
@@ -309,7 +1000,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const [isFollowing, setIsFollowing] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [editFormData, setEditFormData] = useState<Partial<User>>({});
+  const [editFormData, setEditFormData] = useState<Partial<ProfileUser>>({});
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
   const [coverImagePreview, setCoverImagePreview] = useState<string | null>(null);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
@@ -336,9 +1027,155 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const [selectedFantasyCategory, setSelectedFantasyCategory] = useState<string | null>(null);
   const [updatingFantasies, setUpdatingFantasies] = useState(false);
   
+  // Password update state
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
+  });
+  const [passwordVisibility, setPasswordVisibility] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [isPasswordSectionOpen, setIsPasswordSectionOpen] = useState(false);
+  const [isBirthdateSectionOpen, setIsBirthdateSectionOpen] = useState(false);
+  const birthdateDisplay = React.useMemo(() => {
+    const raw = editFormData.date_of_birth;
+    if (!raw) {
+      return t('profile.date_of_birth_placeholder', { defaultValue: 'Select your birthdate' });
+    }
+    const parsed = new Date(raw as string);
+    if (Number.isNaN(parsed.getTime())) {
+      return raw as string;
+    }
+    const locale = defaultLanguage === 'tr' ? 'tr-TR' : 'en-US';
+    return parsed.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
+  }, [editFormData.date_of_birth, defaultLanguage, t]);
+
+  const resetPasswordForm = React.useCallback(() => {
+    setPasswordForm({
+      currentPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
+    });
+    setPasswordVisibility({
+      current: false,
+      new: false,
+      confirm: false,
+    });
+    setPasswordMessage(null);
+    setIsUpdatingPassword(false);
+  }, []);
+
+  const handlePasswordInputChange = (field: 'currentPassword' | 'newPassword' | 'confirmNewPassword', value: string) => {
+    setPasswordForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const togglePasswordVisibility = (field: 'current' | 'new' | 'confirm') => {
+    setPasswordVisibility((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+
+  const handlePasswordSubmit = async () => {
+    setPasswordMessage(null);
+    const current = passwordForm.currentPassword.trim();
+    const next = passwordForm.newPassword.trim();
+    const confirm = passwordForm.confirmNewPassword.trim();
+
+    if (!current || !next || !confirm) {
+      setPasswordMessage({
+        type: 'error',
+        text: t('profile.password_error_required', { defaultValue: 'Please complete all password fields.' }),
+      });
+      return;
+    }
+
+    if (next.length < 8) {
+      setPasswordMessage({
+        type: 'error',
+        text: t('profile.password_error_length', { defaultValue: 'Your new password must be at least 8 characters long.' }),
+      });
+      return;
+    }
+
+    if (next !== confirm) {
+      setPasswordMessage({
+        type: 'error',
+        text: t('profile.password_error_mismatch', { defaultValue: 'New password and confirmation do not match.' }),
+      });
+      return;
+    }
+
+    if (current === next) {
+      setPasswordMessage({
+        type: 'error',
+        text: t('profile.password_error_same', { defaultValue: 'New password must be different from your current password.' }),
+      });
+      return;
+    }
+
+    setIsUpdatingPassword(true);
+    try {
+      await api.call(Actions.CMD_USER_UPDATE_PASSWORD, {
+        method: "POST",
+        body: {
+          current_password: current,
+          new_password: next,
+          new_password_confirmation: confirm,
+        },
+      });
+
+      setPasswordMessage({
+        type: 'success',
+        text: t('profile.password_success', { defaultValue: 'Password updated successfully.' }),
+      });
+      setPasswordForm({
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: '',
+      });
+      setPasswordVisibility({
+        current: false,
+        new: false,
+        confirm: false,
+      });
+    } catch (err: any) {
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        t('profile.password_error_generic', { defaultValue: 'We could not update your password. Please try again.' });
+
+      setPasswordMessage({
+        type: 'error',
+        text: message,
+      });
+    } finally {
+      setIsUpdatingPassword(false);
+    }
+  };
+  
   // Bio editor state
   const [bioEditorInstance, setBioEditorInstance] = useState<any>(null);
-  
+  const privacyLevels = React.useMemo(() => Object.values(PrivacyLevel), []);
+  const privacyLevelLabels = React.useMemo(
+    () => ({
+      [PrivacyLevel.Public]: t('profile.privacy_public', { defaultValue: 'Public' }),
+      [PrivacyLevel.FriendsOnly]: t('profile.privacy_friends_only', { defaultValue: 'Friends Only' }),
+      [PrivacyLevel.FollowersOnly]: t('profile.privacy_followers_only', { defaultValue: 'Followers Only' }),
+      [PrivacyLevel.MutualsOnly]: t('profile.privacy_mutuals_only', { defaultValue: 'Mutuals Only' }),
+      [PrivacyLevel.Private]: t('profile.privacy_private', { defaultValue: 'Private' }),
+    }),
+    [t]
+  );
+
   // Editor config for bio
   const bioEditorConfig = React.useMemo(() => ({
     namespace: "ProfileBioEditor",
@@ -762,7 +1599,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           updateUser(response.user);
           // Also update local user state if viewing own profile
           if (user && (authUser.id === user.id || authUser.username === user.username)) {
-            setUser(response.user as unknown as User);
+            setUser(response.user as unknown as ProfileUser);
           }
         } else {
           // Otherwise, update manually
@@ -800,7 +1637,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
               updateUser(updatedUserData);
               // Also update local user state if viewing own profile
               if (user && (authUser.id === user.id || authUser.username === user.username)) {
-                setUser(updatedUserData as unknown as User);
+                setUser(updatedUserData as unknown as ProfileUser);
               }
             }
           } else {
@@ -831,7 +1668,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
               updateUser(updatedUserData);
               // Also update local user state if viewing own profile
               if (user && (authUser.id === user.id || authUser.username === user.username)) {
-                setUser(updatedUserData as unknown as User);
+                setUser(updatedUserData as unknown as ProfileUser);
               }
             }
           }
@@ -941,7 +1778,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           updateUser(response.user);
           // Update local user state from response
           if (user && (authUser.id === user.id || authUser.username === user.username)) {
-            setUser(response.user as unknown as User);
+            setUser(response.user as unknown as ProfileUser);
           }
         } else if (user && (authUser.id === user.id || authUser.username === user.username)) {
           // Fallback to local state update
@@ -1077,7 +1914,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           updateUser(response.user);
           // Update local user state from response
           if (user && (authUser.id === user.id || authUser.username === user.username)) {
-            setUser(response.user as unknown as User);
+            setUser(response.user as unknown as ProfileUser);
           }
         } else if (user && (authUser.id === user.id || authUser.username === user.username)) {
           // Fallback to local state update
@@ -1134,6 +1971,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   // Initialize edit form when edit mode opens (only for non-attribute fields)
   useEffect(() => {
     if (isEditMode) {
+      resetPasswordForm();
       // Reset edit tab only when first entering edit mode
       // Use a ref to track if this is the first time entering edit mode
       if (!isEditModeRef.current) {
@@ -1158,31 +1996,46 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       
       // Initialize form data if user is available
       if (user) {
+        const normalizedDateOfBirth = user.date_of_birth ? user.date_of_birth.split('T')[0] : '';
         setEditFormData({
+          username: user.username,
           displayname: user.displayname,
+          email: user.email || '',
           bio: user.bio || '',
           website: user.website || '',
           languages: user.languages || [],
+          date_of_birth: normalizedDateOfBirth || undefined,
+          privacy_level: user.privacy_level || PrivacyLevel.Public,
+          location: user.location || undefined,
         } as any);
+        setIsBirthdateSectionOpen(Boolean(normalizedDateOfBirth));
       }
     } else {
+      resetPasswordForm();
       // Reset ref when exiting edit mode
       isEditModeRef.current = false;
     }
-  }, [isEditMode]); // Only depend on isEditMode, not user
+  }, [isEditMode, resetPasswordForm]); // Only depend on isEditMode, not user
   
   // Update form data when user changes (but don't reset tab or other states)
   useEffect(() => {
     if (isEditMode && user && isEditModeRef.current) {
       // Only update if we're already in edit mode (ref is true)
+      const normalizedDateOfBirth = user.date_of_birth ? user.date_of_birth.split('T')[0] : '';
       setEditFormData({
+        username: user.username,
         displayname: user.displayname,
+        email: user.email || '',
         bio: user.bio || '',
         website: user.website || '',
         languages: user.languages || [],
+        date_of_birth: normalizedDateOfBirth || undefined,
+        privacy_level: user.privacy_level || PrivacyLevel.Public,
+        location: user.location || undefined,
       } as any);
+      setIsBirthdateSectionOpen(Boolean(normalizedDateOfBirth));
     }
-  }, [isEditMode, user?.displayname, user?.bio, user?.website, user?.languages]);
+  }, [isEditMode, user?.displayname, user?.bio, user?.website, user?.languages, user?.date_of_birth, user?.privacy_level, user?.username]);
 
   const handleProfileImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -1273,14 +2126,22 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         formData.append('cover_image', coverImageFile);
       }
       
+      const payload: Record<string, any> = {};
+      
       // Add other form data
       Object.keys(editFormData).forEach(key => {
         const value = editFormData[key as keyof typeof editFormData];
         if (value !== undefined && value !== null) {
-          if (Array.isArray(value)) {
-            formData.append(key, JSON.stringify(value));
+          payload[key] = value;
+
+          if (profileImageFile || coverImageFile) {
+            let normalized: string;
+            if (Array.isArray(value) || (typeof value === 'object' && value !== null)) {
+              normalized = JSON.stringify(value);
           } else {
-            formData.append(key, String(value));
+              normalized = String(value);
+            }
+            formData.append(key, normalized);
           }
         }
       });
@@ -1289,7 +2150,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       if (profileImageFile || coverImageFile) {
         await api.updateProfile(formData as any);
       } else {
-        await api.updateProfile(editFormData);
+        await api.updateProfile(payload);
       }
       
       // Update local user state
@@ -1304,9 +2165,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       // Update auth context user if it's the same user
       if (isOwnProfile && authUser) {
         // Filter out location string, only keep valid User fields
-        const { location, ...restEditData } = editFormData;
+        const { location: updatedLocation, ...restEditData } = editFormData;
         updateUser({
           ...restEditData as any,
+          ...(updatedLocation !== undefined ? { location: updatedLocation } : {}),
           profile_image_url: profileImagePreview || authUser.profile_image_url,
           ...(coverImagePreview && { cover_image_url: coverImagePreview }),
         });
@@ -1357,7 +2219,20 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         // If viewing own profile, use authUser data immediately for better UX
         if (isOwn && authUser) {
           console.log('ProfileScreen - Using own profile data from authUser');
-          setUser(authUser as unknown as User);
+          const followerCount =
+            (authUser as any)?.engagements?.counts?.follower_count ??
+            (authUser as any)?.followers_count ??
+            0;
+          const followingCount =
+            (authUser as any)?.engagements?.counts?.following_count ??
+            (authUser as any)?.following_count ??
+            0;
+
+          setUser({
+            ...(authUser as unknown as ProfileUser),
+            followers_count: followerCount,
+            following_count: followingCount,
+          });
           setLoading(false);
           return;
         }
@@ -1383,16 +2258,27 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         
         // Normalize avatar and cover URLs from API response structure
         // API returns avatar.file.url and cover.file.url, we need to extract them
+        const followerCountFromEngagements =
+          userData.engagements?.counts?.follower_count ??
+          userData.followers_count ??
+          0;
+        const followingCountFromEngagements =
+          userData.engagements?.counts?.following_count ??
+          userData.following_count ??
+          0;
+
         const normalizedUserData = {
           ...userData,
           profile_image_url: userData.avatar?.file?.url || userData.profile_image_url || undefined,
           cover_image_url: userData.cover?.file?.url || userData.cover_image_url || undefined,
+          followers_count: followerCountFromEngagements,
+          following_count: followingCountFromEngagements,
         };
         
         console.log('ProfileScreen - Normalized user data:', normalizedUserData);
         
         // Set user data
-        setUser(normalizedUserData as unknown as User);
+        setUser(normalizedUserData as unknown as ProfileUser);
       } catch (err: any) {
         console.error('Error fetching user:', err);
         const errorMessage = err.response?.data?.message || err.message || 'Failed to load profile';
@@ -1530,19 +2416,42 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   };
 
   const handleFollowClick = async () => {
-
     if (!user?.public_id) return;
-  
+
     try {
-      const response = await api.call(Actions.CMD_USER_TOGGLE_FOLLOW, {
-        method: "POST",
+      await api.call(Actions.CMD_USER_TOGGLE_FOLLOW, {
+        method: 'POST',
         body: {
-          followee_id: user.public_id
+          followee_id: user.public_id,
         },
       });
-      
-      // Toggle follow status on success
-      setIsFollowing(!isFollowing);
+
+      setIsFollowing((prev) => !prev);
+      setUser((prevUser) => {
+        if (!prevUser) return prevUser;
+
+        const currentFollowers =
+          prevUser.followers_count ??
+          prevUser.engagements?.counts?.follower_count ??
+          0;
+        const delta = isFollowing ? -1 : 1;
+        const nextFollowers = Math.max(0, currentFollowers + delta);
+
+        const updatedEngagements: UserEngagements = {
+          counts: {
+            follower_count: nextFollowers,
+            following_count:
+              prevUser.engagements?.counts?.following_count ??
+              prevUser.following_count,
+          },
+        };
+
+        return {
+          ...prevUser,
+          followers_count: nextFollowers,
+          engagements: updatedEngagements,
+        };
+      });
     } catch (error) {
       console.error('Error toggling follow:', error);
       // Optionally show error message to user
@@ -1602,6 +2511,40 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       </div>
     );
   }
+
+  const followerCountDisplay =
+    user.followers_count ??
+    user.engagements?.counts?.follower_count ??
+    0;
+  const followingCountDisplay =
+    user.following_count ??
+    user.engagements?.counts?.following_count ??
+    0;
+
+  const followersLabel = t('profile.followers', { defaultValue: 'Followers' });
+  const followingLabel = t('profile.following', { defaultValue: 'Following' });
+  const activePrivacyLevel =
+    (editFormData.privacy_level as PrivacyLevel | undefined) ??
+    (user?.privacy_level as PrivacyLevel | undefined) ??
+    PrivacyLevel.Public;
+
+  const handleEngagementNavigate = (type: 'followers' | 'followings') => {
+    if (!user) {
+      return;
+    }
+
+    navigate(`/${user.username}/${type}`, {
+      state: {
+        profileSummary: {
+          id: user.id,
+          public_id: user.public_id,
+          username: user.username,
+          displayname: user.displayname,
+          avatar: (user as any)?.avatar ?? null,
+        },
+      },
+    });
+  };
 
   const content = (
     <>
@@ -1814,6 +2757,28 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                           transition={{ duration: 0.2 }}
                           className="space-y-6 w-full"
                         >
+                          {/* Username */}
+                          <div>
+                            <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {t('profile.username') || 'Username'}
+                            </label>
+                            <input
+                              type="text"
+                              value={editFormData.username || ''}
+                              onChange={(e) =>
+                                setEditFormData({
+                                  ...editFormData,
+                                  username: e.target.value,
+                                })
+                              }
+                              placeholder={t('auth.placeholder_nickname')}
+                              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${theme === 'dark'
+                                ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
+                                : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
+                              }`}
+                            />
+                          </div>
+
                           {/* Display Name */}
                           <div>
                             <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -1827,6 +2792,30 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                 ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
                                 : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
                                 }`}
+                            />
+                          </div>
+
+                          {/* Email */}
+                          <div>
+                            <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {t('profile.email')}
+                            </label>
+                            <input
+                              type="email"
+                              value={editFormData.email || ''}
+                              onChange={(e) =>
+                                setEditFormData({
+                                  ...editFormData,
+                                  email: e.target.value,
+                                })
+                              }
+                              placeholder={t('profile.email_placeholder')}
+                              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${
+                                theme === 'dark'
+                                  ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
+                                  : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
+                              }`}
+                              autoComplete="email"
                             />
                           </div>
 
@@ -1844,6 +2833,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                   <HashtagPlugin />
                                   <ListPlugin />
                                   <LinkPlugin />
+                                  <NewMentionsPlugin/>
                                   
                                   <div className="-mx-2 mt-1">
                                     <ToolbarPluginWrapper setEditorInstance={setBioEditorInstance} />
@@ -1883,22 +2873,74 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                               {t('profile.location')}
                             </label>
-                            <input
-                              type="text"
-                              value={getLocationDisplay(user?.location)}
-                              onChange={(e) => {
-                                const locationValue = e.target.value;
+                            <LocationPicker
+                              value={editFormData.location ?? user?.location ?? null}
+                              onChange={(nextLocation) =>
+                                setEditFormData((prev) => ({
+                                  ...prev,
+                                  location: nextLocation ?? undefined,
+                                }))
+                              }
+                              theme={theme}
+                              t={t}
+                            />
+                          </div>
+
+                          {/* Date of Birth */}
+                          <div
+                            className={`rounded-2xl border p-5 ${
+                              theme === 'dark'
+                                ? 'bg-gray-900/60 border-gray-800'
+                                : 'bg-white border-gray-200 shadow-sm'
+                            }`}
+                          >
+                            <button
+                              type="button"
+                              onClick={() => setIsBirthdateSectionOpen((prev) => !prev)}
+                              className="w-full flex items-start justify-between gap-4 text-left"
+                            >
+                              <div>
+                                <h3 className={`text-base font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                  {t('profile.date_of_birth') || 'Date of Birth'}
+                                </h3>
+                                <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                                  {birthdateDisplay}
+                                </p>
+                              </div>
+                              <motion.div
+                                animate={{ rotate: isBirthdateSectionOpen ? 180 : 0 }}
+                                transition={{ duration: 0.2 }}
+                                className={`mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}
+                              >
+                                <ChevronDown className="w-5 h-5" />
+                              </motion.div>
+                            </button>
+                            <AnimatePresence initial={false}>
+                              {isBirthdateSectionOpen && (
+                                <motion.div
+                                  key="birthdate-accordion"
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.2, ease: 'easeInOut' }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="pt-5">
+                                    <BirthdatePicker
+                                      value={editFormData.date_of_birth as string}
+                                      onChange={(newValue) =>
                                 setEditFormData({ 
                                   ...editFormData, 
-                                  location: locationValue
-                                });
-                              }}
-                              className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${theme === 'dark'
-                                ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
-                                : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
-                                }`}
-                              placeholder={t('profile.location_placeholder')}
-                            />
+                                          date_of_birth: newValue,
+                                        })
+                                      }
+                                      theme={theme}
+                                      t={t}
+                                    />
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
                           </div>
 
                           {/* Website */}
@@ -1917,6 +2959,232 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                               placeholder="https://example.com"
                             />
                           </div>
+
+                          {/* Privacy Level */}
+                          <div>
+                            <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {t('profile.privacy_level') || 'Privacy Level'}
+                            </label>
+                            <div className="flex flex-wrap gap-2">
+                              {privacyLevels.map((level) => {
+                                const isActive = activePrivacyLevel === level;
+                                return (
+                                  <motion.button
+                                    key={level}
+                                    type="button"
+                                    onClick={() =>
+                                      setEditFormData({
+                                        ...editFormData,
+                                        privacy_level: level,
+                                      })
+                                    }
+                                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border ${
+                                      isActive
+                                        ? theme === 'dark'
+                                          ? 'bg-white text-black border-white shadow-lg shadow-white/10'
+                                          : 'bg-black text-white border-black shadow-lg shadow-black/10'
+                                        : theme === 'dark'
+                                        ? 'bg-gray-900 border-gray-700 text-gray-300 hover:bg-gray-800'
+                                        : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-100'
+                                    }`}
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                  >
+                                    {privacyLevelLabels[level as PrivacyLevel]}
+                                  </motion.button>
+                                );
+                              })}
+                            </div>
+                          </div>
+
+                          {isOwnProfile && (
+                            <div
+                              className={`rounded-2xl border p-5 ${
+                                theme === 'dark'
+                                  ? 'bg-gray-900/60 border-gray-800'
+                                  : 'bg-white border-gray-200 shadow-sm'
+                              }`}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => setIsPasswordSectionOpen((prev) => !prev)}
+                                className="w-full flex items-start justify-between gap-4 text-left"
+                              >
+                                <div className="flex items-start gap-3">
+                                  <div
+                                    className={`p-2.5 rounded-xl ${
+                                      theme === 'dark' ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'
+                                    }`}
+                                  >
+                                    <Lock className="w-5 h-5" />
+                                  </div>
+                                  <div>
+                                    <h3 className={`text-base font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                      {t('profile.change_password')}
+                                    </h3>
+                                    <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                                      {t('profile.password_hint')}
+                                    </p>
+                                  </div>
+                                </div>
+                                <motion.div
+                                  animate={{ rotate: isPasswordSectionOpen ? 180 : 0 }}
+                                  transition={{ duration: 0.2 }}
+                                  className={`mt-1 ${
+                                    theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                                  }`}
+                                >
+                                  <ChevronDown className="w-5 h-5" />
+                                </motion.div>
+                              </button>
+
+                              <AnimatePresence initial={false}>
+                                {isPasswordSectionOpen && (
+                                  <motion.div
+                                    key="password-accordion"
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.2, ease: 'easeInOut' }}
+                                    className="overflow-hidden"
+                                  >
+                                    <div className="pt-5 space-y-4">
+                                      {passwordMessage && (
+                                        <motion.div
+                                          initial={{ opacity: 0, y: -6 }}
+                                          animate={{ opacity: 1, y: 0 }}
+                                          className={`text-sm font-medium rounded-xl px-3 py-2 border ${
+                                            passwordMessage.type === 'success'
+                                              ? theme === 'dark'
+                                                ? 'bg-emerald-500/10 border-emerald-400/30 text-emerald-200'
+                                                : 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                                              : theme === 'dark'
+                                                ? 'bg-red-500/10 border-red-400/40 text-red-200'
+                                                : 'bg-red-50 border-red-200 text-red-600'
+                                          }`}
+                                        >
+                                          {passwordMessage.text}
+                                        </motion.div>
+                                      )}
+
+                                      <div className="space-y-4">
+                                        <div>
+                                          <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                                            {t('profile.current_password')}
+                                          </label>
+                                          <div className="relative">
+                                            <input
+                                              type={passwordVisibility.current ? 'text' : 'password'}
+                                              value={passwordForm.currentPassword}
+                                              onChange={(e) => handlePasswordInputChange('currentPassword', e.target.value)}
+                                              placeholder={t('profile.password_current_placeholder')}
+                                              autoComplete="current-password"
+                                              className={`w-full px-4 py-3 pr-11 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${
+                                                theme === 'dark'
+                                                  ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-white'
+                                                  : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
+                                              }`}
+                                            />
+                                            <button
+                                              type="button"
+                                              onClick={() => togglePasswordVisibility('current')}
+                                              className={`absolute inset-y-0 right-3 flex items-center justify-center text-gray-500 ${theme === 'dark' ? 'hover:text-gray-300' : 'hover:text-gray-700'}`}
+                                              aria-label={passwordVisibility.current ? t('profile.hide_password') : t('profile.show_password')}
+                                            >
+                                              {passwordVisibility.current ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                            </button>
+                                          </div>
+                                        </div>
+
+                                        <div>
+                                          <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                                            {t('profile.new_password')}
+                                          </label>
+                                          <div className="relative">
+                                            <input
+                                              type={passwordVisibility.new ? 'text' : 'password'}
+                                              value={passwordForm.newPassword}
+                                              onChange={(e) => handlePasswordInputChange('newPassword', e.target.value)}
+                                              placeholder={t('profile.password_new_placeholder')}
+                                              autoComplete="new-password"
+                                              className={`w-full px-4 py-3 pr-11 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${
+                                                theme === 'dark'
+                                                  ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-white'
+                                                  : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
+                                              }`}
+                                            />
+                                            <button
+                                              type="button"
+                                              onClick={() => togglePasswordVisibility('new')}
+                                              className={`absolute inset-y-0 right-3 flex items-center justify-center text-gray-500 ${theme === 'dark' ? 'hover:text-gray-300' : 'hover:text-gray-700'}`}
+                                              aria-label={passwordVisibility.new ? t('profile.hide_password') : t('profile.show_password')}
+                                            >
+                                              {passwordVisibility.new ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                            </button>
+                                          </div>
+                                        </div>
+
+                                        <div>
+                                          <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                                            {t('profile.confirm_new_password')}
+                                          </label>
+                                          <div className="relative">
+                                            <input
+                                              type={passwordVisibility.confirm ? 'text' : 'password'}
+                                              value={passwordForm.confirmNewPassword}
+                                              onChange={(e) => handlePasswordInputChange('confirmNewPassword', e.target.value)}
+                                              placeholder={t('profile.password_confirm_placeholder')}
+                                              autoComplete="new-password"
+                                              className={`w-full px-4 py-3 pr-11 rounded-xl border-2 focus:outline-none focus:border-opacity-100 transition-all ${
+                                                theme === 'dark'
+                                                  ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-white'
+                                                  : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
+                                              }`}
+                                            />
+                                            <button
+                                              type="button"
+                                              onClick={() => togglePasswordVisibility('confirm')}
+                                              className={`absolute inset-y-0 right-3 flex items-center justify-center text-gray-500 ${theme === 'dark' ? 'hover:text-gray-300' : 'hover:text-gray-700'}`}
+                                              aria-label={passwordVisibility.confirm ? t('profile.hide_password') : t('profile.show_password')}
+                                            >
+                                              {passwordVisibility.confirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div className="flex items-center justify-end">
+                                        <button
+                                          type="button"
+                                          onClick={handlePasswordSubmit}
+                                          disabled={isUpdatingPassword}
+                                          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                                            isUpdatingPassword
+                                              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                              : theme === 'dark'
+                                                ? 'bg-white text-black hover:bg-gray-200'
+                                                : 'bg-black text-white hover:bg-gray-900'
+                                          }`}
+                                        >
+                                          {isUpdatingPassword ? (
+                                            <>
+                                              <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                                              <span>{t('profile.password_updating')}</span>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <Save className="w-4 h-4" />
+                                              <span>{t('profile.password_update')}</span>
+                                            </>
+                                          )}
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          )}
                         </motion.div>
                       )}
                       {editTab === 'attributes' && (
@@ -2684,17 +3952,25 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
             {/* Stats */}
             <div className="flex gap-5 mb-4">
-              <button className={`text-sm hover:underline ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+              <button
+                type="button"
+                onClick={() => handleEngagementNavigate('followings')}
+                className={`text-sm hover:underline ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}
+              >
                 <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                  {(user.following_count ?? 0).toLocaleString()}
+                  {followingCountDisplay.toLocaleString()}
                 </span>
-                <span className="ml-1">{t('profile.following')}</span>
+                <span className="ml-1">{followingLabel}</span>
               </button>
-              <button className={`text-sm hover:underline ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+              <button
+                type="button"
+                onClick={() => handleEngagementNavigate('followers')}
+                className={`text-sm hover:underline ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}
+              >
                 <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                {(user.followers_count ?? 0).toLocaleString()}
+                  {followerCountDisplay.toLocaleString()}
                 </span>
-                <span className="ml-1">{t('profile.followers')}</span>
+                <span className="ml-1">{followersLabel}</span>
               </button>
             </div>
           </div>
@@ -3202,6 +4478,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         </main>
         )}
       </div>
+
     </>
   );
 

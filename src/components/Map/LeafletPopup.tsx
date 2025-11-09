@@ -4,7 +4,8 @@ import { Popup, PopupProps } from 'react-leaflet'
 import { AppConfig } from './lib/AppConfig'
 import { MarkerCategoriesValues } from '.lib/MarkerCategories'
 import { MapIcon } from './Icon'
-import { useEffect, useRef, useState } from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
+import ProfileScreen from '../ProfileScreen'
 
 
 
@@ -26,12 +27,6 @@ const LeafletPopup = ({
   onOpenChange,
   ...props
 }: LeafletPopupProps) => {
-
-  const [name, setName] = useState<string>("")
-  const [description, setDescription] = useState<string>("")
-
-  const targetRef = useRef(null);
- 
 
  
   useEffect(() => {
@@ -55,10 +50,13 @@ const LeafletPopup = ({
 
 
   return (
-    <div className='w-full'>
-      coolvibes
+    <div className=' w-full  h-screen bg-red-500'>
+      asdsadad
       </div>
+
+   
   )
 }
 
 export default LeafletPopup
+

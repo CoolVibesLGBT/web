@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { useSocket } from '../contexts/SocketContext';
 import { defaultServiceServerId, serviceURL } from '../appSettings';
+import { getSafeImageURL, buildSafeURL } from '../helpers/helpers';
 import { useTranslation } from 'react-i18next';
 
 interface MessageItemProps {
@@ -140,24 +141,45 @@ const MessageItem: React.FC<MessageItemProps> = ({ msg, theme, onDelete, onConte
           <div className="mb-2 space-y-2">
             {msg.attachments.map((attachment, idx) => {
               const file = attachment.file;
-              const imageUrl = file.variants?.image?.original?.url || 
-                              file.variants?.image?.large?.url || 
-                              file.variants?.image?.medium?.url || 
-                              file.variants?.image?.small?.url || 
-                              file.url;
+              const baseUrl = serviceURL[defaultServiceServerId];
+
+              const variantOrder = ['original', 'large', 'medium', 'small', 'thumbnail', 'icon'];
+
+              let resolvedImageUrl: string | null = null;
+              if (file.mime_type?.startsWith('image/')) {
+                for (const variant of variantOrder) {
+                  if (resolvedImageUrl) break;
+                  resolvedImageUrl = getSafeImageURL(attachment, variant);
+                }
+              }
+
+              const fallbackUrl =
+                (file.url && file.url.startsWith('blob:') ? file.url : null) ||
+                (file.url && file.url.startsWith('http') ? file.url : null) ||
+                buildSafeURL(baseUrl, file.url) ||
+                buildSafeURL(baseUrl, file.storage_path);
+
+              const videoUrl = file.mime_type?.startsWith('video/')
+                ? (file.url && file.url.startsWith('blob:') ? file.url : null) ||
+                  (file.url && file.url.startsWith('http') ? file.url : null) ||
+                  buildSafeURL(baseUrl, file.url) ||
+                  buildSafeURL(baseUrl, file.storage_path)
+                : null;
+
+              const displayImageUrl = resolvedImageUrl || fallbackUrl;
               
               return (
                 <div key={attachment.id || idx} className="relative rounded-lg overflow-hidden">
-                  {file.mime_type?.startsWith('image/') ? (
+                  {file.mime_type?.startsWith('image/') && displayImageUrl ? (
                     <img
-                      src={`${serviceURL[defaultServiceServerId]}${imageUrl}`}
+                      src={displayImageUrl}
                       alt={file.name}
                       className="w-full max-w-xs rounded-lg object-cover"
                       style={{ maxHeight: '300px' }}
                     />
-                  ) : file.mime_type?.startsWith('video/') ? (
+                  ) : file.mime_type?.startsWith('video/') && videoUrl ? (
                     <video
-                      src={file.url || file.storage_path || ''}
+                      src={videoUrl}
                       controls
                       className="w-full max-w-xs rounded-lg object-cover"
                       style={{ maxHeight: '300px' }}
@@ -186,10 +208,8 @@ const MessageItem: React.FC<MessageItemProps> = ({ msg, theme, onDelete, onConte
         
         {/* Text Content */}
         {msg.text && (
-          <div className={`text-sm leading-relaxed mb-1 ${msg.text.includes('\n') ? '' : ''}`}>
-            {msg.text.split('\n').map((line, idx) => (
-              <p key={idx}>{line}</p>
-            ))}
+          <div className="text-sm leading-relaxed mb-1 whitespace-pre-wrap break-words">
+            {msg.text}
           </div>
         )}
         
@@ -1196,21 +1216,31 @@ const MessagesScreen: React.FC = () => {
     const allFiles = [...selectedImages, ...selectedVideos];
     
     // Create temporary attachments for optimistic update (will be replaced by backend response)
+    const createdObjectUrls: string[] = [];
     const tempAttachments = allFiles.length > 0 
-      ? allFiles.map((file, idx) => ({
-          id: `temp-attachment-${Date.now()}-${idx}`,
-          file: {
-            id: `temp-file-${Date.now()}-${idx}`,
-            url: URL.createObjectURL(file),
-            mime_type: file.type,
-            name: file.name,
-            variants: file.type.startsWith('image/') ? {
-              image: {
-                original: { url: URL.createObjectURL(file) }
-              }
-            } : undefined
-          }
-        }))
+      ? allFiles.map((file, idx) => {
+          const objectUrl = URL.createObjectURL(file);
+          createdObjectUrls.push(objectUrl);
+          const previewUrl =
+            file.type.startsWith('image/') ? objectUrl : objectUrl;
+
+          return {
+            id: `temp-attachment-${Date.now()}-${idx}`,
+            file: {
+              id: `temp-file-${Date.now()}-${idx}`,
+              url: previewUrl,
+              mime_type: file.type,
+              name: file.name,
+              variants: file.type.startsWith('image/')
+                ? {
+                    image: {
+                      original: { url: objectUrl },
+                    },
+                  }
+                : undefined,
+            },
+          };
+        })
       : undefined;
     
     // Optimistically update UI
@@ -1246,7 +1276,30 @@ const MessagesScreen: React.FC = () => {
 
     // Send message to API
     try {
-      const response = await api.call<{ message_id: string; id: string }>(Actions.CMD_SEND_MESSAGE, {
+      const response = await api.call<{
+        message_id?: string;
+        id?: string;
+        message?: {
+          id?: string;
+          public_id?: string;
+          content?: Record<string, string> | string | null;
+          text?: string | null;
+          created_at?: string;
+          attachments?: Array<{
+            id: string;
+            file: {
+              id: string;
+              url: string;
+              storage_path?: string;
+              mime_type: string;
+              name: string;
+              variants?: {
+                image?: Record<string, { url: string }>;
+              };
+            };
+          }>;
+        };
+      }>(Actions.CMD_SEND_MESSAGE, {
         method: "POST",
         body: {
           chat_id: realChatId, // Use real chat ID from backend
@@ -1256,19 +1309,114 @@ const MessagesScreen: React.FC = () => {
         },
       });
 
-      // Update message ID with server response if available
-      if (response?.message_id || response?.id) {
-        setMessages(prev => prev.map(msg => 
-          msg.id === tempMessageId 
-            ? { ...msg, id: response.message_id || response.id }
-            : msg
-        ));
+      const resolvedMessage = response?.message;
+
+      if (resolvedMessage) {
+        let resolvedText = '';
+        if (typeof resolvedMessage.content === 'string') {
+          resolvedText = resolvedMessage.content;
+        } else if (
+          resolvedMessage.content &&
+          typeof resolvedMessage.content === 'object'
+        ) {
+          resolvedText =
+            resolvedMessage.content.en ||
+            resolvedMessage.content.tr ||
+            Object.values(resolvedMessage.content).find(
+              (v) => v && typeof v === 'string'
+            ) ||
+            '';
+        }
+        if (!resolvedText && resolvedMessage.text) {
+          resolvedText = resolvedMessage.text;
+        }
+
+        const resolvedTime = resolvedMessage.created_at
+          ? new Date(resolvedMessage.created_at).toLocaleTimeString('tr-TR', {
+              hour: '2-digit',
+              minute: '2-digit',
+            })
+          : newMessage.time;
+
+        const resolvedAttachments = resolvedMessage.attachments?.map(
+          (attachment) => {
+            const file = attachment.file;
+            const baseUrl = serviceURL[defaultServiceServerId];
+
+            const safeUrl =
+              buildSafeURL(baseUrl, file.url) ||
+              buildSafeURL(baseUrl, file.storage_path) ||
+              getSafeImageURL({ file }, 'original');
+
+            const normalizedVariants = file.variants?.image
+              ? Object.fromEntries(
+                  Object.entries(file.variants.image).map(([key, value]) => [
+                    key,
+                    value.url
+                      ? {
+                          ...value,
+                          url:
+                            buildSafeURL(baseUrl, value.url) ??
+                            value.url.startsWith('http')
+                              ? value.url
+                              : `${baseUrl}/${value.url.replace(/^\/+/, '')}`,
+                        }
+                      : value,
+                  ])
+                )
+              : undefined;
+
+            return {
+              ...attachment,
+              file: {
+                ...file,
+                url: safeUrl ?? '',
+                variants: file.variants
+                  ? {
+                      ...file.variants,
+                      image: normalizedVariants,
+                    }
+                  : undefined,
+              },
+            };
+          }
+        );
+
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === tempMessageId
+              ? {
+                  ...msg,
+                  id:
+                    resolvedMessage.id ||
+                    resolvedMessage.public_id ||
+                    response?.message_id ||
+                    response?.id ||
+                    msg.id,
+                  text: resolvedText || msg.text,
+                  time: resolvedTime,
+                  attachments: resolvedAttachments || undefined,
+                }
+              : msg
+          )
+        );
+      } else if (response?.message_id || response?.id) {
+        // Fallback: update only the ID if full message payload isn't provided
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === tempMessageId
+              ? { ...msg, id: response.message_id || response.id || msg.id }
+              : msg
+          )
+        );
       }
     } catch (error) {
       console.error('Error sending message:', error);
       // Remove message from UI if API call failed
       setMessages(prev => prev.filter(msg => msg.id !== tempMessageId));
       // Optionally show error message to user
+    } finally {
+      createdObjectUrls.forEach((url) => URL.revokeObjectURL(url));
     }
   };
 
@@ -2366,10 +2514,16 @@ const MessagesScreen: React.FC = () => {
                       onChange={handleVideoUpload}
                       className="hidden"
                     />
-                    <div className="flex-1 relative">
-                      <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
+                    <div
+                      className={`flex w-full items-center gap-2 rounded-full border transition-all ${
+                        theme === 'dark'
+                          ? 'bg-gray-800 border-transparent focus-within:border-gray-700 focus-within:ring-2 focus-within:ring-gray-600'
+                          : 'bg-gray-100 border-transparent focus-within:border-gray-200 focus-within:ring-2 focus-within:ring-gray-300'
+                      } px-3 py-2 sm:py-2.5`}
+                    >
+                      <div className="flex items-center space-x-1">
                         {/* Image Upload Button */}
-                        <motion.button 
+                        <motion.button
                           onClick={() => fileInputRef.current?.click()}
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
@@ -2383,10 +2537,10 @@ const MessagesScreen: React.FC = () => {
                               : 'hover:bg-gray-200 text-gray-600'
                           }`}
                         >
-                          <Image className={`w-4 h-4`} />
+                          <Image className="w-4 h-4" />
                         </motion.button>
                         {/* Video Upload Button */}
-                        <motion.button 
+                        <motion.button
                           onClick={() => videoInputRef.current?.click()}
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
@@ -2400,20 +2554,18 @@ const MessagesScreen: React.FC = () => {
                               : 'hover:bg-gray-200 text-gray-600'
                           }`}
                         >
-                          <Video className={`w-4 h-4`} />
+                          <Video className="w-4 h-4" />
                         </motion.button>
                         {/* Emoji Picker Button */}
-                        <motion.button 
+                        <motion.button
                           onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           className={`p-1.5 rounded-full ${
-                            theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
+                            theme === 'dark' ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-200 text-gray-600'
                           }`}
                         >
-                          <Smile className={`w-4 h-4 ${
-                            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                          }`} />
+                          <Smile className="w-4 h-4" />
                         </motion.button>
                       </div>
                       <input
@@ -2422,24 +2574,22 @@ const MessagesScreen: React.FC = () => {
                         onChange={handleTyping}
                         onKeyPress={handleKeyPress}
                         placeholder={t('messages.send_message_placeholder')}
-                        className={`w-full pl-24 pr-12 py-2.5 sm:py-3 rounded-full border-0 text-sm focus:outline-none focus:ring-2 focus:ring-offset-0 transition-all ${
-                          theme === 'dark' 
-                            ? 'bg-gray-800 text-white placeholder-gray-400 focus:ring-gray-600' 
-                            : 'bg-gray-100 text-gray-900 placeholder-gray-500 focus:ring-gray-300'
+                        className={`flex-1 bg-transparent border-0 text-sm focus:outline-none ${
+                          theme === 'dark' ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'
                         }`}
                       />
                       <motion.button
                         onClick={handleSendMessage}
                         disabled={!message.trim() && selectedImages.length === 0 && selectedVideos.length === 0}
                         whileTap={{ scale: 0.95 }}
-                        className={`absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 rounded-full transition-all hover:scale-105 ${
+                        className={`flex-shrink-0 p-2 rounded-full transition-all ${
                           (message.trim() || selectedImages.length > 0 || selectedVideos.length > 0)
                             ? theme === 'dark'
-                              ? 'bg-white text-black'
-                              : 'bg-black text-white'
+                              ? 'bg-white text-black hover:bg-gray-200'
+                              : 'bg-black text-white hover:bg-gray-900'
                             : theme === 'dark'
-                            ? 'bg-gray-700 text-gray-500'
-                            : 'bg-gray-200 text-gray-500'
+                            ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                            : 'bg-gray-200 text-gray-500 cursor-not-allowed'
                         }`}
                       >
                         <Send className="w-4 h-4" />

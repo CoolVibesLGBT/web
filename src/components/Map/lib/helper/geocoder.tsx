@@ -29,8 +29,21 @@ function getGeoPointFromWallet(walletAddress: string): { latitude: number; longi
   return { latitude, longitude };
 }
 
-export const decodeGeoHash = (item:any): LatLngExpression => {
-  return [item.location.latitude, item.location.longitude];
+export const decodeGeoHash = (item: any): LatLngExpression => {
+  const lat =
+    item?.location?.latitude ??
+    item?.user?.location?.latitude ??
+    0; // default değer
+
+  const lng =
+    item?.location?.longitude ??
+    item?.user?.location?.longitude ??
+    0; // default değer
+
+  // Debug log sadece geliştirme ortamında faydalı olabilir
+  console.log("decodeGeoHash →", { lat, lng, raw: item });
+
+  return [lat, lng];
 };
 
 export const encodeGeoHash = (position: LatLngExpression): string => {
