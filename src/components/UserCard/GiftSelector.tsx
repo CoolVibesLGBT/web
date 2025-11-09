@@ -33,11 +33,11 @@ const GiftSelector: React.FC<GiftSelectorProps> = ({ isOpen, onClose, onSelectGi
 
   return (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
+      className="w-full h-full inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
       onClick={onClose}
     >
       <div 
-        className="bg-gray-900 border border-gray-700 text-white rounded-2xl shadow-xl w-full max-w-md flex flex-col animate-fade-in-up"
+        className="w-full h-full text-white rounded-2xl shadow-xl w-full max-w-md flex flex-col animate-fade-in-up"
         onClick={(e) => e.stopPropagation()}
       >
         <header className="flex items-center justify-between p-4 border-b border-gray-700">

@@ -5,7 +5,9 @@ import { Heart, Mail, Gift, MapPin } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import GiftSelector from '../GiftSelector';
 import QuickMessages from '../QuickMessages';
-import { getSafeImageURL } from '../../helpers/helpers';
+import { calculateAge, getSafeImageURL } from '../../helpers/helpers';
+import { Actions } from '../../services/actions';
+import { api } from '../../services/api';
 
 interface UserCardProps {
   user: any;
@@ -24,6 +26,65 @@ const getLocation = (user: any): string => {
   return '';
 };
 
+
+interface ActionBarProps {
+  liked: boolean;
+  onLikeToggle: () => void;
+  onOpenGiftSelector: () => void;
+  onOpenQuickMessageSelector: () => void;
+  baseButtonStyle: string;
+}
+
+const ActionBar: React.FC<ActionBarProps> = ({
+  liked,
+  onLikeToggle,
+  onOpenGiftSelector,
+  onOpenQuickMessageSelector,
+  baseButtonStyle,
+}) => {
+  return (
+    <div className="w-full flex flex-row justify-around items-center gap-3">
+      <motion.button
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onOpenQuickMessageSelector();
+        }}
+        className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
+        aria-label="Send Message"
+      >
+        <Mail className="w-5 h-5" />
+      </motion.button>
+      <motion.button
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onOpenGiftSelector();
+        }}
+        className={`hidden p-2 rounded-full transition-all ${baseButtonStyle}`}
+        aria-label="Send Gift"
+      >
+        <Gift className="w-5 h-5" />
+      </motion.button>
+      <motion.button
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onLikeToggle();
+        }}
+        className={`p-2 rounded-full transition-all ${liked ? 'text-red-500' : baseButtonStyle}`}
+        aria-label="Like"
+      >
+        <Heart className="w-5 h-5" />
+      </motion.button>
+    </div>
+  );
+};
+
+
 export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) => {
   const { theme } = useTheme();
   const navigate = useNavigate();
@@ -36,7 +97,67 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
     user.name?.toLowerCase().replace(/\s+/g, '') ||
     'profile';
 
-  const handleProfileClick = () => navigate(`/${getUsername()}`);
+  const handleProfileClick = (e:any) => {
+    navigate(`/${getUsername()}`)
+  };
+
+    const handleSendMessage = async (profile: any) => {
+      if (!user?.id || !profile?.id) {
+        console.error('User or profile ID is missing');
+        return;
+      }
+  
+      try {
+        // Create chat via API
+        const chatResponse = await api.call<{ 
+          chat: { 
+            id: string;
+            type: string;
+            participants?: Array<{
+              user_id: string;
+              user?: {
+                id: string;
+                username?: string;
+                displayname?: string;
+              };
+            }>;
+          };
+          success: boolean;
+        }>(Actions.CMD_CHAT_CREATE, {
+          method: "POST",
+          body: {
+            type: 'private',
+            participant_ids: [profile.id],
+          },
+        });
+  
+        const chatId = chatResponse?.chat?.id;
+        
+        if (chatId) {
+          // Navigate to messages screen with chat ID
+          navigate('/messages', { 
+            state: { 
+              openChat: chatId,
+              userId: profile.id,
+              publicId: profile.public_id,
+              username: profile.username
+            } 
+          });
+        } else {
+          console.error('Chat creation failed - no chat ID returned');
+        }
+      } catch (error) {
+        console.error('Error creating chat:', error);
+        // Navigate anyway, MessagesScreen will handle creating a temporary chat
+        navigate('/messages', { 
+          state: { 
+            openChat: profile.username || profile.id,
+            userId: profile.id,
+            publicId: profile.public_id
+          } 
+        });
+      }
+    };
 
   const baseCardStyle =
     theme === 'dark'
@@ -50,13 +171,14 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
 
   const location = getLocation(user);
 
+
   // Compact View
 
   const CompactView = () => {
     return (
       <motion.div
-        className={`relative rounded-xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] ${baseCardStyle}`}
-        onTap={handleProfileClick}
+        className={`select-none group rounded-xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] ${baseCardStyle}`}
+        onClick={handleProfileClick}
         whileTap={{ scale: 0.98 }}
       >
         <div className="group w-full max-w-sm overflow-hidden rounded-xl shadow-md flex flex-col">
@@ -76,7 +198,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
                 <h2 className="text-2xl font-semibold tracking-wide">
                   {user.name || user.displayname || 'İsim Yok'},{' '}
                 </h2>
-                <span className="text-2xl font-light">{user.age || ''}</span>
+                <span className="text-2xl font-light">{calculateAge(user.date_of_birth)}</span>
                 {user.isOnline && <div className="w-2.5 h-2.5 rounded-full bg-green-500 ml-1"></div>}
               </div>
               <p className="text-sm font-medium opacity-90">
@@ -86,42 +208,19 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
           </div>
 
           <div
-            className={`p-4 flex flex-col flex-grow ${
-              theme === 'dark' ? 'bg-[#111]' : 'bg-[#fafafa]'
-            }`}
+            className={`p-4 flex flex-col flex-grow ${theme === 'dark' ? 'bg-[#111]' : 'bg-[#fafafa]'
+              }`}
           >
-            {/* Bio kaldırıldı */}
             <div className="flex items-center gap-3 ml-2">
-              <motion.button
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={(e) => e.stopPropagation()}
-                className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
-              >
-                <Mail className="w-5 h-5" />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={(e) => e.stopPropagation()}
-                className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
-                onClickCapture={() => setIsGiftSelectorOpen(true)}
-              >
-                <Gift className="w-5 h-5" />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setLiked((prev) => !prev);
+              <ActionBar
+                liked={liked}
+                onLikeToggle={() => setLiked((prev) => !prev)}
+                onOpenGiftSelector={() => setIsGiftSelectorOpen(true)}
+                onOpenQuickMessageSelector={() => {
+                  handleSendMessage(user)
                 }}
-                className={`p-2 rounded-full transition-all ${
-                  liked ? 'text-red-500' : baseButtonStyle
-                }`}
-              >
-                <Heart className="w-5 h-5" />
-              </motion.button>
+                baseButtonStyle={baseButtonStyle}
+              />
             </div>
           </div>
         </div>
@@ -131,11 +230,11 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
 
   const ListView = () => {
     return (
-            <motion.div
+      <motion.div
         whileHover={{ scale: 1.01 }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         onClick={handleProfileClick}
-        className={`group flex items-center gap-4 w-full rounded-xl px-4 py-3 cursor-pointer transition-all duration-300 ${baseCardStyle}`}
+        className={`select-none group flex items-center gap-4 w-full rounded-xl px-4 py-3 cursor-pointer transition-all duration-300 ${baseCardStyle}`}
       >
         <div className="relative flex-shrink-0">
           <img
@@ -153,7 +252,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
             <h3 className="font-semibold text-lg truncate">
               {user.displayname || user.name || 'İsim Yok'}
             </h3>
-            <span className="text-sm opacity-70">{user.age || ''}</span>
+            <span className="text-sm opacity-70">{calculateAge(user.date_of_birth)}</span>
           </div>
 
           <div className="flex items-center gap-1 text-sm mt-0.5 opacity-80">
@@ -164,38 +263,13 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
         </div>
 
         <div className="flex-shrink-0 flex items-center gap-3 ml-2">
-          <motion.button
-            whileHover={{ scale: 1.15 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={(e) => e.stopPropagation()}
-            className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
-          >
-            <Mail className="w-5 h-5" />
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.15 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsGiftSelectorOpen(true);
-            }}
-            className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
-          >
-            <Gift className="w-5 h-5" />
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.15 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={(e) => {
-              e.stopPropagation();
-              setLiked((prev) => !prev);
-            }}
-            className={`p-2 rounded-full transition-all ${
-              liked ? 'text-red-500' : baseButtonStyle
-            }`}
-          >
-            <Heart className="w-5 h-5" />
-          </motion.button>
+          <ActionBar
+            liked={liked}
+            onLikeToggle={() => setLiked((prev) => !prev)}
+            onOpenGiftSelector={() => setIsGiftSelectorOpen(true)}
+            onOpenQuickMessageSelector={() => setIsQuickMessageSelectorOpen(true)}
+            baseButtonStyle={baseButtonStyle}
+          />
         </div>
       </motion.div>
     )
@@ -203,98 +277,74 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
 
 
   const CardView = () => {
-    return(
-    <motion.div
+    return (
+      <motion.div
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         onClick={handleProfileClick}
-        className={`group overflow-hidden flex items-center gap-4 w-full rounded-xl cursor-pointer transition-all duration-300 ${baseCardStyle}`}
+        className={`select-none group overflow-hidden flex items-center gap-4 w-full rounded-xl cursor-pointer transition-all duration-300 ${baseCardStyle}`}
       >
-      <div className="w-full max-w-sm overflow-hidden rounded-xl flex flex-col transition-transform duration-300 hover:scale-105">
-        <div
-          className="relative flex-grow flex flex-col justify-end bg-cover bg-center"
-          style={{
-            backgroundImage: `linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 25%, rgba(0,0,0,0) 60%), url("${getSafeImageURL(
-              user.avatar,
-              'large'
-            )}")`,
-            aspectRatio: '3/4',
-          }}
-        >
-          {/* "YENI" etiketi kaldırıldı */}
-          <div className="p-4 pt-8">
-            <div className="flex items-center gap-2 text-white">
-              <p className="text-[20px]">
-                <span className="font-bold">{user.name || user.displayname || 'İsim Yok'},{' '}</span>{' '}
-                <span className="font-normal">{user.age || ''}</span>
-              </p>
-              {user.isOnline && <div className="h-2 w-2 rounded-full bg-green-500 border-2 border-white" />}
+        <div className="w-full max-w-sm overflow-hidden rounded-xl flex flex-col transition-transform duration-300 hover:scale-105">
+          <div
+            className="relative flex-grow flex flex-col justify-end bg-cover bg-center"
+            style={{
+              backgroundImage: `linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 25%, rgba(0,0,0,0) 60%), url("${getSafeImageURL(
+                user.avatar,
+                'large'
+              )}")`,
+              aspectRatio: '3/4',
+            }}
+          >
+            {/* "YENI" etiketi kaldırıldı */}
+            <div className="p-4 pt-8">
+              <div className="flex items-center gap-2 text-white">
+                <p className="text-[20px]">
+                  <span className="font-bold">{user.name || user.displayname || 'İsim Yok'},{' '}</span>{' '}
+                  <span className="font-normal">{calculateAge(user.date_of_birth)}</span>
+                </p>
+                {user.isOnline && <div className="h-2 w-2 rounded-full bg-green-500 border-2 border-white" />}
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className={`p-4 ${theme === 'dark' ? 'bg-[#0f0f0f]' : 'bg-[#f9f9f9]'}`}>
 
 
-          <div className="flex items-center gap-3 ml-2">
-            <motion.button
-              whileHover={{ scale: 1.15 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={(e) => e.stopPropagation()}
-              className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
-            >
-              <Mail className="w-5 h-5" />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.15 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsGiftSelectorOpen(true);
-              }}
-              className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
-            >
-              <Gift className="w-5 h-5" />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.15 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                setLiked((prev) => !prev);
-              }}
-              className={`p-2 rounded-full transition-all ${
-                liked ? 'text-red-500' : baseButtonStyle
+             <div
+            className={`p-4 flex flex-col flex-grow ${theme === 'dark' ? 'bg-[#111]' : 'bg-[#fafafa]'
               }`}
-            >
-              <Heart className="w-5 h-5" />
-            </motion.button>
-          </div>
+          >
+            <div className="flex items-center gap-3 px-3 ">
+              <ActionBar
+                liked={liked}
+                onLikeToggle={() => setLiked((prev) => !prev)}
+                onOpenGiftSelector={() => setIsGiftSelectorOpen(true)}
+                onOpenQuickMessageSelector={() => setIsQuickMessageSelectorOpen(true)}
+                baseButtonStyle={baseButtonStyle}
+              />
+            </div>
+         </div>
         </div>
-      </div>
 
-    
-    </motion.div>
+
+      </motion.div>
     )
-  } 
-  // Card View (Full)
-  return (
- <div className='w-full'>
+  }
+   return (
+    <div className='w-full'>
 
-    {
-      viewMode == "compact" ? <CompactView/> : viewMode == "list" ? <ListView/> : <CardView/>
-    }
+      {
+        viewMode == "compact" ? <CompactView /> : viewMode == "list" ? <ListView /> : <CardView />
+      }
       <GiftSelector
         isOpen={isGiftSelectorOpen}
         onClose={() => setIsGiftSelectorOpen(false)}
-        onSelectGift={() => {}}
+        onSelectGift={() => { }}
         userName={user.name}
       />
       <QuickMessages
         isOpen={isQuickMessageSelectorOpen}
         onClose={() => setIsQuickMessageSelectorOpen(false)}
         userName={user.name}
-        onSendMessage={() => {}}
+        onSendMessage={() => { }}
       />
-</div>
+    </div>
   );
 };

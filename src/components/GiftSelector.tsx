@@ -110,7 +110,7 @@ const GiftSelector: React.FC<GiftSelectorProps> = ({ isOpen, onClose, onSelectGi
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="absolute inset-0 z-5 w-full h-full flex items-center justify-center p-0 m-0"
+          className=" inset-0 z-5 w-full h-full flex items-center justify-center p-0 m-0"
           onClick={onClose}
         >
           {/* Enhanced Blur Background */}
