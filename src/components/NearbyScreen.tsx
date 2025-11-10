@@ -141,7 +141,7 @@ const NearbyScreen: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center">
               <motion.button
                 onClick={handleRefresh}
                 whileHover={{ scale: 1.05 }}
@@ -174,7 +174,7 @@ const NearbyScreen: React.FC = () => {
                     }`}
                   title="Grid View"
                 >
-                  <Grid className="w-3.5 h-3.5" />
+                  <Grid className="w-5 h-5" />
                 </motion.button>
                 <motion.button
                   onClick={() => setViewMode('list')}
@@ -186,7 +186,7 @@ const NearbyScreen: React.FC = () => {
                     }`}
                   title="List View"
                 >
-                  <List className="w-3.5 h-3.5" />
+                  <List className="w-5 h-5" />
                 </motion.button>
                 <motion.button
                   onClick={() => setViewMode('card')}
@@ -198,7 +198,7 @@ const NearbyScreen: React.FC = () => {
                     }`}
                   title="Card View"
                 >
-                  <Square className="w-3.5 h-3.5" />
+                  <Square className="w-5 h-5" />
                 </motion.button>
                 <motion.button
                   onClick={() => setViewMode('map')}
@@ -210,7 +210,7 @@ const NearbyScreen: React.FC = () => {
                     }`}
                   title="Map View"
                 >
-                  <MapIcon className="w-3.5 h-3.5" />
+                  <MapIcon className="w-5 h-5" />
                 </motion.button>
               </div>
 
@@ -227,7 +227,7 @@ const NearbyScreen: React.FC = () => {
                     : 'bg-gray-100 border border-gray-200 text-gray-700 hover:bg-gray-200'
                   }`}
               >
-                <Filter className="w-3.5 h-3.5 inline-block mr-1.5" />
+                <Filter className="w-5 h-5 inline-block" />
 
               </motion.button>
             </div>
@@ -298,7 +298,7 @@ const NearbyScreen: React.FC = () => {
                 )}
 
                 {viewMode === 'card' && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-2">
                     {state.nearbyUsers.map((user: any, index) => (
                       <motion.div
                         key={user.id}

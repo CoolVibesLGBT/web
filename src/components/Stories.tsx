@@ -7,6 +7,7 @@ import { Actions } from '../services/actions';
 import { useAuth } from '../contexts/AuthContext';
 import { getSafeImageURL } from '../helpers/helpers';
 import ReactDOM from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Stories: React.FC = () => {
   const { theme } = useTheme();
@@ -46,6 +47,8 @@ const Stories: React.FC = () => {
 
   const selectedStoryData = selectedStory ? stories.find(s => s.id === selectedStory) : null;
   const availableStories = stories.filter(s => s.hasStory);
+
+  const navigate = useNavigate()
 
   // Separate own story button from other stories
   const otherStories = stories;
@@ -267,6 +270,66 @@ const Stories: React.FC = () => {
       setIsUploading(false);
     }
   };
+
+
+    const handleSendMessage = async (profile: any) => {
+      console.log("ersan",profile)
+      if (!story?.id || !profile?.id) {
+        console.error('User or profile ID is missing');
+        return;
+      }
+  
+      try {
+        // Create chat via API
+        const chatResponse = await api.call<{
+          chat: {
+            id: string;
+            type: string;
+            participants?: Array<{
+              user_id: string;
+              user?: {
+                id: string;
+                username?: string;
+                displayname?: string;
+              };
+            }>;
+          };
+          success: boolean;
+        }>(Actions.CMD_CHAT_CREATE, {
+          method: "POST",
+          body: {
+            type: 'private',
+            participant_ids: [profile.id],
+          },
+        });
+  
+        const chatId = chatResponse?.chat?.id;
+  
+        if (chatId) {
+          // Navigate to messages screen with chat ID
+          navigate('/messages', {
+            state: {
+              openChat: chatId,
+              userId: profile.id,
+              publicId: profile.public_id,
+              username: profile.username
+            }
+          });
+        } else {
+          console.error('Chat creation failed - no chat ID returned');
+        }
+      } catch (error) {
+        console.error('Error creating chat:', error);
+        // Navigate anyway, MessagesScreen will handle creating a temporary chat
+        navigate('/messages', {
+          state: {
+            openChat: profile.username || profile.id,
+            userId: profile.id,
+            publicId: profile.public_id
+          }
+        });
+      }
+    };
 
   return (
     <>
@@ -644,6 +707,9 @@ const Stories: React.FC = () => {
                       </motion.button>
 
                       <motion.button
+                      onClick={()=>{
+                       handleSendMessage(selectedStory)
+                      }}
                         whileHover={{ scale: 1.1, y: -5 }}
                         whileTap={{ scale: 0.95 }}
                         className="flex flex-col items-center gap-2"

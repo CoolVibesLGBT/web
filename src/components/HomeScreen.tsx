@@ -207,6 +207,31 @@ const HomeScreen: React.FC = () => {
                     />
                   )}
                 </motion.button>
+                 <motion.button
+                  onClick={() => {
+                    setActiveTab('live')
+                    setShowBottomBar(false)
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`hidden flex-1 cursor-pointer py-2 font-semibold text-[15px] relative transition-all duration-200 ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-black/5'
+                    } ${activeTab === 'live'
+                      ? theme === 'dark' ? 'text-white' : 'text-black'
+                      : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                >
+                  <div className='relative z-10 w-full flex flex-row gap-2 items-center justify-center'>
+                    <img src={"/icons/live.webp"} className='w-12 h-12 rounded-lg' />
+                    <span>Live</span>
+                  </div>
+
+                  {activeTab === 'live' && (
+                    <motion.div
+                      className={`absolute bottom-0 left-0 right-0 h-1 ${theme === 'dark' ? 'bg-white/20' : 'bg-black'}`}
+                      layoutId="homeScreenTabIndicator"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </motion.button>
               </div>
             )}
           </div>

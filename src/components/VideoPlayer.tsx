@@ -369,11 +369,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, className = '' }
               }}
               whileTap={{ scale: 0.9 }}
               whileHover={{ scale: 1.1 }}
-              className={`p-4 rounded-full backdrop-blur-xl shadow-2xl pointer-events-auto ${
-                theme === 'dark' 
-                  ? 'bg-white/20 text-white hover:bg-white/30' 
-                  : 'bg-black/20 text-black hover:bg-black/30'
-              } transition-colors`}
+              className={`p-4 rounded-full backdrop-blur-xl shadow-2xl pointer-events-auto  transition-colors z-10 flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-white/10 text-primary backdrop-blur-sm transition-opacity group-hover:opacity-100 `}
             >
               <Play className="w-12 h-12 ml-1" fill="currentColor" />
             </motion.button>
@@ -485,11 +481,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, className = '' }
                 whileTap={{ scale: 0.85 }}
                 whileHover={{ scale: 1.15 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                className={`p-2 rounded-full transition-all duration-150 flex items-center justify-center ${
-                  theme === 'dark' 
-                    ? 'text-white hover:bg-white/10' 
-                    : 'text-black hover:bg-black/10'
-                }`}
+                className={`p-2 rounded-full transition-all duration-150 flex items-center justify-center z-10 flex shrink-0 items-center justify-center rounded-full bg-white/10 text-primary backdrop-blur-sm transition-opacity group-hover:opacity-100`}
               >
                 {isPlaying ? (
                   <Pause className="w-6 h-6" fill="currentColor" />

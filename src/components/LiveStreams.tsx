@@ -25,7 +25,7 @@ interface ReelsProps {
 }
 
 
-export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPostClick: _onPostClick }: ReelsProps) {
+export default function LiveStreams({ reels: initialReels, activeTab: _activeTab, onPostClick: _onPostClick }: ReelsProps) {
   const [allReels, setAllReels] = useState<Reel[]>(initialReels || []);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [likedReels, setLikedReels] = useState<Set<string>>(new Set());

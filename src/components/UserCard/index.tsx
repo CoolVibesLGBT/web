@@ -97,67 +97,67 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
     user.name?.toLowerCase().replace(/\s+/g, '') ||
     'profile';
 
-  const handleProfileClick = (e:any) => {
+  const handleProfileClick = (e: any) => {
     navigate(`/${getUsername()}`)
   };
 
-    const handleSendMessage = async (profile: any) => {
-      if (!user?.id || !profile?.id) {
-        console.error('User or profile ID is missing');
-        return;
-      }
-  
-      try {
-        // Create chat via API
-        const chatResponse = await api.call<{ 
-          chat: { 
-            id: string;
-            type: string;
-            participants?: Array<{
-              user_id: string;
-              user?: {
-                id: string;
-                username?: string;
-                displayname?: string;
-              };
-            }>;
-          };
-          success: boolean;
-        }>(Actions.CMD_CHAT_CREATE, {
-          method: "POST",
-          body: {
-            type: 'private',
-            participant_ids: [profile.id],
-          },
-        });
-  
-        const chatId = chatResponse?.chat?.id;
-        
-        if (chatId) {
-          // Navigate to messages screen with chat ID
-          navigate('/messages', { 
-            state: { 
-              openChat: chatId,
-              userId: profile.id,
-              publicId: profile.public_id,
-              username: profile.username
-            } 
-          });
-        } else {
-          console.error('Chat creation failed - no chat ID returned');
-        }
-      } catch (error) {
-        console.error('Error creating chat:', error);
-        // Navigate anyway, MessagesScreen will handle creating a temporary chat
-        navigate('/messages', { 
-          state: { 
-            openChat: profile.username || profile.id,
+  const handleSendMessage = async (profile: any) => {
+    if (!user?.id || !profile?.id) {
+      console.error('User or profile ID is missing');
+      return;
+    }
+
+    try {
+      // Create chat via API
+      const chatResponse = await api.call<{
+        chat: {
+          id: string;
+          type: string;
+          participants?: Array<{
+            user_id: string;
+            user?: {
+              id: string;
+              username?: string;
+              displayname?: string;
+            };
+          }>;
+        };
+        success: boolean;
+      }>(Actions.CMD_CHAT_CREATE, {
+        method: "POST",
+        body: {
+          type: 'private',
+          participant_ids: [profile.id],
+        },
+      });
+
+      const chatId = chatResponse?.chat?.id;
+
+      if (chatId) {
+        // Navigate to messages screen with chat ID
+        navigate('/messages', {
+          state: {
+            openChat: chatId,
             userId: profile.id,
-            publicId: profile.public_id
-          } 
+            publicId: profile.public_id,
+            username: profile.username
+          }
         });
+      } else {
+        console.error('Chat creation failed - no chat ID returned');
       }
-    };
+    } catch (error) {
+      console.error('Error creating chat:', error);
+      // Navigate anyway, MessagesScreen will handle creating a temporary chat
+      navigate('/messages', {
+        state: {
+          openChat: profile.username || profile.id,
+          userId: profile.id,
+          publicId: profile.public_id
+        }
+      });
+    }
+  };
 
   const baseCardStyle =
     theme === 'dark'
@@ -307,7 +307,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
           </div>
 
 
-             <div
+          <div
             className={`p-4 flex flex-col flex-grow ${theme === 'dark' ? 'bg-[#111]' : 'bg-[#fafafa]'
               }`}
           >
@@ -320,14 +320,14 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
                 baseButtonStyle={baseButtonStyle}
               />
             </div>
-         </div>
+          </div>
         </div>
 
 
       </motion.div>
     )
   }
-   return (
+  return (
     <div className='w-full'>
 
       {
