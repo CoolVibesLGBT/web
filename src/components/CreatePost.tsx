@@ -680,17 +680,18 @@ const CreatePost: React.FC<CreatePostProps> = ({
   return (
     <div style={{
       zIndex:100,
-    }} className={`${isFullScreen ? "fixed left-[0] right-[0] bottom-[0] top-[65]  md:top-0 w-full z-[999] min-h-[100dvh] h-[100dvh] max-h-[100dvh] overflow-y-scroll scrollbar-hide" : "scrollbar-hide"} ${theme === 'dark' ? "bg-black" : "bg-white"}`}>
+    }} className={`${isFullScreen ? "fixed left-[0] right-[0] bottom-[0] top-[65] scrollbar-hide md:top-0 w-full z-[999] min-h-[100dvh] h-[100dvh] max-h-[100dvh] overflow-y-scroll scrollbar-hide" : "scrollbar-hide"} ${theme === 'dark' ? "bg-black" : "bg-white"}`}>
 
 
 
       {/* Ultra-Professional Create Post Component */}
       <motion.div
-        className={`w-full ${isFullScreen ? 'h-full flex  max-h-[calc(100dvh - 200px)] overflow-y-scroll  flex-col' : 'flex flex-col'} transition-all duration-500 `}>
+        className={`w-full ${isFullScreen ? 'h-full flex  max-h-[calc(100dvh - 200px)] scrollbar-hide overflow-y-scroll  flex-col' : 'flex flex-col'} transition-all duration-500 `}>
         {/* Compact Professional Header */}
-        <div className={`${isFullScreen ? 'px-3 sm:px-6 py-2' : 'px-3 sm:px-4 py-2 sm:py-3'} border-b flex-shrink-0 ${
+        <div className={`${isFullScreen ? 'px-3 sm:px-6 py-2 mb-[400px] lg:mb-0' : 'px-3 sm:px-4 py-2 sm:py-3'} border-b flex-shrink-0 ${
           theme === 'dark' ? 'border-gray-800/30' : 'border-gray-200/30'
         }`}>
+      
           <div className="flex items-center justify-between">
             {/* Left: Title Only */}
             <div className="flex items-center flex-1 min-w-0">
@@ -761,9 +762,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
               )}
             </div>
           </div>
-        </div>
 
-        {/* Main Content Area */}
+            {/* Main Content Area */}
         <div className={`${isFullScreen ? 'px-3 sm:px-6 py-1' : 'px-3 sm:px-4 py-2'} w-full max-w-full flex-shrink-0`}>
           <div className="w-full max-w-full">
             {/* Content Input Area */}
@@ -2059,6 +2059,9 @@ const CreatePost: React.FC<CreatePostProps> = ({
             )}
           </motion.button>
         </div>
+        </div>
+
+      
       </motion.div>
 
       {/* Hidden File Inputs */}
