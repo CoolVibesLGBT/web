@@ -723,7 +723,13 @@ const CreatePost: React.FC<CreatePostProps> = ({
 
               {/* Full Screen Toggle Button - Compact */}
               <motion.button
-                onClick={toggleFullScreen}
+                onClick={()=>{
+                  toggleFullScreen()
+                  if(canClose && onClose){
+                    
+                    onClose()
+                  }
+                }}
                 className={`flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg transition-all duration-200 ${
                   isFullScreen
                     ? theme === 'dark'
