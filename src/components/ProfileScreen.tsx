@@ -33,6 +33,7 @@ import Container from './Container';
 import AuthWizard from './AuthWizard';
 import { getSafeImageURL } from '../helpers/helpers';
 import NewMentionsPlugin from './Lexical/plugins/MentionsPlugin';
+import { MentionNode } from './Lexical/nodes/MentionNode';
 
 // ToolbarPlugin wrapper component
 const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (editor: any) => void }) => {
@@ -1162,10 +1163,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   );
 
   // Editor config for bio
-  const bioEditorConfig = React.useMemo(() => ({
-    namespace: "ProfileBioEditor",
+  const bioEditorConfig = {
+    namespace: "CoolVibesEditor",
     editable: true,
-    nodes: [HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode],
+    nodes:[HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode,MentionNode],
     theme: {
       paragraph: `mb-2 text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`,
       heading: {
@@ -1189,11 +1190,13 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         underline: "underline",
         strikethrough: "line-through",
       },
+       hashtag: "hashtag inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)]  bg-clip-text text-transparent  font-semibold hover:underline cursor-pointer",
+       mention:"mention font-semibold  font-md inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)]  bg-clip-text text-transparent  font-semibold hover:underline cursor-pointer"
     },
     onError(error: Error) {
       console.error("Lexical Error:", error);
     },
-  }), [theme]);
+  };
 
   // Bio editor onChange handler
   const handleBioChange = (editorState: any) => {
