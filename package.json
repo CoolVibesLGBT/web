@@ -29,7 +29,7 @@
     "gsap": "^3.13.0",
     "i18next": "^23.11.5",
     "intersection-observer": "^0.12.2",
-    "leaflet": "^2.0.0",
+    "leaflet": "^2.0.0-alpha.1",
     "leaflet.markercluster": "^1.5.3",
     "lexical": "^0.37.0",
     "lucide-react": "^0.548.0",
