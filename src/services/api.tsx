@@ -58,7 +58,7 @@ export class ApiService {
   }
 
   async updateProfile(userData: Record<string, any>) {
-    return this.call(Actions.USER_UPDATE_PROFILE, {
+    return this.call(Actions.CMD_UPDATE_USER_PROFILE, {
       method: "POST",
       body: userData,
     });

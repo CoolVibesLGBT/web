@@ -680,27 +680,13 @@ const CreatePost: React.FC<CreatePostProps> = ({
   return (
     <div style={{
       zIndex:100,
-    }} className={`${isFullScreen ? "fixed left-0 top-0 w-full  z-[999] min-h-[100dvh] h-[100dvh] max-h-[100dvh] overflow-y-scroll scrollbar-hide" : "scrollbar-hide"} ${theme === 'dark' ? "bg-black" : "bg-white"} `}>
+    }} className={`${isFullScreen ? "fixed left-[0] right-[0] bottom-[0] top-[65]  md:top-0 w-full z-[999] min-h-[100dvh] h-[100dvh] max-h-[100dvh] overflow-y-scroll scrollbar-hide" : "scrollbar-hide"} ${theme === 'dark' ? "bg-black" : "bg-white"}`}>
 
 
 
       {/* Ultra-Professional Create Post Component */}
       <motion.div
-        className={`w-full ${isFullScreen ? 'h-full flex flex-col' : 'flex flex-col'} transition-all duration-500 `}
-        initial={{ opacity: 0, y: 30, scale: 0.95 }}
-        animate={{ 
-          opacity: 1, 
-          y: 0, 
-          scale: 1,
-          width: isFullScreen ? '100%' : 'auto',
-          height: isFullScreen ? '100%' : 'auto'
-        }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        whileHover={!isFullScreen ? {
-          y: -2,
-          transition: { duration: 0.3 }
-        } : {}}
-      >
+        className={`w-full ${isFullScreen ? 'h-full flex  max-h-[calc(100dvh - 200px)] overflow-y-scroll  flex-col' : 'flex flex-col'} transition-all duration-500 `}>
         {/* Compact Professional Header */}
         <div className={`${isFullScreen ? 'px-3 sm:px-6 py-2' : 'px-3 sm:px-4 py-2 sm:py-3'} border-b flex-shrink-0 ${
           theme === 'dark' ? 'border-gray-800/30' : 'border-gray-200/30'
@@ -801,9 +787,9 @@ const CreatePost: React.FC<CreatePostProps> = ({
                     
                       contentEditable={
                         <ContentEditable 
-                          className="editor-input lexical-editor py-4 px-0 bg-red-500"
+                          className="editor-input lexical-editor py-4 px-0"
                           style={{
-                            minHeight: isFullScreen ? '70dvh' : '140px',
+                            minHeight: isFullScreen ? '50dvh' : '140px',
                             maxHeight: isFullScreen ? '100%' : '100%',
                             wordWrap: 'break-word',
                             overflowWrap: 'break-word'
