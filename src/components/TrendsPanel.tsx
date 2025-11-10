@@ -398,71 +398,71 @@ const cardBackground =
                     const rankStyle = getRankStyle(trend.rank);
 
                     return (
-                      <motion.button
-                        key={trend.id}
-                        type="button"
-                        onClick={() => handleSelect(trend)}
-                        layout
-                        whileHover={{ scale: 0.995, y: -1 }}
-                        whileTap={{ scale: 0.985 }}
-                        transition={{ type: 'spring', stiffness: 340, damping: 24, mass: 0.9 }}
-                        className={`group grid grid-cols-[auto,1fr,auto] items-center gap-3 rounded-2xl px-3 py-2.5 transition-all duration-200 cursor-pointer ${
-                          theme === 'dark'
-                            ? 'bg-white/[0.045] hover:bg-white/[0.08]'
-                            : 'bg-white hover:bg-gray-50'
-                        }`}
-                      >
-                        <span
-                          style={rankStyle}
-                          className="inline-flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold"
-                        >
-                          {trend.rank}
-                        </span>
-                        <div className="min-w-0 text-left">
-                          <p className={`truncate text-sm font-semibold leading-none ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                            {trend.label}
-                          </p>
-                          {trend.subtitle && (
-                            <p className={`truncate text-[11px] mt-1 ${subtitleColor}`}>
-                              {trend.subtitle}
-                            </p>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2 justify-self-end">
-                          {volumeLabel && (
-                            <span
-                              className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
-                                theme === 'dark' ? 'bg-white/10 text-gray-200' : 'bg-gray-100 text-gray-600'
-                              }`}
-                            >
-                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-current" />
-                              {t('app.trending_volume', { count: volumeLabel })}
-                            </span>
-                          )}
-                          {(trend.url || changeLabel) && (
-                            <span
-                              className={`flex items-center gap-1 text-xs font-medium ${
-                                changeLabel
-                                  ? trend.change && trend.change > 0
-                                    ? 'text-emerald-500'
-                                    : 'text-amber-500'
-                                  : theme === 'dark'
-                                    ? 'text-gray-500'
-                                    : 'text-gray-400'
-                              }`}
-                            >
-                              {changeLabel ?? <ExternalLink className="w-3.5 h-3.5" />}
-                            </span>
-                          )}
-                          <ArrowUpRight
-                            className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${
-                              theme === 'dark'
-                                ? 'text-gray-500 group-hover:text-gray-300 group-hover:translate-x-1'
-                                : 'text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1'
-                            }`}
-                          />
-                        </div>
-                      </motion.button>
+         <motion.button
+  key={trend.id}
+  type="button"
+  onClick={() => handleSelect(trend)}
+  layout
+  whileHover={{ scale: 0.995, y: -1 }}
+  whileTap={{ scale: 0.985 }}
+  transition={{ type: 'spring', stiffness: 340, damping: 24, mass: 0.9 }}
+  className={`group grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl px-3 py-2.5 transition-all duration-200 cursor-pointer ${
+    theme === 'dark'
+      ? 'bg-white/[0.045] hover:bg-white/[0.08]'
+      : 'bg-white hover:bg-gray-50'
+  }`}
+>
+  <span
+    style={rankStyle}
+    className="inline-flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold"
+  >
+    {trend.rank}
+  </span>
+  <div className="min-w-0 text-left">
+    <p className={`truncate text-sm font-semibold leading-none ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+      {trend.label}
+    </p>
+    {trend.subtitle && (
+      <p className={`truncate text-[11px] mt-1 ${subtitleColor}`}>
+        {trend.subtitle}
+      </p>
+    )}
+  </div>
+  <div className="flex items-center gap-2 justify-self-end">
+    {volumeLabel && (
+      <span
+        className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+          theme === 'dark' ? 'bg-white/10 text-gray-200' : 'bg-gray-100 text-gray-600'
+        }`}
+      >
+        <span className="inline-block h-1.5 w-1.5 rounded-full bg-current" />
+        {t('app.trending_volume', { count: volumeLabel })}
+      </span>
+    )}
+    {(trend.url || changeLabel) && (
+      <span
+        className={`flex items-center gap-1 text-xs font-medium ${
+          changeLabel
+            ? trend.change && trend.change > 0
+              ? 'text-emerald-500'
+              : 'text-amber-500'
+            : theme === 'dark'
+            ? 'text-gray-500'
+            : 'text-gray-400'
+        }`}
+      >
+        {changeLabel ?? <ExternalLink className="w-3.5 h-3.5" />}
+      </span>
+    )}
+    <ArrowUpRight
+      className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${
+        theme === 'dark'
+          ? 'text-gray-500 group-hover:text-gray-300 group-hover:translate-x-1'
+          : 'text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1'
+      }`}
+    />
+  </div>
+</motion.button>
                     );
                   })}
                 </motion.div>
