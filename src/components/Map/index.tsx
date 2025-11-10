@@ -55,7 +55,7 @@ const LeafletMapInner = () => {
 
 
 
-  
+
 
 
   const { clustersByCategory, allMarkersBoundCenter } = useMarkerData({
@@ -64,42 +64,24 @@ const LeafletMapInner = () => {
     viewportWidth,
     viewportHeight,
   });
+  console.log(state.nearbyUsers)
 
 
-  console.log("clustersByCategory",clustersByCategory)
-  const isLoading = !map || !viewportWidth || !viewportHeight;
-/* 
-  useEffect(() => {
-    if (!allMarkersBoundCenter || !map) return;
 
-    const moveEnd = () => {
-      map.off('moveend', moveEnd);
-    };
+  console.log("clustersByCategory", clustersByCategory)
+  const isLoading = !map || !viewportWidth || !viewportHeight || clustersByCategory?.length == 0;
 
-    try {
-      map.flyTo(
-        allMarkersBoundCenter.centerPos,
-        allMarkersBoundCenter.minZoom,
-        { animate: false }
-      );
-      map.once('moveend', moveEnd);
-    } catch (e) {}
-  }, [allMarkersBoundCenter, map]); */
 
- 
+
 
   return (
     <div
       className="w-full h-[calc(100dvh-130px)] overflow-hidden"
-      ref={viewportRef}
-      
-    >   
-  
-
+      ref={viewportRef}>
 
       <div
         className="rounded-lg h-full w-full transition-opacity">
-        {allMarkersBoundCenter && clustersByCategory && (
+        {allMarkersBoundCenter && clustersByCategory &&  clustersByCategory.length > 0 && (
           <LeafletMapContainer
             center={allMarkersBoundCenter.centerPos}
             zoom={allMarkersBoundCenter.minZoom}
@@ -110,41 +92,41 @@ const LeafletMapInner = () => {
           >
             {!isLoading ? (
               <>
-                <LocateButton />
-                <CenterButton
-                  center={allMarkersBoundCenter.centerPos}
-                  zoom={allMarkersBoundCenter.minZoom}
-                />
-                <ZoomInButton />
-                <ZoomOutButton />
-
-
-
-                {Object.values(clustersByCategory).map((item,index) => (
-                  <LeafletCluster
-                    key={`cluster${item.category}${index}`}
-                    
-                    icon={MarkerCategories[item.category as Category].icon}
-                    color={MarkerCategories[item.category as Category].color}
-                    chunkedLoading={true}
-                  >
-                    {item.markers.map((marker,markerIndex) => (
-                      <CustomMarker item={marker} key={`markerItem${markerIndex}${marker.name}${marker.index}`} />
-                    ))}
-                  </LeafletCluster>
+                {/* Diğer bileşenler */}
+                {Object.values(clustersByCategory).map((item, index) => (
+                  item && item.markers && Array.isArray(item.markers) ? (
+                    <LeafletCluster
+                      key={`cluster${item.category}${index}`}
+                      icon={MarkerCategories[item.category as Category]?.icon}
+                      color={MarkerCategories[item.category as Category]?.color}
+                      chunkedLoading={true}
+                    >
+                      {item.markers.map((marker, markerIndex) =>
+                        marker ? (
+                          <CustomMarker
+                            item={marker}
+                            key={`markerItem${markerIndex}${marker.name}${marker.index}`}
+                          />
+                        ) : null
+                      )}
+                    </LeafletCluster>
+                  ) : null
                 ))}
               </>
             ) : (
-              // we have to spawn at least one element to keep it happy
-              // eslint-disable-next-line react/jsx-no-useless-fragment
               <></>
             )}
           </LeafletMapContainer>
         )}
       </div>
-      </div>
-     
- 
+
+
+
+
+
+    </div>
+
+
   );
 };
 
