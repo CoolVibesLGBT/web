@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
 
 html, body {
   margin: 0;
@@ -173,22 +172,6 @@ html, body {
 .dark ::-webkit-scrollbar-thumb {
   @apply bg-gray-700;
 }
-
-/* Modal overlay */
-.modal-overlay {
-  @apply fixed inset-0 bg-black bg-opacity-60 z-50;
-}
-
-/* Utility for card backgrounds */
-.bg-card {
-  @apply bg-white dark:bg-gray-900 transition-colors duration-300;
-}
-
-/* Utility for border color */
-.border-card {
-  @apply border-gray-200 dark:border-gray-800 transition-colors duration-300;
-}
-
 
 
 
@@ -778,4 +761,3 @@ img{
 .lexical-editor mark {
   @apply bg-yellow-200 dark:bg-yellow-800 px-1 py-0.5 rounded;
 }
-

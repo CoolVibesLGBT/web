@@ -1,6 +1,4 @@
-import { atom } from 'recoil';
-
-
+import { atom } from 'jotai';
 
 export interface GlobalState {
     nearByCursor: string | number | null;
@@ -10,11 +8,8 @@ export interface GlobalState {
 }
 
 export const globalState = atom<GlobalState>({
-    key: 'globalState',
-    default: {
-        nearByCursor: null,
-        nearbyUsers: [],
-        posts: [],
-        postsCursor:null,
-    },
+    nearByCursor: null,
+    nearbyUsers: [],
+    posts: [],
+    postsCursor: null,
 });

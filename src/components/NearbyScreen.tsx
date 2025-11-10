@@ -8,8 +8,10 @@ import { api } from '../services/api';
 import { Actions } from '../services/actions';
 import { useApp } from '../contexts/AppContext';
 import { useAuth } from '../contexts/AuthContext';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { globalState, GlobalState } from '../state/nearby'; // atomun tanımlı olduğu dosya
+
+import { useAtom } from 'jotai';
+
+import { globalState } from '../state/nearby'; // atomun tanımlı olduğu dosya
 import Container from './Container';
 import Map from './Map';
 
@@ -29,7 +31,7 @@ const NearbyScreen: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
 
-  const [state, setState] = useRecoilState(globalState);
+  const [state, setState] = useAtom(globalState);
 
   // Fetch nearby users from API
   const fetchNearbyUsers = async (refreshing: boolean = false) => {

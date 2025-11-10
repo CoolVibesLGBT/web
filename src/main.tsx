@@ -9,25 +9,23 @@ import { AppProvider } from './contexts/AppContext.tsx'
 import { ToolbarContext } from './contexts/ToolbarContext.tsx'
 import { SettingsContext } from './contexts/SettingsContext.tsx'
 import './i18n'
-import { RecoilRoot } from 'recoil';
+
 import { SocketProvider } from './contexts/SocketContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
-    <SocketProvider>
-      <SettingsContext>
-        <ToolbarContext>
-          <ThemeProvider>
-            <AppProvider>
-              <AuthProvider>
-                <RecoilRoot>
-                <App />
-                </RecoilRoot>
-              </AuthProvider>
-            </AppProvider>
-          </ThemeProvider>
-        </ToolbarContext>
-      </SettingsContext>
+      <SocketProvider>
+        <SettingsContext>
+          <ToolbarContext>
+            <ThemeProvider>
+              <AppProvider>
+                <AuthProvider>
+                  <App />
+                </AuthProvider>
+              </AppProvider>
+            </ThemeProvider>
+          </ToolbarContext>
+        </SettingsContext>
       </SocketProvider>
     </BrowserRouter>
 )

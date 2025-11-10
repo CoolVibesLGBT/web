@@ -1,45 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Map from './Map';
-
-const MAX_HEADER_HEIGHT = 200;
-const MIN_HEADER_HEIGHT = 80;
+import React from 'react';  // veya
+;
+import { useAtom } from 'jotai';
+import { globalState } from '../state/nearby';
+import { textState } from '../state/textstate';
 
 const TestPage: React.FC = () => {
-  const [headerHeight, setHeaderHeight] = useState(MAX_HEADER_HEIGHT);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  
+  const [text, setText] = useAtom(textState);
 
-  const handleScroll = () => {
-    if (!scrollContainerRef.current) return;
-    const scrollTop = scrollContainerRef.current.scrollTop;
-    const newHeight = Math.max(MIN_HEADER_HEIGHT, MAX_HEADER_HEIGHT - scrollTop);
-    setHeaderHeight(newHeight);
+  const onChange = (event:any) => {
+    setText(event.target.value);
   };
 
-  useEffect(() => {
-    const current = scrollContainerRef.current;
-    if (current) {
-      current.addEventListener('scroll', handleScroll);
-    }
-    return () => {
-      if (current) {
-        current.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
-
   return (
-    <div
-      ref={scrollContainerRef}
-      style={{
-        height: '100vh',
-        overflowY: 'auto',
-        WebkitOverflowScrolling: 'touch',
-      }}
-    >
-
-<Map/>
- 
+   <div>
+ <div>
+      <input type="text" value={text} onChange={onChange} />
+      <br />
+      Echo: {text}
     </div>
+    </div>
+    
   );
 };
 

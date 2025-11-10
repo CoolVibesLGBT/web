@@ -14,15 +14,15 @@ import { ZoomInButton } from './ui/ZoomInButton';
 import { ZoomOutButton } from './ui/ZoomOutButton';
 import { LeafletCluster } from './LeafletCluster';
 import { CustomMarker } from './LeafletMarker';
-import { useRecoilState } from 'recoil';
 import { globalState } from '../../state/nearby';
+import { useAtom } from 'jotai';
 
 
 
 
 const LeafletMapInner = () => {
   const { map } = useMapContext();
-  const [state, setState] = useRecoilState(globalState);
+  const [state, setState] = useAtom(globalState);
 
   const [windowHeight, setWindowHeight] = useState<number | null>(() =>
     typeof window !== 'undefined' ? window.innerHeight : null
