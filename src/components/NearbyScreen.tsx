@@ -269,7 +269,7 @@ const NearbyScreen: React.FC = () => {
             ) : (
               <div className='w-full flex-col py-2'>
                 {viewMode === 'grid' && (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                     {state.nearbyUsers.map((user: any, index) => (
                       <motion.div
                         key={`view_grid_item${index}`}
@@ -300,7 +300,7 @@ const NearbyScreen: React.FC = () => {
                 )}
 
                 {viewMode === 'card' && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-2">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-2">
                     {state.nearbyUsers.map((user: any, index) => (
                       <motion.div
                         key={user.id}

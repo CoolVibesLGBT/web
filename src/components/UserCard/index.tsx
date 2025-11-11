@@ -8,6 +8,7 @@ import QuickMessages from '../QuickMessages';
 import { calculateAge, getSafeImageURL } from '../../helpers/helpers';
 import { Actions } from '../../services/actions';
 import { api } from '../../services/api';
+import { LikeIcon, DislikeIcon, ChatIcon, BlockIcon } from './icons';
 
 interface UserCardProps {
   user: any;
@@ -31,6 +32,7 @@ interface ActionBarProps {
   liked: boolean;
   disliked: boolean,
   blocked: boolean,
+  viewMode: 'compact' | 'list' | 'card',
   onLikeToggle: () => void;
   onDislikeToggle: () => void;
   onBlockToggle: () => void;
@@ -49,9 +51,18 @@ const ActionBar: React.FC<ActionBarProps> = ({
   onOpenGiftSelector,
   onOpenQuickMessageSelector,
   baseButtonStyle,
+  viewMode,
 }) => {
+
+  const iconStyle = "h-8 w-8 min-h-8  min-w-8 max-h-8 max-w-8"
+  const buttonStyle = "p-2 h-12 w-12 max-w-12 min-h-12 flex items-center justify-center"
+  const viewGridStyle = {
+    "compact": "grid grid-cols-2 py-2 ",
+    "card": "grid grid-cols-4",
+    "list": "grid sm:grid-cols-4 grid-cols-2"
+  }
   return (
-    <div className="w-full flex flex-row justify-around items-center gap-2">
+    <div className={`w-full ${viewGridStyle[viewMode]} justify-center place-items-center gap-2`}>
       <motion.button
         whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.9 }}
@@ -59,11 +70,12 @@ const ActionBar: React.FC<ActionBarProps> = ({
           e.stopPropagation();
           onOpenQuickMessageSelector();
         }}
-        className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
+        className={`cursor-pointer rounded-full transition-all ${buttonStyle}  ${baseButtonStyle}`}
         aria-label="Send Message"
       >
-        <MessageCircleHeart className="w-5 h-5" />
+        <ChatIcon className={iconStyle} />
       </motion.button>
+
       <motion.button
         whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.9 }}
@@ -71,11 +83,12 @@ const ActionBar: React.FC<ActionBarProps> = ({
           e.stopPropagation();
           onOpenGiftSelector();
         }}
-        className={`hidden p-2 rounded-full transition-all ${baseButtonStyle}`}
+        className={`hidden cursor-pointer rounded-full transition-all ${buttonStyle} ${baseButtonStyle}`}
         aria-label="Send Gift"
       >
-        <Gift className="w-5 h-5" />
+        <Gift className={iconStyle} />
       </motion.button>
+
       <motion.button
         whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.9 }}
@@ -83,11 +96,14 @@ const ActionBar: React.FC<ActionBarProps> = ({
           e.stopPropagation();
           onLikeToggle();
         }}
-        className={`p-2 rounded-full transition-all ${liked ? 'text-red-500' : baseButtonStyle}`}
+        className={`cursor-pointer rounded-full transition-all ${buttonStyle} ${liked ? "text-red-500" : baseButtonStyle
+          }`}
         aria-label="Like"
       >
-        <Heart className="w-5 h-5" />
+        <LikeIcon className={iconStyle} />
+
       </motion.button>
+
       <motion.button
         whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.9 }}
@@ -95,11 +111,13 @@ const ActionBar: React.FC<ActionBarProps> = ({
           e.stopPropagation();
           onDislikeToggle();
         }}
-        className={`p-2 rounded-full transition-all ${disliked ? 'text-red-500' : baseButtonStyle}`}
+        className={`cursor-pointer rounded-full transition-all ${buttonStyle} ${disliked ? "text-red-500" : baseButtonStyle
+          }`}
         aria-label="Dislike"
       >
-        <HeartOff className="w-5 h-5" />
+        <DislikeIcon className={iconStyle} />
       </motion.button>
+
       <motion.button
         whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.9 }}
@@ -107,15 +125,15 @@ const ActionBar: React.FC<ActionBarProps> = ({
           e.stopPropagation();
           onBlockToggle();
         }}
-        className={`p-2 rounded-full transition-all ${blocked ? 'text-red-500' : baseButtonStyle}`}
-        aria-label="Block"
-      >
-        <Shield className="w-5 h-5" />
+        className={`cursor-pointer rounded-full transition-all ${buttonStyle} ${blocked ? "text-red-500" : baseButtonStyle
+          }`}
+        aria-label="Block">
+        <BlockIcon className={iconStyle} />
+
       </motion.button>
     </div>
   );
 };
-
 
 export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) => {
   const { theme } = useTheme();
@@ -305,11 +323,12 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
           </div>
 
           <div
-            className={`p-2 flex flex-col flex-grow ${theme === 'dark' ? 'bg-[#111]' : 'bg-[#fafafa]'
+            className={`flex flex-col flex-grow ${theme === 'dark' ? 'bg-[#111]' : 'bg-[#fafafa]'
               }`}
           >
             <div className="flex items-center gap-3 w-full">
               <ActionBar
+                viewMode='compact'
                 liked={liked}
                 disliked={disliked}
                 blocked={blocked}
@@ -338,66 +357,69 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
   }
 
   const ListView = () => {
-    return (
-      <motion.div
-        whileHover={{ scale: 1.01 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-        onClick={handleProfileClick}
-        className={`select-none group flex items-center gap-4 w-full rounded-xl px-4 py-3 cursor-pointer transition-all duration-300 ${baseCardStyle}`}
-      >
-        <div className="relative flex-shrink-0">
-          <img
-            src={getSafeImageURL(user.avatar, 'medium')}
-            alt={user.name || user.displayname || 'profile'}
-            className="w-16 h-16 rounded-xl object-cover shadow-md group-hover:scale-105 transition-transform duration-300"
-          />
-          {user.isOnline && (
-            <div className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-green-500 border-2 border-black animate-pulse" />
-          )}
+  return (
+    <motion.div
+      whileHover={{ scale: 1.01 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      onClick={handleProfileClick}
+      className={`select-none group flex items-center gap-4 w-full rounded-xl px-4 py-3 cursor-pointer transition-all duration-300 ${baseCardStyle}`}
+    >
+      <div className="relative flex-shrink-0 w-32 h-32 rounded-xl overflow-hidden shadow-md">
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
+          style={{
+            backgroundImage: `linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 25%, rgba(0,0,0,0) 60%), url("${getSafeImageURL(
+              user.avatar,
+              'medium'
+            )}")`,
+          }}
+        ></div>
+        {user.isOnline && (
+          <div className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-green-500 border-2 border-black animate-pulse" />
+        )}
+      </div>
+
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <h3 className="font-semibold text-lg truncate">
+            {user.displayname || user.name || 'İsim Yok'}
+          </h3>
+          <span className="text-sm opacity-70">{calculateAge(user.date_of_birth)}</span>
         </div>
 
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-lg truncate">
-              {user.displayname || user.name || 'İsim Yok'}
-            </h3>
-            <span className="text-sm opacity-70">{calculateAge(user.date_of_birth)}</span>
-          </div>
-
-          <div className="flex items-center gap-1 text-sm mt-0.5 opacity-80">
-            <MapPin className="w-4 h-4" />
-            {location || 'Bilinmeyen konum'}
-          </div>
-          {/* Bio kaldırıldı */}
+        <div className="flex items-center gap-1 text-sm mt-0.5 opacity-80">
+          <MapPin className="w-4 h-4" />
+          {location || 'Bilinmeyen konum'}
         </div>
+      </div>
 
-        <div className="flex-shrink-0 flex items-end gap-3">
-          <ActionBar
-            liked={liked}
-            disliked={disliked}
-            blocked={blocked}
-            onBlockToggle={() => {
-              setIsBlocked((prev) => !prev)
-              handleBlock(user)
-            }}
-            onLikeToggle={() => {
-              setLiked((prev) => !prev)
-              handleSendLike(user)
-            }}
-            onDislikeToggle={() => {
-              setDisliked((prev) => !prev)
-            }}
-            onOpenGiftSelector={() => setIsGiftSelectorOpen(true)}
-            onOpenQuickMessageSelector={() => {
-              handleSendMessage(user)
-            }}
-            baseButtonStyle={baseButtonStyle}
-          />
-        </div>
-      </motion.div>
-    )
-  }
-
+      <div className="flex-shrink-0 flex items-end gap-3">
+        <ActionBar
+          viewMode='list'
+          liked={liked}
+          disliked={disliked}
+          blocked={blocked}
+          onBlockToggle={() => {
+            setIsBlocked((prev) => !prev)
+            handleBlock(user)
+          }}
+          onLikeToggle={() => {
+            setLiked((prev) => !prev)
+            handleSendLike(user)
+          }}
+          onDislikeToggle={() => {
+            setDisliked((prev) => !prev)
+          }}
+          onOpenGiftSelector={() => setIsGiftSelectorOpen(true)}
+          onOpenQuickMessageSelector={() => {
+            handleSendMessage(user)
+          }}
+          baseButtonStyle={baseButtonStyle}
+        />
+      </div>
+    </motion.div>
+  )
+}
 
   const CardView = () => {
     return (
@@ -406,7 +428,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
         onClick={handleProfileClick}
         className={`select-none group overflow-hidden flex items-center gap-4 w-full rounded-xl cursor-pointer transition-all duration-300 ${baseCardStyle}`}
       >
-        <div className="w-full max-w-sm overflow-hidden rounded-xl flex flex-col transition-transform duration-300 hover:scale-105">
+        <div className="w-full max-w-full overflow-hidden rounded-xl flex flex-col transition-transform duration-300 hover:scale-105">
           <div
             className="relative flex-grow flex flex-col justify-end bg-cover bg-center"
             style={{
@@ -431,11 +453,13 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
 
 
           <div
-            className={`p-4 flex flex-col flex-grow ${theme === 'dark' ? 'bg-[#111]' : 'bg-[#fafafa]'
+            className={`p-2 flex flex-col flex-grow ${theme === 'dark' ? 'bg-[#111]' : 'bg-[#fafafa]'
               }`}
           >
-            <div className="flex items-center gap-3 px-3 w-full ">
+            <div className="flex items-center w-full ">
               <ActionBar
+                viewMode='card'
+
                 liked={liked}
                 disliked={disliked}
                 blocked={blocked}
