@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Mail, Gift, MapPin } from 'lucide-react';
+import { Heart, Mail, Gift, MapPin, Skull, HeartCrack, HeartOff, MessageCircleHeart, Shield } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import GiftSelector from '../GiftSelector';
 import QuickMessages from '../QuickMessages';
@@ -29,7 +29,11 @@ const getLocation = (user: any): string => {
 
 interface ActionBarProps {
   liked: boolean;
+  disliked: boolean,
+  blocked: boolean,
   onLikeToggle: () => void;
+  onDislikeToggle: () => void;
+  onBlockToggle: () => void;
   onOpenGiftSelector: () => void;
   onOpenQuickMessageSelector: () => void;
   baseButtonStyle: string;
@@ -37,13 +41,17 @@ interface ActionBarProps {
 
 const ActionBar: React.FC<ActionBarProps> = ({
   liked,
+  disliked,
+  blocked,
   onLikeToggle,
+  onDislikeToggle,
+  onBlockToggle,
   onOpenGiftSelector,
   onOpenQuickMessageSelector,
   baseButtonStyle,
 }) => {
   return (
-    <div className="w-full flex flex-row justify-around items-center gap-3">
+    <div className="w-full flex flex-row justify-around items-center gap-2">
       <motion.button
         whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.9 }}
@@ -54,7 +62,7 @@ const ActionBar: React.FC<ActionBarProps> = ({
         className={`p-2 rounded-full transition-all ${baseButtonStyle}`}
         aria-label="Send Message"
       >
-        <Mail className="w-5 h-5" />
+        <MessageCircleHeart className="w-5 h-5" />
       </motion.button>
       <motion.button
         whileHover={{ scale: 1.15 }}
@@ -80,6 +88,30 @@ const ActionBar: React.FC<ActionBarProps> = ({
       >
         <Heart className="w-5 h-5" />
       </motion.button>
+      <motion.button
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onDislikeToggle();
+        }}
+        className={`p-2 rounded-full transition-all ${disliked ? 'text-red-500' : baseButtonStyle}`}
+        aria-label="Dislike"
+      >
+        <HeartOff className="w-5 h-5" />
+      </motion.button>
+      <motion.button
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onBlockToggle();
+        }}
+        className={`p-2 rounded-full transition-all ${blocked ? 'text-red-500' : baseButtonStyle}`}
+        aria-label="Block"
+      >
+        <Shield className="w-5 h-5" />
+      </motion.button>
     </div>
   );
 };
@@ -91,6 +123,8 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
   const [isGiftSelectorOpen, setIsGiftSelectorOpen] = useState(false);
   const [isQuickMessageSelectorOpen, setIsQuickMessageSelectorOpen] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false)
+  const [blocked, setIsBlocked] = useState(false)
 
   const getUsername = () =>
     user.username ||
@@ -159,6 +193,69 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
     }
   };
 
+  const handleSendLike = async (user: any) => {
+    //
+
+
+    if (!user?.public_id) return;
+
+    try {
+      await api.call(Actions.CMD_USER_TOGGLE_LIKE, {
+        method: 'POST',
+        body: {
+          likee_id: user.public_id,
+        },
+      });
+
+
+    } catch (error) {
+      console.error('Error toggling like:', error);
+      // Optionally show error message to user
+    }
+  }
+
+  const handleSendDislike = async (user: any) => {
+    //
+
+
+    if (!user?.public_id) return;
+
+    try {
+      await api.call(Actions.CMD_USER_TOGGLE_DISLIKE, {
+        method: 'POST',
+        body: {
+          likee_id: user.public_id,
+        },
+      });
+
+
+    } catch (error) {
+      console.error('Error toggling like:', error);
+      // Optionally show error message to user
+    }
+  }
+
+  const handleBlock = async (user: any) => {
+    //
+
+
+    if (!user?.public_id) return;
+
+    try {
+      await api.call(Actions.CMD_USER_TOGGLE_BLOCK, {
+        method: 'POST',
+        body: {
+          user_id: user.public_id,
+        },
+      });
+
+
+    } catch (error) {
+      console.error('Error toggling like:', error);
+      // Optionally show error message to user
+    }
+  }
+
   const baseCardStyle =
     theme === 'dark'
       ? 'bg-[#0a0a0a] border border-[#1c1c1c] text-white'
@@ -208,13 +305,25 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
           </div>
 
           <div
-            className={`p-4 flex flex-col flex-grow ${theme === 'dark' ? 'bg-[#111]' : 'bg-[#fafafa]'
+            className={`p-2 flex flex-col flex-grow ${theme === 'dark' ? 'bg-[#111]' : 'bg-[#fafafa]'
               }`}
           >
-            <div className="flex items-center gap-3 ml-2">
+            <div className="flex items-center gap-3 w-full">
               <ActionBar
                 liked={liked}
-                onLikeToggle={() => setLiked((prev) => !prev)}
+                disliked={disliked}
+                blocked={blocked}
+                onBlockToggle={() => {
+                  setIsBlocked((prev) => !prev)
+                  handleBlock(user)
+                }}
+                onLikeToggle={() => {
+                  setLiked((prev) => !prev)
+                  handleSendLike(user)
+                }}
+                onDislikeToggle={() => {
+                  setDisliked((prev) => !prev)
+                }}
                 onOpenGiftSelector={() => setIsGiftSelectorOpen(true)}
                 onOpenQuickMessageSelector={() => {
                   handleSendMessage(user)
@@ -262,12 +371,26 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
           {/* Bio kaldırıldı */}
         </div>
 
-        <div className="flex-shrink-0 flex items-center gap-3 ml-2">
+        <div className="flex-shrink-0 flex items-end gap-3">
           <ActionBar
             liked={liked}
-            onLikeToggle={() => setLiked((prev) => !prev)}
+            disliked={disliked}
+            blocked={blocked}
+            onBlockToggle={() => {
+              setIsBlocked((prev) => !prev)
+              handleBlock(user)
+            }}
+            onLikeToggle={() => {
+              setLiked((prev) => !prev)
+              handleSendLike(user)
+            }}
+            onDislikeToggle={() => {
+              setDisliked((prev) => !prev)
+            }}
             onOpenGiftSelector={() => setIsGiftSelectorOpen(true)}
-            onOpenQuickMessageSelector={() => setIsQuickMessageSelectorOpen(true)}
+            onOpenQuickMessageSelector={() => {
+              handleSendMessage(user)
+            }}
             baseButtonStyle={baseButtonStyle}
           />
         </div>
@@ -311,12 +434,26 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
             className={`p-4 flex flex-col flex-grow ${theme === 'dark' ? 'bg-[#111]' : 'bg-[#fafafa]'
               }`}
           >
-            <div className="flex items-center gap-3 px-3 ">
+            <div className="flex items-center gap-3 px-3 w-full ">
               <ActionBar
                 liked={liked}
-                onLikeToggle={() => setLiked((prev) => !prev)}
+                disliked={disliked}
+                blocked={blocked}
+                onBlockToggle={() => {
+                  setIsBlocked((prev) => !prev)
+                  handleBlock(user)
+                }}
+                onLikeToggle={() => {
+                  setLiked((prev) => !prev)
+                  handleSendLike(user)
+                }}
+                onDislikeToggle={() => {
+                  setDisliked((prev) => !prev)
+                }}
                 onOpenGiftSelector={() => setIsGiftSelectorOpen(true)}
-                onOpenQuickMessageSelector={() => setIsQuickMessageSelectorOpen(true)}
+                onOpenQuickMessageSelector={() => {
+                  handleSendMessage(user)
+                }}
                 baseButtonStyle={baseButtonStyle}
               />
             </div>

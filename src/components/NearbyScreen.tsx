@@ -55,7 +55,7 @@ const NearbyScreen: React.FC = () => {
 
 
 
-      setState((prevState: GlobalState) => {
+      setState((prevState: any) => {
         // Mevcut nearbyUsers listesindeki user id’lerini alıyoruz
         const existingIds = new Set(prevState.nearbyUsers.map(user => user.id));
 
@@ -104,7 +104,7 @@ const NearbyScreen: React.FC = () => {
 
 
   const handleRefresh = () => {
-    setState((prevState: GlobalState) => ({
+    setState((prevState: any) => ({
       ...prevState,
       nearbyUsers: [],
       nearByCursor: null,
