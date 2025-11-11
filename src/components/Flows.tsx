@@ -251,7 +251,7 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick }) => {
   return (
     <div className='w-full'>
       {/* Create Post - Hidden on mobile */}
-      <div className={`hidden lg:block ${theme === 'dark' ? 'bg-black border-b border-black' : 'bg-white border-b border-gray-100'}`}>
+      <div className={`hidden lg:block ${theme === 'dark' ? 'bg-gray-400 border-b border-gray-900' : 'bg-white border-b border-gray-100'}`}>
         <CreatePost
         fullScreen={false}
           title="Create Post"

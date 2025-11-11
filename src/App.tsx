@@ -114,7 +114,7 @@ function App() {
 
   
   return (
-    <>
+    <div className={`w-screen dark:bg-gray-950 bg-white h-screen`}>
       {/* Splash Screen */}
       {showSplash && (
         <SplashScreen onComplete={() => setShowSplash(false)} />
@@ -122,7 +122,7 @@ function App() {
 
       {/* Twitter Style Layout - 3 Columns */}
       {!showSplash && (
-      <div className={`max-h-[100dvh] w-full  flex mx-auto  max-w-7xl min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide`}>
+      <div className={`max-h-[100dvh] w-full  flex mx-auto  max-w-7xl min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide `}>
         
         {/* Mobile Header - Top Navigation */}
         <header className={`lg:hidden fixed top-0 left-0 right-0 z-50 ${theme === 'dark' ? 'bg-black/95 backdrop-blur-xl border-b border-gray-800/50' : 'bg-white/95 backdrop-blur-xl border-b border-gray-100/50'}`}>
@@ -205,7 +205,7 @@ function App() {
                     className={`w-full flex items-center space-x-4 px-5 py-3.5 rounded-full transition-all duration-200 group ${
                       isActive
                         ? theme === 'dark'
-                          ? 'bg-white text-black shadow-lg shadow-white/20'
+                          ? 'bg-gray-200 text-black shadow-lg shadow-gray/20'
                           : 'bg-black text-white shadow-lg shadow-black/20'
                         : theme === 'dark'
                           ? 'text-gray-400 hover:text-white hover:bg-white/10'
@@ -372,7 +372,7 @@ function App() {
 
   
         {/* Middle Section - Scrollable */}
-        <main className={`max-h-[100dvh]  min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide flex-1 min-w-0 lg:border-l lg:border-r ${theme === 'dark' ? 'lg:border-gray-800/70' : 'lg:border-black/5'} pt-[56px] lg:pt-0  lg:pb-0`}>
+        <main className={`max-h-[100dvh]  min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide flex-1 min-w-0 lg:border-l lg:border-r  ${theme === 'dark' ? 'lg:border-gray-900/70' : 'lg:border-gray-100'} pt-[56px] lg:pt-0  lg:pb-0`}>
           {!isAuthenticated ? (
             /* Show AuthWizard in inline mode when not authenticated */
             <div className={`h-full w-full flex items-start lg:items-center justify-center overflow-y-auto ${theme === 'dark' ? 'bg-black' : 'bg-gray-50'}`}>
@@ -511,7 +511,7 @@ function App() {
       {showBottomBar && (
       <nav className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 ${
         theme === 'dark' 
-          ? 'bg-black/95 border-t border-white/[0.08]' 
+          ? 'bg-gray-950 border-t border-gray-900' 
           : 'bg-white/95 border-t border-black/[0.08]'
       } backdrop-blur-xl safe-area-inset-bottom`}>
         <div className="flex items-center justify-around px-4 py-3">
@@ -545,10 +545,13 @@ function App() {
                 {isActive && (
                   <motion.div
                     layoutId="activeNavBg"
+                    style={{
+                      zIndex:-1,
+                    }}
                     className={`absolute inset-0 rounded-2xl ${
                       theme === 'dark'
-                        ? 'bg-white/[0.08]'
-                        : 'bg-black/[0.06]'
+                        ? 'bg-gray-50/[0.08]'
+                        : 'bg-gray-950/[0.06]'
                     }`}
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
@@ -919,7 +922,7 @@ function App() {
       <LanguageSelector isOpen={isLanguageSelectorOpen} onClose={() => setIsLanguageSelectorOpen(false)} />
       )}
 
-    </>
+    </div>
   );
 }
 

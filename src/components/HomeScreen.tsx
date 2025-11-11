@@ -122,7 +122,7 @@ const HomeScreen: React.FC = () => {
           </div>
         }
 
-      <header className={`${theme == "dark" ? "bg-black" : "bg-white"} flex flex-col gap-0`}
+      <header className={` flex flex-col gap-0`}
 
         style={{
           position: 'sticky',
@@ -163,7 +163,7 @@ const HomeScreen: React.FC = () => {
                     setShowBottomBar(true)
                   }}
                   whileTap={{ scale: 0.98 }}
-                  className={`flex-1 py-2 cursor-pointer font-semibold text-[15px] relative transition-all duration-200 ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-black/5'
+                  className={`flex-1 py-2 cursor-pointer font-semibold text-[15px] relative transition-all duration-200 ${theme === 'dark' ? 'hover:bg-gray-900' : 'hover:bg-black/5'
                     } ${activeTab === 'flows'
                       ? theme === 'dark' ? 'text-white' : 'text-black'
                       : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
@@ -176,7 +176,7 @@ const HomeScreen: React.FC = () => {
 
                   {activeTab === 'flows' && (
                     <motion.div
-                      className={`absolute bottom-0 left-0 right-0 h-1 ${theme === 'dark' ? 'bg-white/20' : 'bg-black'}`}
+                      className={`absolute bottom-0 left-0 right-0 h-1 ${theme === 'dark' ? 'bg-gray-900' : 'bg-black'}`}
                       layoutId="homeScreenTabIndicator"
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
@@ -188,7 +188,7 @@ const HomeScreen: React.FC = () => {
                     setShowBottomBar(false)
                   }}
                   whileTap={{ scale: 0.98 }}
-                  className={`flex-1 cursor-pointer py-2 font-semibold text-[15px] relative transition-all duration-200 ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-black/5'
+                  className={`flex-1 cursor-pointer py-2 font-semibold text-[15px] relative transition-all duration-200 ${theme === 'dark' ? 'hover:bg-gray-900' : 'hover:bg-black/5'
                     } ${activeTab === 'vibes'
                       ? theme === 'dark' ? 'text-white' : 'text-black'
                       : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
@@ -201,7 +201,7 @@ const HomeScreen: React.FC = () => {
 
                   {activeTab === 'vibes' && (
                     <motion.div
-                      className={`absolute bottom-0 left-0 right-0 h-1 ${theme === 'dark' ? 'bg-white/20' : 'bg-black'}`}
+                      className={`absolute bottom-0 left-0 right-0 h-1 ${theme === 'dark' ? 'bg-gray-900' : 'bg-black'}`}
                       layoutId="homeScreenTabIndicator"
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
@@ -250,7 +250,7 @@ const HomeScreen: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
-            className={`${theme === 'dark' ? 'bg-black' : 'bg-white'}`}
+            className={`${theme === 'dark' ? 'bg-gray-950' : 'bg-white'}`}
           >
             {loadingPostDetail ? (
               <div className={`flex items-center justify-center py-12 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>

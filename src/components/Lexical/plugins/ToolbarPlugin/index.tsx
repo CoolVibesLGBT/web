@@ -8,7 +8,6 @@
 
 import type {JSX} from 'react';
 
-import './toolbar.css';
 
 import {
   $isCodeNode,
@@ -690,7 +689,7 @@ export default function ToolbarPlugin({
 
   return (
     <motion.div 
-      className="w-full bg-white/98 dark:bg-gray-900/98 relative"
+      className="w-full  relative"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}

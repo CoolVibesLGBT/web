@@ -430,14 +430,17 @@ const Post: React.FC<PostProps> = ({
     </>
   );
 
+  
   return (
     <>
-      <div
-        className={`overflow-hidden border-b ${theme === 'dark'
-            ? 'bg-black border-gray-800/40'
-            : 'bg-white border-gray-100'
-          } ${onPostClick ? 'hover:bg-gray-50 dark:hover:bg-gray-900/30 hover:shadow-sm' : ''} transition-all duration-300 ease-out`}
-      >
+<div
+className={`
+  overflow-hidden border-b transition-all duration-300 ease-out
+  ${theme === "dark"
+    ? "bg-black border-gray-800/40 hover:bg-gray-900/30"
+    : "bg-white border-gray-100 hover:bg-gray-50"}
+`}
+>
         {/* Post Header */}
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center space-x-3">
