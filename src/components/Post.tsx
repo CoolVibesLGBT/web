@@ -437,7 +437,7 @@ const Post: React.FC<PostProps> = ({
 className={`
   overflow-hidden border-b transition-all duration-300 ease-out
   ${theme === "dark"
-    ? "bg-black border-gray-800/40 hover:bg-gray-900/30"
+    ? "bg-gray-950 border-gray-800/40 hover:bg-gray-900"
     : "bg-white border-gray-100 hover:bg-gray-50"}
 `}
 >

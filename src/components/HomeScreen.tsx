@@ -137,7 +137,7 @@ const HomeScreen: React.FC = () => {
       
 
         <div className='w-full flex-grow'>
-          <div className={`z-40 border-b  ${theme === 'dark' ? 'bg-black border-gray-800/50' : 'bg-white border-gray-100/50'}`}>
+          <div className={`z-40 border-b  ${theme === 'dark' ? 'bg-gray-950 border-gray-800/50' : 'bg-white border-gray-100/50'}`}>
             {selectedPost ? (
               // Post Detail Header
               <div className="flex items-center px-4 py-3">
