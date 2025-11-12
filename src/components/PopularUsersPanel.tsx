@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Users, RefreshCw, ChevronRight } from 'lucide-react';
+import { Users, RefreshCw } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import { api } from '../services/api';
@@ -16,6 +16,7 @@ interface PopularUser {
   id: string;
   username: string;
   displayname: string;
+  date_of_birth?: string;
   avatar?: {
     file?: {
       url?: string;
@@ -38,6 +39,21 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({ limit = 6 }) => {
   const [users, setUsers] = React.useState<PopularUser[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+
+  const calculateAge = React.useCallback((dateOfBirth?: string): number | null => {
+    if (!dateOfBirth) return null;
+    const birthDate = new Date(dateOfBirth);
+    if (Number.isNaN(birthDate.getTime())) return null;
+
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age -= 1;
+    }
+
+    return age >= 0 ? age : null;
+  }, []);
 
   const fetchPopularUsers = React.useCallback(async () => {
     setIsLoading(true);
@@ -80,20 +96,22 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({ limit = 6 }) => {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
           {Array.from({ length: limit }).map((_, index) => (
             <div
               key={`popular-skeleton-${index}`}
-              className={`flex items-center gap-3 rounded-xl border ${
-                theme === 'dark' ? 'border-gray-900 bg-gray-950' : 'border-gray-100 bg-white'
-              } p-3 animate-pulse`}
+              className={`relative overflow-hidden rounded-3xl border ${
+                theme === 'dark' ? 'border-gray-900 bg-gray-950' : 'border-gray-100 bg-gray-50'
+              } aspect-[3/4] animate-pulse`}
             >
-              <div className={`w-10 h-10 rounded-full ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`} />
-              <div className="flex-1 space-y-2">
-                <div className={`h-3 rounded ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`} />
-                <div className={`h-3 w-24 rounded ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`} />
+              <div className="absolute inset-0">
+                <div className={`h-2/3 w-full ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-200'}`} />
+                <div className={`h-1/3 w-full ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-300'}`} />
               </div>
-              <div className={`w-8 h-8 rounded-full ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`} />
+              <div className="absolute inset-x-0 bottom-0 p-4">
+                <div className={`h-4 w-24 rounded ${theme === 'dark' ? 'bg-gray-700/60' : 'bg-gray-300'}`} />
+                <div className={`mt-2 h-3 w-16 rounded ${theme === 'dark' ? 'bg-gray-800/70' : 'bg-gray-200'}`} />
+              </div>
             </div>
           ))}
         </div>
@@ -140,59 +158,42 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({ limit = 6 }) => {
     }
 
     return (
-      <div className="space-y-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
         {users.map((user, index) => {
-          const followers =
-            user.followers_count ??
-            user.engagements?.counts?.follower_count ??
-            0;
-
+          const age = calculateAge(user.date_of_birth);
           return (
             <motion.button
               key={user.id}
               type="button"
               onClick={() => navigate(`/${user.username}`)}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              className={`group flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition-all ${
+              transition={{ delay: index * 0.04 }}
+              className={`group relative overflow-hidden rounded-3xl border ${
                 theme === 'dark'
-                  ? 'border-gray-900 bg-gray-950 hover:border-gray-800 hover:bg-gray-900/60'
-                  : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50'
-              }`}
+                  ? 'border-gray-900 bg-gray-950 hover:border-indigo-500/40 hover:shadow-indigo-500/20'
+                  : 'border-gray-100 bg-white hover:border-gray-300 hover:shadow-[0_12px_30px_-16px_rgba(79,70,229,0.55)]'
+              } aspect-[3/4] transition-all`}
             >
-              <div className="relative">
-                <img
-                  src={resolveAvatar(user)}
-                  alt={user.displayname || user.username}
-                  className="h-12 w-12 rounded-full object-cover"
-                />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className={`truncate text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+              <img
+                src={resolveAvatar(user)}
+                alt={user.displayname || user.username}
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-95" />
+              <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-4 text-left">
+                <p className="truncate text-base font-semibold text-white sm:text-lg">
                   {user.displayname || user.username}
                 </p>
-                <p className={`truncate text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                  @{user.username}
-                </p>
-                <p className={`mt-1 text-xs font-medium ${theme === 'dark' ? 'text-indigo-200' : 'text-indigo-600'}`}>
-                  {t('app.popular_users_followers', { count: followers.toLocaleString() })}
+                <p className="text-sm font-medium text-white/80">
+                  {age !== null
+                    ? t('app.popular_users_age_years', {
+                        age,
+                        defaultValue: `${age} ${t('app.popular_users_age_suffix', { defaultValue: 'yaş' })}`,
+                      })
+                    : t('app.popular_users_age_unknown', { defaultValue: 'Yaş bilgisi yok' })}
                 </p>
               </div>
-              <div
-                className={`self-stretch rounded-xl px-2 py-1 text-xs font-semibold transition-colors ${
-                  theme === 'dark'
-                    ? 'bg-white/10 text-white group-hover:bg-white/20'
-                    : 'bg-gray-100 text-gray-700 group-hover:bg-gray-200'
-                }`}
-              >
-                {t('app.popular_users_view')}
-              </div>
-              <ChevronRight
-                className={`h-4 w-4 transition-transform duration-150 group-hover:translate-x-1 ${
-                  theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                }`}
-              />
             </motion.button>
           );
         })}
@@ -205,8 +206,8 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({ limit = 6 }) => {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className={`rounded-2xl border p-5 ${
-        theme === 'dark' ? 'border-gray-900 bg-gray-950' : 'border-gray-100 bg-white shadow-sm'
+      className={`rounded-3xl border p-5 sm:p-6 ${
+        theme === 'dark' ? 'border-gray-900 bg-gray-950/90' : 'border-gray-100 bg-white'
       }`}
     >
       <div className="flex items-start justify-between gap-3">
@@ -227,19 +228,6 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({ limit = 6 }) => {
       </div>
 
       <div className="mt-4">{renderContent()}</div>
-
-      <button
-        type="button"
-        onClick={() => navigate('/nearby')}
-        className={`mt-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-          theme === 'dark'
-            ? 'bg-white text-black hover:bg-gray-200'
-            : 'bg-gray-900 text-white hover:bg-gray-800'
-        }`}
-      >
-        {t('app.popular_users_explore')}
-        <ChevronRight className="h-4 w-4" />
-      </button>
     </motion.section>
   );
 };

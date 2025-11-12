@@ -226,7 +226,7 @@ body,
   user-select: none;
   display: inline-block;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
   max-width: calc(100% - 20px);
   white-space: nowrap;
 }

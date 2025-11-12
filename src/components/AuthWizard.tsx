@@ -15,7 +15,7 @@ interface AuthWizardProps {
   mode?: 'modal' | 'inline';
 }
 
-const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal' }): JSX.Element | null => {
+const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal' }): React.ReactElement | null => {
   const { theme } = useTheme();
   const { login } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
@@ -361,6 +361,11 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleNicknameChange = (nickname: string) => {
+    const normalized = nickname.toLowerCase().replace(/\s+/g, '');
+    updateFormData('nickname', normalized);
+  };
+
   const currentStepData = steps[currentStep];
 
   // Progress bar mapping
@@ -470,7 +475,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                 type="text"
                 placeholder={t('auth.placeholder_nickname')}
                 value={formData.nickname}
-                onChange={(e) => updateFormData('nickname', e.target.value)}
+                onChange={(e) => handleNicknameChange(e.target.value)}
                 className={`w-full px-4 sm:px-4 py-4 sm:py-4 rounded-xl sm:rounded-2xl border-2 focus:outline-none focus:border-opacity-100 transition-all text-base sm:text-base ${theme === 'dark'
                   ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
                   : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'
@@ -507,7 +512,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                 type="text"
                 placeholder={t('auth.placeholder_nickname')}
                 value={formData.nickname}
-                onChange={(e) => updateFormData('nickname', e.target.value)}
+                onChange={(e) => handleNicknameChange(e.target.value)}
                 className={`w-full px-4 sm:px-4 py-4 sm:py-4 rounded-xl sm:rounded-2xl border-2 focus:outline-none focus:border-opacity-100 transition-all text-base sm:text-base ${theme === 'dark'
                   ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-white'
                   : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-gray-900'

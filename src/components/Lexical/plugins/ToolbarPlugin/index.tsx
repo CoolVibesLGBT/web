@@ -697,7 +697,7 @@ export default function ToolbarPlugin({
       {/* Single Row Scrollable for All Screens */}
       <div className="  flex flex-row gap-2 items-center justify-around ">
         {/* Left Scroll Arrow */}
-        <div className=" left-0  z-20 ">
+        <div className=" left-0  z-0 ">
           <div className="flex items-center space-x-1 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-1">
             <motion.button
               onClick={scrollLeft}
@@ -1165,7 +1165,7 @@ export default function ToolbarPlugin({
           </div>
         </div>
            {/* Right Scroll Arrow */}
-           <div className=" right-0 z-20">
+           <div className=" right-0 z-0">
           <div className="flex items-center space-x-1 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-1">
             <motion.button
               onClick={scrollRight}

@@ -31,6 +31,9 @@ export const Actions = {
   CMD_USER_UNFOLLOW: "user.unfollow",
   CMD_USER_TOGGLE_FOLLOW: "user.follow.toggle",
 
+  CMD_USER_BLOCK        : "user.block",
+	CMD_USER_UNBLOCK      : "user.unblock",
+	CMD_USER_TOGGLE_BLOCK : "user.block.toggle",
 
   CMD_USER_POSTS: "user.fetch.posts",
   CMD_USER_POST_REPLIES: "user.fetch.posts.replies",

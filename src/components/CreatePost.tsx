@@ -770,7 +770,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
           </div>
 
             {/* Main Content Area */}
-        <div className={`${isFullScreen ? 'px-3 sm:px-6 py-1' : 'px-3 sm:px-4 py-2'} w-full max-w-full flex-shrink-0`}>
+        <div className={`${isFullScreen ? 'px-3 sm:px-6 py-1' : 'px-3 sm:px-4 py-2'} w-full max-w-full flex-shrink-0 !z-0`}>
           <div className="w-full max-w-full">
             {/* Content Input Area */}
             <div className="w-full max-w-full">
@@ -803,7 +803,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                         />
                       }
                       placeholder={
-                        <div className="pt-[24px] rounded-sm p-0 editor-placeholder w-full h-full text-start flex justify-start items-start">
+                        <div className="pt-[24px] rounded-sm z-0 p-0 editor-placeholder w-full h-full text-start flex justify-start items-start">
                           {placeholder}
                         </div>
                       }
