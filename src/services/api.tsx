@@ -78,6 +78,17 @@ export class ApiService {
     });
   }
 
+  async updatePreferences(id: string, bit_index: number, enabled: boolean) {
+    return this.call(Actions.CMD_USER_UPDATE_PREFERENCES, {
+      method: "POST",
+      body: {
+        id: id,
+        bit_index: bit_index,
+        enabled: enabled,
+      },
+    });
+  }
+
   async searchUserLookup(query: string) {
     return this.call<{ 
       users: Array<{ 

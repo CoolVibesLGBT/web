@@ -151,7 +151,13 @@
     "no_interests_added": "Henüz ilgi alanı eklenmedi",
     "clear_date": "Temizle",
     "previous": "Önceki",
-    "next": "Sonraki"
+    "next": "Sonraki",
+    "preferred_partner_gender": "Tercih Edilen Partner Cinsiyeti",
+    "relationship_preferences": "İlişki Tercihleri",
+    "tattoos": "Dövmeler",
+    "mbti_type": "Kişilik Tipi",
+    "cronotype": "Kronotip",
+    "sense_of_humor": "Mizah Anlayışı"
   },
   "app": {
     "social": "SOCIAL",

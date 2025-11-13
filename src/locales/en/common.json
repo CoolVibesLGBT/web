@@ -151,7 +151,13 @@
     "no_interests_added": "No interests added",
     "clear_date": "Clear",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "preferred_partner_gender": "Preferred Partner Gender",
+    "relationship_preferences": "Relationship Preferences",
+    "tattoos": "Tattoos",
+    "mbti_type": "Personality Type",
+    "cronotype": "Chronotype",
+    "sense_of_humor": "Sense of Humor"
   },
   "app": {
     "social": "SOCIAL",

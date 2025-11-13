@@ -73,7 +73,7 @@ export const Actions = {
   CMD_USER_TOGGLE_LIKE: "user.like.toggle",
   CMD_USER_TOGGLE_DISLIKE: "user.dislike.toggle",
   
-  CMD_USER_TOGGLE_BLOCK: "user.block.toggle",
+	CMD_USER_UPDATE_PREFERENCES : "user.update_preferences"
 
 
 
