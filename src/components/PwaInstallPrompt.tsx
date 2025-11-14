@@ -11,13 +11,13 @@ type BeforeInstallPromptEvent = Event & {
 
 interface InstallContextValue {
   canInstall: boolean;
-  promptInstall: () => Promise<void>;
+  promptInstall: () => Promise<{ outcome: 'accepted' | 'dismissed'; platform: string } | null>;
   dismissPrompt: () => void;
 }
 
 const InstallPromptContext = React.createContext<InstallContextValue>({
   canInstall: false,
-  promptInstall: async () => {},
+  promptInstall: async () => null,
   dismissPrompt: () => {},
 });
 
@@ -47,7 +47,7 @@ export const PwaInstallProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   }, []);
 
   const promptInstall = React.useCallback(async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) return null;
 
     deferredPrompt.prompt();
     const choiceResult = await deferredPrompt.userChoice;
@@ -55,6 +55,7 @@ export const PwaInstallProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       setDeferredPrompt(null);
       setDismissed(true);
     }
+    return choiceResult;
   }, [deferredPrompt]);
 
   const dismissPrompt = React.useCallback(() => {
@@ -81,20 +82,33 @@ interface PwaInstallPromptProps {
   variant?: PromptVariant;
   className?: string;
   position?: 'bottom-left' | 'bottom-right';
+  onDismiss?: () => void;
+  onInstalled?: () => void;
 }
 
 const PwaInstallPrompt: React.FC<PwaInstallPromptProps> = ({
   variant = 'floating',
   className = '',
   position = 'bottom-right',
+  onDismiss,
+  onInstalled,
 }) => {
   const { canInstall, promptInstall, dismissPrompt } = usePwaInstall();
   const { theme } = useTheme();
   const { t } = useTranslation('common');
 
   const handleInstallClick = React.useCallback(async () => {
-    await promptInstall();
-  }, [promptInstall]);
+    const result = await promptInstall();
+    if (result?.outcome === 'accepted') {
+      onInstalled?.();
+      onDismiss?.();
+    }
+  }, [promptInstall, onDismiss, onInstalled]);
+
+  const handleDismiss = React.useCallback(() => {
+    dismissPrompt();
+    onDismiss?.();
+  }, [dismissPrompt, onDismiss]);
 
   if (!canInstall) {
     return null;
@@ -186,7 +200,7 @@ const PwaInstallPrompt: React.FC<PwaInstallPromptProps> = ({
               {t('app.install_now', { defaultValue: 'Install' })}
             </button>
             <button
-              onClick={dismissPrompt}
+              onClick={handleDismiss}
               className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors ${
                 theme === 'dark'
                   ? 'border-white/20 text-white hover:bg-white/10'

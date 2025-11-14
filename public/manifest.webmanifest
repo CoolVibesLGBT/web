@@ -3,8 +3,8 @@
   "short_name": "CoolVibes",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "description": "CoolVibes is the safest and most inclusive gay dating app for the LGBTIQ+ community.",
   "icons": [
     {
