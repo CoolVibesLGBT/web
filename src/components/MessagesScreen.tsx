@@ -272,6 +272,41 @@ const MessagesScreen: React.FC = () => {
     if (!socket || !user?.id) return;
 
     const handleSocketMessage = (msg: string | object | any[]) => {
+        const updateChatListFromMessage = (
+          chatUuid: string | undefined,
+          messageTextForList: string,
+          messageTimeForList: string,
+          isFromCurrentUser: boolean
+        ) => {
+          if (!chatUuid) return;
+
+          setChatsList(prev => {
+            const idx = prev.findIndex(chat => chat.chatId === chatUuid);
+            if (idx === -1) {
+              return prev;
+            }
+
+            const chat = prev[idx];
+            const isChatOpen = selectedChatRef.current ? prev[idx].id === selectedChatRef.current : false;
+            const unreadCount = isFromCurrentUser
+              ? chat.unread
+              : isChatOpen
+                ? 0
+                : (chat.unread || 0) + 1;
+
+            const updatedChat = {
+              ...chat,
+              lastMessage: messageTextForList,
+              lastTime: messageTimeForList,
+              unread: unreadCount,
+            };
+
+            const updatedList = [...prev];
+            updatedList.splice(idx, 1);
+            updatedList.unshift(updatedChat);
+            return updatedList;
+          });
+        };
       console.log('Socket message received (raw):', msg);
       
       try {
@@ -314,20 +349,6 @@ const MessagesScreen: React.FC = () => {
             hasCurrentChat: !!currentChat
           });
           
-          // If we have a selected chat, only process messages for that chat
-          // But if no chat is selected, still process the message (it might be for a chat we should show)
-          if (currentSelectedChat && currentChat?.chatId && messageChatId) {
-            if (messageChatId !== currentChat.chatId) {
-              // Message is for a different chat, ignore it
-              console.log('Message ignored - different chat', { messageChatId, currentChatId: currentChat.chatId });
-              return;
-            }
-          } else if (currentSelectedChat && !messageChatId) {
-            // If we have a selected chat but message has no chat_id, it might be for current chat
-            // Continue processing - backend might not always include chat_id in socket messages
-            console.log('Message has no chat_id, processing anyway for selected chat:', currentSelectedChat);
-          }
-
           // Determine if message is from current user
           const isFromMe = message.author_id === user.id;
 
@@ -358,6 +379,22 @@ const MessagesScreen: React.FC = () => {
               hour: '2-digit', 
               minute: '2-digit' 
             });
+          }
+
+          updateChatListFromMessage(messageChatId, messageText, messageTime, isFromMe);
+
+          // If the message belongs to a different chat than the currently open one,
+          // update the chat list but don't mutate the currently viewed message list.
+          if (
+            currentSelectedChat &&
+            currentChat?.chatId &&
+            messageChatId &&
+            messageChatId !== currentChat.chatId
+          ) {
+            console.log('Message belongs to another chat, updated chat list.');
+            return;
+          } else if (currentSelectedChat && !messageChatId) {
+            console.log('Message has no chat_id, processing for currently selected chat:', currentSelectedChat);
           }
 
           // Use attachments directly from backend format - no mapping needed

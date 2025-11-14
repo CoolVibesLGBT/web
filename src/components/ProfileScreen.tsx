@@ -1349,7 +1349,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       name: item.name?.[defaultLanguage] || item.name?.en || (item.name ? Object.values(item.name)[0] : '') || '',
       display_order: item.display_order,
     }));
-    }
+  }
   }
 
   // Build interestOptions from preferences.interests
@@ -4734,7 +4734,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                     {(() => {
                       // Use preferences_flags data first, fallback to old structure
                       const hasPreferencesData = Object.keys(userSelectedInterestsByCategory).length > 0;
-                      
+
                       if (hasPreferencesData) {
                         // Use new preferences_flags structure
                         return (

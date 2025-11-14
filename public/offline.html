@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoolVibes • Offline</title>
+    <style>
+      body {
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #0b0b0f;
+        color: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 2rem;
+        text-align: center;
+      }
+      .card {
+        max-width: 420px;
+        width: 100%;
+        padding: 2.5rem 2rem;
+        border-radius: 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      }
+      h1 {
+        margin: 0 0 0.5rem;
+        font-size: 1.75rem;
+      }
+      p {
+        margin: 0;
+        line-height: 1.6;
+        color: #c0c0c0;
+      }
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 1rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #f5f5f5;
+        font-size: 0.85rem;
+        margin-bottom: 1.5rem;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        background: #f87171;
+        border-radius: 50%;
+        animation: pulse 1.5s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          transform: scale(0.8);
+          opacity: 0.6;
+        }
+        50% {
+          transform: scale(1.3);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.8);
+          opacity: 0.6;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="status">
+        <span class="dot"></span>
+        Offline
+      </div>
+      <h1>No connection</h1>
+      <p>
+        It looks like you’re offline right now. When you’re back on the network, we’ll resume right where you left off.
+      </p>
+    </div>
+  </body>
+</html>
+
