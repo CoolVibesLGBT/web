@@ -25,15 +25,14 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') {
-    return;
-  }
+  if (event.request.method !== 'GET') return;
+
+  // Sadece http veya https ile başlayan istekleri cachele
+  if (!event.request.url.startsWith('http')) return;
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
+      if (cachedResponse) return cachedResponse;
 
       return fetch(event.request)
         .then((networkResponse) => {
@@ -46,8 +45,12 @@ self.addEventListener('fetch', (event) => {
           }
 
           const responseToCache = networkResponse.clone();
+
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
+            // Burada da url kontrolü yapabiliriz ama yukarıdaki yeterli
+            if (event.request.url.startsWith('http')) {
+              cache.put(event.request, responseToCache);
+            }
           });
 
           return networkResponse;
@@ -56,4 +59,3 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
-
