@@ -14,7 +14,7 @@ import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext.tsx';
 import { useSettings } from './contexts/SettingsContext';
 import AuthWizard from './components/AuthWizard';
-import { Search, MapPin, Heart, MessageCircle, User, Menu, X, Sun, Moon, Languages, MoreHorizontal, Bell, ChevronRight, LogOut, HandFist, TrendingUp, Filter, ArrowUpRight, Download } from 'lucide-react';
+import { Search, MapPin, Heart, MessageCircle, User, Menu, X, Sun, Moon, Languages, MoreHorizontal, Bell, ChevronRight, LogOut, HandFist, TrendingUp, Filter, ArrowUpRight } from 'lucide-react';
 import TrendsPanel, { NormalizedTrend } from './components/TrendsPanel';
 import PopularUsersPanel from './components/PopularUsersPanel';
 import PlacesScreen from './components/PlacesScreen';
@@ -27,86 +27,9 @@ import { applicationName } from './appSettings.tsx';
 import LandingPage from './components/LandingPage.tsx';
 import { getSafeImageURL } from './helpers/helpers.tsx';
 import TestPage from './components/TestPage.tsx';
+import PwaInstallPrompt, { PwaInstallProvider, usePwaInstall } from './components/PwaInstallPrompt';
 
-type BeforeInstallPromptEvent = Event & {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
-};
-
-interface InstallPromptCardProps {
-  theme: string;
-  title: string;
-  description: string;
-  buttonLabel: string;
-  onInstall: () => void;
-  isVisible: boolean;
-}
-
-const InstallPromptCard: React.FC<InstallPromptCardProps> = ({
-  theme,
-  title,
-  description,
-  buttonLabel,
-  onInstall,
-  isVisible,
-}) => {
-  if (!isVisible) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35 }}
-      className={`rounded-2xl p-5 border ${
-        theme === 'dark'
-          ? 'bg-gradient-to-br from-gray-900/90 via-black/90 to-gray-950 border-white/10'
-          : 'bg-gradient-to-br from-white via-gray-50 to-white border-gray-200 shadow-sm'
-      }`}
-    >
-      <div className="flex items-start gap-3 mb-4">
-        <div
-          className={`p-3 rounded-2xl ${
-            theme === 'dark'
-              ? 'bg-white/10 text-white'
-              : 'bg-gray-900/5 text-gray-900'
-          }`}
-        >
-          <Download className="w-6 h-6" />
-        </div>
-        <div className="flex-1">
-          <h3
-            className={`text-base font-semibold ${
-              theme === 'dark' ? 'text-white' : 'text-gray-900'
-            }`}
-          >
-            {title}
-          </h3>
-          <p
-            className={`text-sm mt-1 ${
-              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-            }`}
-          >
-            {description}
-          </p>
-        </div>
-      </div>
-      <button
-        type="button"
-        onClick={onInstall}
-        className={`w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-          theme === 'dark'
-            ? 'bg-white text-gray-900 hover:bg-gray-100'
-            : 'bg-gray-900 text-white hover:bg-gray-800'
-        }`}
-      >
-        <Download className="w-4 h-4" />
-        {buttonLabel}
-      </button>
-    </motion.div>
-  );
-};
-
-function App() {
+function AppContent() {
   const [activeScreen, setActiveScreen] = useState('pride');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthWizardOpen, setIsAuthWizardOpen] = useState(false);
@@ -114,7 +37,6 @@ function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileProfileMenuOpen, setIsMobileProfileMenuOpen] = useState(false);
-  const [deferredInstallPrompt, setDeferredInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
 
   const { theme, toggleTheme } = useTheme();
@@ -123,6 +45,12 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation('common');
+  const { canInstall } = usePwaInstall();
+  const previousCanInstallRef = React.useRef(false);
+  const showSidebarInstallCard = canInstall && !showInstallBanner;
+  const handleBannerDismiss = React.useCallback(() => {
+    setShowInstallBanner(false);
+  }, []);
 
   // Update activeScreen based on current URL
   React.useEffect(() => {
@@ -163,40 +91,16 @@ function App() {
   }, [location.pathname, setShowBottomBar]);
 
   React.useEffect(() => {
-    const beforeInstallHandler = (event: Event) => {
-      event.preventDefault();
-      setDeferredInstallPrompt(event as BeforeInstallPromptEvent);
+    if (canInstall && !previousCanInstallRef.current) {
       setShowInstallBanner(true);
-    };
+    }
 
-    const installedHandler = () => {
-      setDeferredInstallPrompt(null);
-      setShowInstallBanner(false);
-    };
-
-    window.addEventListener('beforeinstallprompt', beforeInstallHandler);
-    window.addEventListener('appinstalled', installedHandler);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', beforeInstallHandler);
-      window.removeEventListener('appinstalled', installedHandler);
-    };
-  }, []);
-
-  const handleInstallApp = async () => {
-    if (!deferredInstallPrompt) return;
-    deferredInstallPrompt.prompt();
-    const choiceResult = await deferredInstallPrompt.userChoice;
-    if (choiceResult.outcome === 'accepted') {
+    if (!canInstall) {
       setShowInstallBanner(false);
     }
-    setDeferredInstallPrompt(null);
-  };
 
-  const handleDismissInstall = () => {
-    setShowInstallBanner(false);
-  };
-  const showSidebarInstallCard = !!deferredInstallPrompt && !showInstallBanner;
+    previousCanInstallRef.current = canInstall;
+  }, [canInstall]);
 
   const mobileNavItems = [
     { id: 'pride', label: "Pride", icon: "/icons/pride.webp" },
@@ -534,14 +438,9 @@ function App() {
         {location.pathname !== '/messages' && location.pathname !== '/landing' && location.pathname !== '/classifieds' && location.pathname !== '/places' && location.pathname !== '/match' && location.pathname !== '/nearby' &&(
         <aside className={`hidden xl:flex scrollbar-hide flex-col w-[380px]`}>
           <div className="p-5 sticky top-0 h-screen scrollbar-hide overflow-y-auto space-y-4">
-            <InstallPromptCard
-              theme={theme}
-              title={t('app.install_prompt_title', { defaultValue: 'Install CoolVibes' })}
-              description={t('app.install_prompt_desc_sidebar', { defaultValue: 'Add the app to your device for a faster, full-screen experience.' })}
-              buttonLabel={t('app.install_now', { defaultValue: 'Install' })}
-              onInstall={handleInstallApp}
-              isVisible={showSidebarInstallCard}
-            />
+            {showSidebarInstallCard && (
+              <PwaInstallPrompt variant="card" />
+            )}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -1034,31 +933,12 @@ function App() {
       )}
       
       {showInstallBanner && (
-        <div className="fixed bottom-24 right-5 z-[210] max-w-xs rounded-2xl border border-white/10 bg-gray-900/90 text-white shadow-2xl backdrop-blur-md p-4 flex items-start gap-3">
-          <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-            <Download className="w-5 h-5" />
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold mb-1">{t('app.install_prompt_title', { defaultValue: 'Install CoolVibes' })}</p>
-            <p className="text-xs text-white/70 mb-3">
-              {t('app.install_prompt_desc', { defaultValue: 'Add the app to your home screen for a faster experience.' })}
-            </p>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handleInstallApp}
-                className="flex-1 px-3 py-1.5 rounded-xl bg-white text-gray-900 text-xs font-semibold hover:bg-gray-100 transition-colors"
-              >
-                {t('app.install_now', { defaultValue: 'Install' })}
-              </button>
-              <button
-                onClick={handleDismissInstall}
-                className="px-3 py-1.5 rounded-xl border border-white/20 text-xs font-semibold text-white hover:bg-white/10 transition-colors"
-              >
-                {t('app.not_now', { defaultValue: 'Later' })}
-              </button>
-            </div>
-          </div>
-        </div>
+        <PwaInstallPrompt
+          variant="floating"
+          position="bottom-right"
+          onDismiss={handleBannerDismiss}
+          onInstalled={handleBannerDismiss}
+        />
       )}
 
       {/* LanguageSelector */}
@@ -1067,6 +947,14 @@ function App() {
       )}
 
     </div>
+  );
+}
+
+function App() {
+  return (
+    <PwaInstallProvider>
+      <AppContent />
+    </PwaInstallProvider>
   );
 }
 

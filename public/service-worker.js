@@ -4,8 +4,8 @@ const APP_SHELL = [
   '/index.html',
   '/manifest.webmanifest',
   '/offline.html',
-  '/icons/icon_192x192.png',
-  '/icons/icon_512x512.png'
+  '/icons/icon_256x256@2x.png',
+  '/icons/icon_512x512@2x.png'
 ];
 
 self.addEventListener('install', (event) => {
