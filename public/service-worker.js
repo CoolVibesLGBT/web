@@ -4,7 +4,15 @@ const APP_SHELL = [
   '/index.html',
   '/manifest.webmanifest',
   '/offline.html',
+  '/icons/icon_16x16.png',
+  '/icons/icon_16x16@2x.png',
+  '/icons/icon_32x32.png',
+  '/icons/icon_32x32@2x.png',
+  '/icons/icon_128x128.png',
+  '/icons/icon_128x128@2x.png',
+  '/icons/icon_256x256.png',
   '/icons/icon_256x256@2x.png',
+  '/icons/icon_512x512.png',
   '/icons/icon_512x512@2x.png'
 ];
 
