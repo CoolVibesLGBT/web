@@ -265,6 +265,7 @@ const MessagesScreen: React.FC = () => {
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastTypingSentRef = useRef<number>(0);
   const typingIndicatorTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const currentChatRoomRef = useRef<string | null>(null); // Track current joined chat room
 
   // Handle socket messages
   useEffect(() => {
@@ -299,8 +300,9 @@ const MessagesScreen: React.FC = () => {
 
         // Only process messages for the current chat
         if (action === Actions.CMD_SEND_MESSAGE && message) {
-          // Get current chat from ref
-          const currentChat = chatsListRef.current.find((chat: any) => chat.id === selectedChat);
+          // Get current chat and selectedChat from refs (always use latest values)
+          const currentSelectedChat = selectedChatRef.current;
+          const currentChat = chatsListRef.current.find((chat: any) => chat.id === currentSelectedChat);
           
           // Check if message belongs to current chat
           const messageChatId = message.contentable_id || message.chat_id;
@@ -308,15 +310,22 @@ const MessagesScreen: React.FC = () => {
           console.log('Processing message:', { 
             messageChatId, 
             currentChatId: currentChat?.chatId, 
-            selectedChat,
+            currentSelectedChat,
             hasCurrentChat: !!currentChat
           });
           
           // If we have a selected chat, only process messages for that chat
-          if (selectedChat && currentChat?.chatId && messageChatId && messageChatId !== currentChat.chatId) {
-            // Message is for a different chat, ignore it
-            console.log('Message ignored - different chat', { messageChatId, currentChatId: currentChat.chatId });
-            return;
+          // But if no chat is selected, still process the message (it might be for a chat we should show)
+          if (currentSelectedChat && currentChat?.chatId && messageChatId) {
+            if (messageChatId !== currentChat.chatId) {
+              // Message is for a different chat, ignore it
+              console.log('Message ignored - different chat', { messageChatId, currentChatId: currentChat.chatId });
+              return;
+            }
+          } else if (currentSelectedChat && !messageChatId) {
+            // If we have a selected chat but message has no chat_id, it might be for current chat
+            // Continue processing - backend might not always include chat_id in socket messages
+            console.log('Message has no chat_id, processing anyway for selected chat:', currentSelectedChat);
           }
 
           // Determine if message is from current user
@@ -382,35 +391,22 @@ const MessagesScreen: React.FC = () => {
             // If message is from current user, check for duplicate content (optimistic update)
             // This prevents duplicate messages when we send a message optimistically and then receive it from socket
             if (isFromMe) {
-              // Find the last message that matches our content and is from us
-              // This is likely the optimistic message we just added
-              const lastMessage = prev.length > 0 ? prev[prev.length - 1] : null;
+              // Find messages that match our content and are from us with temp IDs
+              // Check the last few messages (not just the last one) to handle rapid sends
+              const recentMessages = prev.slice(-5).reverse(); // Check last 5 messages, most recent first
               
-              // Check if last message is from us, has same content, and has a temp ID
-              if (lastMessage && 
-                  lastMessage.sender === 'me' && 
-                  lastMessage.text === newMessage.text &&
-                  (lastMessage.id.startsWith('temp-') || lastMessage.id.startsWith('socket-'))) {
-                // Update the existing optimistic message with the real ID from socket
-                return prev.map(m => 
-                  m.id === lastMessage.id && m.text === newMessage.text
-                    ? { ...m, id: newMessage.id }
-                    : m
-                );
-              }
-              
-              // Also check for any message with same content from us (fallback)
-              const duplicate = prev.find(m => 
+              // Find the most recent matching message with a temp ID
+              const matchingMessage = recentMessages.find(m => 
                 m.sender === 'me' && 
                 m.text === newMessage.text &&
                 (m.id.startsWith('temp-') || m.id.startsWith('socket-'))
               );
               
-              if (duplicate) {
-                // Update the existing message with the real ID from socket
+              if (matchingMessage) {
+                // Update the existing optimistic message with the real ID from socket
                 return prev.map(m => 
-                  m.id === duplicate.id && m.text === newMessage.text
-                    ? { ...m, id: newMessage.id }
+                  m.id === matchingMessage.id && m.text === newMessage.text
+                    ? { ...m, id: newMessage.id, attachments: newMessage.attachments || m.attachments }
                     : m
                 );
               }
@@ -428,29 +424,30 @@ const MessagesScreen: React.FC = () => {
           const isTypingActive = typingData?.typing === true;
           const typingUserId = typingData?.userID || typingData?.user_id;
           
+          // Get current chat and selectedChat from refs (always use latest values)
+          const currentSelectedChat = selectedChatRef.current;
+          const currentChat = chatsListRef.current.find((chat: any) => chat.id === currentSelectedChat);
+          
           console.log('Typing indicator received:', { 
             typingChatId, 
             isTypingActive, 
             typingUserId, 
             currentUserId: user?.id,
-            selectedChat,
+            currentSelectedChat,
             messageData,
             allChats: chatsListRef.current.map((c: any) => ({ id: c.id, chatId: c.chatId }))
           });
-          
-          // Get current chat from ref
-          const currentChat = chatsListRef.current.find((chat: any) => chat.id === selectedChat);
           
           console.log('Current chat:', { 
             currentChat, 
             currentChatId: currentChat?.chatId,
             matches: typingChatId === currentChat?.chatId,
             isOtherUser: typingUserId !== user?.id,
-            selectedChat
+            currentSelectedChat
           });
           
           // Only show typing indicator if it's for the current chat and from the other user
-          if (selectedChat && 
+          if (currentSelectedChat && 
               currentChat?.chatId && 
               typingChatId === currentChat.chatId && 
               typingUserId !== user?.id) {
@@ -479,13 +476,13 @@ const MessagesScreen: React.FC = () => {
             }
           } else {
             console.log('❌ Typing indicator ignored:', {
-              hasSelectedChat: !!selectedChat,
+              hasSelectedChat: !!currentSelectedChat,
               hasCurrentChat: !!currentChat,
               chatIdMatch: typingChatId === currentChat?.chatId,
               isOtherUser: typingUserId !== user?.id,
               typingChatId,
               currentChatId: currentChat?.chatId,
-              selectedChat
+              currentSelectedChat
             });
           }
         }
@@ -502,6 +499,14 @@ const MessagesScreen: React.FC = () => {
     return () => {
       socket.off('message', handleSocketMessage);
       socket.off('chat', handleSocketMessage);
+      
+      // Leave chat room on cleanup
+      if (currentChatRoomRef.current) {
+        console.log('Leaving chat room (cleanup):', currentChatRoomRef.current);
+        socket.emit('leave', { chat_id: currentChatRoomRef.current });
+        currentChatRoomRef.current = null;
+      }
+      
       // Clear typing timeout on cleanup
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
@@ -513,7 +518,7 @@ const MessagesScreen: React.FC = () => {
         typingIndicatorTimeoutRef.current = null;
       }
     };
-  }, [socket, selectedChat, user?.id]);
+  }, [socket, user?.id]); // Removed selectedChat from dependencies - use ref instead
 
 
   useEffect(() => {
@@ -906,10 +911,17 @@ const MessagesScreen: React.FC = () => {
   // Use ref to access current chatsList in socket handler
   const chatsListRef = useRef(chatsList);
   
-  // Update ref when chatsList changes
+  // Use ref to access current selectedChat in socket handler
+  const selectedChatRef = useRef(selectedChat);
+  
+  // Update refs when they change
   useEffect(() => {
     chatsListRef.current = chatsList;
   }, [chatsList]);
+  
+  useEffect(() => {
+    selectedChatRef.current = selectedChat;
+  }, [selectedChat]);
 
   const emojis = ['😊', '😂', '❤️', '👍', '🎉', '🔥', '💯', '✨', '🏳️‍🌈', '💪', '😍', '🤔', '😭', '😡', '🤗', '👏', '🙏', '💖', '💕', '💔', '😎', '🤩', '😴', '🤯', '🥳', '😇', '🤠', '👻', '🤖', '👽', '👾'];
 
@@ -1081,6 +1093,48 @@ const MessagesScreen: React.FC = () => {
       }
   }, [selectedChat, chatsList, user?.id]);
 
+  // Join chat room when chat is selected
+  React.useEffect(() => {
+    if (!socket || !selectedChat || !user?.id) {
+      // Leave current chat room if chat is deselected
+      if (socket && currentChatRoomRef.current) {
+        console.log('Leaving chat room (chat deselected):', currentChatRoomRef.current);
+        socket.emit('leave', { chat_id: currentChatRoomRef.current });
+        currentChatRoomRef.current = null;
+      }
+      return;
+    }
+
+    // Find the selected chat to get the real chat ID
+    const currentChat = chatsList.find(chat => chat.id === selectedChat);
+    const realChatId = currentChat?.chatId;
+    
+    if (!realChatId) {
+      console.warn('Cannot join chat room - chat ID not found', { selectedChat, currentChat });
+      return;
+    }
+
+    // Validate that chatId is a UUID format
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(realChatId)) {
+      console.warn('Cannot join chat room - invalid chat ID format', { chatId: realChatId });
+      return;
+    }
+
+    // Leave previous chat room if exists and different
+    if (currentChatRoomRef.current && currentChatRoomRef.current !== realChatId) {
+      console.log('Leaving previous chat room:', currentChatRoomRef.current);
+      socket.emit('leave', { chat_id: currentChatRoomRef.current });
+    }
+
+    // Join new chat room
+    if (currentChatRoomRef.current !== realChatId) {
+      console.log('Joining chat room:', realChatId);
+      socket.emit('join', { chat_id: realChatId });
+      currentChatRoomRef.current = realChatId;
+    }
+  }, [socket, selectedChat, chatsList, user?.id]);
+
   // Fetch messages when chat is selected
   React.useEffect(() => {
     fetchMessages();
@@ -1205,6 +1259,15 @@ const MessagesScreen: React.FC = () => {
         currentChat 
       });
       return;
+    }
+    
+    // Ensure we're joined to the chat room before sending message
+    if (socket && currentChatRoomRef.current !== realChatId) {
+      console.log('Not joined to chat room yet, joining now before sending message:', realChatId);
+      socket.emit('join', { chat_id: realChatId });
+      currentChatRoomRef.current = realChatId;
+      // Small delay to ensure join is processed (though emit is fire-and-forget)
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
     
     console.log('Sending message with chat_id:', realChatId);
@@ -1382,33 +1445,75 @@ const MessagesScreen: React.FC = () => {
           }
         );
 
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.id === tempMessageId
-              ? {
-                  ...msg,
-                  id:
-                    resolvedMessage.id ||
-                    resolvedMessage.public_id ||
-                    response?.message_id ||
-                    response?.id ||
-                    msg.id,
-                  text: resolvedText || msg.text,
-                  time: resolvedTime,
-                  attachments: resolvedAttachments || undefined,
-                }
-              : msg
-          )
-        );
+        setMessages((prev) => {
+          // Check if optimistic message exists
+          const optimisticMessage = prev.find(msg => msg.id === tempMessageId);
+          
+          if (optimisticMessage) {
+            // Update existing optimistic message
+            return prev.map((msg) =>
+              msg.id === tempMessageId
+                ? {
+                    ...msg,
+                    id:
+                      resolvedMessage.id ||
+                      resolvedMessage.public_id ||
+                      response?.message_id ||
+                      response?.id ||
+                      msg.id,
+                    text: resolvedText || msg.text,
+                    time: resolvedTime,
+                    attachments: resolvedAttachments || msg.attachments,
+                  }
+                : msg
+            );
+          } else {
+            // Optimistic message doesn't exist (might have been removed or not added)
+            // Add the message from API response
+            const newMessageFromAPI = {
+              id: resolvedMessage.id || resolvedMessage.public_id || response?.message_id || response?.id || `api-${Date.now()}`,
+              text: resolvedText || messageText,
+              time: resolvedTime,
+              sender: 'me' as const,
+              attachments: resolvedAttachments || undefined,
+            };
+            
+            // Check if message with this ID already exists (from socket)
+            const exists = prev.some(m => m.id === newMessageFromAPI.id);
+            if (!exists) {
+              return [...prev, newMessageFromAPI];
+            }
+            return prev;
+          }
+        });
       } else if (response?.message_id || response?.id) {
         // Fallback: update only the ID if full message payload isn't provided
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.id === tempMessageId
-              ? { ...msg, id: response.message_id || response.id || msg.id }
-              : msg
-          )
-        );
+        setMessages((prev) => {
+          const optimisticMessage = prev.find(msg => msg.id === tempMessageId);
+          if (optimisticMessage) {
+            return prev.map((msg) =>
+              msg.id === tempMessageId
+                ? { ...msg, id: response.message_id || response.id || msg.id }
+                : msg
+            );
+          } else {
+            // If optimistic message doesn't exist, check if we need to add it
+            const newId = response.message_id || response.id;
+            if (newId) {
+              const exists = prev.some(m => m.id === newId);
+              if (!exists && messageText) {
+                return [...prev, {
+                  id: newId,
+                  text: messageText,
+                  time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
+                  sender: 'me' as const,
+                  attachments: tempAttachments,
+                }];
+              }
+            }
+            return prev;
+          }
+        });
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -1524,6 +1629,27 @@ const MessagesScreen: React.FC = () => {
   };
 
   const handleChatSelect = (chatId: string) => {
+    // Find the chat to get the real chat ID
+    const chat = chatsList.find(c => c.id === chatId);
+    const realChatId = chat?.chatId;
+    
+    // Leave previous chat room if exists
+    if (socket && currentChatRoomRef.current && currentChatRoomRef.current !== realChatId) {
+      console.log('Leaving previous chat room:', currentChatRoomRef.current);
+      socket.emit('leave', { chat_id: currentChatRoomRef.current });
+      currentChatRoomRef.current = null;
+    }
+    
+    // Join new chat room if chat ID is valid
+    if (socket && realChatId) {
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (uuidRegex.test(realChatId)) {
+        console.log('Joining chat room:', realChatId);
+        socket.emit('join', { chat_id: realChatId });
+        currentChatRoomRef.current = realChatId;
+      }
+    }
+    
     setSelectedChat(chatId);
     setShowSidebar(false);
     // Reset typing indicator when switching chats
@@ -1582,7 +1708,7 @@ const MessagesScreen: React.FC = () => {
               mode="inline"
             />
           </div>
-        </div>
+        </div> 
       </div>
     );
   }
@@ -2136,9 +2262,10 @@ const MessagesScreen: React.FC = () => {
                     flexShrink: 1,
                     minHeight: 0,
                     overflowY: 'auto',
+                    paddingBottom: otherUserTyping ? '0' : undefined,
                     ...(isMobile && selectedChat && headerHeight > 0 && inputHeight > 0 ? {
-                      maxHeight: `calc(100dvh - ${headerHeight}px - ${inputHeight}px)`,
-                      height: `calc(100dvh - ${headerHeight}px - ${inputHeight}px)`,
+                      maxHeight: `calc(100dvh - ${headerHeight}px - ${inputHeight}px${otherUserTyping ? ' - 60px' : ''})`,
+                      height: `calc(100dvh - ${headerHeight}px - ${inputHeight}px${otherUserTyping ? ' - 60px' : ''})`,
                     } : {})
                   }}
                 >
@@ -2227,42 +2354,47 @@ const MessagesScreen: React.FC = () => {
                       </motion.div>
                     )}
 
-                    {/* Typing indicator - Other user typing */}
-                    {otherUserTyping && (
-                      <div className="flex justify-start">
-                        <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-4 py-2.5 rounded-2xl shadow-sm ${
-                          theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-900 border border-gray-200'
-                        }`} style={{ 
-                          borderBottomLeftRadius: '4px',
-                          borderTopLeftRadius: '16px',
-                          borderTopRightRadius: '16px',
-                          borderBottomRightRadius: '16px'
-                        }}>
-                          <div className="flex items-center space-x-2">
-                            <span className={`text-xs ${
-                              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                            }`}>
-                              {selectedPrivateChat?.name || t('messages.user')} {t('messages.typing')}
-                            </span>
-                            <div className="flex space-x-1">
-                              <div className={`w-2 h-2 rounded-full animate-bounce ${
-                                theme === 'dark' ? 'bg-gray-400' : 'bg-gray-600'
-                              }`}></div>
-                              <div className={`w-2 h-2 rounded-full animate-bounce ${
-                                theme === 'dark' ? 'bg-gray-400' : 'bg-gray-600'
-                              }`} style={{ animationDelay: '0.2s' }}></div>
-                              <div className={`w-2 h-2 rounded-full animate-bounce ${
-                                theme === 'dark' ? 'bg-gray-400' : 'bg-gray-600'
-                              }`} style={{ animationDelay: '0.4s' }}></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </motion.div>
                   )}
                 </AnimatePresence>
+
+                {/* Typing indicator - Other user typing - Outside messages container to be above input */}
+                {!showProfile && otherUserTyping && (
+                  <div className={`flex-shrink-0 px-3 sm:px-4 py-2 ${
+                    theme === 'dark' ? 'bg-black' : 'bg-white'
+                  }`}>
+                    <div className="flex justify-start">
+                      <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-4 py-2.5 rounded-2xl shadow-sm ${
+                        theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-900 border border-gray-200'
+                      }`} style={{ 
+                        borderBottomLeftRadius: '4px',
+                        borderTopLeftRadius: '16px',
+                        borderTopRightRadius: '16px',
+                        borderBottomRightRadius: '16px'
+                      }}>
+                        <div className="flex items-center space-x-2">
+                          <span className={`text-xs ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                          }`}>
+                            {selectedPrivateChat?.name || t('messages.user')} {t('messages.typing')}
+                          </span>
+                          <div className="flex space-x-1">
+                            <div className={`w-2 h-2 rounded-full animate-bounce ${
+                              theme === 'dark' ? 'bg-gray-400' : 'bg-gray-600'
+                            }`}></div>
+                            <div className={`w-2 h-2 rounded-full animate-bounce ${
+                              theme === 'dark' ? 'bg-gray-400' : 'bg-gray-600'
+                            }`} style={{ animationDelay: '0.2s' }}></div>
+                            <div className={`w-2 h-2 rounded-full animate-bounce ${
+                              theme === 'dark' ? 'bg-gray-400' : 'bg-gray-600'
+                            }`} style={{ animationDelay: '0.4s' }}></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Message Input Container - Fixed on Mobile */}
                 {!showProfile && (

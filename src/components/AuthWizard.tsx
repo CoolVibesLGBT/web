@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowLeft, User, Calendar, Heart, X, ChevronLeft, ChevronRight, ChevronDown, LocateFixed, MapPin, Bell, Shield } from 'lucide-react';
+import { ArrowRight, ArrowLeft, User, Calendar, Heart, X, ChevronLeft, ChevronRight, ChevronDown, MapPin, Bell, Shield } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useApp } from '../contexts/AppContext';
@@ -42,6 +42,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
 
   // Location status for UI
   const [locationStatus, setLocationStatus] = useState<string>('');
+  const [isLocationLoading, setIsLocationLoading] = useState(false);
 
   const [formData, setFormData] = useState<{
     name: string;
@@ -631,6 +632,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         };
 
         const handleLocationRequest = async () => {
+          setIsLocationLoading(true);
           try {
             setLocationStatus(t('location.requesting_permission'));
             if (!navigator.geolocation) {
@@ -695,29 +697,37 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
               setLocationStatus(t('location.failed'));
             }
           }
+          finally {
+            setIsLocationLoading(false);
+          }
         };
         return (
           <div className="space-y-6">
-            <div className="text-center">
-              <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-100'}`}>
-                <LocateFixed className={`w-8 h-8 ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`} />
-              </div>
-              {locationStatus && (
+            {locationStatus && (
+              <div className="text-center">
                 <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locationStatus}</p>
-              )}
-            </div>
+              </div>
+            )}
 
             {!formData.location && (
               <motion.button
                 onClick={handleLocationRequest}
-                className={`w-full px-6 py-4 rounded-2xl font-semibold text-lg transition-all duration-200 ${theme === 'dark'
+                disabled={isLocationLoading}
+                className={`w-full px-6 py-4 rounded-2xl font-semibold text-lg transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed ${theme === 'dark'
                   ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-blue-500/25'
                   : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-blue-500/25'
                   }`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={isLocationLoading ? {} : { scale: 1.02 }}
+                whileTap={isLocationLoading ? {} : { scale: 0.98 }}
               >
-                {t('auth.allow_location')}
+                {isLocationLoading ? (
+                  <div className="flex items-center justify-center gap-3">
+                    <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>{t('auth.detecting_location', { defaultValue: 'Detecting location...' })}</span>
+                  </div>
+                ) : (
+                  t('auth.allow_location')
+                )}
               </motion.button>
             )}
 
@@ -737,9 +747,6 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         return (
           <div className="space-y-4">
             <div className="text-center">
-              <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-yellow-900/20' : 'bg-yellow-100'}`}>
-                <Bell className={`w-8 h-8 ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-600'}`} />
-              </div>
               <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t('auth.current_status')}: {notificationPermission ?? 'unknown'}</p>
             </div>
             <motion.button
