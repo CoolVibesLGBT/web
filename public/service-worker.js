@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coolvibes-cache-v1';
+const CACHE_NAME = 'coolvibes-cache-v5';
 const APP_SHELL = [
   '/',
   '/index.html',
@@ -16,54 +16,43 @@ const APP_SHELL = [
   '/icons/icon_512x512@2x.png'
 ];
 
+// CACHE'LERİ DEVRE DIŞI BIRAKILMIŞ SERVICE WORKER
+
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL))
-  );
+  // Cache yapma
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
+  // Tüm eski cache'leri temizle (önceki versiyonlardan kalanları da siler)
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))
+      Promise.all(keys.map((key) => caches.delete(key)))
     )
   );
   self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
+  // Sadece network kullan - cache hiç yok
   if (event.request.method !== 'GET') return;
 
-  // Sadece http veya https ile başlayan istekleri cachele
-  if (!event.request.url.startsWith('http')) return;
+  // VITE HMR protection
+  const url = new URL(event.request.url);
+  if (url.pathname.startsWith('/@vite') || url.pathname.includes('hmr')) return;
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) return cachedResponse;
+  // WebSocket protection
+  if (event.request.url.startsWith('ws://') || event.request.url.startsWith('wss://')) return;
 
-      return fetch(event.request)
-        .then((networkResponse) => {
-          if (
-            !networkResponse ||
-            networkResponse.status !== 200 ||
-            networkResponse.type !== 'basic'
-          ) {
-            return networkResponse;
-          }
+  // Chrome extension protection
+  if (event.request.url.startsWith('chrome-extension://')) return;
 
-          const responseToCache = networkResponse.clone();
+  // Socket.io protection
+  if (event.request.url.includes('socket.io')) return;
 
-          caches.open(CACHE_NAME).then((cache) => {
-            // Burada da url kontrolü yapabiliriz ama yukarıdaki yeterli
-            if (event.request.url.startsWith('http')) {
-              cache.put(event.request, responseToCache);
-            }
-          });
-
-          return networkResponse;
-        })
-        .catch(() => caches.match('/offline.html'));
-    })
-  );
+  // Direkt network’e git, cache’e bakma, cache’e yazma
+  event.respondWith(fetch(event.request).catch(() => {
+    // offline'da fallback İSTERSEN buraya eklenir
+    // return new Response("Offline");
+  }));
 });

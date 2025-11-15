@@ -1,268 +1,262 @@
-import React from 'react';
-import { motion, useAnimationFrame } from 'framer-motion';
 
-const columns = 24;
-const rows = 11;
-const tileGap = 16;
-const baseTileWidth = 220;
-const baseTileHeight = 260;
+import React, { useState, useRef, useEffect, useReducer } from 'react';
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  useInView,
+  MotionValue,
+} from 'framer-motion';
+import { useTheme } from '../contexts/ThemeContext';
 
-const imageSources = [
-  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1502720705749-3c42b953d3ab?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1502980426475-b83966705988?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1504203700686-f21e703e3e59?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1512813195386-6cf811ad3542?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1472457897821-70d3819a0e24?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1524503033411-c9566986fc8f?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1493119508027-2b584f234d6c?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1521316730702-829a8e30dfd1?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1522771930-78848d9293e8?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1558981403-c5f9891ba31a?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1517249372651-51384ff07f03?auto=format&fit=crop&w=600&q=80',
-  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80'
+const BASE_IMAGE_URLS: string[] = [
+  'https://framerusercontent.com/images/d4vuR3XWFNyIGpMuv8ciR2M1U.jpg',
+  'https://framerusercontent.com/images/IWE1NxOpUZZfM61WzpahXjluiE4.jpg',
+  'https://framerusercontent.com/images/tIIDJsJlFjkX88ysZko6gTVKYZs.jpg',
+  'https://framerusercontent.com/images/8dZyfPZxixKyqjowwolyynzuolg.jpg',
+  'https://framerusercontent.com/images/TdTePeGkpeFm2o5GuDEgte4Rd4.jpg',
+  'https://framerusercontent.com/images/6oMzl15zOgTPczPPSxi978neR0.jpg',
+  'https://framerusercontent.com/images/ZS8BFvHHti3UjDLIIEJkDICni8E.jpg',
+  'https://framerusercontent.com/images/19UlbpsgZ5Jiwp0mZXSeKIA.jpg',
+  'https://framerusercontent.com/images/Zde7wDFiFTc8SSsVnHvIMhTuP08.jpg',
+  'https://framerusercontent.com/images/ux961HljTaWDl4R2sdfmXPbaSc.jpg',
+  'https://framerusercontent.com/images/3XO5RkPt160kPn0brNqtmfEJ01I.jpg',
+  'https://framerusercontent.com/images/cHGcD8TRh5MhC1esSfKglFUtUmo.jpg',
+  'https://framerusercontent.com/images/dKzEi2OUPCV6aqJHkhCJ1VOho.jpg',
+  'https://framerusercontent.com/images/vVorcvYfjeVqUk0TiYjr6maGIvM.jpg',
+  'https://framerusercontent.com/images/bFIbV9Xvx1yzStu0f9G2TSp3mXY.jpg',
+  'https://framerusercontent.com/images/yWcUx6iX01ElimOjFYJsNY0mXE.jpg',
+  'https://framerusercontent.com/images/qkPllBt8JnwWiR426UeqSUpLwAU.jpg',
+  'https://framerusercontent.com/images/A4aGdsZiY5CuLFFhUbjrNQk.jpg',
+  'https://framerusercontent.com/images/FR0sgwggOzd7xIDqNSzDB3EAm0w.jpg',
+  'https://framerusercontent.com/images/p1JP25L7JVbhtG2isQdjbWUdvs.jpg'
 ];
 
-const computeTileDimensions = () => {
-  return {
-    width: baseTileWidth,
-    height: baseTileHeight
-  };
-};
+export const IMAGE_URLS: string[] = Array(5).fill(BASE_IMAGE_URLS).flat();
 
-interface UsePlaneControlsReturn {
-  pointerHandlers: {
-    onPointerDown: (event: React.PointerEvent) => void;
-    onPointerMove: (event: React.PointerEvent) => void;
-    onPointerUp: (event: React.PointerEvent) => void;
-    onPointerLeave: (event: React.PointerEvent) => void;
-  };
-  offset: React.MutableRefObject<{ x: number; y: number }>;
-  velocity: React.MutableRefObject<{ x: number; y: number }>;
-  dragging: React.MutableRefObject<boolean>;
+export const TILE_SIZE = { width: 200, height: 300 };
+export const GAP = 10;
+
+// Defines the conceptual grid layout of the source images for wrapping logic.
+// For 100 images, a 10x10 or 20x5 grid works well.
+export const IMAGE_GRID_COLS = 10;
+
+
+interface InfiniteImageGridProps {
+  images?: string[];
 }
 
-const usePlaneControls = (): UsePlaneControlsReturn => {
-  const offset = React.useRef({ x: 0, y: 0 });
-  const velocity = React.useRef({ x: 0, y: 0 });
-  const dragging = React.useRef(false);
-  const lastPointer = React.useRef({ x: 0, y: 0 });
-  const lastTimestamp = React.useRef<number | null>(null);
+interface TileProps {
+  x: number;
+  y: number;
+  imageUrl: string;
+  gridOffsetX: MotionValue<number>;
+  viewportSize: { width: number; height: number };
+}
 
-  const handlePointerDown = (event: React.PointerEvent) => {
-    dragging.current = true;
-    lastPointer.current = { x: event.clientX, y: event.clientY };
-    lastTimestamp.current = event.timeStamp;
-    if (event.currentTarget?.setPointerCapture) {
-      event.currentTarget.setPointerCapture(event.pointerId);
-    }
-  };
+const Tile: React.FC<TileProps> = React.memo(({ x, y, imageUrl, gridOffsetX, viewportSize }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  const handlePointerMove = (event: React.PointerEvent) => {
-    if (!dragging.current) return;
+  const { width: vpWidth } = viewportSize;
+  if (vpWidth === 0) return null;
 
-    const dx = event.clientX - lastPointer.current.x;
-    const dy = event.clientY - lastPointer.current.y;
-    lastPointer.current = { x: event.clientX, y: event.clientY };
-    const now = event.timeStamp;
-    const dt = Math.max(1, now - (lastTimestamp.current ?? now));
-    lastTimestamp.current = now;
+  const tileScreenX = useTransform(gridOffsetX, (v) => x + v);
 
-    offset.current = {
-      x: offset.current.x + dx,
-      y: offset.current.y + dy
-    };
+  const distFromCenter = useTransform(
+    tileScreenX,
+    (v) => v + (TILE_SIZE.width + GAP) / 2 - vpWidth / 2
+  );
 
-    velocity.current = {
-      x: dx / dt,
-      y: dy / dt
-    };
-  };
+  const rotateY = useTransform(
+    distFromCenter,
+    [-vpWidth / 1.5, 0, vpWidth / 1.5],
+    [40, 0, -40],
+    { clamp: false }
+  );
 
-  const handlePointerUp = (event: React.PointerEvent) => {
-    dragging.current = false;
-    lastTimestamp.current = event.timeStamp;
-    if (event.currentTarget?.releasePointerCapture) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-  };
+  const z = useTransform(
+    distFromCenter,
+    [-vpWidth / 2, 0, vpWidth / 2],
+    [-250, 0, -250],
+    { clamp: false }
+  );
+  
+  const scale = useTransform(
+    distFromCenter,
+    [-vpWidth / 2, 0, vpWidth / 2],
+    [0.85, 1, 0.85],
+    { clamp: false }
+  );
+  
+  const opacity = useTransform(
+    distFromCenter,
+    [-vpWidth / 2, 0, vpWidth / 2],
+    [0.3, 1, 0.3],
+    { clamp: false }
+  );
 
-  const handlePointerLeave = () => {
-    dragging.current = false;
-  };
+  return (
+    <motion.div
+      ref={ref}
+      className="absolute"
+      style={{
+        width: TILE_SIZE.width + GAP,
+        height: TILE_SIZE.height + GAP,
+        left: x,
+        top: y,
+        rotateY,
+        z,
+        scale,
+        transformStyle: 'preserve-3d',
+      }}
+      initial={{ opacity: 1, y: 60, scale: 0.9 }}
+      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+    >
+      <div className="w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+        <motion.img
+          src={imageUrl}
+          alt=""
+          className="w-full h-full object-cover rounded-xl shadow-lg"
+          draggable="false"
+          style={{ opacity }}
+        />
+      </div>
+    </motion.div>
+  );
+});
 
-  React.useEffect(() => {
-    const cancelDrag = () => {
-      dragging.current = false;
-    };
+const TestPage: React.FC<InfiniteImageGridProps> = ({ images = IMAGE_URLS }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [gridSize, setGridSize] = useState({ rows: 0, cols: 0 });
+  const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
 
-    window.addEventListener('pointerup', cancelDrag);
-    window.addEventListener('pointercancel', cancelDrag);
+  const x = useMotionValue(-TILE_SIZE.width / 2);
+  const y = useMotionValue(-TILE_SIZE.height / 2);
+  const tiltX = useTransform(y, (value) => {
+    const clamped = Math.max(-600, Math.min(600, value));
+    return 12 + clamped / 60;
+  });
+  const waveSkew = useTransform(x, (value) => {
+    const clamped = Math.max(-800, Math.min(800, value));
+    return clamped / 700;
+  });
+
+  const [_, forceRender] = useReducer((x) => x + 1, 0);
+
+  useEffect(() => {
+    const unsubscribeX = x.on('change', forceRender);
+    const unsubscribeY = y.on('change', forceRender);
     return () => {
-      window.removeEventListener('pointerup', cancelDrag);
-      window.removeEventListener('pointercancel', cancelDrag);
+      unsubscribeX();
+      unsubscribeY();
+    };
+  }, [x, y]);
+
+  const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const updateDimensions = () => {
+      const containerWidth = container.offsetWidth;
+      const containerHeight = container.offsetHeight;
+      setViewportSize({ width: containerWidth, height: containerHeight });
+      const cols = Math.ceil(containerWidth / (TILE_SIZE.width + GAP)) + 4;
+      const rows = Math.ceil(containerHeight / (TILE_SIZE.height + GAP)) + 4;
+      setGridSize({ rows, cols });
+    };
+
+    const resizeObserver = new ResizeObserver(updateDimensions);
+    resizeObserver.observe(container);
+    updateDimensions();
+
+    return () => {
+      resizeObserver.unobserve(container);
+      resizeObserver.disconnect();
     };
   }, []);
 
-  return {
-    pointerHandlers: {
-      onPointerDown: handlePointerDown,
-      onPointerMove: handlePointerMove,
-      onPointerUp: handlePointerUp,
-      onPointerLeave: handlePointerLeave
-    },
-    offset,
-    velocity,
-    dragging
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    x.stop();
+    y.stop();
+    x.set(x.get() - e.deltaX);
+    y.set(y.get() - e.deltaY);
   };
-};
 
-const InfinitePlaneGallery: React.FC = () => {
-  const { pointerHandlers, offset, velocity, dragging } = usePlaneControls();
-  const tiles = React.useMemo(
-    () =>
-      Array.from({ length: rows * columns }, (_, index) => ({
-        id: index,
-        src: imageSources[index % imageSources.length]
-      })),
-    []
-  );
-  const tileSize = React.useMemo(computeTileDimensions, []);
-  const [planeOffset, setPlaneOffset] = React.useState({ x: 0, y: 0 });
+  const renderTiles = () => {
+    const tiles = [];
+    if (gridSize.rows === 0 || gridSize.cols === 0 || images.length === 0) return null;
 
-  useAnimationFrame((_, delta) => {
-    const friction = Math.pow(0.9, delta / 16);
-    velocity.current = {
-      x: velocity.current.x * friction,
-      y: velocity.current.y * friction
-    };
+    const fullTileWidth = TILE_SIZE.width + GAP;
+    const fullTileHeight = TILE_SIZE.height + GAP;
 
-    if (!dragging.current) {
-      if (Math.abs(velocity.current.x) < 0.0001) velocity.current.x = 0;
-      if (Math.abs(velocity.current.y) < 0.0001) velocity.current.y = 0;
-      offset.current = {
-        x: offset.current.x + velocity.current.x * delta,
-        y: offset.current.y + velocity.current.y * delta
-      };
+    const currentOffsetX = x.get();
+    const currentOffsetY = y.get();
+
+    const startCol = Math.floor(-currentOffsetX / fullTileWidth) - 1;
+    const endCol = startCol + gridSize.cols;
+    const startRow = Math.floor(-currentOffsetY / fullTileHeight) - 1;
+    const endRow = startRow + gridSize.rows;
+
+    for (let row = startRow; row < endRow; row++) {
+      for (let col = startCol; col < endCol; col++) {
+        const numImageRows = Math.ceil(images.length / IMAGE_GRID_COLS);
+        const imgCol = (col % IMAGE_GRID_COLS + IMAGE_GRID_COLS) % IMAGE_GRID_COLS;
+        const imgRow = (row % numImageRows + numImageRows) % numImageRows;
+        const imgIndex = (imgRow * IMAGE_GRID_COLS + imgCol) % images.length;
+
+        if (images[imgIndex]) {
+          tiles.push(
+            <Tile
+              key={`${col}-${row}`}
+              x={col * fullTileWidth}
+              y={row * fullTileHeight}
+              imageUrl={images[imgIndex]}
+              gridOffsetX={x}
+              viewportSize={viewportSize}
+            />
+          );
+        }
+      }
     }
-
-    setPlaneOffset({
-      x: offset.current.x,
-      y: offset.current.y
-    });
-  });
-
-  const stepX = tileSize.width + tileGap;
-  const stepY = tileSize.height + tileGap;
-
-  const wrap = (value: number, step: number) => {
-    const mod = value % step;
-    return mod < 0 ? mod + step : mod;
+    return tiles;
   };
-
-  const normalizedOffsetX = wrap(planeOffset.x, stepX);
-  const normalizedOffsetY = wrap(planeOffset.y, stepY);
-
-  const extraTiles = 4;
-  const startX = normalizedOffsetX - stepX * extraTiles;
-  const startY = normalizedOffsetY - stepY * extraTiles;
-
-  const columnShift = Math.floor(planeOffset.x / stepX);
-  const rowShift = Math.floor(planeOffset.y / stepY);
-
-  const rowsToRender = rows + extraTiles * 2 + 2;
-  const colsToRender = columns + extraTiles * 2 + 2;
 
   return (
     <div
-      className="relative w-full overflow-hidden rounded-[48px] border border-white/10 bg-black/80 p-6 sm:p-8"
-      style={{
-        boxShadow: '0 80px 160px -120px rgba(79, 70, 229, 0.65)'
-      }}
+      className={`relative min-h-screen overflow-hidden`}
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-[#080808] via-transparent to-[#020202]" />
-
-      <main
-        className="relative h-[480px] w-full touch-none select-none sm:h-[560px] lg:h-[640px]"
-        style={{ cursor: 'grab' }}
-        {...pointerHandlers}
-      >
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0">
-            {Array.from({ length: rowsToRender }).map((_, row) => {
-              const y = startY + row * stepY;
-              const logicalRow = row - extraTiles + rowShift;
-              const sourceRow = ((logicalRow % rows) + rows) % rows;
-
-              return Array.from({ length: colsToRender }).map((__, col) => {
-                const x = startX + col * stepX;
-                const logicalCol = col - extraTiles + columnShift;
-                const sourceCol = ((logicalCol % columns) + columns) % columns;
-                const tileIndex = sourceRow * columns + sourceCol;
-                const tile = tiles[tileIndex];
-
-                return (
-                  <div
-                    key={`${row}-${col}`}
-                    className="absolute"
-                    style={{
-                      width: tileSize.width,
-                      height: tileSize.height,
-                      transform: `translate3d(${x}px, ${y}px, 0)`
-                    }}
-                  >
-                    <motion.div
-                      className="relative h-full w-full overflow-hidden rounded-[26px] border border-white/10 bg-[#101010] shadow-[0_18px_45px_-24px_rgba(0,0,0,0.65)]"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ type: 'spring', stiffness: 240, damping: 28 }}
-                    >
-                      <img
-                        src={tile.src}
-                        alt={`Gallery tile ${tile.id}`}
-                        draggable={false}
-                        className="h-full w-full object-cover"
-                        style={{ filter: 'saturate(1.05)' }}
-                      />
-                    </motion.div>
-                  </div>
-                );
-              });
-            })}
+                <div
+            ref={containerRef}
+            className="mt-10 h-[100dvh] w-full overflow-hidden select-none rounded-2xl bg-transparent md:h-[75vh]"
+            onWheel={handleWheel}
+            style={{ perspective: '1800px', transformStyle: 'preserve-3d' }}
+          >
+            <motion.div
+              className="relative h-full w-full"
+              drag
+              dragTransition={{ power: 0.1, timeConstant: 250 }}
+              style={{
+                x,
+                y,
+                cursor: 'grab',
+                transformStyle: 'preserve-3d',
+                rotateX: tiltX,
+                skewY: waveSkew,
+              }}
+              whileTap={{ cursor: 'grabbing' }}
+            >
+              {renderTiles() || (
+                <div className="flex h-full w-full items-center justify-center text-sm text-slate-400">
+                  No images available.
+                </div>
+              )}
+            </motion.div>
           </div>
-        </div>
-      </main>
-
-      <div className="pointer-events-none absolute inset-0 rounded-[48px] border border-white/10 opacity-30" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,transparent_55%,rgba(0,0,0,0.65)_100%)]" />
-    </div>
-  );
-};
-
-const TestPage: React.FC = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-[#070714] to-[#090821] text-white">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-10 px-6 text-center">
-       
-
-        <InfinitePlaneGallery />
-      </div>
     </div>
   );
 };
