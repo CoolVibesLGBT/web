@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coolvibes-cache-v5';
+const CACHE_NAME = 'coolvibes-cache-v20';
 const APP_SHELL = [
   '/',
   '/index.html',
@@ -34,7 +34,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Sadece network kullan - cache hiç yok
+  
   if (event.request.method !== 'GET') return;
 
   // VITE HMR protection

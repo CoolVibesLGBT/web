@@ -35,7 +35,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       if(savedToken){
         socketIo.emit('auth', savedToken);
       }
-
       console.log('Socket connected:', socketIo.id);
     });
 
