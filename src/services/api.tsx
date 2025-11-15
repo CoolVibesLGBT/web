@@ -11,7 +11,26 @@ interface ApiRequestOptions {
 
 export class ApiService {
 
- 
+
+  async checkNewNotifications(){
+    return this.call(Actions.CMD_GET_NOTIFICATIONS, {
+      method: "POST",
+    });
+  }
+
+  async handleGetVapidKey() {
+    return this.call(Actions.CMD_GET_VAPID_PUBLIC_KEY, {
+      method: "POST",
+    });
+  }
+
+  async handleSetVapidSubscriptions(params:any) {
+    return this.call(Actions.CMD_SET_VAPID_SUBSCRIBE, {
+      method: "POST",
+      body:params
+    });
+  }
+
   async handleRegister(user: Record<string, any>) {
     return this.call(Actions.AUTH_REGISTER, {
       method: "POST",
@@ -19,13 +38,13 @@ export class ApiService {
     });
   }
 
-  async handleCreatePost(data: Record<string, any>){
+  async handleCreatePost(data: Record<string, any>) {
 
     return this.call(Actions.POST_CREATE, {
       method: "POST",
       body: data,
     });
-    console.log("handleCreatePost",data)
+    console.log("handleCreatePost", data)
   }
 
   async handleLogin(credentials: { nickname: string; password: string; location?: any }) {
@@ -90,20 +109,20 @@ export class ApiService {
   }
 
   async searchUserLookup(query: string) {
-    return this.call<{ 
-      users: Array<{ 
+    return this.call<{
+      users: Array<{
         id: string;
-        username: string; 
+        username: string;
         displayname: string;
         avatar?: {
           file?: {
             url?: string;
           };
         };
-      }> 
-    } | Array<{ 
+      }>
+    } | Array<{
       id: string;
-      username: string; 
+      username: string;
       displayname: string;
       avatar?: {
         file?: {
@@ -115,16 +134,16 @@ export class ApiService {
       body: { query },
     });
   }
- 
 
- 
+
+
   async call<T = any>(
     action: ActionType,
     options: ApiRequestOptions = {}
   ): Promise<T> {
     const method = options.method ?? "GET";
 
-    console.log("GIDEN DATA",options)
+    console.log("GIDEN DATA", options)
 
     if (method === "GET") {
       const response = await httpClient.get("/", {

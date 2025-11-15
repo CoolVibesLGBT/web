@@ -23,6 +23,50 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
+
+self.addEventListener('push', event => {
+  console.log('[Service Worker] Push Received.');
+  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
+
+  let received = event.data.json()
+
+  console.log("Received,",received)
+
+  const title = `CoolVibes LGBTIQA+ ${received.title}`;
+  const options = {
+    body: received.body,
+      data: {
+      url: 'https://coolvibes.lgbt' || '/' // tıklanınca açılacak URL
+    }
+  };
+
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+
+  // Tıklayınca açılacak URL'yi options.data'dan alıyoruz
+  const urlToOpen = event.notification.data?.url || '/';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
+      // Halihazırda açık olan pencereler içinde url kontrolü yap
+      for (const client of windowClients) {
+        if (client.url === urlToOpen && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      // Açık pencere yoksa yeni sekme aç
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
+});
+
 self.addEventListener('activate', (event) => {
   // Tüm eski cache'leri temizle (önceki versiyonlardan kalanları da siler)
   event.waitUntil(
@@ -56,3 +100,4 @@ self.addEventListener('fetch', (event) => {
     // return new Response("Offline");
   }));
 });
+

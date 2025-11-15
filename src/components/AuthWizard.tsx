@@ -29,16 +29,20 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
 
   // Track notification permission
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission | null>(null);
+  
+  
   const requestNotificationPermission = async () => {
-    try {
-      if (typeof window !== 'undefined' && 'Notification' in window) {
-        const perm = await Notification.requestPermission();
-        setNotificationPermission(perm);
-      }
-    } catch (_) {
-      // ignore unsupported
+  if (typeof window !== 'undefined' && 'Notification' in window) {
+    if (Notification.permission === 'default') {
+      const perm = await Notification.requestPermission();
+      setNotificationPermission(perm);
+      console.log('Permission result:', perm);
+    } else {
+      setNotificationPermission(Notification.permission);
+      console.log('Existing permission:', Notification.permission);
     }
-  };
+  }
+};
 
   // Location status for UI
   const [locationStatus, setLocationStatus] = useState<string>('');
@@ -750,7 +754,9 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
               <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t('auth.current_status')}: {notificationPermission ?? 'unknown'}</p>
             </div>
             <motion.button
-              onClick={requestNotificationPermission}
+              onClick={()=>{
+                requestNotificationPermission()
+              }}
               className={`w-full px-6 py-4 rounded-2xl font-semibold text-lg transition-all duration-200 ${theme === 'dark'
                 ? 'bg-yellow-500 text-black hover:bg-yellow-400'
                 : 'bg-yellow-500 text-black hover:bg-yellow-600'
