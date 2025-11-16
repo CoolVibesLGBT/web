@@ -260,7 +260,7 @@ const NearbyScreen: React.FC = () => {
     <Map />
   </div>
 ) : isBubbleView ? (
-  <div className="w-full h-[calc(100vh-205px)] sm:h-[calc(100vh-60px)]">
+  <div className="w-full h-[calc(100dvh-205px)] sm:h-[calc(100dvh-60px)]">
     <BubbleView />
   </div>
 ) : (
