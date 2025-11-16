@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
-import { Filter, Search, Users, Grid, List, Square, ChevronDown, RefreshCw, MapPin, Users2, X, Map as MapIcon, Bubbles } from 'lucide-react';
+import { Filter, Search, Users, Grid, List, Square, ChevronDown, RefreshCw, MapPin, Users2, X, Map as MapIcon, Bubbles, Earth } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { UserCard } from './UserCard';
@@ -14,8 +14,8 @@ import { useAtom } from 'jotai';
 import { globalState } from '../state/nearby'; // atomun tanımlı olduğu dosya
 import Container from './Container';
 import Map from './Map';
-import InfiniteMenu from './BubbleView';
 import BubbleView from './BubbleView';
+import DomeView from './DomeView';
 
 
 const NearbyScreen: React.FC = () => {
@@ -116,6 +116,7 @@ const NearbyScreen: React.FC = () => {
 
   const isMapView = viewMode === 'map';
   const isBubbleView = viewMode === 'bubble'
+  const isDomeView = viewMode === 'dome'
 
 
   return (
@@ -165,6 +166,19 @@ const NearbyScreen: React.FC = () => {
                   title="Bubble View"
                 >
                   <Bubbles className="w-5 h-5" />
+                </motion.button>
+
+                 <motion.button
+                  onClick={() => setViewMode('dome')}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-2.5 py-1.5 rounded-lg transition-all ${viewMode === 'dome'
+                    ? theme === 'dark' ? 'bg-white text-black' : 'bg-gray-900 text-white'
+                    : theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  title="Dome View"
+                >
+                  <Earth className="w-5 h-5" />
                 </motion.button>
               
 
@@ -256,14 +270,18 @@ const NearbyScreen: React.FC = () => {
 
 
 {isMapView ? (
-  <div className="w-full mt-0">
+  <div className="w-full h-[calc(100dvh-205px)] sm:h-[calc(100dvh-60px)]">
     <Map />
   </div>
 ) : isBubbleView ? (
   <div className="w-full h-[calc(100dvh-205px)] sm:h-[calc(100dvh-60px)]">
     <BubbleView />
   </div>
-) : (
+) : isDomeView ? (
+  <div className="w-full h-[calc(100dvh-205px)] sm:h-[calc(100dvh-60px)]">
+    <DomeView fit={0.1} maxRadius={1000} />
+  </div>
+): (
         <div
           className="w-full mx-auto max-w-7xl relative"
           style={{ touchAction: 'pan-y', WebkitOverflowScrolling: 'touch' }}>

@@ -76,7 +76,7 @@ const LeafletMapInner = () => {
 
   return (
     <div
-      className="w-full h-[calc(100dvh-130px)] overflow-hidden"
+      className="w-full h-full overflow-hidden"
       ref={viewportRef}>
 
       <div

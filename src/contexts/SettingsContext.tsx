@@ -20,7 +20,7 @@ import {
 import { DEFAULT_SETTINGS, INITIAL_SETTINGS, SettingName } from '../appSettings';
 
 
-type ViewMode = 'grid' | 'list' | 'card' | 'map' | 'bubble';
+type ViewMode = 'grid' | 'list' | 'card' | 'map' | 'bubble' | 'dome';
 
 type SettingsContextShape = {
   setOption: (name: SettingName, value: boolean) => void;
