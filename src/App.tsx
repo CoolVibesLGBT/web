@@ -132,7 +132,7 @@ function AppContent() {
 
   
   return (
-    <div className={`w-screen dark:bg-gray-950 bg-white h-screen`}>
+    <div className={`w-screen dark:bg-gray-950 bg-white h-screen select-none`}>
       {/* Splash Screen */}
       {showSplash && (
         <SplashScreen onComplete={() => setShowSplash(false)} />
