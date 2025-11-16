@@ -97,7 +97,7 @@ function computeItemBaseRotation(offsetX, offsetY, sizeX, sizeY, segments) {
 export default function DomeView({
   fit = 0.5,
   fitBasis = 'auto',
-  minRadius = window.innerWidth/2,
+  minRadius = window.innerWidth,
   maxRadius = Infinity,
   padFactor = 0.25,
   overlayBlurColor = 'transparent',
