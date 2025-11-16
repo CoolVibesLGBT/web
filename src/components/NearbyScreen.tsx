@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
-import { Filter, Search, Users, Grid, List, Square, ChevronDown, RefreshCw, MapPin, Users2, X, Map as MapIcon } from 'lucide-react';
+import { Filter, Search, Users, Grid, List, Square, ChevronDown, RefreshCw, MapPin, Users2, X, Map as MapIcon, Bubbles } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { UserCard } from './UserCard';
@@ -14,6 +14,8 @@ import { useAtom } from 'jotai';
 import { globalState } from '../state/nearby'; // atomun tanımlı olduğu dosya
 import Container from './Container';
 import Map from './Map';
+import InfiniteMenu from './BubbleView';
+import BubbleView from './BubbleView';
 
 
 const NearbyScreen: React.FC = () => {
@@ -113,7 +115,7 @@ const NearbyScreen: React.FC = () => {
   };
 
   const isMapView = viewMode === 'map';
-
+  const isBubbleView = viewMode === 'bubble'
 
 
   return (
@@ -123,9 +125,9 @@ const NearbyScreen: React.FC = () => {
         ? 'border-gray-800/50 bg-black/95'
         : 'border-gray-200/50 bg-white/95'
         }`}>
-        <div className="w-full px-4 lg:px-6">
+        <div className="w-full flex flex-row items-center justify-between gap-2 p-2 px-2">
           {/* Top Bar */}
-          <div className="flex items-center justify-between py-4">
+          <div className="hidden md:block flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${theme === 'dark'
                 ? 'bg-white text-black'
@@ -143,29 +145,29 @@ const NearbyScreen: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center">
-              <motion.button
-                onClick={handleRefresh}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`p-2 rounded-full transition-colors ${theme === 'dark'
-                  ? 'hover:bg-white/10 text-gray-400 hover:text-white'
-                  : 'hover:bg-black/10 text-gray-500 hover:text-gray-900'
-                  }`}
-                title="Refresh"
-              >
-                <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
-              </motion.button>
-            </div>
+         
           </div>
 
           {/* Search, Filter and View Toggle */}
-          <div className="flex flex-col sm:flex-row gap-2 pb-4">
-
-
+          <div className="flex flex-col sm:flex-row gap-2">
             <div className="flex gap-2">
               {/* View Mode Toggle */}
               <div className={`flex rounded-xl p-1 ${theme === 'dark' ? 'bg-gray-900 border border-gray-800' : 'bg-gray-100 border border-gray-200'}`}>
+                
+                  <motion.button
+                  onClick={() => setViewMode('bubble')}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-2.5 py-1.5 rounded-lg transition-all ${viewMode === 'bubble'
+                    ? theme === 'dark' ? 'bg-white text-black' : 'bg-gray-900 text-white'
+                    : theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  title="Bubble View"
+                >
+                  <Bubbles className="w-5 h-5" />
+                </motion.button>
+              
+
                 <motion.button
                   onClick={() => setViewMode('grid')}
                   whileHover={{ scale: 1.05 }}
@@ -215,7 +217,7 @@ const NearbyScreen: React.FC = () => {
                   <MapIcon className="w-5 h-5" />
                 </motion.button>
               </div>
-
+   <div className="flex flex-row gap-2 items-center">
               <motion.button
                 onClick={() => setShowFilters(!showFilters)}
                 whileHover={{ scale: 1.05 }}
@@ -232,17 +234,36 @@ const NearbyScreen: React.FC = () => {
                 <Filter className="w-5 h-5 inline-block" />
 
               </motion.button>
+
+              
+              <motion.button
+                onClick={handleRefresh}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`p-2 rounded-xl transition-colors ${theme === 'dark'
+                        ? 'bg-gray-900 border border-gray-800 text-gray-300 hover:bg-gray-800'
+                    : 'bg-gray-100 border border-gray-200 text-gray-700 hover:bg-gray-200'
+                  }`}
+                title="Refresh"
+              >
+                <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </motion.button>
+            </div>
             </div>
           </div>
         </div>
       </div>
 
 
-      {isMapView ? (
-        <div className="w-full mt-0">
-          <Map />
-        </div>
-      ) : (
+{isMapView ? (
+  <div className="w-full mt-0">
+    <Map />
+  </div>
+) : isBubbleView ? (
+  <div className="w-full h-[calc(100vh-205px)] sm:h-[calc(100vh-60px)]">
+    <BubbleView />
+  </div>
+) : (
         <div
           className="w-full mx-auto max-w-7xl relative"
           style={{ touchAction: 'pan-y', WebkitOverflowScrolling: 'touch' }}>

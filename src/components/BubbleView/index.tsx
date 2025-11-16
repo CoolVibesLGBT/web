@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { mat4, quat, vec2, vec3 } from 'gl-matrix';
 import './style.css';
 import { ArrowUpRight } from 'lucide-react';
+import { useAtom } from 'jotai';
+import { globalState } from '../../state/nearby'; // atomun tanımlı olduğu dosya
+import { getSafeImageURL } from '../../helpers/helpers';
 
 const discVertShaderSource = `#version 300 es
 
@@ -525,9 +528,28 @@ class InfiniteGridMenu {
         canvas.width = this.atlasSize * cellSize;
         canvas.height = this.atlasSize * cellSize;
 
-        Promise.all(this.items.map(item => new Promise(resolve => { const img = new Image(); img.crossOrigin = 'anonymous'; img.onload = () => resolve(img); img.src = item.image; }))
+        console.log("canvas",this.items)
+
+        Promise.all(this.items.map(item => new Promise(resolve => {
+
+            const _imageURL = getSafeImageURL(item.avatar,'large')
+
+            var imageURL = _imageURL ? _imageURL : "https://picsum.photos/300/300?grayscale"
+            console.log("image,",_imageURL)
+             const img = new Image(); 
+             img.crossOrigin = 'anonymous'; 
+            
+
+
+             img.onload = () => resolve(img); 
+             img.src = imageURL;
+            }))
         ).then(images => {
-            images.forEach((img, i) => { const x = (i % this.atlasSize) * cellSize; const y = Math.floor(i / this.atlasSize) * cellSize; ctx.drawImage(img, x, y, cellSize, cellSize); });
+            images.forEach((img, i) => { 
+                const x = (i % this.atlasSize) * cellSize; 
+                const y = Math.floor(i / this.atlasSize) * cellSize; 
+                ctx.drawImage(img, x, y, cellSize, cellSize); 
+            });
             gl.bindTexture(gl.TEXTURE_2D, this.tex); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas); gl.generateMipmap(gl.TEXTURE_2D);
         });
     }
@@ -625,7 +647,7 @@ class InfiniteGridMenu {
 
     #onControlUpdate(deltaTime) {
         const timeScale = deltaTime / this.TARGET_FRAME_DURATION + 0.0001;
-        let damping = 5 / timeScale;
+        let damping = 15 / timeScale;
         let cameraTargetZ = 3;
 
         const isMoving = this.control.isPointerDown || Math.abs(this.smoothRotationVelocity) > 0.01;
@@ -672,8 +694,10 @@ const defaultItems = [
     }
 ];
 
-export default function InfiniteMenu({ items = [] }) {
+export default function BubbleView() {
     const canvasRef = useRef(null);
+      const [state, setState] = useAtom(globalState);
+    
     const [activeItem, setActiveItem] = useState(null);
     const [isMoving, setIsMoving] = useState(false);
 
@@ -682,11 +706,11 @@ export default function InfiniteMenu({ items = [] }) {
         let sketch;
 
         const handleActiveItem = index => {
-            const itemIndex = index % items.length; setActiveItem(items[itemIndex]);
+            const itemIndex = index % state.nearbyUsers.length; setActiveItem(state.nearbyUsers[itemIndex]);
         };
 
         if (canvas) {
-            sketch = new InfiniteGridMenu(canvas, items.length ? items : defaultItems, handleActiveItem, setIsMoving, sk => sk.run());
+            sketch = new InfiniteGridMenu(canvas, state.nearbyUsers.length ? state.nearbyUsers : defaultItems, handleActiveItem, setIsMoving, sk => sk.run());
         }
 
         const handleResize = () => {
@@ -699,7 +723,7 @@ export default function InfiniteMenu({ items = [] }) {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [items]);
+    }, [state.nearbyUsers.length]);
 
     const handleButtonClick = () => {
         if (!activeItem?.link) return;
@@ -712,9 +736,14 @@ export default function InfiniteMenu({ items = [] }) {
 
     return (
         <div style={{ position: 'relative', width: '100%', height: '100%' }}><canvas id="infinite-grid-menu-canvas" ref={canvasRef} />
-            {activeItem && (<>    <h2 className={`face-title ${isMoving ? 'inactive' : 'active'}`}>{activeItem.title}</h2>
+            {activeItem && (<>   
+             <h2 className={`face-title ${isMoving ? 'inactive' : 'active'}`}>{activeItem.username} harami</h2>
                 <p className={`face-description ${isMoving ? 'inactive' : 'active'}`}> {activeItem.description}</p>
-                <div onClick={handleButtonClick} className={`action-button ${isMoving ? 'inactive' : 'active'}`}><p className="action-button-icon">    <ArrowUpRight className='w-5 h-5' /></p>    </div>  </>)}
+                <div onClick={handleButtonClick} className={`action-button ${isMoving ? 'inactive' : 'active'}`}>
+                    <p className="action-button-icon">    
+                        <ArrowUpRight className='w-5 h-5' /></p>   
+                     </div>
+            </>)}
         </div>
     );
 }

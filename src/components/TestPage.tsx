@@ -8,7 +8,7 @@ import {
   MotionValue,
 } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
-import InfiniteMenu from './InfiniteView';
+import InfiniteMenu from './BubbleView';
 
 const BASE_IMAGE_URLS: string[] = [
   'https://framerusercontent.com/images/d4vuR3XWFNyIGpMuv8ciR2M1U.jpg',
