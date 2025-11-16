@@ -8,6 +8,7 @@ import {
   MotionValue,
 } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
+import InfiniteMenu from './InfiniteView';
 
 const BASE_IMAGE_URLS: string[] = [
   'https://framerusercontent.com/images/d4vuR3XWFNyIGpMuv8ciR2M1U.jpg',
@@ -226,38 +227,37 @@ const TestPage: React.FC<InfiniteImageGridProps> = ({ images = IMAGE_URLS }) => 
     return tiles;
   };
 
+
+   const items = [
+    {
+      image: 'https://picsum.photos/300/300?grayscale',
+      link: 'https://google.com/',
+      title: 'Item 1',
+      description: 'This is pretty cool, right?'
+    },
+    {
+      image: 'https://picsum.photos/400/400?grayscale',
+      link: 'https://google.com/',
+      title: 'Item 2',
+      description: 'This is pretty cool, right?'
+    },
+    {
+      image: 'https://picsum.photos/500/500?grayscale',
+      link: 'https://google.com/',
+      title: 'Item 3',
+      description: 'This is pretty cool, right?'
+    },
+    {
+      image: 'https://picsum.photos/600/600?grayscale',
+      link: 'https://google.com/',
+      title: 'Item 4',
+      description: 'This is pretty cool, right?'
+    }
+  ];
+
   return (
-    <div
-      className={`relative min-h-screen overflow-hidden`}
-    >
-                <div
-            ref={containerRef}
-            className="mt-10 h-[100dvh] w-full overflow-hidden select-none rounded-2xl bg-transparent md:h-[75vh]"
-            onWheel={handleWheel}
-            style={{ perspective: '1800px', transformStyle: 'preserve-3d' }}
-          >
-            <motion.div
-              className="relative h-full w-full"
-              drag
-              dragTransition={{ power: 0.1, timeConstant: 250 }}
-              style={{
-                x,
-                y,
-                cursor: 'grab',
-                transformStyle: 'preserve-3d',
-                rotateX: tiltX,
-                skewY: waveSkew,
-              }}
-              whileTap={{ cursor: 'grabbing' }}
-            >
-              {renderTiles() || (
-                <div className="flex h-full w-full items-center justify-center text-sm text-slate-400">
-                  No images available.
-                </div>
-              )}
-            </motion.div>
-          </div>
-    </div>
+    <><InfiniteMenu items={items} /></>
+
   );
 };
 

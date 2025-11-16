@@ -23,6 +23,7 @@ export const Actions = {
 
 
   // USER
+  CMD_USER_GET_NOTIFICATIONS  : "user.fetch.notifications",
   CMD_UPDATE_USER_PROFILE: "user.update_profile",
   CMD_USER_UPDATE_IDENTIFY: "user.update_identify",
   CMD_USER_UPDATE_ATTRIBUTE: "user.update_attribute",
