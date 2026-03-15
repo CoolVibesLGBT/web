@@ -4,20 +4,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="format-detection" content="telephone=no">
   <title>CoolVibes – Inclusive LGBTIQA+ Gay Dating App</title>
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+  <link rel="preconnect" href="https://www.google.com" crossorigin />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="https://www.google.com" />
+  <link rel="dns-prefetch" href="https://unpkg.com" />
 
   <!-- Favicons & Icons -->
   <link rel="icon" type="image/png" href="/icons/icon_16x16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon_32x32.png" />
+  <link rel="icon" type="image/png" sizes="128x128" href="/icons/icon_128x128.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon_180x180.png" />
   <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials" />
   <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="CoolVibes" />
+  <meta name="application-name" content="CoolVibes" />
 
   <!-- SEO Base -->
-  <meta name="robots" content="index, follow" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://coolvibes.lgbt" />
   <meta name="description" content="CoolVibes is the safest and most inclusive gay dating app for the LGBTIQA+ community. Connect, chat, and find meaningful relationships with like-minded people worldwide." />
   <meta name="keywords" content="LGBTIQA+ dating, gay dating app, LGBTIQA+ community, inclusive dating, safe gay dating, LGBTQIA+ dating, find love, chat gay, CoolVibes app" />
   <meta name="author" content="CoolVibes Team" />
+  <meta name="geo.region" content="global" />
 
   <!-- Open Graph -->
   <meta property="og:site_name" content="CoolVibes" />
@@ -26,16 +43,24 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://coolvibes.lgbt" />
   <meta property="og:image" content="https://coolvibes.lgbt/images/icons/icon_512x512.jpg" />
+  <meta property="og:image:secure_url" content="https://coolvibes.lgbt/images/icons/icon_512x512.jpg" />
   <meta property="og:image:width" content="512" />
   <meta property="og:image:height" content="512" />
+  <meta property="og:image:alt" content="CoolVibes – Inclusive LGBTIQA+ dating app logo" />
   <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="tr_TR" />
+  <meta property="og:locale:alternate" content="de_DE" />
+  <meta property="og:locale:alternate" content="es_ES" />
+  <meta property="og:locale:alternate" content="fr_FR" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@coolvibeslgbt" />
+  <meta name="twitter:creator" content="@coolvibeslgbt" />
   <meta name="twitter:title" content="CoolVibes – Inclusive LGBTIQA+ Gay Dating App" />
   <meta name="twitter:description" content="CoolVibes is the safest and most inclusive gay dating app for the LGBTIQA+ community. Connect, chat, and find meaningful relationships with like-minded people worldwide." />
   <meta name="twitter:image" content="https://coolvibes.lgbt/images/icons/icon_512x512.jpg" />
+  <meta name="twitter:image:alt" content="CoolVibes – Inclusive LGBTIQA+ dating app logo" />
 
   <!-- Structured Data: WebSite -->
   <script type="application/ld+json">
@@ -72,6 +97,24 @@
       "@type": "ContactPoint",
       "email": "hello@coolvibes.lgbt",
       "contactType": "customer support"
+    }
+  }
+  </script>
+
+  <!-- Structured Data: MobileApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MobileApplication",
+    "name": "CoolVibes",
+    "operatingSystem": "Web, iOS, Android",
+    "applicationCategory": "LifestyleApplication",
+    "description": "The safest and most inclusive LGBTIQA+ gay dating and social app. Connect, chat, and find meaningful relationships.",
+    "url": "https://coolvibes.lgbt",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
     }
   }
   </script>
