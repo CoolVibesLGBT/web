@@ -20,7 +20,6 @@ import {
   NodeKey,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
-import * as React from 'react';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {ErrorBoundary} from 'react-error-boundary';
 
@@ -63,7 +62,8 @@ export default function EquationComponent({
 
   useEffect(() => {
     if (!showEquationEditor && equationValue !== equation) {
-      setEquationValue(equation);
+      const timer = setTimeout(() => setEquationValue(equation), 0);
+      return () => clearTimeout(timer);
     }
   }, [showEquationEditor, equation, equationValue]);
 
@@ -75,7 +75,7 @@ export default function EquationComponent({
       return mergeRegister(
         editor.registerCommand(
           SELECTION_CHANGE_COMMAND,
-          (payload) => {
+          () => {
             const activeElement = document.activeElement;
             const inputElem = inputRef.current;
             if (inputElem !== activeElement) {
@@ -87,7 +87,7 @@ export default function EquationComponent({
         ),
         editor.registerCommand(
           KEY_ESCAPE_COMMAND,
-          (payload) => {
+          () => {
             const activeElement = document.activeElement;
             const inputElem = inputRef.current;
             if (inputElem === activeElement) {
@@ -126,7 +126,7 @@ export default function EquationComponent({
           ref={inputRef}
         />
       ) : (
-        <ErrorBoundary onError={(e) => editor._onError(e)} fallback={null}>
+        <ErrorBoundary onError={(e) => editor._onError(e as Error)} fallback={null}>
           <KatexRenderer
             equation={equationValue}
             inline={inline}

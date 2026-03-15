@@ -50,10 +50,13 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   isLast
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const Icon = getNotificationIcon(notification.type);
+  const NotificationIcon = getNotificationIcon(notification.type);
   const isDark = theme === 'dark';
 
   useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !notification.is_read) {
@@ -63,9 +66,9 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
       { threshold: 0.5 }
     );
 
-    if (ref.current) observer.observe(ref.current);
+    observer.observe(node);
     return () => {
-      if (ref.current) observer.unobserve(ref.current);
+      observer.unobserve(node);
     };
   }, [notification.id, notification.is_read, markAsRead]);
 
@@ -102,7 +105,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
               ? 'bg-gray-900/60 group-hover:bg-gray-800' 
               : 'bg-gray-100 group-hover:bg-gray-200/50'
           }`}>
-            <Icon className={`w-5 h-5 ${
+            <NotificationIcon className={`w-5 h-5 ${
               isDark ? 'text-gray-400 group-hover:text-white' : 'text-gray-500 group-hover:text-gray-900'
             }`} strokeWidth={1.5} />
           </div>

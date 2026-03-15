@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
-import { BurstOverlayState } from '../UserCard/ActionBar';
-import { getSafeImageURL, random } from '../../../helpers/helpers';
-import { Ban, Heart, MessageCircle, MoreHorizontal, Plus, Share, X } from './Icons';
-import { BurstType } from '../../../types/custom';
+import { random } from '../../../helpers/helpers';
+import { Ban, Heart, MessageCircle, Plus, X } from './Icons';
+import { BurstType, BurstOverlayState, BurstParticle, BurstConfetti, BurstStreak } from '../../../types/custom';
 
 // --- ANIMATION CONFIG ---
-export const burstConfig = {
+export const burstConfig: Record<BurstType, { Icon: React.ComponentType<{ className?: string; strokeWidth?: number; fill?: string }>; color: string; gradient: string }> = {
     [BurstType.LIKE]: {
         Icon: Heart,
         color: 'text-red-500',
@@ -29,7 +28,7 @@ const particleIcons = [Heart];
 const particleColors = ['text-red-500', 'text-pink-500', 'text-rose-500', 'text-white'];
 const confettiColors = ['#ef4444', '#ec4899', '#f97316', '#eab308', '#ffffff'];
 
-export const createOverlayParticles = (type: BurstType, key: number) => Array.from({ length: 12 }).map((_, i) => {
+export const createOverlayParticles = (_type: BurstType, key: number) => Array.from({ length: 12 }).map((_, i) => {
     const angle = (i / 12) * 360;
     const radius = random(100, 160);
     return {
@@ -42,7 +41,7 @@ export const createOverlayParticles = (type: BurstType, key: number) => Array.fr
     };
 });
 
-export const createOverlayConfetti = (type: BurstType, key: number) => Array.from({ length: 30 }).map((_, i) => {
+export const createOverlayConfetti = (_type: BurstType, key: number) => Array.from({ length: 30 }).map((_, i) => {
     const angle = random(0, 360);
     const radius = random(50, 250);
     const drift = 50;
@@ -61,7 +60,7 @@ export const createOverlayConfetti = (type: BurstType, key: number) => Array.fro
     };
 });
 
-export const createOverlayStreaks = (type: BurstType, key: number) => Array.from({ length: 6 }).map((_, i) => ({
+export const createOverlayStreaks = (_type: BurstType, key: number) => Array.from({ length: 6 }).map((_, i) => ({
     id: `s-${key}-${i}`,
     angle: random(0, 360),
     length: random(200, 400),
@@ -73,32 +72,33 @@ interface ActionBarProps {
     avatarUrl: string;
     onLike: () => void;
     onMessage: () => void;
-    onShare: () => void;
-    onBlock: () => void;
     openProfile : () => void;
 }
 
-export const ActionBar: React.FC<ActionBarProps> = ({ avatarUrl, onLike, onMessage,openProfile, onShare, onBlock }) => {
+export const ActionBar: React.FC<ActionBarProps> = ({ avatarUrl, onLike, onMessage,openProfile }) => {
     const [overlay, setOverlay] = useState<BurstOverlayState | null>(null);
     const [isOverlayReady, setIsOverlayReady] = useState(false);
-    const [showMoreMenu, setShowMoreMenu] = useState(false);
 
-    useEffect(() => { setIsOverlayReady(true); }, []);
+    useEffect(() => {
+        const timer = setTimeout(() => setIsOverlayReady(true), 0);
+        return () => clearTimeout(timer);
+    }, []);
     useEffect(() => {
         if (!overlay) return;
         const timeout = setTimeout(() => setOverlay(null), 2600);
         return () => clearTimeout(timeout);
     }, [overlay]);
 
-    const handleTriggerOverlay = (type: BurstType) => {
-        const key = Date.now();
+    const handleTriggerOverlay = useCallback((type: BurstType) => {
+        const now = Date.now();
         setOverlay({
-            type, key,
-            particles: createOverlayParticles(type, key),
-            confetti: createOverlayConfetti(type, key),
-            streaks: createOverlayStreaks(type, key),
+            type,
+            key: now,
+            particles: createOverlayParticles(type, now),
+            confetti: createOverlayConfetti(type, now),
+            streaks: createOverlayStreaks(type, now),
         });
-    };
+    }, []);
     
     const createHandler = (action: () => void, type: BurstType) => () => {
         action();
@@ -153,7 +153,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({ avatarUrl, onLike, onMessa
 };
 
 // --- HELPER COMPONENTS ---
-const ActionButton: React.FC<{ icon: React.ComponentType<unknown>; label: string; onClick: () => void; }> = ({ icon: Icon, label, onClick }) => (
+const ActionButton: React.FC<{ icon: React.ComponentType<{ className?: string }>; label: string; onClick: () => void; }> = ({ icon: Icon, label, onClick }) => (
     <button onClick={onClick} className="flex flex-col items-center gap-1.5 transition-transform hover:scale-110" aria-label={label}>
         <Icon className="w-9 h-9 drop-shadow-md" />
         <span className="text-xs font-semibold">{label}</span>
@@ -173,7 +173,7 @@ const BurstOverlay: React.FC<{ overlay: BurstOverlayState }> = ({ overlay }) => 
                 <motion.div className="absolute inset-0" initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: [0.6, 1.05, 1], opacity: [0, 0.6, 0] }} exit={{ opacity: 0 }} transition={{ duration: 0.8, ease: 'easeOut' }} style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 65%)' }} />
                 
                 <div className="relative z-[1] flex flex-col items-center justify-center gap-8">
-                     {overlay.streaks.map(({ id, angle, length, delay }) => (
+                     {overlay.streaks.map(({ id, angle, length, delay }: BurstStreak) => (
                         <motion.span key={id} className="absolute origin-center" style={{ width: length, height: 2, background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.85) 45%, rgba(255,255,255,0.05) 100%)', rotate: `${angle}deg` }} initial={{ scale: 0, opacity: 0 }} animate={{ scale: [0, 1.05, 0.8], opacity: [0, 0.85, 0] }} transition={{ duration: 1.1, ease: 'easeOut', delay, repeat: Infinity, repeatType: 'loop' }} />
                     ))}
                     <motion.div className="relative" initial={{ scale: 0.2, opacity: 0, rotate: -25 }} animate={{ scale: [0.2, 1.25, 1], opacity: [0, 1, 1], rotate: 0 }} exit={{ scale: 0.5, opacity: 0 }} transition={{ duration: 0.55, ease: 'easeOut' }}>
@@ -181,12 +181,12 @@ const BurstOverlay: React.FC<{ overlay: BurstOverlayState }> = ({ overlay }) => 
                             {React.createElement(burstConfig[overlay.type].Icon, { className: `h-32 w-32 ${burstConfig[overlay.type].color}`, strokeWidth: 1.4, fill: 'currentColor' })}
                         </motion.div>
                     </motion.div>
-                    {overlay.particles.map(({ id, x, y, rotate, Icon, color }) => (
+                    {overlay.particles.map(({ id, x, y, rotate, Icon, color }: BurstParticle) => (
                         <motion.span key={id} className="absolute drop-shadow-[0_0_22px_rgba(255,255,255,0.45)]" initial={{ opacity: 0, scale: 0, x: 0, y: 0, rotate: 0 }} animate={{ opacity: [0, 1, 0], scale: [0, 1.25, 0.65], x, y, rotate: rotate + 120 }} exit={{ opacity: 0, scale: 0, x: x * 1.05, y: y * 1.05 }} transition={{ duration: 0.95, ease: 'easeOut' }}>
                             <Icon className={`h-12 w-12 ${color}`} strokeWidth={1.2} fill="currentColor" />
                         </motion.span>
                     ))}
-                    {overlay.confetti.map(({ id, x, y, size, color, rotate, driftX, driftY, duration, delay, shape }) => (
+                    {overlay.confetti.map(({ id, x, y, size, color, rotate, driftX, driftY, duration, delay, shape }: BurstConfetti) => (
                         <motion.span key={id} className={`absolute left-1/2 top-1/2 shadow-[0_0_18px_rgba(255,255,255,0.35)]`} initial={{ opacity: 0, scale: 0.6, x: 0, y: 0, rotate: 0 }} animate={{ opacity: [0, 1, 0.8, 0], scale: [0.6, 1.05, 0.95, 0.6], x: [0, x * 0.6, x + driftX], y: [0, y * 0.6, y + driftY], rotate: [0, rotate * 0.6, rotate * 1.2] }} exit={{ opacity: 0, scale: 0.4, x: x * 1.05, y: y * 1.05 }} transition={{ duration, ease: 'easeInOut', delay, repeat: Infinity, repeatType: 'mirror' }} style={{ width: size, height: size, backgroundColor: color, mixBlendMode: 'screen', borderRadius: shape === 'circle' ? '9999px' : shape === 'square' ? '4px' : undefined, clipPath: shape === 'triangle' ? 'polygon(50% 0%, 0% 100%, 100% 100%)' : undefined }} />
                     ))}
                     <motion.div className="absolute -bottom-20 text-white text-3xl font-semibold uppercase tracking-[0.4rem]" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} transition={{ duration: 0.4, delay: 0.1 }}>

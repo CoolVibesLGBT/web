@@ -8,26 +8,237 @@ import GiftSelector from './GiftSelector';
 import QuickMessages from '../../post/QuickMessages';
 import { calculateAge, getSafeImageURLEx } from '../../../helpers/helpers';
 import { api } from '../../../services/api';
-import { burstConfig, BurstOverlayState, BurstType, createOverlayConfetti, createOverlayParticles, createOverlayStreaks } from './ActionBar';
+import { burstConfig, BurstOverlayState } from './ActionBar';
+
+interface User {
+  id: string;
+  public_id: string | number;
+  username: string;
+  displayname?: string;
+  name?: string;
+  avatar?: string | { file?: { url?: string } } | null;
+  date_of_birth?: string;
+  location?: string | { display?: string };
+  isOnline?: boolean;
+}
 
 interface UserCardProps {
-  user: unknown;
+  user: User;
   viewMode?: 'compact' | 'list' | 'card';
 }
 
-const getLocation = (user: unknown): string => {
+const getLocation = (user: User): string => {
   if (user.location) {
     if (typeof user.location === 'string') {
       return user.location.trim();
     }
-    if (typeof user.location === 'object') {
-      return user.location.display?.trim() || '';
+    if (typeof user.location === 'object' && user.location !== null) {
+      return (user.location as { display?: string }).display?.trim() || '';
     }
   }
   return '';
 };
 
+interface SubViewProps {
+  user: User;
+  theme: string;
+  liked: boolean;
+  disliked: boolean;
+  blocked: boolean;
+  handleSendMessage: (user: User) => void;
+  handleSendLike: (user: User) => void;
+  handleSendDislike: (user: User) => void;
+  handleBlock: (user: User) => void;
+  handleProfileClick: () => void;
+  avatarURL: string;
+  userAge: string;
+  location: string;
+}
 
+const CompactView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blocked, handleSendMessage, handleSendLike, handleSendDislike, handleBlock, handleProfileClick, avatarURL, userAge, location }) => {
+  const inlineBtns = [
+    { label: 'Message', icon: <MessageCircleHeart size={15} />, active: false, activeClass: '', onClick: () => handleSendMessage(user) },
+    { label: 'Like', icon: <Heart size={15} className={liked ? 'fill-red-500' : ''} />, active: liked, activeClass: 'text-red-500', onClick: () => { handleSendLike(user); } },
+    { label: 'Dislike', icon: <HeartOff size={15} />, active: disliked, activeClass: 'text-orange-500', onClick: () => { handleSendDislike(user); } },
+    { label: 'Block', icon: <ShieldBan size={15} />, active: blocked, activeClass: 'text-blue-500', onClick: () => { handleBlock(user); } },
+  ];
+  const ghostBtn = theme === 'dark'
+    ? 'text-gray-500 hover:text-white hover:bg-white/5'
+    : 'text-gray-400 hover:text-gray-800 hover:bg-black/5';
+
+  return (
+    <div
+      className={`rounded-xl overflow-hidden cursor-pointer border transition-colors ${theme === 'dark' ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'
+        }`}
+      onClick={handleProfileClick}
+    >
+      <div className="relative aspect-square overflow-hidden">
+        <img src={avatarURL} alt="" className="w-full h-full object-cover object-top" />
+        {user.isOnline && (
+          <div className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-green-500 border border-white" />
+        )}
+      </div>
+
+      <div className={`px-2.5 py-2 border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
+        }`}>
+        <p className={`font-semibold text-[13px] truncate leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
+          {user.displayname || user.name || 'Anonymous'}
+          {userAge && <span className={`ml-1 font-normal text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+            }`}>{userAge}</span>}
+        </p>
+        {location && (
+          <p className={`text-[11px] truncate flex items-center gap-0.5 mt-0.5 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
+            }`}>
+            <MapPin size={9} />{location}
+          </p>
+        )}
+      </div>
+
+      <div
+        className="flex items-center"
+        onClick={e => e.stopPropagation()}
+      >
+        {inlineBtns.map(btn => (
+          <button
+            key={btn.label}
+            aria-label={btn.label}
+            onClick={btn.onClick}
+            className={`flex-1 h-10 flex items-center justify-center transition-colors border-r last:border-r-0 ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
+              } ${btn.active ? btn.activeClass : ghostBtn
+              }`}
+          >
+            {btn.icon}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ListView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blocked, handleSendMessage, handleSendLike, handleSendDislike, handleBlock, handleProfileClick, avatarURL, userAge, location }) => (
+  <div
+    className={`flex items-center h-[72px] rounded-xl overflow-hidden cursor-pointer border transition-colors ${theme === 'dark'
+      ? 'bg-gray-900 border-gray-800 hover:bg-gray-800/80'
+      : 'bg-white border-gray-100 hover:bg-gray-50'
+      }`}
+    onClick={handleProfileClick}
+  >
+    <div className="w-[72px] h-[72px] shrink-0 overflow-hidden">
+      <img src={avatarURL} alt="" className="w-full h-full object-cover object-top" />
+    </div>
+
+    <div className="flex-1 flex flex-col justify-center px-3 min-w-0 overflow-hidden">
+      <div className="flex items-center gap-1.5">
+        <p className={`font-semibold text-sm truncate leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
+          {user.displayname || user.name || 'Anonymous'}
+        </p>
+        {userAge && (
+          <span className={`text-xs shrink-0 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+            }`}>{userAge}</span>
+        )}
+        {user.isOnline && <div className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />}
+      </div>
+      {location && (
+        <p className={`text-[11px] truncate flex items-center gap-1 mt-0.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+          }`}>
+          <MapPin size={9} />
+          {location}
+        </p>
+      )}
+    </div>
+
+    <div
+      className={`shrink-0 flex items-center border-l ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
+        }`}
+      onClick={e => e.stopPropagation()}
+    >
+      {[
+        { label: 'Message', icon: <MessageCircleHeart size={16} />, active: false, onClick: () => handleSendMessage(user), activeClass: '' },
+        { label: 'Like', icon: <Heart size={16} className={liked ? 'fill-red-500' : ''} />, active: liked, onClick: () => { handleSendLike(user); }, activeClass: 'text-red-500' },
+        { label: 'Dislike', icon: <HeartOff size={16} />, active: disliked, onClick: () => { handleSendDislike(user); }, activeClass: 'text-orange-500' },
+        { label: 'Block', icon: <ShieldBan size={16} />, active: blocked, onClick: () => { handleBlock(user); }, activeClass: 'text-blue-500' },
+      ].map(btn => (
+        <button
+          key={btn.label}
+          aria-label={btn.label}
+          onClick={btn.onClick}
+          className={`w-10 h-[72px] flex items-center justify-center transition-colors ${btn.active ? btn.activeClass : theme === 'dark'
+            ? 'text-gray-500 hover:text-white hover:bg-white/5'
+            : 'text-gray-400 hover:text-gray-800 hover:bg-gray-50'
+            }`}
+        >
+          {btn.icon}
+        </button>
+      ))}
+    </div>
+  </div>
+);
+
+const CardView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blocked, handleSendMessage, handleSendLike, handleSendDislike, handleBlock, handleProfileClick, avatarURL, userAge, location }) => {
+  const inlineBtns = [
+    { label: 'Message', icon: <MessageCircleHeart size={17} />, active: false, activeClass: '', onClick: () => handleSendMessage(user) },
+    { label: 'Like', icon: <Heart size={17} className={liked ? 'fill-red-500' : ''} />, active: liked, activeClass: 'text-red-500', onClick: () => { handleSendLike(user); } },
+    { label: 'Dislike', icon: <HeartOff size={17} />, active: disliked, activeClass: 'text-orange-500', onClick: () => { handleSendDislike(user); } },
+    { label: 'Block', icon: <ShieldBan size={17} />, active: blocked, activeClass: 'text-blue-500', onClick: () => { handleBlock(user); } },
+  ];
+  const ghostBtn = theme === 'dark'
+    ? 'text-gray-500 hover:text-white hover:bg-white/5'
+    : 'text-gray-400 hover:text-gray-800 hover:bg-black/5';
+
+  return (
+    <div
+      className={`rounded-xl overflow-hidden cursor-pointer border transition-colors ${theme === 'dark' ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'
+        }`}
+      onClick={handleProfileClick}
+    >
+      <div className="relative aspect-[3/4] overflow-hidden">
+        <img src={avatarURL} alt="" className="w-full h-full object-cover object-top" />
+        {user.isOnline && (
+          <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 border border-white/20">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
+            <span className="text-white text-[10px] font-medium">Online</span>
+          </div>
+        )}
+      </div>
+
+      <div className={`px-3 py-2.5 border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
+        }`}>
+        <p className={`font-bold text-sm truncate leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
+          {user.displayname || user.name || 'Anonymous'}
+          {userAge && <span className={`ml-1.5 font-normal ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+            }`}>{userAge}</span>}
+        </p>
+        {location && (
+          <p className={`text-[11px] truncate flex items-center gap-1 mt-0.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+            }`}>
+            <MapPin size={10} />{location}
+          </p>
+        )}
+      </div>
+
+      <div
+        className="flex items-center"
+        onClick={e => e.stopPropagation()}
+      >
+        {inlineBtns.map(btn => (
+          <button
+            key={btn.label}
+            aria-label={btn.label}
+            onClick={btn.onClick}
+            className={`flex-1 h-11 flex items-center justify-center transition-colors border-r last:border-r-0 ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
+              } ${btn.active ? btn.activeClass : ghostBtn
+              }`}
+          >
+            {btn.icon}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) => {
   const { theme } = useTheme();
@@ -41,7 +252,8 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
   const [isOverlayReady, setIsOverlayReady] = useState(false);
 
   useEffect(() => {
-    setIsOverlayReady(true);
+    const timer = setTimeout(() => setIsOverlayReady(true), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const getUsername = () =>
@@ -53,7 +265,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
     navigate(`/${getUsername()}`)
   };
 
-  const handleSendMessage = async (profile: unknown) => {
+  const handleSendMessage = async (profile: User) => {
     if (!user?.id || !profile?.id) {
       console.error('User or profile ID is missing');
       return;
@@ -105,66 +317,39 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
     }
   };
 
-  const handleSendLike = async (user: unknown) => {
-    //
-
-
-    if (!user?.public_id) return;
-
+  const handleSendLike = async (profile: User) => {
+    if (!profile?.public_id) return;
     try {
+      setLiked(p => !p);
       await api.toggleUserLike({
-        likee_id: user.public_id,
+        likee_id: profile.public_id as string,
       });
-
-
     } catch (error) {
       console.error('Error toggling like:', error);
-      // Optionally show error message to user
     }
   }
 
-  const handleSendDislike = async (user: unknown) => {
-    //
-
-
-    if (!user?.public_id) return;
-
+  const handleSendDislike = async (profile: User) => {
+    if (!profile?.public_id) return;
     try {
+      setDisliked(p => !p);
       await api.toggleUserDislike({
-        likee_id: user.public_id,
+        likee_id: profile.public_id as string,
       });
-
-
     } catch (error) {
       console.error('Error toggling like:', error);
-      // Optionally show error message to user
     }
   }
 
-  const handleBlock = async (user: unknown) => {
-    //
-
-
-    if (!user?.public_id) return;
-
+  const handleBlock = async (profile: User) => {
+    if (!profile?.public_id) return;
     try {
-      await api.toggleBlockUser(user.public_id);
+      setIsBlocked(p => !p);
+      await api.toggleBlockUser(profile.public_id as string);
     } catch (error) {
       console.error('Error toggling like:', error);
-      // Optionally show error message to user
     }
   }
-
-  const handleTriggerOverlay = (type: BurstType) => {
-    const key = Date.now();
-    setOverlay({
-      type,
-      key,
-      particles: createOverlayParticles(type, key),
-      confetti: createOverlayConfetti(type, key),
-      streaks: createOverlayStreaks(type, key),
-    });
-  };
 
   useEffect(() => {
     if (!overlay) return;
@@ -172,233 +357,41 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
     return () => clearTimeout(timeout);
   }, [overlay]);
 
-  const location = getLocation(user);
-  const avatarURL = getSafeImageURLEx(user.public_id, user?.avatar, "large") || "";
-  let userAge = calculateAge(user.date_of_birth);
-  userAge = userAge === "-" ? "" : userAge;
+  const locationValue = getLocation(user);
+  const avatarURLValue = getSafeImageURLEx(user.public_id.toString(), (user.avatar as any), "large") || "";
+  let userAgeValue = calculateAge(user.date_of_birth as string);
+  userAgeValue = userAgeValue === "-" ? "" : userAgeValue;
 
-  const btnBase = theme === 'dark'
-    ? 'border border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white'
-    : 'border border-gray-200 text-gray-600 hover:bg-gray-100 hover:text-gray-900';
+  const renderView = () => {
+    const props: SubViewProps = {
+      user,
+      theme,
+      liked,
+      disliked,
+      blocked,
+      handleSendMessage,
+      handleSendLike,
+      handleSendDislike,
+      handleBlock,
+      handleProfileClick,
+      avatarURL: avatarURLValue,
+      userAge: userAgeValue.toString(),
+      location: locationValue
+    };
 
-  // --- COMPACT (Grid) View ---
-  const CompactView = () => {
-    const inlineBtns = [
-      { label: 'Message', icon: <MessageCircleHeart size={15} />, active: false, activeClass: '', onClick: () => handleSendMessage(user) },
-      { label: 'Like', icon: <Heart size={15} className={liked ? 'fill-red-500' : ''} />, active: liked, activeClass: 'text-red-500', onClick: () => { setLiked(p => !p); handleSendLike(user); } },
-      { label: 'Dislike', icon: <HeartOff size={15} />, active: disliked, activeClass: 'text-orange-500', onClick: () => { setDisliked(p => !p); handleSendDislike(user); } },
-      { label: 'Block', icon: <ShieldBan size={15} />, active: blocked, activeClass: 'text-blue-500', onClick: () => { setIsBlocked(p => !p); handleBlock(user); } },
-    ];
-    const ghostBtn = theme === 'dark'
-      ? 'text-gray-500 hover:text-white hover:bg-white/5'
-      : 'text-gray-400 hover:text-gray-800 hover:bg-black/5';
-
-    return (
-      <div
-        className={`rounded-xl overflow-hidden cursor-pointer border transition-colors ${theme === 'dark' ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'
-          }`}
-        onClick={handleProfileClick}
-      >
-        {/* Photo — square, fully visible */}
-        <div className="relative aspect-square overflow-hidden">
-          <img src={avatarURL} alt="" className="w-full h-full object-cover object-top" />
-          {user.isOnline && (
-            <div className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-green-500 border border-white" />
-          )}
-        </div>
-
-        {/* Info Strip */}
-        <div className={`px-2.5 py-2 border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
-          }`}>
-          <p className={`font-semibold text-[13px] truncate leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-            }`}>
-            {user.displayname || user.name || 'Anonymous'}
-            {userAge && <span className={`ml-1 font-normal text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-              }`}>{userAge}</span>}
-          </p>
-          {location && (
-            <p className={`text-[11px] truncate flex items-center gap-0.5 mt-0.5 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
-              }`}>
-              <MapPin size={9} />{location}
-            </p>
-          )}
-        </div>
-
-        {/* Action Row — 4 equal buttons, fixed height */}
-        <div
-          className="flex items-center"
-          onClick={e => e.stopPropagation()}
-        >
-          {inlineBtns.map(btn => (
-            <button
-              key={btn.label}
-              aria-label={btn.label}
-              onClick={btn.onClick}
-              className={`flex-1 h-10 flex items-center justify-center transition-colors border-r last:border-r-0 ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
-                } ${btn.active ? btn.activeClass : ghostBtn
-                }`}
-            >
-              {btn.icon}
-            </button>
-          ))}
-        </div>
-      </div>
-    );
+    switch (viewMode) {
+      case 'compact':
+        return <CompactView {...props} />;
+      case 'list':
+        return <ListView {...props} />;
+      default:
+        return <CardView {...props} />;
+    }
   };
 
-  // --- LIST View ---
-  const ListView = () => (
-    <div
-      className={`flex items-center h-[72px] rounded-xl overflow-hidden cursor-pointer border transition-colors ${theme === 'dark'
-        ? 'bg-gray-900 border-gray-800 hover:bg-gray-800/80'
-        : 'bg-white border-gray-100 hover:bg-gray-50'
-        }`}
-      onClick={handleProfileClick}
-    >
-      {/* Avatar */}
-      <div className="w-[72px] h-[72px] shrink-0 overflow-hidden">
-        <img src={avatarURL} alt="" className="w-full h-full object-cover object-top" />
-      </div>
-
-      {/* Info */}
-      <div className="flex-1 flex flex-col justify-center px-3 min-w-0 overflow-hidden">
-        <div className="flex items-center gap-1.5">
-          <p className={`font-semibold text-sm truncate leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-            }`}>
-            {user.displayname || user.name || 'Anonymous'}
-          </p>
-          {userAge && (
-            <span className={`text-xs shrink-0 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-              }`}>{userAge}</span>
-          )}
-          {user.isOnline && <div className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />}
-        </div>
-        {location && (
-          <p className={`text-[11px] truncate flex items-center gap-1 mt-0.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-            }`}>
-            <MapPin size={9} />
-            {location}
-          </p>
-        )}
-      </div>
-
-      {/* Action Buttons — inline, no ActionBar, fixed size */}
-      <div
-        className={`shrink-0 flex items-center border-l ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
-          }`}
-        onClick={e => e.stopPropagation()}
-      >
-        {[
-          {
-            label: 'Message', icon: <MessageCircleHeart size={16} />,
-            active: false, onClick: () => handleSendMessage(user),
-            activeClass: ''
-          },
-          {
-            label: 'Like', icon: <Heart size={16} className={liked ? 'fill-red-500' : ''} />,
-            active: liked, onClick: () => { setLiked(p => !p); handleSendLike(user); },
-            activeClass: 'text-red-500'
-          },
-          {
-            label: 'Dislike', icon: <HeartOff size={16} />,
-            active: disliked, onClick: () => { setDisliked(p => !p); handleSendDislike(user); },
-            activeClass: 'text-orange-500'
-          },
-          {
-            label: 'Block', icon: <ShieldBan size={16} />,
-            active: blocked, onClick: () => { setIsBlocked(p => !p); handleBlock(user); },
-            activeClass: 'text-blue-500'
-          },
-        ].map(btn => (
-          <button
-            key={btn.label}
-            aria-label={btn.label}
-            onClick={btn.onClick}
-            className={`w-10 h-[72px] flex items-center justify-center transition-colors ${btn.active ? btn.activeClass : theme === 'dark'
-              ? 'text-gray-500 hover:text-white hover:bg-white/5'
-              : 'text-gray-400 hover:text-gray-800 hover:bg-gray-50'
-              }`}
-          >
-            {btn.icon}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-
-  // --- CARD View ---
-  const CardView = () => {
-    const inlineBtns = [
-      { label: 'Message', icon: <MessageCircleHeart size={17} />, active: false, activeClass: '', onClick: () => handleSendMessage(user) },
-      { label: 'Like', icon: <Heart size={17} className={liked ? 'fill-red-500' : ''} />, active: liked, activeClass: 'text-red-500', onClick: () => { setLiked(p => !p); handleSendLike(user); } },
-      { label: 'Dislike', icon: <HeartOff size={17} />, active: disliked, activeClass: 'text-orange-500', onClick: () => { setDisliked(p => !p); handleSendDislike(user); } },
-      { label: 'Block', icon: <ShieldBan size={17} />, active: blocked, activeClass: 'text-blue-500', onClick: () => { setIsBlocked(p => !p); handleBlock(user); } },
-    ];
-    const ghostBtn = theme === 'dark'
-      ? 'text-gray-500 hover:text-white hover:bg-white/5'
-      : 'text-gray-400 hover:text-gray-800 hover:bg-black/5';
-
-    return (
-      <div
-        className={`rounded-xl overflow-hidden cursor-pointer border transition-colors ${theme === 'dark' ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'
-          }`}
-        onClick={handleProfileClick}
-      >
-        {/* Photo — 3:4 tall, fully visible */}
-        <div className="relative aspect-[3/4] overflow-hidden">
-          <img src={avatarURL} alt="" className="w-full h-full object-cover object-top" />
-          {user.isOnline && (
-            <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 border border-white/20">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-              <span className="text-white text-[10px] font-medium">Online</span>
-            </div>
-          )}
-        </div>
-
-        {/* Info Strip */}
-        <div className={`px-3 py-2.5 border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
-          }`}>
-          <p className={`font-bold text-sm truncate leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-            }`}>
-            {user.displayname || user.name || 'Anonymous'}
-            {userAge && <span className={`ml-1.5 font-normal ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-              }`}>{userAge}</span>}
-          </p>
-          {location && (
-            <p className={`text-[11px] truncate flex items-center gap-1 mt-0.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-              }`}>
-              <MapPin size={10} />{location}
-            </p>
-          )}
-        </div>
-
-        {/* Action Row */}
-        <div
-          className="flex items-center"
-          onClick={e => e.stopPropagation()}
-        >
-          {inlineBtns.map(btn => (
-            <button
-              key={btn.label}
-              aria-label={btn.label}
-              onClick={btn.onClick}
-              className={`flex-1 h-11 flex items-center justify-center transition-colors border-r last:border-r-0 ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'
-                } ${btn.active ? btn.activeClass : ghostBtn
-                }`}
-            >
-              {btn.icon}
-            </button>
-          ))}
-        </div>
-      </div>
-    );
-  };
   return (
     <div className='w-full'>
-
-      {
-        viewMode == "compact" ? <CompactView /> : viewMode == "list" ? <ListView /> : <CardView />
-      }
+      {renderView()}
       <GiftSelector
         isOpen={isGiftSelectorOpen}
         onClose={() => setIsGiftSelectorOpen(false)}

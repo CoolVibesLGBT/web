@@ -6,7 +6,6 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
-import { Actions } from '../../services/actions';
 import { generateFallbackImage, getSafeImageURLEx } from '../../helpers/helpers';
 
 interface PopularUsersPanelProps {
@@ -15,6 +14,7 @@ interface PopularUsersPanelProps {
 
 interface PopularUser {
   id: string;
+  public_id?: string | number;
   username: string;
   displayname: string;
   date_of_birth?: string;
@@ -69,10 +69,10 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({ limit = 20 }) => 
 
       const normalized = (response?.users ?? []).slice(0, limit);
       setUsers(normalized);
-    } catch (err: any) {
+    } catch (err: unknown) {
       const message =
-        err?.response?.data?.message ||
-        err?.message ||
+        (err as any)?.response?.data?.message ||
+        (err as Error)?.message ||
         'Fetch error';
       setError(message);
     } finally {
@@ -86,7 +86,7 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({ limit = 20 }) => 
 
   const resolveAvatar = useCallback((user: PopularUser) => {
     return (
-      getSafeImageURLEx(user.username, (user as any).avatar, 'icon') as string
+      getSafeImageURLEx(user.username, user.avatar || undefined, 'icon') as string
     );
   }, []);
 

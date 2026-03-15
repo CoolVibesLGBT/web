@@ -18,6 +18,41 @@ interface Reel {
   comments: number;
 }
 
+interface Author {
+  id: string | number;
+  public_id: string;
+  username: string;
+  displayname?: string;
+  avatar?: string | null;
+}
+
+interface Attachment {
+  id?: string | number;
+  public_id?: string;
+  file?: {
+    name?: string;
+    url?: string;
+    mime_type?: string;
+    storage_path?: string;
+  };
+  variants?: Array<{
+    type: string;
+    url: string;
+  }>;
+}
+
+interface Post {
+  id: string | number;
+  public_id?: string;
+  author: Author;
+  attachments?: Attachment[];
+}
+
+interface VibesAPIResponse {
+  posts?: Post[];
+  next_cursor?: string | number;
+}
+
 interface ReelsProps {
   reels?: Reel[];
   activeTab?: string;
@@ -57,10 +92,10 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
       const currentCursor = loadMore ? cursor : '';
       console.log('Fetching vibes with cursor:', currentCursor, 'loadMore:', loadMore);
       
-      const response = await api.fetchVibes({
+      const response = (await api.fetchVibes({
         limit: 10,
         cursor: currentCursor,
-      });
+      })) as VibesAPIResponse;
 
       console.log('Vibes API Response:', response);
 
@@ -68,10 +103,10 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
       // Yeni format: response.posts array'i
       const posts = response.posts || [];
       const newReels: Reel[] = posts
-        .filter((post: any) => post.attachments && post.attachments.length > 0) // En az bir attachment olan post'ları al
-        .map((post: any) => {
+        .filter((post: Post) => post.attachments && post.attachments.length > 0) // En az bir attachment olan post'ları al
+        .map((post: Post) => {
           // İlk attachment'ı kullan (reel için tek medya)
-          const attachment = post.attachments[0];
+          const attachment = post.attachments![0];
           const file = attachment.file;
           const author = post.author;
           
@@ -111,19 +146,20 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
           }
 
           // User avatar'ını al
-          const avatarUrl = getSafeImageURLEx(author.public_id,author.avatar, 'thumbnail') 
+          const avatarUrl = getSafeImageURLEx(author.public_id, author.avatar || undefined, 'thumbnail') || ''
 
           return {
-            id: attachment.id || attachment.public_id || post.id || post.public_id,
+            id: (attachment.id || attachment.public_id || post.id || post.public_id || Math.random()).toString(),
             mediaUrl: mediaUrl,
             mediaType: isVideo ? 'video' : 'image',
             posterUrl: isVideo ? posterUrl : undefined,
-            username: author?.username || author?.displayname,
+            username: author?.username || author?.displayname || 'User',
             avatar: avatarUrl,
             description: file?.name?.replace(/\.(jpg|jpeg|png|webp|gif|mp4|mov)$/i, '') || 'Vibe',
+            music: 'Original Audio',
             likes: Math.floor(Math.random() * 10000) + 100, // Random like sayısı
             comments: Math.floor(Math.random() * 1000) + 10, // Random yorum sayısı
-          };
+          } as Reel;
         });
 
       if (loadMore) {
@@ -324,20 +360,6 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
     
     if (shouldLoadMore) {
       console.log('Load more triggered, cursor:', cursor, 'currentIndex:', currentIndex, 'length:', allReels.length);
-      isLoadingMoreRef.current = true;
-      fetchVibesFromAPI(true).finally(() => {
-        isLoadingMoreRef.current = false;
-      });
-    }
-    
-    // Kayıtlar bitti ama hala scroll ediyorsa - cursor'u sıfırla ve sonuna ekle (infinite loop)
-    if (currentIndex >= allReels.length - 3 && !hasMore && allReels.length > 0 && !isLoading && !isLoadingMoreRef.current) {
-      console.log('End reached, resetting cursor for infinite loop');
-      // Cursor'u sıfırla ve hasMore'u true yap
-      setCursor('');
-      setHasMore(true);
-      
-      // Baştan yeni veri çek ve SONUNA EKLE
       isLoadingMoreRef.current = true;
       fetchVibesFromAPI(true).finally(() => {
         isLoadingMoreRef.current = false;

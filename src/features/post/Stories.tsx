@@ -9,6 +9,42 @@ import { useNavigate } from 'react-router-dom';
 
 const STORY_LIMIT = 10;
 
+interface User {
+  id: string | number;
+  public_id?: string;
+  username?: string;
+  displayname?: string;
+  avatar?: string | null;
+  cover?: string | null;
+}
+
+interface Media {
+  id?: string | number;
+  file?: {
+    url?: string;
+    mime_type?: string;
+  };
+  thumbnail?: string;
+  small?: string;
+  icon?: string;
+  medium?: string;
+  large?: string;
+  high?: string;
+  low?: string;
+  preview?: string;
+  poster?: string;
+  original?: string;
+}
+
+interface Story {
+  id: string | number;
+  user_id: string | number;
+  user?: User;
+  media?: Media;
+  is_expired?: boolean;
+  created_at: string;
+}
+
 type StoryCard = {
   id: number | string;
   name: string;
@@ -18,9 +54,9 @@ type StoryCard = {
   isOwn?: boolean;
   hasStory?: boolean;
   storyId?: string;
-  storyMedia?: any;
+  storyMedia?: Media;
   userId?: string | number;
-  user?: any;
+  user?: User;
   created_at?: string;
 };
 
@@ -51,7 +87,7 @@ const Stories: React.FC = () => {
     [availableStories, selectedStory]
   );
 
-  const buildStoryCover = useCallback((story: any, user: any, isVideoMedia: boolean) => {
+  const buildStoryCover = useCallback((story: Story, user: User | undefined, isVideoMedia: boolean) => {
     if (isVideoMedia) {
       return (
         getSafeImageURL(story.media, 'poster') ||
@@ -75,13 +111,13 @@ const Stories: React.FC = () => {
     );
   }, []);
 
-  const transformStories = useCallback((storiesData: any[]) => {
-    const activeStories = storiesData.filter((story) => !story.is_expired);
+  const transformStories = useCallback((storiesData: Story[]) => {
+    const activeStories = storiesData.filter((story) => story.is_expired !== true);
     const sortedStories = [...activeStories].sort(
       (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
 
-    return sortedStories.map((story: any) => {
+    return sortedStories.map((story: Story) => {
       const user = story.user;
       const isVideoMedia = story?.media?.file?.mime_type?.startsWith('video/');
       const avatarIcon = getSafeImageURLEx(user?.public_id, user?.avatar, 'icon');
@@ -91,11 +127,11 @@ const Stories: React.FC = () => {
         id: story.id,
         name: user?.displayname || user?.username || 'User',
         avatar: avatarIcon,
-        cover: buildStoryCover(story, user, isVideoMedia),
+        cover: buildStoryCover(story, user, !!isVideoMedia),
         userCover: avatarMedium,
         isOwn: story.user_id === authUser?.id,
         hasStory: true,
-        storyId: story.id,
+        storyId: story.id.toString(),
         storyMedia: story.media,
         userId: story.user_id,
         user,
@@ -119,7 +155,10 @@ const Stories: React.FC = () => {
   const fetchStories = useCallback(async () => {
     try {
       setLoadingStories(true);
-      const response = await api.fetchStories({ limit: STORY_LIMIT });
+      const response = (await api.fetchStories({ limit: STORY_LIMIT })) as {
+        stories?: Story[];
+        data?: { stories?: Story[] };
+      };
       const storiesData = response?.stories || response?.data?.stories || [];
       if (storiesData.length === 0) {
         const mockData = await loadMockStories();
@@ -197,22 +236,23 @@ const Stories: React.FC = () => {
       await api.uploadStory({ story: selectedFile });
       resetUploadState();
       await fetchStories();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error uploading story:', err);
-      setUploadError(err.response?.data?.message || 'Failed to upload story. Please try again.');
+      const errorMessage = (err as any).response?.data?.message || 'Failed to upload story. Please try again.';
+      setUploadError(errorMessage);
     } finally {
       setIsUploading(false);
     }
   };
 
-  const handleSendMessage = async (profile: any) => {
+  const handleSendMessage = async (profile: User) => {
     if (!authUser?.id || !profile?.id) {
       console.error('User or profile ID is missing');
       return;
     }
 
     try {
-      const chatResponse = await api.createChat([profile.id], 'private') as {
+      const chatResponse = (await api.createChat([profile.id.toString()], 'private')) as {
         chat: {
           id: string;
         };
@@ -226,13 +266,13 @@ const Stories: React.FC = () => {
             openChat: chatId,
             userId: profile.id,
             publicId: profile.public_id,
-            username: profile.username,
+            username: profile.username || '',
           },
         });
       } else {
         navigate('/messages', {
           state: {
-            openChat: profile.username || profile.id,
+            openChat: profile.username || profile.id.toString(),
             userId: profile.id,
             publicId: profile.public_id,
           },
@@ -242,7 +282,7 @@ const Stories: React.FC = () => {
       console.error('Error creating chat:', error);
       navigate('/messages', {
         state: {
-          openChat: profile.username || profile.id,
+          openChat: profile.username || profile.id.toString(),
           userId: profile.id,
           publicId: profile.public_id,
         },

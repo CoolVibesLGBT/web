@@ -91,7 +91,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, className = '' }
 
   useEffect(() => {
     if (isPlaying) {
-      resetControlsTimeout();
+      const timer = setTimeout(() => resetControlsTimeout(), 0);
+      return () => clearTimeout(timer);
     }
     return () => {
       if (controlsTimeoutRef.current) {
