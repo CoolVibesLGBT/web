@@ -77,9 +77,8 @@ export function useSEO(options: SEOOptions = {}) {
     setMeta('twitter:image', image)
     setMeta('twitter:card', 'summary_large_image')
 
-    // Cleanup: restore defaults on unmount
+    // Cleanup: restore meta on unmount (title is set by next route or App fallback)
     return () => {
-      document.title = DEFAULT_TITLE
       setMeta('description', DEFAULT_DESCRIPTION)
       setMeta('robots', 'index, follow')
       setLink('canonical', SITE_URL)
