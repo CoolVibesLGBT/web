@@ -51,7 +51,7 @@ export default function BubbleView() {
     }, []);
 
     useEffect(() => {
-        const handleUserBlocked = (e: any) => {
+        const handleUserBlocked = (e: unknown) => {
             const blockedId = e.detail?.userId;
             if (activeUser && (activeUser.public_id === blockedId || activeUser.id === blockedId)) {
                 setActiveUser(null);
@@ -77,7 +77,7 @@ export default function BubbleView() {
 
 
 
-    const handleSendMessage = async (profile: any) => {
+    const handleSendMessage = async (profile: unknown) => {
         if (!profile?.id) {
             console.error('User or profile ID is missing');
             return;
@@ -129,7 +129,7 @@ export default function BubbleView() {
         }
     };
 
-    const handleSendLike = async (user: any) => {
+    const handleSendLike = async (user: unknown) => {
         //
 
 
@@ -147,7 +147,7 @@ export default function BubbleView() {
         }
     }
 
-    const handleSendDislike = async (user: any) => {
+    const handleSendDislike = async (user: unknown) => {
         //
 
 
@@ -165,7 +165,7 @@ export default function BubbleView() {
         }
     }
 
-    const handleBlock = async (user: any) => {
+    const handleBlock = async (user: unknown) => {
         //
 
 

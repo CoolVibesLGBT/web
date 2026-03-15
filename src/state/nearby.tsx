@@ -3,13 +3,13 @@ import { atom } from 'jotai';
 export interface GlobalState {
     notificationNextCursor: string | number | null;
     notificationPrevCursor: string | number | null;
-    notifications: any[];
+    notifications: unknown[];
 
     vibesCursor: string | number | null
     nearByCursor: string | number | null;
-    nearbyUsers: any[];
-    vibes: any[]
-    posts: any[];
+    nearbyUsers: unknown[];
+    vibes: unknown[]
+    posts: unknown[];
     postsCursor: string | number | null;
     currentUserMapPosition: [number, number] | null;
 }

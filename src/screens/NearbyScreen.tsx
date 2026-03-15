@@ -30,7 +30,7 @@ const NearbyScreen: React.FC = () => {
 
   const isRequestPendingRef = useRef(false);
 
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<unknown>(null);
 
   const [state, setState] = useAtom(globalState);
 
@@ -50,7 +50,7 @@ const NearbyScreen: React.FC = () => {
       setError(null);
 
       // Build filter payload
-      const payload: any = {
+      const payload: unknown = {
         limit: 100,
         cursor: (refreshing || (lat !== undefined && lng !== undefined)) ? null : state.nearByCursor,
         latitude: lat,
@@ -59,15 +59,15 @@ const NearbyScreen: React.FC = () => {
 
       const response = await api.fetchNearbyUsers(payload);
 
-      setState((prevState: any) => {
+      setState((prevState: unknown) => {
         // If refreshing or map moved, we replace the list. Otherwise we append.
         const shouldReset = refreshing || (lat !== undefined && lng !== undefined);
         const existingUsers = shouldReset ? [] : prevState.nearbyUsers;
-        const existingIds = new Set(existingUsers.map((user: any) => user.id));
+        const existingIds = new Set(existingUsers.map((user: unknown) => user.id));
 
         // Filter out duplicates
         const newUsers = (response.users || []).filter(
-          (user: any) => !existingIds.has(user.id)
+          (user: unknown) => !existingIds.has(user.id)
         );
 
         return {
@@ -77,7 +77,7 @@ const NearbyScreen: React.FC = () => {
         };
       });
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching nearby users:", err);
       setError(err?.message || "Could not fetch users");
     } finally {
@@ -122,15 +122,15 @@ const NearbyScreen: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    const handleUserBlocked = (e: any) => {
+    const handleUserBlocked = (e: unknown) => {
       const blockedId = e.detail?.userId;
       if (blockedId) {
-        setState((prevState: any) => ({
+        setState((prevState: unknown) => ({
           ...prevState,
-          nearbyUsers: prevState.nearbyUsers.filter((u: any) => u.public_id !== blockedId && u.id !== blockedId)
+          nearbyUsers: prevState.nearbyUsers.filter((u: unknown) => u.public_id !== blockedId && u.id !== blockedId)
         }));
 
-        setSelectedUser((prev: any) => {
+        setSelectedUser((prev: unknown) => {
           if (prev && (prev.public_id === blockedId || prev.id === blockedId)) {
             return null;
           }
@@ -146,7 +146,7 @@ const NearbyScreen: React.FC = () => {
 
 
   const handleRefresh = () => {
-    setState((prevState: any) => ({
+    setState((prevState: unknown) => ({
       ...prevState,
       nearbyUsers: [],
       nearByCursor: null,
@@ -155,7 +155,7 @@ const NearbyScreen: React.FC = () => {
     fetchNearbyUsers(true);
   };
 
-  const handleMarkerClick = useCallback((user: any) => {
+  const handleMarkerClick = useCallback((user: unknown) => {
     setSelectedUser(user);
   }, []);
 
@@ -359,7 +359,7 @@ const NearbyScreen: React.FC = () => {
               <div className='w-full flex-col py-2'>
                 {viewMode === 'grid' && (
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                    {state.nearbyUsers.map((user: any, index: number) => (
+                    {state.nearbyUsers.map((user: unknown, index: number) => (
                       <motion.div
                         key={`view_grid_item${index}`}
 
@@ -375,7 +375,7 @@ const NearbyScreen: React.FC = () => {
 
                 {viewMode === 'list' && (
                   <div className="space-y-3">
-                    {state.nearbyUsers.map((user: any, index: number) => (
+                    {state.nearbyUsers.map((user: unknown, index: number) => (
                       <motion.div
                         key={user.id}
                         initial={{ opacity: 0, x: -20 }}
@@ -390,7 +390,7 @@ const NearbyScreen: React.FC = () => {
 
                 {viewMode === 'card' && (
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-2">
-                    {state.nearbyUsers.map((user: any, index: number) => (
+                    {state.nearbyUsers.map((user: unknown, index: number) => (
                       <motion.div
                         key={user.id}
                         initial={{ opacity: 0, scale: 0.95 }}

@@ -5,21 +5,21 @@ import { httpClient } from "./httpClient";
 
 interface ApiRequestOptions {
   method?: "GET" | "POST";
-  params?: Record<string, any>;
-  body?: Record<string, any> | any; // array veya nested objelere izin verir
+  params?: Record<string, unknown>;
+  body?: Record<string, unknown> | unknown; // array veya nested objelere izin verir
 }
 
 export class ApiService {
 
 
-  async fetchMetadata(url: any) {
+  async fetchMetadata(url: unknown) {
     return this.call(Actions.CMD_LINK_METADATA, {
       method: "POST",
       body: { url: url }
     });
   }
 
-  async checkNewNotifications(limit: number = 1, cursor: any = null) {
+  async checkNewNotifications(limit: number = 1, cursor: unknown = null) {
     return this.call(Actions.CMD_USER_GET_NOTIFICATIONS, {
       method: "POST",
       body: { limit: limit, cursor: cursor }
@@ -34,14 +34,14 @@ export class ApiService {
     });
   }
 
-  async handleSetVapidSubscriptions(params: any) {
+  async handleSetVapidSubscriptions(params: unknown) {
     return this.call(Actions.CMD_SET_VAPID_SUBSCRIBE, {
       method: "POST",
       body: params
     });
   }
 
-  async handleRegister(user: Record<string, any>) {
+  async handleRegister(user: Record<string, unknown>) {
     return this.call(Actions.AUTH_REGISTER, {
       method: "POST",
       body: user,
@@ -54,7 +54,7 @@ export class ApiService {
     });
   }
 
-  async handleCreatePost(data: Record<string, any>) {
+  async handleCreatePost(data: Record<string, unknown>) {
 
     return this.call(Actions.POST_CREATE, {
       method: "POST",
@@ -63,56 +63,56 @@ export class ApiService {
     console.log("handleCreatePost", data)
   }
 
-  async handlePostDelete(postId: any) {
+  async handlePostDelete(postId: unknown) {
     return this.call(Actions.CMD_POST_DELETE, {
       method: "POST",
       body: { post_id: postId },
     });
   }
 
-  async handlePostLike(postId: any) {
+  async handlePostLike(postId: unknown) {
     return this.call(Actions.CMD_POST_LIKE, {
       method: "POST",
       body: { post_id: postId },
     });
   }
 
-  async handlePostDislike(postId: any) {
+  async handlePostDislike(postId: unknown) {
     return this.call(Actions.CMD_POST_DISLIKE, {
       method: "POST",
       body: { post_id: postId },
     });
   }
 
-  async handlePostBanana(postId: any) {
+  async handlePostBanana(postId: unknown) {
     return this.call(Actions.CMD_POST_BANANA, {
       method: "POST",
       body: { post_id: postId },
     });
   }
 
-  async handlePostAddToBookmarks(postId: any) {
+  async handlePostAddToBookmarks(postId: unknown) {
     return this.call(Actions.CMD_POST_BOOKMARK, {
       method: "POST",
       body: { post_id: postId },
     });
   }
 
-  async handlePostReport(postId: any, reason: any, description: any) {
+  async handlePostReport(postId: unknown, reason: unknown, description: unknown) {
     return this.call(Actions.CMD_POST_REPORT, {
       method: "POST",
       body: { post_id: postId, reason: reason, description: description },
     });
   }
 
-  async handleUserReport(userId: any, reason: any, description: any) {
+  async handleUserReport(userId: unknown, reason: unknown, description: unknown) {
     return this.call(Actions.CMD_USER_REPORT, {
       method: "POST",
       body: { userId: userId, reason: reason, description: description },
     });
   }
 
-  async handlePostView(postId: any) {
+  async handlePostView(postId: unknown) {
     return this.call(Actions.CMD_POST_VIEW, {
       method: "POST",
       body: { post_id: postId },
@@ -120,7 +120,7 @@ export class ApiService {
   }
 
 
-  async handleSendTip(postId: any, amount: any) {
+  async handleSendTip(postId: unknown, amount: unknown) {
     return this.call(Actions.CMD_POST_TIP, {
       method: "POST",
       body: { post_id: postId, amount: amount },
@@ -128,7 +128,7 @@ export class ApiService {
   }
 
 
-  async handleLogin(credentials: { nickname: string; password: string; location?: any }) {
+  async handleLogin(credentials: { nickname: string; password: string; location?: unknown }) {
     return this.call(Actions.AUTH_LOGIN, {
       method: "POST",
       body: credentials,
@@ -136,7 +136,7 @@ export class ApiService {
   }
 
   async handleVote(credentials: { choice_id: string; weight?: number; rank?: number }) {
-    const body: Record<string, any> = {
+    const body: Record<string, unknown> = {
       choice_id: credentials.choice_id,
     };
 
@@ -217,7 +217,7 @@ export class ApiService {
   }
 
 
-  async updateProfile(userData: Record<string, any>) {
+  async updateProfile(userData: Record<string, unknown>) {
     return this.call(Actions.CMD_UPDATE_USER_PROFILE, {
       method: "POST",
       body: userData,
@@ -282,7 +282,7 @@ export class ApiService {
   }
 
   // Nearby
-  async fetchNearbyUsers(payload: Record<string, any>) {
+  async fetchNearbyUsers(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_FETCH_NEARBY_USERS, {
       method: "POST",
       body: payload,
@@ -304,7 +304,7 @@ export class ApiService {
     });
   }
 
-  async sendMessage(payload: Record<string, any>) {
+  async sendMessage(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_SEND_MESSAGE, {
       method: "POST",
       body: payload,
@@ -319,91 +319,91 @@ export class ApiService {
   }
 
   // Profile updates & uploads
-  async updatePassword(payload: Record<string, any>) {
+  async updatePassword(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_UPDATE_PASSWORD, {
       method: "POST",
       body: payload,
     });
   }
 
-  async updateIdentify(payload: Record<string, any>) {
+  async updateIdentify(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_UPDATE_IDENTIFY, {
       method: "POST",
       body: payload,
     });
   }
 
-  async updateAttribute(payload: Record<string, any>) {
+  async updateAttribute(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_UPDATE_ATTRIBUTE, {
       method: "POST",
       body: payload,
     });
   }
 
-  async updateInterest(payload: Record<string, any>) {
+  async updateInterest(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_UPDATE_INTEREST, {
       method: "POST",
       body: payload,
     });
   }
 
-  async updateFantasy(payload: Record<string, any>) {
+  async updateFantasy(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_UPDATE_FANTASY, {
       method: "POST",
       body: payload,
     });
   }
 
-  async uploadAvatar(payload: Record<string, any>) {
+  async uploadAvatar(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_UPLOAD_AVATAR, {
       method: "POST",
       body: payload,
     });
   }
 
-  async uploadCover(payload: Record<string, any>) {
+  async uploadCover(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_UPLOAD_COVER, {
       method: "POST",
       body: payload,
     });
   }
 
-  async fetchUserPosts(payload: Record<string, any>) {
+  async fetchUserPosts(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_POSTS, {
       method: "POST",
       body: payload,
     });
   }
 
-  async fetchUserPostReplies(payload: Record<string, any>) {
+  async fetchUserPostReplies(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_POST_REPLIES, {
       method: "POST",
       body: payload,
     });
   }
 
-  async fetchUserPostLikes(payload: Record<string, any>) {
+  async fetchUserPostLikes(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_POST_LIKES, {
       method: "POST",
       body: payload,
     });
   }
 
-  async fetchUserPostMedia(payload: Record<string, any>) {
+  async fetchUserPostMedia(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_POST_MEDIA, {
       method: "POST",
       body: payload,
     });
   }
 
-  async toggleFollow(payload: Record<string, any>) {
+  async toggleFollow(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_TOGGLE_FOLLOW, {
       method: "POST",
       body: payload,
     });
   }
 
-  async fetchEngagements(payload: Record<string, any>) {
+  async fetchEngagements(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_FETCH_ENGAGEMENTS, {
       method: "POST",
       body: payload,
@@ -419,7 +419,7 @@ export class ApiService {
   }
 
   // Discovery
-  async fetchTrends(payload: Record<string, any>) {
+  async fetchTrends(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_SEARCH_TRENDS, {
       method: "POST",
       body: payload,
@@ -427,14 +427,14 @@ export class ApiService {
   }
 
   // Stories
-  async fetchStories(payload: Record<string, any>) {
+  async fetchStories(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_FETCH_STORIES, {
       method: "POST",
       body: payload,
     });
   }
 
-  async uploadStory(payload: Record<string, any>) {
+  async uploadStory(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_UPLOAD_STORY, {
       method: "POST",
       body: payload,
@@ -442,14 +442,14 @@ export class ApiService {
   }
 
   // User interactions
-  async toggleUserLike(payload: Record<string, any>) {
+  async toggleUserLike(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_TOGGLE_LIKE, {
       method: "POST",
       body: payload,
     });
   }
 
-  async toggleUserDislike(payload: Record<string, any>) {
+  async toggleUserDislike(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_TOGGLE_DISLIKE, {
       method: "POST",
       body: payload,
@@ -556,7 +556,7 @@ export class ApiService {
 
 
 
-  async call<T = any>(
+  async call<T = unknown>(
     action: ActionType,
     options: ApiRequestOptions = {}
   ): Promise<T> {
@@ -574,11 +574,11 @@ export class ApiService {
 
     const response = await httpClient.post("/", {
       action: action,    // opsiyonel, backend handlePacket için
-      ...options.body, // body tek objeye sarılıyor
+      ...(options.body as Record<string, unknown>), // body tek objeye sarılıyor
     }, {
       headers: {
         "Content-Type": "multipart/form-data",
-        "Authorization": token,
+        "Authorization": token as string,
       }
     });
 

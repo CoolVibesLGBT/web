@@ -296,7 +296,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
       googlePayButtonRef.current.innerHTML = '';
     }
 
-    const handleGooglePaySuccess = async (paymentData: any) => {
+    const handleGooglePaySuccess = async (paymentData: unknown) => {
       console.log("GelenData", paymentData)
       try {
         // TODO: Send paymentData to your backend for processing
@@ -323,14 +323,14 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
       }
     };
 
-    const handleGooglePayError = (error: any) => {
+    const handleGooglePayError = (error: unknown) => {
       console.error('Google Pay error:', error);
       setIsGooglePayProcessing(false);
       setDepositStep('error');
     };
 
     // Payment authorization callback
-    const onPaymentAuthorized = (paymentData: any) => {
+    const onPaymentAuthorized = (paymentData: unknown) => {
       return new Promise((resolve) => {
         // Process payment
         handleGooglePaySuccess(paymentData)
@@ -385,7 +385,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
           // Check if Google Pay is available
           const provider = googlePayDetail.provider;
           // Build tokenization parameters based on gateway type
-          const tokenizationParams: any = {
+          const tokenizationParams: unknown = {
             gateway: provider?.gateway || 'stripe'
           };
 
@@ -417,7 +417,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
               }
             ],
             existingPaymentMethodRequired: true
-          }).then((response: any) => {
+          }).then((response: unknown) => {
             if (response.result) {
               setGooglePayReady(true);
               setIsGooglePayLoading(false);
@@ -430,7 +430,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
               setGooglePayReady(false);
               setIsGooglePayLoading(false);
             }
-          }).catch((error: any) => {
+          }).catch((error: unknown) => {
             console.error('Error checking Google Pay availability:', error);
             setGooglePayReady(false);
             setIsGooglePayLoading(false);
@@ -446,7 +446,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
       }
     };
 
-    const renderGooglePayButton = (paymentsClient: any) => {
+    const renderGooglePayButton = (paymentsClient: unknown) => {
       if (!googlePayButtonRef.current) {
         console.log('Google Pay button ref not ready, retrying...');
         setTimeout(() => renderGooglePayButton(paymentsClient), 100);
@@ -477,7 +477,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
       }
     };
 
-    const onGooglePayButtonClick = (paymentsClient: any) => {
+    const onGooglePayButtonClick = (paymentsClient: unknown) => {
       return () => {
         if (!googlePayAmount || parseFloat(googlePayAmount) <= 0) {
           return;
@@ -494,7 +494,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
 
         const provider = googlePayDetail.provider;
         // Build tokenization parameters based on gateway type
-        const tokenizationParams: any = {
+        const tokenizationParams: unknown = {
           gateway: provider?.gateway || 'stripe'
         };
 
@@ -543,7 +543,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
             // This will be called after onPaymentAuthorized resolves
             console.log('Payment authorized successfully');
           })
-          .catch((error: any) => {
+          .catch((error: unknown) => {
             handleGooglePayError(error);
           });
       };
@@ -755,7 +755,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                     ].map((tab) => (
                       <motion.button
                         key={tab.id}
-                        onClick={() => setActiveTab(tab.id as any)}
+                        onClick={() => setActiveTab(tab.id as unknown)}
                         className={`flex-1 py-3 font-semibold text-sm relative transition-colors ${activeTab === tab.id
                           ? theme === 'dark' ? 'text-white' : 'text-black'
                           : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'

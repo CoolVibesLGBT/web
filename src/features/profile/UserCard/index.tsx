@@ -11,11 +11,11 @@ import { api } from '../../../services/api';
 import { burstConfig, BurstOverlayState, BurstType, createOverlayConfetti, createOverlayParticles, createOverlayStreaks } from './ActionBar';
 
 interface UserCardProps {
-  user: any;
+  user: unknown;
   viewMode?: 'compact' | 'list' | 'card';
 }
 
-const getLocation = (user: any): string => {
+const getLocation = (user: unknown): string => {
   if (user.location) {
     if (typeof user.location === 'string') {
       return user.location.trim();
@@ -53,7 +53,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
     navigate(`/${getUsername()}`)
   };
 
-  const handleSendMessage = async (profile: any) => {
+  const handleSendMessage = async (profile: unknown) => {
     if (!user?.id || !profile?.id) {
       console.error('User or profile ID is missing');
       return;
@@ -105,7 +105,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
     }
   };
 
-  const handleSendLike = async (user: any) => {
+  const handleSendLike = async (user: unknown) => {
     //
 
 
@@ -123,7 +123,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
     }
   }
 
-  const handleSendDislike = async (user: any) => {
+  const handleSendDislike = async (user: unknown) => {
     //
 
 
@@ -141,7 +141,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
     }
   }
 
-  const handleBlock = async (user: any) => {
+  const handleBlock = async (user: unknown) => {
     //
 
 

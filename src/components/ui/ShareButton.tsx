@@ -19,7 +19,7 @@ const socialPlatforms = [
     name: 'Facebook',
     icon: Facebook,
     color: '#1877F2',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: (url: string) => 
       `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`
   },
   {
@@ -35,7 +35,7 @@ const socialPlatforms = [
     name: 'Instagram',
     icon: Instagram,
     color: '#E4405F',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: () => 
       `https://www.instagram.com/`
   },
   {
@@ -43,7 +43,7 @@ const socialPlatforms = [
     name: 'TikTok',
     icon: Share2,
     color: '#000000',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: () => 
       `https://www.tiktok.com/`
   },
   {
@@ -59,7 +59,7 @@ const socialPlatforms = [
     name: 'Snapchat',
     icon: Send,
     color: '#FFFC00',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: () => 
       `https://www.snapchat.com/`
   },
   {
@@ -67,7 +67,7 @@ const socialPlatforms = [
     name: 'YouTube',
     icon: Youtube,
     color: '#FF0000',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: () => 
       `https://www.youtube.com/`
   },
   {
@@ -75,7 +75,7 @@ const socialPlatforms = [
     name: 'WeChat',
     icon: MessageCircle,
     color: '#07C160',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: () => 
       `weixin://`
   },
   {
@@ -83,7 +83,7 @@ const socialPlatforms = [
     name: 'Douyin',
     icon: Share2,
     color: '#000000',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: () => 
       `https://www.douyin.com/`
   },
   {
@@ -107,7 +107,7 @@ const socialPlatforms = [
     name: 'Bilibili',
     icon: Share2,
     color: '#FB7299',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: () => 
       `https://www.bilibili.com/`
   },
   {
@@ -115,7 +115,7 @@ const socialPlatforms = [
     name: 'Kuaishou',
     icon: Share2,
     color: '#FF6600',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: () => 
       `https://www.kuaishou.com/`
   },
   {
@@ -123,7 +123,7 @@ const socialPlatforms = [
     name: 'LINE',
     icon: MessageCircle,
     color: '#00C300',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: (url: string) => 
       `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}`
   },
   {
@@ -131,7 +131,7 @@ const socialPlatforms = [
     name: 'Zalo',
     icon: MessageCircle,
     color: '#0068FF',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: () => 
       `https://zalo.me/`
   },
   {
@@ -139,7 +139,7 @@ const socialPlatforms = [
     name: 'KakaoTalk',
     icon: MessageCircle,
     color: '#3C1E1E',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: (url: string) => 
       `https://story.kakao.com/share?url=${encodeURIComponent(url)}`
   },
   {
@@ -147,7 +147,7 @@ const socialPlatforms = [
     name: 'Helo',
     icon: Share2,
     color: '#FF6B00',
-    getShareUrl: (url: string, title?: string) => 
+    getShareUrl: () => 
       `https://helo.com/`
   },
   {
@@ -163,7 +163,6 @@ const socialPlatforms = [
 const ShareButton: React.FC<ShareButtonProps> = ({
   url,
   title,
-  description,
   trigger,
   className = '',
 }) => {
@@ -221,7 +220,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
     
     // For mobile apps (WeChat, Viber, etc.), try to open the app
     if (shareUrl.startsWith('weixin://') || shareUrl.startsWith('viber://')) {
-      window.location.href = shareUrl;
+      window.location.assign(shareUrl);
     } else {
       // Open in new window
       window.open(shareUrl, '_blank', 'width=600,height=400,noopener,noreferrer');
@@ -285,7 +284,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
                   e.preventDefault();
                   handleOpenModal();
                 },
-                style: { pointerEvents: 'auto' as const, ...((trigger as any).props?.style || {}) }
+                style: { pointerEvents: 'auto' as const, ...(trigger.props as any)?.style }
               })
             : trigger
           }

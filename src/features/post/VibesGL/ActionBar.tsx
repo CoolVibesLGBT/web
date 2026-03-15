@@ -153,7 +153,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({ avatarUrl, onLike, onMessa
 };
 
 // --- HELPER COMPONENTS ---
-const ActionButton: React.FC<{ icon: React.ComponentType<any>; label: string; onClick: () => void; }> = ({ icon: Icon, label, onClick }) => (
+const ActionButton: React.FC<{ icon: React.ComponentType<unknown>; label: string; onClick: () => void; }> = ({ icon: Icon, label, onClick }) => (
     <button onClick={onClick} className="flex flex-col items-center gap-1.5 transition-transform hover:scale-110" aria-label={label}>
         <Icon className="w-9 h-9 drop-shadow-md" />
         <span className="text-xs font-semibold">{label}</span>

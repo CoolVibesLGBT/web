@@ -35,21 +35,21 @@ export function buildSafeURL(
   }
   
 
-export function generatePlaceImage(seed : any) : string{
+export function generatePlaceImage(seed : unknown) : string{
   const safeSeed = String(seed ?? 'guest');
   const randColor = pickSeededColorsString(safeSeed, 3);
   return `${PLACE_AVATAR_URL}${encodeURIComponent(safeSeed)}&backgroundColor=${randColor}&backgroundType=gradientLinear,solid`;
 }
 
 
-export function generateFallbackImage(seed : any) : string{
+export function generateFallbackImage(seed : unknown) : string{
   const safeSeed = String(seed ?? 'guest');
   const randColor = pickSeededColorsString(safeSeed, 3);
   return `${DEFAULT_AVATAR_URL}${encodeURIComponent(safeSeed)}&backgroundColor=${randColor}&backgroundType=gradientLinear,solid`;
 }
 
 export function getSafeImageURL(
-    attachment: any,
+    attachment: unknown,
     variant: string = "small"
   ): string | null {
     const serviceURI = serviceURL[defaultServiceServerId]
@@ -84,8 +84,8 @@ export function getSafeImageURL(
   }
 
 export function getSafeImageURLEx(
-    publicId : any,
-    attachment: any,
+    publicId : unknown,
+    attachment: unknown,
     variant: string = "small"
   ): string | null {
     const serviceURI = serviceURL[defaultServiceServerId]
@@ -120,7 +120,7 @@ export function getSafeImageURLEx(
 
   }
   
-  export function getImageURL(attachment: any, variant: string = "small"): string | null {
+  export function getImageURL(attachment: unknown, variant: string = "small"): string | null {
     return getSafeImageURL(attachment, variant);
   }
 
@@ -175,7 +175,7 @@ export function urlBase64ToUint8Array(base64String: string) {
 
 export const random = (min: number, max: number): number => Math.random() * (max - min) + min;
 
-export const getLocalizedContent = (contentObj: Record<string, any> | undefined, languageCode: string): any => {
+export const getLocalizedContent = (contentObj: Record<string, unknown> | undefined, languageCode: string): unknown => {
   if (!contentObj) return "";
 
   // Önce istenen dilde içerik var mı kontrol et

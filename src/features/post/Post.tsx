@@ -75,7 +75,7 @@ interface ApiPost {
   author_id: string;
   type?: string;
   post_kind?: string;
-  extras?: any;
+  extras?: unknown;
   content?: {
     en?: string;
   };
@@ -139,7 +139,7 @@ interface ApiPost {
     file_id: string;
     owner_id: string;
     owner_type: string;
-  extras?: any;
+  extras?: unknown;
     role: string;
     is_public: boolean;
     file: {
@@ -147,7 +147,7 @@ interface ApiPost {
       url: string;
       storage_path: string;
       mime_type: string;
-  extras?: any;
+  extras?: unknown;
       size: number;
       name: string;
       created_at: string;
@@ -160,7 +160,7 @@ interface ApiPost {
     post_id: string;
     contentable_id: string;
     contentable_type: string;
-  extras?: any;
+  extras?: unknown;
     question: {
       en: string;
     };
@@ -229,7 +229,7 @@ interface ApiPost {
       id: string;
       contentable_id: string;
       contentable_type: string;
-  extras?: any;
+  extras?: unknown;
       country_code: string | null;
       address: string;
       display: string | null;
@@ -244,7 +244,7 @@ interface ApiPost {
       deleted_at: string | null;
     };
     type: string;
-  extras?: any;
+  extras?: unknown;
     kind?: string;
     capacity?: number;
     is_paid?: boolean;
@@ -265,7 +265,7 @@ interface ApiPost {
     id: string;
     contentable_id: string;
     contentable_type: string;
-  extras?: any;
+  extras?: unknown;
     country_code: string | null;
     address: string;
     display: string | null;
@@ -283,7 +283,7 @@ interface ApiPost {
     id: string;
     contentable_id: string;
     contentable_type: string;
-  extras?: any;
+  extras?: unknown;
     counts: {
       comment_count?: number;
       bookmark_count?: number;
@@ -302,7 +302,7 @@ interface ApiPost {
       engager_id: string;
       engagee_id?: string;
       kind: string;
-      details?: any;
+      details?: unknown;
       created_at?: string;
       updated_at?: string;
     }>;
@@ -413,8 +413,8 @@ const Post: React.FC<PostProps> = ({
   // Memoize post ID and key engagement data to prevent unnecessary updates
   const postIdRef = useRef<string>(postProp.public_id);
   const userIdRef = useRef<string | undefined>(user?.id);
-  const engagementsRef = useRef<any>(postProp.engagements);
-  const postEngagementsRef = useRef<any>(postProp.engagements);
+  const engagementsRef = useRef<unknown>(postProp.engagements);
+  const postEngagementsRef = useRef<unknown>(postProp.engagements);
   const childrenRef = useRef<ApiPost[] | undefined>(postProp.children);
   const postPropRef = useRef<ApiPost>(postProp);
 
@@ -647,8 +647,8 @@ const Post: React.FC<PostProps> = ({
     container.innerHTML = '';
 
     // Remove Leaflet-specific properties
-    if ((container as any)._leaflet_id) {
-      delete (container as any)._leaflet_id;
+    if ((container as unknown)._leaflet_id) {
+      delete (container as unknown)._leaflet_id;
     }
 
     try {
@@ -775,8 +775,8 @@ const Post: React.FC<PostProps> = ({
     container.innerHTML = '';
 
     // Remove Leaflet-specific properties
-    if ((container as any)._leaflet_id) {
-      delete (container as any)._leaflet_id;
+    if ((container as unknown)._leaflet_id) {
+      delete (container as unknown)._leaflet_id;
     }
 
     try {
@@ -919,7 +919,7 @@ const Post: React.FC<PostProps> = ({
   };
 
   const authorAvatarUrl = useMemo(() => {
-    const avatar = (post.author as any)?.avatar;
+    const avatar = (post.author as unknown)?.avatar;
     return getSafeImageURLEx(post?.author?.public_id, avatar, 'thumbnail')
   }, [post.author]);
 
@@ -945,7 +945,7 @@ const Post: React.FC<PostProps> = ({
   // Calculate total votes for a specific poll
   const getTotalVotes = (poll: NonNullable<typeof post.poll>[0]) => {
     if (!poll || !poll.choices || !Array.isArray(poll.choices)) return 0;
-    return poll.choices.reduce((total: number, choice: any) => total + (choice.vote_count || 0), 0);
+    return poll.choices.reduce((total: number, choice: unknown) => total + (choice.vote_count || 0), 0);
   };
 
   // Calculate percentage for poll choice
@@ -2561,7 +2561,7 @@ const Post: React.FC<PostProps> = ({
                   const eventKind = post.event.kind || post.event.type;
                   if (!eventKind || !appData?.event_kinds) return null;
 
-                  const eventKindData = appData.event_kinds.find((ek: any) => ek.kind === eventKind);
+                  const eventKindData = appData.event_kinds.find((ek: unknown) => ek.kind === eventKind);
                   const kindLabel = eventKindData
                     ? (eventKindData.name?.[defaultLanguage] || eventKindData.name?.en || eventKindData.kind)
                     : eventKind;
@@ -2824,7 +2824,7 @@ const Post: React.FC<PostProps> = ({
           <div className="px-4 py-3">
             <div className={`px-4 py-3 rounded-2xl flex flex-wrap gap-2 ${theme === 'dark' ? 'bg-white/[0.04] border border-white/[0.06]' : 'bg-gray-50 border border-black/[0.06]'}`}>
               {post.extras.tags.map((t: string) => {
-                const tagType = appData?.checkin_tag_types?.find((ct: any) => ct.tag === t);
+                const tagType = appData?.checkin_tag_types?.find((ct: unknown) => ct.tag === t);
                 if (!tagType) {
                   return (
                     <div

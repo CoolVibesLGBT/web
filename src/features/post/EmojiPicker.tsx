@@ -75,7 +75,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
   const emojisByCategory = useMemo(() => {
     const grouped: Record<string, typeof emojiData> = {};
     
-    emojiData.forEach((emoji: any) => {
+    emojiData.forEach((emoji: unknown) => {
       // Skip skin tone variations and other modifiers
       if (emoji.skin_variations || emoji.obsoleted_by) {
         return;
@@ -121,7 +121,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
   };
 
   // Get Facebook emoji image URL
-  const getEmojiImageUrl = (emoji: any): string | null => {
+  const getEmojiImageUrl = (emoji: unknown): string | null => {
     // Check if emoji has Facebook image
     // has_img_facebook can be true, false, or undefined
     // We'll try to use image if it exists and has_img_facebook is not explicitly false
@@ -139,7 +139,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
     if (frequentlyUsed.length === 0) return [];
     
     const emojiMap = new Map<string, any>();
-    emojiData.forEach((emoji: any) => {
+    emojiData.forEach((emoji: unknown) => {
       const emojiChar = unifiedToEmoji(emoji.unified);
       if (emojiChar) {
         emojiMap.set(emojiChar, emoji);
@@ -157,10 +157,10 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
     if (searchQuery.trim()) {
       // When searching, show results from all categories
       const query = searchQuery.toLowerCase();
-      const allEmojis: any[] = [];
+      const allEmojis: unknown[] = [];
       
       Object.values(emojisByCategory).forEach(categoryEmojis => {
-        categoryEmojis.forEach((emoji: any) => {
+        categoryEmojis.forEach((emoji: unknown) => {
           const shortName = (emoji.short_name || '').toLowerCase();
           const keywords = (emoji.short_names || []).join(' ').toLowerCase();
           const name = (emoji.name || '').toLowerCase();
@@ -266,8 +266,8 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
   const groupedEmojisForDisplay = useMemo(() => {
     if (searchQuery.trim()) {
       // When searching, group results by their category
-      const grouped: Record<string, any[]> = {};
-      filteredEmojis.forEach((emoji: any) => {
+      const grouped: Record<string, unknown[]> = {};
+      filteredEmojis.forEach((emoji: unknown) => {
         const category = emoji.category || 'Symbols';
         if (!grouped[category]) {
           grouped[category] = [];
@@ -310,7 +310,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
             <button
               data-category="recent"
               onClick={() => {
-                setSelectedCategory('recent' as any);
+                setSelectedCategory('recent' as unknown);
                 if (emojiGridRef.current) {
                   emojiGridRef.current.scrollTop = 0;
                 }
@@ -426,7 +426,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
                     Frequently used
                   </h3>
                   <div className="grid grid-cols-8 gap-1">
-                    {frequentlyUsedEmojis.map((emoji: any, index: number) => {
+                    {frequentlyUsedEmojis.map((emoji: unknown, index: number) => {
                       const emojiChar = unifiedToEmoji(emoji.unified);
                       if (!emojiChar) return null;
 
@@ -507,7 +507,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
                       {config.label}
                     </h3>
                     <div className="grid grid-cols-8 gap-1">
-                      {emojis.map((emoji: any, index: number) => {
+                      {emojis.map((emoji: unknown, index: number) => {
                         const emojiChar = unifiedToEmoji(emoji.unified);
                         if (!emojiChar) return null;
 

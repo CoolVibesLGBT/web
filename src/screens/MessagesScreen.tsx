@@ -77,7 +77,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ msg, theme, onContextMenu }) 
     const clientY = touch.clientY;
     longPressTimer.current = setTimeout(() => {
       setIsPressed(false);
-      onContextMenu({ preventDefault: () => { }, clientX, clientY } as any, msg.id);
+      onContextMenu({ preventDefault: () => { }, clientX, clientY } as unknown, msg.id);
     }, 400); // 400ms for slightly snappier opening
   };
 
@@ -227,7 +227,7 @@ const MessagesScreen: React.FC = () => {
     if (!socket || !user?.id) return;
 
 
-    const handleSocketMessage = (msg: string | object | any[]) => {
+    const handleSocketMessage = (msg: string | object | unknown[]) => {
       const updateChatListFromMessage = (
         chatUuid: string | undefined,
         messageTextForList: string,
@@ -267,7 +267,7 @@ const MessagesScreen: React.FC = () => {
 
       try {
         // Handle array format: ["chat_id", "json_string"]
-        let messageData: any;
+        let messageData: unknown;
         if (Array.isArray(msg)) {
           // If it's an array, the second element is the JSON string
           if (msg.length > 1 && typeof msg[1] === 'string') {
@@ -293,7 +293,7 @@ const MessagesScreen: React.FC = () => {
         if (action === Actions.CMD_SEND_MESSAGE && message) {
           // Get current chat and selectedChat from refs (always use latest values)
           const currentSelectedChat = selectedChatRef.current;
-          const currentChat = chatsListRef.current.find((chat: any) => chat.id === currentSelectedChat);
+          const currentChat = chatsListRef.current.find((chat: unknown) => chat.id === currentSelectedChat);
 
           // Check if message belongs to current chat
           const messageChatId = message.contentable_id || message.chat_id;
@@ -314,7 +314,7 @@ const MessagesScreen: React.FC = () => {
             messageText = message.content;
           } else if (message.content && typeof message.content === 'object') {
             // Try to get content in preferred language (en first, then tr, then any available)
-            messageText = message.content.en || message.content.tr || Object.values(message.content).find((v: any) => v && typeof v === 'string') || '';
+            messageText = message.content.en || message.content.tr || Object.values(message.content).find((v: unknown) => v && typeof v === 'string') || '';
           }
           // Fallback to text field if content is empty
           if (!messageText && message.text) {
@@ -419,7 +419,7 @@ const MessagesScreen: React.FC = () => {
 
           // Get current chat and selectedChat from refs (always use latest values)
           const currentSelectedChat = selectedChatRef.current;
-          const currentChat = chatsListRef.current.find((chat: any) => chat.id === currentSelectedChat);
+          const currentChat = chatsListRef.current.find((chat: unknown) => chat.id === currentSelectedChat);
 
           console.log('Typing indicator received:', {
             typingChatId,
@@ -428,7 +428,7 @@ const MessagesScreen: React.FC = () => {
             currentUserId: user?.id,
             currentSelectedChat,
             messageData,
-            allChats: chatsListRef.current.map((c: any) => ({ id: c.id, chatId: c.chatId }))
+            allChats: chatsListRef.current.map((c: unknown) => ({ id: c.id, chatId: c.chatId }))
           });
 
           console.log('Current chat:', {
@@ -714,15 +714,15 @@ const MessagesScreen: React.FC = () => {
 
 
         if (response?.chats && Array.isArray(response.chats)) {
-          const mappedChats = response.chats.map((chat: any) => {
+          const mappedChats = response.chats.map((chat: unknown) => {
             // For private chats, find the other participant (not current user)
             const otherParticipant = chat.participants?.find(
-              (p: any) => p.user_id !== user.id
+              (p: unknown) => p.user_id !== user.id
             );
 
             // Find current user's participant to get unread_count
             const currentUserParticipant = chat.participants?.find(
-              (p: any) => p.user_id === user.id
+              (p: unknown) => p.user_id === user.id
             );
 
             const otherUser = otherParticipant?.user;
@@ -763,7 +763,7 @@ const MessagesScreen: React.FC = () => {
                 // Try to get content in preferred language (en first, then tr, then any available)
                 lastMessageText = chat.last_message.content.en ||
                   chat.last_message.content.tr ||
-                  Object.values(chat.last_message.content).find((v: any) => v && typeof v === 'string') ||
+                  Object.values(chat.last_message.content).find((v: unknown) => v && typeof v === 'string') ||
                   '';
               }
             }
@@ -969,7 +969,7 @@ const MessagesScreen: React.FC = () => {
       }
       const response = await api.fetchMessages(realChatId);
       if (response?.messages && Array.isArray(response.messages)) {
-        const mappedMessages = response.messages.map((msg: any) => {
+        const mappedMessages = response.messages.map((msg: unknown) => {
           // Determine if message is from current user
           const isFromMe = msg.author_id === user.id;
 
@@ -1007,9 +1007,9 @@ const MessagesScreen: React.FC = () => {
         });
 
         // Sort messages by created_at (oldest first)
-        mappedMessages.sort((a: any, b: any) => {
-          const msgA = response.messages?.find((m: any) => m.id === a.id);
-          const msgB = response.messages?.find((m: any) => m.id === b.id);
+        mappedMessages.sort((a: unknown, b: unknown) => {
+          const msgA = response.messages?.find((m: unknown) => m.id === a.id);
+          const msgB = response.messages?.find((m: unknown) => m.id === b.id);
           if (!msgA?.created_at || !msgB?.created_at) return 0;
           return new Date(msgA.created_at).getTime() - new Date(msgB.created_at).getTime();
         });
@@ -1810,7 +1810,7 @@ const MessagesScreen: React.FC = () => {
                     </p>
                   </div>
                 </div>
-              ) : chatsList.filter((chat: any) => {
+              ) : chatsList.filter((chat: unknown) => {
                 if (activeFilter === 'all') return true;
                 if (activeFilter === 'unread') return chat.unread > 0;
                 if (activeFilter === 'unencrypted') return !chat.encrypted;
@@ -1819,12 +1819,12 @@ const MessagesScreen: React.FC = () => {
                 <div className="flex items-center justify-center h-full text-gray-400 text-center p-8">
                   {t('messages.no_chats_found')}
                 </div>
-              ) : chatsList.filter((chat: any) => {
+              ) : chatsList.filter((chat: unknown) => {
                 if (activeFilter === 'all') return true;
                 if (activeFilter === 'unread') return chat.unread > 0;
                 if (activeFilter === 'unencrypted') return !chat.encrypted;
                 return true;
-              }).map((chat: any) => (
+              }).map((chat: unknown) => (
                 <div
                   key={chat.id}
                   className={`group/item p-3 sm:p-4 cursor-pointer transition-colors border-b relative ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'

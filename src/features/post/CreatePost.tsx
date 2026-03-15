@@ -69,7 +69,7 @@ import { TweetNode } from '../editor/Lexical/nodes/TweetNode';
 import { MetadataNode } from '../editor/Lexical/nodes/MetadataNode';
 
 // ToolbarPlugin wrapper component
-const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (editor: any) => void }) => {
+const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (editor: unknown) => void }) => {
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isLinkEditMode, setIsLinkEditMode] = useState(false);
@@ -105,7 +105,7 @@ interface CreatePostProps {
   onReply?: (content: string, parentPostId?: string) => void;
   onPostCreated?: () => void;
   postKind?: string;
-  extras?: Record<string, any>;
+  extras?: Record<string, unknown>;
 }
 
 const CreatePost: React.FC<CreatePostProps> = ({
@@ -124,7 +124,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   const [postText, setPostText] = useState('');
   const [editorContent, setEditorContent] = useState('');
   const [hasEditorContent, setHasEditorContent] = useState(false);
-  const [editorInstance, setEditorInstance] = useState<any>(null);
+  const [editorInstance, setEditorInstance] = useState<unknown>(null);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [selectedVideos, setSelectedVideos] = useState<File[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -343,7 +343,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
         htmlContent = $generateHtmlFromNodes(editorInstance, null);
 
         // Extract hashtags and mentions from the editor
-        const extractHashtags = (node: any): string[] => {
+        const extractHashtags = (node: unknown): string[] => {
           const tags: string[] = [];
 
           if (node.getType && node.getType() === 'hashtag') {
@@ -363,11 +363,11 @@ const CreatePost: React.FC<CreatePostProps> = ({
           return tags;
         };
 
-        const extractMentions = (node: any): string[] => {
+        const extractMentions = (node: unknown): string[] => {
           const mentions: string[] = [];
 
           if (node.getType && node.getType() === 'mention') {
-            const mentionName = (node as any).__mention || node.getTextContent();
+            const mentionName = (node as unknown).__mention || node.getTextContent();
             if (mentionName) {
               mentions.push(mentionName);
             }
@@ -389,7 +389,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
     }
 
     const contentJSON = editorInstance.getEditorState().toJSON()
-    const postData: Record<string, any> = {
+    const postData: Record<string, unknown> = {
       content: JSON.stringify(contentJSON),
       hashtags: hashtags,
       mentions: mentions,
@@ -407,7 +407,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
           acc[`polls[${pollIndex}].options[${optionIndex}]`] = option;
         });
         return acc;
-      }, {} as Record<string, any>)),
+      }, {} as Record<string, unknown>)),
       event: isEventActive ? {
         title: eventTitle,
         description: eventDescription,
@@ -693,8 +693,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
     container.innerHTML = '';
 
     // Remove Leaflet-specific properties
-    if ((container as any)._leaflet_id) {
-      delete (container as any)._leaflet_id;
+    if ((container as unknown)._leaflet_id) {
+      delete (container as unknown)._leaflet_id;
     }
 
     try {
@@ -828,7 +828,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
     // Process all event kinds from context, sorted by display_order
     return appData.event_kinds
       .sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
-      .map((eventKind: any) => {
+      .map((eventKind: unknown) => {
         const label = eventKind.name?.[defaultLanguage] || eventKind.name?.en || eventKind.kind;
         const desc = eventKind.description?.[defaultLanguage] || eventKind.description?.en || '';
 
@@ -888,13 +888,13 @@ const CreatePost: React.FC<CreatePostProps> = ({
 
 
 
-  const onChange = (editorState: any) => {
+  const onChange = (editorState: unknown) => {
     editorState.read(() => {
       const root = $getRoot();
       const plainText = root.getTextContent();
       const topLevelChildren = root.getChildren();
 
-      const hasMeaningfulNode = topLevelChildren.some((child: any) => {
+      const hasMeaningfulNode = topLevelChildren.some((child: unknown) => {
         const type = typeof child.getType === 'function' ? child.getType() : null;
 
         if (type && type !== 'paragraph') {
