@@ -88,7 +88,7 @@ function TweetComponent({
 
   const createTweet = useCallback(async () => {
     try {
-      // @ts-expect-error
+      // @ts-expect-error - twttr widget API not in DOM types
       await window.twttr.widgets.createTweet(tweetID, containerRef.current);
       setIsTweetLoading(false);
       isTwitterScriptLoading = false;

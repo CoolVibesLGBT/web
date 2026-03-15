@@ -160,7 +160,7 @@ export default function StickyComponent({
     }
   };
 
-  const handlePointerUp = (event: PointerEvent) => {
+  const handlePointerUp = (_event: PointerEvent) => {
     const stickyContainer = stickyContainerRef.current;
     const positioning = positioningRef.current;
     if (stickyContainer !== null) {

@@ -76,8 +76,7 @@ export function getSafeImageURL(
 
       return url.href.toString();
       
-    } catch (_err) {
-      
+    } catch {
       return null;
     }
 
@@ -114,7 +113,7 @@ export function getSafeImageURLEx(
 
       return url.href.toString();
       
-    } catch (_err) {
+    } catch {
          return generateFallbackImage(publicId)
     }
 

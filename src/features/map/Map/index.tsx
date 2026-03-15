@@ -29,12 +29,12 @@ const MapEvents = ({ onMapMoveEnd }: { onMapMoveEnd?: (lat: number, lng: number)
   return null;
 };
 
-const LeafletMapInner = ({ onMarkerClick, onMapMoveEnd }: { onMarkerClick?: (item: any) => void, onMapMoveEnd?: (lat: number, lng: number) => void }) => {
+const LeafletMapInner = ({ onMarkerClick, onMapMoveEnd }: { onMarkerClick?: (item: unknown) => void; onMapMoveEnd?: (lat: number, lng: number) => void }) => {
   const { map } = useMapContext();
-  const [state, setState] = useAtom(globalState);
+  const [state, _setState] = useAtom(globalState);
   const { user } = useAuth();
 
-  const [windowHeight, setWindowHeight] = useState<number | null>(() =>
+  const [_windowHeight, setWindowHeight] = useState<number | null>(() =>
     typeof window !== 'undefined' ? window.innerHeight : null
   );
 

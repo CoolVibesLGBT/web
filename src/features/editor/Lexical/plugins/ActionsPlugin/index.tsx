@@ -140,7 +140,7 @@ export default function ActionsPlugin({
 
   useEffect(() => {
     return editor.registerUpdateListener(
-      ({dirtyElements, prevEditorState, tags}) => {
+      ({dirtyElements, prevEditorState: _prevEditorState, tags}) => {
         // If we are in read only mode, send the editor state
         // to server and ask for validation if possible.
         if (

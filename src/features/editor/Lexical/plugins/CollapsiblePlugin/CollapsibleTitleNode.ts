@@ -23,7 +23,7 @@ import {$isCollapsibleContainerNode} from './CollapsibleContainerNode';
 import {$isCollapsibleContentNode} from './CollapsibleContentNode';
 
 export function $convertSummaryElement(
-  domNode: HTMLElement,
+  _domNode: HTMLElement,
 ): DOMConversionOutput | null {
   const node = $createCollapsibleTitleNode();
   return {
@@ -70,7 +70,7 @@ export class CollapsibleTitleNode extends ElementNode {
     return dom;
   }
 
-  updateDOM(prevNode: this, dom: HTMLElement): boolean {
+  updateDOM(_prevNode: this, _dom: HTMLElement): boolean {
     return false;
   }
 

@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { mat4, quat, vec2, vec3 } from 'gl-matrix';
-import { generateFallbackImage, getSafeImageURL, getSafeImageURLEx } from '../helpers/helpers';
-import { DEFAULT_AVATAR_URL } from '../constants/constants';
+import { generateFallbackImage, getSafeImageURLEx } from '../helpers/helpers';
 
 // --- SHADERS ---
 const discVertShaderSource = `#version 300 es
@@ -418,7 +417,7 @@ export const useWebGLSphere = (
                 sketchRef.current = null;
             };
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     }, [canvasRef, items]);
 
     return sketchRef;

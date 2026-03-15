@@ -51,7 +51,7 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import ToolbarPlugin from '../editor/Lexical/plugins/ToolbarPlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $generateHtmlFromNodes } from '@lexical/html';
-import { $getRoot, $getSelection, $isRangeSelection, $createParagraphNode, $createTextNode, INSERT_PARAGRAPH_COMMAND } from 'lexical';
+import { $getRoot, $getSelection, $isRangeSelection, INSERT_PARAGRAPH_COMMAND } from 'lexical';
 import { MentionNode } from '../editor/Lexical/nodes/MentionNode';
 import NewMentionsPlugin from '../editor/Lexical/plugins/MentionsPlugin';
 import ImagesPlugin, { INSERT_IMAGE_COMMAND } from '../editor/Lexical/plugins/ImagesPlugin';
@@ -61,10 +61,8 @@ import YouTubePicker, { YouTubeVideo } from './YouTubePicker';
 import { ImageNode } from '../editor/Lexical/nodes/ImageNode';
 import { YouTubeNode } from '../editor/Lexical/nodes/YouTubeNode';
 import YouTubePlugin, { INSERT_YOUTUBE_COMMAND } from '../editor/Lexical/plugins/YouTubePlugin';
-import { INSERT_PAGE_BREAK } from '../editor/Lexical/plugins/PageBreakPlugin';
 import EmojiPicker from './EmojiPicker';
 import AutoLinkPlugin from '../editor/Lexical/plugins/AutoLinkPlugin';
-import AutoEmbedPlugin from '../editor/Lexical/plugins/AutoEmbedPlugin';
 import { TweetNode } from '../editor/Lexical/nodes/TweetNode';
 import { MetadataNode } from '../editor/Lexical/nodes/MetadataNode';
 
@@ -72,9 +70,7 @@ import { MetadataNode } from '../editor/Lexical/nodes/MetadataNode';
 const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (editor: unknown) => void }) => {
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
-  const [isLinkEditMode, setIsLinkEditMode] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  void isLinkEditMode;
+  const [, setIsLinkEditMode] = useState(false);
 
   // Set editor instance when available
   React.useEffect(() => {
@@ -123,13 +119,13 @@ const CreatePost: React.FC<CreatePostProps> = ({
   postKind,
   extras,
 }) => {
-  const [postText, _setPostText] = useState('');
+  const [_postText, _setPostText] = useState('');
   const [editorContent, setEditorContent] = useState('');
   const [hasEditorContent, setHasEditorContent] = useState(false);
   const [editorInstance, setEditorInstance] = useState<unknown>(null);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [selectedVideos, setSelectedVideos] = useState<File[]>([]);
-  const [isExpanded, _setIsExpanded] = useState(false);
+  const [_isExpanded, _setIsExpanded] = useState(false);
   const [audience] = useState<'public' | 'community' | 'private'>('public');
   const [polls, setPolls] = useState<Array<{ id: string, question: string, options: string[], duration: string, kind: 'single' | 'multiple' | 'ranked' | 'weighted', maxSelectable: number }>>([]);
   const [isPollActive, setIsPollActive] = useState(false);
@@ -149,7 +145,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   const [eventKindSearchQuery, setEventKindSearchQuery] = useState('');
   const eventKindPickerRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [charCount, _setCharCount] = useState(0);
+  const [_charCount, _setCharCount] = useState(0);
   const [location, setLocation] = useState<{ address: string; lat: number; lng: number } | null>(null);
   const [pollErrors, setPollErrors] = useState<Record<string, string>>({});
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
@@ -1151,7 +1147,12 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                     </div>
                                   )}
                                   <motion.button
-                                    onClick={(e) => { e.stopPropagation(); e.preventDefault(); media.type === 'image' ? removeImage(media.index) : removeVideo(media.index); }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      e.preventDefault();
+                                      if (media.type === 'image') removeImage(media.index);
+                                      else removeVideo(media.index);
+                                    }}
                                     className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full backdrop-blur-xl bg-black/40 hover:bg-black/60 border border-white/20 flex items-center justify-center shadow-sm transition-all duration-200 z-20"
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}

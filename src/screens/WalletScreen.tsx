@@ -365,7 +365,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
         }
 
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         const google = (window as any).google;
         if (google?.payments?.api?.PaymentsClient) {
           const paymentsClient = new google.payments.api.PaymentsClient({
@@ -454,7 +454,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
         // Clear existing content
         googlePayButtonRef.current.innerHTML = '';
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         const button = (paymentsClient as any).createButton({
           onClick: onGooglePayButtonClick(paymentsClient),
           buttonColor: theme === 'dark' ? 'white' : 'black',
@@ -533,7 +533,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
           emailRequired: true
         };
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         (paymentsClient as any).loadPaymentData(paymentDataRequest)
           .then(() => {
             // This will be called after onPaymentAuthorized resolves

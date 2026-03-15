@@ -184,6 +184,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
       console.error('Vibes yüklenirken hata:', error);
       // Hata durumunda fallback olarak örnek data kullan
       if (!loadMore) {
+        // fallback when loadMore not available
       }
     } finally {
       setIsLoading(false);
@@ -198,7 +199,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
     } else {
       setIsLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []); // İlk yükleme sadece bir kez çalışmalı
 
   // Detect mobile and calculate header/bottom bar heights

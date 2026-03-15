@@ -4,8 +4,7 @@ import {
   AutoLinkPlugin,
   createLinkMatcherWithRegExp,
 } from '@lexical/react/LexicalAutoLinkPlugin';
-import { $insertNodeToNearestRoot } from '@lexical/utils';
-import { $createYouTubeNode, YouTubeNode } from '../../nodes/YouTubeNode';
+import { $createYouTubeNode } from '../../nodes/YouTubeNode';
 import { useEffect } from 'react';
 import { TextNode } from 'lexical';
 import { $createTweetNode } from '../../nodes/TweetNode';

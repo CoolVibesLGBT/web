@@ -4,9 +4,7 @@ import { TrendingUp, RefreshCw, ExternalLink, Search, Loader2, ArrowUpRight } fr
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../contexts/ThemeContext';
 import { api } from '../../services/api';
-import { Actions } from '../../services/actions';
-
-type RawTrend = Record<string, any> | string;
+type RawTrend = Record<string, unknown> | string;
 
 export interface NormalizedTrend {
   id: string;

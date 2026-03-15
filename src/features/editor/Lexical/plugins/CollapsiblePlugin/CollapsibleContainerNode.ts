@@ -64,7 +64,7 @@ export class CollapsibleContainerNode extends ElementNode {
     return true;
   }
 
-  collapseAtStart(selection: RangeSelection): boolean {
+  collapseAtStart(_selection: RangeSelection): boolean {
     // Unwrap the CollapsibleContainerNode by replacing it with the children
     // of its children (CollapsibleTitleNode, CollapsibleContentNode)
     const nodesToInsert: LexicalNode[] = [];
@@ -132,7 +132,7 @@ export class CollapsibleContainerNode extends ElementNode {
 
   static importDOM(): DOMConversionMap<HTMLDetailsElement> | null {
     return {
-      details: (domNode: HTMLDetailsElement) => {
+      details: (_domNode: HTMLDetailsElement) => {
         return {
           conversion: $convertDetailsElement,
           priority: 1,

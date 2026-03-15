@@ -148,6 +148,7 @@ export default function LiveStreams({ reels: initialReels, activeTab: _activeTab
       console.error('Vibes yüklenirken hata:', error);
       // Hata durumunda fallback olarak örnek data kullan
       if (!loadMore) {
+        // fallback when loadMore not available
       }
     } finally {
       setIsLoading(false);
@@ -162,7 +163,7 @@ export default function LiveStreams({ reels: initialReels, activeTab: _activeTab
     } else {
       setIsLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []); // İlk yükleme sadece bir kez çalışmalı
 
   // Detect mobile and calculate header/bottom bar heights

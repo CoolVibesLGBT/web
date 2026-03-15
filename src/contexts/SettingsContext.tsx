@@ -17,7 +17,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { DEFAULT_SETTINGS, INITIAL_SETTINGS, SettingName } from '../appSettings';
+import { INITIAL_SETTINGS, SettingName } from '../appSettings';
 
 
 type ViewMode = 'grid' | 'list' | 'card' | 'map' | 'bubble' | 'dome';
