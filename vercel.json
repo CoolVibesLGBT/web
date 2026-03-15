@@ -1,5 +1,12 @@
 {
-    "rewrites": [
-      { "source": "/(.*)", "destination": "/" }
-    ]
+  "functions": {
+    "api/rsc.js": {
+      "runtime": "nodejs20.x",
+      "includeFiles": "dist/**"
+    }
+  },
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/api/rsc" }
+  ]
 }
