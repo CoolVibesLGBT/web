@@ -85,7 +85,12 @@ export function useSEO(options: SEOOptions = {}) {
       setLink('canonical', SITE_URL)
       setMeta('og:title', DEFAULT_TITLE, true)
       setMeta('og:description', DEFAULT_DESCRIPTION, true)
+      setMeta('og:type', 'website', true)
       setMeta('og:url', SITE_URL, true)
+      setMeta('og:image', DEFAULT_IMAGE, true)
+      setMeta('twitter:title', DEFAULT_TITLE)
+      setMeta('twitter:description', DEFAULT_DESCRIPTION)
+      setMeta('twitter:image', DEFAULT_IMAGE)
     }
   }, [
     options.title,

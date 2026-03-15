@@ -60,6 +60,28 @@ const ACTIVE_SCREEN_BY_PATH: Record<string, string> = {
   '/profile': 'profile',
 };
 
+const DEFAULT_DOCUMENT_TITLE = 'CoolVibes – Inclusive LGBTIQA+ Gay Dating App';
+const ROUTE_DEFAULT_TITLES: Record<string, string> = {
+  '/': 'Home',
+  '/home': 'Home',
+  '/pride': 'Pride',
+  '/search': 'Search',
+  '/messages': 'Messages',
+  '/match': 'Match',
+  '/nearby': 'Nearby',
+  '/wallet': 'Wallet',
+  '/settings': 'Settings',
+  '/notifications': 'Notifications',
+  '/premium': 'Premium',
+  '/referrals': 'Referrals',
+  '/checkin': 'Check-in',
+  '/classifieds': 'Classifieds',
+  '/profile': 'Profile',
+  '/landing': 'Where Every Voice Matters',
+  '/places': 'LGBTQ+ Places',
+  '/legal': 'Legal',
+};
+
 const RIGHT_SIDEBAR_HIDDEN_PATHS = new Set(['/messages', '/landing', '/classifieds', '/places', '/match', '/nearby', '/checkin']);
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -117,6 +139,17 @@ function AppContent() {
   const followerCount = (user as any)?.engagements?.counts?.follower_count ?? 0;
   const avatarIconSrc = getSafeImageURLEx((user as any)?.public_id, (user as any)?.avatar, 'icon') || undefined;
   const shouldShowRightSidebar = !Array.from(RIGHT_SIDEBAR_HIDDEN_PATHS).some(p => location.pathname === p || location.pathname.startsWith(p + '/'));
+
+  // Default document title by route (screens with useSEO override this)
+  React.useEffect(() => {
+    const path = location.pathname;
+    let titleKey = path;
+    if (path.startsWith('/legal/')) titleKey = '/legal';
+    else if (path.startsWith('/places/')) titleKey = '/places';
+    else if (path.startsWith('/classifieds/')) titleKey = '/classifieds';
+    const segment = ROUTE_DEFAULT_TITLES[titleKey];
+    document.title = segment ? `${segment} | CoolVibes` : DEFAULT_DOCUMENT_TITLE;
+  }, [location.pathname]);
 
   // Update activeScreen based on current URL
   React.useEffect(() => {
