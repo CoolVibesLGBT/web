@@ -710,6 +710,31 @@ function AppContent() {
                       </div>
                     </div>
                   </motion.button>
+
+                  <motion.button
+                    onClick={openLanguageSelector}
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`rounded-xl border px-3 py-2.5 text-left transition-all ${theme === 'dark'
+                      ? 'border-gray-800/90 bg-gray-900/35 hover:bg-gray-800/60 text-white'
+                      : 'border-black/[0.06] bg-white hover:bg-black/[0.03] text-gray-900'
+                      }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Globe className={`w-4 h-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
+                        <div>
+                          <p className="text-[10px] uppercase tracking-[0.2em] opacity-70">
+                            {t('app.language', { defaultValue: 'Language' })}
+                          </p>
+                          <p className="text-sm font-semibold">
+                            {languageDisplay}
+                          </p>
+                        </div>
+                      </div>
+                      <ChevronRight className={`w-4 h-4 opacity-50 ${theme === 'dark' ? 'text-white' : 'text-black'}`} />
+                    </div>
+                  </motion.button>
                 </div>
               </div>
             </div>
@@ -782,10 +807,10 @@ function AppContent() {
                 <div className="pb-4 pt-2">
                   <div className="flex flex-wrap gap-x-3 gap-y-1.5">
                     {[
+                      { label: 'Legal', to: '/legal' },
                       { label: 'Privacy Policy', to: '/legal/privacy' },
                       { label: 'Cookie Policy', to: '/legal/cookies' },
                       { label: 'Terms of Service', to: '/legal/terms' },
-                      { label: 'Legal', to: '/legal' },
                       { label: 'Code of Conduct', to: '/legal/conduct' },
                       { label: 'Community Guidelines', to: '/legal/guidelines' },
                       { label: 'Accessibility', to: '/legal/accessibility' },
@@ -795,17 +820,17 @@ function AppContent() {
                       <Link
                         key={link.label}
                         to={link.to}
-                        className={`text-[11px] font-medium transition-colors hover:underline underline-offset-2 ${
+                        className={`text-xs font-medium transition-colors hover:underline underline-offset-2 ${
                           theme === 'dark'
-                            ? 'text-gray-500 hover:text-gray-300'
-                            : 'text-gray-400 hover:text-gray-700'
+                            ? '!text-white hover:!text-white/80'
+                            : 'text-gray-500 hover:text-gray-900'
                         }`}
                       >
                         {link.label}
                       </Link>
                     ))}
                   </div>
-                  <p className={`mt-2.5 text-[11px] ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>
+                  <p className={`mt-3 text-xs ${theme === 'dark' ? '!text-white' : 'text-gray-400'}`}>
                     © {new Date().getFullYear()} CoolVibes LGBT. All rights reserved.
                   </p>
                 </div>

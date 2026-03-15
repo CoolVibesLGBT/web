@@ -12,7 +12,8 @@ import {
     AlertTriangle,
     Moon,
     Sun,
-    Languages
+    Languages,
+    LogOut
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
@@ -20,6 +21,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../services/api';
 import Container from '../components/ui/Container';
 import ConfirmationModal from '../components/ui/ConfirmationModal';
 import LanguageSelectorModal from '../components/ui/LanguageSelector';
@@ -101,12 +103,24 @@ export default function SettingsScreen() {
 
     const [isLangModalOpen, setIsLangModalOpen] = useState(false);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const isDark = theme === 'dark';
 
     const handleToggle = useCallback((key: string) => {
         setOption(key as any, !((settings as any)[key]));
     }, [settings, setOption]);
+
+    const handleDeleteProfile = async () => {
+        try {
+            await api.handleDeleteProfile();
+            logout();
+            navigate('/', { replace: true });
+        } catch (error) {
+            console.error('Delete account failed:', error);
+            // Optional: Show error toast/message
+        }
+    };
 
     return (
         <Container>
@@ -212,10 +226,20 @@ export default function SettingsScreen() {
 
                     <Section title={t('settings.account.title', { defaultValue: 'Account' })} dark={isDark}>
                         <SettingItem
-                            icon={Trash2}
+                            icon={LogOut}
                             label={t('settings.logout', { defaultValue: 'Log Out' })}
                             subtitle="Sign out from this device"
                             onClick={() => setIsLogoutModalOpen(true)}
+                            danger
+                            dark={isDark}
+                            border={false}
+                        />
+                        <div className={`h-2 ${isDark ? 'bg-gray-900/40' : 'bg-gray-50'}`} />
+                        <SettingItem
+                            icon={Trash2}
+                            label={t('settings.delete_account', { defaultValue: 'Delete Account' })}
+                            subtitle="Permanently remove your data"
+                            onClick={() => setIsDeleteModalOpen(true)}
                             danger
                             dark={isDark}
                             border={false}
@@ -238,6 +262,18 @@ export default function SettingsScreen() {
                 title={t('settings.logout_confirm_title', { defaultValue: 'Log Out?' })}
                 message={t('settings.logout_confirm_message', { defaultValue: 'Are you sure you want to sign out? You will need to login again to access your profile.' })}
                 confirmText={t('settings.logout', { defaultValue: 'Log Out' })}
+                cancelText={t('common.cancel', { defaultValue: 'Cancel' })}
+                variant="danger"
+                icon={<AlertTriangle className="text-white" />}
+            />
+
+            <ConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDeleteProfile}
+                title={t('settings.delete_confirm_title', { defaultValue: 'Delete Account?' })}
+                message={t('settings.delete_confirm_message', { defaultValue: 'This action is PERMANENT. All your posts, profile data, and messages will be deleted forever. This cannot be undone.' })}
+                confirmText={t('settings.delete_account', { defaultValue: 'Delete Everything' })}
                 cancelText={t('common.cancel', { defaultValue: 'Cancel' })}
                 variant="danger"
                 icon={<AlertTriangle className="text-white" />}

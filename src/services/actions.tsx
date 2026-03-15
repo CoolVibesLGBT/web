@@ -112,6 +112,7 @@ export const Actions = {
 
   CMD_USER_CHECK_IN: "user.check_in",
   CMD_USER_CHECK_IN_FETCH: "user.check_in_fetch",
+  CMD_USER_DELETE_PROFILE: "user.delete_profile",
 
 } as const;
 

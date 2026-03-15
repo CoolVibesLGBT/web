@@ -520,6 +520,13 @@ export class ApiService {
     });
   }
 
+  async handleDeleteProfile() {
+    return this.call(Actions.CMD_USER_DELETE_PROFILE, {
+      method: "POST",
+      body: {},
+    });
+  }
+
   async searchUserLookup(query: string) {
     return this.call<{
       users: Array<{
