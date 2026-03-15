@@ -71,7 +71,7 @@ function PollOptionComponent({
           ref={checkboxRef}
           className="PollNode__optionCheckbox"
           type="checkbox"
-          onChange={(e) => {
+          onChange={(_e) => {
             withPollNode((node) => {
               node.toggleVote(option, username);
             });

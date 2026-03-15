@@ -60,7 +60,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({
         const parsed = JSON.parse(saved);
         const timer = setTimeout(() => setFrequentlyUsed(parsed), 0);
         return () => clearTimeout(timer);
-      } catch (_e) {
+      } catch {
         // Ignore parse errors
       }
     }

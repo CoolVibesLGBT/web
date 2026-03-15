@@ -100,7 +100,7 @@ export class StickyNode extends DecoratorNode<JSX.Element> {
     };
   }
 
-  createDOM(config: EditorConfig): HTMLElement {
+  createDOM(_config: EditorConfig): HTMLElement {
     const div = document.createElement('div');
     div.style.display = 'contents';
     return div;
@@ -122,7 +122,7 @@ export class StickyNode extends DecoratorNode<JSX.Element> {
     writable.__color = writable.__color === 'pink' ? 'yellow' : 'pink';
   }
 
-  decorate(editor: LexicalEditor, config: EditorConfig): JSX.Element {
+  decorate(_editor: LexicalEditor, _config: EditorConfig): JSX.Element {
     return createPortal(
       <StickyComponent
         color={this.__color}

@@ -184,6 +184,7 @@ export default function Vibes({ reels: initialReels, activeTab: _activeTab, onPo
       console.error('Vibes yüklenirken hata:', error);
       // Hata durumunda fallback olarak örnek data kullan
       if (!loadMore) {
+        // fallback when loadMore not available
       }
     } finally {
       setIsLoading(false);

@@ -44,8 +44,7 @@ export const blockTypeToBlockName = {
   quote: 'Quote',
 };
 
-//disable eslint sorting rule for quick reference to toolbar state
-/* eslint-disable sort-keys-fix/sort-keys-fix */
+// Toolbar state keys kept in this order for quick reference
 const INITIAL_TOOLBAR_STATE = {
   bgColor: '#fff',
   blockType: 'paragraph' as keyof typeof blockTypeToBlockName,

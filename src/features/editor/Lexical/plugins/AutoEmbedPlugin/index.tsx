@@ -252,7 +252,7 @@ export function AutoEmbedDialog({
     [embedConfig, embedResult],
   );
 
-  const onClick = () => {
+  const _onClick = () => {
     if (embedResult != null) {
       embedConfig.insertNode(editor, embedResult);
       onClose();

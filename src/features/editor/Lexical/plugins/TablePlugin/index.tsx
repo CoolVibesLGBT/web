@@ -14,7 +14,7 @@ import {useState} from 'react';
 import Button from '../../ui/Button';
 
 export function InsertTableDialog({
-  activeEditor,
+  activeEditor: _activeEditor,
   onClose,
 }: {
   activeEditor: LexicalEditor;

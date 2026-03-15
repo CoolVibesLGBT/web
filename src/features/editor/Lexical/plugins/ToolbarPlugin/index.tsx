@@ -66,7 +66,6 @@ import {
   AlignRight,
   AlignJustify,
   Eraser,
-  MoreHorizontal,
   Palette,
   Paintbrush,
   ChevronLeft,
@@ -91,8 +90,6 @@ import FontSize, { parseFontSizeForToolbar } from './fontSize';
 import {
   clearFormatting,
   formatBulletList,
-  formatCheckList,
-  formatCode,
   formatHeading,
   formatNumberedList,
   formatParagraph,

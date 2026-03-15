@@ -2,7 +2,7 @@ import React from 'react';
 import { Place } from '../../types/places';
 import { useTheme } from '../../contexts/ThemeContext';
 import { motion } from 'framer-motion';
-import { Building, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { generatePlaceImage } from '../../helpers/helpers';
 
 interface PlaceCardProps {

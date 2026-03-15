@@ -1124,7 +1124,7 @@ function AppContent() {
                         {t('app.sidebar.primary', { defaultValue: 'Discover' })}
                       </p>
                       <div className="space-y-1.5">
-                        {mobileNavItems.map((item, index) => {
+                        {mobileNavItems.map((item, _index) => {
                           const isActive = activeScreen === item.id;
                           return (
                             <button

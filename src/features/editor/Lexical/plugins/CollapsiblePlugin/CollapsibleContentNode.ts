@@ -24,7 +24,7 @@ import {domOnBeforeMatch, setDomHiddenUntilFound} from './CollapsibleUtils';
 type SerializedCollapsibleContentNode = SerializedElementNode;
 
 export function $convertCollapsibleContentElement(
-  domNode: HTMLElement,
+  _domNode: HTMLElement,
 ): DOMConversionOutput | null {
   const node = $createCollapsibleContentNode();
   return {
@@ -73,13 +73,13 @@ export class CollapsibleContentNode extends ElementNode {
     return dom;
   }
 
-  updateDOM(prevNode: this, dom: HTMLElement): boolean {
+  updateDOM(_prevNode: this, _dom: HTMLElement): boolean {
     return false;
   }
 
   static importDOM(): DOMConversionMap | null {
     return {
-      div: (domNode: HTMLElement) => {
+      div: (_domNode: HTMLElement) => {
         if (!domNode.hasAttribute('data-lexical-collapsible-content')) {
           return null;
         }

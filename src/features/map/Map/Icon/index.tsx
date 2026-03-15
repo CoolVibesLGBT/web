@@ -1,14 +1,14 @@
 import { FunctionComponent } from 'react';
-import { getSafeImageURL, getSafeImageURLEx } from '../../../../helpers/helpers';
- 
+import { getSafeImageURLEx } from '../../../../helpers/helpers';
+
 interface IconProps {
-  item?: any;
+  item?: unknown;
   width?: number;
   height?: number;
 }
 
 // MapIcon FunctionComponent olarak tanımlandı
-export const MapIcon: FunctionComponent<IconProps> = ({item = null,width = 24,height = 24}) => {
+export const MapIcon: FunctionComponent<IconProps> = ({ item = null, width: _width = 24, height: _height = 24 }) => {
   const pictureURL = getSafeImageURLEx(item.public_id, item.avatar,"icon")
   return (
     <div className="flex flex-col gap-2 items-center justify-center min-w-[60px] min-h-[60px] max-w-[60px] max-h-[60px]">
