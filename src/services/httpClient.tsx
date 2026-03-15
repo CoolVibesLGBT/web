@@ -1,5 +1,7 @@
+'use client'
+
 import axios, { AxiosInstance } from "axios";
-import { serviceURL } from "../appSettings";
+import { serviceURL } from "@/appSettings";
 
 class HttpClient {
   private instance: AxiosInstance;

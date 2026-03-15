@@ -316,16 +316,17 @@ function getMouseInfo(
 }
 
 export default function TableHoverActionsPlugin({
-  anchorElem = document.body,
+  anchorElem,
 }: {
   anchorElem?: HTMLElement;
 }): React.ReactPortal | null {
   const isEditable = useLexicalEditable();
+  const resolvedAnchor = anchorElem ?? (typeof document !== 'undefined' ? document.body : null);
 
-  return isEditable
+  return isEditable && resolvedAnchor
     ? createPortal(
-        <TableHoverActionsContainer anchorElem={anchorElem} />,
-        anchorElem,
+        <TableHoverActionsContainer anchorElem={resolvedAnchor} />,
+        resolvedAnchor,
       )
     : null;
 }

@@ -23,26 +23,10 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    // Check localStorage first, then system preference
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme) {
-      return savedTheme;
-    }
-    
-    // Check system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
-    
-    return 'light';
-  });
+  const [theme, setThemeState] = useState<Theme>('light');
 
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-    localStorage.setItem('theme', newTheme);
-    
-    // Update document class for global styling
+  const applyThemeToDocument = (newTheme: Theme) => {
+    if (typeof document === 'undefined') return;
     if (newTheme === 'dark') {
       document.documentElement.classList.add('dark');
       document.documentElement.classList.remove('light');
@@ -52,22 +36,39 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     }
   };
 
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('theme', newTheme);
+    }
+    applyThemeToDocument(newTheme);
+  };
+
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
   useEffect(() => {
-    // Apply theme on mount
-    setTheme(theme);
-    
-    // Listen for system theme changes
+    if (typeof window === 'undefined') return;
+
+    const savedTheme = localStorage.getItem('theme') as Theme | null;
+    const prefersDark =
+      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const nextTheme: Theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+    setThemeState(nextTheme);
+    applyThemeToDocument(nextTheme);
+
+    // Listen for system theme changes only if user has not chosen explicitly
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e: MediaQueryListEvent) => {
       if (!localStorage.getItem('theme')) {
-        setTheme(e.matches ? 'dark' : 'light');
+        const updatedTheme: Theme = e.matches ? 'dark' : 'light';
+        setThemeState(updatedTheme);
+        applyThemeToDocument(updatedTheme);
       }
     };
-    
+
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);

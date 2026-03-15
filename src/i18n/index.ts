@@ -24,15 +24,27 @@ import kr from '../locales/kr/common.json';
 
 
 
-const storedLang = typeof window !== 'undefined' ? localStorage.getItem('lang') : null;
-const browserLang = typeof navigator !== 'undefined' ? (navigator.language || 'en').split('-')[0] : 'en';
 const fallbackLng = 'en';
 
-let lng = storedLang || browserLang || fallbackLng;
+const normalizeLang = (lang: string) => {
+  if (lang === 'zh-tw') return 'tw';
+  if (lang === 'zh-hk') return 'hk';
+  return lang;
+};
 
-// Eğer tarayıcı dili örneğin "zh-tw" ise ve resources "tw" ise, eşleştirme yapabiliriz:
-if (lng === 'zh-tw') lng = 'tw';
-else if (lng === 'zh-hk') lng = 'hk';
+export const resolvePreferredLanguage = () => {
+  if (typeof window === 'undefined') {
+    return fallbackLng;
+  }
+  const storedLang = localStorage.getItem('lang');
+  const browserLang =
+    typeof navigator !== 'undefined'
+      ? (navigator.language || 'en').split('-')[0]
+      : 'en';
+  return normalizeLang(storedLang || browserLang || fallbackLng);
+};
+
+const lng = fallbackLng;
 
 
 i18n

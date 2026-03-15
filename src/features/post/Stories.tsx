@@ -64,6 +64,7 @@ const Stories: React.FC = () => {
   const { theme } = useTheme();
   const { user: authUser } = useAuth();
   const navigate = useNavigate();
+  const portalRoot = typeof document !== 'undefined' ? document.body : null;
 
   const [selectedStory, setSelectedStory] = useState<number | string | null>(null);
   const [showAddStoryModal, setShowAddStoryModal] = useState(false);
@@ -439,7 +440,7 @@ const Stories: React.FC = () => {
         )}
       </div>
 
-      {createPortal(
+      {portalRoot && createPortal(
         selectedStory && selectedStoryData ? (
           <div className="fixed inset-0 z-[200]">
             <div
@@ -559,10 +560,10 @@ const Stories: React.FC = () => {
             </div>
           </div>
         ) : null,
-        document.body
+        portalRoot
       )}
 
-      {createPortal(
+      {portalRoot && createPortal(
         showAddStoryModal && selectedImage ? (
           <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/60 backdrop-blur-sm">
             <div
@@ -673,7 +674,7 @@ const Stories: React.FC = () => {
             </div>
           </div>
         ) : null,
-        document.body
+        portalRoot
       )}
     </div>
   );

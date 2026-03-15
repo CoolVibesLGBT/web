@@ -105,6 +105,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({ avatarUrl, onLike, onMessa
         handleTriggerOverlay(type);
     };
 
+    const portalRoot = typeof document !== 'undefined' ? document.body : null;
+
     return (
         <>
             <div className="flex flex-col items-center justify-end gap-5 text-white">
@@ -147,7 +149,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({ avatarUrl, onLike, onMessa
                     </AnimatePresence>
                 </div> */}
             </div>
-            {isOverlayReady && overlay && createPortal(<BurstOverlay overlay={overlay} />, document.body)}
+            {portalRoot && isOverlayReady && overlay && createPortal(<BurstOverlay overlay={overlay} />, portalRoot)}
         </>
     );
 };

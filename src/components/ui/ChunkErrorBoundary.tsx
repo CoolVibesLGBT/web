@@ -27,6 +27,7 @@ class ChunkErrorBoundary extends React.Component<
   State
 > {
   static SESSION_KEY = 'chunk_reload_attempted';
+  static SHOULD_AUTO_RELOAD = import.meta.env.PROD;
 
   constructor(props: { children: React.ReactNode }) {
     super(props);
@@ -60,7 +61,7 @@ class ChunkErrorBoundary extends React.Component<
 
     // Guard against infinite reload loops: only auto-reload once per session
     const alreadyAttempted = sessionStorage.getItem(ChunkErrorBoundary.SESSION_KEY);
-    if (!alreadyAttempted) {
+    if (!alreadyAttempted && ChunkErrorBoundary.SHOULD_AUTO_RELOAD) {
       sessionStorage.setItem(ChunkErrorBoundary.SESSION_KEY, '1');
       this.setState({ reloading: true });
       // Hard-reload fetches fresh index.html and all new hashed chunks

@@ -43,7 +43,7 @@ export default function LiveStreams({ reels: initialReels, activeTab: _activeTab
   const containerRef = useRef<HTMLDivElement>(null);
   const isLoadingMoreRef = useRef(false);
   const [isVideoBuffering, setIsVideoBuffering] = useState(false);
-  const [containerHeight, setContainerHeight] = useState(window.innerHeight);
+  const [containerHeight, setContainerHeight] = useState(0);
   const [calculatedTopOffset, setCalculatedTopOffset] = useState(0);
 
   const currentReel = allReels[currentIndex];

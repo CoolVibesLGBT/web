@@ -1,13 +1,9 @@
+'use client'
+
 import { Actions, ActionType } from "./actions";
-import { httpClient } from "./httpClient";
-
-
-
-interface ApiRequestOptions {
-  method?: "GET" | "POST";
-  params?: Record<string, unknown>;
-  body?: Record<string, unknown> | unknown; // array veya nested objelere izin verir
-}
+import { callApi } from "./api.server";
+import type { ApiRequestOptions } from "./api.types";
+import { serviceURL } from "@/appSettings";
 
 export class ApiService {
 
@@ -564,26 +560,13 @@ export class ApiService {
 
     console.log("GIDEN DATA", options)
 
-    if (method === "GET") {
-      const response = await httpClient.get("/", {
-        params: { action, ...options.params },
-      });
-      return response.data.data as T;
-    }
-    const token = localStorage.getItem("authToken"); // direkt al
+    const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+    const baseURL = serviceURL[0];
 
-    const response = await httpClient.post("/", {
-      action: action,    // opsiyonel, backend handlePacket için
-      ...(options.body as Record<string, unknown>), // body tek objeye sarılıyor
-    }, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        "Authorization": token as string,
-      }
+    return callApi<T>(action, options, {
+      baseURL,
+      authToken: token,
     });
-
-
-    return response.data.data as T;
   }
 }
 

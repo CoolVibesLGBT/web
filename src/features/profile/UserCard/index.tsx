@@ -362,6 +362,8 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
   let userAgeValue = calculateAge(user.date_of_birth as string);
   userAgeValue = userAgeValue === "-" ? "" : userAgeValue;
 
+  const portalRoot = typeof document !== 'undefined' ? document.body : null;
+
   const renderView = () => {
     const props: SubViewProps = {
       user,
@@ -404,7 +406,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
         userName={user.name || user.displayname || 'User'}
         onSendMessage={() => { }}
       />
-      {isOverlayReady && overlay &&
+      {portalRoot && isOverlayReady && overlay &&
         createPortal(
           <AnimatePresence initial={true}>
             <motion.div
@@ -601,7 +603,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, viewMode = 'card' }) =
               </div>
             </motion.div>
           </AnimatePresence>,
-          document.body
+          portalRoot
         )}
     </div>
   );

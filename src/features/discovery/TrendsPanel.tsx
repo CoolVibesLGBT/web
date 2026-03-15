@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, RefreshCw, ExternalLink, Search, Loader2, ArrowUpRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../contexts/ThemeContext';
 import { api } from '../../services/api';
 type RawTrend = Record<string, unknown> | string;
@@ -236,6 +237,8 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
     fetchTrends();
   }, [fetchTrends]);
 
+  const navigate = useNavigate();
+
   const handleSelect = React.useCallback((trend: NormalizedTrend) => {
     if (onTrendSelect) {
       onTrendSelect(trend);
@@ -249,9 +252,9 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
 
     if (trend.query) {
       const encoded = encodeURIComponent(trend.query);
-      window.location.href = `/search?q=${encoded}`;
+      navigate(`/search?q=${encoded}`);
     }
-  }, [onTrendSelect]);
+  }, [navigate, onTrendSelect]);
 
   const subtitleColor = theme === 'dark' ? 'text-gray-400' : 'text-gray-500';
   const cardBackground =
