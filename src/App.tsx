@@ -279,14 +279,14 @@ function AppContent() {
   ], [profilePath, t]);
 
   const mobileNavItems = React.useMemo(() => {
-    const mobileOrder = ['pride', 'checkin', 'nearby', 'match', 'classifieds', 'places', 'messages', 'notifications', 'referrals', 'settings', 'profile'];
+    const mobileOrder = ['pride', 'match', 'messages', 'nearby', 'places', 'checkin', 'classifieds', 'notifications', 'referrals', 'settings', 'profile'];
     return mobileOrder
       .map((id) => sidebarNavItems.find((item) => item.id === id))
       .filter(Boolean) as typeof sidebarNavItems;
   }, [sidebarNavItems]);
 
   const sidebarNavSections = React.useMemo(() => {
-    const primaryOrder = ['pride', 'checkin', 'nearby', 'match', 'classifieds', 'places', 'messages'];
+    const primaryOrder = ['pride', 'match', 'messages', 'nearby', 'places', 'checkin', 'classifieds'];
     const secondaryOrder = ['notifications', 'referrals', 'settings', 'profile'];
 
     const sortByOrder = (ids: string[]) =>
@@ -365,9 +365,9 @@ function AppContent() {
 
   const bottomNavItems = React.useMemo(() => [
     { id: 'pride', icon: HandFist, label: 'Pride', accent: 'from-rose-500/90 via-fuchsia-500/80 to-purple-500/70' },
-    { id: 'nearby', icon: MapPin, label: t('app.nav.nearby'), accent: 'from-amber-400/80 to-orange-500/80' },
     { id: 'match', icon: Heart, label: t('app.nav.match'), accent: 'from-rose-400/80 to-red-500/80' },
     { id: 'messages', icon: MessageCircle, label: t('app.nav.messages'), accent: 'from-sky-400/80 to-indigo-500/80' },
+    { id: 'nearby', icon: MapPin, label: t('app.nav.nearby'), accent: 'from-amber-400/80 to-orange-500/80' },
     { id: 'profile', icon: User, label: t('app.nav.profile'), accent: 'from-gray-900/80 to-gray-700/80' },
   ], [t]);
 
