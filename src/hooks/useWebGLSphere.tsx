@@ -417,7 +417,7 @@ export const useWebGLSphere = (
                 sketchRef.current = null;
             };
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     }, [canvasRef, items]);
 
     return sketchRef;

@@ -244,7 +244,7 @@ const PlacesScreen: React.FC = () => {
 
   useEffect(() => {
     handleInitialFetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   const categories = useMemo(() => {

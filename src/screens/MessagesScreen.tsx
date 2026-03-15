@@ -1040,7 +1040,7 @@ const MessagesScreen: React.FC = () => {
       setIsLoadingMessages(false);
       setIsRefreshingMessages(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [selectedChat, user?.id]); // chatsList removed from deps to avoid refetch whenever chat list updates
 
   // Join chat room when chat is selected
@@ -1094,7 +1094,7 @@ const MessagesScreen: React.FC = () => {
     if (selectedChat && user?.id) {
       fetchMessages();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [selectedChat, user?.id]);
 
 
