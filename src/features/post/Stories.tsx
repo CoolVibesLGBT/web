@@ -104,19 +104,37 @@ const Stories: React.FC = () => {
     });
   }, [authUser?.id, buildStoryCover]);
 
+  const loadMockStories = useCallback(async () => {
+    try {
+      const response = await fetch('/data/stories.json');
+      if (!response.ok) return [];
+      const payload = await response.json();
+      return payload?.data?.stories || payload?.stories || [];
+    } catch (error) {
+      console.error('Error loading mock stories:', error);
+      return [];
+    }
+  }, []);
+
   const fetchStories = useCallback(async () => {
     try {
       setLoadingStories(true);
       const response = await api.fetchStories({ limit: STORY_LIMIT });
-      const storiesData = response?.stories || [];
+      const storiesData = response?.stories || response?.data?.stories || [];
+      if (storiesData.length === 0) {
+        const mockData = await loadMockStories();
+        setStories(transformStories(mockData));
+        return;
+      }
       setStories(transformStories(storiesData));
     } catch (err) {
       console.error('Error fetching stories:', err);
-      setStories([]);
+      const mockData = await loadMockStories();
+      setStories(transformStories(mockData));
     } finally {
       setLoadingStories(false);
     }
-  }, [transformStories]);
+  }, [transformStories, loadMockStories]);
 
   useEffect(() => {
     fetchStories();

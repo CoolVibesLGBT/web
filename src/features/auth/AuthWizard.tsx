@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowLeft, User, Calendar, Heart, X, ChevronLeft, ChevronRight, ChevronDown, Shield } from 'lucide-react';
+import { ArrowRight, ArrowLeft, User, Heart, X, Shield, Globe } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useApp } from '../../contexts/AppContext';
@@ -8,6 +8,7 @@ import { api } from '../../services/api';
 import { useTranslation } from 'react-i18next';
 import { applicationName, RECAPTCHA_SITE_KEY } from '../../appSettings';
 import ReCAPTCHA from 'react-google-recaptcha';
+import LanguageSelectorModal from '../../components/ui/LanguageSelector.tsx';
 
 interface AuthWizardProps {
   isOpen: boolean;
@@ -25,7 +26,14 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   const { data: _data, defaultLanguage: _defaultLanguage } = useApp();
-  const { t } = useTranslation('common');
+  const { t, i18n } = useTranslation('common') as any;
+  const [isLanguageSelectorOpen, setIsLanguageSelectorOpen] = useState(false);
+
+  const languageDisplay = React.useMemo(() => {
+    const lang = i18n?.language || 'en';
+    const base = lang.split('-')[0] || lang;
+    return base.toUpperCase();
+  }, [i18n?.language]);
 
   // Track notification permission
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission | null>(null);
@@ -67,31 +75,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
     referralCode: typeof window !== 'undefined' ? localStorage.getItem('referralCode') || '' : ''
   });
 
-  // Date picker state
-  const [selectedDate, setSelectedDate] = useState({
-    day: 0,
-    month: 0,
-    year: 0
-  });
 
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear() - 25);
-  const [viewMode, setViewMode] = useState<'day' | 'month' | 'year'>('day');
-  const [decadeStart, setDecadeStart] = useState(Math.floor((new Date().getFullYear() - 25) / 20) * 20);
-  const months = [
-    t('months.january'),
-    t('months.february'),
-    t('months.march'),
-    t('months.april'),
-    t('months.may'),
-    t('months.june'),
-    t('months.july'),
-    t('months.august'),
-    t('months.september'),
-    t('months.october'),
-    t('months.november'),
-    t('months.december')
-  ];
 
   const steps = [
     {
@@ -132,86 +116,6 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
     },
 
   ];
-
-  const getDaysInMonth = (month: number, year: number) => {
-    return new Date(year, month + 1, 0).getDate();
-  };
-
-  const getFirstDayOfMonth = (month: number, year: number) => {
-    return new Date(year, month, 1).getDay();
-  };
-
-  const handleDateSelect = (day: number) => {
-    setSelectedDate({ day, month: currentMonth + 1, year: currentYear });
-    updateFormData('day', day.toString());
-    updateFormData('month', (currentMonth + 1).toString());
-    updateFormData('year', currentYear.toString());
-  };
-
-  const navigateMonth = (direction: 'prev' | 'next') => {
-    if (direction === 'prev') {
-      if (currentMonth === 0) {
-        setCurrentMonth(11);
-        setCurrentYear(currentYear - 1);
-      } else {
-        setCurrentMonth(currentMonth - 1);
-      }
-    } else {
-      if (currentMonth === 11) {
-        setCurrentMonth(0);
-        setCurrentYear(currentYear + 1);
-      } else {
-        setCurrentMonth(currentMonth + 1);
-      }
-    }
-  };
-
-  const renderCalendar = () => {
-    const daysInMonth = getDaysInMonth(currentMonth, currentYear);
-    const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
-    const days: React.ReactNode[] = [];
-    const today = new Date();
-    for (let i = 0; i < firstDay; i++) {
-      days.push(<div key={`empty-${i}`} className="w-10 h-10 sm:w-10 sm:h-10" />);
-    }
-    for (let day = 1; day <= daysInMonth; day++) {
-      const isSelected = selectedDate.day === day &&
-        selectedDate.month === currentMonth + 1 &&
-        selectedDate.year === currentYear;
-      const isToday =
-        day === today.getDate() &&
-        currentMonth === today.getMonth() &&
-        currentYear === today.getFullYear();
-      days.push(
-        <motion.button
-          key={day}
-          onClick={() => handleDateSelect(day)}
-          className={`relative w-10 h-10 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm sm:text-sm font-medium transition-all
-            ${isSelected
-              ? (theme === 'dark'
-                ? 'bg-white text-gray-900 ring-2 sm:ring-2 ring-black/50'
-                : 'bg-gray-900 text-white ring-2 sm:ring-2 ring-black/50')
-              : (theme === 'dark'
-                ? 'text-white hover:bg-gray-700'
-                : 'text-gray-900 hover:bg-gray-100')
-            }`}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <span className="relative justify-center flex flex-col items-center w-full h-full">
-            <span>{day}</span>
-            {isToday && (
-              <span
-                className={`mt-0.5 w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-black/80' : 'bg-black/80'
-                  }`}
-              />
-            )}
-          </span>
-        </motion.button>
-      );
-    }
-    return days;
-  };
 
   const handleNext = () => {
     if (currentStep === 0) {
@@ -595,18 +499,35 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
             ))}
           </div>
 
-          {/* X Button */}
-          <button
-            onClick={onClose}
-            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 flex-shrink-0 ${theme === 'dark'
-              ? 'hover:bg-gray-800 text-gray-400 hover:text-gray-300'
-              : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
-              }`}
-          >
-            <X className="w-4 h-4 sm:w-5 sm:h-5" />
-          </button>
+          {/* X Button & Language */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={() => setIsLanguageSelectorOpen(true)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-200 ${theme === 'dark'
+                ? 'hover:bg-white/10 text-white/60 hover:text-white'
+                : 'hover:bg-black/5 text-gray-500 hover:text-gray-900'
+                }`}
+            >
+              <Globe className="w-4 h-4" />
+              <span className="text-[10px] font-bold uppercase tracking-wider">{languageDisplay}</span>
+            </button>
+            <button
+              onClick={onClose}
+              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 ${theme === 'dark'
+                ? 'hover:bg-gray-800 text-gray-400 hover:text-gray-300'
+                : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+                }`}
+            >
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          </div>
         </div>
       )}
+
+      <LanguageSelectorModal 
+        isOpen={isLanguageSelectorOpen} 
+        onClose={() => setIsLanguageSelectorOpen(false)} 
+      />
 
       {/* Step Content */}
       <motion.div

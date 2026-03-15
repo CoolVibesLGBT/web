@@ -33,7 +33,7 @@ import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext.tsx';
 import { useSettings } from './contexts/SettingsContext';
 import AuthWizard from './features/auth/AuthWizard';
-import { MapPin, Heart, MessageCircle, User, Users, Menu, X, Sun, Moon, Languages, MoreHorizontal, Bell, ChevronRight, LogOut, HandFist, Briefcase, Navigation, Settings as SettingsIcon } from 'lucide-react';
+import { MapPin, Heart, MessageCircle, User, Users, Menu, X, Sun, Moon, MoreHorizontal, Bell, ChevronRight, LogOut, HandFist, Briefcase, Navigation, Settings as SettingsIcon, Globe } from 'lucide-react';
 import TrendsPanel, { NormalizedTrend } from './features/discovery/TrendsPanel';
 import PopularUsersPanel from './features/discovery/PopularUsersPanel';
 import LanguageSelector from './components/ui/LanguageSelector.tsx';
@@ -376,31 +376,41 @@ function AppContent() {
                   {applicationName}
                 </h1>
               </button>
-              {isAuthenticated ? (
+
+              <div className="flex items-center gap-2">
                 <button
-                  onClick={() => openProfile()}
-                  className={`relative p-0.5 rounded-full transition-transform active:scale-95`}
+                  onClick={openLanguageSelector}
+                  className={`p-2 rounded-full transition-colors flex items-center gap-1.5 ${theme === 'dark' ? 'hover:bg-white/10 text-white/70' : 'hover:bg-black/10 text-gray-500'}`}
                 >
-                  <div className={`w-8 h-8 rounded-full overflow-hidden ring-2 ${theme === 'dark' ? 'ring-white/10' : 'ring-black/10'}`}>
-                    {avatarIconSrc ? (
-                      <img src={avatarIconSrc} alt="Profile" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className={`w-full h-full flex items-center justify-center ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'}`}>
-                        <User className="w-5 h-5 text-gray-500" />
-                      </div>
-                    )}
-                  </div>
-                  <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ${theme === 'dark' ? 'ring-gray-950' : 'ring-white'}`} />
+                  <Globe className="w-5 h-5" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">{languageDisplay}</span>
                 </button>
-              ) : (
-                <button
-                  onClick={() => setIsAuthWizardOpen(true)}
-                  className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-black/10'
-                    }`}
-                >
-                  <User className={`w-6 h-6 ${theme === 'dark' ? 'text-white' : 'text-black'}`} />
-                </button>
-              )}
+                {isAuthenticated ? (
+                  <button
+                    onClick={() => openProfile()}
+                    className={`relative p-0.5 rounded-full transition-transform active:scale-95`}
+                  >
+                    <div className={`w-8 h-8 rounded-full overflow-hidden ring-2 ${theme === 'dark' ? 'ring-white/10' : 'ring-black/10'}`}>
+                      {avatarIconSrc ? (
+                        <img src={avatarIconSrc} alt="Profile" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className={`w-full h-full flex items-center justify-center ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'}`}>
+                          <User className="w-5 h-5 text-gray-500" />
+                        </div>
+                      )}
+                    </div>
+                    <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ${theme === 'dark' ? 'ring-gray-950' : 'ring-white'}`} />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setIsAuthWizardOpen(true)}
+                    className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-black/10'
+                      }`}
+                  >
+                    <User className={`w-6 h-6 ${theme === 'dark' ? 'text-white' : 'text-black'}`} />
+                  </button>
+                )}
+              </div>
             </div>
           </header>
 
@@ -472,86 +482,96 @@ function AppContent() {
                           </span>
                         </div>
                       </div>
-                      <div className="relative">
+                      <div className="flex items-center gap-1">
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setIsProfileMenuOpen(!isProfileMenuOpen);
-                          }}
-                          className={`p-2 rounded-xl transition ${theme === 'dark'
-                            ? 'text-white/70 hover:bg-white/10'
-                            : 'text-gray-600 hover:bg-gray-100'
-                            } ${isProfileMenuOpen ? (theme === 'dark' ? 'bg-white/10 text-white' : 'bg-gray-200 text-gray-900') : ''}`}
+                          onClick={openLanguageSelector}
+                          className={`p-1.5 rounded-lg transition-all flex items-center gap-1 ${theme === 'dark' ? 'hover:bg-white/10 text-white/50 hover:text-white' : 'hover:bg-black/5 text-gray-400 hover:text-gray-700'}`}
                         >
-                          <MoreHorizontal className="w-4 h-4" />
+                          <Globe className="w-3.5 h-3.5" />
+                          <span className="text-[10px] font-bold">{languageDisplay}</span>
                         </button>
-                        <AnimatePresence>
-                          {isProfileMenuOpen && (
-                            <motion.div
-                              initial={{ opacity: 0, scale: 0.95, y: -6 }}
-                              animate={{ opacity: 1, scale: 1, y: 0 }}
-                              exit={{ opacity: 0, scale: 0.95, y: -6 }}
-                              transition={{ duration: 0.18 }}
-                              className={`absolute top-full right-0 mt-2 w-52 z-50 rounded-xl overflow-hidden border ${theme === 'dark'
-                                ? 'bg-gray-900 border-gray-800'
-                                : 'bg-white border-gray-200 shadow-lg'
-                                }`}
-                            >
-                              <button
-                                onClick={() => {
-                                  openProfile();
-                                  setIsProfileMenuOpen(false);
-                                }}
-                                className={`w-full px-4 py-3 flex items-center gap-3 text-left ${theme === 'dark'
-                                  ? 'text-white hover:bg-white/10'
-                                  : 'text-gray-900 hover:bg-gray-50'
+                        <div className="relative">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsProfileMenuOpen(!isProfileMenuOpen);
+                            }}
+                            className={`p-2 rounded-xl transition ${theme === 'dark'
+                              ? 'text-white/70 hover:bg-white/10'
+                              : 'text-gray-600 hover:bg-gray-100'
+                              } ${isProfileMenuOpen ? (theme === 'dark' ? 'bg-white/10 text-white' : 'bg-gray-200 text-gray-900') : ''}`}
+                          >
+                            <MoreHorizontal className="w-4 h-4" />
+                          </button>
+                          
+                          <AnimatePresence>
+                            {isProfileMenuOpen && (
+                              <motion.div
+                                initial={{ opacity: 0, scale: 0.95, y: -6 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.95, y: -6 }}
+                                transition={{ duration: 0.18 }}
+                                className={`absolute top-full right-0 mt-2 w-52 z-50 rounded-xl overflow-hidden border ${theme === 'dark'
+                                  ? 'bg-gray-900 border-gray-800'
+                                  : 'bg-white border-gray-200 shadow-lg'
                                   }`}
                               >
-                                <User className="w-4 h-4" />
-                                <span className="text-sm font-semibold">{t('app.nav.profile')}</span>
-                              </button>
-                              <button
-                                onClick={() => {
-                                  navigate('/settings');
-                                  setIsProfileMenuOpen(false);
-                                }}
-                                className={`w-full px-4 py-3 flex items-center gap-3 text-left ${theme === 'dark'
-                                  ? 'text-white hover:bg-white/10'
-                                  : 'text-gray-900 hover:bg-gray-50'
-                                  }`}
-                              >
-                                <SettingsIcon className="w-4 h-4" />
-                                <span className="text-sm font-semibold">{t('app.nav.settings')}</span>
-                              </button>
-                              <div className={`h-px ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`} />
-                              <button
-                                onClick={() => requestLogout(() => setIsProfileMenuOpen(false))}
-                                className={`w-full px-4 py-3 flex items-center gap-3 text-left ${theme === 'dark'
-                                  ? 'text-red-400 hover:bg-red-500/10'
-                                  : 'text-red-600 hover:bg-red-50'
-                                  }`}
-                              >
-                                <LogOut className="w-4 h-4" />
-                                <span className="text-sm font-semibold">{t('app.logout')}</span>
-                              </button>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
+                                <button
+                                  onClick={() => {
+                                    openProfile();
+                                    setIsProfileMenuOpen(false);
+                                  }}
+                                  className={`w-full px-4 py-3 flex items-center gap-3 text-left ${theme === 'dark'
+                                    ? 'text-white hover:bg-white/10'
+                                    : 'text-gray-900 hover:bg-gray-50'
+                                    }`}
+                                >
+                                  <User className="w-4 h-4" />
+                                  <span className="text-sm font-semibold">{t('app.nav.profile')}</span>
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    navigate('/settings');
+                                    setIsProfileMenuOpen(false);
+                                  }}
+                                  className={`w-full px-4 py-3 flex items-center gap-3 text-left ${theme === 'dark'
+                                    ? 'text-white hover:bg-white/10'
+                                    : 'text-gray-900 hover:bg-gray-50'
+                                    }`}
+                                >
+                                  <SettingsIcon className="w-4 h-4" />
+                                  <span className="text-sm font-semibold">{t('app.nav.settings')}</span>
+                                </button>
+                                <div className={`h-px ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`} />
+                                <button
+                                  onClick={() => requestLogout(() => setIsProfileMenuOpen(false))}
+                                  className={`w-full px-4 py-3 flex items-center gap-3 text-left ${theme === 'dark'
+                                    ? 'text-red-400 hover:bg-red-500/10'
+                                    : 'text-red-600 hover:bg-red-50'
+                                    }`}
+                                >
+                                  <LogOut className="w-4 h-4" />
+                                  <span className="text-sm font-semibold">{t('app.logout')}</span>
+                                </button>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
                       </div>
                     </div>
+                    
                     <AnimatePresence>
                       {isProfileMenuOpen && (
-                        <>
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-40"
-                            onClick={() => setIsProfileMenuOpen(false)}
-                          />
-                        </>
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="fixed inset-0 z-40"
+                          onClick={() => setIsProfileMenuOpen(false)}
+                        />
                       )}
                     </AnimatePresence>
+                    
                     <div className="grid grid-cols-2 gap-2 mt-4">
                       <button
                         onClick={openProfile}
@@ -578,9 +598,18 @@ function AppContent() {
                     ? 'bg-gray-900/30 border-gray-800/90'
                     : 'bg-white border-black/[0.06]'
                     }`}>
-                    <p className={`text-[10px] uppercase tracking-[0.3em] ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                      {t('app.join_title', { defaultValue: 'Welcome' })}
-                    </p>
+                    <div className="flex items-center justify-between">
+                      <p className={`text-[10px] uppercase tracking-[0.3em] ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {t('app.join_title', { defaultValue: 'Welcome' })}
+                      </p>
+                      <button
+                        onClick={openLanguageSelector}
+                        className={`p-1.5 rounded-lg transition-all flex items-center gap-1 ${theme === 'dark' ? 'hover:bg-white/10 text-white/50 hover:text-white' : 'hover:bg-black/5 text-gray-400 hover:text-gray-700'}`}
+                      >
+                        <Globe className="w-3 h-3" />
+                        <span className="text-[10px] font-bold">{languageDisplay}</span>
+                      </button>
+                    </div>
                     <p className={`text-lg font-semibold mt-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                       {t('app.join_subtitle', { defaultValue: 'Create your profile' })}
                     </p>
@@ -681,26 +710,6 @@ function AppContent() {
                       </div>
                     </div>
                   </motion.button>
-
-                  <motion.button
-                    onClick={() => setIsLanguageSelectorOpen(true)}
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`rounded-xl border px-3 py-2.5 text-left transition-all ${theme === 'dark'
-                      ? 'border-gray-800/90 bg-gray-900/35 hover:bg-gray-800/60 text-white'
-                      : 'border-black/[0.06] bg-white hover:bg-black/[0.03] text-gray-900'
-                      }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-[10px] uppercase tracking-[0.2em] opacity-70">
-                          {t('app.language')}
-                        </p>
-                        <p className="text-sm font-semibold">{languageDisplay}</p>
-                      </div>
-                      <ChevronRight className={`w-4 h-4 ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`} />
-                    </div>
-                  </motion.button>
                 </div>
               </div>
             </div>
@@ -748,6 +757,7 @@ function AppContent() {
                   <Route path="*" element={<HomeScreen />} />
 
                   {/* Legal Pages */}
+                  <Route path="/legal" element={<LegalScreen />} />
                   <Route path="/legal/:page" element={<LegalScreen />} />
                 </Routes>
               </Suspense>
@@ -775,6 +785,8 @@ function AppContent() {
                       { label: 'Privacy Policy', to: '/legal/privacy' },
                       { label: 'Cookie Policy', to: '/legal/cookies' },
                       { label: 'Terms of Service', to: '/legal/terms' },
+                      { label: 'Legal', to: '/legal' },
+                      { label: 'Code of Conduct', to: '/legal/conduct' },
                       { label: 'Community Guidelines', to: '/legal/guidelines' },
                       { label: 'Accessibility', to: '/legal/accessibility' },
                       { label: 'About', to: '/legal/about' },
@@ -959,20 +971,29 @@ function AppContent() {
                             </span>
                           </div>
                         </div>
-                        {isAuthenticated && (
+                        <div className="flex items-center gap-1">
                           <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setIsMobileProfileMenuOpen(!isMobileProfileMenuOpen);
-                            }}
-                            className={`p-2 rounded-lg transition-all flex-shrink-0 ${theme === 'dark'
-                              ? 'hover:bg-white/10 text-gray-400 hover:text-white'
-                              : 'hover:bg-black/10 text-gray-600 hover:text-black'
-                              } ${isMobileProfileMenuOpen ? (theme === 'dark' ? 'bg-white/10 text-white' : 'bg-black/10 text-black') : ''}`}
+                            onClick={openLanguageSelector}
+                            className={`p-2 rounded-lg transition-all flex items-center gap-1.5 ${theme === 'dark' ? 'hover:bg-white/10 text-white/50 hover:text-white' : 'hover:bg-black/5 text-gray-400 hover:text-gray-700'}`}
                           >
-                            <MoreHorizontal className="w-5 h-5" />
+                            <Globe className="w-4 h-4" />
+                            <span className="text-[11px] font-bold">{languageDisplay}</span>
                           </button>
-                        )}
+                          {isAuthenticated && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setIsMobileProfileMenuOpen(!isMobileProfileMenuOpen);
+                              }}
+                              className={`p-2 rounded-lg transition-all flex-shrink-0 ${theme === 'dark'
+                                ? 'hover:bg-white/10 text-gray-400 hover:text-white'
+                                : 'hover:bg-black/10 text-gray-600 hover:text-black'
+                                } ${isMobileProfileMenuOpen ? (theme === 'dark' ? 'bg-white/10 text-white' : 'bg-black/10 text-black') : ''}`}
+                            >
+                              <MoreHorizontal className="w-5 h-5" />
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </motion.div>
 
@@ -1112,24 +1133,6 @@ function AppContent() {
                             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                           />
                         </div>
-                      </motion.button>
-
-                      {/* Language Selector */}
-                      <motion.button
-                        onClick={openLanguageSelector}
-                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-[16px] font-semibold text-[15px] tracking-[-0.011em] transition-all duration-200 ${theme === 'dark'
-                          ? 'bg-white/[0.08] hover:bg-white/[0.12] text-white'
-                          : 'bg-black/[0.08] hover:bg-black/[0.12] text-black'
-                          }`}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        style={{ willChange: 'transform' }}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <Languages className="w-5 h-5" />
-                          <span>{t('app.language')}</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4" />
                       </motion.button>
                     </div>
                   </div>
