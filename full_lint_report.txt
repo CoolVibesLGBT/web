@@ -188,9 +188,7 @@ Calling setState synchronously within an effect body causes cascading renders th
   5:10  error  'Building' is defined but never used  @typescript-eslint/no-unused-vars
 
 /Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/discovery/PopularUsersPanel.tsx
-   9:10  error  'Actions' is defined but never used       @typescript-eslint/no-unused-vars
-  72:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  89:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  74:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
 
 /Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/discovery/TrendsPanel.tsx
     7:10  error  'Actions' is defined but never used       @typescript-eslint/no-unused-vars
@@ -242,26 +240,6 @@ React refs are values that are not needed for rendering. Refs should only be acc
   78 |     },
   79 |     middleware: [
   80 |       offset(5),  react-hooks/refs
-
-/Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/editor/Lexical/nodes/EquationComponent.tsx
-  66:7   error  Error: Calling setState synchronously within an effect can trigger cascading renders
-
-Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
-* Update external systems with the latest state from React.
-* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
-
-Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
-
-/Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/editor/Lexical/nodes/EquationComponent.tsx:66:7
-  64 |   useEffect(() => {
-  65 |     if (!showEquationEditor && equationValue !== equation) {
-> 66 |       setEquationValue(equation);
-     |       ^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
-  67 |     }
-  68 |   }, [showEquationEditor, equation, equationValue]);
-  69 |  react-hooks/set-state-in-effect
-  78:12  error  'payload' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
-  90:12  error  'payload' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
 
 /Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/editor/Lexical/nodes/EquationNode.tsx
   82:13  error  '_config' is defined but never used  @typescript-eslint/no-unused-vars
@@ -795,48 +773,31 @@ Calling setState synchronously within an effect body causes cascading renders th
   92:13  error  'center' is assigned a value but never used                    @typescript-eslint/no-unused-vars
 
 /Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/media/VideoPlayer.tsx
-   94:7   error    Error: Calling setState synchronously within an effect can trigger cascading renders
-
-Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
-* Update external systems with the latest state from React.
-* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
-
-Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
-
-/Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/media/VideoPlayer.tsx:94:7
-  92 |   useEffect(() => {
-  93 |     if (isPlaying) {
-> 94 |       resetControlsTimeout();
-     |       ^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
-  95 |     }
-  96 |     return () => {
-  97 |       if (controlsTimeoutRef.current) {  react-hooks/set-state-in-effect
-  249:11  error    Unexpected lexical declaration in case block                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           no-case-declarations
-  258:6   warning  React Hook useEffect has missing dependencies: 'toggleFullscreen' and 'toggleMute'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 react-hooks/exhaustive-deps
+  250:11  error    Unexpected lexical declaration in case block                                                                                            no-case-declarations
+  259:6   warning  React Hook useEffect has missing dependencies: 'toggleFullscreen' and 'toggleMute'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
 
 /Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/notifications/NotificationItem/index.tsx
-   15:20  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-explicit-any
-   24:20  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-explicit-any
-   36:62  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-explicit-any
-   68:47  warning  The ref value 'ref.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'ref.current' to a variable inside the effect, and use that variable in the cleanup function                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                react-hooks/exhaustive-deps
-  105:14  error    Error: Cannot create components during render
+   15:20  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-explicit-any
+   24:20  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-explicit-any
+   36:62  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-explicit-any
+  108:14  error  Error: Cannot create components during render
 
 Components created during render will reset their state each time they are created. Declare components outside of render.
 
-/Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/notifications/NotificationItem/index.tsx:105:14
-  103 |               : 'bg-gray-100 group-hover:bg-gray-200/50'
-  104 |           }`}>
-> 105 |             <Icon className={`w-5 h-5 ${
-      |              ^^^^ This component is created during render
-  106 |               isDark ? 'text-gray-400 group-hover:text-white' : 'text-gray-500 group-hover:text-gray-900'
-  107 |             }`} strokeWidth={1.5} />
-  108 |           </div>
+/Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/notifications/NotificationItem/index.tsx:108:14
+  106 |               : 'bg-gray-100 group-hover:bg-gray-200/50'
+  107 |           }`}>
+> 108 |             <NotificationIcon className={`w-5 h-5 ${
+      |              ^^^^^^^^^^^^^^^^ This component is created during render
+  109 |               isDark ? 'text-gray-400 group-hover:text-white' : 'text-gray-500 group-hover:text-gray-900'
+  110 |             }`} strokeWidth={1.5} />
+  111 |           </div>
 
-/Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/notifications/NotificationItem/index.tsx:53:16
+/Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/notifications/NotificationItem/index.tsx:53:28
   51 | }) => {
   52 |   const ref = useRef<HTMLDivElement>(null);
-> 53 |   const Icon = getNotificationIcon(notification.type);
-     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The component is created during render here
+> 53 |   const NotificationIcon = getNotificationIcon(notification.type);
+     |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The component is created during render here
   54 |   const isDark = theme === 'dark';
   55 |
   56 |   useEffect(() => {  react-hooks/static-components
@@ -854,26 +815,10 @@ Components created during render will reset their state each time they are creat
   1152:96  error  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
 
 /Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/post/EmojiPicker.tsx
-   30:3   error  'title' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
-   31:3   error  'description' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
-   48:9   error  Error: Calling setState synchronously within an effect can trigger cascading renders
-
-Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
-* Update external systems with the latest state from React.
-* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
-
-Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
-
-/Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/post/EmojiPicker.tsx:48:9
-  46 |     if (saved) {
-  47 |       try {
-> 48 |         setFrequentlyUsed(JSON.parse(saved));
-     |         ^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
-  49 |       } catch (e) {
-  50 |         // Ignore parse errors
-  51 |       }  react-hooks/set-state-in-effect
-   49:16  error  'e' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
-  141:38  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-explicit-any
+  11:21  error  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+  42:10  error  '_title' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  43:16  error  '_description' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  63:16  error  '_e' is defined but never used                     @typescript-eslint/no-unused-vars
 
 /Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/post/Flows.tsx
   214:49  error    Unexpected any. Specify a different type                                                                                                                                                   @typescript-eslint/no-explicit-any
@@ -911,44 +856,22 @@ Calling setState synchronously within an effect body causes cascading renders th
   1434:6  warning  React Hook useCallback has a missing dependency: 'updateEngagementStates'. Either include it or remove the dependency array                                                                                                                     react-hooks/exhaustive-deps
 
 /Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/post/Stories.tsx
-   21:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   23:10  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   54:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   54:58  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   78:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   84:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  200:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  208:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  241:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
 
 /Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/post/Vibes.tsx
-   28:65  error    '_activeTab' is defined but never used                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
-   28:90  error    '_onPostClick' is defined but never used                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
-   63:13  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
-   71:24  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
-   72:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
-  150:22  error    Empty block statement                                                                                                                                                                                                                                                    no-empty
-  303:18  warning  The ref value 'videoRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'videoRef.current' to a variable inside the effect, and use that variable in the cleanup function          react-hooks/exhaustive-deps
-  307:22  warning  The ref value 'nextVideoRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'nextVideoRef.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
-  311:22  warning  The ref value 'prevVideoRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'prevVideoRef.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
-  437:6   warning  React Hook useEffect has a missing dependency: 'currentIndex'. Either include it or remove the dependency array                                                                                                                                                          react-hooks/exhaustive-deps
+   63:65  error    '_activeTab' is defined but never used                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+   63:90  error    '_onPostClick' is defined but never used                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+  186:22  error    Empty block statement                                                                                                                                                                                                                                                    no-empty
+  339:18  warning  The ref value 'videoRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'videoRef.current' to a variable inside the effect, and use that variable in the cleanup function          react-hooks/exhaustive-deps
+  343:22  warning  The ref value 'nextVideoRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'nextVideoRef.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+  347:22  warning  The ref value 'prevVideoRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'prevVideoRef.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+  473:6   warning  React Hook useEffect has a missing dependency: 'currentIndex'. Either include it or remove the dependency array                                                                                                                                                          react-hooks/exhaustive-deps
 
 /Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/post/VibesGL/ActionBar.tsx
-   9:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react-refresh/only-export-components
-  31:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react-refresh/only-export-components
-  44:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react-refresh/only-export-components
-  63:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react-refresh/only-export-components
-  90:21  error    Error: Cannot call impure function during render
-
-`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
-
-/Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/post/VibesGL/ActionBar.tsx:90:21
-  88 |
-  89 |     const handleTriggerOverlay = (type: BurstType) => {
-> 90 |         const now = Date.now();
-     |                     ^^^^^^^^^^ Cannot call impure function
-  91 |         setOverlay({
-  92 |             type,
-  93 |             key: now,  react-hooks/purity
+   9:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  31:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  44:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  63:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
 
 /Users/ersanyakit/Documents/coolvibes/coolvibes/web/src/features/post/VibesGL/VibeItem.tsx
    1:17  error  'useEffect' is defined but never used        @typescript-eslint/no-unused-vars
@@ -1331,7 +1254,6 @@ Calling setState synchronously within an effect body causes cascading renders th
   5320:130  error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
   5531:47   error    Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
 
-✖ 610 problems (546 errors, 64 warnings)
+✖ 591 problems (528 errors, 63 warnings)
 
-error Command failed with exit code 1.
 info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
