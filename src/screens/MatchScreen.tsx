@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import Container from '../components/ui/Container';
 import ProfileScreen from './ProfileScreen';
 import { api } from '../services/api';
-import { getSafeImageURL, getSafeImageURLEx } from '../helpers/helpers';
+import { getSafeImageURLEx } from '../helpers/helpers';
 
 interface Fantasy {
   id: string;
@@ -191,9 +191,9 @@ const MatchScreen: React.FC = () => {
         // Handle both array and object response formats
         let apiUsers: ApiUser[] = [];
         if (Array.isArray(response)) {
-          apiUsers = response;
-        } else if (response && typeof response === 'object' && 'users' in response) {
-          apiUsers = response.users;
+          apiUsers = response as ApiUser[];
+        } else if (response && typeof response === 'object' && 'users' in (response as any)) {
+          apiUsers = (response as any).users as ApiUser[];
         }
         
         // Map API users to Profile format
@@ -419,7 +419,7 @@ const MatchScreen: React.FC = () => {
     }
   };
 
-  const handleDragEnd = (_event: any, info: PanInfo) => {
+  const handleDragEnd = (_event: React.PointerEvent | PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => {
     const threshold = 100;
     const velocityThreshold = 500;
 
@@ -498,7 +498,7 @@ const MatchScreen: React.FC = () => {
     setCurrentImageIndex(0);
     setShowProfileModal(false);
     // Don't reset exitDirection here - let animation complete first
-  }, [currentIndex]);
+  }, [currentIndex, x, y]);
 
   // Reset processed profiles when profiles list changes (new profiles loaded)
   useEffect(() => {
@@ -853,9 +853,9 @@ const MatchScreen: React.FC = () => {
                   
                   let apiUsers: ApiUser[] = [];
                   if (Array.isArray(response)) {
-                    apiUsers = response;
-                  } else if (response && typeof response === 'object' && 'users' in response) {
-                    apiUsers = response.users;
+                    apiUsers = response as ApiUser[];
+                  } else if (response && typeof response === 'object' && 'users' in (response as any)) {
+                    apiUsers = (response as any).users as ApiUser[];
                   }
                   
                   const mappedProfiles = apiUsers.map(mapApiUserToProfile);
@@ -903,7 +903,7 @@ const MatchScreen: React.FC = () => {
               >
                 <div className="absolute inset-0 w-full h-full">
                   <img
-                    src={getSafeImageURLEx(nextProfile.public_id,null,"cover")}
+                    src={getSafeImageURLEx(nextProfile.public_id,null,"cover") || undefined}
                     alt={nextProfile.name}
                     className="w-full h-full object-cover opacity-60 blur-[1px]"
                     draggable={false}
@@ -981,7 +981,7 @@ const MatchScreen: React.FC = () => {
                     <AnimatePresence mode="wait">
                       <motion.img
                         key={currentImageIndex}
-                          src={getSafeImageURLEx(currentProfile.public_id,null,"cover")}
+                          src={getSafeImageURLEx(currentProfile.public_id,null,"cover") || undefined}
 
                         alt={currentProfile.name}
                         className="w-full h-full object-cover"
@@ -1284,7 +1284,7 @@ const MatchScreen: React.FC = () => {
                     transition={{ duration: 0.3 }}
                   >
                     <img
-                      src={getSafeImageURLEx(profile.public_id,null,"cover")}
+                      src={getSafeImageURLEx(profile.public_id,null,"cover") || undefined}
                       alt={profile.name}
                       className="w-full h-full object-cover"
                     />
@@ -1380,7 +1380,7 @@ const MatchScreen: React.FC = () => {
                     transition={{ duration: 0.3 }}
                   >
                     <img
-                      src={getSafeImageURLEx(profile.public_id,null,"cover")}
+                      src={getSafeImageURLEx(profile.public_id,null,"cover") || undefined}
                       alt={profile.name}
                       className="w-full h-full object-cover"
                     />
@@ -1465,7 +1465,7 @@ const MatchScreen: React.FC = () => {
                     transition={{ duration: 0.3 }}
                   >
                     <img
-                      src={getSafeImageURLEx(profile.public_id,null,"cover")}
+                      src={getSafeImageURLEx(profile.public_id,null,"cover") || undefined}
                       alt={profile.name}
                       className="w-full h-full object-cover grayscale"
                     />

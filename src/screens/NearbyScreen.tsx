@@ -30,12 +30,12 @@ const NearbyScreen: React.FC = () => {
 
   const isRequestPendingRef = useRef(false);
 
-  const [selectedUser, setSelectedUser] = useState<unknown>(null);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
 
   const [state, setState] = useAtom(globalState);
 
   // Fetch nearby users from API
-  const fetchNearbyUsers = async (refreshing: boolean = false, lat?: number, lng?: number) => {
+  const fetchNearbyUsers = useCallback(async (refreshing: boolean = false, lat?: number, lng?: number) => {
     if (isRequestPendingRef.current) return;
 
     const isLoadMore = !refreshing && lat === undefined && lng === undefined;
@@ -57,17 +57,17 @@ const NearbyScreen: React.FC = () => {
         longitude: lng
       };
 
-      const response = await api.fetchNearbyUsers(payload);
+      const response = (await api.fetchNearbyUsers(payload as any)) as any;
 
-      setState((prevState: unknown) => {
+      setState((prevState: any) => {
         // If refreshing or map moved, we replace the list. Otherwise we append.
         const shouldReset = refreshing || (lat !== undefined && lng !== undefined);
         const existingUsers = shouldReset ? [] : prevState.nearbyUsers;
-        const existingIds = new Set(existingUsers.map((user: unknown) => user.id));
+        const existingIds = new Set(existingUsers.map((user: any) => user.id));
 
         // Filter out duplicates
         const newUsers = (response.users || []).filter(
-          (user: unknown) => !existingIds.has(user.id)
+          (user: any) => !existingIds.has(user.id)
         );
 
         return {
@@ -79,7 +79,7 @@ const NearbyScreen: React.FC = () => {
 
     } catch (err: unknown) {
       console.error("Error fetching nearby users:", err);
-      setError(err?.message || "Could not fetch users");
+      setError((err as any)?.message || "Could not fetch users");
     } finally {
       setLoadingUsers(false);
       setLoadingMore(false);
@@ -89,7 +89,7 @@ const NearbyScreen: React.FC = () => {
         isRequestPendingRef.current = false;
       }, 500);
     }
-  };
+  }, [state.nearByCursor, setState]);
 
 
   const observerTarget = useRef<HTMLDivElement>(null);
@@ -112,25 +112,25 @@ const NearbyScreen: React.FC = () => {
     return () => {
       if (target) observer.unobserve(target);
     };
-  }, [state.nearByCursor, loadingMore, loadingUsers]);
+  }, [state.nearByCursor, loadingMore, loadingUsers, fetchNearbyUsers]);
 
   useEffect(() => {
     if (state.nearbyUsers.length == 0) {
       fetchNearbyUsers()
     }
 
-  }, [])
+  }, [state.nearbyUsers.length, fetchNearbyUsers]);
 
   useEffect(() => {
-    const handleUserBlocked = (e: unknown) => {
+    const handleUserBlocked = (e: any) => {
       const blockedId = e.detail?.userId;
       if (blockedId) {
-        setState((prevState: unknown) => ({
+        setState((prevState: any) => ({
           ...prevState,
-          nearbyUsers: prevState.nearbyUsers.filter((u: unknown) => u.public_id !== blockedId && u.id !== blockedId)
+          nearbyUsers: prevState.nearbyUsers.filter((u: any) => u.public_id !== blockedId && u.id !== blockedId)
         }));
 
-        setSelectedUser((prev: unknown) => {
+        setSelectedUser((prev: any) => {
           if (prev && (prev.public_id === blockedId || prev.id === blockedId)) {
             return null;
           }
@@ -139,14 +139,14 @@ const NearbyScreen: React.FC = () => {
       }
     };
 
-    window.addEventListener('userBlocked', handleUserBlocked);
-    return () => window.removeEventListener('userBlocked', handleUserBlocked);
+    window.addEventListener('userBlocked', (handleUserBlocked as any));
+    return () => window.removeEventListener('userBlocked', (handleUserBlocked as any));
   }, [setState]);
 
 
 
   const handleRefresh = () => {
-    setState((prevState: unknown) => ({
+    setState((prevState: any) => ({
       ...prevState,
       nearbyUsers: [],
       nearByCursor: null,
@@ -155,7 +155,7 @@ const NearbyScreen: React.FC = () => {
     fetchNearbyUsers(true);
   };
 
-  const handleMarkerClick = useCallback((user: unknown) => {
+  const handleMarkerClick = useCallback((user: any) => {
     setSelectedUser(user);
   }, []);
 
@@ -359,7 +359,7 @@ const NearbyScreen: React.FC = () => {
               <div className='w-full flex-col py-2'>
                 {viewMode === 'grid' && (
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                    {state.nearbyUsers.map((user: unknown, index: number) => (
+                    {state.nearbyUsers.map((user: any, index: number) => (
                       <motion.div
                         key={`view_grid_item${index}`}
 
@@ -375,7 +375,7 @@ const NearbyScreen: React.FC = () => {
 
                 {viewMode === 'list' && (
                   <div className="space-y-3">
-                    {state.nearbyUsers.map((user: unknown, index: number) => (
+                    {state.nearbyUsers.map((user: any, index: number) => (
                       <motion.div
                         key={user.id}
                         initial={{ opacity: 0, x: -20 }}
@@ -390,7 +390,7 @@ const NearbyScreen: React.FC = () => {
 
                 {viewMode === 'card' && (
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-2">
-                    {state.nearbyUsers.map((user: unknown, index: number) => (
+                    {state.nearbyUsers.map((user: any, index: number) => (
                       <motion.div
                         key={user.id}
                         initial={{ opacity: 0, scale: 0.95 }}
@@ -493,10 +493,10 @@ const NearbyScreen: React.FC = () => {
               <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800 shrink-0">
                 <div className="flex flex-col">
                   <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                    {selectedUser.displayname || selectedUser.username}
+                    {(selectedUser as any).displayname || (selectedUser as any).username}
                   </h2>
                   <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
-                    @{selectedUser.username}
+                    @{(selectedUser as any).username}
                   </p>
                 </div>
                 <motion.button
@@ -517,7 +517,7 @@ const NearbyScreen: React.FC = () => {
                 <ProfileScreen
                   inline={true}
                   isEmbed={true}
-                  username={selectedUser.username}
+                  username={(selectedUser as any).username}
                 />
               </div>
             </motion.div>

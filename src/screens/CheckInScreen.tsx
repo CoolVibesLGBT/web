@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, animate } from 'framer-motion';
 import {
     MapPin,
@@ -18,18 +18,14 @@ import {
     Hand,
     X,
     Globe,
-    Video,
     Sparkles,
     Droplet,
     Feather,
     Dumbbell,
     FlaskRound,
-    ImagePlus,
     Minimize2,
     Maximize2,
     Minus,
-    Plus,
-    ChevronRight,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -37,7 +33,6 @@ import L from 'leaflet';
 import { useTheme } from '../contexts/ThemeContext';
 import 'leaflet/dist/leaflet.css';
 import { useApp } from '../contexts/AppContext';
-import { useAuth } from '../contexts/AuthContext';
 import { tagNameToColor } from '../helpers/colors';
 import CreatePost from '../features/post/CreatePost';
 import { getLocalizedContent } from '../helpers/helpers';
@@ -172,7 +167,7 @@ function HoneycombItem({ tag, pos, isSelected, hasSelection, onToggle, dark, def
             strokeWidth={1.8}
         />
                 <span className={`text-[10px] font-black uppercase tracking-tight text-center px-1 leading-none transition-colors duration-250 ${isSelected ? 'text-white' : dark ? 'text-gray-300' : 'text-gray-600'}`}>
-                    {getLocalizedContent(tag.name, defaultLanguage)}
+                    {getLocalizedContent(tag.name, defaultLanguage) as any}
                 </span>
             </div>
         </motion.button>
@@ -184,10 +179,23 @@ export default function CheckInScreen() {
     const { theme } = useTheme();
     const dark = theme === 'dark';
     const { data: appData,defaultLanguage } = useApp();
-    const checkinTags: CheckInTag[] = (appData?.checkin_tag_types ?? []).map((tag: any) => ({
+    interface RawTag {
+        id: string;
+        tag: string;
+        name: { en: string; tr: string };
+        icon?: string;
+        category: TagCategory;
+    }
+
+    const checkinTags: CheckInTag[] = ((appData?.checkin_tag_types as RawTag[]) ?? []).map((tag: RawTag) => ({
         ...tag,
         icon: resolveTagIcon(tag.icon),
-    }));
+        color: tagByTagNameToColor(tag.tag).background?.toString() || '#8b5cf6'
+    } as CheckInTag));
+
+    function tagByTagNameToColor(tag: string) {
+        return tagNameToColor(tag) as any;
+    }
 
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [posts, setPosts] = useState<ApiPost[]>([]);
@@ -204,8 +212,10 @@ export default function CheckInScreen() {
         try {
             setLoading(true);
             setError(null);
-            const response = await api.fetchCheckIns({ limit: 50 });
-            setPosts(response.posts);
+            const response = await api.fetchCheckIns({ limit: 50 }) as any;
+            if (response && response.posts) {
+                setPosts(response.posts);
+            }
         } catch (err) {
             console.error('Error fetching check-ins:', err);
             setError('Failed to load check-ins. Please try again.');
@@ -232,7 +242,7 @@ export default function CheckInScreen() {
             animate(dragY, 0, { duration: 0 });
             setSelectedTags([]);
         }
-    }, [isModalOpen]);
+    }, [isModalOpen, dragX, dragY]);
 
     const centerOnItem = (pos: { x: number; y: number }) => {
         // animate() — spring ile smooth kayma, drag sırasında ise anlık
@@ -275,8 +285,9 @@ export default function CheckInScreen() {
                     />
                     <Marker position={userLocation} icon={createUserIcon('https://i.pravatar.cc/150?u=me', true)} />
                     {posts.map(p => {
-                        const hasTags = p.extras?.tags && p.extras.tags.length > 0;
-                        const firstTag = hasTags ? checkinTags.find(t => t.tag === p.extras.tags[0]) : null;
+                        const postExtras = p.extras as any;
+                        const hasTags = postExtras?.tags && postExtras.tags.length > 0;
+                        const firstTag = hasTags ? checkinTags.find(t => t.tag === postExtras.tags[0]) : null;
                         const TagIcon = firstTag?.icon || MapPin;
                         
                         return (
@@ -296,16 +307,16 @@ export default function CheckInScreen() {
                                             
                                             {hasTags && firstTag && (
                                                 <div className="flex items-center gap-1.5 mt-2.5 mb-2">
-                                                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-md border" style={{ ...tagNameToColor(firstTag.tag), background: 'transparent', color: tagNameToColor(firstTag.tag).background, borderColor: dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)' }}>
+                                                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-md border" style={{ ...tagNameToColor(firstTag.tag), background: 'transparent', color: (tagNameToColor(firstTag.tag) as any).background, borderColor: dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)' }}>
                                                         <TagIcon className="w-3.5 h-3.5" />
-                                                        <span className="text-[10px] font-bold uppercase tracking-wider">{getLocalizedContent(firstTag.name, defaultLanguage)}</span>
+                                                        <span className="text-[10px] font-bold uppercase tracking-wider">{getLocalizedContent(firstTag.name, defaultLanguage) as any}</span>
                                                     </div>
                                                 </div>
                                             )}
                                             
                                             {p.content && (
                                                 <p className={`text-[12px] leading-relaxed mt-2 line-clamp-3 font-medium ${dark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                                    {getLocalizedContent(p.content, defaultLanguage)}
+                                                    {getLocalizedContent(p.content, defaultLanguage) as any}
                                                 </p>
                                             )}
                                         </div>
@@ -540,13 +551,13 @@ export default function CheckInScreen() {
                                                         <button
                                                             key={t}
                                                             onClick={() => toggleTag(t)}
-                                                              style={tagNameToColor(tag.tag)}
+                                                              style={tagNameToColor(tag.tag) as any}
 
                                                   
                                                             className={`flex items-center gap-1.5 px-2 py-1 rounded-xl text-white`}
                                                         >
                                                             <Icon className="w-3 h-3" strokeWidth={2} />
-                                                            <span className="text-[10px] font-bold">{getLocalizedContent(tag.name, defaultLanguage)}</span>
+                                                            <span className="text-[10px] font-bold">{getLocalizedContent(tag.name, defaultLanguage) as any}</span>
                                                             <X className="w-2 h-2 opacity-60" />
                                                         </button>
                                                     );

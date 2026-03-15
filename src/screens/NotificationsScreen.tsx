@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -32,7 +32,7 @@ const NotificationsScreen: React.FC = () => {
   const { t } = useTranslation('common');
   const [activeTab, setActiveTab] = useState<'all' | 'messages' | 'matches' | 'likes' | 'follows' | 'gifts' | 'other'>('all');
   const [state, setState] = useAtom(globalState);
-  const notifications: Notification[] = state.notifications || [];
+  const notifications: Notification[] = (state as any).notifications || [];
   const { socket } = useSocket();
   const { isAuthenticated, user } = useAuth();
 
@@ -111,19 +111,20 @@ const NotificationsScreen: React.FC = () => {
     };
   }, [socket, isAuthenticated, user?.public_id]);
 
-  const fetchNotifications = async (reset: boolean = false) => {
-    const res = await api.checkNewNotifications(20, reset ? null : state.notificationNextCursor);
-    setState(prev => ({
+  const fetchNotifications = useCallback(async (reset: boolean = false) => {
+    const stateAny = state as any;
+    const res = (await api.checkNewNotifications(20, reset ? null : stateAny.notificationNextCursor)) as any;
+    setState((prev: any) => ({
       ...prev,
       notifications: reset ? (res.notifications ?? []) : [...prev.notifications, ...(res.notifications ?? [])],
       notificationNextCursor: res.next_cursor,
       notificationPrevCursor: res.prev_cursor
     }));
-  };
+  }, [state, setState]);
 
   useEffect(() => {
     fetchNotifications(true);
-  }, []);
+  }, [fetchNotifications]);
 
   const markAsRead = async (notificationId: string) => {
     if (isAuthenticated && socket) {
@@ -134,9 +135,9 @@ const NotificationsScreen: React.FC = () => {
         notification_id: notificationId
       }));
     }
-    setState(prev => ({
+    setState((prev: any) => ({
       ...prev,
-      notifications: prev.notifications?.map(n => n.id === notificationId ? { ...n, is_read: true } : n) || []
+      notifications: prev.notifications?.map((n: any) => n.id === notificationId ? { ...n, is_read: true } : n) || []
     }));
   };
 
@@ -157,7 +158,7 @@ const NotificationsScreen: React.FC = () => {
     return () => {
       if (target) observer.unobserve(target);
     };
-  }, [state.notificationNextCursor]);
+  }, [state.notificationNextCursor, fetchNotifications]);
 
   const handleNotificationClick = (notification: Notification) => {
     if (notification.type === 'chat_message') navigate('/messages');

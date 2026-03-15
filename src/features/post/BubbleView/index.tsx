@@ -20,26 +20,27 @@ const defaultItems = [
     }
 ];
 
+interface BubbleUser {
+    id: string;
+    public_id: string;
+    username: string;
+    date_of_birth: string;
+    [key: string]: unknown;
+}
+
 export default function BubbleView() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [state, setState] = useAtom(globalState);
+    const [state] = useAtom(globalState);
 
-    const [activeItem, setActiveItem] = useState(null);
     const [isMoving, setIsMoving] = useState(false);
 
-    const [isGiftSelectorOpen, setIsGiftSelectorOpen] = useState(false);
-    const [isQuickMessageSelectorOpen, setIsQuickMessageSelectorOpen] = useState(false);
+    const [, setIsGiftSelectorOpen] = useState(false);
     const [liked, setLiked] = useState(false);
     const [disliked, setDisliked] = useState(false)
     const [blocked, setIsBlocked] = useState(false)
     const navigate = useNavigate();
     const { theme } = useTheme();
-    const [activeUser, setActiveUser] = useState<any | null>(null);
-
-    const baseCardStyle =
-        theme === 'dark'
-            ? 'bg-gray-950 border border-gray-900 text-white'
-            : 'bg-white border border-gray-100 text-black';
+    const [activeUser, setActiveUser] = useState<BubbleUser | null>(null);
 
     const baseButtonStyle =
         theme === 'dark'
@@ -48,11 +49,12 @@ export default function BubbleView() {
 
     useEffect(() => {
         console.log(state.nearbyUsers)
-    }, []);
+    }, [state.nearbyUsers]);
 
     useEffect(() => {
-        const handleUserBlocked = (e: unknown) => {
-            const blockedId = e.detail?.userId;
+        const handleUserBlocked = (e: Event) => {
+            const customEvent = e as CustomEvent<{ userId: string }>;
+            const blockedId = customEvent.detail?.userId;
             if (activeUser && (activeUser.public_id === blockedId || activeUser.id === blockedId)) {
                 setActiveUser(null);
             }
@@ -67,10 +69,10 @@ export default function BubbleView() {
 
     const handleActiveItemChange = useCallback((index: number) => {
         const itemIndex = index % users.length;
-        setActiveUser(users[itemIndex]);
+        setActiveUser(users[itemIndex] as BubbleUser);
     }, [users]);
 
-    const webglController = useWebGLSphere(canvasRef, users, handleActiveItemChange, setIsMoving);
+    useWebGLSphere(canvasRef as React.RefObject<HTMLCanvasElement>, users, handleActiveItemChange, setIsMoving);
 
 
 

@@ -4,7 +4,7 @@ import {
   Sparkles,
   ShieldCheck,
   Zap,
-  Infinity,
+  Infinity as InfinityIcon,
   ArrowRight,
   Award,
   Users,
@@ -53,10 +53,10 @@ const PremiumScreen: React.FC = () => {
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
 
-  useAnimationFrame((t) => {
+  useAnimationFrame((time) => {
     if (!glowRef.current) return;
-    const x = 50 + Math.sin(t / 1800) * 20;
-    const y = 40 + Math.cos(t / 2200) * 15;
+    const x = 50 + Math.sin(time / 1800) * 20;
+    const y = 40 + Math.cos(time / 2200) * 15;
     glowRef.current.style.setProperty('--glow-x', `${x}%`);
     glowRef.current.style.setProperty('--glow-y', `${y}%`);
   });
@@ -121,7 +121,7 @@ const PremiumScreen: React.FC = () => {
               Verified instantly
             </div>
             <div className="flex items-center gap-2">
-              <Infinity className={`h-4 w-4 ${isDarkMode ? 'text-amber-300' : 'text-amber-500'}`} />
+              <InfinityIcon className={`h-4 w-4 ${isDarkMode ? 'text-amber-300' : 'text-amber-500'}`} />
               Unlimited vibes
             </div>
           </div>

@@ -16,16 +16,17 @@ import { DEFAULT_TOKEN_SYMBOL } from '../constants/constants';
 
 
 interface ReferralEngagement {
-    id: string;
-    kind: string;
-    created_at: string;
-    engager: {
-        username: string;
-        public_id: number;
-        avatar?: string;
-    };
+    id?: string;
+    kind?: string;
+    created_at?: string;
     details?: {
         amount?: number;
+    };
+    engager?: {
+        id?: string;
+        public_id?: number | string;
+        username?: string;
+        avatar?: string | null;
     };
 }
 
@@ -258,7 +259,7 @@ const ReferralsScreen: React.FC = () => {
                             {user?.engagements?.engagement_details?.filter((e: ReferralEngagement) => e.kind === 'referral')?.map((engagement: ReferralEngagement, idx: number, arr: ReferralEngagement[]) => (
                                 <div
                                     key={engagement.id}
-                                    onClick={() => navigate(`/${engagement.engager.username}`)}
+                                    onClick={() => engagement.engager?.username && navigate(`/${engagement.engager.username}`)}
                                     className={`p-4 flex items-center justify-between cursor-pointer transition-colors duration-200 ${idx !== arr.length - 1
                                         ? `border-b-[0.5px] ${borderColor}`
                                         : ''
@@ -266,20 +267,18 @@ const ReferralsScreen: React.FC = () => {
                                 >
                                     <div className="flex items-center gap-3">
                                         <div className={`w-10 h-10 rounded-[14px] overflow-hidden flex items-center justify-center font-bold text-[14px] ${isDark ? 'bg-gray-900/50 text-gray-300' : 'bg-gray-100 text-gray-600'}`}>
-                                            <img className='w-full h-full object-cover' src={getSafeImageURLEx(engagement.engager.public_id, engagement.engager.avatar || undefined, "thumbnail") || undefined} alt={engagement.engager.username} />
+                                            <img className='w-full h-full object-cover' src={getSafeImageURLEx(engagement.engager?.public_id, engagement.engager?.avatar || undefined, "thumbnail") || undefined} alt={engagement.engager?.username} />
                                         </div>
                                         <div>
-                                            <p className="font-semibold text-[15px]">{engagement.engager.username}</p>
-                                            <p className={`text-[13px] font-medium ${secTextColor}`}>{formatTime(engagement.created_at)}</p>
+                                            <p className="font-semibold text-[15px]">{engagement.engager?.username}</p>
+                                            <p className={`text-[13px] font-medium ${secTextColor}`}>{engagement.created_at ? formatTime(engagement.created_at) : ''}</p>
                                         </div>
                                     </div>
                                     <div className="text-right flex flex-col items-end">
-
                                         <>
                                             <span className="text-[15px] font-semibold text-gray-900 dark:text-white">{engagement.details?.amount}</span>
                                             <span className={`text-[11px] font-medium mt-0.5 ${secTextColor}`}>Completed</span>
                                         </>
-
                                     </div>
                                 </div>
                             ))}

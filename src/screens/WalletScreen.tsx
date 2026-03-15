@@ -171,8 +171,6 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
   const [isGooglePayProcessing, setIsGooglePayProcessing] = useState(false);
   const [isGooglePayLoading, setIsGooglePayLoading] = useState(false);
   const [depositStep, setDepositStep] = useState<'payment_method' | 'package' | 'payment_screen' | 'success' | 'error'>('payment_method');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [depositAmount, setDepositAmount] = useState<string>('');
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethodsResponse | null>(null);
   const [selectedIban, setSelectedIban] = useState<IBANDetail | null>(null);
 
@@ -818,7 +816,6 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                 onClick={() => {
                                   setDepositStep('payment_method');
                                   setSelectedPackage(null);
-                                  setDepositAmount('');
                                   setDepositPaymentMethod('google_pay');
                                   // Reset to default payment method from API based on enabled flags
                                   if (paymentMethods?.is_google_pay_enabled && (paymentMethods?.kind === 'google_play' || paymentMethods?.kind === 'google_pay')) {
@@ -981,7 +978,6 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
               setShowDepositModal(false);
               setSelectedPackage(null);
               setGooglePayAmount('');
-              setDepositAmount('');
               setDepositStep('payment_method');
               setDefaultPaymentMethod();
               setShowPackageDropdown(false);
@@ -1020,7 +1016,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                         setShowDepositModal(false);
                         setSelectedPackage(null);
                         setGooglePayAmount('');
-                        setDepositAmount('');
+
                         setDepositStep('payment_method');
                         setDefaultPaymentMethod();
                         setShowGooglePayProviderDropdown(false);
@@ -1041,13 +1037,13 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                           setDepositStep('package');
                         } else {
                           setDepositStep('payment_method');
-                          setDepositAmount('');
+  
                         }
                       } else if (depositStep === 'success' || depositStep === 'error') {
                         setShowDepositModal(false);
                         setSelectedPackage(null);
                         setGooglePayAmount('');
-                        setDepositAmount('');
+
                         setDepositStep('payment_method');
                         setDefaultPaymentMethod();
                         setShowGooglePayProviderDropdown(false);
@@ -1668,7 +1664,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                             setShowDepositModal(false);
                             setSelectedPackage(null);
                             setGooglePayAmount('');
-                            setDepositAmount('');
+
                             setDepositStep('payment_method');
                             setDefaultPaymentMethod();
                             setShowPaymentMethodDropdown(false);
@@ -2674,7 +2670,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                     setDepositStep('package');
                                   } else {
                                     setDepositStep('payment_method');
-                                    setDepositAmount('');
+        
                                   }
                                 }}
                                 whileHover={{ scale: 1.02 }}

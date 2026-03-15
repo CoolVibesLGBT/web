@@ -1,14 +1,23 @@
 
 import React, { useState } from 'react';
 
+import { X } from 'lucide-react';
+
+interface GiftItem {
+  id: number;
+  name: string;
+  emoji: string;
+  price: number;
+}
+
 interface GiftSelectorProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectGift: (gift: any) => void;
+  onSelectGift: (gift: GiftItem) => void;
   userName: string;
 }
 
-const gifts: any[] = [
+const gifts: GiftItem[] = [
   { id: 1, name: 'Rose', emoji: '🌹', price: 10 },
   { id: 2, name: 'Lollipop', emoji: '🍭', price: 20 },
   { id: 3, name: 'Diamond', emoji: '💎', price: 1000 },
@@ -20,7 +29,7 @@ const gifts: any[] = [
 ];
 
 const GiftSelector: React.FC<GiftSelectorProps> = ({ isOpen, onClose, onSelectGift, userName }) => {
-  const [selectedGift, setSelectedGift] = useState<any | null>(null);
+  const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
 
   if (!isOpen) return null;
 

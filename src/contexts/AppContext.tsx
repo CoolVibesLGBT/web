@@ -22,25 +22,25 @@ export interface InitialItem {
   id: string;
   name: LocalizedString;
   display_order: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface InitialData {
   vapid_public_key: string;
   preferences: {
-    interests?: any[];
-    fantasies?: any[];
-    attributes?: any[];
-    gender_identities?: any[];
-    sexual_orientations?: any[];
-    sexual_roles?: any[];
-    [key: string]: any;
-  } | any;
-  event_kinds: any[];
-  report_kinds: any[];
-  checkin_tag_types: any[]
-  countries: Record<string, any>;
-  languages: Record<string, any>;
+    interests?: unknown[];
+    fantasies?: unknown[];
+    attributes?: unknown[];
+    gender_identities?: unknown[];
+    sexual_orientations?: unknown[];
+    sexual_roles?: unknown[];
+    [key: string]: unknown;
+  } | Record<string, unknown>;
+  event_kinds: unknown[];
+  report_kinds: unknown[];
+  checkin_tag_types: unknown[]
+  countries: Record<string, unknown>;
+  languages: Record<string, unknown>;
   status: string;
   attributes?: GroupedAttribute[];
   gender_identities?: InitialItem[];

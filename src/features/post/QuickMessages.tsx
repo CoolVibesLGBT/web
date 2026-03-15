@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Heart, Star, Crown, Diamond, Sparkles, Coffee, Cake, Music, Zap } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 
 
@@ -108,7 +108,7 @@ const QuickMessages: React.FC<QuickMessagesProps> = ({ isOpen, onClose, onSendMe
             {/* Gifts Grid */}
             <div className="p-4 max-h-[355px] overflow-y-auto scrollbar-hide">
               <div className="flex flex-col gap-2">
-                {quickMessages.map((message, index) => (
+                {quickMessages.map((message) => (
                   <motion.button
                     key={message.id}
                   

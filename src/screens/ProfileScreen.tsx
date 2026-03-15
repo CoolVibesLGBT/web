@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { TravelData } from '../interfaces/user';
 import { ArrowLeft, Calendar, MapPin, Link, MoreHorizontal, Settings, Heart, Baby, Cigarette, Wine, Ruler, PawPrint, Church, GraduationCap, Eye, EyeOff, Lock, Palette, Accessibility, Paintbrush, RulerDimensionLine, Vegan, PersonStanding, Sparkles, Drama, Banana, Save, Camera, Image as ImageIcon, ChevronRight, Check, HeartHandshake, FileText, MessageCircle, Panda, Ghost, Rainbow, Transgender, Rabbit, ChevronLeft, ChevronDown, LocateFixed, UserCircle, Clock, Smile, HeartPulse, Bubbles, Leaf, Fingerprint, Wallet } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -111,6 +112,7 @@ interface UserEngagementDetail {
     id?: string;
     public_id?: string | number;
   };
+  created_at?: string;
 }
 
 interface UserEngagements {
@@ -126,15 +128,28 @@ interface ProfileUser {
   email: string;
   date_of_birth: string;
   gender: string;
-  sexual_orientation: {
+  gender_identity?: { id: string; key?: string; name?: Record<string, string> };
+  gender_identities?: Array<{ id: string; key?: string; name?: Record<string, string> }>;
+  sexual_orientation?: {
     id: string;
     key: string;
     order: number;
+    name?: Record<string, string>;
   };
-  sex_role: string;
+  sexual_orientations?: Array<{ id: string; key?: string; name?: Record<string, string> }>;
+  sex_role?: string;
+  sexual_role?: { id: string; key?: string; name?: Record<string, string> };
+  sexual_identities?: {
+    gender_identities?: Array<{ id: string; key?: string; name?: Record<string, string> }>;
+    sexual_orientations?: Array<{ id: string; key?: string; name?: Record<string, string> }>;
+    sex_role?: { id: string; key?: string; name?: Record<string, string> };
+  };
   relationship_status: string;
   user_role: string;
   is_active: boolean;
+  is_premium?: boolean;
+  is_verified?: boolean;
+  preferences_flags?: string;
   created_at: string;
   updated_at: string;
   default_language: string;
@@ -161,6 +176,7 @@ interface ProfileUser {
       id: string;
       interest_id: string;
       name: Record<string, string>;
+      bit_index?: number;
       emoji?: string;
       interest?: {
         id: string;
@@ -186,8 +202,8 @@ interface ProfileUser {
   religion?: string;
   personality?: string;
   education_level?: string;
-  travel: unknown;
-  social: unknown;
+  travel?: TravelData;
+  social?: unknown;
   deleted_at: string | null;
   bio?: string;
   location?: UserLocation;
@@ -197,6 +213,10 @@ interface ProfileUser {
   followers_count?: number;
   following_count?: number;
   posts_count?: number;
+  medias_count?: number;
+  likes_count?: number;
+  profile_views_count?: number;
+  is_following?: boolean;
   user_attributes?: Array<{
     id: string;
     user_id: string;
@@ -211,8 +231,21 @@ interface ProfileUser {
   }>;
   engagements?: UserEngagements;
   privacy_level?: PrivacyLevel;
-  avatar?: any;
-  cover_image?: any;
+  avatar?: { file?: { url?: string } } | null;
+  cover_image?: { file?: { url?: string } } | null;
+  cover?: { file?: { url?: string } } | null;
+  [key: string]: unknown;
+}
+
+interface ApiResponse {
+  user?: ProfileUser;
+  target_user?: ProfileUser;
+  followee?: ProfileUser;
+  posts?: unknown[];
+  medias?: unknown[];
+  success?: boolean;
+  message?: string;
+  [key: string]: unknown;
 }
 
 const getIsFollowingFromEngagements = (authUserData: unknown, targetUser: ProfileUser | null): boolean => {
@@ -220,7 +253,7 @@ const getIsFollowingFromEngagements = (authUserData: unknown, targetUser: Profil
     return false;
   }
 
-  const engagementDetails = (authUserData as any)?.engagements?.engagement_details;
+  const engagementDetails = (authUserData as { engagements?: { engagement_details?: UserEngagementDetail[] } })?.engagements?.engagement_details;
   if (!Array.isArray(engagementDetails)) {
     return false;
   }
@@ -262,26 +295,31 @@ const normalizeProfileUser = (rawUser: unknown): ProfileUser | null => {
     return null;
   }
 
+  const userObj = rawUser as Partial<ProfileUser> & {
+    cover?: { file?: { url?: string } };
+    avatar?: { file?: { url?: string } };
+  };
+
   const followerCount =
-    (rawUser as any).engagements?.counts?.follower_count ??
-    (rawUser as any).followers_count ??
+    userObj.engagements?.counts?.follower_count ??
+    userObj.followers_count ??
     0;
 
   const followingCount =
-    (rawUser as any).engagements?.counts?.following_count ??
-    (rawUser as any).following_count ??
+    userObj.engagements?.counts?.following_count ??
+    userObj.following_count ??
     0;
 
   return {
-    ...(rawUser as ProfileUser),
-    profile_image_url: (rawUser as any).avatar?.file?.url || (rawUser as any).profile_image_url,
-    cover_image_url: (rawUser as any).cover?.file?.url || (rawUser as any).cover_image_url,
+    ...(userObj as ProfileUser),
+    profile_image_url: userObj.avatar?.file?.url || userObj.profile_image_url,
+    cover_image_url: userObj.cover?.file?.url || userObj.cover_image_url,
     followers_count: followerCount,
     following_count: followingCount,
     engagements: {
-      ...((rawUser as any).engagements || {}),
+      ...(userObj.engagements || {}),
       counts: {
-        ...((rawUser as any).engagements?.counts || {}),
+        ...(userObj.engagements?.counts || {}),
         follower_count: followerCount,
         following_count: followingCount,
       },
@@ -923,8 +961,8 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange, theme,
 
     try {
       try {
-        if ('permissions' in navigator && typeof (navigator as any).permissions?.query === 'function') {
-          const permissionStatus = await (navigator as any).permissions.query({ name: 'geolocation' });
+        if ('permissions' in navigator && typeof (navigator as unknown as { permissions?: { query: (opts: { name: string }) => Promise<{ state: string }> } }).permissions?.query === 'function') {
+          const permissionStatus = await (navigator as unknown as { permissions: { query: (opts: { name: string }) => Promise<{ state: string }> } }).permissions.query({ name: 'geolocation' });
           if (permissionStatus.state === 'denied') {
             setStatus(t('location.permission_denied', { defaultValue: 'Location permission denied. Update browser settings to enable.' }));
             setIsDetecting(false);
@@ -1120,7 +1158,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       return;
     }
 
-    const currentEngagements = ((authUser as any).engagements || {}) as UserEngagements;
+    const currentEngagements = (authUser.engagements || {}) as UserEngagements;
     const currentDetails: UserEngagementDetail[] = (currentEngagements.engagement_details || []) as UserEngagementDetail[];
     const targetPublicId = targetUser.public_id != null ? String(targetUser.public_id) : null;
     const targetId = targetUser.id ? String(targetUser.id) : null;
@@ -1197,7 +1235,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           ...(currentEngagements.counts || {}),
           following_count: nextFollowingCount,
         },
-        engagement_details: updatedDetails,
+        engagement_details: updatedDetails as any,
       },
     } as any);
     skipNextFetchRef.current = true;
@@ -1344,7 +1382,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         new: false,
         confirm: false,
       });
-    } catch (err: unknown) {
+    } catch (err: any) {
       const message =
         err?.response?.data?.message ||
         err?.message ||
@@ -1410,14 +1448,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   };
 
   // Bio editor onChange handler
-  const handleBioChange = React.useCallback((editorState: unknown) => {
+  const handleBioChange = React.useCallback((editorState: { read: (fn: () => void) => void }) => {
     if (!bioEditorInstance) return;
 
     // Mark that user is typing to prevent re-initialization
     isUserTypingRef.current = true;
 
-    (editorState as any).read(() => {
-      const htmlString = $generateHtmlFromNodes(bioEditorInstance, null);
+    editorState.read(() => {
+      const htmlString = $generateHtmlFromNodes(bioEditorInstance as any, null);
 
       setEditFormData((prev) => ({
         ...prev,
@@ -1461,16 +1499,16 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             // Try to parse as HTML
             const parser = new DOMParser();
             const doc = parser.parseFromString(bioString, 'text/html');
-            bioEditorInstance.update(() => {
+            (bioEditorInstance as any).update(() => {
               const root = $getRoot();
               root.clear();
-              const nodes = $generateNodesFromDOM(bioEditorInstance, doc);
+              const nodes = $generateNodesFromDOM(bioEditorInstance as any, doc);
               root.append(...nodes);
             }, { discrete: true });
           } catch (error) {
             console.warn('Failed to parse bio as HTML, treating as plain text:', error);
             // If parsing fails, treat as plain text
-            bioEditorInstance.update(() => {
+            (bioEditorInstance as any).update(() => {
               const root = $getRoot();
               root.clear();
               const paragraph = $createParagraphNode();
@@ -1480,7 +1518,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           }
         } else {
           // Clear editor if bio is empty
-          bioEditorInstance.update(() => {
+          (bioEditorInstance as any).update(() => {
             const root = $getRoot();
             root.clear();
             root.append($createParagraphNode());
@@ -1521,7 +1559,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   // Get preferences_flags from user
   const userToCheck = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? authUser : user;
   const preferencesFlags = React.useMemo(() => {
-    const flagsString = (userToCheck as any)?.preferences_flags || '';
+    const flagsString = (userToCheck as ProfileUser & { preferences_flags?: string })?.preferences_flags || '';
     return parsePreferencesFlags(flagsString);
   }, [userToCheck]);
 
@@ -1532,16 +1570,18 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   // Read from preferences.attributes if available, otherwise fallback to old structure
   const preferencesAttributes = (appData as InitialData | null)?.preferences?.attributes;
   if (preferencesAttributes && Array.isArray(preferencesAttributes)) {
-    preferencesAttributes.forEach((attr: any) => {
+    preferencesAttributes.forEach((attr: { tag?: string; slug?: string; allow_multiple?: boolean; items?: Array<{ id: string; display_order?: number; title?: Record<string, string>; bit_index?: number }> }) => {
       const tag = attr.tag || attr.slug;
+      if (!tag) return;
+      
       const allowMultiple = attr.allow_multiple || false;
       fieldAllowMultiple[tag] = allowMultiple;
 
       if (attr.items && Array.isArray(attr.items)) {
-        const sortedItems = [...attr.items].sort((a: any, b: any) => (a.display_order || 0) - (b.display_order || 0));
-        fieldOptions[tag] = sortedItems.map((item: any) => ({
+        const sortedItems = [...attr.items].sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+        fieldOptions[tag] = sortedItems.map((item) => ({
           id: item.id,
-          name: item.title?.[defaultLanguage] || item.title?.en || (item.title ? Object.values(item.title as Record<string, string>)[0] : '') || '',
+          name: item.title?.[defaultLanguage] || item.title?.en || (item.title ? Object.values(item.title)[0] : '') || '',
           display_order: item.display_order || 0,
           bit_index: item.bit_index,
         }));
@@ -1550,9 +1590,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   } else {
     // Fallback to old structure
     if ((appData as InitialData | null)?.attributes) {
-      (appData as InitialData).attributes?.forEach((group: any) => {
-        const sortedAttributes = [...group.attributes].sort((a: any, b: any) => a.display_order - b.display_order);
-        fieldOptions[group.category] = sortedAttributes.map((attr: any) => ({
+      (appData as InitialData).attributes?.forEach((group: { category: string; attributes: Array<{ id: string; name: Record<string, string>; display_order: number }> }) => {
+        const sortedAttributes = [...group.attributes].sort((a, b) => a.display_order - b.display_order);
+        fieldOptions[group.category] = sortedAttributes.map((attr) => ({
           id: attr.id,
           name: attr.name[defaultLanguage] || attr.name.en || Object.values(attr.name as Record<string, string>)[0] || '',
           display_order: attr.display_order,
@@ -1562,18 +1602,18 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
     // Add gender_identities to fieldOptions
     if ((appData as InitialData | null)?.gender_identities) {
-      const sortedGenderIdentities = [...((appData as InitialData).gender_identities || [])].sort((a: any, b: any) => a.display_order - b.display_order);
-      fieldOptions['gender_identity'] = sortedGenderIdentities.map((item: any) => ({
+      const sortedGenderIdentities = [...((appData as InitialData).gender_identities || [])].sort((a: { display_order?: number }, b: { display_order?: number }) => (a.display_order || 0) - (b.display_order || 0));
+      fieldOptions['gender_identity'] = sortedGenderIdentities.map((item: { id: string; display_order?: number; name?: Record<string, string> }) => ({
         id: item.id,
         name: item.name?.[defaultLanguage] || item.name?.en || (item.name ? Object.values(item.name as Record<string, string>)[0] : '') || '',
-        display_order: item.display_order,
+        display_order: item.display_order || 0,
       }));
     }
 
     // Add sexual_orientations to fieldOptions
     if ((appData as InitialData | null)?.sexual_orientations) {
-      const sortedSexualOrientations = [...((appData as InitialData).sexual_orientations || [])].sort((a: any, b: any) => (a.display_order || 0) - (b.display_order || 0));
-      fieldOptions['sexual_orientation'] = sortedSexualOrientations.map((item: any) => ({
+      const sortedSexualOrientations = [...((appData as InitialData).sexual_orientations || [])].sort((a: { display_order?: number }, b: { display_order?: number }) => (a.display_order || 0) - (b.display_order || 0));
+      fieldOptions['sexual_orientation'] = sortedSexualOrientations.map((item: { id: string; display_order?: number; name?: Record<string, string> }) => ({
         id: item.id,
         name: (item.name?.[defaultLanguage] || item.name?.en || (item.name ? Object.values(item.name as Record<string, string>)[0] : '') || ''),
         display_order: item.display_order || 0,
@@ -1582,11 +1622,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
     // Add sexual_roles to fieldOptions
     if ((appData as InitialData | null)?.sexual_roles) {
-      const sortedSexualRoles = [...((appData as InitialData).sexual_roles || [])].sort((a: any, b: any) => a.display_order - b.display_order);
-      fieldOptions['sex_role'] = sortedSexualRoles.map((item: any) => ({
+      const sortedSexualRoles = [...((appData as InitialData).sexual_roles || [])].sort((a: { display_order?: number }, b: { display_order?: number }) => (a.display_order || 0) - (b.display_order || 0));
+      fieldOptions['sex_role'] = sortedSexualRoles.map((item: { id: string; display_order?: number; name?: Record<string, string> }) => ({
         id: item.id,
         name: item.name?.[defaultLanguage] || item.name?.en || (item.name ? Object.values(item.name as Record<string, string>)[0] : '') || '',
-        display_order: item.display_order,
+        display_order: item.display_order || 0,
       }));
     }
   }
@@ -1630,7 +1670,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           name: categoryName,
         });
 
-        options[interest.id] = (interest.items || []).map(item => ({
+        const items = (interest.items as Array<{ id: string; name: Record<string, string>; emoji?: string; interest_id: string }>) || [];
+        options[interest.id] = items.map(item => ({
           id: item.id,
           name: item.name[defaultLanguage] || item.name.en || Object.values(item.name)[0] || '',
           emoji: item.emoji,
@@ -1657,11 +1698,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
     // Fallback to old structure if preferences_flags is empty and we have interests array
     if (selectedIds.length === 0) {
-      const interestsSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as unknown).interests : user?.interests;
+      const interestsSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as any).interests : (user as any)?.interests;
       if (interestsSource) {
-        return interestsSource.map((i: unknown) => {
+        return interestsSource.map((i: any) => {
           if (typeof i === 'object' && i !== null) {
-            return String(i.interest_item_id || i.interest_item?.id || i.id);
+            return String((i as any).interest_item_id || (i as any).interest_item?.id || (i as any).id);
           }
           return String(i);
         });
@@ -1669,7 +1710,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     }
 
     return selectedIds;
-  }, [preferencesFlags, interestOptions, user?.interests, authUser, isEditMode, isAuthenticated, isOwnProfile]);
+  }, [preferencesFlags, interestOptions, user, authUser, isEditMode, isAuthenticated, isOwnProfile]);
 
   // Get selected interest items grouped by category for display in category list from preferences_flags
   const userSelectedInterestsByCategory = React.useMemo(() => {
@@ -1694,11 +1735,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
     // Fallback to old structure if preferences_flags is empty
     if (Object.keys(grouped).length === 0) {
-      const interestsSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as unknown).interests : user?.interests;
+      const interestsSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as any).interests : (user as any)?.interests;
       if (interestsSource) {
-        interestsSource.forEach((userInterest: unknown) => {
+        interestsSource.forEach((userInterest: any) => {
           if (typeof userInterest === 'object' && userInterest !== null) {
-            const interestItem = userInterest.interest_item;
+            const interestItem = (userInterest as any).interest_item;
             if (interestItem) {
               const categoryId = interestItem.interest_id || interestItem.interest?.id;
               if (categoryId) {
@@ -1709,7 +1750,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                   interestItem.name.en ||
                   Object.values(interestItem.name)[0] || '';
                 grouped[categoryId].push({
-                  id: interestItem.id || String(userInterest.interest_item_id),
+                  id: interestItem.id || String((userInterest as any).interest_item_id),
                   name: itemName,
                   emoji: interestItem.emoji,
                 });
@@ -1721,7 +1762,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     }
 
     return grouped;
-  }, [preferencesFlags, interestOptions, user?.interests, authUser, isEditMode, isAuthenticated, isOwnProfile, defaultLanguage]);
+  }, [preferencesFlags, interestOptions, user, authUser, isEditMode, isAuthenticated, isOwnProfile, defaultLanguage]);
 
   // Build fantasyOptions and fantasyCategories from preferences.fantasies
   // Build fantasyOptions and fantasyCategories from preferences.fantasies
@@ -1731,9 +1772,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     const allowMultipleMap: Record<string, boolean> = {};
 
     // Read from preferences.fantasies if available, otherwise fallback to old structure
-    const preferencesFantasies = (appData as unknown)?.preferences?.fantasies;
+    const preferencesFantasies = (appData as any)?.preferences?.fantasies;
     if (preferencesFantasies && Array.isArray(preferencesFantasies)) {
-      preferencesFantasies.forEach((fantasy: { slug: string; title?: Record<string, string>; allow_multiple?: boolean; items?: Array<{ id: string; title?: Record<string, string>; description?: Record<string, string>; bit_index?: number }> }) => {
+      preferencesFantasies.forEach((fantasy: any) => {
         const categorySlug = fantasy.slug;
         const allowMultiple = fantasy.allow_multiple || false;
         allowMultipleMap[categorySlug] = allowMultiple;
@@ -1762,7 +1803,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       // Fallback to old structure
       const fantasiesByCategory: Record<string, typeof appData.fantasies> = {};
       appData.fantasies.forEach((fantasy) => {
-        const categorySlug = fantasy.slug;
+        const categorySlug = (fantasy as Record<string, unknown>).slug as string;
         if (!fantasiesByCategory[categorySlug]) {
           fantasiesByCategory[categorySlug] = [];
         }
@@ -1771,18 +1812,23 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
       Object.keys(fantasiesByCategory).forEach((categorySlug) => {
         const firstFantasy = fantasiesByCategory[categorySlug][0];
-        const categoryName = firstFantasy.category[defaultLanguage] || firstFantasy.category.en || Object.values(firstFantasy.category)[0] || categorySlug;
+        const fCategory = firstFantasy.category as Record<string, string> | undefined;
+        const categoryName = fCategory?.[defaultLanguage] || fCategory?.en || (fCategory ? Object.values(fCategory)[0] : '') || categorySlug;
 
         categories.push({
           id: categorySlug,
           name: categoryName,
         });
 
-        options[categorySlug] = fantasiesByCategory[categorySlug].map((fantasy) => ({
-          id: fantasy.id,
-          name: fantasy.label[defaultLanguage] || fantasy.label.en || Object.values(fantasy.label)[0] || `Fantasy ${fantasy.id}`,
-          description: fantasy.description[defaultLanguage] || fantasy.description.en || Object.values(fantasy.description)[0] || '',
-        }));
+        options[categorySlug] = fantasiesByCategory[categorySlug].map((fantasy) => {
+          const fLabel = fantasy.label as Record<string, string> | undefined;
+          const fDesc = fantasy.description as Record<string, string> | undefined;
+          return {
+            id: fantasy.id,
+            name: fLabel?.[defaultLanguage] || fLabel?.en || (fLabel ? Object.values(fLabel)[0] : '') || `Fantasy ${fantasy.id}`,
+            description: fDesc?.[defaultLanguage] || fDesc?.en || (fDesc ? Object.values(fDesc)[0] : '') || '',
+          };
+        });
       });
     }
 
@@ -1805,14 +1851,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
     // Fallback to old structure if preferences_flags is empty
     if (selectedIds.length === 0) {
-      const fantasiesSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as unknown).fantasies : user?.fantasies;
+      const fantasiesSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as any).fantasies : user?.fantasies;
       if (fantasiesSource) {
-        return fantasiesSource.map((f: unknown) => f.fantasy_id || f.id);
+        return fantasiesSource.map((f: any) => (f as any).fantasy_id || (f as any).id);
       }
     }
 
     return selectedIds;
-  }, [preferencesFlags, fantasyOptions, user?.fantasies, authUser, isEditMode, isAuthenticated, isOwnProfile]);
+  }, [preferencesFlags, fantasyOptions, user, authUser, isEditMode, isAuthenticated, isOwnProfile]);
 
   // Get selected fantasy items grouped by category for display in category list from preferences_flags
   const userSelectedFantasiesByCategory = React.useMemo(() => {
@@ -1836,21 +1882,22 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
     // Fallback to old structure if preferences_flags is empty
     if (Object.keys(grouped).length === 0) {
-      const fantasiesSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as unknown).fantasies : user?.fantasies;
-      if (fantasiesSource && appData?.fantasies) {
-        fantasiesSource.forEach((userFantasy: unknown) => {
+      const fantasiesSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as any).fantasies : (user as any)?.fantasies;
+      if (fantasiesSource && (appData as any)?.fantasies) {
+        fantasiesSource.forEach((userFantasy: any) => {
           if (typeof userFantasy === 'object' && userFantasy !== null) {
-            const fantasyId = userFantasy.fantasy_id || userFantasy.id;
+            const fantasyId = (userFantasy as any).fantasy_id || (userFantasy as any).id;
             if (fantasyId) {
-              const fantasy = appData.fantasies.find(f => f.id === fantasyId);
+              const fantasy = (appData as any).fantasies.find((f: any) => f.id === fantasyId);
               if (fantasy) {
-                const categorySlug = fantasy.slug;
+                const categorySlug = (fantasy as Record<string, unknown>).slug as string;
                 if (!grouped[categorySlug]) {
                   grouped[categorySlug] = [];
                 }
-                const fantasyName = fantasy.label[defaultLanguage] ||
-                  fantasy.label.en ||
-                  Object.values(fantasy.label)[0] ||
+                const fLabel = fantasy.label as Record<string, string> | undefined;
+                const fantasyName = fLabel?.[defaultLanguage] ||
+                  fLabel?.en ||
+                  (fLabel ? Object.values(fLabel)[0] : '') ||
                   '';
                 grouped[categorySlug].push({
                   id: fantasyId,
@@ -1864,7 +1911,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     }
 
     return grouped;
-  }, [preferencesFlags, fantasyOptions, user?.fantasies, authUser, isEditMode, isAuthenticated, isOwnProfile, appData?.fantasies, defaultLanguage]);
+  }, [preferencesFlags, fantasyOptions, user, authUser, isEditMode, isAuthenticated, isOwnProfile, appData, defaultLanguage]);
 
 
   const USER_ATTRIBUTES = [
@@ -1944,14 +1991,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
     // Immediately save to backend
     try {
-      let response;
+      let response: { user?: ProfileUser; target_user?: ProfileUser; followee?: ProfileUser; posts?: unknown[]; medias?: unknown[]; [key: string]: unknown } | undefined;
 
       if (usePreferencesFlags && selectedOption.bit_index !== undefined) {
         // Update preferences using updatePreferences API
         const isEnabled = isBitSet(newPreferencesFlags, selectedOption.bit_index);
         const userId = (isEditMode && isAuthenticated && authUser) ? authUser.id : user?.id;
         if (userId) {
-          response = await api.updatePreferences(selectedOption.id, selectedOption.bit_index, isEnabled);
+        response = await api.updatePreferences(selectedOption.id, selectedOption.bit_index, isEnabled) as any;
         }
       } else if (isSexualIdentityField) {
         // Use CMD_USER_UPDATE_IDENTIFY for sexual identity fields
@@ -1959,27 +2006,27 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           : field === 'sexual_orientation' ? 'sexual_orientation_id'
             : 'sexual_role_id';
 
-        response = await api.updateIdentify({ [bodyKey]: attributeId });
+        response = await api.updateIdentify({ [bodyKey]: attributeId }) as any;
       } else {
         // Use CMD_USER_UPDATE_ATTRIBUTE for regular attributes
-        response = await api.updateAttribute({ attribute_id: attributeId });
+        response = await api.updateAttribute({ attribute_id: attributeId }) as any;
       }
 
       // Update auth context - always update if authenticated
       if (isAuthenticated && authUser) {
         // If response contains updated user, use that
         if (response?.user) {
-          updateUser(response.user);
+          updateUser(response.user as any);
           // Also update local user state if viewing own profile
           if (user && (authUser.id === user.id || authUser.username === user.username)) {
-            setUser(response.user as unknown as ProfileUser);
+            setUser(response.user as ProfileUser);
           }
         } else if (usePreferencesFlags && selectedOption.bit_index !== undefined) {
           // Update preferences_flags in user data from response
           if (response?.user) {
-            updateUser(response.user);
+            updateUser(response.user as any);
             if (user && (authUser.id === user.id || authUser.username === user.username)) {
-              setUser(response.user as unknown as ProfileUser);
+              setUser(response.user as ProfileUser);
             }
           } else {
             // Fallback: update from newPreferencesFlags
@@ -1987,10 +2034,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             const updatedUserData = {
               ...authUser,
               preferences_flags: flagsString,
-            } as unknown;
-            updateUser(updatedUserData);
+            } as Parameters<typeof updateUser>[0];
+            updateUser(updatedUserData as Parameters<typeof updateUser>[0]);
             if (user && (authUser.id === user.id || authUser.username === user.username)) {
-              setUser(updatedUserData as unknown as ProfileUser);
+              setUser(updatedUserData as ProfileUser);
             }
           }
         } else {
@@ -1999,37 +2046,37 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             // Update sexual identity fields as arrays (matching API structure)
             const attributeData = options.find(opt => opt.id === attributeId);
             if (attributeData) {
-              const updatedUserData: unknown = { ...authUser };
+              const updatedUserData: Parameters<typeof updateUser>[0] = { ...authUser } as Parameters<typeof updateUser>[0];
 
               if (field === 'gender_identity') {
                 // Store as array to match API structure
-                updatedUserData.gender_identities = [{
+                (updatedUserData as any).gender_identities = [{
                   id: attributeId,
                   name: { [defaultLanguage]: attributeData.name } as Record<string, string>,
                   display_order: attributeData.display_order,
                 }];
               } else if (field === 'sexual_orientation') {
                 // Store as array to match API structure
-                updatedUserData.sexual_orientations = [{
+                (updatedUserData as any).sexual_orientations = [{
                   id: attributeId,
                   name: { [defaultLanguage]: attributeData.name } as Record<string, string>,
                   display_order: attributeData.display_order,
                 }];
               } else if (field === 'sex_role') {
                 // Store as object (not array) - use sexual_role to match API
-                updatedUserData.sexual_role = {
+                (updatedUserData as any).sexual_role = {
                   id: attributeId,
                   name: { [defaultLanguage]: attributeData.name } as Record<string, string>,
                   display_order: attributeData.display_order,
                 };
                 // Also set sexual_role_id for API compatibility
-                updatedUserData.sexual_role_id = attributeId;
+                (updatedUserData as any).sexual_role_id = attributeId;
               }
 
-              updateUser(updatedUserData);
+              updateUser(updatedUserData as any);
               // Also update local user state if viewing own profile
               if (user && (authUser.id === user.id || authUser.username === user.username)) {
-                setUser(updatedUserData as unknown as ProfileUser);
+                setUser(updatedUserData as any);
               }
             }
           } else {
@@ -2055,18 +2102,18 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
               const updatedUserData = {
                 ...authUser,
                 user_attributes: [...otherAttributes, newAttribute],
-              } as unknown;
+              };
 
-              updateUser(updatedUserData);
+              updateUser(updatedUserData as any);
               // Also update local user state if viewing own profile
               if (user && (authUser.id === user.id || authUser.username === user.username)) {
-                setUser(updatedUserData as unknown as ProfileUser);
+                setUser(updatedUserData as any);
               }
             }
           }
         }
       }
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error(`Error updating ${field}:`, err);
       setError(err.response?.data?.message || `Failed to update ${field}`);
     } finally {
@@ -2136,9 +2183,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
       if (isSelected) {
         // Remove interest
-        updatedInterests = currentInterests.filter((interest: unknown) => {
+        updatedInterests = currentInterests.filter((interest: any) => {
           if (typeof interest === 'object' && interest !== null) {
-            return String(interest.interest_item_id || interest.interest_item?.id || interest.id) !== itemId;
+            return String(interest.interest_item_id || (interest as any).interest_item?.id || (interest as any).id) !== itemId;
           }
           return String(interest) !== itemId;
         });
@@ -2161,7 +2208,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                 },
               },
             };
-            updatedInterests = [...currentInterests, newInterest as unknown];
+            updatedInterests = [...currentInterests, newInterest as NonNullable<ProfileUser['interests']>[number]];
           } else {
             updatedInterests = currentInterests;
           }
@@ -2177,17 +2224,17 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     }
 
     try {
-      let response;
+      let response: ApiResponse | undefined;
       if (usePreferencesFlags && interestItem.bit_index !== undefined) {
         // Update preferences using updatePreferences API
         const isEnabled = isBitSet(newPreferencesFlags, interestItem.bit_index);
         const userId = (isEditMode && isAuthenticated && authUser) ? authUser.id : user?.id;
         if (userId) {
-          response = await api.updatePreferences(interestItem.id, interestItem.bit_index, isEnabled);
+          response = (await api.updatePreferences(interestItem.id, interestItem.bit_index, isEnabled)) as ApiResponse;
         }
       } else {
         // Update via API using CMD_USER_UPDATE_INTEREST
-        response = await api.updateInterest({ interest_id: itemId });
+        response = (await api.updateInterest({ interest_id: itemId })) as ApiResponse;
       }
 
       // Update auth context - use response if available, otherwise use local state
@@ -2196,33 +2243,33 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           updateUser(response.user);
           // Update local user state from response
           if (user && (authUser.id === user.id || authUser.username === user.username)) {
-            setUser(response.user as unknown as ProfileUser);
+            setUser(response.user);
           }
         } else if (usePreferencesFlags && interestItem.bit_index !== undefined) {
           // Update preferences_flags in user data from response
-          if (response?.user) {
-            updateUser(response.user);
-            if (user && (authUser.id === user.id || authUser.username === user.username)) {
-              setUser(response.user as unknown as ProfileUser);
+            if (response?.user) {
+              updateUser(response.user);
+              if (user && (authUser.id === user.id || authUser.username === user.username)) {
+                setUser(response.user);
+              }
+            } else {
+              // Fallback: update from newPreferencesFlags
+              const flagsString = serializePreferencesFlags(newPreferencesFlags);
+              const updatedUserData: ProfileUser = {
+                ...authUser,
+                preferences_flags: flagsString,
+              };
+              updateUser(updatedUserData);
+              if (user && (authUser.id === user.id || authUser.username === user.username)) {
+                setUser(updatedUserData);
+              }
             }
-          } else {
-            // Fallback: update from newPreferencesFlags
-            const flagsString = serializePreferencesFlags(newPreferencesFlags);
-            const updatedUserData = {
-              ...authUser,
-              preferences_flags: flagsString,
-            } as unknown;
-            updateUser(updatedUserData);
-            if (user && (authUser.id === user.id || authUser.username === user.username)) {
-              setUser(updatedUserData as unknown as ProfileUser);
-            }
-          }
         } else if (user && (authUser.id === user.id || authUser.username === user.username)) {
           // Fallback to local state update
           updateUser({
             ...authUser,
             interests: newSelected,
-          } as unknown);
+          });
         }
       }
     } catch (err: unknown) {
@@ -2233,10 +2280,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         // Revert to previous interests state (before the change)
         // We need to restore the original interests array
         // For now, just refresh from authUser if available
-        if (isAuthenticated && authUser && (authUser as unknown).interests) {
+        if (isAuthenticated && authUser && (authUser as ProfileUser).interests) {
           setUser({
             ...user,
-            interests: (authUser as unknown).interests,
+            interests: (authUser as ProfileUser).interests,
           });
         } else {
           // Fallback: remove the last added item if we added, or re-add if we removed
@@ -2266,7 +2313,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                 };
                 setUser({
                   ...user,
-                  interests: [...currentInterests, restoredInterest as unknown],
+                  interests: [...currentInterests, restoredInterest as any],
                 });
               }
             }
@@ -2274,7 +2321,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             // We added it, so remove it
             setUser({
               ...user,
-              interests: currentInterests.filter((interest: unknown) => {
+              interests: currentInterests.filter((interest: any) => {
                 if (typeof interest === 'object' && interest !== null) {
                   return String(interest.interest_item_id || interest.interest_item?.id || interest.id) !== itemId;
                 }
@@ -2286,7 +2333,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       }
 
       // Set error message - will be displayed in the error section (doesn't cause screen to disappear)
-      const errorMessage = (err as any).response?.data?.message || (err as any).message || 'Failed to update interests';
+      const errorMessage = (err as any)?.response?.data?.message || (err as any)?.message || 'Failed to update interests';
       setError(errorMessage);
     } finally {
       setUpdatingInterests(false);
@@ -2341,16 +2388,16 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         const updatedUserData = {
           ...userToUpdate,
           preferences_flags: flagsString,
-        } as unknown;
+        };
 
         // Update auth context if it's the auth user
-        if (isAuthenticated && authUser && (authUser.id === userToUpdate.id || authUser.username === userToUpdate.username)) {
-          updateUser(updatedUserData);
+        if (isAuthenticated && authUser && (authUser.id === (userToUpdate as any).id || authUser.username === (userToUpdate as any).username)) {
+          updateUser(updatedUserData as any);
         }
 
         // Update local user state
-        if (user && (user.id === userToUpdate.id || user.username === userToUpdate.username)) {
-          setUser(updatedUserData as unknown as ProfileUser);
+        if (user && (user.id === (userToUpdate as any).id || user.username === (userToUpdate as any).username)) {
+          setUser(updatedUserData as any);
         }
       }
     }
@@ -2362,11 +2409,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         // Remove fantasy
         setUser({
           ...user,
-          fantasies: currentFantasies.filter(f => (f.fantasy_id || f.id) !== fantasyId),
+          fantasies: currentFantasies.filter(f => ((f as any).fantasy_id || (f as any).id) !== fantasyId),
         });
       } else {
         // Add fantasy - create UserFantasy object
-        const fantasy = appData?.fantasies?.find(f => f.id === fantasyId);
+        const fantasy = (appData as any)?.fantasies?.find((f: any) => f.id === fantasyId);
         if (fantasy) {
           const newFantasy = {
             id: `${fantasyId}`,
@@ -2382,41 +2429,41 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           };
           setUser({
             ...user,
-            fantasies: [...currentFantasies, newFantasy as unknown],
+            fantasies: [...currentFantasies, newFantasy as any],
           });
         }
       }
     }
 
     try {
-      let response;
+      let response: { user?: ProfileUser; target_user?: ProfileUser; followee?: ProfileUser; posts?: unknown[]; medias?: unknown[]; [key: string]: unknown } | undefined;
       if (usePreferencesFlags && fantasyItem.bit_index !== undefined) {
         // Update preferences using updatePreferences API
         const isEnabled = isBitSet(newPreferencesFlags, fantasyItem.bit_index);
         const userId = (isEditMode && isAuthenticated && authUser) ? authUser.id : user?.id;
         if (userId) {
-          response = await api.updatePreferences(fantasyItem.id, fantasyItem.bit_index, isEnabled);
+          response = (await api.updatePreferences(fantasyItem.id, fantasyItem.bit_index, isEnabled)) as any;
         }
       } else {
         // Update via API using CMD_USER_UPDATE_FANTASY
-        response = await api.updateFantasy({ fantasy_id: fantasyId });
+        response = (await api.updateFantasy({ fantasy_id: fantasyId })) as any;
       }
 
       // Update auth context - use response if available, otherwise use local state
       if (isAuthenticated && authUser) {
         if (response?.user) {
-          updateUser(response.user);
+          updateUser(response.user as any);
           // Update local user state from response
           if (user && (authUser.id === user.id || authUser.username === user.username)) {
-            setUser(response.user as unknown as ProfileUser);
+            setUser(response.user as any);
           }
-        } else if (usePreferencesFlags && fantasyItem.bit_index !== undefined) {
+        } else if (usePreferencesFlags && (fantasyItem as any).bit_index !== undefined) {
           // Response might not have user, but we already updated optimistically
           // Just ensure preferences_flags is in sync
           if (response?.user) {
-            updateUser(response.user);
+            updateUser(response.user as any);
             if (user && (authUser.id === user.id || authUser.username === user.username)) {
-              setUser(response.user as unknown as ProfileUser);
+              setUser(response.user as any);
             }
           }
           // If no response.user, optimistic update already handled it above
@@ -2424,8 +2471,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           // Fallback to local state update
           updateUser({
             ...authUser,
-            fantasies: user.fantasies,
-          } as unknown);
+            fantasies: (user as any).fantasies,
+          } as any);
         }
       }
     } catch (err: unknown) {
@@ -2436,18 +2483,18 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         // Revert preferences_flags
         const userToRevert = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? authUser : user;
         if (userToRevert) {
-          const originalFlagsString = (userToRevert as unknown)?.preferences_flags || '';
+          const originalFlagsString = (userToRevert as any)?.preferences_flags || '';
           const revertedUserData = {
             ...userToRevert,
             preferences_flags: originalFlagsString,
-          } as unknown;
+          };
 
-          if (isAuthenticated && authUser && (authUser.id === userToRevert.id || authUser.username === userToRevert.username)) {
-            updateUser(revertedUserData);
+          if (isAuthenticated && authUser && (authUser.id === (userToRevert as any).id || authUser.username === (userToRevert as any).username)) {
+            updateUser(revertedUserData as any);
           }
 
-          if (user && (user.id === userToRevert.id || user.username === userToRevert.username)) {
-            setUser(revertedUserData as unknown as ProfileUser);
+          if (user && (user.id === (userToRevert as any).id || user.username === (userToRevert as any).username)) {
+            setUser(revertedUserData as any);
           }
         }
       } else if (user) {
@@ -2462,28 +2509,28 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
               fantasy_id: fantasyId,
               fantasy: {
                 id: fantasy.id,
-                slug: fantasy.slug,
-                category: fantasy.category,
-                label: fantasy.label,
-                description: fantasy.description,
+                slug: fantasy.slug as string,
+                category: fantasy.category as any,
+                label: fantasy.label as any,
+                description: fantasy.description as any,
               },
             };
             setUser({
               ...user,
-              fantasies: [...currentFantasies, restoredFantasy as unknown],
+              fantasies: [...currentFantasies, restoredFantasy as any],
             });
           }
         } else {
           // Remove fantasy if we added it
           setUser({
             ...user,
-            fantasies: currentFantasies.filter(f => (f.fantasy_id || f.id) !== fantasyId),
+            fantasies: currentFantasies.filter(f => ((f as any).fantasy_id || (f as any).id) !== fantasyId),
           });
         }
       }
 
       // Set error message - will be displayed in the error section (doesn't cause screen to disappear)
-      const errorMessage = (err as any).response?.data?.message || (err as any).message || 'Failed to update fantasies';
+      const errorMessage = (err as any)?.response?.data?.message || (err as any)?.message || 'Failed to update fantasies';
       setError(errorMessage);
     } finally {
       setUpdatingFantasies(false);
@@ -2520,13 +2567,13 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           username: user.username,
           displayname: user.displayname,
           email: user.email || '',
-          bio: user.bio && user.default_language && typeof user.bio === 'object' ? (user.bio as Record<string, string>)[user.default_language] || '' : (typeof user.bio === 'string' ? user.bio : ''),
+          bio: user.bio && user.default_language && typeof user.bio === 'object' ? (user.bio as any)[user.default_language] || '' : (typeof user.bio === 'string' ? user.bio : ''),
           website: user.website || '',
           languages: user.languages || [],
           date_of_birth: normalizedDateOfBirth || undefined,
-          privacy_level: user.privacy_level || PrivacyLevel.Public,
-          location: user.location || undefined,
-        });
+          privacy_level: (user as any).privacy_level || PrivacyLevel.Public,
+          location: (user as any).location || undefined,
+        } as any);
         setIsBirthdateSectionOpen(Boolean(normalizedDateOfBirth));
       }
     } else {
@@ -2551,7 +2598,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         date_of_birth: normalizedDateOfBirth || undefined,
         privacy_level: user.privacy_level || PrivacyLevel.Public,
         location: user.location || undefined,
-      } as unknown);
+      } as any);
       setIsBirthdateSectionOpen(Boolean(normalizedDateOfBirth));
     }
   }, [isEditMode, user, user?.displayname, user?.bio, user?.website, user?.languages, user?.date_of_birth, user?.privacy_level, user?.username]);
@@ -2569,7 +2616,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
       // Immediately upload the image using CMD_USER_UPLOAD_AVATAR
       try {
-        const response = await api.uploadAvatar({ avatar: file });
+        const response = await api.uploadAvatar({ avatar: file }) as any;
 
         // Update local state and auth context with full user object from API response
         if (response?.user) {
@@ -2578,13 +2625,13 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             setUser(updatedUser);
             if (isOwnProfile && authUser) {
               // Update AuthContext with full user object from response
-              updateUser(response.user as unknown);
+              updateUser(response.user as any);
             }
           }
         }
-      } catch (err: unknown) {
+      } catch (err: any) {
         console.error('Error uploading profile image:', err);
-        setError(err.response?.data?.message || 'Failed to upload profile image');
+        setError(err.response?.data?.message || err.message || 'Failed to upload profile image');
       } finally {
         setUploadingProfileImage(false);
       }
@@ -2604,7 +2651,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
       // Immediately upload the image using CMD_USER_UPLOAD_COVER
       try {
-        const response = await api.uploadCover({ cover: file });
+        const response = await api.uploadCover({ cover: file }) as any;
 
         // Update local state and auth context with full user object from API response
         if (response?.user) {
@@ -2613,13 +2660,13 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             setUser(updatedUser);
             if (isOwnProfile && authUser) {
               // Update AuthContext with full user object from response
-              updateUser(response.user as unknown);
+              updateUser(response.user as any);
             }
           }
         }
-      } catch (err: unknown) {
+      } catch (err: any) {
         console.error('Error uploading cover image:', err);
-        setError(err.response?.data?.message || 'Failed to upload cover image');
+        setError(err.response?.data?.message || err.message || 'Failed to upload cover image');
       } finally {
         setUploadingCoverImage(false);
       }
@@ -2666,11 +2713,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       });
 
       // If there are images, send FormData, otherwise send regular object
-      let response;
+      let response: { user?: ProfileUser; target_user?: ProfileUser; followee?: ProfileUser; posts?: unknown[]; medias?: unknown[]; [key: string]: unknown } | undefined;
       if (profileImageFile || coverImageFile) {
-        response = await api.updateProfile(formData as unknown);
+        response = (await api.updateProfile(formData as any)) as any;
       } else {
-        response = await api.updateProfile(payload);
+        response = (await api.updateProfile(payload)) as any;
       }
 
       // Update local user state from API response if available
@@ -2681,7 +2728,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
           // Update auth context user if it's the same user
           if (isOwnProfile && authUser) {
-            updateUser(response.user as unknown);
+            updateUser(response.user as any);
           }
         }
       } else {
@@ -2699,18 +2746,18 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           // Filter out location string, only keep valid User fields
           const { location: updatedLocation, ...restEditData } = editFormData;
           updateUser({
-            ...restEditData as unknown,
+            ...restEditData as any,
             ...(updatedLocation !== undefined ? { location: updatedLocation } : {}),
             profile_image_url: profileImagePreview || authUser.profile_image_url,
             ...(coverImagePreview && { cover_image_url: coverImagePreview }),
-          });
+          } as any);
         }
       }
 
       setIsEditMode(false);
     } catch (err: unknown) {
       console.error('Error updating profile:', err);
-      setError(err.response?.data?.message || 'Failed to update profile');
+      setError((err as any).response?.data?.message || 'Failed to update profile');
     } finally {
       setIsSaving(false);
     }
@@ -2810,7 +2857,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         console.log('ProfileScreen - API response:', response);
 
         // Handle different response structures
-        const userData = response?.user || response;
+        const userData = (response as any)?.user || response;
 
         if (!userData) {
           throw new Error('User not found');
@@ -2827,19 +2874,19 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
         const normalizedUserData = {
           ...userData,
-          profile_image_url: userData.avatar?.file?.url || userData.profile_image_url || undefined,
-          cover_image_url: userData.cover?.file?.url || userData.cover_image_url || undefined,
+          profile_image_url: (userData as any).avatar?.file?.url || (userData as any).profile_image_url || undefined,
+          cover_image_url: (userData as any).cover?.file?.url || (userData as any).cover_image_url || undefined,
           followers_count: followerCountFromEngagements,
           following_count: followingCountFromEngagements,
         };
 
         console.log('ProfileScreen - Normalized user data:', normalizedUserData);
 
-        setUser(normalizedUserData as unknown as ProfileUser);
+        setUser(normalizedUserData as ProfileUser);
         lastFetchedUsernameRef.current = username;
-      } catch (err: unknown) {
+      } catch (err: any) {
         console.error('Error fetching user:', err);
-        const errorMessage = (err as { response?: { data?: { message?: string } }; message?: string })?.response?.data?.message || (err as Error)?.message || 'Failed to load profile';
+        const errorMessage = (err as any)?.response?.data?.message || (err as any)?.message || 'Failed to load profile';
         setError(errorMessage);
         setUser(null);
       } finally {
@@ -2864,42 +2911,42 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         setPostsLoading(true);
         setError(null);
 
-        let response;
+        let response: { user?: ProfileUser; target_user?: ProfileUser; followee?: ProfileUser; posts?: unknown[]; medias?: unknown[]; [key: string]: unknown } | undefined;
 
         if (activeTab === 'posts') {
           // Fetch user posts
-          response = await api.fetchUserPosts({
+          response = (await api.fetchUserPosts({
             user_id: user?.public_id,
             limit: 20,
             cursor: ""
-          });
+          })) as any;
         } else if (activeTab === 'replies') {
           // Fetch user replies
-          response = await api.fetchUserPostReplies({
+          response = (await api.fetchUserPostReplies({
             user_id: user?.public_id,
             limit: 20,
             cursor: ""
-          });
+          })) as any;
         } else if (activeTab === 'likes') {
           // Fetch user liked posts
-          response = await api.fetchUserPostLikes({
+          response = (await api.fetchUserPostLikes({
             user_id: user?.public_id,
             limit: 20,
             cursor: ""
-          });
+          })) as any;
         }
 
         // Set posts from API response
-        if (response && response.posts) {
-          setPosts(response.posts);
+        if (response && (response as any).posts) {
+          setPosts((response as any).posts);
         } else if (response && Array.isArray(response)) {
           setPosts(response);
         } else {
           setPosts([]);
         }
-      } catch (err: unknown) {
+      } catch (err: any) {
         console.error('Error fetching posts:', err);
-        setError((err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to load posts');
+        setError((err as any).response?.data?.message || 'Failed to load posts');
         setPosts([]);
       } finally {
         setPostsLoading(false);
@@ -2931,8 +2978,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         // Set medias from API response
         let allMedias: unknown[] = [];
 
-        if (response && response.medias) {
-          allMedias = response.medias;
+        if (response && (response as any).medias) {
+          allMedias = (response as any).medias;
         } else if (response && Array.isArray(response)) {
           allMedias = response;
         } else {
@@ -2940,12 +2987,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         }
 
         // Filter only post medias (exclude stories, avatars, covers, etc.)
-        const postMedias = allMedias.filter((media: unknown) => (media as { role?: string }).role === 'post');
+        const postMedias = allMedias.filter((media: any) => (media as any).role === 'post');
 
-        setMedias(postMedias);
-      } catch (err: unknown) {
+        setMedias(postMedias as any);
+      } catch (err: any) {
         console.error('Error fetching medias:', err);
-        setError((err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to load medias');
+        setError((err as any).response?.data?.message || 'Failed to load medias');
         setMedias([]);
       } finally {
         setMediasLoading(false);
@@ -2992,12 +3039,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       });
 
       const responseUser =
-        followResponse?.target_user ||
-        followResponse?.followee ||
-        followResponse?.user;
+        (followResponse as any)?.target_user ||
+        (followResponse as any)?.followee ||
+        (followResponse as any)?.user;
 
       const normalized = normalizeProfileUser(responseUser);
-      if (normalized && normalized.id === targetUser.id) {
+      if (normalized && (normalized as any).id === (targetUser as any).id) {
         setUser(normalized);
       }
 
@@ -3010,28 +3057,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     }
   };
 
-  const handleSendMessage = async (profile: unknown) => {
+  const handleSendMessage = async (profile: any) => {
     if (!authUser?.id || !profile?.id) {
       console.error('User or profile ID is missing');
       return;
     }
 
     try {
-      const chatResponse = await api.createChat([profile.id], 'private') as {
-        chat: {
-          id: string;
-          type: string;
-          participants?: Array<{
-            user_id: string;
-            user?: {
-              id: string;
-              username?: string;
-              displayname?: string;
-            };
-          }>;
-        };
-        success: boolean;
-      };
+      const chatResponse = await api.createChat([profile.id], 'private') as any;
 
       const chatId = chatResponse?.chat?.id;
 
@@ -3326,7 +3359,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                       ].map((tab) => (
                         <motion.button
                           key={tab.id}
-                          onClick={() => setEditTab(tab.id as unknown)}
+                          onClick={() => setEditTab(tab.id as 'profile' | 'attributes' | 'interests' | 'fantasies')}
                           className={`flex-1 py-3 font-semibold text-sm relative transition-colors ${editTab === tab.id
                             ? theme === 'dark' ? 'text-white' : 'text-black'
                             : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
@@ -3823,27 +3856,27 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                         filledCount++;
                                       }
                                     } else if (attr.field === 'gender_identity') {
-                                      const genderIdentities = (userToCheck as unknown)?.gender_identities || (userToCheck as unknown)?.sexual_identities?.gender_identities;
-                                      const genderIdentity = genderIdentities?.[0] || (userToCheck as unknown)?.gender_identity;
-                                      if (genderIdentity?.name) {
+                                      const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
+                                      const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
+                                      if (genderIdentity?.id || genderIdentity?.name) {
                                         filledCount++;
                                       }
                                     } else if (attr.field === 'sexual_orientation') {
-                                      const sexualOrientations = (userToCheck as unknown)?.sexual_orientations || (userToCheck as unknown)?.sexual_identities?.sexual_orientations;
-                                      const sexualOrientation = sexualOrientations?.[0] || (userToCheck as unknown)?.sexual_orientation;
-                                      if (sexualOrientation?.name) {
+                                      const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
+                                      const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
+                                      if (sexualOrientation?.id || sexualOrientation?.name) {
                                         filledCount++;
                                       }
                                     } else if (attr.field === 'sex_role') {
-                                      const sexRole = (userToCheck as unknown)?.sexual_role || (userToCheck as unknown)?.sex_role || (userToCheck as unknown)?.sexual_identities?.sex_role;
-                                      if (sexRole?.name) {
+                                      const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
+                                      if (sexRole?.id || sexRole?.name) {
                                         filledCount++;
                                       }
                                     } else {
-                                      const ua = userToCheck?.user_attributes?.find((u: unknown) => u.category_type === attr.field);
-                                      if (ua?.attribute?.name) {
+                                      const ua = (userToCheck as any)?.user_attributes?.find((u: any) => u.category_type === attr.field);
+                                      if (ua?.attribute?.name || ua?.attribute_id) {
                                         filledCount++;
-                                      } else if (attr.field === 'relationship_status' && userToCheck?.relationship_status) {
+                                      } else if (attr.field === 'relationship_status' && (userToCheck as any)?.relationship_status) {
                                         filledCount++;
                                       }
                                     }
@@ -3892,65 +3925,64 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                     selectedOption = selectedOptions[0];
                                   }
                                 } else if (item.field === 'gender_identity') {
-                                  // Fallback to old structure
-                                  const genderIdentities = (userToCheck as unknown)?.gender_identities || (userToCheck as unknown)?.sexual_identities?.gender_identities;
-                                  const genderIdentity = genderIdentities?.[0] || (userToCheck as unknown)?.gender_identity;
-                                  if (genderIdentity?.id) {
-                                    currentAttributeId = genderIdentity.id;
-                                    selectedOption = options.find((opt: unknown) => opt.id === currentAttributeId);
-                                    if (selectedOption) {
-                                      displayValue = selectedOption.name;
-                                      hasValue = true;
-                                    } else if (genderIdentity.name) {
-                                      displayValue = genderIdentity.name[defaultLanguage] || genderIdentity.name.en || Object.values(genderIdentity.name)[0] || t('profile.select_option');
-                                      hasValue = !!displayValue && displayValue !== t('profile.select_option');
+                                    const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
+                                    const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
+                                    if (genderIdentity?.id) {
+                                      currentAttributeId = (genderIdentity as any).id;
+                                      selectedOption = options.find((opt: any) => opt.id === currentAttributeId);
+                                      if (selectedOption) {
+                                        displayValue = (selectedOption as any).name;
+                                        hasValue = true;
+                                      } else if ((genderIdentity as any).name) {
+                                        displayValue = (genderIdentity as any).name[defaultLanguage] || (genderIdentity as any).name.en || Object.values((genderIdentity as any).name)[0] || t('profile.select_option');
+                                        hasValue = !!displayValue && displayValue !== t('profile.select_option');
+                                      }
                                     }
-                                  }
-                                } else if (item.field === 'sexual_orientation') {
-                                  const sexualOrientations = (userToCheck as unknown)?.sexual_orientations || (userToCheck as unknown)?.sexual_identities?.sexual_orientations;
-                                  const sexualOrientation = sexualOrientations?.[0] || (userToCheck as unknown)?.sexual_orientation;
-                                  if (sexualOrientation?.id) {
-                                    currentAttributeId = sexualOrientation.id;
-                                    selectedOption = options.find((opt: unknown) => opt.id === currentAttributeId);
-                                    if (selectedOption) {
-                                      displayValue = selectedOption.name;
-                                      hasValue = true;
-                                    } else if (sexualOrientation.name) {
-                                      displayValue = sexualOrientation.name[defaultLanguage] || sexualOrientation.name.en || Object.values(sexualOrientation.name)[0] || t('profile.select_option');
-                                      hasValue = !!displayValue && displayValue !== t('profile.select_option');
+                                  } else if (item.field === 'sexual_orientation') {
+                                    const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
+                                    const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
+                                    if (sexualOrientation?.id) {
+                                      currentAttributeId = (sexualOrientation as any).id;
+                                      selectedOption = options.find((opt: any) => opt.id === currentAttributeId);
+                                      if (selectedOption) {
+                                        displayValue = (selectedOption as any).name;
+                                        hasValue = true;
+                                      } else if ((sexualOrientation as any).name) {
+                                        displayValue = (sexualOrientation as any).name[defaultLanguage] || (sexualOrientation as any).name.en || Object.values((sexualOrientation as any).name)[0] || t('profile.select_option');
+                                        hasValue = !!displayValue && displayValue !== t('profile.select_option');
+                                      }
                                     }
-                                  }
-                                } else if (item.field === 'sex_role') {
-                                  const sexRole = (userToCheck as unknown)?.sexual_role || (userToCheck as unknown)?.sex_role || (userToCheck as unknown)?.sexual_identities?.sex_role;
-                                  if (sexRole?.id) {
-                                    currentAttributeId = sexRole.id;
-                                    selectedOption = options.find((opt: unknown) => opt.id === currentAttributeId);
-                                    if (selectedOption) {
-                                      displayValue = selectedOption.name;
-                                      hasValue = true;
-                                    } else if (sexRole.name) {
-                                      displayValue = sexRole.name[defaultLanguage] || sexRole.name.en || Object.values(sexRole.name)[0] || t('profile.select_option');
-                                      hasValue = !!displayValue && displayValue !== t('profile.select_option');
+                                  } else if (item.field === 'sex_role') {
+                                    const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
+                                    if (sexRole?.id) {
+                                      currentAttributeId = (sexRole as any).id;
+                                      selectedOption = options.find((opt: any) => opt.id === currentAttributeId);
+                                      if (selectedOption) {
+                                        displayValue = (selectedOption as any).name;
+                                        hasValue = true;
+                                      } else if ((sexRole as any).name) {
+                                        displayValue = (sexRole as any).name[defaultLanguage] || (sexRole as any).name.en || Object.values((sexRole as any).name)[0] || t('profile.select_option');
+                                        hasValue = !!displayValue && displayValue !== t('profile.select_option');
+                                      }
                                     }
+                                  } else {
+                                    // Regular attribute from user_attributes (fallback to old structure)
+                                    const currentUserAttribute = (userToCheck as any)?.user_attributes?.find(
+                                      (ua: any) => ua.category_type === item.field
+                                    );
+  
+                                    currentAttributeId = currentUserAttribute?.attribute_id || '';
+                                    selectedOption = currentAttributeId
+                                      ? options.find((opt: any) => opt.id === currentAttributeId)
+                                      : null;
+  
+                                    hasValue = !!(selectedOption || (currentUserAttribute?.attribute?.name));
+                                    displayValue = selectedOption
+                                      ? (selectedOption as any).name
+                                      : currentUserAttribute?.attribute?.name
+                                        ? ((currentUserAttribute.attribute.name as any)[defaultLanguage] || (currentUserAttribute.attribute.name as any).en || Object.values(currentUserAttribute.attribute.name as any)[0] || t('profile.select_option'))
+                                        : t('profile.select_option');
                                   }
-                                } else {
-                                  // Regular attribute from user_attributes (fallback to old structure)
-                                  const currentUserAttribute = userToCheck?.user_attributes?.find(
-                                    (ua: unknown) => ua.category_type === item.field
-                                  );
-
-                                  currentAttributeId = currentUserAttribute?.attribute_id || '';
-                                  selectedOption = currentAttributeId
-                                    ? options.find((opt: unknown) => opt.id === currentAttributeId)
-                                    : null;
-
-                                  hasValue = !!(selectedOption || (currentUserAttribute?.attribute?.name));
-                                  displayValue = selectedOption
-                                    ? selectedOption.name
-                                    : currentUserAttribute?.attribute?.name
-                                      ? (currentUserAttribute.attribute.name[defaultLanguage] || currentUserAttribute.attribute.name.en || Object.values(currentUserAttribute.attribute.name)[0] || t('profile.select_option'))
-                                      : t('profile.select_option');
-                                }
 
                                 return (
                                   <motion.div
@@ -4065,19 +4097,19 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                                   if (option.bit_index !== undefined) {
                                                     isSelected = isBitSet(preferencesFlags, option.bit_index);
                                                   } else if (item.field === 'gender_identity') {
-                                                    const genderIdentities = (userToCheck as unknown)?.gender_identities || (userToCheck as unknown)?.sexual_identities?.gender_identities;
-                                                    const genderIdentity = genderIdentities?.[0] || (userToCheck as unknown)?.gender_identity;
+                                                    const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
+                                                    const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
                                                     isSelected = genderIdentity?.id === option.id;
                                                   } else if (item.field === 'sexual_orientation') {
-                                                    const sexualOrientations = (userToCheck as unknown)?.sexual_orientations || (userToCheck as unknown)?.sexual_identities?.sexual_orientations;
-                                                    const sexualOrientation = sexualOrientations?.[0] || (userToCheck as unknown)?.sexual_orientation;
+                                                    const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
+                                                    const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
                                                     isSelected = sexualOrientation?.id === option.id;
                                                   } else if (item.field === 'sex_role') {
-                                                    const sexRole = (userToCheck as unknown)?.sexual_role || (userToCheck as unknown)?.sex_role || (userToCheck as unknown)?.sexual_identities?.sex_role;
+                                                    const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
                                                     isSelected = sexRole?.id === option.id;
                                                   } else {
-                                                    const currentUserAttribute = userToCheck?.user_attributes?.find(
-                                                      (ua: unknown) => ua.category_type === item.field
+                                                    const currentUserAttribute = (userToCheck as any)?.user_attributes?.find(
+                                                      (ua: any) => ua.category_type === item.field
                                                     );
                                                     isSelected = currentUserAttribute?.attribute_id === option.id;
                                                   }
@@ -4644,7 +4676,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                 {/* Profile Picture */}
                 <div className={`relative w-32 h-32 rounded-full border-4 ${theme === 'dark' ? 'border-black' : 'border-white'} ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'} z-10 overflow-hidden`}>
                   <img
-                    src={getProfileImageUrl()}
+                    src={getProfileImageUrl() || ''}
                     alt={user.displayname}
                     className={`w-full h-full gay rounded-full object-cover ${!isAuthenticated ? 'blur-xl' : ''}`}
                   />
@@ -4875,27 +4907,27 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                     filledCount++;
                                   }
                                 } else if (attr.field === 'gender_identity') {
-                                  const genderIdentities = (userToCheck as unknown)?.gender_identities || (userToCheck as unknown)?.sexual_identities?.gender_identities;
-                                  const genderIdentity = genderIdentities?.[0] || (userToCheck as unknown)?.gender_identity;
-                                  if (genderIdentity?.name) {
+                                  const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
+                                  const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
+                                  if (genderIdentity?.id || genderIdentity?.name) {
                                     filledCount++;
                                   }
                                 } else if (attr.field === 'sexual_orientation') {
-                                  const sexualOrientations = (userToCheck as unknown)?.sexual_orientations || (userToCheck as unknown)?.sexual_identities?.sexual_orientations;
-                                  const sexualOrientation = sexualOrientations?.[0] || (userToCheck as unknown)?.sexual_orientation;
-                                  if (sexualOrientation?.name) {
+                                  const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
+                                  const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
+                                  if (sexualOrientation?.id || sexualOrientation?.name) {
                                     filledCount++;
                                   }
                                 } else if (attr.field === 'sex_role') {
-                                  const sexRole = (userToCheck as unknown)?.sexual_role || (userToCheck as unknown)?.sex_role || (userToCheck as unknown)?.sexual_identities?.sex_role;
-                                  if (sexRole?.name) {
+                                  const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
+                                  if (sexRole?.id || sexRole?.name) {
                                     filledCount++;
                                   }
                                 } else {
-                                  const ua = userToCheck?.user_attributes?.find((u: unknown) => u.category_type === attr.field);
-                                  if (ua?.attribute?.name) {
+                                  const ua = (userToCheck as any)?.user_attributes?.find((u: any) => u.category_type === attr.field);
+                                  if (ua?.attribute?.name || ua?.attribute_id) {
                                     filledCount++;
-                                  } else if (attr.field === 'relationship_status' && userToCheck?.relationship_status) {
+                                  } else if (attr.field === 'relationship_status' && (userToCheck as any)?.relationship_status) {
                                     filledCount++;
                                   }
                                 }
@@ -4941,50 +4973,50 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             } else if (item.field === 'gender_identity') {
                               // Fallback to old structure
                               // Check both structures: direct array or nested in sexual_identities
-                              const genderIdentities = (userToCheck as unknown)?.gender_identities || (userToCheck as unknown)?.sexual_identities?.gender_identities;
-                              const genderIdentity = genderIdentities?.[0] || (userToCheck as unknown)?.gender_identity;
+                              const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
+                              const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
                               if (genderIdentity?.name) {
                                 displayValue = genderIdentity.name[defaultLanguage] ||
                                   genderIdentity.name.en ||
-                                  Object.values(genderIdentity.name)[0] || '';
+                                  Object.values(genderIdentity.name as any)[0] || '';
                                 hasValue = !!displayValue;
                               }
                             } else if (item.field === 'sexual_orientation') {
                               // Fallback to old structure
                               // Check both structures: direct array or nested in sexual_identities
-                              const sexualOrientations = (userToCheck as unknown)?.sexual_orientations || (userToCheck as unknown)?.sexual_identities?.sexual_orientations;
-                              const sexualOrientation = sexualOrientations?.[0] || (userToCheck as unknown)?.sexual_orientation;
+                              const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
+                              const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
                               if (sexualOrientation?.name) {
                                 displayValue = sexualOrientation.name[defaultLanguage] ||
                                   sexualOrientation.name.en ||
-                                  Object.values(sexualOrientation.name)[0] || '';
+                                  Object.values(sexualOrientation.name as any)[0] || '';
                                 hasValue = !!displayValue;
                               }
                             } else if (item.field === 'sex_role') {
                               // Fallback to old structure
                               // Check multiple structures: sexual_role, sex_role, or nested in sexual_identities
-                              const sexRole = (userToCheck as unknown)?.sexual_role || (userToCheck as unknown)?.sex_role || (userToCheck as unknown)?.sexual_identities?.sex_role;
+                              const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
                               if (sexRole?.name) {
                                 displayValue = sexRole.name[defaultLanguage] ||
                                   sexRole.name.en ||
-                                  Object.values(sexRole.name)[0] || '';
+                                  Object.values(sexRole.name as any)[0] || '';
                                 hasValue = !!displayValue;
                               }
                             } else {
                               // Regular attribute from user_attributes (fallback to old structure)
-                              const currentUserAttribute = userToCheck?.user_attributes?.find(
-                                (ua: unknown) => ua.category_type === item.field
+                              const currentUserAttribute = (userToCheck as any)?.user_attributes?.find(
+                                (ua: any) => ua.category_type === item.field
                               );
 
                               if (currentUserAttribute?.attribute?.name) {
                                 displayValue = currentUserAttribute.attribute.name[defaultLanguage] ||
                                   currentUserAttribute.attribute.name.en ||
-                                  Object.values(currentUserAttribute.attribute.name)[0] || '';
+                                  Object.values(currentUserAttribute.attribute.name as any)[0] || '';
                                 hasValue = !!displayValue;
                               }
 
                               if (item.field === 'relationship_status' && !hasValue) {
-                                displayValue = userToCheck?.relationship_status || '';
+                                displayValue = (userToCheck as any)?.relationship_status || '';
                                 hasValue = !!displayValue;
                               }
                             }
@@ -5057,7 +5089,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             // Count fantasies from preferences_flags or fallback to old structure
                             const totalCount = Object.values(userSelectedFantasiesByCategory).reduce((sum, items) => sum + items.length, 0);
                             const fallbackCount = (() => {
-                              const fantasiesSource = (isOwnProfile && isAuthenticated && authUser) ? (authUser as unknown).fantasies : user?.fantasies;
+                              const fantasiesSource = (isOwnProfile && isAuthenticated && authUser) ? (authUser as any).fantasies : user?.fantasies;
                               return fantasiesSource?.length || 0;
                             })();
                             const displayCount = totalCount > 0 ? totalCount : fallbackCount;
@@ -5118,11 +5150,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                           }
 
                           // Fallback to old structure
-                          const fantasiesSource = (isOwnProfile && isAuthenticated && authUser) ? (authUser as unknown).fantasies : user?.fantasies;
+                          const fantasiesSource = (isOwnProfile && isAuthenticated && authUser) ? (authUser as any).fantasies : user?.fantasies;
                           if (fantasiesSource && fantasiesSource.length > 0) {
                             // Group fantasies by category slug
                             const fantasiesByCategory: Record<string, typeof fantasiesSource> = {};
-                            fantasiesSource.forEach((f: unknown) => {
+                            fantasiesSource.forEach((f: any) => {
                               const categorySlug = f.fantasy?.slug || 'other';
                               if (!fantasiesByCategory[categorySlug]) {
                                 fantasiesByCategory[categorySlug] = [];
@@ -5153,7 +5185,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                         </h3>
                                       </div>
                                       <div className="p-3.5 flex flex-wrap gap-2">
-                                        {categoryFantasies.map((f: unknown) => {
+                                        {categoryFantasies.map((f: any) => {
                                           const label = f.fantasy?.label?.[defaultLanguage] ||
                                             f.fantasy?.label?.en ||
                                             Object.values(f.fantasy?.label || {})[0] ||
@@ -5203,8 +5235,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             // Count interests from preferences_flags or fallback to old structure
                             const totalCount = Object.values(userSelectedInterestsByCategory).reduce((sum, items) => sum + items.length, 0);
                             const fallbackCount = (() => {
-                              const interestsSource = (isOwnProfile && isAuthenticated && authUser && (authUser as unknown).interests)
-                                ? (authUser as unknown).interests
+                              const interestsSource = (isOwnProfile && isAuthenticated && authUser && (authUser as any).interests)
+                                ? (authUser as any).interests
                                 : user?.interests;
                               return interestsSource?.length || 0;
                             })();
@@ -5267,31 +5299,31 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                           }
 
                           // Fallback to old structure
-                          const interestsSource = (isOwnProfile && isAuthenticated && authUser && (authUser as unknown).interests)
-                            ? (authUser as unknown).interests
+                          const interestsSource = (isOwnProfile && isAuthenticated && authUser && (authUser as any).interests)
+                            ? (authUser as any).interests
                             : user?.interests;
 
                           if (interestsSource && interestsSource.length > 0) {
                             // Group interests by category
                             const interestsByCategory: Record<string, Array<{ id: string; name: string; emoji?: string; categoryId: string; categoryName: string }>> = {};
 
-                            interestsSource.forEach((interest: unknown) => {
+                            interestsSource.forEach((interest: any) => {
                               if (typeof interest === 'object' && interest !== null && interest.interest_item) {
                                 const itemName = interest.interest_item.name[defaultLanguage] ||
                                   interest.interest_item.name.en ||
-                                  Object.values(interest.interest_item.name)[0] ||
+                                  Object.values(interest.interest_item.name as any)[0] ||
                                   `Interest ${interest.interest_item.id}`;
-
+  
                                 const categoryId = interest.interest_item.interest_id || interest.interest_item.interest?.id || 'other';
                                 const categoryName = interest.interest_item.interest?.name?.[defaultLanguage] ||
                                   interest.interest_item.interest?.name?.en ||
-                                  (interest.interest_item.interest?.name ? Object.values(interest.interest_item.interest.name)[0] : null) ||
+                                  (interest.interest_item.interest?.name ? Object.values(interest.interest_item.interest.name as any)[0] : null) ||
                                   'Other';
-
+  
                                 if (!interestsByCategory[categoryId]) {
                                   interestsByCategory[categoryId] = [];
                                 }
-
+  
                                 interestsByCategory[categoryId].push({
                                   id: interest.interest_item.id || interest.id,
                                   name: itemName,
@@ -5313,12 +5345,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                   136: 'Sci-fi books',
                                   25: 'Sci-fi films',
                                 };
-
+  
                                 const categoryId = 'uncategorized';
                                 if (!interestsByCategory[categoryId]) {
                                   interestsByCategory[categoryId] = [];
                                 }
-
+  
                                 interestsByCategory[categoryId].push({
                                   id: String(interest),
                                   name: typeof interest === 'number' ? (interestNameById[interest] || `Interest #${interest}`) : String(interest),
@@ -5496,7 +5528,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                               className={`${theme === 'dark' ? 'bg-gray-950' : 'bg-white'}`}
                             >
                               <Post
-                                post={post as unknown}
+                                post={post as any}
                                 onPostClick={(postId, username) => navigate(`/${username}/status/${postId}`)}
                                 onProfileClick={(username) => navigate(`/${username}`)}
                               />

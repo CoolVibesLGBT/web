@@ -82,7 +82,7 @@ const ProfileEngagementsScreen: React.FC = () => {
 
     setLoadingProfile(true);
     try {
-      const response = await api.fetchProfileByNickname(username);
+      const response = (await api.fetchProfileByNickname(username)) as any;
 
       const userData = (response?.user || response) ?? null;
 
@@ -97,15 +97,15 @@ const ProfileEngagementsScreen: React.FC = () => {
         displayname: userData.displayname ?? userData.username ?? username,
         avatar: userData.avatar ?? null,
       });
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to load profile summary', err);
       setProfile({
         username,
         displayname: username,
       });
       setError(
-        (err as any)?.response?.data?.message ||
-        (err as Error).message ||
+        err?.response?.data?.message ||
+        err.message ||
         t('profile.user_not_found')
       );
     } finally {
@@ -133,7 +133,7 @@ const ProfileEngagementsScreen: React.FC = () => {
           body.cursor = nextCursor;
         }
 
-        const response = await api.fetchEngagements(body);
+        const response = (await api.fetchEngagements(body)) as any;
 
         // API returns engagements array, not users array
         const engagementsArray = Array.isArray(response?.engagements)
@@ -146,7 +146,7 @@ const ProfileEngagementsScreen: React.FC = () => {
         const users: EngagementUser[] = engagementsArray
           .map((engagement: any) => {
             const userData =
-               engagement.kind === 'follower' ? engagement.engagee : engagement.engagee;
+               engagement.kind === 'follower' ? engagement.engager : engagement.engagee;
 
             if (!userData) {
               return null;
@@ -404,7 +404,7 @@ const ProfileEngagementsScreen: React.FC = () => {
                 >
                   <div className="relative">
                     <img
-                      src={getSafeImageURLEx(profile.public_id, profile.avatar ?? undefined, 'icon')}
+                      src={getSafeImageURLEx(profile.public_id, profile.avatar ?? undefined, 'icon') ?? undefined}
                       alt={profile.displayname || profile.username}
                       className={`w-14 h-14 rounded-full object-cover ring-2 ring-offset-2 ring-offset-transparent ${theme === 'dark' ? 'ring-gray-900' : 'ring-gray-200/50'
                         }`}
@@ -520,7 +520,7 @@ const ProfileEngagementsScreen: React.FC = () => {
                     >
                       <div className="relative flex-shrink-0">
                         <img
-                          src={renderAvatar(engagementUser)}
+                          src={renderAvatar(engagementUser) ?? undefined}
                           alt={engagementUser.displayname || engagementUser.username}
                           className={`w-14 h-14 rounded-full object-cover ring-2 ring-offset-2 ring-offset-transparent transition-all duration-200 group-hover:ring-opacity-50 ${theme === 'dark' ? 'ring-gray-900' : 'ring-gray-200/50'
                             }`}

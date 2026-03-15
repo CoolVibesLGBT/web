@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Heart, Star, Crown, Diamond, Sparkles, Coffee, Cake, Music, Zap } from 'lucide-react';
+import { X, Heart, Star, Crown, Sparkles } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 
 interface Gift {
@@ -32,7 +32,7 @@ const GiftSelector: React.FC<GiftSelectorProps> = ({ isOpen, onClose, onSelectGi
     { id: 1, name: 'Aubergine', icon: "/gifts/aubergine-thin.svg", price: 10, color: 'text-red-400', rarity: 'common' },
 
   { id: 1, name: 'Peach One', icon: "/gifts/peach-one.svg", price: 10, color: 'text-red-400', rarity: 'common' },
-  { id: 1, name: 'Peach Two', icon: "/gifts/peach-two.svg", price: 10, color: 'text-red-400', rarity: 'common' },,
+  { id: 1, name: 'Peach Two', icon: "/gifts/peach-two.svg", price: 10, color: 'text-red-400', rarity: 'common' },
     { id: 1, name: 'Condom', icon: "/gifts/condom.svg", price: 10, color: 'text-red-400', rarity: 'common' },
     { id: 1, name: 'Tongue', icon: "/gifts/tongue.svg", price: 10, color: 'text-red-400', rarity: 'common' },
   { id: 1, name: 'Watermelon', icon: "/gifts/watermelon.svg", price: 10, color: 'text-red-400', rarity: 'common' },
@@ -156,7 +156,7 @@ const GiftSelector: React.FC<GiftSelectorProps> = ({ isOpen, onClose, onSelectGi
             {/* Gifts Grid */}
             <div className="p-4 max-h-[355px] overflow-y-auto scrollbar-hide">
               <div className="grid grid-cols-4 gap-2">
-                {gifts.map((gift, index) => (
+                {gifts.map((gift) => (
                   <motion.button
                     key={gift.id}
                   

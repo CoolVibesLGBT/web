@@ -8,7 +8,6 @@ import {
   Plus,
   ArrowUpRight,
   ShieldCheck,
-  MessageSquare,
   MoreHorizontal,
   Globe,
   Briefcase

@@ -10,14 +10,14 @@ export type SmokingHabit = string;
 export type DrinkingHabit = string;
 
 export interface LocationData {
-  country_code: string;
-  country_name: string;
-  city: string;
+  country_code?: string;
+  country_name?: string;
+  city?: string;
   region?: string;
-  lat: number;
-  lng: number;
+  lat?: number;
+  lng?: number;
   timezone?: string;
-  display: string;
+  display?: string;
 }
 
 export interface TravelData {
@@ -48,7 +48,10 @@ export interface UserFantasy {
 
 export interface Fantasy {
   id: string;
-  category: string;
+  slug?: string;
+  category: string | Record<string, string>;
+  label?: Record<string, string>;
+  description?: Record<string, string>;
   translations?: FantasyTranslation[];
 }
 
@@ -97,8 +100,8 @@ export interface User {
   created_at: string;
   updated_at: string;
   last_online?: string;
-  location?: LocationData;
-  location_point?: { lat: number; lng: number };
+  location?: LocationData | string | null;
+  location_point?: { lat: number; lng: number } | null;
 
   bdsm_interest?: BDSMInterest;
   bdsm_role?: BDSMRole;
@@ -106,7 +109,7 @@ export interface User {
   smoking?: SmokingHabit;
   drinking?: DrinkingHabit;
 
-  languages?: string[];
+  languages?: string[] | null;
   hobbies?: string[];
   movies_genres?: string[];
   tv_shows_genres?: string[];
@@ -134,19 +137,39 @@ export interface User {
     counts?: {
       referral_count?: number;
       referral_amount?: number;
+      follower_count?: number;
+      following_count?: number;
     };
     engagement_details?: Array<{
-      id: string;
-      kind: string;
-      created_at: string;
-      details: {
-        amount: number;
+      id?: string;
+      kind?: string;
+      created_at?: string;
+      details?: {
+        amount?: number;
       };
-      engager: {
-        public_id: number;
-        username: string;
-        avatar?: any;
+      engager?: {
+        id?: string;
+        public_id?: number | string;
+        username?: string;
+        avatar?: string | null;
       };
     }>;
   };
+  interests?: Array<{
+    id: string;
+    user_id: string;
+    interest_item_id: string;
+    interest_item?: {
+      id: string;
+      interest_id: string;
+      name: Record<string, string>;
+      bit_index?: number;
+      emoji?: string;
+      interest?: {
+        id: string;
+        name: Record<string, string>;
+      };
+    };
+  }>;
+  preferences_flags?: string;
 }

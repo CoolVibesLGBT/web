@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, MapPin, Globe, Phone, Loader, Mail, Compass, Navigation } from 'lucide-react';
@@ -26,36 +26,34 @@ const PlaceDetailsScreen: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(!place);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchPlaceDetails = async () => {
-      if (!place && publicId) {
-        setLoading(true);
-        setError(null);
-        try {
-          const response = await api.fetchPlace(publicId);
-          // The API might return a single place in an array or as a single object
-          const foundPlace = Array.isArray(response.places) && response.places.length > 0 ? response.places[0] : response.place;
+  const fetchPlaceDetails = useCallback(async () => {
+    if (!place && publicId) {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = (await api.fetchPlace(publicId)) as any;
+        // The API might return a single place in an array or as a single object
+        const foundPlace = Array.isArray(response.places) && response.places.length > 0 ? response.places[0] : response.place;
 
-          if (foundPlace) {
-            setPlace(foundPlace);
-          } else {
-            throw new Error(response.error || t('places.details_not_found', { defaultValue: 'Place not found' }));
-          }
-        } catch (err: any) {
-          setError(err.message || 'An error occurred while fetching place details.');
-        } finally {
-          setLoading(false);
+        if (foundPlace) {
+          setPlace(foundPlace);
+        } else {
+          throw new Error(response.error || t('places.details_not_found', { defaultValue: 'Place not found' }));
         }
-      } else if (!publicId) {
-        setError(t('places.no_public_id', { defaultValue: 'No place ID provided.' }));
-        setLoading(false);
-      } else {
-        setLoading(false);
+      } catch (err: any) {
+        setError(err.message || 'An error occurred while fetching place details.');
       }
-    };
+    } else if (!publicId) {
+      setError(t('places.no_public_id', { defaultValue: 'No place ID provided.' }));
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  }, [place, publicId, t]);
 
+  useEffect(() => {
     fetchPlaceDetails();
-  }, [publicId, place, t]);
+  }, [fetchPlaceDetails]);
 
   const handleBackClick = () => {
     navigate('/places', { replace: true });
@@ -133,10 +131,10 @@ const PlaceDetailsScreen: React.FC = () => {
     );
   }
 
-  const { name, description, address, town, province, country, website, telephone, urls, email, image, postcode } =
+  const { name, address, town, province, country, website, telephone, urls, email, image, postcode } =
     place.extras.place;
   const i18nTitle = place.title[t('lang_code', { defaultValue: 'tr' })] || place.title['en'] || name;
-  const i18nDesc = place.content[t('lang_code', { defaultValue: 'tr' })] || place.content['en'] || description;
+  /* const i18nDesc = place.content[t('lang_code', { defaultValue: 'tr' })] || place.content['en'] || description; */
   const mainUrl = urls?.[0] || website;
   const locationText = [town, province, country].filter(Boolean).join(', ');
 
@@ -279,7 +277,7 @@ const PlaceDetailsScreen: React.FC = () => {
 
         
          <Post
-        post={place}
+        post={place as any}
   
         defaultShowReply={true}
         loadChildren={false}

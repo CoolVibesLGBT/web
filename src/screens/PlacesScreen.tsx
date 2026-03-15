@@ -160,13 +160,13 @@ const PlacesScreen: React.FC = () => {
       const cursorToUse = reset ? null : cursor;
 
       try {
-        const response = await api.fetchNearbyPlaces(
+        const response = (await api.fetchNearbyPlaces(
           center.latitude,
           center.longitude,
           cursorToUse?.next || null,
           cursorToUse?.distance ? String(cursorToUse.distance) : null,
           DEFAULT_LIMIT
-        );
+        )) as any;
 
         if (response && response.places) {
           setPlaces((prev: Place[]) => {
@@ -590,7 +590,7 @@ const PlacesScreen: React.FC = () => {
                         ? 'bg-gray-100 text-gray-800 border-gray-300'
                         : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
                       }`}>
-                      {isAll ? t('places.all_categories', 'Tümü') : `#${cat}`}
+                      {isAll ? t('places.all_categories') || 'Tümü' : `#${cat}`}
                     </button>
                   );
                 })}

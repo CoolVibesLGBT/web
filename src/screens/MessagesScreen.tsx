@@ -34,6 +34,58 @@ import { defaultServiceServerId, serviceURL } from '../appSettings';
 import { getSafeImageURL, buildSafeURL, getSafeImageURLEx } from '../helpers/helpers';
 import { useTranslation } from 'react-i18next';
 import { Virtuoso } from 'react-virtuoso';
+interface Attachment {
+  id: string;
+  file: {
+    id: string;
+    url: string;
+    mime_type: string;
+    name: string;
+    storage_path?: string;
+    variants?: {
+      image?: {
+        original?: { url: string };
+        small?: { url: string };
+        medium?: { url: string };
+        large?: { url: string };
+        thumbnail?: { url: string };
+        icon?: { url: string };
+      };
+      video?: {
+        original?: { url: string };
+        small?: { url: string };
+        medium?: { url: string };
+        large?: { url: string };
+        thumbnail?: { url: string };
+        icon?: { url: string };
+      };
+    };
+  };
+}
+
+interface ChatItem {
+  id: string;
+  chatId: string | null;
+  name: string;
+  username: string;
+  emojis: string;
+  avatar: string | null;
+  avatarLetter: string | null;
+  lastMessage: string;
+  lastTime: string;
+  unread: number;
+  online: boolean;
+  verified: boolean;
+  encrypted: boolean;
+}
+
+interface ChatMessage {
+  id: string;
+  text: string;
+  time: string;
+  sender: 'me' | 'other';
+  attachments?: Attachment[];
+}
 
 interface MessageItemProps {
   msg: {
@@ -77,7 +129,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ msg, theme, onContextMenu }) 
     const clientY = touch.clientY;
     longPressTimer.current = setTimeout(() => {
       setIsPressed(false);
-      onContextMenu({ preventDefault: () => { }, clientX, clientY } as unknown, msg.id);
+      onContextMenu({ preventDefault: () => { }, clientX, clientY } as any, msg.id);
     }, 400); // 400ms for slightly snappier opening
   };
 
@@ -284,8 +336,9 @@ const MessagesScreen: React.FC = () => {
           messageData = msg;
         }
 
-        const action = messageData?.action;
-        const message = messageData?.message || messageData?.data;
+        const typedData = messageData as { action: string; message?: any; data?: any };
+        const action = typedData?.action;
+        const message = typedData?.message || typedData?.data;
 
         console.log('Socket message parsed:', { action, message, messageData });
 
@@ -293,7 +346,7 @@ const MessagesScreen: React.FC = () => {
         if (action === Actions.CMD_SEND_MESSAGE && message) {
           // Get current chat and selectedChat from refs (always use latest values)
           const currentSelectedChat = selectedChatRef.current;
-          const currentChat = chatsListRef.current.find((chat: unknown) => chat.id === currentSelectedChat);
+          const currentChat = (chatsListRef.current as ChatItem[]).find((chat: ChatItem) => chat.id === currentSelectedChat);
 
           // Check if message belongs to current chat
           const messageChatId = message.contentable_id || message.chat_id;
@@ -412,14 +465,14 @@ const MessagesScreen: React.FC = () => {
           });
         } else if (action === Actions.CMD_TYPING) {
           // Handle typing indicator from socket
-          const typingData = messageData;
+          const typingData = messageData as any;
           const typingChatId = typingData?.chatID || typingData?.chat_id;
           const isTypingActive = typingData?.typing === true;
           const typingUserId = typingData?.userID || typingData?.user_id;
 
           // Get current chat and selectedChat from refs (always use latest values)
           const currentSelectedChat = selectedChatRef.current;
-          const currentChat = chatsListRef.current.find((chat: unknown) => chat.id === currentSelectedChat);
+          const currentChat = (chatsListRef.current as ChatItem[]).find((chat: ChatItem) => chat.id === currentSelectedChat);
 
           console.log('Typing indicator received:', {
             typingChatId,
@@ -428,7 +481,7 @@ const MessagesScreen: React.FC = () => {
             currentUserId: user?.id,
             currentSelectedChat,
             messageData,
-            allChats: chatsListRef.current.map((c: unknown) => ({ id: c.id, chatId: c.chatId }))
+            allChats: (chatsListRef.current as ChatItem[]).map((c: ChatItem) => ({ id: c.id, chatId: c.chatId }))
           });
 
           console.log('Current chat:', {
@@ -526,7 +579,7 @@ const MessagesScreen: React.FC = () => {
         typingIndicatorTimeoutRef.current = null;
       }
     };
-  }, [socket, user?.id]); // Removed selectedChat from dependencies - use ref instead
+  }, [socket, user?.id, user?.public_id]); // Added user?.public_id to satisfy linter
 
 
   useEffect(() => {
@@ -710,19 +763,19 @@ const MessagesScreen: React.FC = () => {
 
       try {
         setIsLoadingChats(true);
-        const response = await api.fetchChats();
+        const response = (await api.fetchChats()) as any;
 
 
         if (response?.chats && Array.isArray(response.chats)) {
-          const mappedChats = response.chats.map((chat: unknown) => {
+          const mappedChats = (response.chats as any[]).map((chat: any) => {
             // For private chats, find the other participant (not current user)
             const otherParticipant = chat.participants?.find(
-              (p: unknown) => p.user_id !== user.id
+              (p: any) => p.user_id !== user.id
             );
 
             // Find current user's participant to get unread_count
             const currentUserParticipant = chat.participants?.find(
-              (p: unknown) => p.user_id === user.id
+              (p: any) => p.user_id === user.id
             );
 
             const otherUser = otherParticipant?.user;
@@ -763,7 +816,7 @@ const MessagesScreen: React.FC = () => {
                 // Try to get content in preferred language (en first, then tr, then any available)
                 lastMessageText = chat.last_message.content.en ||
                   chat.last_message.content.tr ||
-                  Object.values(chat.last_message.content).find((v: unknown) => v && typeof v === 'string') ||
+                  Object.values(chat.last_message.content as Record<string, any>).find((v: any) => v && typeof v === 'string') ||
                   '';
               }
             }
@@ -871,21 +924,7 @@ const MessagesScreen: React.FC = () => {
   //   }
   // ];
 
-  const [chatsList, setChatsList] = useState<Array<{
-    id: string;
-    chatId: string | null;
-    name: string;
-    username: string;
-    emojis: string;
-    avatar: string | null;
-    avatarLetter: string | null;
-    lastMessage: string;
-    lastTime: string;
-    unread: number;
-    online: boolean;
-    verified: boolean;
-    encrypted: boolean;
-  }>>([]);
+  const [chatsList, setChatsList] = useState<ChatItem[]>([]);
   const [isLoadingChats, setIsLoadingChats] = useState(false);
 
   // Use ref to access current chatsList in socket handler
@@ -908,31 +947,7 @@ const MessagesScreen: React.FC = () => {
   const selectedPrivateChat = chatsList.find(chat => chat.id === selectedChat);
 
   // Messages state - Backend format: attachments array
-  const [messages, setMessages] = useState<Array<{
-    id: string;
-    text: string;
-    time: string;
-    sender: 'me' | 'other';
-    attachments?: Array<{
-      id: string;
-      file: {
-        id: string;
-        url: string;
-        mime_type: string;
-        name: string;
-        storage_path?: string;
-        variants?: {
-          image?: {
-            original?: { url: string };
-            small?: { url: string };
-            medium?: { url: string };
-            large?: { url: string };
-            thumbnail?: { url: string };
-          };
-        };
-      };
-    }>;
-  }>>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
 
   // Fetch messages function (can be called manually or automatically)
@@ -967,9 +982,9 @@ const MessagesScreen: React.FC = () => {
       } else {
         setIsLoadingMessages(true);
       }
-      const response = await api.fetchMessages(realChatId);
+      const response = (await api.fetchMessages(realChatId)) as { messages: any[] };
       if (response?.messages && Array.isArray(response.messages)) {
-        const mappedMessages = response.messages.map((msg: unknown) => {
+        const mappedMessages = response.messages.map((msg: any) => {
           // Determine if message is from current user
           const isFromMe = msg.author_id === user.id;
 
@@ -1007,9 +1022,9 @@ const MessagesScreen: React.FC = () => {
         });
 
         // Sort messages by created_at (oldest first)
-        mappedMessages.sort((a: unknown, b: unknown) => {
-          const msgA = response.messages?.find((m: unknown) => m.id === a.id);
-          const msgB = response.messages?.find((m: unknown) => m.id === b.id);
+        mappedMessages.sort((a: ChatMessage, b: ChatMessage) => {
+          const msgA = (response.messages as any[])?.find((m: any) => m.id === a.id);
+          const msgB = (response.messages as any[])?.find((m: any) => m.id === b.id);
           if (!msgA?.created_at || !msgB?.created_at) return 0;
           return new Date(msgA.created_at).getTime() - new Date(msgB.created_at).getTime();
         });
@@ -1025,7 +1040,8 @@ const MessagesScreen: React.FC = () => {
       setIsLoadingMessages(false);
       setIsRefreshingMessages(false);
     }
-  }, [selectedChat, user?.id]); // chatsList removed from deps — avoids refetch whenever chat list updates
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedChat, user?.id]); // chatsList removed from deps to avoid refetch whenever chat list updates
 
   // Join chat room when chat is selected
   React.useEffect(() => {
@@ -1810,7 +1826,7 @@ const MessagesScreen: React.FC = () => {
                     </p>
                   </div>
                 </div>
-              ) : chatsList.filter((chat: unknown) => {
+              ) : chatsList.filter((chat: ChatItem) => {
                 if (activeFilter === 'all') return true;
                 if (activeFilter === 'unread') return chat.unread > 0;
                 if (activeFilter === 'unencrypted') return !chat.encrypted;
@@ -1819,12 +1835,12 @@ const MessagesScreen: React.FC = () => {
                 <div className="flex items-center justify-center h-full text-gray-400 text-center p-8">
                   {t('messages.no_chats_found')}
                 </div>
-              ) : chatsList.filter((chat: unknown) => {
+              ) : chatsList.filter((chat: ChatItem) => {
                 if (activeFilter === 'all') return true;
                 if (activeFilter === 'unread') return chat.unread > 0;
                 if (activeFilter === 'unencrypted') return !chat.encrypted;
                 return true;
-              }).map((chat: unknown) => (
+              }).map((chat: ChatItem) => (
                 <div
                   key={chat.id}
                   className={`group/item p-3 sm:p-4 cursor-pointer transition-colors border-b relative ${theme === 'dark' ? 'border-gray-800' : 'border-gray-100'

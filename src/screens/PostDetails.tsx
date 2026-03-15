@@ -72,7 +72,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
       try {
         setLoading(true);
         setError(null);
-        const postData = await api.fetchPost(postId);
+        const postData = await api.fetchPost(postId) as ApiPost;
         setPost(postData);
       } catch (err) {
         console.error('Error fetching post:', err);
