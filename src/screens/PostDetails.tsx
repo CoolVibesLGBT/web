@@ -6,6 +6,7 @@ import Post, { PostProps, ApiPost } from '../features/post/Post';
 import { api } from '../services/api';
 import Container from '../components/ui/Container';
 import { PostSkeleton } from '../features/post/Flows';
+import { useSEO } from '../hooks/useSEO';
 
 type PostDetailsProps = Omit<PostProps, 'post' | 'defaultShowReply' | 'loadChildren'>;
 
@@ -31,12 +32,23 @@ const PostDetailsHeader = memo(({ theme, onBack }: { theme: 'dark' | 'light'; on
 PostDetailsHeader.displayName = 'PostDetailsHeader';
 
 const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restProps }) => {
-  const { postId } = useParams<{ postId: string }>();
+  const { postId, username } = useParams<{ postId: string; username?: string }>();
   const navigate = useNavigate();
   const { theme } = useTheme();
   const [post, setPost] = useState<ApiPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const authorName = post?.author?.displayname || post?.author?.username;
+  const postExcerpt = post?.content?.plain?.slice(0, 120)?.trim();
+  const canonicalPath = username && postId ? `/${username}/status/${postId}` : postId ? `/status/${postId}` : undefined;
+  useSEO({
+    title: authorName ? `Post by ${authorName}` : 'Post',
+    description: postExcerpt || (authorName ? `Read this post by ${authorName} on CoolVibes.` : 'View post on CoolVibes.'),
+    canonical: canonicalPath,
+    type: 'article',
+    image: post?.media?.[0]?.url,
+  });
 
   // Handle back button click
   const handleBackClick = useCallback(() => {
