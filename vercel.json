@@ -1,12 +1,15 @@
 {
-  "functions": {
-    "api/rsc.js": {
-      "runtime": "nodejs20.x",
-      "includeFiles": "dist/**"
+  "version": 2,
+  "builds": [
+    {
+      "src": "dist/ssr/index.js",
+      "use": "@vercel/node"
     }
-  },
+  ],
   "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/api/rsc" }
+    {
+      "src": "/(.*)",
+      "dest": "dist/ssr/index.js"
+    }
   ]
 }
