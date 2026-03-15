@@ -122,6 +122,7 @@ function TableActionMenu({
   showColorPickerModal,
 }: TableCellActionMenuProps) {
   const [editor] = useLexicalComposerContext();
+  const portalRoot = typeof document !== 'undefined' ? document.body : null;
   const dropDownRef = useRef<HTMLDivElement | null>(null);
   const [tableCellNode, updateTableCellNode] = useState(_tableCellNode);
   const [selectionCounts, updateSelectionCounts] = useState({
@@ -495,6 +496,10 @@ function TableActionMenu({
     }
   }
 
+  if (!portalRoot) {
+    return null;
+  }
+
   return createPortal(
     <div
       className="dropdown"
@@ -673,7 +678,7 @@ function TableActionMenu({
         </span>
       </button>
     </div>,
-    document.body,
+    portalRoot,
   );
 }
 
@@ -918,20 +923,22 @@ function TableCellActionMenuContainer({
 }
 
 export default function TableActionMenuPlugin({
-  anchorElem = document.body,
+  anchorElem,
   cellMerge = false,
 }: {
   anchorElem?: HTMLElement;
   cellMerge?: boolean;
 }): null | ReactPortal {
   const isEditable = useLexicalEditable();
+  const resolvedAnchor = anchorElem ?? (typeof document !== 'undefined' ? document.body : null);
+  if (!isEditable || !resolvedAnchor) {
+    return null;
+  }
   return createPortal(
-    isEditable ? (
-      <TableCellActionMenuContainer
-        anchorElem={anchorElem}
-        cellMerge={cellMerge}
-      />
-    ) : null,
-    anchorElem,
+    <TableCellActionMenuContainer
+      anchorElem={resolvedAnchor}
+      cellMerge={cellMerge}
+    />,
+    resolvedAnchor,
   );
 }

@@ -145,7 +145,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   const [eventKindSearchQuery, setEventKindSearchQuery] = useState('');
   const eventKindPickerRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [_charCount, _setCharCount] = useState(0);
+  const [, setCharCount] = useState(0);
   const [location, setLocation] = useState<{ address: string; lat: number; lng: number } | null>(null);
   const [pollErrors, setPollErrors] = useState<Record<string, string>>({});
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
@@ -468,7 +468,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
       setEventOnlineURL('');
       setPolls([]);
       setPollErrors({});
-      _setCharCount(0);
+      setCharCount(0);
       setLocation(null);
 
       // Clear editor content

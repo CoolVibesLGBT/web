@@ -319,9 +319,12 @@ function TextFormatFloatingToolbar({
 
 function useFloatingTextFormatToolbar(
   editor: LexicalEditor,
-  anchorElem: HTMLElement,
+  anchorElem: HTMLElement | null,
   setIsLinkEditMode: Dispatch<boolean>,
 ): JSX.Element | null {
+  if (!anchorElem) {
+    return null;
+  }
   const [isText, setIsText] = useState(false);
   const [isLink, setIsLink] = useState(false);
   const [isBold, setIsBold] = useState(false);
@@ -444,12 +447,13 @@ function useFloatingTextFormatToolbar(
 }
 
 export default function FloatingTextFormatToolbarPlugin({
-  anchorElem = document.body,
+  anchorElem,
   setIsLinkEditMode,
 }: {
   anchorElem?: HTMLElement;
   setIsLinkEditMode: Dispatch<boolean>;
 }): JSX.Element | null {
   const [editor] = useLexicalComposerContext();
-  return useFloatingTextFormatToolbar(editor, anchorElem, setIsLinkEditMode);
+  const resolvedAnchor = anchorElem ?? (typeof document !== 'undefined' ? document.body : null);
+  return useFloatingTextFormatToolbar(editor, resolvedAnchor, setIsLinkEditMode);
 }

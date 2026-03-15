@@ -21,10 +21,14 @@ function isOnMenu(element: HTMLElement): boolean {
 }
 
 export default function DraggableBlockPlugin({
-  anchorElem = document.body,
+  anchorElem,
 }: {
   anchorElem?: HTMLElement;
-}): JSX.Element {
+}): JSX.Element | null {
+  const resolvedAnchor = anchorElem ?? (typeof document !== 'undefined' ? document.body : null);
+  if (!resolvedAnchor) {
+    return null;
+  }
   const [editor] = useLexicalComposerContext();
   const menuRef = useRef<HTMLDivElement>(null);
   const targetLineRef = useRef<HTMLDivElement>(null);
@@ -55,7 +59,7 @@ export default function DraggableBlockPlugin({
 
   return (
     <DraggableBlockPlugin_EXPERIMENTAL
-      anchorElem={anchorElem}
+      anchorElem={resolvedAnchor}
       menuRef={menuRef}
       targetLineRef={targetLineRef}
       menuComponent={

@@ -69,8 +69,7 @@ const AppContext = createContext<AppContextType>({
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [data, setData] = useState<InitialData | null>(null);
   const [loading, setLoading] = useState(true);
-  const storedLang = typeof window !== 'undefined' ? localStorage.getItem('lang') : null;
-  const [defaultLanguage, setDefaultLanguage] = useState<string>(storedLang || i18n.language || "en");
+  const [defaultLanguage, setDefaultLanguage] = useState<string>(() => i18n.language || "en");
 
 
   const refresh = async () => {
@@ -100,6 +99,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       i18n.off('languageChanged', handleLanguageChange);
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const storedLang = localStorage.getItem('lang');
+    if (storedLang && storedLang !== defaultLanguage) {
+      setDefaultLanguage(storedLang);
+    }
+  }, [defaultLanguage]);
 
   return (
     <AppContext.Provider value={{

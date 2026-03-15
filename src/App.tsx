@@ -29,6 +29,7 @@ const CheckInScreen = lazy(() => import('./screens/CheckInScreen.tsx'));
 const LegalScreen = lazy(() => import('./screens/LegalScreen.tsx'));
 
 import SplashScreen from './components/ui/SplashScreen';
+import RouteLoader from './components/ui/RouteLoader';
 import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext.tsx';
 import { useSettings } from './contexts/SettingsContext';
@@ -37,7 +38,9 @@ import { MapPin, Heart, MessageCircle, User, Users, Menu, X, Sun, Moon, MoreHori
 import TrendsPanel, { NormalizedTrend } from './features/discovery/TrendsPanel';
 import PopularUsersPanel from './features/discovery/PopularUsersPanel';
 import LanguageSelector from './components/ui/LanguageSelector.tsx';
-import './i18n';
+import { resolvePreferredLanguage } from './i18n';
+import { useSEO } from '@/hooks/useSEO';
+import { getRouteSeo } from '@/seo/routeSeo';
 import { useTranslation } from 'react-i18next';
 import { applicationName } from './appSettings.tsx';
 import { getSafeImageURLEx } from './helpers/helpers.tsx';
@@ -58,28 +61,6 @@ const ACTIVE_SCREEN_BY_PATH: Record<string, string> = {
   '/checkin': 'checkin',
   '/settings': 'settings',
   '/profile': 'profile',
-};
-
-const DEFAULT_DOCUMENT_TITLE = 'CoolVibes – Inclusive LGBTIQA+ Gay Dating App';
-const ROUTE_DEFAULT_TITLES: Record<string, string> = {
-  '/': 'Home',
-  '/home': 'Home',
-  '/pride': 'Pride',
-  '/search': 'Search',
-  '/messages': 'Messages',
-  '/match': 'Match',
-  '/nearby': 'Nearby',
-  '/wallet': 'Wallet',
-  '/settings': 'Settings',
-  '/notifications': 'Notifications',
-  '/premium': 'Premium',
-  '/referrals': 'Referrals',
-  '/checkin': 'Check-in',
-  '/classifieds': 'Classifieds',
-  '/profile': 'Profile',
-  '/landing': 'Where Every Voice Matters',
-  '/places': 'LGBTQ+ Places',
-  '/legal': 'Legal',
 };
 
 const RIGHT_SIDEBAR_HIDDEN_PATHS = new Set(['/messages', '/landing', '/classifieds', '/places', '/match', '/nearby', '/checkin']);
@@ -109,7 +90,8 @@ function AppContent() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthWizardOpen, setIsAuthWizardOpen] = useState(false);
   const [isLanguageSelectorOpen, setIsLanguageSelectorOpen] = useState(false);
-  const [showSplash, setShowSplash] = useState(true);
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [showSplash, setShowSplash] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileProfileMenuOpen, setIsMobileProfileMenuOpen] = useState(false);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
@@ -140,16 +122,8 @@ function AppContent() {
   const avatarIconSrc = getSafeImageURLEx((user as any)?.public_id, (user as any)?.avatar, 'icon') || undefined;
   const shouldShowRightSidebar = !Array.from(RIGHT_SIDEBAR_HIDDEN_PATHS).some(p => location.pathname === p || location.pathname.startsWith(p + '/'));
 
-  // Default document title by route (screens with useSEO override this)
-  React.useEffect(() => {
-    const path = location.pathname;
-    let titleKey = path;
-    if (path.startsWith('/legal/')) titleKey = '/legal';
-    else if (path.startsWith('/places/')) titleKey = '/places';
-    else if (path.startsWith('/classifieds/')) titleKey = '/classifieds';
-    const segment = ROUTE_DEFAULT_TITLES[titleKey];
-    document.title = segment ? `${segment} | CoolVibes` : DEFAULT_DOCUMENT_TITLE;
-  }, [location.pathname]);
+  const routeSeo = React.useMemo(() => getRouteSeo(location.pathname), [location.pathname]);
+  useSEO(routeSeo);
 
   // Update activeScreen based on current URL
   React.useEffect(() => {
@@ -179,6 +153,16 @@ function AppContent() {
   }, [location.pathname, setShowBottomBar]);
 
   React.useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  React.useEffect(() => {
+    if (!isHydrated || typeof window === 'undefined') return;
+    const shouldShow = sessionStorage.getItem('splash_seen') !== '1';
+    setShowSplash(shouldShow);
+  }, [isHydrated]);
+
+  React.useEffect(() => {
     if (canInstall && !previousCanInstallRef.current) {
       setShowInstallBanner(true);
     }
@@ -189,6 +173,14 @@ function AppContent() {
 
     previousCanInstallRef.current = canInstall;
   }, [canInstall]);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const preferred = resolvePreferredLanguage();
+    if (preferred && preferred !== i18n?.language) {
+      i18n.changeLanguage(preferred);
+    }
+  }, [i18n]);
 
   const sidebarNavItems = React.useMemo(() => [
     {
@@ -378,7 +370,12 @@ function AppContent() {
     <div className={`w-screen dark:bg-gray-950 bg-white h-screen select-none`}>
       {/* Splash Screen */}
       {showSplash && (
-        <SplashScreen onComplete={() => setShowSplash(false)} />
+        <SplashScreen onComplete={() => {
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem('splash_seen', '1');
+          }
+          setShowSplash(false);
+        }} />
       )}
 
       {/* Twitter Style Layout - 3 Columns */}
@@ -777,7 +774,7 @@ function AppContent() {
           {/* Middle Section - Scrollable */}
           <main className={`max-h-[100dvh]  min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide flex-1 min-w-0 lg:border-l lg:border-r  ${theme === 'dark' ? 'lg:border-gray-900/70' : 'lg:border-gray-100'} pt-[56px] lg:pt-0  lg:pb-0`}>
             <ChunkErrorBoundary>
-              <Suspense fallback={<div className="h-full w-full flex items-center justify-center bg-[var(--background-color)]"><SplashScreen onComplete={() => { }} /></div>}>
+              <Suspense fallback={<RouteLoader />}>
                 <Routes>
                   {/* Public Routes */}
                   <Route path="/landing" element={<LandingPage />} />

@@ -98,7 +98,7 @@ function computeItemBaseRotation(offsetX, offsetY, sizeX, sizeY, segments) {
 export default function DomeView({
   fit = 0.5,
   fitBasis = 'auto',
-  minRadius = window.innerWidth,
+  minRadius,
   maxRadius = Infinity,
   padFactor = 0.25,
   overlayBlurColor = 'transparent',
@@ -114,6 +114,8 @@ export default function DomeView({
   grayscale = false,
   onMemberClick
 }) {
+  const resolvedMinRadius =
+    minRadius ?? (typeof window !== 'undefined' ? window.innerWidth : 0);
   const [state] = useAtom(globalState);
 
   const rootRef = useRef(null);
@@ -189,7 +191,7 @@ export default function DomeView({
       let radius = basis * fit;
       const heightGuard = h * 1.35;
       radius = Math.min(radius, heightGuard);
-      radius = clamp(radius, minRadius, maxRadius);
+      radius = clamp(radius, resolvedMinRadius, maxRadius);
       lockedRadiusRef.current = Math.round(radius);
 
       const viewerPad = Math.max(8, Math.round(minDim * padFactor));
@@ -232,7 +234,7 @@ export default function DomeView({
   }, [
     fit,
     fitBasis,
-    minRadius,
+    resolvedMinRadius,
     maxRadius,
     padFactor,
     overlayBlurColor,

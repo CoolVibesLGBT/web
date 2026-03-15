@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useTransition, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowLeft, User, Heart, X, Shield, Globe } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -21,7 +21,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
   const { login } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const [authMode, setAuthMode] = useState<'login' | 'register' | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [error, setError] = useState('');
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
@@ -72,8 +72,19 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
     day: '',
     month: '',
     year: '',
-    referralCode: typeof window !== 'undefined' ? localStorage.getItem('referralCode') || '' : ''
+    referralCode: ''
   });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const savedReferral = localStorage.getItem('referralCode') || '';
+    if (savedReferral) {
+      setFormData((prev) => ({
+        ...prev,
+        referralCode: savedReferral
+      }));
+    }
+  }, []);
 
 
 
@@ -125,24 +136,21 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         setCurrentStep(2); // nickname (register için)
       }
     } else if (currentStep === 1 && authMode === 'login') {
-      setIsLoading(true);
       setError('');
       const loginData: any = {
         nickname: formData.nickname,
         password: formData.password
       };
 
-      api.handleLogin(loginData)
-        .then(response => {
+      startTransition(async () => {
+        try {
+          const response = await api.handleLogin(loginData);
           login(response.token, response.user);
           onClose();
-        })
-        .catch(err => {
+        } catch (err: any) {
           setError(err.response?.message || 'Login failed. Please try again.');
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+        }
+      });
     } else if (currentStep === 2 && authMode === 'register') {
       setCurrentStep(3); // captcha step
     } else if (currentStep === 3 && authMode === 'register') {
@@ -160,24 +168,21 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         domain: "coolvibes.lgbt",
       };
 
-      setIsLoading(true);
       setError('');
-      api.handleRegister(user)
-        .then(response => {
+      startTransition(async () => {
+        try {
+          const response = await api.handleRegister(user);
           login(response.token, response.user);
           onClose();
-        })
-        .catch(err => {
+        } catch (err: any) {
           setError(err.response?.message || 'Registration failed. Please try again.');
           // Reset captcha on error
           if (recaptchaRef.current) {
             recaptchaRef.current.reset();
           }
           setRecaptchaToken(null);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+        }
+      });
     }
   };
 
@@ -611,8 +616,8 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
 
           <motion.button
             onClick={handleNext}
-            disabled={!canProceed() || isLoading}
-            className={`flex-1 flex items-center justify-center px-4 sm:px-8 py-4 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-lg transition-all duration-200 min-w-0 ${canProceed() && !isLoading
+            disabled={!canProceed() || isPending}
+            className={`flex-1 flex items-center justify-center px-4 sm:px-8 py-4 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-lg transition-all duration-200 min-w-0 ${canProceed() && !isPending
               ? theme === 'dark'
                 ? 'bg-white text-gray-900 hover:bg-gray-100 shadow-lg hover:shadow-white/25'
                 : 'bg-gray-900 text-white hover:bg-gray-800 shadow-lg hover:shadow-gray-900/25'
@@ -620,10 +625,10 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                 ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
                 : 'bg-gray-200 text-gray-500 cursor-not-allowed'
               }`}
-            whileHover={canProceed() && !isLoading ? { scale: 1.02 } : {}}
-            whileTap={canProceed() && !isLoading ? { scale: 0.98 } : {}}
+            whileHover={canProceed() && !isPending ? { scale: 1.02 } : {}}
+            whileTap={canProceed() && !isPending ? { scale: 0.98 } : {}}
           >
-            {isLoading ? (
+            {isPending ? (
               <div className="flex items-center justify-center">
                 <div className={`w-4 h-4 sm:w-5 sm:h-5 border-2 border-current border-t-transparent rounded-full animate-spin mr-2`} />
                 <span className="text-sm sm:text-base">{authMode === 'login' ? t('auth.signing_in') : t('auth.creating_account')}</span>

@@ -728,6 +728,7 @@ export default function CommentPlugin({
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const {yjsDocMap} = collabContext;
+  const portalRoot = typeof document !== 'undefined' ? document.body : null;
 
   useEffect(() => {
     if (providerFactory) {
@@ -950,16 +951,16 @@ export default function CommentPlugin({
 
   return (
     <>
-      {showCommentInput &&
+      {portalRoot && showCommentInput &&
         createPortal(
           <CommentInputBox
             editor={editor}
             cancelAddComment={cancelAddComment}
             submitAddComment={submitAddComment}
           />,
-          document.body,
+          portalRoot,
         )}
-      {activeAnchorKey !== null &&
+      {portalRoot && activeAnchorKey !== null &&
         activeAnchorKey !== undefined &&
         !showCommentInput &&
         createPortal(
@@ -968,9 +969,9 @@ export default function CommentPlugin({
             editor={editor}
             onAddComment={onAddComment}
           />,
-          document.body,
+          portalRoot,
         )}
-      {createPortal(
+      {portalRoot && createPortal(
         <Button
           className={`CommentPlugin_ShowCommentsButton ${
             showComments ? 'active' : ''
@@ -979,9 +980,9 @@ export default function CommentPlugin({
           title={showComments ? 'Hide Comments' : 'Show Comments'}>
           <i className="comments" />
         </Button>,
-        document.body,
+        portalRoot,
       )}
-      {showComments &&
+      {portalRoot && showComments &&
         createPortal(
           <CommentsPanel
             comments={comments}
@@ -990,7 +991,7 @@ export default function CommentPlugin({
             activeIDs={activeIDs}
             markNodeMap={markNodeMap}
           />,
-          document.body,
+          portalRoot,
         )}
     </>
   );
