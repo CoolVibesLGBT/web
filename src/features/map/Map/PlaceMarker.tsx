@@ -32,7 +32,7 @@ const PlaceMarker: React.FC<PlaceMarkerProps> = ({ place, selected, onClick }) =
   return (
     <ReactMarker
       position={[latitude, longitude]}
-      // @ts-ignore
+      // @ts-expect-error - LeafletDivIcon type not compatible with Leaflet Marker icon type
       icon={LeafletDivIcon({
         source: (
           <div className="relative flex flex-col items-center group" style={{ width: '60px', height: '80px' }}>

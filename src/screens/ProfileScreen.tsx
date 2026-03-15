@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSEO } from '../hooks/useSEO';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { TravelData } from '../interfaces/user';
 import { ArrowLeft, Calendar, MapPin, Link, MoreHorizontal, Settings, Heart, Baby, Cigarette, Wine, Ruler, PawPrint, Church, GraduationCap, Eye, EyeOff, Lock, Palette, Accessibility, Paintbrush, RulerDimensionLine, Vegan, PersonStanding, Sparkles, Drama, Banana, Save, Camera, Image as ImageIcon, ChevronRight, Check, HeartHandshake, FileText, MessageCircle, Panda, Ghost, Rainbow, Transgender, Rabbit, ChevronLeft, ChevronDown, LocateFixed, UserCircle, Clock, Smile, HeartPulse, Bubbles, Leaf, Fingerprint, Wallet } from 'lucide-react';
@@ -1144,6 +1145,18 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const [isFollowing, setIsFollowing] = useState(false);
   const [showAuthWizard, setShowAuthWizard] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+
+  // Dynamic SEO based on profile data
+  const profileDisplayName = user?.displayname || user?.username || username;
+  const profileUsername = user?.username || username;
+  useSEO({
+    title: profileDisplayName ? `${profileDisplayName} (@${profileUsername})` : profileUsername ? `@${profileUsername}` : 'Profile',
+    description: user?.bio
+      ? `${profileDisplayName} on CoolVibes – ${typeof user.bio === 'string' ? user.bio.replace(/<[^>]*>/g, '').slice(0, 150) : ''}`.trim()
+      : `${profileDisplayName || profileUsername}'s profile on CoolVibes, the LGBTIQA+ social platform.`,
+    canonical: profileUsername ? `/${profileUsername}` : '/profile',
+    type: 'profile',
+  });
   useEffect(() => {
     if (!user || !authUser) {
       setIsFollowing(false);

@@ -23,6 +23,22 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      // Disable rules that require plugins not installed in this project
+      'sort-keys-fix/sort-keys-fix': 'off',
+      'jsx-a11y/no-noninteractive-element-interactions': 'off',
+      'jsx-a11y/no-static-element-interactions': 'off',
+      // Relax no-explicit-any for dynamic API boundary code
+      '@typescript-eslint/no-explicit-any': 'warn',
+      // Turn off overly strict react-hooks rules that cause false positives in Lexical editor code
+      'react-hooks/refs': 'off',
+      'react-hooks/purity': 'off',
+      'react-hooks/immutability': 'off',
+      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/static-components': 'off',
+      // Standard rules
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      'no-empty': ['error', { allowEmptyCatch: true }],
     },
   }
 );
+

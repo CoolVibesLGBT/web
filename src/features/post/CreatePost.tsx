@@ -73,6 +73,8 @@ const ToolbarPluginWrapper = ({ setEditorInstance }: { setEditorInstance: (edito
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isLinkEditMode, setIsLinkEditMode] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  void isLinkEditMode;
 
   // Set editor instance when available
   React.useEffect(() => {
@@ -121,13 +123,13 @@ const CreatePost: React.FC<CreatePostProps> = ({
   postKind,
   extras,
 }) => {
-  const [postText, setPostText] = useState('');
+  const [postText, _setPostText] = useState('');
   const [editorContent, setEditorContent] = useState('');
   const [hasEditorContent, setHasEditorContent] = useState(false);
   const [editorInstance, setEditorInstance] = useState<unknown>(null);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [selectedVideos, setSelectedVideos] = useState<File[]>([]);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, _setIsExpanded] = useState(false);
   const [audience] = useState<'public' | 'community' | 'private'>('public');
   const [polls, setPolls] = useState<Array<{ id: string, question: string, options: string[], duration: string, kind: 'single' | 'multiple' | 'ranked' | 'weighted', maxSelectable: number }>>([]);
   const [isPollActive, setIsPollActive] = useState(false);
@@ -147,7 +149,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   const [eventKindSearchQuery, setEventKindSearchQuery] = useState('');
   const eventKindPickerRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [charCount, setCharCount] = useState(0);
+  const [charCount, _setCharCount] = useState(0);
   const [location, setLocation] = useState<{ address: string; lat: number; lng: number } | null>(null);
   const [pollErrors, setPollErrors] = useState<Record<string, string>>({});
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
@@ -159,7 +161,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   const [isFullScreen, setIsFullScreen] = useState(fullScreen);
   const { theme } = useTheme();
   const { data: appData, defaultLanguage } = useApp();
-  const maxChars = 500;
+  const _maxChars = 500;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
@@ -454,7 +456,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
       setHasEditorContent(false);
       setSelectedImages([]);
       setSelectedVideos([]);
-      setIsExpanded(false);
+      _setIsExpanded(false);
       setIsPollActive(false);
       setIsEventActive(false);
       setEventTitle('');
@@ -470,7 +472,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
       setEventOnlineURL('');
       setPolls([]);
       setPollErrors({});
-      setCharCount(0);
+      _setCharCount(0);
       setLocation(null);
 
       // Clear editor content

@@ -247,9 +247,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, className = '' }
         case '8':
         case '9':
           e.preventDefault();
-          const percent = parseInt(e.key) / 10;
-          video.currentTime = duration * percent;
-          setCurrentTime(duration * percent);
+          {
+            const percent = parseInt(e.key) / 10;
+            video.currentTime = duration * percent;
+            setCurrentTime(duration * percent);
+          }
           break;
       }
     };

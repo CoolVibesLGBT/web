@@ -1,4 +1,4 @@
-import { Gem, Leaf, LocateFixed, LucideProps, PersonStanding, User, Users } from 'lucide-react'
+import { Gem, LucideProps, User, Users } from 'lucide-react'
 import { FunctionComponent } from 'react'
 import colors from 'tailwindcss/colors'
 

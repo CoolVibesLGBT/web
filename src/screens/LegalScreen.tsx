@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Shield, Cookie, FileText, Users, Eye, Info, HelpCircle, ChevronRight, HandFist } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useSEO } from '../hooks/useSEO';
 
 type LegalPage = 'privacy' | 'cookies' | 'terms' | 'guidelines' | 'accessibility' | 'about' | 'help' | 'conduct';
 
@@ -118,6 +119,20 @@ const LegalScreen: React.FC = () => {
   const { page } = useParams<{ page: string }>();
   const navigate = useNavigate();
   const { theme } = useTheme();
+
+  const currentPage = page as LegalPage | undefined;
+  const pageData = currentPage ? PAGES[currentPage] : null;
+
+  // Dynamic SEO per sub-page
+  useSEO({
+    title: pageData ? pageData.title : 'Legal Center',
+    description: pageData
+      ? `${pageData.title} – ${pageData.description}. CoolVibes LGBTIQA+ app.`
+      : 'Explore our Privacy Policy, Terms of Service, Community Guidelines and more. CoolVibes LGBTIQA+ dating app legal center.',
+    canonical: page ? `/legal/${page}` : '/legal',
+    keywords: `CoolVibes legal, ${pageData?.title || 'privacy policy terms'}, LGBTIQA+ app`,
+    noindex: false,
+  });
 
   const isDark = theme === 'dark';
   const bgColor = isDark ? 'bg-gray-950' : 'bg-white';

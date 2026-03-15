@@ -8,6 +8,7 @@ import Flows from '../features/post/Flows';
 import CreatePost from '../features/post/CreatePost';
 import { useSettings } from '../contexts/SettingsContext';
 import VibesGL from '../features/post/VibesGL/VibesGL';
+import { useSEO } from '../hooks/useSEO';
 
 const MAX_HEADER_HEIGHT = 335;
 const MIN_HEADER_HEIGHT = 80;
@@ -19,6 +20,13 @@ const HomeScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState('flows');
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
   const { setShowBottomBar } = useSettings();
+
+  useSEO({
+    title: 'Home',
+    description: 'Your LGBTIQA+ social feed. Discover flows, vibes and connect with people who get you on CoolVibes.',
+    canonical: '/home',
+    noindex: true, // Protected route – no public indexing needed
+  });
 
   // Handle post click - update URL
   const handlePostClick = (postId: string, username: string) => {

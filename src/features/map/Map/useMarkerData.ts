@@ -2,7 +2,7 @@ import { LatLngExpression, Map } from 'leaflet'
 import { useEffect, useMemo, useState } from 'react'
 
 import { AppConfig } from './lib/AppConfig'
-import { PlacesClusterType, PlacesType } from './lib/Places'
+import { PlacesClusterType } from './lib/Places'
 import { decodeGeoHash } from './lib/helper/geocoder';
 import { Category } from './lib/MarkerCategories';
 import useMapContext from './useMapContext';
@@ -20,7 +20,7 @@ interface allMarkerPosValues {
 }
 
 const useMarkerData = ({ locations, map, viewportWidth, viewportHeight }: useMapDataValues) => {
-  const [allMarkersBoundCenter, setAllMarkersBoundCenter] = useState<allMarkerPosValues>({
+  const [allMarkersBoundCenter] = useState<allMarkerPosValues>({
     minZoom: AppConfig.initialZoom,//AppConfig.minZoom > 5 ? AppConfig.minZoom - 5 : AppConfig.minZoom,
     centerPos: AppConfig.baseCenterAvax,
   })
@@ -87,9 +87,9 @@ const useMarkerData = ({ locations, map, viewportWidth, viewportHeight }: useMap
       map.invalidateSize(); // Harita boyutlarını güncelleme
   
       // Zoom seviyesini hesapla
-      const zoom = map.getBoundsZoom(allMarkerBounds);
+      const _zoom = map.getBoundsZoom(allMarkerBounds);
       // Harita merkezini hesapla
-      const center = allMarkerBounds.getCenter();
+      const _center = allMarkerBounds.getCenter();
   
       /*
       setAllMarkersBoundCenter({

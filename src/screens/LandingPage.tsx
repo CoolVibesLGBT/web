@@ -15,10 +15,19 @@ import {
   Globe as GlobeIcon
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useSEO } from '../hooks/useSEO';
 
 const LandingPage: React.FC = () => {
   const { theme } = useTheme();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useSEO({
+    title: 'Where Every Voice Matters – LGBTIQA+ Social App',
+    description: 'CoolVibes is the safest and most inclusive LGBTIQA+ dating and social platform. Connect, share, and find meaningful relationships worldwide.',
+    keywords: 'LGBTIQA+ dating, gay dating app, inclusive social network, queer community, LGBTQ+ platform, CoolVibes',
+    canonical: '/landing',
+    type: 'website',
+  });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {

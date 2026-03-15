@@ -9,9 +9,9 @@ interface LeafletPopupProps extends PopupProps {
 }
 
 const LeafletPopup = ({
-  handlePopupClose,
+  handlePopupClose: _handlePopupClose,
   item,
-  isOpen,
+  isOpen: _isOpen,
   onOpenChange,
   ...props
 }: LeafletPopupProps) => {

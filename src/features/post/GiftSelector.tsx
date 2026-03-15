@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Heart, Star, Crown, Sparkles } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 
 interface Gift {
@@ -9,7 +9,7 @@ interface Gift {
   icon: React.ReactNode;
   price: number;
   color: string;
-  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 }
 
 interface GiftSelectorProps {
@@ -73,27 +73,7 @@ const GiftSelector: React.FC<GiftSelectorProps> = ({ isOpen, onClose, onSelectGi
 
   ];
 
-  const getRarityColor = (rarity: string) => {
-    switch (rarity) {
-      case 'common': return 'border-slate-300/50';
-      case 'rare': return 'border-blue-400/60';
-      case 'epic': return 'border-purple-400/60';
-      case 'legendary': return 'border-gradient-to-r from-yellow-400 to-orange-400';
-      default: return 'border-slate-300/50';
-    }
-  };
-
-  const getRarityGlow = (rarity: string) => {
-    switch (rarity) {
-      case 'common': return 'shadow-lg shadow-slate-200/10';
-      case 'rare': return 'shadow-lg shadow-blue-400/25';
-      case 'epic': return 'shadow-lg shadow-purple-400/30';
-      case 'legendary': return 'shadow-xl shadow-yellow-400/40';
-      default: return 'shadow-lg shadow-slate-200/10';
-    }
-  };
-
-  const getRarityBg = (rarity: string, isDark: boolean) => {
+  const _getRarityBg = (rarity: string, isDark: boolean) => {
     const baseGlass = isDark ? 'bg-white/10 hover:bg-white/20' : 'bg-white/10 hover:bg-white/30';
     return `${baseGlass} backdrop-blur-md`;
   };

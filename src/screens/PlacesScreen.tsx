@@ -12,6 +12,7 @@ import { DEFAULT_LIMIT } from '../constants/constants';
 import { useTranslation } from 'react-i18next';
 import Container from '../components/ui/Container';
 import { useNavigate } from 'react-router-dom';
+import { useSEO } from '../hooks/useSEO';
 
 type CursorType = {
   next: string | null;
@@ -129,6 +130,14 @@ const PlacesScreen: React.FC = () => {
   const { t } = useTranslation('common');
   const { theme } = useTheme();
   const navigate = useNavigate();
+
+  useSEO({
+    title: 'Discover LGBTQ+ Places Near You',
+    description: 'Find LGBTQ+ friendly bars, clubs, saunas, cafes, and community spaces near you. Discover safe and welcoming places on CoolVibes.',
+    keywords: 'LGBTQ+ places, gay bars, queer friendly cafes, LGBTQ friendly venues, gay clubs near me',
+    canonical: '/places',
+    type: 'website',
+  });
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');

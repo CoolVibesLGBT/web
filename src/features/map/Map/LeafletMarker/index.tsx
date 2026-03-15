@@ -63,7 +63,7 @@ export const CustomMarker = React.memo(({ item, onClick }: CustomMarkerProps) =>
   return (
     <ReactMarker
       position={decodeGeoHash(item)}
-      // @ts-ignore
+      // @ts-expect-error - LeafletDivIcon type not compatible with Leaflet Marker icon type
       icon={LeafletDivIcon({
         source: (
           <MarkerIconWrapper

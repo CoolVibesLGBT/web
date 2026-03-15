@@ -1,4 +1,5 @@
 import { useState, useCallback, memo } from 'react';
+import { useSEO } from '../hooks/useSEO';
 import {
     Bell,
     Eye,
@@ -125,6 +126,13 @@ export default function SettingsScreen() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const isDark = theme === 'dark';
+
+    useSEO({
+      title: 'Settings',
+      description: 'Manage your CoolVibes account settings, privacy, notifications, and preferences.',
+      canonical: '/settings',
+      noindex: true,
+    });
 
     const handleToggle = useCallback((key: string) => {
         setOption(key as SettingName, !(settings[key as SettingName]));

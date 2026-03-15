@@ -9,6 +9,7 @@ import { Place } from '../types/places';
 import { api } from '../services/api';
 import { generatePlaceImage } from '../helpers/helpers';
 import Post from '../features/post/Post';
+import { useSEO } from '../hooks/useSEO';
 
 interface LocationState {
   place?: Place;
@@ -25,6 +26,19 @@ const PlaceDetailsScreen: React.FC = () => {
   const [place, setPlace] = useState<Place | null>(state?.place || null);
   const [loading, setLoading] = useState<boolean>(!place);
   const [error, setError] = useState<string | null>(null);
+
+  // Dynamic SEO – updates when place data is available
+  const placeTitle = place?.title?.[t('lang_code', { defaultValue: 'tr' })] || place?.title?.['en'] || place?.extras?.place?.name;
+  const placeLocation = [place?.extras?.place?.town, place?.extras?.place?.country].filter(Boolean).join(', ');
+  useSEO({
+    title: placeTitle ? `${placeTitle}${placeLocation ? ` – ${placeLocation}` : ''} | LGBTQ+ Place` : 'Place Details',
+    description: placeTitle
+      ? `Discover ${placeTitle} on CoolVibes. An LGBTQ+ friendly place in ${placeLocation || 'your area'}. View contact info, directions, and more.`
+      : 'Explore LGBTQ+ friendly places on CoolVibes.',
+    canonical: publicId ? `/places/${publicId}` : '/places',
+    image: place?.extras?.place?.image && place.extras.place.image.startsWith('http') ? place.extras.place.image : undefined,
+    type: 'website',
+  });
 
   const fetchPlaceDetails = useCallback(async () => {
     if (!place && publicId) {

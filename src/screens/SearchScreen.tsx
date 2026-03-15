@@ -4,6 +4,7 @@ import { Search, MapPin, Users, Calendar, Heart, MessageCircle, Share2, X, Arrow
 import { useTheme } from '../contexts/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSEO } from '../hooks/useSEO';
 
 interface SearchResult {
   id: number;
@@ -43,6 +44,13 @@ const SearchScreen: React.FC = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
   const { t } = useTranslation('common');
+
+  useSEO({
+    title: 'Search',
+    description: 'Search for people, events, posts and LGBTQ+ places on CoolVibes.',
+    canonical: '/search',
+    noindex: true,
+  });
 
   const isDark = theme === 'dark';
   const bgColor = isDark ? 'bg-gray-950' : 'bg-white';

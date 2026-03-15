@@ -153,7 +153,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onLikeToggle,
   onDislikeToggle,
   onBlockToggle,
-  onOpenGiftSelector,
+  onOpenGiftSelector: _onOpenGiftSelector,
   onOpenQuickMessageSelector,
   baseButtonStyle,
   viewMode,

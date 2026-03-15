@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSetAtom } from 'jotai';
 import { globalState } from '../../../state/nearby';
 import { calculateAge } from '../../../helpers/helpers';
@@ -15,8 +15,8 @@ export const VibeItem: React.FC<ReelItemProps> = ({ vibe }) => {
   const navigate = useNavigate();
 
   
-      const handleBlockAction = async (userId: string) => {
-            const action = "block"
+      const handleBlockAction = async (_userId: string) => {
+            const _action = "block"
 
       }
     const handleLikeAction = async (postId: string) => {

@@ -6,12 +6,9 @@
  *
  */
 
-import {$isRangeSelection, $isTextNode} from 'lexical';
-import {$isElementNode, LexicalNode} from 'lexical';
+import {$isTextNode, LexicalNode} from 'lexical';
 
 export function getSelectedNode(selection: any): LexicalNode {
-  const anchor = selection.anchor;
-  const focus = selection.focus;
   const anchorNode = selection.anchor.getNode();
   const focusNode = selection.focus.getNode();
   if (anchorNode === focusNode) {
