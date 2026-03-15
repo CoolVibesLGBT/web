@@ -40,7 +40,10 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
   const [error, setError] = useState<string | null>(null);
 
   const authorName = post?.author?.displayname || post?.author?.username;
-  const postExcerpt = post?.content?.plain?.slice(0, 120)?.trim();
+  const rawContent = post?.content && (typeof post.content === 'object' && post.content !== null)
+    ? (post.content as Record<string, string>).en || (post.content as Record<string, string>).tr || Object.values(post.content as Record<string, string>).find(Boolean)
+    : '';
+  const postExcerpt = (typeof rawContent === 'string' ? rawContent.replace(/<[^>]*>/g, '').slice(0, 120).trim() : '') || undefined;
   const canonicalPath = username && postId ? `/${username}/status/${postId}` : postId ? `/status/${postId}` : undefined;
   useSEO({
     title: authorName ? `Post by ${authorName}` : 'Post',
