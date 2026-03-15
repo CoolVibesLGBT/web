@@ -18,15 +18,36 @@ export interface GroupedAttribute {
   attributes: AttributeItem[];
 }
 
-interface InitialData {
+export interface InitialItem {
+  id: string;
+  name: LocalizedString;
+  display_order: number;
+  [key: string]: any;
+}
+
+export interface InitialData {
   vapid_public_key: string;
-  preferences: any;
+  preferences: {
+    interests?: any[];
+    fantasies?: any[];
+    attributes?: any[];
+    gender_identities?: any[];
+    sexual_orientations?: any[];
+    sexual_roles?: any[];
+    [key: string]: any;
+  } | any;
   event_kinds: any[];
   report_kinds: any[];
   checkin_tag_types: any[]
   countries: Record<string, any>;
   languages: Record<string, any>;
   status: string;
+  attributes?: GroupedAttribute[];
+  gender_identities?: InitialItem[];
+  sexual_orientations?: InitialItem[];
+  sexual_roles?: InitialItem[];
+  fantasies?: InitialItem[];
+  interests?: InitialItem[];
 }
 
 interface AppContextType {

@@ -25,10 +25,23 @@ import { api } from '../services/api';
 import Container from '../components/ui/Container';
 import ConfirmationModal from '../components/ui/ConfirmationModal';
 import LanguageSelectorModal from '../components/ui/LanguageSelector';
+import { SettingName } from '../appSettings';
 
 // --- Sub-components (Refined for a Professional Look) ---
 
-const SettingItem = memo(({ icon: Icon, label, subtitle, onClick, value, toggle, danger, dark, border = true }: any) => (
+interface SettingItemProps {
+    icon: React.ElementType;
+    label: string;
+    subtitle?: string;
+    onClick?: () => void;
+    value?: string | boolean | number;
+    toggle?: boolean;
+    danger?: boolean;
+    dark?: boolean;
+    border?: boolean;
+}
+
+const SettingItem = memo(({ icon: Icon, label, subtitle, onClick, value, toggle, danger, dark = false, border = true }: SettingItemProps) => (
     <div
         onClick={onClick}
         className={`group flex items-center justify-between p-4 cursor-pointer transition-all ${dark ? 'hover:bg-gray-900/50' : 'hover:bg-gray-100'
@@ -53,7 +66,7 @@ const SettingItem = memo(({ icon: Icon, label, subtitle, onClick, value, toggle,
             </div>
         </div>
         <div className="flex items-center gap-3">
-            {toggle && <Toggle value={value} dark={dark} />}
+            {toggle && <Toggle value={!!value} dark={dark} />}
             {!toggle && !value && <ChevronRight size={18} className={dark ? 'text-gray-700' : 'text-gray-300'} />}
             {value && !toggle && <span className={`text-sm font-medium ${dark ? 'text-gray-400' : 'text-gray-500'}`}>{value}</span>}
         </div>
@@ -62,7 +75,13 @@ const SettingItem = memo(({ icon: Icon, label, subtitle, onClick, value, toggle,
 
 SettingItem.displayName = 'SettingItem';
 
-const Section = memo(({ title, children, dark }: any) => (
+interface SectionProps {
+    title?: string;
+    children: React.ReactNode;
+    dark?: boolean;
+}
+
+const Section = memo(({ title, children, dark }: SectionProps) => (
     <div className="mb-8">
         {title && (
             <h3 className={`px-4 mb-3 text-[11px] font-bold uppercase tracking-[0.2em] ${dark ? 'text-gray-500' : 'text-gray-400'}`}>
@@ -78,7 +97,7 @@ const Section = memo(({ title, children, dark }: any) => (
 
 Section.displayName = 'Section';
 
-const Toggle = memo(({ value, dark }: { value: boolean, dark: boolean }) => (
+const Toggle = memo(({ value = false, dark }: { value?: boolean, dark: boolean }) => (
     <div
         className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none ${value ? (dark ? 'bg-white' : 'bg-black') : (dark ? 'bg-gray-800' : 'bg-gray-200')
             }`}
@@ -108,7 +127,7 @@ export default function SettingsScreen() {
     const isDark = theme === 'dark';
 
     const handleToggle = useCallback((key: string) => {
-        setOption(key as any, !((settings as any)[key]));
+        setOption(key as SettingName, !(settings[key as SettingName]));
     }, [settings, setOption]);
 
     const handleDeleteProfile = async () => {

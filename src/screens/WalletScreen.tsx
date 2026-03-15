@@ -171,6 +171,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
   const [isGooglePayProcessing, setIsGooglePayProcessing] = useState(false);
   const [isGooglePayLoading, setIsGooglePayLoading] = useState(false);
   const [depositStep, setDepositStep] = useState<'payment_method' | 'package' | 'payment_screen' | 'success' | 'error'>('payment_method');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [depositAmount, setDepositAmount] = useState<string>('');
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethodsResponse | null>(null);
   const [selectedIban, setSelectedIban] = useState<IBANDetail | null>(null);
@@ -365,13 +366,11 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
           return;
         }
 
-        // Get current language from i18n
-        const currentLocale = i18n.language || 'en';
 
-        // @ts-expect-error Google Pay is attached to the window
-        if (window.google?.payments?.api?.PaymentsClient) {
-          // @ts-expect-error
-          const paymentsClient = new window.google.payments.api.PaymentsClient({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const google = (window as any).google;
+        if (google?.payments?.api?.PaymentsClient) {
+          const paymentsClient = new google.payments.api.PaymentsClient({
             environment: googlePayDetail.environment || 'TEST',
             merchantInfo: {
               merchantName: googlePayDetail.description || 'CoolVibes',
@@ -385,7 +384,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
           // Check if Google Pay is available
           const provider = googlePayDetail.provider;
           // Build tokenization parameters based on gateway type
-          const tokenizationParams: unknown = {
+          const tokenizationParams: Record<string, string> = {
             gateway: provider?.gateway || 'stripe'
           };
 
@@ -417,7 +416,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
               }
             ],
             existingPaymentMethodRequired: true
-          }).then((response: unknown) => {
+          }).then((response: { result: boolean }) => {
             if (response.result) {
               setGooglePayReady(true);
               setIsGooglePayLoading(false);
@@ -457,10 +456,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
         // Clear existing content
         googlePayButtonRef.current.innerHTML = '';
 
-        // Get current language from i18n
-        const currentLocale = i18n.language || 'en';
-
-        const button = paymentsClient.createButton({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const button = (paymentsClient as any).createButton({
           onClick: onGooglePayButtonClick(paymentsClient),
           buttonColor: theme === 'dark' ? 'white' : 'black',
           buttonType: 'pay',
@@ -494,7 +491,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
 
         const provider = googlePayDetail.provider;
         // Build tokenization parameters based on gateway type
-        const tokenizationParams: unknown = {
+        const tokenizationParams: Record<string, string> = {
           gateway: provider?.gateway || 'stripe'
         };
 
@@ -538,7 +535,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
           emailRequired: true
         };
 
-        paymentsClient.loadPaymentData(paymentDataRequest)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (paymentsClient as any).loadPaymentData(paymentDataRequest)
           .then(() => {
             // This will be called after onPaymentAuthorized resolves
             console.log('Payment authorized successfully');
@@ -553,14 +551,14 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
     const existingScript = document.querySelector(`script[src="${GOOGLE_PAY_SCRIPT_URL}"]`);
 
     // Load Google Pay script if not already loaded
-    // @ts-expect-error
+    // @ts-expect-error - Google Pay API is attached to the window
     if (window.google?.payments?.api?.PaymentsClient) {
       // API is already available, initialize immediately
       initializeGooglePay();
     } else if (existingScript) {
       // Script exists but API not ready yet, wait for it
       const checkInterval = setInterval(() => {
-        // @ts-expect-error
+        // @ts-expect-error - Google Pay API is attached to the window
         if (window.google?.payments?.api?.PaymentsClient) {
           clearInterval(checkInterval);
           initializeGooglePay();
@@ -593,14 +591,15 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
       document.body.appendChild(script);
     }
 
+    const currentRef = googlePayButtonRef.current;
     return () => {
-      if (googlePayButtonRef.current) {
-        googlePayButtonRef.current.innerHTML = '';
+      if (currentRef) {
+        currentRef.innerHTML = '';
       }
       setGooglePayReady(false);
       setIsGooglePayLoading(false);
     };
-  }, [depositPaymentMethod, showDepositModal, depositStep, googlePayAmount, theme, paymentMethods]);
+  }, [depositPaymentMethod, showDepositModal, depositStep, googlePayAmount, theme, paymentMethods, selectedGooglePayProvider, googlePayReady]);
 
   // Total USD balance from user auth
   const totalBalanceUSD = user?.balance !== undefined ? (Number(user.balance) || 0).toFixed(2) : '0.00';
@@ -755,7 +754,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                     ].map((tab) => (
                       <motion.button
                         key={tab.id}
-                        onClick={() => setActiveTab(tab.id as unknown)}
+                        onClick={() => setActiveTab(tab.id as 'overview' | 'history')}
                         className={`flex-1 py-3 font-semibold text-sm relative transition-colors ${activeTab === tab.id
                           ? theme === 'dark' ? 'text-white' : 'text-black'
                           : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'

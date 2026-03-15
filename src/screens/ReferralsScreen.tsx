@@ -15,6 +15,20 @@ import { DEFAULT_TOKEN_SYMBOL } from '../constants/constants';
 
 
 
+interface ReferralEngagement {
+    id: string;
+    kind: string;
+    created_at: string;
+    engager: {
+        username: string;
+        public_id: number;
+        avatar?: string;
+    };
+    details?: {
+        amount?: number;
+    };
+}
+
 const ReferralsScreen: React.FC = () => {
     const { theme } = useTheme();
     const { user } = useAuth();
@@ -71,7 +85,9 @@ const ReferralsScreen: React.FC = () => {
                     text: `Join me on CoolVibes and earn free ${DEFAULT_TOKEN_SYMBOL} tokens!`,
                     url: referralLink,
                 });
-            } catch (err) { }
+            } catch (err) {
+                console.debug('Share cancelled or failed:', err);
+            }
         } else {
             copyToClipboard();
         }
@@ -239,7 +255,7 @@ const ReferralsScreen: React.FC = () => {
                         </div>
 
                         <div className={`rounded-[24px] overflow-hidden ${cardBgColor} border-[0.5px] ${borderColor} shadow-sm`}>
-                            {user?.engagements?.engagement_details?.filter((e: any) => e.kind === 'referral')?.map((engagement: any, idx: number, arr: any[]) => (
+                            {user?.engagements?.engagement_details?.filter((e: ReferralEngagement) => e.kind === 'referral')?.map((engagement: ReferralEngagement, idx: number, arr: ReferralEngagement[]) => (
                                 <div
                                     key={engagement.id}
                                     onClick={() => navigate(`/${engagement.engager.username}`)}
@@ -260,7 +276,7 @@ const ReferralsScreen: React.FC = () => {
                                     <div className="text-right flex flex-col items-end">
 
                                         <>
-                                            <span className="text-[15px] font-semibold text-gray-900 dark:text-white">{engagement.details.amount}</span>
+                                            <span className="text-[15px] font-semibold text-gray-900 dark:text-white">{engagement.details?.amount}</span>
                                             <span className={`text-[11px] font-medium mt-0.5 ${secTextColor}`}>Completed</span>
                                         </>
 
