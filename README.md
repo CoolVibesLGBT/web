@@ -1,32 +1,42 @@
-🌈 A free, open-source, and privacy-respecting dating platform designed with full LGBTIQ+ inclusivity.
+# CoolVibes Web
 
-# Web
+Web client for **CoolVibes** — an inclusive LGBTIQA+ social and dating platform.
 
-This is the web interface of a free and open-source social platform designed for LGBTIQ+ individuals.
+**Live:** [coolvibes.lgbt](https://coolvibes.lgbt)
 
-🌐 Live Demo: [https://coolvibes.lgbt](https://coolvibes.lgbt)
+## Quick start
+
+```bash
+yarn install
+yarn dev
+```
+
+Open [http://localhost:5173](http://localhost:5173). Use `yarn build` for production and `yarn preview` to preview the build.
+
+## Tech stack
+
+- **Vite** + **React 19** + **TypeScript**
+- **Tailwind CSS** for styling
+- **React Router** for routing
+- **i18next** for translations
+
+## Environment
+
+Optional: copy `.env.example` to `.env` and set any `VITE_*` variables for local overrides. In production, API and socket URLs are chosen by hostname (e.g. `coolvibes.lgbt`).
+
+## Project structure
+
+- `src/features/` — domain modules (auth, editor, map, profile, post, …)
+- `src/components/` — shared UI
+- `src/contexts/`, `src/hooks/`, `src/services/` — app-wide logic and API
+- `src/screens/` — route-level pages
+- `src/locales/` — i18n JSON
+
+See [AGENTS.md](./AGENTS.md) for contributor guidelines and conventions.
 
 ## About
 
-This project is the front-end of a completely secure and privacy-focused inclusive social network tailored specifically for the LGBTIQ+ community. Built with modern web technologies, it aims to empower people with a safe and expressive digital space — free from surveillance and bias.
-
-## Features
-
-- 🌈 LGBTIQ+ inclusive design and experience
-- 🛡️ Privacy-first, open-source codebase
-- ⚡ Fast and modern UI built with performance in mind
-- 🔒 No tracking, no ads, no profiling
-
-## Tech Stack
-
-- React / Next.js
-- TailwindCSS
-- TypeScript
-- Vercel hosting
-
-## Contribute
-
-We welcome developers who care about privacy, accessibility, and inclusive design. Feel free to fork, contribute, or suggest improvements!
+Privacy-first, open-source social network for the LGBTIQ+ community. No tracking, no ads.
 
 ---
 

@@ -9,6 +9,8 @@ This is a Vite + React + TypeScript frontend app. Main code lives in `src/`:
 - `public/`: static assets served as-is.
 - `dist/`: production build output (generated; do not edit manually).
 
+**Imports:** Prefer the `@/` path alias for `src/` (e.g. `import { api } from '@/services'`, `import { useAuth } from '@/contexts/AuthContext'`) to avoid deep relative paths. Existing relative imports remain valid.
+
 ## Build, Test, and Development Commands
 - `npm run dev` (or `yarn dev`): start local Vite dev server.
 - `npm run build`: create optimized production bundle in `dist/`.
