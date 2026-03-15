@@ -2,7 +2,7 @@
   "functions": {
     "api/rsc.js": {
       "runtime": "nodejs20.x",
-      "includeFiles": ["dist/**", ".vercel/output/static/**"]
+      "includeFiles": "dist/**"
     }
   },
   "routes": [
