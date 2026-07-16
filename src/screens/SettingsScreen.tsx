@@ -1,0 +1,337 @@
+import { useState, useCallback, memo } from 'react';
+import { useSEO } from '../hooks/useSEO';
+import {
+    Bell,
+    Eye,
+    EyeOff,
+    Trash2,
+    ChevronRight,
+    Mail,
+    MessageSquare,
+    Heart,
+    AlertTriangle,
+    Moon,
+    Sun,
+    Languages,
+    LogOut,
+    FileText,
+    ShieldCheck,
+    Lightbulb
+} from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import i18n from '../i18n';
+import { useTheme } from '../contexts/ThemeContext';
+import { useSettings } from '../contexts/SettingsContext';
+import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from '@/router';
+import { api } from '../services/api';
+import { openExternalUrl } from '../platform/runtime';
+import ConfirmationModal from '../components/ui/ConfirmationModal';
+import LanguageSelectorModal from '../components/ui/LanguageSelector';
+import type { SettingName } from '../appSettings';
+
+// --- Sub-components (Refined for a Professional Look) ---
+
+interface SettingItemProps {
+    icon: React.ElementType;
+    label: string;
+    subtitle?: string;
+    onClick?: () => void;
+    value?: string | boolean | number;
+    toggle?: boolean;
+    danger?: boolean;
+    dark?: boolean;
+    border?: boolean;
+}
+
+const SettingItem = memo(({ icon: Icon, label, subtitle, onClick, value, toggle, danger, dark = false, border = true }: SettingItemProps) => (
+    <div
+        onClick={onClick}
+        className={`group flex items-center justify-between p-4 cursor-pointer transition-all ${dark ? 'hover:bg-white/[0.04]' : 'hover:bg-sky-50/70'
+            } ${border ? (dark ? 'border-b border-white/5' : 'border-b border-white/70') : ''}`}
+    >
+        <div className="flex items-center gap-4 min-w-0">
+            <div className={`flex items-center justify-center w-10 h-10 rounded-2xl transition-colors ${danger
+                ? (dark ? 'bg-red-500/10 text-red-500' : 'bg-red-50 text-red-600')
+                : (dark ? 'bg-white/[0.08] text-zinc-300 group-hover:text-white' : 'bg-white/80 text-slate-500 group-hover:text-sky-600')
+                }`}>
+                <Icon size={20} strokeWidth={2} />
+            </div>
+            <div className="flex flex-col min-w-0">
+                <span className={`text-[15px] font-semibold leading-tight ${danger ? 'text-red-500' : (dark ? 'text-white' : 'text-slate-950')}`}>
+                    {label}
+                </span>
+                {subtitle && (
+                    <span className={`text-[12px] truncate leading-tight mt-0.5 ${dark ? 'text-zinc-500' : 'text-slate-500'}`}>
+                        {subtitle}
+                    </span>
+                )}
+            </div>
+        </div>
+        <div className="flex items-center gap-3">
+            {toggle && <Toggle value={!!value} dark={dark} />}
+            {!toggle && !value && <ChevronRight size={18} className={dark ? 'text-zinc-700' : 'text-slate-300'} />}
+            {value && !toggle && <span className={`text-sm font-medium ${dark ? 'text-zinc-400' : 'text-slate-500'}`}>{value}</span>}
+        </div>
+    </div>
+));
+
+SettingItem.displayName = 'SettingItem';
+
+interface SectionProps {
+    title?: string;
+    children: React.ReactNode;
+    dark?: boolean;
+}
+
+const Section = memo(({ title, children, dark }: SectionProps) => (
+    <div className="mb-8">
+        {title && (
+            <h3 className={`px-4 mb-3 text-[11px] font-bold uppercase tracking-[0.2em] ${dark ? 'text-zinc-500' : 'text-slate-400'}`}>
+                {title}
+            </h3>
+        )}
+        <div className={`overflow-hidden rounded-[30px] border backdrop-blur-3xl shadow-[0_20px_60px_-42px_rgba(15,23,42,0.45)] ${dark ? 'cv-card-surface-soft border-white/10' : 'bg-white/[0.72] border-white/70'
+            }`}>
+            {children}
+        </div>
+    </div>
+));
+
+Section.displayName = 'Section';
+
+const Toggle = memo(({ value = false, dark }: { value?: boolean, dark: boolean }) => (
+    <div
+        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none ${value ? (dark ? 'bg-sky-400' : 'bg-sky-600') : (dark ? 'bg-white/10' : 'bg-slate-200')
+            }`}
+    >
+        <span
+            className={`pointer-events-none inline-block h-4 w-4 transform rounded-full ${value ? (dark ? 'bg-[#121418]' : 'bg-white') : 'bg-white'} shadow-md ring-0 transition duration-200 ease-in-out ${value ? 'translate-x-[22px]' : 'translate-x-1'
+                } mt-[4px]`}
+        />
+    </div>
+));
+
+Toggle.displayName = 'Toggle';
+
+// --- Main Settings Screen ---
+
+export default function SettingsScreen() {
+    const { t } = useTranslation('common');
+    const { theme, toggleTheme } = useTheme();
+    const { settings, setOption } = useSettings();
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const [isLangModalOpen, setIsLangModalOpen] = useState(false);
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const isDark = theme === 'dark';
+
+    useSEO({
+      title: 'Settings',
+      description: 'Manage your CoolVibes account settings, privacy, notifications, and preferences.',
+      canonical: '/settings',
+      noindex: true,
+    });
+
+    const handleToggle = useCallback((key: string) => {
+        setOption(key as SettingName, !(settings[key as SettingName]));
+    }, [settings, setOption]);
+
+    const handleDeleteProfile = async () => {
+        try {
+            await api.handleDeleteProfile();
+            logout();
+            navigate('/', { replace: true });
+        } catch (error) {
+            console.error('Delete account failed:', error);
+            // Optional: Show error toast/message
+        }
+    };
+
+    const handleLogoutConfirm = useCallback(() => {
+        logout();
+        setIsLogoutModalOpen(false);
+        navigate('/', { replace: true });
+    }, [logout, navigate]);
+
+    const handleDataRequest = useCallback(() => {
+        if (typeof window === 'undefined') return;
+        openExternalUrl('mailto:privacy@coolvibes.lgbt');
+    }, []);
+
+    const handleOpenPrivacyManager = useCallback(() => {
+        navigate('/legal/privacy');
+    }, [navigate]);
+
+    return (
+        <div className={`skyline-page-scroll w-full ${isDark ? 'text-white' : 'text-slate-950'}`}>
+            <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col px-1 pb-8 pt-24 md:px-2 md:pt-28">
+                <div className="grid w-full gap-5 lg:grid-cols-2">
+
+                    <Section title={t('settings.appearance', { defaultValue: 'Appearance' })} dark={isDark}>
+                        <SettingItem
+                            icon={isDark ? Moon : Sun}
+                            label={t('settings.dark_mode', { defaultValue: 'Dark Mode' })}
+                            subtitle={isDark ? 'Currently using Dark' : 'Currently using Light'}
+                            onClick={toggleTheme}
+                            value={isDark}
+                            toggle
+                            dark={isDark}
+                        />
+                        <SettingItem
+                            icon={Lightbulb}
+                            label={t('settings.navigation_tips', { defaultValue: 'Dock tips' })}
+                            subtitle={t('settings.navigation_tips_description', { defaultValue: 'Show navigation guides above the dock' })}
+                            onClick={() => handleToggle('showDockTips')}
+                            value={settings.showDockTips}
+                            toggle
+                            dark={isDark}
+                        />
+                        <SettingItem
+                            icon={Languages}
+                            label={t('settings.language', { defaultValue: 'Language' })}
+                            subtitle={i18n.language.toUpperCase()}
+                            onClick={() => setIsLangModalOpen(true)}
+                            dark={isDark}
+                            border={false}
+                        />
+                    </Section>
+
+                    <Section title={t('settings.notifications.title', { defaultValue: 'Notifications' })} dark={isDark}>
+                        <SettingItem
+                            icon={Bell}
+                            label={t('settings.push_notifications', { defaultValue: 'Push Notifications' })}
+                            subtitle="Get notified in real-time"
+                            onClick={() => handleToggle('pushNotifications')}
+                            value={settings.pushNotifications}
+                            toggle
+                            dark={isDark}
+                        />
+                        <SettingItem
+                            icon={Mail}
+                            label={t('settings.email_notifications', { defaultValue: 'Email Notifications' })}
+                            subtitle="Weekly updates and alerts"
+                            onClick={() => handleToggle('emailNotifications')}
+                            value={settings.emailNotifications}
+                            toggle
+                            dark={isDark}
+                        />
+                        <SettingItem
+                            icon={MessageSquare}
+                            label={t('settings.chat_notifications', { defaultValue: 'Messages' })}
+                            subtitle="New message alerts"
+                            onClick={() => handleToggle('messageNotifications')}
+                            value={settings.messageNotifications}
+                            toggle
+                            dark={isDark}
+                            border={false}
+                        />
+                    </Section>
+
+                    <Section title={t('settings.privacy', { defaultValue: 'Privacy' })} dark={isDark}>
+                        <SettingItem
+                            icon={settings.blurPhotos ? EyeOff : Eye}
+                            label={t('settings.blur_photos', { defaultValue: 'Blur Photos in Posts' })}
+                            subtitle={settings.blurPhotos ? 'Photos are blurred' : 'Photos are clear'}
+                            onClick={() => handleToggle('blurPhotos')}
+                            value={settings.blurPhotos}
+                            toggle
+                            dark={isDark}
+                        />
+                        <SettingItem
+                            icon={Heart}
+                            label={t('settings.likes_visibility', { defaultValue: 'Who can see my likes' })}
+                            subtitle="Public by default"
+                            onClick={() => { }}
+                            value="Everyone"
+                            dark={isDark}
+                        />
+                        <SettingItem
+                            icon={settings.showOnlineStatus ? Eye : EyeOff}
+                            label={t('settings.online_status', { defaultValue: 'Online Status' })}
+                            subtitle="Let others know you're here"
+                            onClick={() => handleToggle('showOnlineStatus')}
+                            value={settings.showOnlineStatus}
+                            toggle
+                            dark={isDark}
+                            border={false}
+                        />
+                    </Section>
+
+                    <Section title={t('settings.gdpr.title', { defaultValue: 'Personal Data & GDPR' })} dark={isDark}>
+                        <SettingItem
+                            icon={FileText}
+                            label={t('settings.gdpr.request_title', { defaultValue: 'Data Request' })}
+                            subtitle={t('settings.gdpr.request_subtitle', { defaultValue: 'Request a copy of the personal data we hold about you.' })}
+                            onClick={handleDataRequest}
+                            dark={isDark}
+                        />
+                        <SettingItem
+                            icon={ShieldCheck}
+                            label={t('settings.gdpr.manager_title', { defaultValue: 'Open Privacy Manager' })}
+                            subtitle={t('settings.gdpr.manager_subtitle', { defaultValue: 'You can manage your GDPR permissions in the Privacy Manager.' })}
+                            onClick={handleOpenPrivacyManager}
+                            dark={isDark}
+                            border={false}
+                        />
+                    </Section>
+
+                    <Section title={t('settings.account.title', { defaultValue: 'Account' })} dark={isDark}>
+                        <SettingItem
+                            icon={LogOut}
+                            label={t('settings.logout', { defaultValue: 'Log Out' })}
+                            subtitle="Sign out from this device"
+                            onClick={() => setIsLogoutModalOpen(true)}
+                            danger
+                            dark={isDark}
+                            border={false}
+                        />
+                        <div className={`h-2 ${isDark ? 'bg-white/[0.03]' : 'bg-sky-50/60'}`} />
+                        <SettingItem
+                            icon={Trash2}
+                            label={t('settings.delete_account', { defaultValue: 'Delete Account' })}
+                            subtitle="Permanently remove your data"
+                            onClick={() => setIsDeleteModalOpen(true)}
+                            danger
+                            dark={isDark}
+                            border={false}
+                        />
+                    </Section>
+
+                </div>
+            </div>
+
+            <LanguageSelectorModal
+                isOpen={isLangModalOpen}
+                onClose={() => setIsLangModalOpen(false)}
+            />
+
+            <ConfirmationModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                onConfirm={handleLogoutConfirm}
+                title={t('settings.logout_confirm_title', { defaultValue: 'Log Out?' })}
+                message={t('settings.logout_confirm_message', { defaultValue: 'Are you sure you want to sign out? You will need to login again to access your profile.' })}
+                confirmText={t('settings.logout', { defaultValue: 'Log Out' })}
+                cancelText={t('common.cancel', { defaultValue: 'Cancel' })}
+                variant="danger"
+                icon={<AlertTriangle className="text-white" />}
+            />
+
+            <ConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDeleteProfile}
+                title={t('settings.delete_confirm_title', { defaultValue: 'Delete Account?' })}
+                message={t('settings.delete_confirm_message', { defaultValue: 'This action is PERMANENT. All your posts, profile data, and messages will be deleted forever. This cannot be undone.' })}
+                confirmText={t('settings.delete_account', { defaultValue: 'Delete Everything' })}
+                cancelText={t('common.cancel', { defaultValue: 'Cancel' })}
+                variant="danger"
+                icon={<AlertTriangle className="text-white" />}
+            />
+        </div>
+    );
+}

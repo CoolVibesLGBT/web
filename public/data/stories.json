@@ -1,0 +1,1544 @@
+{
+    "success": true,
+    "data": {
+        "stories": [
+            {
+                "id": "43619dc0-a63b-4133-abdc-bbd21c0d40b1",
+                "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                "user": {
+                    "public_id": "2029006997717782528",
+                    "id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "socket_id": "2d",
+                    "domain": "coolvibes",
+                    "username": "coolvibes",
+                    "displayname": "coolvibes",
+                    "bio": {
+                        "en": "\u003cp class=\"mb-2 text-base text-gray-900\"\u003e\u003cspan style=\"white-space: pre-wrap;\"\u003ehello \u003c/span\u003e\u003cspan class=\"hashtag inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)] bg-clip-text text-transparent font-semibold hover:underline cursor-pointer\" style=\"white-space: pre-wrap;\"\u003e#coolvibes\u003c/span\u003e\u003c/p\u003e"
+                    },
+                    "date_of_birth": "1989-12-05T00:00:00Z",
+                    "balance": "50",
+                    "is_online": false,
+                    "privacy_level": "public",
+                    "preferences_flags": "08002020000d64ffc420d800000000000000000002108000000007fc00030100001a34900c050010008000010021002000010088404200011100220000884000088102010080000000000000000000010000000000000200000000000400b000c000000c0800002002",
+                    "user_role": "user",
+                    "is_active": false,
+                    "created_at": "2026-03-04T01:32:20.04031Z",
+                    "updated_at": "2026-03-14T15:45:03.484626Z",
+                    "last_online": "2026-03-14T15:45:03.478435Z",
+                    "default_language": "en",
+                    "avatar_id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                    "avatar": {
+                        "public_id": "2029009079141142528",
+                        "id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                        "file_id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                        "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "owner_type": "user",
+                        "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 493095,
+                            "name": "b976ae19-f286-4117-8c65-19a619347a78.jpg",
+                            "width": 960,
+                            "height": 960,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 56788
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 63364
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 213360
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                                        "width": 960,
+                                        "height": 960,
+                                        "format": "jpg",
+                                        "size": 493095
+                                    }
+                                }
+                            },
+                            "created_at": "2026-03-04T01:40:36.29057Z"
+                        },
+                        "created_at": "2026-03-04T01:40:36.29057Z",
+                        "updated_at": "2026-03-04T01:40:36.290571Z"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "wallet": {
+                        "id": "00000000-0000-0000-0000-000000000000",
+                        "hd_account_id": 0,
+                        "hd_address_id": 0,
+                        "bitcoin": "",
+                        "ethereum": "",
+                        "avalanche": "",
+                        "tron": "",
+                        "solana": "",
+                        "chiliz": "",
+                        "created_at": "0001-01-01T00:00:00Z",
+                        "updated_at": "0001-01-01T00:00:00Z"
+                    },
+                    "deleted_at": null
+                },
+                "media_id": "db493498-c306-4a9a-b5d5-7f489e8b3d68",
+                "media": {
+                    "public_id": "2029017346009468928",
+                    "id": "db493498-c306-4a9a-b5d5-7f489e8b3d68",
+                    "file_id": "74ca7a14-d932-4193-a48e-5671c5b5ab6e",
+                    "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "owner_type": "user",
+                    "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "role": "story",
+                    "is_public": true,
+                    "file": {
+                        "id": "74ca7a14-d932-4193-a48e-5671c5b5ab6e",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/34f70588-56ca-46eb-9397-765302ac175f.jpg",
+                        "mime_type": "image/jpeg",
+                        "size": 812616,
+                        "name": "f5acacca-8a3e-422a-9a1d-d885666cddb3 (1).jpg",
+                        "width": 720,
+                        "height": 1280,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/34f70588-56ca-46eb-9397-765302ac175f_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 28350
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/34f70588-56ca-46eb-9397-765302ac175f_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 81030
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/34f70588-56ca-46eb-9397-765302ac175f_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 407262
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/34f70588-56ca-46eb-9397-765302ac175f_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 831622
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/34f70588-56ca-46eb-9397-765302ac175f_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1920,
+                                    "format": "webp",
+                                    "size": 1849160
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/34f70588-56ca-46eb-9397-765302ac175f.jpg",
+                                    "width": 720,
+                                    "height": 1280,
+                                    "format": "jpg",
+                                    "size": 812616
+                                }
+                            }
+                        },
+                        "created_at": "2026-03-04T02:13:27.265453Z"
+                    },
+                    "created_at": "2026-03-04T02:13:27.265453Z",
+                    "updated_at": "2026-03-04T02:13:27.265453Z"
+                },
+                "expires_at": "2026-03-05T02:13:27.275467Z",
+                "is_expired": false,
+                "is_archived": false,
+                "created_at": "2026-03-04T02:13:27.275467Z",
+                "updated_at": "2026-03-04T02:13:27.275467Z",
+                "deleted_at": null
+            },
+            {
+                "id": "8569e489-15da-4b7b-a0ae-8610ab59b846",
+                "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                "user": {
+                    "public_id": "2029006997717782528",
+                    "id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "socket_id": "2d",
+                    "domain": "coolvibes",
+                    "username": "coolvibes",
+                    "displayname": "coolvibes",
+                    "bio": {
+                        "en": "\u003cp class=\"mb-2 text-base text-gray-900\"\u003e\u003cspan style=\"white-space: pre-wrap;\"\u003ehello \u003c/span\u003e\u003cspan class=\"hashtag inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)] bg-clip-text text-transparent font-semibold hover:underline cursor-pointer\" style=\"white-space: pre-wrap;\"\u003e#coolvibes\u003c/span\u003e\u003c/p\u003e"
+                    },
+                    "date_of_birth": "1989-12-05T00:00:00Z",
+                    "balance": "50",
+                    "is_online": false,
+                    "privacy_level": "public",
+                    "preferences_flags": "08002020000d64ffc420d800000000000000000002108000000007fc00030100001a34900c050010008000010021002000010088404200011100220000884000088102010080000000000000000000010000000000000200000000000400b000c000000c0800002002",
+                    "user_role": "user",
+                    "is_active": false,
+                    "created_at": "2026-03-04T01:32:20.04031Z",
+                    "updated_at": "2026-03-14T15:45:03.484626Z",
+                    "last_online": "2026-03-14T15:45:03.478435Z",
+                    "default_language": "en",
+                    "avatar_id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                    "avatar": {
+                        "public_id": "2029009079141142528",
+                        "id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                        "file_id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                        "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "owner_type": "user",
+                        "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 493095,
+                            "name": "b976ae19-f286-4117-8c65-19a619347a78.jpg",
+                            "width": 960,
+                            "height": 960,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 56788
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 63364
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 213360
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                                        "width": 960,
+                                        "height": 960,
+                                        "format": "jpg",
+                                        "size": 493095
+                                    }
+                                }
+                            },
+                            "created_at": "2026-03-04T01:40:36.29057Z"
+                        },
+                        "created_at": "2026-03-04T01:40:36.29057Z",
+                        "updated_at": "2026-03-04T01:40:36.290571Z"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "wallet": {
+                        "id": "00000000-0000-0000-0000-000000000000",
+                        "hd_account_id": 0,
+                        "hd_address_id": 0,
+                        "bitcoin": "",
+                        "ethereum": "",
+                        "avalanche": "",
+                        "tron": "",
+                        "solana": "",
+                        "chiliz": "",
+                        "created_at": "0001-01-01T00:00:00Z",
+                        "updated_at": "0001-01-01T00:00:00Z"
+                    },
+                    "deleted_at": null
+                },
+                "media_id": "f742bf64-87e0-4116-8aa1-fb6a770aa97c",
+                "media": {
+                    "public_id": "2029016184174678016",
+                    "id": "f742bf64-87e0-4116-8aa1-fb6a770aa97c",
+                    "file_id": "5cde21e5-62e6-4394-9ddf-9701c0537431",
+                    "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "owner_type": "user",
+                    "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "role": "story",
+                    "is_public": true,
+                    "file": {
+                        "id": "5cde21e5-62e6-4394-9ddf-9701c0537431",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/bf2b0c26-444a-4b9d-9ad0-b57aa7f81e5e.jpg",
+                        "mime_type": "image/jpeg",
+                        "size": 790600,
+                        "name": "9da7460f-4fd9-4956-82a4-b9e7c40e3503.jpg",
+                        "width": 720,
+                        "height": 1280,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/bf2b0c26-444a-4b9d-9ad0-b57aa7f81e5e_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 25820
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/bf2b0c26-444a-4b9d-9ad0-b57aa7f81e5e_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 74876
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/bf2b0c26-444a-4b9d-9ad0-b57aa7f81e5e_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 388046
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/bf2b0c26-444a-4b9d-9ad0-b57aa7f81e5e_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 781424
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/bf2b0c26-444a-4b9d-9ad0-b57aa7f81e5e_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1920,
+                                    "format": "webp",
+                                    "size": 1798292
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/bf2b0c26-444a-4b9d-9ad0-b57aa7f81e5e.jpg",
+                                    "width": 720,
+                                    "height": 1280,
+                                    "format": "jpg",
+                                    "size": 790600
+                                }
+                            }
+                        },
+                        "created_at": "2026-03-04T02:08:50.262677Z"
+                    },
+                    "created_at": "2026-03-04T02:08:50.262678Z",
+                    "updated_at": "2026-03-04T02:08:50.262678Z"
+                },
+                "expires_at": "2026-03-05T02:08:50.272076Z",
+                "is_expired": false,
+                "is_archived": false,
+                "created_at": "2026-03-04T02:08:50.272076Z",
+                "updated_at": "2026-03-04T02:08:50.272076Z",
+                "deleted_at": null
+            },
+            {
+                "id": "003f1ff6-6ee4-4528-947a-fd27c1376cd6",
+                "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                "user": {
+                    "public_id": "2029006997717782528",
+                    "id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "socket_id": "2d",
+                    "domain": "coolvibes",
+                    "username": "coolvibes",
+                    "displayname": "coolvibes",
+                    "bio": {
+                        "en": "\u003cp class=\"mb-2 text-base text-gray-900\"\u003e\u003cspan style=\"white-space: pre-wrap;\"\u003ehello \u003c/span\u003e\u003cspan class=\"hashtag inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)] bg-clip-text text-transparent font-semibold hover:underline cursor-pointer\" style=\"white-space: pre-wrap;\"\u003e#coolvibes\u003c/span\u003e\u003c/p\u003e"
+                    },
+                    "date_of_birth": "1989-12-05T00:00:00Z",
+                    "balance": "50",
+                    "is_online": false,
+                    "privacy_level": "public",
+                    "preferences_flags": "08002020000d64ffc420d800000000000000000002108000000007fc00030100001a34900c050010008000010021002000010088404200011100220000884000088102010080000000000000000000010000000000000200000000000400b000c000000c0800002002",
+                    "user_role": "user",
+                    "is_active": false,
+                    "created_at": "2026-03-04T01:32:20.04031Z",
+                    "updated_at": "2026-03-14T15:45:03.484626Z",
+                    "last_online": "2026-03-14T15:45:03.478435Z",
+                    "default_language": "en",
+                    "avatar_id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                    "avatar": {
+                        "public_id": "2029009079141142528",
+                        "id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                        "file_id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                        "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "owner_type": "user",
+                        "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 493095,
+                            "name": "b976ae19-f286-4117-8c65-19a619347a78.jpg",
+                            "width": 960,
+                            "height": 960,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 56788
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 63364
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 213360
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                                        "width": 960,
+                                        "height": 960,
+                                        "format": "jpg",
+                                        "size": 493095
+                                    }
+                                }
+                            },
+                            "created_at": "2026-03-04T01:40:36.29057Z"
+                        },
+                        "created_at": "2026-03-04T01:40:36.29057Z",
+                        "updated_at": "2026-03-04T01:40:36.290571Z"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "wallet": {
+                        "id": "00000000-0000-0000-0000-000000000000",
+                        "hd_account_id": 0,
+                        "hd_address_id": 0,
+                        "bitcoin": "",
+                        "ethereum": "",
+                        "avalanche": "",
+                        "tron": "",
+                        "solana": "",
+                        "chiliz": "",
+                        "created_at": "0001-01-01T00:00:00Z",
+                        "updated_at": "0001-01-01T00:00:00Z"
+                    },
+                    "deleted_at": null
+                },
+                "media_id": "504b0c47-bb8c-456e-89dc-798c3bff0ae0",
+                "media": {
+                    "public_id": "2029016113513238528",
+                    "id": "504b0c47-bb8c-456e-89dc-798c3bff0ae0",
+                    "file_id": "6e4220ce-b54d-406f-bc6c-f22b751b3a8d",
+                    "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "owner_type": "user",
+                    "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "role": "story",
+                    "is_public": true,
+                    "file": {
+                        "id": "6e4220ce-b54d-406f-bc6c-f22b751b3a8d",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/f51873fd-d99d-4660-ac94-affb1bf9a88e.jpg",
+                        "mime_type": "image/jpeg",
+                        "size": 884415,
+                        "name": "42dd66c4-bfa7-4c63-8b89-a8e89951512a.jpg",
+                        "width": 720,
+                        "height": 1280,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/f51873fd-d99d-4660-ac94-affb1bf9a88e_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 32262
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/f51873fd-d99d-4660-ac94-affb1bf9a88e_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 92484
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/f51873fd-d99d-4660-ac94-affb1bf9a88e_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 444992
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/f51873fd-d99d-4660-ac94-affb1bf9a88e_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 901130
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/f51873fd-d99d-4660-ac94-affb1bf9a88e_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1920,
+                                    "format": "webp",
+                                    "size": 1915738
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/f51873fd-d99d-4660-ac94-affb1bf9a88e.jpg",
+                                    "width": 720,
+                                    "height": 1280,
+                                    "format": "jpg",
+                                    "size": 884415
+                                }
+                            }
+                        },
+                        "created_at": "2026-03-04T02:08:33.415443Z"
+                    },
+                    "created_at": "2026-03-04T02:08:33.415443Z",
+                    "updated_at": "2026-03-04T02:08:33.415444Z"
+                },
+                "expires_at": "2026-03-05T02:08:33.425271Z",
+                "is_expired": false,
+                "is_archived": false,
+                "created_at": "2026-03-04T02:08:33.425271Z",
+                "updated_at": "2026-03-04T02:08:33.425271Z",
+                "deleted_at": null
+            },
+            {
+                "id": "7abda617-e5a4-4e16-805f-4b9e10d838bc",
+                "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                "user": {
+                    "public_id": "2029006997717782528",
+                    "id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "socket_id": "2d",
+                    "domain": "coolvibes",
+                    "username": "coolvibes",
+                    "displayname": "coolvibes",
+                    "bio": {
+                        "en": "\u003cp class=\"mb-2 text-base text-gray-900\"\u003e\u003cspan style=\"white-space: pre-wrap;\"\u003ehello \u003c/span\u003e\u003cspan class=\"hashtag inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)] bg-clip-text text-transparent font-semibold hover:underline cursor-pointer\" style=\"white-space: pre-wrap;\"\u003e#coolvibes\u003c/span\u003e\u003c/p\u003e"
+                    },
+                    "date_of_birth": "1989-12-05T00:00:00Z",
+                    "balance": "50",
+                    "is_online": false,
+                    "privacy_level": "public",
+                    "preferences_flags": "08002020000d64ffc420d800000000000000000002108000000007fc00030100001a34900c050010008000010021002000010088404200011100220000884000088102010080000000000000000000010000000000000200000000000400b000c000000c0800002002",
+                    "user_role": "user",
+                    "is_active": false,
+                    "created_at": "2026-03-04T01:32:20.04031Z",
+                    "updated_at": "2026-03-14T15:45:03.484626Z",
+                    "last_online": "2026-03-14T15:45:03.478435Z",
+                    "default_language": "en",
+                    "avatar_id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                    "avatar": {
+                        "public_id": "2029009079141142528",
+                        "id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                        "file_id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                        "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "owner_type": "user",
+                        "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 493095,
+                            "name": "b976ae19-f286-4117-8c65-19a619347a78.jpg",
+                            "width": 960,
+                            "height": 960,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 56788
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 63364
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 213360
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                                        "width": 960,
+                                        "height": 960,
+                                        "format": "jpg",
+                                        "size": 493095
+                                    }
+                                }
+                            },
+                            "created_at": "2026-03-04T01:40:36.29057Z"
+                        },
+                        "created_at": "2026-03-04T01:40:36.29057Z",
+                        "updated_at": "2026-03-04T01:40:36.290571Z"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "wallet": {
+                        "id": "00000000-0000-0000-0000-000000000000",
+                        "hd_account_id": 0,
+                        "hd_address_id": 0,
+                        "bitcoin": "",
+                        "ethereum": "",
+                        "avalanche": "",
+                        "tron": "",
+                        "solana": "",
+                        "chiliz": "",
+                        "created_at": "0001-01-01T00:00:00Z",
+                        "updated_at": "0001-01-01T00:00:00Z"
+                    },
+                    "deleted_at": null
+                },
+                "media_id": "cd3cdb85-7d43-461d-949f-c9fc17228ee8",
+                "media": {
+                    "public_id": "2029011355461226496",
+                    "id": "cd3cdb85-7d43-461d-949f-c9fc17228ee8",
+                    "file_id": "d8d71b8c-2f6b-4db9-9be3-f90db81019a6",
+                    "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "owner_type": "user",
+                    "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "role": "story",
+                    "is_public": true,
+                    "file": {
+                        "id": "d8d71b8c-2f6b-4db9-9be3-f90db81019a6",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/d3853bae-7bc9-41b4-886e-71d639fb223e.jpg",
+                        "mime_type": "image/jpeg",
+                        "size": 800317,
+                        "name": "bc8120e7-88cc-490e-80f5-b107ec0e7835 (1).jpg",
+                        "width": 720,
+                        "height": 1280,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/d3853bae-7bc9-41b4-886e-71d639fb223e_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 29018
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/d3853bae-7bc9-41b4-886e-71d639fb223e_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 84492
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/d3853bae-7bc9-41b4-886e-71d639fb223e_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 415832
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/d3853bae-7bc9-41b4-886e-71d639fb223e_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 855144
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/d3853bae-7bc9-41b4-886e-71d639fb223e_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1920,
+                                    "format": "webp",
+                                    "size": 1805606
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/d3853bae-7bc9-41b4-886e-71d639fb223e.jpg",
+                                    "width": 720,
+                                    "height": 1280,
+                                    "format": "jpg",
+                                    "size": 800317
+                                }
+                            }
+                        },
+                        "created_at": "2026-03-04T01:49:39.007688Z"
+                    },
+                    "created_at": "2026-03-04T01:49:39.007688Z",
+                    "updated_at": "2026-03-04T01:49:39.007688Z"
+                },
+                "expires_at": "2026-03-05T01:49:39.017803Z",
+                "is_expired": false,
+                "is_archived": false,
+                "created_at": "2026-03-04T01:49:39.017804Z",
+                "updated_at": "2026-03-04T01:49:39.017804Z",
+                "deleted_at": null
+            },
+            {
+                "id": "47c64fcb-de87-4971-8428-c084aadd8d8b",
+                "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                "user": {
+                    "public_id": "2029006997717782528",
+                    "id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "socket_id": "2d",
+                    "domain": "coolvibes",
+                    "username": "coolvibes",
+                    "displayname": "coolvibes",
+                    "bio": {
+                        "en": "\u003cp class=\"mb-2 text-base text-gray-900\"\u003e\u003cspan style=\"white-space: pre-wrap;\"\u003ehello \u003c/span\u003e\u003cspan class=\"hashtag inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)] bg-clip-text text-transparent font-semibold hover:underline cursor-pointer\" style=\"white-space: pre-wrap;\"\u003e#coolvibes\u003c/span\u003e\u003c/p\u003e"
+                    },
+                    "date_of_birth": "1989-12-05T00:00:00Z",
+                    "balance": "50",
+                    "is_online": false,
+                    "privacy_level": "public",
+                    "preferences_flags": "08002020000d64ffc420d800000000000000000002108000000007fc00030100001a34900c050010008000010021002000010088404200011100220000884000088102010080000000000000000000010000000000000200000000000400b000c000000c0800002002",
+                    "user_role": "user",
+                    "is_active": false,
+                    "created_at": "2026-03-04T01:32:20.04031Z",
+                    "updated_at": "2026-03-14T15:45:03.484626Z",
+                    "last_online": "2026-03-14T15:45:03.478435Z",
+                    "default_language": "en",
+                    "avatar_id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                    "avatar": {
+                        "public_id": "2029009079141142528",
+                        "id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                        "file_id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                        "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "owner_type": "user",
+                        "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 493095,
+                            "name": "b976ae19-f286-4117-8c65-19a619347a78.jpg",
+                            "width": 960,
+                            "height": 960,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 56788
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 63364
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 213360
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                                        "width": 960,
+                                        "height": 960,
+                                        "format": "jpg",
+                                        "size": 493095
+                                    }
+                                }
+                            },
+                            "created_at": "2026-03-04T01:40:36.29057Z"
+                        },
+                        "created_at": "2026-03-04T01:40:36.29057Z",
+                        "updated_at": "2026-03-04T01:40:36.290571Z"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "wallet": {
+                        "id": "00000000-0000-0000-0000-000000000000",
+                        "hd_account_id": 0,
+                        "hd_address_id": 0,
+                        "bitcoin": "",
+                        "ethereum": "",
+                        "avalanche": "",
+                        "tron": "",
+                        "solana": "",
+                        "chiliz": "",
+                        "created_at": "0001-01-01T00:00:00Z",
+                        "updated_at": "0001-01-01T00:00:00Z"
+                    },
+                    "deleted_at": null
+                },
+                "media_id": "4cf33349-2ae7-4bea-ac5c-1b1f92f015ce",
+                "media": {
+                    "public_id": "2029011137885900800",
+                    "id": "4cf33349-2ae7-4bea-ac5c-1b1f92f015ce",
+                    "file_id": "b0d6c047-b6c7-4a58-915f-2b7d60fc622b",
+                    "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "owner_type": "user",
+                    "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "role": "story",
+                    "is_public": true,
+                    "file": {
+                        "id": "b0d6c047-b6c7-4a58-915f-2b7d60fc622b",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/a181efd1-e9bf-4b46-b655-7cf285524446.jpg",
+                        "mime_type": "image/jpeg",
+                        "size": 866904,
+                        "name": "32308cf7-b404-4e35-8419-4fcd3e19d137.jpg",
+                        "width": 720,
+                        "height": 1280,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/a181efd1-e9bf-4b46-b655-7cf285524446_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 31986
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/a181efd1-e9bf-4b46-b655-7cf285524446_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 92654
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/a181efd1-e9bf-4b46-b655-7cf285524446_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 436410
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/a181efd1-e9bf-4b46-b655-7cf285524446_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 871780
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/a181efd1-e9bf-4b46-b655-7cf285524446_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1920,
+                                    "format": "webp",
+                                    "size": 1935742
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/a181efd1-e9bf-4b46-b655-7cf285524446.jpg",
+                                    "width": 720,
+                                    "height": 1280,
+                                    "format": "jpg",
+                                    "size": 866904
+                                }
+                            }
+                        },
+                        "created_at": "2026-03-04T01:48:47.133328Z"
+                    },
+                    "created_at": "2026-03-04T01:48:47.133328Z",
+                    "updated_at": "2026-03-04T01:48:47.133328Z"
+                },
+                "expires_at": "2026-03-05T01:48:47.14255Z",
+                "is_expired": false,
+                "is_archived": false,
+                "created_at": "2026-03-04T01:48:47.14255Z",
+                "updated_at": "2026-03-04T01:48:47.14255Z",
+                "deleted_at": null
+            },
+            {
+                "id": "9669761f-d3f4-4958-8804-771c6a22bc7d",
+                "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                "user": {
+                    "public_id": "2029006997717782528",
+                    "id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "socket_id": "2d",
+                    "domain": "coolvibes",
+                    "username": "coolvibes",
+                    "displayname": "coolvibes",
+                    "bio": {
+                        "en": "\u003cp class=\"mb-2 text-base text-gray-900\"\u003e\u003cspan style=\"white-space: pre-wrap;\"\u003ehello \u003c/span\u003e\u003cspan class=\"hashtag inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)] bg-clip-text text-transparent font-semibold hover:underline cursor-pointer\" style=\"white-space: pre-wrap;\"\u003e#coolvibes\u003c/span\u003e\u003c/p\u003e"
+                    },
+                    "date_of_birth": "1989-12-05T00:00:00Z",
+                    "balance": "50",
+                    "is_online": false,
+                    "privacy_level": "public",
+                    "preferences_flags": "08002020000d64ffc420d800000000000000000002108000000007fc00030100001a34900c050010008000010021002000010088404200011100220000884000088102010080000000000000000000010000000000000200000000000400b000c000000c0800002002",
+                    "user_role": "user",
+                    "is_active": false,
+                    "created_at": "2026-03-04T01:32:20.04031Z",
+                    "updated_at": "2026-03-14T15:45:03.484626Z",
+                    "last_online": "2026-03-14T15:45:03.478435Z",
+                    "default_language": "en",
+                    "avatar_id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                    "avatar": {
+                        "public_id": "2029009079141142528",
+                        "id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                        "file_id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                        "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "owner_type": "user",
+                        "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 493095,
+                            "name": "b976ae19-f286-4117-8c65-19a619347a78.jpg",
+                            "width": 960,
+                            "height": 960,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 56788
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 63364
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 213360
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                                        "width": 960,
+                                        "height": 960,
+                                        "format": "jpg",
+                                        "size": 493095
+                                    }
+                                }
+                            },
+                            "created_at": "2026-03-04T01:40:36.29057Z"
+                        },
+                        "created_at": "2026-03-04T01:40:36.29057Z",
+                        "updated_at": "2026-03-04T01:40:36.290571Z"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "wallet": {
+                        "id": "00000000-0000-0000-0000-000000000000",
+                        "hd_account_id": 0,
+                        "hd_address_id": 0,
+                        "bitcoin": "",
+                        "ethereum": "",
+                        "avalanche": "",
+                        "tron": "",
+                        "solana": "",
+                        "chiliz": "",
+                        "created_at": "0001-01-01T00:00:00Z",
+                        "updated_at": "0001-01-01T00:00:00Z"
+                    },
+                    "deleted_at": null
+                },
+                "media_id": "6108f672-a400-4459-9e06-931159cf2809",
+                "media": {
+                    "public_id": "2029011027227578368",
+                    "id": "6108f672-a400-4459-9e06-931159cf2809",
+                    "file_id": "9e801749-7889-40ec-8826-9918f3b4f3b3",
+                    "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "owner_type": "user",
+                    "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "role": "story",
+                    "is_public": true,
+                    "file": {
+                        "id": "9e801749-7889-40ec-8826-9918f3b4f3b3",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/42be3bd6-dfe5-4e9a-952a-92a95158be60.jpg",
+                        "mime_type": "image/jpeg",
+                        "size": 887220,
+                        "name": "8ce48dc5-2c18-4428-a2b3-e366b5dd4881.jpg",
+                        "width": 720,
+                        "height": 1280,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/42be3bd6-dfe5-4e9a-952a-92a95158be60_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 31108
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/42be3bd6-dfe5-4e9a-952a-92a95158be60_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 90356
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/42be3bd6-dfe5-4e9a-952a-92a95158be60_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 443522
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/42be3bd6-dfe5-4e9a-952a-92a95158be60_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 905240
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/42be3bd6-dfe5-4e9a-952a-92a95158be60_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1920,
+                                    "format": "webp",
+                                    "size": 1974494
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/42be3bd6-dfe5-4e9a-952a-92a95158be60.jpg",
+                                    "width": 720,
+                                    "height": 1280,
+                                    "format": "jpg",
+                                    "size": 887220
+                                }
+                            }
+                        },
+                        "created_at": "2026-03-04T01:48:20.750785Z"
+                    },
+                    "created_at": "2026-03-04T01:48:20.750785Z",
+                    "updated_at": "2026-03-04T01:48:20.750785Z"
+                },
+                "expires_at": "2026-03-05T01:48:20.760478Z",
+                "is_expired": false,
+                "is_archived": false,
+                "created_at": "2026-03-04T01:48:20.760479Z",
+                "updated_at": "2026-03-04T01:48:20.760479Z",
+                "deleted_at": null
+            },
+            {
+                "id": "de6ad446-aa25-4f73-bbf0-917d56a83266",
+                "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                "user": {
+                    "public_id": "2029006997717782528",
+                    "id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "socket_id": "2d",
+                    "domain": "coolvibes",
+                    "username": "coolvibes",
+                    "displayname": "coolvibes",
+                    "bio": {
+                        "en": "\u003cp class=\"mb-2 text-base text-gray-900\"\u003e\u003cspan style=\"white-space: pre-wrap;\"\u003ehello \u003c/span\u003e\u003cspan class=\"hashtag inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)] bg-clip-text text-transparent font-semibold hover:underline cursor-pointer\" style=\"white-space: pre-wrap;\"\u003e#coolvibes\u003c/span\u003e\u003c/p\u003e"
+                    },
+                    "date_of_birth": "1989-12-05T00:00:00Z",
+                    "balance": "50",
+                    "is_online": false,
+                    "privacy_level": "public",
+                    "preferences_flags": "08002020000d64ffc420d800000000000000000002108000000007fc00030100001a34900c050010008000010021002000010088404200011100220000884000088102010080000000000000000000010000000000000200000000000400b000c000000c0800002002",
+                    "user_role": "user",
+                    "is_active": false,
+                    "created_at": "2026-03-04T01:32:20.04031Z",
+                    "updated_at": "2026-03-14T15:45:03.484626Z",
+                    "last_online": "2026-03-14T15:45:03.478435Z",
+                    "default_language": "en",
+                    "avatar_id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                    "avatar": {
+                        "public_id": "2029009079141142528",
+                        "id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                        "file_id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                        "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "owner_type": "user",
+                        "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 493095,
+                            "name": "b976ae19-f286-4117-8c65-19a619347a78.jpg",
+                            "width": 960,
+                            "height": 960,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 56788
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 63364
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 213360
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                                        "width": 960,
+                                        "height": 960,
+                                        "format": "jpg",
+                                        "size": 493095
+                                    }
+                                }
+                            },
+                            "created_at": "2026-03-04T01:40:36.29057Z"
+                        },
+                        "created_at": "2026-03-04T01:40:36.29057Z",
+                        "updated_at": "2026-03-04T01:40:36.290571Z"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "wallet": {
+                        "id": "00000000-0000-0000-0000-000000000000",
+                        "hd_account_id": 0,
+                        "hd_address_id": 0,
+                        "bitcoin": "",
+                        "ethereum": "",
+                        "avalanche": "",
+                        "tron": "",
+                        "solana": "",
+                        "chiliz": "",
+                        "created_at": "0001-01-01T00:00:00Z",
+                        "updated_at": "0001-01-01T00:00:00Z"
+                    },
+                    "deleted_at": null
+                },
+                "media_id": "cadcd69b-6106-4544-9609-9b90ffa4c3c6",
+                "media": {
+                    "public_id": "2029010830363725824",
+                    "id": "cadcd69b-6106-4544-9609-9b90ffa4c3c6",
+                    "file_id": "f870ecc6-9a1f-49b6-bbbf-d266b8f4fb8f",
+                    "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "owner_type": "user",
+                    "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "role": "story",
+                    "is_public": true,
+                    "file": {
+                        "id": "f870ecc6-9a1f-49b6-bbbf-d266b8f4fb8f",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/2f3e2eed-41f1-46ef-94fe-685847131913.jpg",
+                        "mime_type": "image/jpeg",
+                        "size": 833323,
+                        "name": "079bb176-5cf1-447e-af41-a9a1ab5c5476.jpg",
+                        "width": 720,
+                        "height": 1280,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/2f3e2eed-41f1-46ef-94fe-685847131913_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 26296
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/2f3e2eed-41f1-46ef-94fe-685847131913_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 77234
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/2f3e2eed-41f1-46ef-94fe-685847131913_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 414244
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/2f3e2eed-41f1-46ef-94fe-685847131913_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 849896
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/2f3e2eed-41f1-46ef-94fe-685847131913_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1920,
+                                    "format": "webp",
+                                    "size": 1872180
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/2f3e2eed-41f1-46ef-94fe-685847131913.jpg",
+                                    "width": 720,
+                                    "height": 1280,
+                                    "format": "jpg",
+                                    "size": 833323
+                                }
+                            }
+                        },
+                        "created_at": "2026-03-04T01:47:33.814289Z"
+                    },
+                    "created_at": "2026-03-04T01:47:33.814289Z",
+                    "updated_at": "2026-03-04T01:47:33.81429Z"
+                },
+                "expires_at": "2026-03-05T01:47:33.820511Z",
+                "is_expired": false,
+                "is_archived": false,
+                "created_at": "2026-03-04T01:47:33.820511Z",
+                "updated_at": "2026-03-04T01:47:33.820511Z",
+                "deleted_at": null
+            },
+            {
+                "id": "84b50f47-dd9f-418a-9746-6a0046c7d733",
+                "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                "user": {
+                    "public_id": "2029006997717782528",
+                    "id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "socket_id": "2d",
+                    "domain": "coolvibes",
+                    "username": "coolvibes",
+                    "displayname": "coolvibes",
+                    "bio": {
+                        "en": "\u003cp class=\"mb-2 text-base text-gray-900\"\u003e\u003cspan style=\"white-space: pre-wrap;\"\u003ehello \u003c/span\u003e\u003cspan class=\"hashtag inline-block bg-[linear-gradient(to_right,_#d04b36,_#e36511,_#ffba00,_#00b180,_#147aab,_#675997)] bg-clip-text text-transparent font-semibold hover:underline cursor-pointer\" style=\"white-space: pre-wrap;\"\u003e#coolvibes\u003c/span\u003e\u003c/p\u003e"
+                    },
+                    "date_of_birth": "1989-12-05T00:00:00Z",
+                    "balance": "50",
+                    "is_online": false,
+                    "privacy_level": "public",
+                    "preferences_flags": "08002020000d64ffc420d800000000000000000002108000000007fc00030100001a34900c050010008000010021002000010088404200011100220000884000088102010080000000000000000000010000000000000200000000000400b000c000000c0800002002",
+                    "user_role": "user",
+                    "is_active": false,
+                    "created_at": "2026-03-04T01:32:20.04031Z",
+                    "updated_at": "2026-03-14T15:45:03.484626Z",
+                    "last_online": "2026-03-14T15:45:03.478435Z",
+                    "default_language": "en",
+                    "avatar_id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                    "avatar": {
+                        "public_id": "2029009079141142528",
+                        "id": "3ea25a5b-7dc9-4e73-9ac9-7ef88206106e",
+                        "file_id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                        "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "owner_type": "user",
+                        "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                        "role": "avatar",
+                        "is_public": true,
+                        "file": {
+                            "id": "72d72ff9-c398-43af-a78d-7c1a1d1c7bf3",
+                            "url": "",
+                            "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                            "mime_type": "image/jpeg",
+                            "size": 493095,
+                            "name": "b976ae19-f286-4117-8c65-19a619347a78.jpg",
+                            "width": 960,
+                            "height": 960,
+                            "variants": {
+                                "image": {
+                                    "icon": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_icon.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "thumbnail": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_thumb.webp",
+                                        "width": 240,
+                                        "height": 240,
+                                        "format": "webp",
+                                        "size": 56788
+                                    },
+                                    "small": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_sm.webp",
+                                        "width": 128,
+                                        "height": 128,
+                                        "format": "webp",
+                                        "size": 19778
+                                    },
+                                    "medium": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_md.webp",
+                                        "width": 256,
+                                        "height": 256,
+                                        "format": "webp",
+                                        "size": 63364
+                                    },
+                                    "large": {
+                                        "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b_square_lg.webp",
+                                        "width": 512,
+                                        "height": 512,
+                                        "format": "webp",
+                                        "size": 213360
+                                    },
+                                    "original": {
+                                        "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/avatar/2026-03-04/88476ad4-5e0e-4726-9052-3d2fdca5513b.jpg",
+                                        "width": 960,
+                                        "height": 960,
+                                        "format": "jpg",
+                                        "size": 493095
+                                    }
+                                }
+                            },
+                            "created_at": "2026-03-04T01:40:36.29057Z"
+                        },
+                        "created_at": "2026-03-04T01:40:36.29057Z",
+                        "updated_at": "2026-03-04T01:40:36.290571Z"
+                    },
+                    "languages": null,
+                    "travel": {
+                        "visited_countries": null,
+                        "travel_frequency": "",
+                        "favorite_places": null
+                    },
+                    "wallet": {
+                        "id": "00000000-0000-0000-0000-000000000000",
+                        "hd_account_id": 0,
+                        "hd_address_id": 0,
+                        "bitcoin": "",
+                        "ethereum": "",
+                        "avalanche": "",
+                        "tron": "",
+                        "solana": "",
+                        "chiliz": "",
+                        "created_at": "0001-01-01T00:00:00Z",
+                        "updated_at": "0001-01-01T00:00:00Z"
+                    },
+                    "deleted_at": null
+                },
+                "media_id": "b862d032-90dd-4e84-a185-37d858fdd271",
+                "media": {
+                    "public_id": "2029010760042024960",
+                    "id": "b862d032-90dd-4e84-a185-37d858fdd271",
+                    "file_id": "99297318-071d-4287-8baa-95749fd31f9c",
+                    "owner_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "owner_type": "user",
+                    "user_id": "81eb4d27-96bd-444e-93a7-574c095ac91c",
+                    "role": "story",
+                    "is_public": true,
+                    "file": {
+                        "id": "99297318-071d-4287-8baa-95749fd31f9c",
+                        "url": "",
+                        "storage_path": "./static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/e1c298c2-82d7-453d-bc8d-74a9687331e1.jpg",
+                        "mime_type": "image/jpeg",
+                        "size": 838702,
+                        "name": "68eb6dba-ed28-41a8-989f-e916680b043c (1).jpg",
+                        "width": 720,
+                        "height": 1280,
+                        "variants": {
+                            "image": {
+                                "icon": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/e1c298c2-82d7-453d-bc8d-74a9687331e1_portrait_icon.webp",
+                                    "width": 128,
+                                    "height": 128,
+                                    "format": "webp",
+                                    "size": 29222
+                                },
+                                "thumbnail": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/e1c298c2-82d7-453d-bc8d-74a9687331e1_portrait_thumb.webp",
+                                    "width": 240,
+                                    "height": 240,
+                                    "format": "webp",
+                                    "size": 83684
+                                },
+                                "small": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/e1c298c2-82d7-453d-bc8d-74a9687331e1_portrait_sm.webp",
+                                    "width": 480,
+                                    "height": 720,
+                                    "format": "webp",
+                                    "size": 414952
+                                },
+                                "medium": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/e1c298c2-82d7-453d-bc8d-74a9687331e1_portrait_md.webp",
+                                    "width": 720,
+                                    "height": 1080,
+                                    "format": "webp",
+                                    "size": 854662
+                                },
+                                "large": {
+                                    "url": "static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/e1c298c2-82d7-453d-bc8d-74a9687331e1_portrait_lg.webp",
+                                    "width": 1080,
+                                    "height": 1920,
+                                    "format": "webp",
+                                    "size": 1882086
+                                },
+                                "original": {
+                                    "url": "/static/uploads/users/81eb4d27-96bd-444e-93a7-574c095ac91c/stories/2026-03-04/e1c298c2-82d7-453d-bc8d-74a9687331e1.jpg",
+                                    "width": 720,
+                                    "height": 1280,
+                                    "format": "jpg",
+                                    "size": 838702
+                                }
+                            }
+                        },
+                        "created_at": "2026-03-04T01:47:17.04811Z"
+                    },
+                    "created_at": "2026-03-04T01:47:17.04811Z",
+                    "updated_at": "2026-03-04T01:47:17.04811Z"
+                },
+                "expires_at": "2026-03-05T01:47:17.056802Z",
+                "is_expired": false,
+                "is_archived": false,
+                "created_at": "2026-03-04T01:47:17.056803Z",
+                "updated_at": "2026-03-04T01:47:17.056803Z",
+                "deleted_at": null
+            }
+        ]
+    },
+    "message": "Stories fetched successfully"
+}

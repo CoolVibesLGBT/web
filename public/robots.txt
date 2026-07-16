@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Disallow: /messages
+Disallow: /settings
+Disallow: /wallet
+Disallow: /profile
+Disallow: /notifications
+Disallow: /match
+Disallow: /checkin
+Disallow: /referrals
+Disallow: /classifieds
+Disallow: /search
+Disallow: /nearby
+Disallow: /premium
+Disallow: /testpage
+Disallow: /ref/
+
+Sitemap: https://coolvibes.lgbt/sitemap.xml
+Sitemap: https://api.coolvibes.lgbt/sitemap.xml

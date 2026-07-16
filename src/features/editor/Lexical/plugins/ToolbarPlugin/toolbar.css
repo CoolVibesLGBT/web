@@ -1,0 +1,149 @@
+/* Toolbar Plugin Styles */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.dark .toolbar {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.toolbar-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toolbar-item:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.toolbar-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toolbar-item.active {
+  background: #e5e7eb;
+}
+
+.dark .toolbar-item {
+  color: #f9fafb;
+  background: #1f2937;
+  border-color: #4b5563;
+}
+
+.dark .toolbar-item:hover:not(:disabled) {
+  background: #374151;
+}
+
+.dark .toolbar-item.active {
+  background: #4b5563;
+}
+
+/* Icon styles */
+.icon {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
+/* Format icons */
+.format.undo::before { content: "↶"; }
+.format.redo::before { content: "↷"; }
+.format.bold::before { content: "B"; font-weight: bold; }
+.format.italic::before { content: "I"; font-style: italic; }
+.format.underline::before { content: "U"; text-decoration: underline; }
+.format.code::before { content: "</>"; }
+.format.link::before { content: "🔗"; }
+.format.clear::before { content: "✕"; }
+
+/* Block type icons */
+.block-type.paragraph::before { content: "¶"; }
+.block-type.h1::before { content: "H1"; font-weight: bold; }
+.block-type.h2::before { content: "H2"; font-weight: bold; }
+.block-type.h3::before { content: "H3"; font-weight: bold; }
+.block-type.number::before { content: "1."; }
+.block-type.bullet::before { content: "•"; }
+.block-type.check::before { content: "☐"; }
+.block-type.quote::before { content: '"'; }
+
+/* Dropdown arrow */
+.dropdown-arrow::before { content: "▼"; }
+
+/* More options */
+.dropdown-more::before { content: "⋯"; }
+
+/* Plus icon */
+.plus::before { content: "+"; }
+
+/* Close icon */
+.close::before { content: "×"; }
+
+/* Other icons */
+.horizontal-rule::before { content: "—"; }
+.page-break::before { content: "📄"; }
+.image::before { content: "🖼"; }
+.gif::before { content: "🎬"; }
+.diagram-2::before { content: "📊"; }
+.table::before { content: "⊞"; }
+.poll::before { content: "📊"; }
+.columns::before { content: "⫸"; }
+.equation::before { content: "∑"; }
+.caret-right::before { content: "▶"; }
+.calendar::before { content: "📅"; }
+
+/* Text case icons */
+.lowercase::before { content: "a"; }
+.uppercase::before { content: "A"; }
+.capitalize::before { content: "Aa"; }
+.strikethrough::before { content: "S"; text-decoration: line-through; }
+.subscript::before { content: "x₂"; }
+.superscript::before { content: "x²"; }
+.highlight::before { content: "🖍"; }
+
+/* Alignment icons */
+.left-align::before { content: "⬅"; }
+.center-align::before { content: "↔"; }
+.right-align::before { content: "➡"; }
+.justify-align::before { content: "⬌"; }
+
+/* Indent icons */
+.indent::before { content: "⫸"; }
+.outdent::before { content: "⫷"; }
+
+/* Font family icon */
+.font-family::before { content: "Aa"; }
+
+/* Color picker icons */
+.font-color::before { content: "A"; }
+.bg-color::before { content: "🖍"; }
+
+/* Hide scrollbar for mobile toolbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}

@@ -1,0 +1,116 @@
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+import { getRuntimeServiceURL, getRuntimeSocketURL } from './platform/runtime'
+
+export const applicationName = "coolvibes"
+
+// Google reCAPTCHA Site Key (v2)
+// Replace with your actual reCAPTCHA site key from https://www.google.com/recaptcha/admin
+export const RECAPTCHA_SITE_KEY = "6LecaQIsAAAAAOptodMnAZCOiKSVysrvKnmsXDix"; // Test key for development
+export const YOUTUBE_API_KEY = "AIzaSyBjmmwmtWOaK-SVlBEuUwmn0hox-9SDjcs"
+export const TENOR_API_KEY = "AIzaSyBjmmwmtWOaK-SVlBEuUwmn0hox-9SDjcs";
+
+const hostName = typeof window !== 'undefined' ? window.location.hostname : '';
+const port = typeof window !== 'undefined' ? window.location.port : '';
+const runtimeServiceURL = getRuntimeServiceURL()
+const runtimeSocketURL = getRuntimeSocketURL()
+
+const domainToServiceURL: Record<string, [string, string]> = {
+  'coolvibes.lgbt': ['https://api.coolvibes.lgbt', 'https://api.coolvibes.lgbt'],
+  'coolvibes.io': ['https://api.coolvibes.io', 'https://api.coolvibes.io'],
+  'coolvibes.app': ['https://api.coolvibes.app', 'https://api.coolvibes.app'],
+};
+
+const domainToSocketURL: Record<string, [string, string]> = {
+  'coolvibes.lgbt': ['wss://socket.coolvibes.lgbt', 'wss://socket2.coolvibes.lgbt'],
+  'coolvibes.io': ['wss://socket.coolvibes.io', 'wss://socket2.coolvibes.io'],
+  'coolvibes.app': ['wss://socket.coolvibes.app', 'wss://socket2.coolvibes.app'],
+};
+
+const isLocalHost = hostName === 'localhost' || hostName === '127.0.0.1';
+const isDev =
+  isLocalHost &&
+  (port === '5173' || port === '3000' || port === '3001' || port === '');
+const isKnownDomain = Boolean(hostName && domainToServiceURL[hostName]);
+
+const remoteDebug = false
+const defaultServiceURL: [string, string] = remoteDebug
+  ? ['https://api.coolvibes.app', 'https://api.coolvibes.app']
+  : ['http://localhost:4001', 'http://localhost:4001'];
+const defaultSocketURL: [string, string] = remoteDebug
+  ? ['wss://socket.coolvibes.app', 'wss://socket2.coolvibes.app']
+  : ['ws://localhost:4002', 'ws://localhost:4003'];
+
+const lanServiceURL: [string, string] = hostName
+  ? [`http://${hostName}:4001`, `http://${hostName}:4001`]
+  : defaultServiceURL;
+const lanSocketURL: [string, string] = hostName
+  ? [`ws://${hostName}:4002`, `ws://${hostName}:4003`]
+  : defaultSocketURL;
+
+export const defaultServiceServerId = 0
+export const serviceURL = runtimeServiceURL
+  ? runtimeServiceURL
+  : isDev
+  ? defaultServiceURL
+  : isKnownDomain
+    ? domainToServiceURL[hostName]
+    : lanServiceURL;
+
+export const defaultSocketServerId = 0
+export const socketURL = runtimeSocketURL
+  ? runtimeSocketURL
+  : isDev
+  ? defaultSocketURL
+  : isKnownDomain
+    ? domainToSocketURL[hostName]
+    : lanSocketURL;
+
+export const DEFAULT_SETTINGS = {
+  disableBeforeInput: false,
+  emptyEditor: isDev,
+  hasLinkAttributes: false,
+  isAutocomplete: false,
+  isCharLimit: false,
+  isCharLimitUtf8: false,
+  isCodeHighlighted: true,
+  isCodeShiki: false,
+  isCollab: false,
+  isMaxLength: false,
+  isRichText: true,
+  listStrictIndent: false,
+  measureTypingPerf: false,
+  selectionAlwaysOnDisplay: false,
+  shouldAllowHighlightingWithBrackets: false,
+  shouldPreserveNewLinesInMarkdown: false,
+  shouldUseLexicalContextMenu: false,
+  showNestedEditorTreeView: false,
+  showTableOfContents: false,
+  showTreeView: true,
+  tableCellBackgroundColor: true,
+  tableCellMerge: true,
+  tableHorizontalScroll: true,
+  useCollabV2: false,
+  blurPhotos: true,
+  pushNotifications: true,
+  emailNotifications: false,
+  messageNotifications: true,
+  matchNotifications: true,
+  showOnlineStatus: true,
+  showDockTips: true,
+} as const;
+
+// These are mutated in setupEnv
+export const INITIAL_SETTINGS: Record<SettingName, boolean> = {
+  ...DEFAULT_SETTINGS,
+};
+
+export type SettingName = keyof typeof DEFAULT_SETTINGS;
+
+export type Settings = typeof INITIAL_SETTINGS; 
