@@ -54,6 +54,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         localStorage.removeItem("authToken");
         setToken(null);
         setUser(null)
+        emitAuthTokenChange(null);
       } finally {
         if (isActive) {
           setIsAuthReady(true);
@@ -65,7 +66,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return () => {
       isActive = false;
     };
-  }, []);
+  }, [emitAuthTokenChange]);
 
   const login = React.useCallback((token: string, userData: User) => {
     setToken(token);

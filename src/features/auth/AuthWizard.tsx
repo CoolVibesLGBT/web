@@ -7,7 +7,7 @@ import { useApp } from '../../contexts/AppContext';
 import { api, getCurrentAppDomain } from '../../services/api';
 import { useTranslation } from 'react-i18next';
 import { RECAPTCHA_SITE_KEY } from '../../appSettings';
-import { canUseBrowserNotifications } from '../../platform/runtime';
+import { canUseBrowserNotifications, getRuntimeRegistrationURL, openExternalUrl } from '../../platform/runtime';
 import ReCAPTCHA from 'react-google-recaptcha';
 import LanguageSelectorModal, { getLanguageFlagDisplay } from '../../components/ui/LanguageSelector';
 import { DEFAULT_APP_MOTTO, DEFAULT_APP_NAME } from '../../constants/constants';
@@ -31,6 +31,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
   const { t, i18n } = useTranslation('common') as any;
   const [isLanguageSelectorOpen, setIsLanguageSelectorOpen] = useState(false);
   const [languageFlagFailed, setLanguageFlagFailed] = useState(false);
+  const externalRegistrationURL = getRuntimeRegistrationURL();
 
   const languageDisplay = React.useMemo(() => {
     const lang = i18n?.language || 'en';
@@ -325,7 +326,13 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
               </motion.button>
 
               <motion.button
-                onClick={() => setAuthMode('register')}
+                onClick={() => {
+                  if (externalRegistrationURL) {
+                    openExternalUrl(externalRegistrationURL);
+                    return;
+                  }
+                  setAuthMode('register');
+                }}
                 className={`group w-full rounded-[26px] border p-4 text-left transition-all duration-500 ${authMode === 'register'
                   ? 'border-sky-600 bg-sky-600 text-white shadow-2xl shadow-sky-600/25'
                   : theme === 'dark'
@@ -340,6 +347,11 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                 </div>
                 <h3 className="mb-2 text-sm font-black uppercase tracking-tight sm:text-base">{t('auth.create_account')}</h3>
                 <p className="text-xs font-medium leading-relaxed opacity-75">{t('auth.create_account_subtitle')}</p>
+                {externalRegistrationURL && (
+                  <p className="mt-2 text-[10px] font-black uppercase tracking-[0.14em] opacity-70">
+                    {t('auth.opens_in_browser', { defaultValue: 'Opens in your browser' })}
+                  </p>
+                )}
               </motion.button>
             </div>
           </div>

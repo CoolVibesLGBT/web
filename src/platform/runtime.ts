@@ -2,6 +2,9 @@ type VscodeExtensionConfig = {
   mode: 'vscode'
   placement?: 'sidebar' | 'panel'
   assetBaseUrl?: string
+  appDomain?: string
+  appURL?: string
+  registrationURL?: string
   serviceURL?: [string, string]
   socketURL?: [string, string]
   disableNotifications?: boolean
@@ -32,6 +35,27 @@ export const resolvePublicAssetUrl = (path: string) => {
 export const getRuntimeServiceURL = () => getVscodeExtensionConfig()?.serviceURL
 
 export const getRuntimeSocketURL = () => getVscodeExtensionConfig()?.socketURL
+
+export const getRuntimeAppDomain = () => getVscodeExtensionConfig()?.appDomain
+
+export const getRuntimeAppURL = () => getVscodeExtensionConfig()?.appURL
+
+export const getRuntimeRegistrationURL = () =>
+  getVscodeExtensionConfig()?.registrationURL
+
+export const resolveAppUrl = (path = '/') => {
+  const runtimeAppURL = getRuntimeAppURL()
+  const currentOrigin = typeof window !== 'undefined' ? window.location.origin : ''
+  const baseURL = runtimeAppURL || currentOrigin
+
+  if (!baseURL) return path
+
+  try {
+    return new URL(path, `${baseURL.replace(/\/+$/, '')}/`).toString()
+  } catch {
+    return path
+  }
+}
 
 export const canUseBrowserNotifications = () => {
   const config = getVscodeExtensionConfig()

@@ -5,6 +5,7 @@ import type { ActionType } from "./actions";
 import type { ApiRequestOptions } from "./api.types";
 import { httpClient } from "./httpClient";
 import { DEFAULT_APP_URL } from "../constants/constants";
+import { getRuntimeAppDomain } from "../platform/runtime";
 
 export type GlobalSearchScope = 'all' | 'people' | 'events' | 'posts' | 'places';
 
@@ -90,6 +91,9 @@ const fallbackAppDomain = (() => {
 })();
 
 export const getCurrentAppDomain = () => {
+  const runtimeAppDomain = getRuntimeAppDomain()?.trim();
+  if (runtimeAppDomain) return runtimeAppDomain;
+
   if (typeof window === "undefined") return fallbackAppDomain;
 
   const hostname = window.location.hostname;

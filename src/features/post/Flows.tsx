@@ -17,6 +17,7 @@ import ShareButton from '@/components/ui/ShareButton';
 import { isFeatureEnabled } from '@/config/featureFlags';
 import { getLocalizedContent, getSafeImageURL, getSafeImageURLEx } from '@/helpers/helpers';
 import { useDwellView } from '@/hooks/useDwellView';
+import { resolveAppUrl } from '@/platform/runtime';
 import {
   filterDeletedPosts,
   getTimelineCursor,
@@ -612,7 +613,7 @@ export const CoolVibesPostCard = React.memo(({
                 <span className="text-[11px] font-bold">{comments + replyCountOffset}</span>
               </motion.button>
               <ShareButton
-                url={typeof window !== 'undefined' ? `${window.location.origin}/${username}/status/${post.public_id || post.id}` : ''}
+                url={resolveAppUrl(`/${username}/status/${post.public_id || post.id}`)}
                 title={displayName ? `${displayName}'s post` : 'Post'}
                 trigger={
                   <motion.button

@@ -6,6 +6,9 @@ declare global {
       mode: 'vscode'
       placement?: 'sidebar' | 'panel'
       assetBaseUrl?: string
+      appDomain?: string
+      appURL?: string
+      registrationURL?: string
       serviceURL?: [string, string]
       socketURL?: [string, string]
       disableNotifications?: boolean

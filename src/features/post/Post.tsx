@@ -18,6 +18,7 @@ import { useDwellView } from '../../hooks/useDwellView';
 import { CLEAR_HISTORY_COMMAND } from 'lexical';
 import type * as Leaflet from 'leaflet';
 import { useTranslation } from 'react-i18next';
+import { resolveAppUrl } from '@/platform/runtime';
 
 import { HashtagNode } from '@lexical/hashtag';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
@@ -2077,7 +2078,7 @@ const Post: React.FC<PostProps> = ({
               <span>{formattedViewCount}</span>
             </span>
             <ShareButton
-              url={typeof window !== 'undefined' ? `${window.location.origin}/status/${post.public_id}` : ''}
+              url={resolveAppUrl(`/status/${post.public_id}`)}
               title={post.author.displayname ? `${post.author.displayname}'s post` : 'Post'}
               description={post.content ? (getLocalizedContent(post.content, defaultLanguage || 'en')?.replace(/<[^>]*>/g, '') || '').substring(0, 100) : ''}
               trigger={
