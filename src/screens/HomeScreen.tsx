@@ -22,6 +22,9 @@ import {
   withTimeout,
 } from '@/features/post/timelineUtils';
 
+import PopularUsersPanel from '../features/discovery/PopularUsersPanel';
+import { Users } from 'lucide-react';
+
 const LiveTab = React.lazy(() => import('./LiveTab'));
 
 const MAX_HEADER_HEIGHT = 335;
@@ -62,11 +65,15 @@ const HomeScreen: React.FC = () => {
     }
     if (tab === 'vibes') {
       setActiveTab('vibes');
+      return;
+    }
+    if (tab === 'people' || tab === 'users') {
+      setActiveTab('people');
     }
   }, [location.search, liveEnabled]);
 
   useEffect(() => {
-    setShowBottomBar(activeTab === 'flows');
+    setShowBottomBar(activeTab === 'flows' || activeTab === 'people');
   }, [activeTab, setShowBottomBar]);
 
   useEffect(() => {
@@ -196,16 +203,21 @@ const HomeScreen: React.FC = () => {
       className="flex h-full flex-col overflow-y-auto no-scrollbar pt-24 md:pt-28">
 
       {
-        activeTab == "flows" && <div
-          ref={storiesShellRef}
-          className="flex-shrink-0 px-1 pb-12 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-          style={{
-            opacity: 1,
-            pointerEvents: 'auto',
-            minHeight: 112
-          }}>
-          <Stories />
-        </div>
+        activeTab === "flows" && (
+          <div
+            ref={storiesShellRef}
+            className="flex-shrink-0 px-1 pb-4 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex flex-col gap-4"
+            style={{
+              opacity: 1,
+              pointerEvents: 'auto',
+              minHeight: 112
+            }}>
+            <Stories />
+            <div className="w-full">
+              <PopularUsersPanel limit={15} variant="horizontal" showHeader={true} />
+            </div>
+          </div>
+        )
       }
 
       {activeTab !== 'flows' && (
@@ -217,8 +229,6 @@ const HomeScreen: React.FC = () => {
 
         }}
       >
-
-
 
         <div className="w-full max-w-[560px] flex-grow">
           <div className="elite-floating z-40 p-1.5">
@@ -285,6 +295,34 @@ const HomeScreen: React.FC = () => {
               <motion.button
                 type="button"
                 onClick={() => {
+                  setActiveTab('people')
+                  setShowBottomBar(true)
+                }}
+                whileTap={{ scale: 0.98 }}
+                className={`relative flex-1 cursor-pointer overflow-hidden rounded-full py-2.5 font-bold uppercase tracking-[0.16em] text-[10px] transition-all duration-300 ${
+                  activeTab === 'people'
+                    ? 'text-white'
+                    : theme === 'dark' ? 'text-zinc-500 hover:bg-zinc-800 hover:text-white' : 'text-slate-400 hover:bg-slate-100 hover:text-sky-600'
+                }`}
+              >
+                <div className='relative z-10 w-full flex flex-row gap-2 items-center justify-center'>
+                  <Users className="h-5 w-5" />
+                  <span>Kişiler</span>
+                </div>
+
+                {activeTab === 'people' && (
+                  <motion.div
+                    className="absolute inset-0 rounded-full bg-sky-600"
+                    layoutId="homeScreenTabIndicator"
+                    layout="position"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    style={{ willChange: 'transform' }}
+                  />
+                )}
+              </motion.button>
+              <motion.button
+                type="button"
+                onClick={() => {
                   setActiveTab('vibes')
                   setShowBottomBar(false)
                 }}
@@ -317,11 +355,8 @@ const HomeScreen: React.FC = () => {
       </header>
       )}
 
-
-
-
       <main className="min-h-0 flex-grow w-full min-w-0 pb-4">
-        {/* Posts Feed or Vibes Grid */}
+        {/* Posts Feed or Vibes Grid or People Grid */}
         <AnimatePresence mode="wait">
           {activeTab === 'flows' ? (
             <Flows
@@ -330,6 +365,10 @@ const HomeScreen: React.FC = () => {
               onProfileClick={handleProfileClick}
               scrollParentRef={scrollContainerRef}
             />
+          ) : activeTab === 'people' ? (
+            <div key="people" className="w-full max-w-[640px] mx-auto px-4 py-2">
+              <PopularUsersPanel limit={24} variant="grid" showHeader={true} />
+            </div>
           ) : activeTab === 'live' && liveEnabled ? (
             <React.Suspense fallback={null}>
               <LiveTab key="live" theme={theme} />

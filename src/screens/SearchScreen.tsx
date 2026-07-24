@@ -455,7 +455,7 @@ const SearchScreen: React.FC = () => {
     <div className={`skyline-page-scroll w-full ${textColor}`}>
         <main className="mx-auto flex min-h-full w-full max-w-[1360px] flex-col gap-5 px-1 pb-8 pt-[88px] md:px-2 md:pt-24">
         <section className={`shrink-0 rounded-[30px] border backdrop-blur-3xl lg:self-center lg:w-fit lg:max-w-full ${panelClass} shadow-[0_28px_90px_-48px_rgba(15,23,42,0.55)]`}>
-          <form onSubmit={submitSearch} className="flex items-center gap-2 px-4 pt-4 lg:hidden">
+          <form onSubmit={submitSearch} className="flex items-center gap-2 px-4 pt-4">
             <div className="relative flex-1">
               <Search className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 ${secondaryTextColor}`} />
               <input

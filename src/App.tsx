@@ -1333,39 +1333,6 @@ function AppContent() {
                 </div>
 
                 <div className="pointer-events-auto hidden min-w-0 justify-center lg:flex">
-                  {showSearchHeaderControls && (
-                    <form
-                      onSubmit={(event) => {
-                        event.preventDefault();
-                        const value = shellRouteSearchValue.trim();
-                        navigate(value ? `/search?q=${encodeURIComponent(value)}` : '/search', { replace: true });
-                      }}
-                      className="elite-floating flex h-11 w-[360px] max-w-full items-center gap-2 px-3 backdrop-blur-md xl:w-[560px]"
-                    >
-                      <Search className="h-4 w-4 shrink-0 text-slate-400" />
-                      <input
-                        type="text"
-                        value={shellRouteSearchValue}
-                        onChange={(event) => updateShellRouteSearch(event.target.value)}
-                        placeholder={shellRouteSearchPlaceholder}
-                        aria-label={shellRouteSearchPlaceholder}
-                        className="min-w-0 flex-1 bg-transparent text-[10px] font-bold uppercase tracking-widest text-slate-900 outline-none placeholder:text-slate-400 dark:text-white"
-                      />
-                      {shellRouteSearchValue && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            updateShellRouteSearch('');
-                            navigate('/search', { replace: true });
-                          }}
-                          aria-label={t('search.clear', { defaultValue: 'Clear search' })}
-                          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/10 dark:hover:text-white"
-                        >
-                          <X className="h-3.5 w-3.5" />
-                        </button>
-                      )}
-                    </form>
-                  )}
                   {showNearbyHeaderControls && (
                     <div className="elite-floating flex h-11 w-[360px] max-w-full items-center gap-1.5 overflow-visible px-2 backdrop-blur-md">
                       <div className={`flex min-w-0 flex-1 items-center justify-center gap-0.5 overflow-visible rounded-full p-1 ${
@@ -1824,64 +1791,15 @@ function AppContent() {
                   )}
                 </div>
 
-                <div className="flex items-center gap-3 pointer-events-auto justify-self-end">
-                  {isShellSearchRoute ? (
-                    <>
-                      <div
-                        className="elite-floating flex h-11 w-32 items-center gap-2 px-3 text-slate-500 backdrop-blur-md sm:w-48 md:w-60"
-                      >
-                        <Search className="h-4 w-4 shrink-0 text-slate-400" />
-                        <input
-                          type="text"
-                          value={shellRouteSearchValue}
-                          onChange={(event) => updateShellRouteSearch(event.target.value)}
-                          placeholder={shellRouteSearchPlaceholder}
-                          className="min-w-0 flex-1 bg-transparent text-[10px] font-bold uppercase tracking-widest text-slate-900 outline-none placeholder:text-slate-400 dark:text-white"
-                        />
-                        {shellRouteSearchValue && (
-                          <button
-                            type="button"
-                            onClick={() => updateShellRouteSearch('')}
-                            aria-label={t('classifieds.clear_search', { defaultValue: 'Clear search' })}
-                            className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/10 dark:hover:text-white"
-                          >
-                            <X className="h-3.5 w-3.5" />
-                          </button>
-                        )}
-                      </div>
-                      {normalizedPath === '/classifieds' && (
-                        <button
-                          type="button"
-                          onClick={() => dispatchShellEvent('cv:classifieds-open-create')}
-                          aria-label={t('classifieds.new_job_listing', { defaultValue: 'New listing' })}
-                          className="w-11 h-11 elite-floating sky-glow flex items-center justify-center !text-white transition-transform hover:scale-105 active:scale-95"
-                        >
-                          <Plus className="w-5 h-5 shrink-0 text-white" strokeWidth={2.6} />
-                        </button>
-                      )}
-                    </>
-                  ) : showSearchHeaderControls ? null : (
+                <div className="flex items-center gap-3 pointer-events-auto justify-self-end relative">
+                  {normalizedPath === '/classifieds' && (
                     <button
                       type="button"
-                      onClick={() => navigate('/search')}
-                      aria-label={t('app.nav.search', { defaultValue: 'Search' })}
-                    className={`hidden md:flex items-center elite-floating px-4 py-2 gap-3 transition-all cursor-pointer ${
-                        activeScreen === 'search'
-                          ? 'bg-sky-600 text-white'
-                          : 'backdrop-blur-md'
-                      }`}
+                      onClick={() => dispatchShellEvent('cv:classifieds-open-create')}
+                      aria-label={t('classifieds.new_job_listing', { defaultValue: 'New listing' })}
+                      className="w-11 h-11 elite-floating sky-glow flex items-center justify-center !text-white transition-transform hover:scale-105 active:scale-95"
                     >
-                      <Search className={`w-3.5 h-3.5 ${activeScreen === 'search' ? 'text-white' : 'text-slate-400'}`} />
-                      <input
-                        type="text"
-                        placeholder="Arama..."
-                        readOnly
-                        className={`bg-transparent border-none outline-none text-[10px] font-bold tracking-widest uppercase w-24 cursor-pointer ${
-                          activeScreen === 'search'
-                            ? 'text-white placeholder:text-sky-200'
-                            : 'placeholder:text-slate-400 dark:text-white'
-                        }`}
-                      />
+                      <Plus className="w-5 h-5 shrink-0 text-white" strokeWidth={2.6} />
                     </button>
                   )}
                   {isHomePerformanceRoute && (
@@ -1924,6 +1842,58 @@ function AppContent() {
                       <User className="h-5 w-5 text-slate-500" />
                     </button>
                   )}
+
+                  {/* Top-Right Navigation Menu Trigger */}
+                  <div className="relative">
+                    <AnimatePresence>
+                      {showHomeMenuGuide && (
+                        <motion.div
+                          role="status"
+                          aria-live="polite"
+                          aria-labelledby="home-menu-guide-title"
+                          aria-describedby="home-menu-guide-description"
+                          initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                          transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                          className="absolute top-[calc(100%+0.75rem)] right-0 w-[min(18rem,calc(100vw-2rem))] rounded-3xl border border-sky-200 bg-white p-5 text-slate-950 shadow-[0_24px_80px_rgba(2,132,199,0.28)] dark:border-sky-500/30 dark:bg-zinc-950 dark:text-white md:w-80 z-[730]"
+                        >
+                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-sky-600 dark:text-sky-400">
+                            {t('app.home_guide_badge', { defaultValue: 'Quick start' })}
+                          </p>
+                          <div className="mt-3 flex items-center gap-3">
+                            <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-sky-600 text-white shadow-lg shadow-sky-600/30">
+                              <Command className="h-5 w-5" aria-hidden="true" />
+                            </span>
+                            <h2 id="home-menu-guide-title" className="text-base font-black leading-tight tracking-tight">
+                              {t('app.home_guide_title', { defaultValue: 'Menüden Başla' })}
+                            </h2>
+                          </div>
+                          <p id="home-menu-guide-description" className="mt-2 text-xs font-medium leading-5 text-slate-600 dark:text-zinc-300">
+                            {t('app.home_guide_description', { defaultValue: 'Sağ üst köşedeki menü butonuna basarak CoolVibes alt sayfalarını keşfedin.' })}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => navigate('/settings')}
+                            className="mt-3 rounded-full bg-slate-950 px-3.5 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-white transition-transform hover:scale-105 active:scale-95 dark:bg-white dark:text-slate-950"
+                          >
+                            {t('app.home_guide_manage', { defaultValue: 'Ayarlar' })}
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <button
+                      type="button"
+                      onClick={openNavigationMenu}
+                      aria-label={t('app.open_navigation_menu', { defaultValue: 'Open navigation menu' })}
+                      aria-describedby={showHomeMenuGuide ? 'home-menu-guide-description' : undefined}
+                      className={`w-11 h-11 elite-floating flex items-center justify-center text-slate-700 dark:text-slate-200 hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer transition-all hover:scale-105 active:scale-95 ${
+                        showHomeMenuGuide ? 'ring-4 ring-sky-400/50 shadow-[0_0_0_10px_rgba(56,189,248,0.14)] animate-pulse' : ''
+                      }`}
+                    >
+                      <Command className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </header>
@@ -2356,76 +2326,7 @@ function AppContent() {
             </nav>
           )}
 
-          {showDock && (
-            <div className={`fixed bottom-[calc(env(safe-area-inset-bottom)+7.5rem)] left-4 flex-col gap-4 md:bottom-10 md:left-10 ${isHomePerformanceRoute ? 'flex' : 'hidden md:flex'} ${showHomeMenuGuide ? 'z-[720]' : 'z-[300]'}`}>
-              <button
-                type="button"
-                onClick={() => setShowSkylineTrends(prev => !prev)}
-                aria-label="Toggle trends"
-                className="hidden w-12 h-12 elite-floating md:flex items-center justify-center text-slate-400 hover:text-sky-600 cursor-pointer"
-              >
-                <Filter className="w-5.5 h-5.5" />
-              </button>
-              <div className="relative">
-                <AnimatePresence>
-                  {showHomeMenuGuide && (
-                    <motion.div
-                      role="status"
-                      aria-live="polite"
-                      aria-labelledby="home-menu-guide-title"
-                      aria-describedby="home-menu-guide-description"
-                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                      transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute bottom-[calc(100%+1.25rem)] left-0 w-[min(18rem,calc(100vw-2rem))] rounded-3xl border border-sky-200 bg-white p-5 text-slate-950 shadow-[0_24px_80px_rgba(2,132,199,0.28)] dark:border-sky-500/30 dark:bg-zinc-950 dark:text-white md:bottom-0 md:left-[calc(100%+4.5rem)] md:w-80"
-                    >
-                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-sky-600 dark:text-sky-400">
-                        {t('app.home_guide_badge', { defaultValue: 'Quick start' })}
-                      </p>
-                      <div className="mt-3 flex items-center gap-3">
-                        <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-sky-600 text-white shadow-lg shadow-sky-600/30">
-                          <Command className="h-6 w-6" aria-hidden="true" />
-                        </span>
-                        <h2 id="home-menu-guide-title" className="text-lg font-black leading-tight tracking-tight">
-                          {t('app.home_guide_title', { defaultValue: 'Start from the menu' })}
-                        </h2>
-                      </div>
-                      <p id="home-menu-guide-description" className="mt-2 text-sm font-medium leading-6 text-slate-600 dark:text-zinc-300">
-                        {t('app.home_guide_description', { defaultValue: 'Press the menu button in the lower-left corner to discover CoolVibes.' })}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => navigate('/settings')}
-                        className="mt-4 rounded-full bg-slate-950 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-white transition-transform hover:scale-105 active:scale-95 dark:bg-white dark:text-slate-950"
-                      >
-                        {t('app.home_guide_manage', { defaultValue: 'Manage in Settings' })}
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-                {showHomeMenuGuide && (
-                  <motion.span
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -right-5 -top-5 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-sky-600 text-white shadow-[0_10px_30px_rgba(2,132,199,0.5)]"
-                    animate={{ x: [4, -2, 4], y: [-4, 2, -4], rotate: [-10, 2, -10], scale: [1, 1.12, 1] }}
-                    transition={{ duration: 1.15, repeat: Infinity, ease: 'easeInOut' }}
-                  >
-                    <MousePointerClick className="h-6 w-6" />
-                  </motion.span>
-                )}
-                <button
-                  type="button"
-                  onClick={openNavigationMenu}
-                  aria-label={t('app.open_navigation_menu', { defaultValue: 'Open navigation menu' })}
-                  aria-describedby={showHomeMenuGuide ? 'home-menu-guide-description' : undefined}
-                  className={`relative w-12 h-12 elite-floating flex items-center justify-center text-slate-400 hover:text-sky-600 cursor-pointer ${showHomeMenuGuide ? 'ring-4 ring-sky-400/50 shadow-[0_0_0_10px_rgba(56,189,248,0.14)] animate-pulse motion-reduce:animate-none' : ''}`}
-                >
-                  <Command className="w-5.5 h-5.5" />
-                </button>
-              </div>
-            </div>
-          )}
+
 
           {/* Skyline Navigation Modal */}
           <AnimatePresence
