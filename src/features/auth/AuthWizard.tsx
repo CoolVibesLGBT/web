@@ -244,7 +244,18 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  // Only letters, digits, and underscores are allowed in usernames
+  const NICKNAME_REGEX = /^[a-z0-9_]*$/;
+
+  const getNicknameError = (nickname: string): string => {
+    if (nickname.length === 0) return '';
+    if (nickname.length < 3) return t('auth.nickname_too_short', { defaultValue: 'Username must be at least 3 characters.' });
+    if (!NICKNAME_REGEX.test(nickname)) return t('auth.nickname_invalid_chars', { defaultValue: 'Username can only contain letters, numbers, and underscores (_).' });
+    return '';
+  };
+
   const handleNicknameChange = (nickname: string) => {
+    // Strip whitespace and convert to lowercase, but keep special chars so the user sees the error
     const normalized = nickname.toLowerCase().replace(/\s+/g, '');
     updateFormData('nickname', normalized);
   };
@@ -279,11 +290,15 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         return authMode !== null;
       case 'loginForm':
         return formData.nickname.trim() !== '' && formData.password.trim() !== '';
-      case 'nickname':
-        return formData.nickname.trim() !== '' &&
+      case 'nickname': {
+        const nicknameValid =
+          formData.nickname.trim().length >= 3 &&
+          NICKNAME_REGEX.test(formData.nickname.trim());
+        return nicknameValid &&
           formData.password.trim() !== '' &&
           formData.confirmPassword.trim() !== '' &&
           formData.password === formData.confirmPassword;
+      }
       case 'captcha':
         return !!recaptchaToken;
       default:
@@ -400,9 +415,25 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                 placeholder={t('auth.placeholder_nickname')}
                 value={formData.nickname}
                 onChange={(e) => handleNicknameChange(e.target.value)}
-                className={inputClass}
+                className={`${inputClass} ${
+                  formData.nickname && getNicknameError(formData.nickname)
+                    ? theme === 'dark' ? 'border-red-500/60 focus:border-red-500 focus:ring-red-500/10' : 'border-red-400 focus:border-red-500 focus:ring-red-500/10'
+                    : formData.nickname && !getNicknameError(formData.nickname)
+                      ? theme === 'dark' ? 'border-green-500/60 focus:border-green-500 focus:ring-green-500/10' : 'border-green-400 focus:border-green-500 focus:ring-green-500/10'
+                      : ''
+                }`}
                 autoFocus
               />
+              {formData.nickname && getNicknameError(formData.nickname) && (
+                <p className={`text-xs sm:text-sm mt-1 sm:mt-2 ${theme === 'dark' ? 'text-red-400' : 'text-red-600'}`}>
+                  {getNicknameError(formData.nickname)}
+                </p>
+              )}
+              {formData.nickname && !getNicknameError(formData.nickname) && (
+                <p className={`text-xs sm:text-sm mt-1 sm:mt-2 ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
+                  {t('auth.nickname_valid', { defaultValue: 'Username looks good!' })}
+                </p>
+              )}
             </div>
             <div>
               <label className={labelClass}>
