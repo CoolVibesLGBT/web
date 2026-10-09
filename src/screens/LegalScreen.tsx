@@ -267,7 +267,7 @@ const LegalScreen: React.FC = () => {
                     to={`/legal/${key}`}
                     aria-current={isActive ? 'page' : undefined}
                     className={`flex min-h-11 items-center gap-2 rounded-2xl px-3 py-2 text-left text-[12px] font-black transition-colors ${isActive
-                      ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/20'
+                      ? 'bg-[var(--color-brand)] text-white shadow-lg shadow-[var(--color-brand-glow)]'
                       : isDark
                         ? 'text-zinc-500 hover:bg-white/10 hover:text-white'
                         : 'text-slate-500 hover:bg-slate-100 hover:text-slate-950'

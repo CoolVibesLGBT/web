@@ -200,7 +200,56 @@ const HomeScreen: React.FC = () => {
         overflowY: 'auto',
         WebkitOverflowScrolling: 'touch',
       }}
-      className="flex h-full flex-col overflow-y-auto no-scrollbar pt-24 md:pt-28">
+      className="flex h-full flex-col overflow-y-auto no-scrollbar">
+
+      {(
+        <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+          <div className="cv-tab-row">
+            {liveEnabled && (
+              <button
+                type="button"
+                onClick={() => { setActiveTab('live'); setShowBottomBar(false); }}
+                style={{ minWidth: 0 }}
+                className={`cv-tab ${activeTab === 'live' ? 'is-active' : ''}`}
+              >
+                <img src={resolvePublicAssetUrl('/icons/live.webp')} alt="" className="h-5 w-5 shrink-0 rounded-full object-cover" />
+                <span className="min-w-0 truncate">Live</span>
+                <span className={`cv-tab-underline ${activeTab === 'live' ? 'is-on' : ''}`} />
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => { setActiveTab('flows'); setShowBottomBar(true); }}
+              style={{ minWidth: 0 }}
+              className={`cv-tab ${activeTab === 'flows' ? 'is-active' : ''}`}
+            >
+              <img src={resolvePublicAssetUrl('/icons/flows.webp')} alt="" className="h-5 w-5 shrink-0 rounded-full object-cover" />
+              <span className="min-w-0 truncate">Cool</span>
+                <span className={`cv-tab-underline ${activeTab === 'flows' ? 'is-on' : ''}`} />
+            </button>
+            <button
+              type="button"
+              onClick={() => { setActiveTab('people'); setShowBottomBar(true); }}
+              style={{ minWidth: 0 }}
+              className={`cv-tab ${activeTab === 'people' ? 'is-active' : ''}`}
+            >
+              <Users className="h-5 w-5 shrink-0" />
+              <span className="min-w-0 truncate">Kişiler</span>
+                <span className={`cv-tab-underline ${activeTab === 'people' ? 'is-on' : ''}`} />
+            </button>
+            <button
+              type="button"
+              onClick={() => { setActiveTab('vibes'); setShowBottomBar(false); }}
+              style={{ minWidth: 0 }}
+              className={`cv-tab ${activeTab === 'vibes' ? 'is-active' : ''}`}
+            >
+              <img src={resolvePublicAssetUrl('/icons/vibes.webp')} alt="" className="h-5 w-5 shrink-0 rounded-full object-cover" />
+              <span className="min-w-0 truncate">Vibes</span>
+                <span className={`cv-tab-underline ${activeTab === 'vibes' ? 'is-on' : ''}`} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {
         activeTab === "flows" && (
@@ -210,150 +259,16 @@ const HomeScreen: React.FC = () => {
             style={{
               opacity: 1,
               pointerEvents: 'auto',
-              minHeight: 112
             }}>
-            <Stories />
+            <div style={{ minHeight: 112 }}>
+              <Stories />
+            </div>
             <div className="w-full">
               <PopularUsersPanel limit={15} variant="horizontal" showHeader={true} />
             </div>
           </div>
         )
       }
-
-      {activeTab !== 'flows' && (
-      <header className="sticky top-0 z-30 mb-8 flex flex-col items-center gap-0 px-1"
-
-        style={{
-          transition: 'height 0.45s cubic-bezier(0.22, 1, 0.36, 1)',
-          willChange: 'height',
-
-        }}
-      >
-
-        <div className="w-full max-w-[560px] flex-grow">
-          <div className="elite-floating z-40 p-1.5">
-            {/* Tab Navigation */}
-            <div className="relative z-10 flex gap-1">
-              {liveEnabled && (
-                <motion.button
-                  type="button"
-                  onClick={() => {
-                    setActiveTab('live')
-                    setShowBottomBar(false)
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`relative flex-1 cursor-pointer overflow-hidden rounded-full py-2.5 font-bold uppercase tracking-[0.16em] text-[10px] transition-all duration-300 ${
-                    activeTab === 'live'
-                      ? 'text-white'
-                      : theme === 'dark' ? 'text-zinc-500 hover:bg-zinc-800 hover:text-white' : 'text-slate-400 hover:bg-slate-100 hover:text-sky-600'
-                    }`}
-                >
-                  <div className='relative z-10 w-full flex flex-row gap-2 items-center justify-center'>
-                    <img src={resolvePublicAssetUrl('/icons/live.webp')} alt="Live tab" className='h-7 w-7 rounded-full object-cover' />
-                    <span>Live</span>
-                  </div>
-
-                  {activeTab === 'live' && (
-                    <motion.div
-                      className="absolute inset-0 rounded-full bg-sky-600"
-                      layoutId="homeScreenTabIndicator"
-                      layout="position"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      style={{ willChange: 'transform' }}
-                    />
-                  )}
-                </motion.button>
-              )}
-              <motion.button
-                type="button"
-                onClick={() => {
-                  setActiveTab('flows')
-                  setShowBottomBar(true)
-                }}
-                whileTap={{ scale: 0.98 }}
-                className={`relative flex-1 cursor-pointer overflow-hidden rounded-full py-2.5 font-bold uppercase tracking-[0.16em] text-[10px] transition-all duration-300 ${
-                  activeTab === 'flows'
-                    ? 'text-white'
-                    : theme === 'dark' ? 'text-zinc-500 hover:bg-zinc-800 hover:text-white' : 'text-slate-400 hover:bg-slate-100 hover:text-sky-600'
-                }`}
-              >
-                <div className='relative z-10 w-full flex flex-row gap-2 items-center justify-center'>
-                  <img src={resolvePublicAssetUrl('/icons/flows.webp')} alt="Cool tab" className='h-7 w-7 rounded-full object-cover' />
-                  <span>Cool</span>
-                </div>
-
-                {activeTab === 'flows' && (
-                  <motion.div
-                    className="absolute inset-0 rounded-full bg-sky-600"
-                    layoutId="homeScreenTabIndicator"
-                    layout="position"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    style={{ willChange: 'transform' }}
-                  />
-                )}
-              </motion.button>
-              <motion.button
-                type="button"
-                onClick={() => {
-                  setActiveTab('people')
-                  setShowBottomBar(true)
-                }}
-                whileTap={{ scale: 0.98 }}
-                className={`relative flex-1 cursor-pointer overflow-hidden rounded-full py-2.5 font-bold uppercase tracking-[0.16em] text-[10px] transition-all duration-300 ${
-                  activeTab === 'people'
-                    ? 'text-white'
-                    : theme === 'dark' ? 'text-zinc-500 hover:bg-zinc-800 hover:text-white' : 'text-slate-400 hover:bg-slate-100 hover:text-sky-600'
-                }`}
-              >
-                <div className='relative z-10 w-full flex flex-row gap-2 items-center justify-center'>
-                  <Users className="h-5 w-5" />
-                  <span>Kişiler</span>
-                </div>
-
-                {activeTab === 'people' && (
-                  <motion.div
-                    className="absolute inset-0 rounded-full bg-sky-600"
-                    layoutId="homeScreenTabIndicator"
-                    layout="position"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    style={{ willChange: 'transform' }}
-                  />
-                )}
-              </motion.button>
-              <motion.button
-                type="button"
-                onClick={() => {
-                  setActiveTab('vibes')
-                  setShowBottomBar(false)
-                }}
-                whileTap={{ scale: 0.98 }}
-                className={`relative flex-1 cursor-pointer overflow-hidden rounded-full py-2.5 font-bold uppercase tracking-[0.16em] text-[10px] transition-all duration-300 ${
-                  activeTab === 'vibes'
-                    ? 'text-white'
-                    : theme === 'dark' ? 'text-zinc-500 hover:bg-zinc-800 hover:text-white' : 'text-slate-400 hover:bg-slate-100 hover:text-sky-600'
-                }`}
-              >
-                <div className='relative z-10 w-full flex flex-row gap-2 items-center justify-center'>
-                  <img src={resolvePublicAssetUrl('/icons/vibes.webp')} alt="Vibes tab" className='h-7 w-7 rounded-full object-cover' />
-                  <span>Vibes</span>
-                </div>
-
-                {activeTab === 'vibes' && (
-                  <motion.div
-                    className="absolute inset-0 rounded-full bg-sky-600"
-                    layoutId="homeScreenTabIndicator"
-                    layout="position"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    style={{ willChange: 'transform' }}
-                  />
-                )}
-              </motion.button>
-            </div>
-          </div>
-
-        </div>
-      </header>
-      )}
 
       <main className="min-h-0 flex-grow w-full min-w-0 pb-4">
         {/* Posts Feed or Vibes Grid or People Grid */}

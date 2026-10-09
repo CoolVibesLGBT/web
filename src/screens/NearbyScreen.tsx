@@ -635,105 +635,56 @@ const NearbyScreen: React.FC = () => {
         </div>
       )}
 
-      <div className={`relative z-10 flex flex-col ${isImmersiveView ? 'h-full pointer-events-none px-2 pt-24 md:pt-28' : 'px-1 pb-8 pt-24 md:px-2 md:pt-28'}`}>
-        <div className={`pointer-events-auto z-50 mx-auto w-full lg:hidden ${isImmersiveView ? 'max-w-5xl px-1' : 'max-w-7xl px-1 md:px-2'}`}>
-          <motion.section
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="relative"
-          >
-            <div className={`${isImmersiveView ? 'flex h-14 flex-nowrap items-center gap-2 overflow-hidden' : 'flex min-h-[50px] flex-wrap items-center gap-2 border-b pb-2'} ${isImmersiveView
-              ? theme === 'dark'
-                ? 'cv-card-surface-soft rounded-[22px] border border-white/10 px-2 backdrop-blur-3xl shadow-[0_18px_60px_-42px_rgba(0,0,0,0.9)]'
-                : 'rounded-[22px] border border-white/70 bg-white/75 px-2 backdrop-blur-3xl shadow-[0_18px_60px_-42px_rgba(15,23,42,0.55)]'
-              : theme === 'dark'
-                ? 'border-white/10'
-                : 'border-slate-200/80'
-              }`}>
-              <div className={`flex min-w-0 flex-1 items-center gap-1 overflow-x-auto rounded-full p-1 no-scrollbar ${theme === 'dark' ? 'bg-white/[0.04]' : 'bg-slate-100/85'}`}>
-                <motion.button
-                  onClick={() => handleChangeViewMode('bubble')}
-                  whileTap={{ scale: 0.98 }}
-                  className={`flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] transition-all ${isImmersiveView ? 'w-9 px-0 sm:w-auto sm:px-3' : ''} ${viewMode === 'bubble'
-                    ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/25'
-                    : theme === 'dark' ? 'text-zinc-500 hover:bg-white/10 hover:text-white' : 'text-slate-500 hover:bg-white hover:text-slate-950'
-                    }`}
-                  title={t('nearby.view_bubble')}
-                >
-                  <Bubbles className="h-3.5 w-3.5" />
-                  {isPremiumRequired && <Lock className="h-3 w-3" />}
-                </motion.button>
-                <motion.button
-                  onClick={() => handleChangeViewMode('grid')}
-                  whileTap={{ scale: 0.98 }}
-                  className={`flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] transition-all ${isImmersiveView ? 'w-9 px-0 sm:w-auto sm:px-3' : ''} ${viewMode === 'grid'
-                    ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/25'
-                    : theme === 'dark' ? 'text-zinc-500 hover:bg-white/10 hover:text-white' : 'text-slate-500 hover:bg-white hover:text-slate-950'
-                    }`}
-                  title={t('nearby.view_grid')}
-                >
-                  <Grid className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">{t('nearby.view_grid')}</span>
-                </motion.button>
-                <motion.button
-                  onClick={() => handleChangeViewMode('list')}
-                  whileTap={{ scale: 0.98 }}
-                  className={`flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] transition-all ${isImmersiveView ? 'w-9 px-0 sm:w-auto sm:px-3' : ''} ${viewMode === 'list'
-                    ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/25'
-                    : theme === 'dark' ? 'text-zinc-500 hover:bg-white/10 hover:text-white' : 'text-slate-500 hover:bg-white hover:text-slate-950'
-                    }`}
-                  title={t('nearby.view_list')}
-                >
-                  <List className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">{t('nearby.view_list')}</span>
-                </motion.button>
-                <motion.button
-                  onClick={() => handleChangeViewMode('card')}
-                  whileTap={{ scale: 0.98 }}
-                  className={`flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] transition-all ${isImmersiveView ? 'w-9 px-0 sm:w-auto sm:px-3' : ''} ${viewMode === 'card'
-                    ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/25'
-                    : theme === 'dark' ? 'text-zinc-500 hover:bg-white/10 hover:text-white' : 'text-slate-500 hover:bg-white hover:text-slate-950'
-                    }`}
-                  title={t('nearby.view_card')}
-                >
-                  <Square className="h-3.5 w-3.5" />
-                </motion.button>
-                <motion.button
-                  onClick={() => handleChangeViewMode('map')}
-                  whileTap={{ scale: 0.98 }}
-                  className={`flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] transition-all ${isImmersiveView ? 'w-9 px-0 sm:w-auto sm:px-3' : ''} ${viewMode === 'map'
-                    ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/25'
-                    : theme === 'dark' ? 'text-zinc-500 hover:bg-white/10 hover:text-white' : 'text-slate-500 hover:bg-white hover:text-slate-950'
-                    }`}
-                  title={t('nearby.view_map')}
-                >
-                  <MapIcon className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">{t('nearby.view_map')}</span>
-                </motion.button>
+      <div className={`relative z-10 flex flex-col ${isImmersiveView ? 'h-full pointer-events-none px-2 pt-0' : 'px-1 pb-8 pt-0 md:px-2'}`}>
+        <div className={`pointer-events-auto z-50 mx-auto w-full ${isImmersiveView ? 'max-w-5xl' : 'max-w-7xl'}`}>
+          <section className="relative">
+            <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+              <div className="cv-tab-row">
+                {(
+                  [
+                    { id: 'bubble' as const, icon: Bubbles, label: t('nearby.view_bubble'), locked: isPremiumRequired },
+                    { id: 'grid' as const, icon: Grid, label: t('nearby.view_grid') },
+                    { id: 'list' as const, icon: List, label: t('nearby.view_list') },
+                    { id: 'card' as const, icon: Square, label: t('nearby.view_card') },
+                    { id: 'map' as const, icon: MapIcon, label: t('nearby.view_map') },
+                  ]
+                ).map((tab) => {
+                  const Icon = tab.icon;
+                  const active = viewMode === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => handleChangeViewMode(tab.id)}
+                      style={{ minWidth: 0 }}
+                      className={`cv-tab ${active ? 'is-active' : ''}`}
+                      title={typeof tab.label === 'string' ? tab.label : tab.id}
+                    >
+                      <Icon className="h-5 w-5 shrink-0" />
+                      <span className="hidden min-w-0 truncate text-[13px] sm:inline">{tab.label}</span>
+                      {tab.locked && <Lock className="h-3 w-3" />}
+                      <span className={`cv-tab-underline ${active ? 'is-on' : ''}`} />
+                    </button>
+                  );
+                })}
               </div>
-
-              <div className="ml-auto flex shrink-0 items-center gap-2">
-                <div className={`hidden h-9 shrink-0 items-center rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] sm:flex ${theme === 'dark' ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/70 text-slate-500'}`}>
+            </div>
+            <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
+              <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
+                <span className="flex h-9 shrink-0 items-center rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
                   {t('nearby.people_nearby', { count: state.nearbyUsers.length })}
-                </div>
+                </span>
               </div>
-
-              <motion.button
+              <button
                 type="button"
                 onClick={handleRefresh}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
                 title={t('nearby.refresh')}
-                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all ${theme === 'dark'
-                  ? 'bg-white text-slate-950 hover:bg-zinc-200'
-                  : 'bg-slate-950 text-white hover:bg-slate-800'
-                  }`}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--cv-surface-3)] text-[var(--cv-neutral-1)] transition-all hover:bg-[var(--cv-surface-3-hover)]"
               >
                 <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-              </motion.button>
+              </button>
             </div>
-          </motion.section>
+          </section>
         </div>
 
         {isImmersiveView && (showInitialLoadingState || showEmptyState || error) && (
@@ -744,7 +695,7 @@ const NearbyScreen: React.FC = () => {
 
         {!isImmersiveView && (
           <div
-            className="pointer-events-auto mx-auto w-full max-w-7xl px-0 pt-4 md:px-1"
+            className="pointer-events-auto mx-auto w-full max-w-7xl px-0 pt-2 md:px-1"
             style={{ touchAction: 'pan-y', WebkitOverflowScrolling: 'touch' }}>
 
 

@@ -699,108 +699,63 @@ const PlacesScreen: React.FC = () => {
 
       {/* Scrollable overlay — always the same structure */}
       <div className="relative z-10 h-full overflow-y-auto skyline-page-scroll">
-        <div className={`flex flex-col px-1 pt-24 md:px-2 md:pt-28 ${
+        <div className={`flex flex-col px-1 pt-0 md:px-2 ${
           viewMode === 'map' ? 'pointer-events-none min-h-full' : 'min-h-full'
         }`}>
 
-        <div className="pointer-events-auto z-50 mx-auto w-full max-w-7xl px-1 md:px-2 lg:hidden">
-          <motion.section
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="relative space-y-2"
-          >
+        <div className="pointer-events-auto z-50 mx-auto w-full max-w-7xl">
+          <section className="relative">
 
             {/* ── View Mode Bar ──────────────────────────────────────────────── */}
-            <div className={`flex items-center gap-2 ${
-              viewMode === 'map'
-                ? isDark
-                  ? 'cv-card-surface-soft rounded-[20px] border border-white/10 px-2 backdrop-blur-3xl h-12 shadow-[0_18px_60px_-42px_rgba(0,0,0,0.9)]'
-                  : 'rounded-[20px] border border-white/70 bg-white/80 px-2 backdrop-blur-3xl h-12 shadow-[0_12px_40px_-20px_rgba(15,23,42,0.18)]'
-                : isDark
-                  ? 'border-b border-white/10 pb-2'
-                  : 'border-b border-slate-200/80 pb-2'
-            }`}>
-
-              {/* Segmented view switcher */}
-              <div className={`relative flex items-center gap-0.5 rounded-full p-1 ${
-                isDark ? 'bg-white/[0.04]' : 'bg-slate-100/90'
-              }`}>
+            <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+              {/* View switcher */}
+              <div className="cv-tab-row">
                 {(['grid', 'map'] as const).map((mode) => {
                   const isActive = viewMode === mode;
                   const Icon = mode === 'grid' ? Grid : MapIcon;
                   const label = mode === 'grid' ? t('nearby.view_grid') : t('nearby.view_map');
                   return (
-                    <motion.button
+                    <button
                       key={mode}
                       type="button"
                       onClick={() => setViewMode(mode)}
-                      whileTap={{ scale: 0.96 }}
-                      className={`relative flex h-8 shrink-0 items-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] transition-colors ${
-                        isActive
-                          ? 'text-white'
-                          : isDark
-                            ? 'text-zinc-500 hover:text-white'
-                            : 'text-slate-400 hover:text-slate-900'
-                      }`}
+                      style={{ minWidth: 0 }}
+                      className={`cv-tab ${isActive ? 'is-active' : ''}`}
                       title={label}
                     >
-                      {isActive && (
-                        <motion.span
-                          layoutId="placesViewIndicator"
-                          className="absolute inset-0 rounded-full bg-sky-600 shadow-lg shadow-sky-600/30"
-                          transition={{ type: 'spring', stiffness: 380, damping: 34 }}
-                        />
-                      )}
-                      <span className="relative z-10 flex items-center gap-1.5">
-                        <Icon className="h-3.5 w-3.5" />
-                        <span className="hidden sm:inline">{label}</span>
-                      </span>
-                    </motion.button>
+                      <Icon className="h-5 w-5 shrink-0" />
+                      <span className="min-w-0 truncate">{label}</span>
+                      <span className={`cv-tab-underline ${isActive ? 'is-on' : ''}`} />
+                    </button>
                   );
                 })}
               </div>
+            </div>
 
-              {/* Right-side status chips */}
-              <div className="ml-auto flex shrink-0 items-center gap-2">
+            <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
+              <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
+                <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
+                  <MapPin className="h-3.5 w-3.5 shrink-0" />
+                  {filteredPlaces.length}
+                </span>
                 {searchQuery && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className={`hidden h-8 min-w-0 items-center gap-2 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.12em] md:flex ${
-                      isDark ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/80 text-slate-500 shadow-sm border border-slate-200/60'
-                    }`}
-                  >
-                    <Search className="h-3 w-3 shrink-0" />
+                  <span className="flex h-9 min-w-0 shrink-0 items-center gap-1.5 rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[13px] font-semibold text-[var(--cv-neutral-2)]">
+                    <Search className="h-3.5 w-3.5 shrink-0" />
                     <span className="max-w-[140px] truncate md:max-w-[200px]">{searchQuery}</span>
-                  </motion.div>
+                  </span>
                 )}
-
-                <div className={`flex h-8 shrink-0 items-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] ${
-                  isDark ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/80 text-slate-500 shadow-sm border border-slate-200/60'
-                }`}>
-                  <MapPin className="h-3 w-3" />
-                  <span>{filteredPlaces.length}</span>
-                </div>
               </div>
 
-              {/* Refresh button */}
-              <motion.button
+              <button
                 type="button"
                 onClick={handleInitialFetch}
-                whileHover={{ scale: 1.06 }}
-                whileTap={{ scale: 0.94 }}
                 disabled={loadingInitial}
                 aria-label={t('places.retry')}
                 title={t('places.retry')}
-                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all disabled:cursor-default disabled:opacity-50 ${
-                  isDark
-                    ? 'bg-white/10 text-white hover:bg-white/20'
-                    : 'bg-slate-950/90 text-white hover:bg-slate-800'
-                }`}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--cv-surface-3)] text-[var(--cv-neutral-1)] transition-all hover:bg-[var(--cv-surface-3-hover)] disabled:cursor-default disabled:opacity-50"
               >
-                <RefreshCw className={`h-3.5 w-3.5 ${loadingInitial && places.length === 0 ? 'animate-spin' : ''}`} />
-              </motion.button>
+                <RefreshCw className={`h-4 w-4 ${loadingInitial && places.length === 0 ? 'animate-spin' : ''}`} />
+              </button>
             </div>
 
             {/* ── Category Tags ──────────────────────────────────────────────── */}
@@ -838,7 +793,7 @@ const PlacesScreen: React.FC = () => {
                       {isSelected && (
                         <motion.span
                           layoutId="placesCategoryIndicator"
-                          className="absolute inset-0 rounded-full bg-sky-600 shadow-md shadow-sky-600/30"
+                          className="absolute inset-0 rounded-full bg-[var(--color-brand)] shadow-md shadow-[var(--color-brand-glow)]"
                           transition={{ type: 'spring', stiffness: 380, damping: 34 }}
                         />
                       )}
@@ -848,12 +803,12 @@ const PlacesScreen: React.FC = () => {
                 })}
               </motion.div>
             )}
-          </motion.section>
+          </section>
         </div>
 
         {/* Content Area */}
         {viewMode !== 'map' && (
-          <div className="pointer-events-auto mx-auto w-full max-w-7xl px-0 pt-4 md:px-1">
+          <div className="pointer-events-auto mx-auto w-full max-w-7xl px-0 pt-2 md:px-1">
             {renderContent()}
           </div>
         )}

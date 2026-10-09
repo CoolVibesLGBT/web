@@ -84,5 +84,18 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.3",
     "vite": "^8.0.16"
-  }
+  },
+  "description": "Web client for **CoolVibes** — an inclusive LGBTIQA+ social and dating platform.",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CoolVibesLGBT/web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CoolVibesLGBT/web/issues"
+  },
+  "homepage": "https://github.com/CoolVibesLGBT/web#readme"
 }

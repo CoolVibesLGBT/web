@@ -346,8 +346,8 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
     : isMe
       ? 'border-white/25 bg-white/[0.13] text-white'
       : theme === 'dark'
-        ? 'border-white/10 bg-gradient-to-br from-sky-400/[0.12] via-zinc-900/95 to-zinc-900/95 text-zinc-100'
-        : 'border-sky-100 bg-gradient-to-br from-sky-50 via-white to-white text-slate-900';
+        ? 'border-white/10 bg-gradient-to-br from-brand/[0.12] via-zinc-900/95 to-zinc-900/95 text-zinc-100'
+        : 'border-brand bg-gradient-to-br from-brand via-white to-white text-slate-900';
   const iconClass = state === 'error'
     ? isMe
       ? 'bg-rose-300/20 text-rose-50 ring-rose-100/25'
@@ -357,8 +357,8 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
     : isMe
       ? 'bg-white/20 text-white ring-white/25'
       : theme === 'dark'
-        ? 'bg-sky-400/10 text-sky-300 ring-sky-400/15'
-        : 'bg-sky-100 text-sky-700 ring-sky-200';
+        ? 'bg-brand/10 text-brand ring-brand/15'
+        : 'bg-brand text-brand-hovered ring-brand';
   const secondaryTextClass = isMe
     ? 'text-white/70'
     : theme === 'dark' ? 'text-zinc-400' : 'text-slate-500';
@@ -368,7 +368,7 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
       <span
         className={`pointer-events-none absolute -right-8 -top-10 h-28 w-28 rounded-full blur-2xl ${state === 'error'
           ? 'bg-rose-400/15'
-          : 'bg-sky-400/15'
+          : 'bg-brand/15'
           }`}
         aria-hidden="true"
       />
@@ -379,10 +379,10 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
         <StateIcon className={`h-6 w-6 ${state === 'opening' ? 'animate-spin' : ''}`} />
         {(state === 'unopened' || state === 'sent') && (
           <span className={`absolute -bottom-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full border px-1 text-[10px] font-black shadow-sm ${isMe
-            ? 'border-sky-500 bg-white text-sky-700'
+            ? 'border-brand bg-white text-brand-hovered'
             : theme === 'dark'
-              ? 'border-zinc-900 bg-sky-400 text-zinc-950'
-              : 'border-white bg-sky-600 text-white'
+              ? 'border-zinc-900 bg-brand text-zinc-950'
+              : 'border-white bg-brand-hovered text-white'
             }`}>
             1
           </span>
@@ -405,7 +405,7 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
       {state === 'unopened' && (
         <span className={`relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${isMe
           ? 'bg-white/15 text-white'
-          : theme === 'dark' ? 'bg-white/[0.06] text-sky-300' : 'bg-sky-100 text-sky-700'
+          : theme === 'dark' ? 'bg-white/[0.06] text-brand' : 'bg-brand text-brand-hovered'
           }`} aria-hidden="true">
           <Eye className="h-4 w-4" />
         </span>
@@ -429,8 +429,8 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
         aria-busy={isOpening}
         data-view-once-message={messageId}
         data-view-once-state={state}
-        className={`${sharedClassName} transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_50px_-28px_rgba(14,165,233,0.8)] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 disabled:cursor-wait disabled:hover:translate-y-0 ${isMe
-          ? 'focus-visible:ring-offset-sky-600'
+        className={`${sharedClassName} transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_50px_-28px_rgba(255,55,199,0.8)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-wait disabled:hover:translate-y-0 ${isMe
+          ? 'focus-visible:ring-offset-brand-hovered'
           : theme === 'dark' ? 'focus-visible:ring-offset-zinc-950' : 'focus-visible:ring-offset-white'
           }`}
       >
@@ -531,8 +531,8 @@ const MessageItem: React.FC<MessageItemProps> = ({
           ? 'max-w-[88%] px-2.5 py-2 sm:max-w-sm'
           : 'max-w-[78%] px-4 py-2.5 sm:max-w-xs md:max-w-sm'
           } shadow-[0_18px_45px_-24px_rgba(15,23,42,0.35)] relative border backdrop-blur-2xl ${theme === 'dark'
-          ? isMe ? 'bg-sky-500/95 text-white border-sky-300/20 shadow-sky-950/30' : 'bg-zinc-900/80 text-zinc-100 border-white/10'
-          : isMe ? 'bg-sky-600 text-white border-sky-500/40 shadow-sky-500/20' : 'bg-white/[0.85] text-slate-900 border-white/70'
+          ? isMe ? 'bg-brand/95 text-white border-brand/20 shadow-brand-hovered/30' : 'bg-zinc-900/80 text-zinc-100 border-white/10'
+          : isMe ? 'bg-brand-hovered text-white border-brand/40 shadow-brand/20' : 'bg-white/[0.85] text-slate-900 border-[var(--cv-inner-border)]'
           }`}
       >
         {msg.viewOnce && (
@@ -552,7 +552,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
         {isHiddenDisappearing && (
           <div className={`mb-2 min-w-[190px] overflow-hidden rounded-2xl border p-2 ${theme === 'dark'
             ? 'border-white/10 bg-white/[0.05]'
-            : 'border-white/80 bg-white/65'
+            : 'border-[var(--cv-inner-border)] bg-white/65'
             }`}>
             <div className={`mb-2 flex items-center gap-2 rounded-xl px-3 py-3 backdrop-blur-2xl ${theme === 'dark'
               ? 'bg-gradient-to-r from-white/[0.08] to-white/[0.03] text-zinc-300'
@@ -571,9 +571,9 @@ const MessageItem: React.FC<MessageItemProps> = ({
               aria-label={isMessageOpening
                 ? t('messages.opening_disappearing_message')
                 : t('messages.open_disappearing_message')}
-              className={`flex w-full items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 disabled:cursor-wait ${theme === 'dark'
-                ? 'bg-sky-400 text-zinc-950 hover:bg-sky-300'
-                : 'bg-sky-600 text-white hover:bg-sky-700'
+              className={`flex w-full items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:cursor-wait ${theme === 'dark'
+                ? 'bg-brand text-zinc-950 hover:bg-brand'
+                : 'bg-brand-hovered text-white hover:bg-brand-hovered'
                 }`}
             >
               {isMessageOpening ? (
@@ -597,7 +597,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
               const isImage = media?.kind === 'image';
               const isVideo = media?.kind === 'video';
               const thumbSizeClass = msg.attachments?.length === 1 && !msg.text ? 'h-[108px] w-[108px]' : 'h-[72px] w-[72px]';
-              const thumbClass = `${thumbSizeClass} group/media relative shrink-0 overflow-hidden rounded-full border shadow-[0_16px_40px_-22px_rgba(15,23,42,0.65)] transition-transform duration-200 hover:scale-[1.03] ${isMe ? 'border-white/35 bg-white/18' : theme === 'dark' ? 'border-white/12 bg-white/8' : 'border-white/80 bg-slate-100/80'}`;
+              const thumbClass = `${thumbSizeClass} group/media relative shrink-0 overflow-hidden rounded-full border shadow-[0_16px_40px_-22px_rgba(15,23,42,0.65)] transition-transform duration-200 hover:scale-[1.03] ${isMe ? 'border-white/35 bg-white/18' : theme === 'dark' ? 'border-white/12 bg-white/8' : 'border-[var(--cv-inner-border)] bg-slate-100/80'}`;
 
               return (
                 <React.Fragment key={attachment.id || idx}>
@@ -648,7 +648,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
                     </button>
                   ) : (
                     <div
-                      className={`flex max-w-[220px] items-center gap-2 rounded-full border py-1.5 pl-1.5 pr-3 ${isMe ? 'border-white/30 bg-white/16' : theme === 'dark' ? 'border-white/10 bg-white/8' : 'border-white/80 bg-slate-100/85'}`}
+                      className={`flex max-w-[220px] items-center gap-2 rounded-full border py-1.5 pl-1.5 pr-3 ${isMe ? 'border-white/30 bg-white/16' : theme === 'dark' ? 'border-white/10 bg-white/8' : 'border-[var(--cv-inner-border)] bg-slate-100/85'}`}
                       title={file.name}
                     >
                       <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isMe ? 'bg-white/22 text-white' : theme === 'dark' ? 'bg-white/10 text-zinc-200' : 'bg-white text-slate-600'}`}>
@@ -745,7 +745,7 @@ const SelectedMediaThumbnail: React.FC<SelectedMediaThumbnailProps> = ({
             className="h-full w-full object-cover"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-950 via-slate-800 to-sky-950">
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-950 via-slate-800 to-brand-hovered">
             {kind === 'video' ? <Video className="h-6 w-6 text-white" /> : <Image className="h-6 w-6 text-white" />}
           </div>
         )}
@@ -754,13 +754,13 @@ const SelectedMediaThumbnail: React.FC<SelectedMediaThumbnailProps> = ({
         type="button"
         onClick={() => onRemove(index)}
         aria-label={removeLabel}
-        className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border border-white/70 bg-slate-950 text-white shadow-lg transition-transform duration-150 hover:scale-105"
+        className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--cv-inner-border)] bg-slate-950 text-white shadow-lg transition-transform duration-150 hover:scale-105"
         whileTap={{ scale: 0.9 }}
       >
         <X className="h-3.5 w-3.5" />
       </motion.button>
       {kind === 'video' && (
-        <span className="absolute bottom-0 right-0 flex h-6 w-6 items-center justify-center rounded-full border border-white/70 bg-white text-slate-950 shadow-md">
+        <span className="absolute bottom-0 right-0 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--cv-inner-border)] bg-white text-slate-950 shadow-md">
           <Video className="h-3.5 w-3.5" />
         </span>
       )}
@@ -2566,7 +2566,7 @@ const MessagesScreen: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="skyline-page-scroll w-full">
-        <div className="mx-auto flex min-h-full w-full max-w-5xl items-center justify-center px-4 pb-8 pt-24 md:pt-28">
+        <div className="mx-auto flex min-h-full w-full max-w-5xl items-center justify-center px-4 pb-8 pt-[72px]">
           <div className="w-full max-w-lg">
             <AuthWizard
               isOpen={true}
@@ -2583,21 +2583,21 @@ const MessagesScreen: React.FC = () => {
   }
 
   return (
-    <div className="h-full w-full overflow-hidden px-1 pb-8 pt-24 md:px-2 md:pt-28">
+    <div className="h-full w-full overflow-hidden pt-[72px]">
       <div className="mx-auto flex h-full min-h-0 w-full max-w-7xl flex-row overflow-hidden">
         <div
-          className={`flex flex-row h-full w-full flex-1 min-h-0 overflow-hidden border backdrop-blur-3xl shadow-[0_36px_120px_-48px_rgba(15,23,42,0.45)] ${theme === 'dark'
-            ? 'cv-card-surface-soft rounded-[36px] border-white/10'
-            : 'rounded-[36px] border-white/70 bg-white/70'
+          className={`flex flex-row h-full w-full flex-1 min-h-0 overflow-hidden ${theme === 'dark'
+            ? 'cv-card-surface-soft'
+            : 'bg-white'
             }`}
           style={{ flex: '1 1 auto', minHeight: 0, display: 'flex', flexDirection: 'row' }}
         >
           {/* Sidebar - Responsive Design */}
-          <div className={`absolute lg:relative inset-0 z-40 lg:z-auto w-full lg:w-[360px] lg:flex-shrink-0 border-r flex flex-col h-full overflow-hidden backdrop-blur-3xl ${theme === 'dark' ? 'cv-card-surface-solid border-white/10' : 'border-white/70 bg-white/80'
+          <div className={`absolute lg:relative inset-0 z-40 lg:z-auto w-full lg:w-[360px] lg:flex-shrink-0 border-r flex flex-col h-full overflow-hidden ${theme === 'dark' ? 'cv-card-surface-solid border-white/10' : 'border-[var(--cv-inner-border)] bg-white'
             } ${showSidebar ? 'flex' : 'hidden lg:flex'}`}>
             <div className={`flex-shrink-0 z-50 border-b px-3 py-3 ${theme === 'dark'
-              ? 'cv-card-surface-soft border-white/10 backdrop-blur-2xl'
-              : 'border-white/70 bg-white/75 backdrop-blur-2xl'
+              ? 'cv-card-surface-soft border-white/10'
+              : 'border-[var(--cv-inner-border)] bg-white'
               }`}>
               <div className="flex items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-3">
@@ -2605,7 +2605,7 @@ const MessagesScreen: React.FC = () => {
                     <MessageCircle className="h-5 w-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[9px] font-black uppercase tracking-[0.28em] text-sky-600">
+                    <p className="text-[9px] font-black uppercase tracking-[0.28em] text-brand-hovered">
                       {t('messages.chat')}
                     </p>
                     <h1 className={`mt-0.5 truncate text-lg font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-slate-950'
@@ -2619,7 +2619,7 @@ const MessagesScreen: React.FC = () => {
                   onClick={refreshChats}
                   disabled={isLoadingChats}
                   aria-label={t('messages.refresh', { defaultValue: 'Yenile' })}
-                    className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${isLoadingChats ? 'opacity-60 cursor-not-allowed' : ''} ${theme === 'dark' ? 'bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-white' : 'bg-white/80 text-slate-600 hover:bg-sky-50 hover:text-slate-950'
+                    className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${isLoadingChats ? 'opacity-60 cursor-not-allowed' : ''} ${theme === 'dark' ? 'bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-white' : 'bg-white/80 text-slate-600 hover:bg-brand hover:text-slate-950'
                     }`}
                 >
                     <RefreshCw className={`h-4 w-4 ${isLoadingChats ? 'animate-spin' : ''}`} />
@@ -2627,7 +2627,7 @@ const MessagesScreen: React.FC = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                    className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${theme === 'dark' ? 'bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-white' : 'bg-white/80 text-slate-600 hover:bg-sky-50 hover:text-slate-950'
+                    className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${theme === 'dark' ? 'bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-white' : 'bg-white/80 text-slate-600 hover:bg-brand hover:text-slate-950'
                     }`}
                 >
                     <Settings className="h-4 w-4" />
@@ -2635,7 +2635,7 @@ const MessagesScreen: React.FC = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                    className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${theme === 'dark' ? 'bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-white' : 'bg-white/80 text-slate-600 hover:bg-sky-50 hover:text-slate-950'
+                    className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${theme === 'dark' ? 'bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-white' : 'bg-white/80 text-slate-600 hover:bg-brand hover:text-slate-950'
                     }`}
                 >
                     <PlusSquare className="h-4 w-4" />
@@ -2653,74 +2653,38 @@ const MessagesScreen: React.FC = () => {
                   type="text"
                   placeholder={t('messages.search')}
                   className={`relative w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-full border text-sm z-10 outline-none transition-all focus:ring-2 ${theme === 'dark'
-                    ? 'bg-white/[0.08] border-white/10 text-white placeholder-zinc-500 focus:ring-sky-500/20'
-                    : 'bg-white/[0.85] border-white/80 text-slate-900 placeholder-slate-500 focus:ring-sky-500/20'
+                    ? 'bg-white/[0.08] border-white/10 text-white placeholder-zinc-500 focus:ring-brand/20'
+                    : 'bg-white/[0.85] border-[var(--cv-inner-border)] text-slate-900 placeholder-slate-500 focus:ring-brand/20'
                     }`}
                 />
               </div>
 
               {/* Filter Tabs */}
-              <div className="flex gap-2 overflow-x-auto no-scrollbar flex-nowrap relative z-20">
-                <motion.button
-                  onClick={() => setActiveFilter('all')}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors whitespace-nowrap flex-shrink-0 ${activeFilter === 'all'
-                    ? theme === 'dark'
-                      ? 'bg-sky-500 text-white shadow-[0_10px_24px_-16px_rgba(14,165,233,0.9)]'
-                      : 'bg-sky-600 text-white shadow-[0_10px_24px_-16px_rgba(2,132,199,0.9)]'
-                    : theme === 'dark'
-                      ? 'bg-white/[0.08] text-zinc-400 hover:bg-white/[0.12]'
-                      : 'bg-white/70 text-slate-600 hover:bg-white'
-                    }`}
-                >
-                  {t('messages.all')}
-                </motion.button>
-                <motion.button
-                  onClick={() => setActiveFilter('unread')}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors whitespace-nowrap flex-shrink-0 ${activeFilter === 'unread'
-                    ? theme === 'dark'
-                      ? 'bg-sky-500 text-white shadow-[0_10px_24px_-16px_rgba(14,165,233,0.9)]'
-                      : 'bg-sky-600 text-white shadow-[0_10px_24px_-16px_rgba(2,132,199,0.9)]'
-                    : theme === 'dark'
-                      ? 'bg-white/[0.08] text-zinc-400 hover:bg-white/[0.12]'
-                      : 'bg-white/70 text-slate-600 hover:bg-white'
-                    }`}
-                >
-                  {t('messages.unread')}
-                </motion.button>
-                <motion.button
-                  onClick={() => setActiveFilter('groups')}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors whitespace-nowrap flex-shrink-0 ${activeFilter === 'groups'
-                    ? theme === 'dark'
-                      ? 'bg-sky-500 text-white shadow-[0_10px_24px_-16px_rgba(14,165,233,0.9)]'
-                      : 'bg-sky-600 text-white shadow-[0_10px_24px_-16px_rgba(2,132,199,0.9)]'
-                    : theme === 'dark'
-                      ? 'bg-white/[0.08] text-zinc-400 hover:bg-white/[0.12]'
-                      : 'bg-white/70 text-slate-600 hover:bg-white'
-                    }`}
-                >
-                  {t('messages.groups')}
-                </motion.button>
-                <motion.button
-                  onClick={() => setActiveFilter('unencrypted')}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors whitespace-nowrap flex-shrink-0 ${activeFilter === 'unencrypted'
-                    ? theme === 'dark'
-                      ? 'bg-sky-500 text-white shadow-[0_10px_24px_-16px_rgba(14,165,233,0.9)]'
-                      : 'bg-sky-600 text-white shadow-[0_10px_24px_-16px_rgba(2,132,199,0.9)]'
-                    : theme === 'dark'
-                      ? 'bg-white/[0.08] text-zinc-400 hover:bg-white/[0.12]'
-                      : 'bg-white/70 text-slate-600 hover:bg-white'
-                    }`}
-                >
-                  {t('messages.unencrypted')}
-                </motion.button>
+              <div className="cv-tab-bar -mx-1 !h-12">
+                <div className="cv-tab-row overflow-x-auto no-scrollbar">
+                  {(
+                    [
+                      { id: 'all' as const, label: t('messages.all') },
+                      { id: 'unread' as const, label: t('messages.unread') },
+                      { id: 'groups' as const, label: t('messages.groups') },
+                      { id: 'unencrypted' as const, label: t('messages.unencrypted') },
+                    ]
+                  ).map((tab) => {
+                    const isActive = activeFilter === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => setActiveFilter(tab.id)}
+                        style={{ minWidth: 0, flex: 'none' }}
+                        className={`cv-tab !h-12 !pt-0 !text-[13px] ${isActive ? 'is-active' : ''}`}
+                      >
+                        <span className="min-w-0 truncate px-2">{tab.label}</span>
+                        <span className={`cv-tab-underline ${isActive ? 'is-on' : ''}`} />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
@@ -2731,7 +2695,7 @@ const MessagesScreen: React.FC = () => {
                   {Array.from({ length: 6 }).map((_, idx) => (
                     <div
                       key={idx}
-                      className={`flex items-center space-x-3 p-3 sm:p-4 rounded-3xl border ${theme === 'dark' ? 'bg-white/[0.06] border-white/[0.08]' : 'bg-white/70 border-white/80'}`}
+                      className={`flex items-center space-x-3 p-3 sm:p-4 rounded-3xl border ${theme === 'dark' ? 'bg-white/[0.06] border-white/[0.08]' : 'bg-white/70 border-[var(--cv-inner-border)]'}`}
                     >
                       <div className={`h-12 w-12 sm:h-14 sm:w-14 rounded-full animate-pulse ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-200'}`} />
                       <div className="flex-1 space-y-2">
@@ -2751,49 +2715,48 @@ const MessagesScreen: React.FC = () => {
                 <div className={`flex items-center justify-center h-full text-center p-8 ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-500'}`}>
                   {t('messages.no_chats_found')}
                 </div>
-              ) : chatsList.filter((chat: ChatItem) => {
-                if (activeFilter === 'all') return true;
-                if (activeFilter === 'unread') return chat.unread > 0;
-                if (activeFilter === 'unencrypted') return !chat.encrypted;
-                return true;
-              }).map((chat: ChatItem) => (
+              ) : (() => {
+                const visibleChats = chatsList.filter((chat: ChatItem) => {
+                  if (activeFilter === 'all') return true;
+                  if (activeFilter === 'unread') return chat.unread > 0;
+                  if (activeFilter === 'unencrypted') return !chat.encrypted;
+                  return true;
+                });
+                return visibleChats.map((chat: ChatItem, chatIndex: number) => (
+              <React.Fragment key={chat.id}>
                 <div
-                  key={chat.id}
-                  className={`group/item mx-2 mb-2 rounded-[28px] p-3 sm:p-4 cursor-pointer transition-all border relative ${theme === 'dark' ? 'border-white/[0.08]' : 'border-white/70'
-                    } ${selectedChat === chat.id
-                      ? theme === 'dark'
-                        ? 'bg-sky-500/[0.14] border-sky-400/20 shadow-[0_18px_45px_-30px_rgba(14,165,233,0.65)]'
-                        : 'bg-white/[0.92] border-sky-100 shadow-[0_18px_45px_-32px_rgba(2,132,199,0.55)]'
+                  className={`group/item p-3 sm:p-4 cursor-pointer transition-colors relative ${selectedChat === chat.id
+                      ? 'bg-[var(--color-brand-light-solid)]'
                       : theme === 'dark'
-                        ? 'bg-white/[0.03] hover:bg-white/[0.07]'
-                        : 'bg-white/[0.42] hover:bg-white/[0.78]'
+                        ? 'hover:bg-white/[0.05]'
+                        : 'hover:bg-[var(--cv-surface-2-hover)]'
                     }`}
                   onClick={() => handleChatSelect(chat.id)}
                 >
                   <div className="flex items-center space-x-2 sm:space-x-3">
-                    <div className="relative flex-shrink-0">
-                      {chat.avatar ? (
+                    <div className="relative h-12 w-12 shrink-0 sm:h-14 sm:w-14">
+                      <div className={`flex h-full w-full items-center justify-center rounded-full text-lg font-bold ${theme === 'dark' ? 'bg-zinc-900 text-white border border-white/10' : 'bg-slate-950 text-white'
+                        }`}>
+                        {chat.avatarLetter || chat.name.charAt(0).toUpperCase()}
+                      </div>
+                      {chat.avatar && (
                         <img
                           src={chat.avatar}
-                          alt={chat.name}
-                          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover"
+                          alt=""
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          className="absolute inset-0 h-full w-full rounded-full object-cover"
                         />
-                      ) : (
-                        <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-lg font-bold ${theme === 'dark' ? 'bg-zinc-900 text-white border border-white/10' : 'bg-slate-950 text-white'
-                          }`}>
-                          {chat.avatarLetter || chat.name.charAt(0).toUpperCase()}
-                        </div>
                       )}
                       {!chat.encrypted && (
                         <Lock className={`absolute -bottom-1 left-0 w-3 h-3 ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'
                           }`} />
                       )}
                       {chat.online && (
-                        <div className={`absolute -bottom-1 -right-1 w-3 h-3 border-2 rounded-full ${theme === 'dark' ? 'bg-sky-400 border-zinc-950' : 'bg-sky-500 border-white'
+                        <div className={`absolute -bottom-1 -right-1 w-3 h-3 border-2 rounded-full ${theme === 'dark' ? 'bg-brand border-zinc-950' : 'bg-brand border-white'
                           }`}></div>
                       )}
                       {chat.verified && (
-                        <Check className={`absolute -top-1 -right-1 w-4 h-4 ${theme === 'dark' ? 'text-sky-300' : 'text-sky-600'
+                        <Check className={`absolute -top-1 -right-1 w-4 h-4 ${theme === 'dark' ? 'text-brand' : 'text-brand-hovered'
                           }`} />
                       )}
                     </div>
@@ -2810,7 +2773,7 @@ const MessagesScreen: React.FC = () => {
                           <span className={`text-xs ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-500'
                             }`}>{chat.lastTime}</span>
                           {chat.unread === 0 && (
-                            <CheckCheck className={`w-3 h-3 ${theme === 'dark' ? 'text-sky-300' : 'text-sky-600'
+                            <CheckCheck className={`w-3 h-3 ${theme === 'dark' ? 'text-brand' : 'text-brand-hovered'
                               }`} />
                           )}
                         </div>
@@ -2829,7 +2792,7 @@ const MessagesScreen: React.FC = () => {
                       </div>
                       {chat.unread > 0 && (
                         <div className="flex justify-end mt-1 sm:mt-2">
-                          <span className={`text-white text-xs px-2 py-1 rounded-full ${theme === 'dark' ? 'bg-sky-400 text-zinc-950' : 'bg-sky-600 text-white'
+                          <span className={`text-white text-xs px-2 py-1 rounded-full ${theme === 'dark' ? 'bg-brand text-zinc-950' : 'bg-brand-hovered text-white'
                             }`}>
                             {chat.unread}
                           </span>
@@ -2846,7 +2809,7 @@ const MessagesScreen: React.FC = () => {
                       }}
                       className={`p-1.5 rounded-full transition-colors ${theme === 'dark'
                         ? 'hover:bg-white/10 text-zinc-400'
-                        : 'hover:bg-sky-50 text-slate-500'
+                        : 'hover:bg-[var(--cv-surface-3)] text-slate-500'
                         }`}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
@@ -2862,7 +2825,7 @@ const MessagesScreen: React.FC = () => {
                           transition={{ duration: 0.15 }}
                           className={`absolute right-0 top-full mt-1 rounded-2xl shadow-2xl border z-50 p-1 backdrop-blur-2xl ${theme === 'dark'
                             ? 'bg-zinc-900/[0.92] border-white/10'
-                            : 'bg-white/[0.92] border-white/70'
+                            : 'bg-white/[0.92] border-[var(--cv-inner-border)]'
                             }`}
                           style={{ minWidth: '140px' }}
                           onClick={(e) => e.stopPropagation()}
@@ -2913,7 +2876,12 @@ const MessagesScreen: React.FC = () => {
                     </AnimatePresence>
                   </div>
                 </div>
-              ))}
+                {chatIndex < visibleChats.length - 1 && (
+                  <div className={`h-px ${theme === 'dark' ? 'bg-white/[0.06]' : 'bg-[var(--cv-inner-border)]'}`} />
+                )}
+              </React.Fragment>
+                ));
+              })()}
             </div>
           </div>
 
@@ -2943,8 +2911,8 @@ const MessagesScreen: React.FC = () => {
                 <div
                   ref={headerRef}
                   className={`flex-shrink-0 z-30 p-3 sm:p-4 border-b ${theme === 'dark'
-                    ? 'cv-card-surface-soft border-white/10 backdrop-blur-2xl'
-                    : 'border-white/70 bg-white/75 backdrop-blur-2xl'
+                    ? 'cv-card-surface-soft border-white/10'
+                    : 'border-[var(--cv-inner-border)] bg-white'
                     }`}
                   style={{
                     flexGrow: 0,
@@ -2962,7 +2930,7 @@ const MessagesScreen: React.FC = () => {
                         }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`lg:hidden p-2 rounded-full flex-shrink-0 mr-1 transition-colors ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-sky-50'}`}
+                        className={`lg:hidden p-2 rounded-full flex-shrink-0 mr-1 transition-colors ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-brand'}`}
                       >
                         <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`} />
                       </motion.button>
@@ -2976,18 +2944,18 @@ const MessagesScreen: React.FC = () => {
                           transition={{ type: "spring", stiffness: 400, damping: 17 }}
                           className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1 cursor-pointer"
                         >
-                          <div className="relative flex-shrink-0">
-                            {selectedPrivateChat.avatar ? (
+                          <div className="relative h-10 w-10 shrink-0">
+                            <div className={`flex h-full w-full items-center justify-center rounded-full text-base font-bold ${theme === 'dark' ? 'bg-zinc-900 text-white border border-white/10' : 'bg-slate-950 text-white'
+                              }`}>
+                              {selectedPrivateChat.avatarLetter || selectedPrivateChat.name.charAt(0).toUpperCase()}
+                            </div>
+                            {selectedPrivateChat.avatar && (
                               <img
                                 src={selectedPrivateChat.avatar}
-                                alt={selectedPrivateChat.name}
-                                className="w-10 h-10 rounded-full object-cover"
+                                alt=""
+                                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                                className="absolute inset-0 h-full w-full rounded-full object-cover"
                               />
-                            ) : (
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-base font-bold ${theme === 'dark' ? 'bg-zinc-900 text-white border border-white/10' : 'bg-slate-950 text-white'
-                                }`}>
-                                {selectedPrivateChat.avatarLetter || selectedPrivateChat.name.charAt(0).toUpperCase()}
-                              </div>
                             )}
                           </div>
                           <div className="min-w-0 flex-1 text-left">
@@ -2998,7 +2966,7 @@ const MessagesScreen: React.FC = () => {
                                 <span className="text-base">{selectedPrivateChat.emojis}</span>
                               )}
                               {selectedPrivateChat.verified && (
-                                <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${theme === 'dark' ? 'bg-sky-300' : 'bg-sky-600'
+                                <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${theme === 'dark' ? 'bg-brand' : 'bg-brand-hovered'
                                   }`}>
                                   <Check className={`w-2.5 h-2.5 ${theme === 'dark' ? 'text-zinc-950' : 'text-white'
                                     }`} />
@@ -3046,7 +3014,7 @@ const MessagesScreen: React.FC = () => {
                         disabled={isRefreshingMessages || isLoadingMessages}
                         className={`p-2 rounded-full transition-colors ${theme === 'dark'
                           ? 'hover:bg-white/10 text-zinc-400'
-                          : 'hover:bg-sky-50 text-slate-500'
+                          : 'hover:bg-[var(--cv-surface-3)] text-slate-500'
                           } disabled:opacity-50`}
                       >
                         <RefreshCw
@@ -3061,7 +3029,7 @@ const MessagesScreen: React.FC = () => {
                         }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-sky-50'
+                        className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-brand'
                           }`}
                       >
                         <MoreVertical className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`} />
@@ -3074,7 +3042,7 @@ const MessagesScreen: React.FC = () => {
                           transition={{ duration: 0.2, ease: "easeOut" }}
                           className={`absolute right-0 top-full mt-2 z-50 min-w-[200px] rounded-2xl shadow-2xl border backdrop-blur-2xl overflow-hidden ${theme === 'dark'
                             ? 'bg-zinc-900/[0.92] border-white/10'
-                            : 'bg-white/[0.92] border-white/70'
+                            : 'bg-white/[0.92] border-[var(--cv-inner-border)]'
                             }`}
                           onClick={(e) => e.stopPropagation()}
                         >
@@ -3174,7 +3142,7 @@ const MessagesScreen: React.FC = () => {
                       ref={null/*messagesContainerRef*/}
                       className={`flex-1 flex flex-col p-3 sm:p-4 no-scrollbar min-h-0 overflow-hidden ${theme === 'dark'
                         ? 'cv-card-surface-muted'
-                        : 'bg-sky-50/[0.28]'
+                        : 'bg-[var(--cv-page-bg)]'
                         }`}
                       style={{
                         flexGrow: 1,
@@ -3208,7 +3176,7 @@ const MessagesScreen: React.FC = () => {
                                   <div
                                     key={bi}
                                     className={`h-9 rounded-2xl animate-pulse ${w} ${group.side === 'me'
-                                      ? theme === 'dark' ? 'bg-sky-500/30 rounded-br-sm' : 'bg-sky-200 rounded-br-sm'
+                                      ? theme === 'dark' ? 'bg-brand/30 rounded-br-sm' : 'bg-brand rounded-br-sm'
                                       : theme === 'dark' ? 'bg-white/10 rounded-bl-sm' : 'bg-white/80 rounded-bl-sm'
                                       }`}
                                     style={{ animationDelay: `${(gi * 0.12 + bi * 0.06).toFixed(2)}s` }}
@@ -3228,7 +3196,7 @@ const MessagesScreen: React.FC = () => {
                                 <div className="pb-3">
                                   {index === 0 && (
                                     <div className="flex justify-center my-6">
-                                      <div className={`px-3 py-1 rounded-full border backdrop-blur-xl ${theme === 'dark' ? 'bg-white/[0.08] border-white/10' : 'bg-white/80 border-white/70'}`}>
+                                      <div className={`px-3 py-1 rounded-full border backdrop-blur-xl ${theme === 'dark' ? 'bg-white/[0.08] border-white/10' : 'bg-white/80 border-[var(--cv-inner-border)]'}`}>
                                         <span className={`text-xs font-medium ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-600'}`}>
                                           {t('messages.today')}
                                         </span>
@@ -3252,7 +3220,7 @@ const MessagesScreen: React.FC = () => {
                                 EmptyPlaceholder: () => (
                                   <div className="flex items-center justify-center py-12">
                                     <div className="text-center">
-                                      <MessageCircle className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-zinc-600' : 'text-sky-300'}`} />
+                                      <MessageCircle className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-zinc-600' : 'text-brand'}`} />
                                       <p className={`text-sm ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'}`}>
                                         {t('messages.no_messages_yet')}
                                       </p>
@@ -3280,7 +3248,7 @@ const MessagesScreen: React.FC = () => {
                             className={`message-context-menu fixed z-[1000] min-w-[180px] overflow-hidden rounded-xl shadow-2xl
                               ${theme === 'dark'
                                 ? 'bg-zinc-900/95 border border-white/10 backdrop-blur-2xl'
-                                : 'bg-white/95 border border-white/70 backdrop-blur-2xl'}`
+                                : 'bg-white/95 border border-[var(--cv-inner-border)] backdrop-blur-2xl'}`
                             }
                             style={{
                               left: resolvedMessageMenuPosition?.x ?? 0,
@@ -3350,10 +3318,10 @@ const MessagesScreen: React.FC = () => {
 
                 {/* Typing indicator - Other user typing - Outside messages container to be above input */}
                 {!showProfile && otherUserTyping && (
-                  <div className={`flex-shrink-0 px-3 sm:px-4 py-2 ${theme === 'dark' ? 'cv-card-surface-muted' : 'bg-sky-50/[0.28]'
+                  <div className={`flex-shrink-0 px-3 sm:px-4 py-2 ${theme === 'dark' ? 'cv-card-surface-muted' : 'bg-[var(--cv-page-bg)]'
                     }`}>
                     <div className="flex justify-start">
-                      <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-4 py-2.5 rounded-2xl shadow-sm border backdrop-blur-xl ${theme === 'dark' ? 'bg-zinc-900/80 text-white border-white/10' : 'bg-white/[0.85] text-slate-900 border-white/70'
+                      <div className={`max-w-[75%] sm:max-w-xs md:max-w-sm px-4 py-2.5 rounded-2xl shadow-sm border backdrop-blur-xl ${theme === 'dark' ? 'bg-zinc-900/80 text-white border-white/10' : 'bg-white/[0.85] text-slate-900 border-[var(--cv-inner-border)]'
                         }`} style={{
                           borderBottomLeftRadius: '4px',
                           borderTopLeftRadius: '16px',
@@ -3366,11 +3334,11 @@ const MessagesScreen: React.FC = () => {
                             {selectedPrivateChat?.name || t('messages.user')} {t('messages.typing')}
                           </span>
                           <div className="flex space-x-1">
-                            <div className={`w-2 h-2 rounded-full animate-bounce ${theme === 'dark' ? 'bg-sky-300' : 'bg-sky-600'
+                            <div className={`w-2 h-2 rounded-full animate-bounce ${theme === 'dark' ? 'bg-brand' : 'bg-brand-hovered'
                               }`}></div>
-                            <div className={`w-2 h-2 rounded-full animate-bounce ${theme === 'dark' ? 'bg-sky-300' : 'bg-sky-600'
+                            <div className={`w-2 h-2 rounded-full animate-bounce ${theme === 'dark' ? 'bg-brand' : 'bg-brand-hovered'
                               }`} style={{ animationDelay: '0.2s' }}></div>
-                            <div className={`w-2 h-2 rounded-full animate-bounce ${theme === 'dark' ? 'bg-sky-300' : 'bg-sky-600'
+                            <div className={`w-2 h-2 rounded-full animate-bounce ${theme === 'dark' ? 'bg-brand' : 'bg-brand-hovered'
                               }`} style={{ animationDelay: '0.4s' }}></div>
                           </div>
                         </div>
@@ -3384,8 +3352,8 @@ const MessagesScreen: React.FC = () => {
                   <div
                     ref={inputContainerRef}
                     className={`relative flex-shrink-0 border-t w-full p-3 transition-all duration-300 sm:p-4 ${theme === 'dark'
-                        ? 'cv-card-surface-soft border-white/10 backdrop-blur-2xl'
-                        : 'border-white/70 bg-white/75 backdrop-blur-2xl'
+                        ? 'cv-card-surface-soft border-white/10'
+                        : 'border-[var(--cv-inner-border)] bg-white'
                       }`}
                     style={{
                       paddingBottom: isMobile ? `max(12px, env(safe-area-inset-bottom, 12px))` : undefined,
@@ -3408,10 +3376,10 @@ const MessagesScreen: React.FC = () => {
                           ? 'messages.view_once_requires_single_photo'
                           : 'messages.view_once_description')}
                         onClick={handleViewOnceToggle}
-                        className={`group flex h-10 min-w-0 w-full items-center justify-between gap-2 rounded-xl border px-2.5 text-xs font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 sm:w-auto ${viewOnceEnabled
+                        className={`group flex h-10 min-w-0 w-full items-center justify-between gap-2 rounded-xl border px-2.5 text-xs font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:w-auto ${viewOnceEnabled
                           ? theme === 'dark'
-                            ? 'border-sky-300/30 bg-sky-400/12 text-sky-100'
-                            : 'border-sky-200 bg-sky-50/90 text-sky-900'
+                            ? 'border-brand/30 bg-brand/12 text-brand'
+                            : 'border-brand bg-brand text-white'
                           : theme === 'dark'
                             ? 'border-white/10 bg-white/[0.045] text-zinc-300 hover:bg-white/[0.075]'
                             : 'border-slate-200/80 bg-white/80 text-slate-600 hover:bg-white'
@@ -3419,7 +3387,7 @@ const MessagesScreen: React.FC = () => {
                       >
                         <span className="flex min-w-0 items-center gap-2">
                           <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg transition-colors ${viewOnceEnabled
-                            ? theme === 'dark' ? 'bg-sky-300/15 text-sky-200' : 'bg-sky-100 text-sky-700'
+                            ? theme === 'dark' ? 'bg-brand/15 text-brand' : 'bg-brand text-white'
                             : theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-500'
                             }`}>
                             <Eye className="h-3.5 w-3.5" aria-hidden="true" />
@@ -3429,7 +3397,7 @@ const MessagesScreen: React.FC = () => {
                         <span
                           aria-hidden="true"
                           className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition-colors duration-200 ${viewOnceEnabled
-                            ? 'bg-sky-500 shadow-inner shadow-sky-950/15'
+                            ? 'bg-brand shadow-inner shadow-brand-hovered/15'
                             : theme === 'dark' ? 'bg-white/15' : 'bg-slate-300'
                             }`}
                         >
@@ -3537,9 +3505,9 @@ const MessagesScreen: React.FC = () => {
                         className="hidden"
                       />
                       <div
-                        className={`flex w-full items-center gap-2 rounded-full border transition-all shadow-[0_16px_44px_-30px_rgba(15,23,42,0.45)] ${theme === 'dark'
-                          ? 'bg-white/[0.08] border-white/10 focus-within:border-sky-400/[0.35] focus-within:ring-2 focus-within:ring-sky-500/20'
-                          : 'bg-white/[0.88] border-white/80 focus-within:border-sky-200 focus-within:ring-2 focus-within:ring-sky-500/15'
+                        className={`flex w-full items-center gap-2 rounded-full border transition-all ${theme === 'dark'
+                          ? 'bg-white/[0.08] border-white/10 focus-within:border-brand/[0.35] focus-within:ring-2 focus-within:ring-brand/20'
+                          : 'bg-[var(--cv-surface-2)] border-[var(--cv-inner-border)] focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/15'
                           } px-3 py-2 sm:py-2.5`}
                       >
                         <div className="flex items-center space-x-1">
@@ -3554,7 +3522,7 @@ const MessagesScreen: React.FC = () => {
                                 : 'bg-blue-50 text-blue-600'
                               : theme === 'dark'
                                 ? 'hover:bg-white/10 text-zinc-400'
-                                : 'hover:bg-sky-50 text-slate-600'
+                                : 'hover:bg-brand text-slate-600'
                               }`}
                           >
                             <Image className="w-4 h-4" />
@@ -3570,7 +3538,7 @@ const MessagesScreen: React.FC = () => {
                                 : 'bg-purple-50 text-purple-600'
                               : theme === 'dark'
                                 ? 'hover:bg-white/10 text-zinc-400'
-                                : 'hover:bg-sky-50 text-slate-600'
+                                : 'hover:bg-brand text-slate-600'
                               }`}
                           >
                             <Video className="w-4 h-4" />
@@ -3580,7 +3548,7 @@ const MessagesScreen: React.FC = () => {
                             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
-                            className={`p-1.5 rounded-full ${theme === 'dark' ? 'hover:bg-white/10 text-zinc-400' : 'hover:bg-sky-50 text-slate-600'
+                            className={`p-1.5 rounded-full ${theme === 'dark' ? 'hover:bg-white/10 text-zinc-400' : 'hover:bg-brand text-slate-600'
                               }`}
                           >
                             <Smile className="w-4 h-4" />
@@ -3601,8 +3569,8 @@ const MessagesScreen: React.FC = () => {
                           whileTap={{ scale: 0.95 }}
                           className={`flex-shrink-0 p-2 rounded-full transition-all ${(message.trim() || selectedImages.length > 0 || selectedVideos.length > 0)
                             ? theme === 'dark'
-                              ? 'bg-sky-400 text-zinc-950 hover:bg-sky-300 shadow-[0_10px_24px_-14px_rgba(14,165,233,0.9)]'
-                              : 'bg-sky-600 text-white hover:bg-sky-700 shadow-[0_10px_24px_-14px_rgba(2,132,199,0.9)]'
+                              ? 'bg-brand text-zinc-950 hover:bg-brand shadow-[0_10px_24px_-14px_rgba(255,55,199,0.9)]'
+                              : 'bg-brand-hovered text-white hover:bg-brand-hovered shadow-[0_10px_24px_-14px_rgba(229,0,165,0.9)]'
                             : theme === 'dark'
                               ? 'bg-white/10 text-zinc-500 cursor-not-allowed'
                               : 'bg-slate-200 text-slate-500 cursor-not-allowed'
@@ -3615,7 +3583,7 @@ const MessagesScreen: React.FC = () => {
 
                     {/* Emoji Picker */}
                     {showEmojiPicker && (
-                      <div className={`mt-2 p-3 rounded-2xl border backdrop-blur-2xl ${theme === 'dark' ? 'bg-zinc-900/[0.92] border-white/10' : 'bg-white/[0.92] border-white/70'
+                      <div className={`mt-2 p-3 rounded-2xl border backdrop-blur-2xl ${theme === 'dark' ? 'bg-zinc-900/[0.92] border-white/10' : 'bg-white/[0.92] border-[var(--cv-inner-border)]'
                         }`}>
                         <div className="grid grid-cols-8 gap-2">
                           {emojis.map((emoji, index) => (
@@ -3624,7 +3592,7 @@ const MessagesScreen: React.FC = () => {
                               onClick={() => handleEmojiClick(emoji)}
                               whileHover={{ scale: 1.2 }}
                               whileTap={{ scale: 0.9 }}
-                              className={`p-2 text-lg rounded-full ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-sky-50'
+                              className={`p-2 text-lg rounded-full ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-brand'
                                 }`}
                             >
                               {emoji}
@@ -3649,11 +3617,12 @@ const MessagesScreen: React.FC = () => {
                 className="flex-1 flex flex-col h-full w-full relative z-10 overflow-hidden"
               >
                 {!isMobile ? (
-                  <div className={`flex-1 flex items-center justify-center ${theme === 'dark' ? 'cv-card-surface-muted' : 'bg-sky-50/[0.28]'
+                  <div className={`flex-1 flex items-center justify-center ${theme === 'dark' ? 'cv-card-surface-muted' : 'bg-[var(--cv-page-bg)]'
                     }`}>
                     <div className="text-center px-4">
-                      <MessageCircle className={`w-16 h-16 mx-auto mb-4 ${theme === 'dark' ? 'text-zinc-600' : 'text-sky-300'
-                        }`} />
+                      <span className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
+                        <MessageCircle className="h-7 w-7" strokeWidth={2} />
+                      </span>
                       <h2 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-slate-950'
                         }`}>{t('messages.select_conversation')}</h2>
                       <p className={`${theme === 'dark' ? 'text-zinc-400' : 'text-slate-600'

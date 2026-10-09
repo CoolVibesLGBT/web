@@ -12,6 +12,7 @@ import {
   UserSearch,
   GraduationCap,
   PawPrint,
+  RefreshCw,
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
@@ -185,14 +186,6 @@ export default function ClassifiedsScreen() {
     });
   }, [posts, searchQuery]);
 
-  const classifiedColumns = useMemo(() => {
-    const columns: any[][] = [[], [], []];
-    filteredPosts.forEach((post, index) => {
-      columns[index % columns.length].push(post);
-    });
-    return columns;
-  }, [filteredPosts]);
-
   const handleMetadataToggle = () => {
     setIsMetadataEnabled(prev => {
       if (prev) {
@@ -345,68 +338,69 @@ export default function ClassifiedsScreen() {
     <motion.div
       ref={containerRef}
       onScroll={handleScroll}
-      className="skyline-page-scroll w-full pt-24 md:pt-28"
+      className="skyline-page-scroll w-full pt-0"
       initial={{ opacity: 0, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
     >
       <div className="flex min-h-full flex-col">
-        <section className="relative z-20 mx-auto w-full max-w-7xl px-1 md:px-2 lg:hidden">
-          <div className={`flex min-h-[50px] flex-wrap items-center gap-2 border-b pb-2 ${dark ? 'border-white/10' : 'border-slate-200/80'}`}>
-            <div className={`flex max-w-full min-w-0 items-center gap-1 overflow-x-auto rounded-full p-1 no-scrollbar ${dark ? 'bg-white/[0.04]' : 'bg-slate-100/85'}`}>
+        <div className="mx-auto w-full max-w-7xl">
+          <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+            <div className="cv-tab-row">
               {classifiedTabs.map((tab) => {
                 const Icon = tab.icon;
                 const active = activeTab === tab.id;
                 return (
-                  <motion.button
+                  <button
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    whileTap={{ scale: 0.98 }}
-                    className={`relative flex h-9 shrink-0 items-center gap-2 overflow-hidden rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] transition-colors ${active
-                      ? 'text-white'
-                      : dark
-                        ? 'text-zinc-500 hover:text-white'
-                        : 'text-slate-500 hover:text-slate-950'
-                      }`}
+                    style={{ minWidth: 0 }}
+                    className={`cv-tab ${active ? 'is-active' : ''}`}
                   >
-                    {active && (
-                      <motion.span
-                        layoutId="classifiedsTabIndicator"
-                        className="absolute inset-0 rounded-full bg-sky-600 shadow-lg shadow-sky-600/20"
-                        transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-                      />
-                    )}
-                    <span className="relative z-10 flex items-center gap-2">
-                      <Icon className="h-3.5 w-3.5" />
-                      {tab.label}
-                    </span>
-                  </motion.button>
+                    <Icon className="h-5 w-5 shrink-0" />
+                    <span className="min-w-0 truncate">{tab.label}</span>
+                    <span className={`cv-tab-underline ${active ? 'is-on' : ''}`} />
+                  </button>
                 );
               })}
             </div>
+          </div>
+        </div>
+        <section className="relative z-20 mx-auto w-full max-w-7xl">
 
-            <div className="ml-auto flex min-w-0 items-center gap-2">
-              <div className={`hidden h-9 shrink-0 items-center gap-2 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] sm:flex ${dark ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/70 text-slate-500'}`}>
-                <ActiveClassifiedTabIcon className="h-3.5 w-3.5" />
-                <span>{activeClassifiedTab.label}</span>
-              </div>
-              <div className={`flex h-9 shrink-0 items-center rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] ${dark ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/70 text-slate-500'}`}>
+          <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
+            <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
+              <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
+                <ActiveClassifiedTabIcon className="h-3.5 w-3.5 shrink-0" />
+                {activeClassifiedTab.label}
+              </span>
+              <span className="flex h-9 shrink-0 items-center rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[13px] font-semibold text-[var(--cv-neutral-2)]">
                 {t('classifieds.active_listings', { count: filteredPosts.length })}
-              </div>
+              </span>
               {searchQuery && (
-                <div className={`flex h-9 min-w-0 items-center gap-2 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.12em] ${dark ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/70 text-slate-500'}`}>
+                <span className="flex h-9 min-w-0 shrink-0 items-center gap-1.5 rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[13px] font-semibold text-[var(--cv-neutral-2)]">
                   <Search className="h-3.5 w-3.5 shrink-0" />
                   <span className="max-w-[140px] truncate md:max-w-[220px]">{searchQuery}</span>
-                </div>
+                </span>
               )}
             </div>
+            <button
+              type="button"
+              onClick={() => fetchClassifieds()}
+              disabled={isLoading}
+              aria-label={t('classifieds.refresh', { defaultValue: 'Refresh listings' })}
+              title={t('classifieds.refresh', { defaultValue: 'Refresh listings' })}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--cv-surface-3)] text-[var(--cv-neutral-1)] transition-all hover:bg-[var(--cv-surface-3-hover)]"
+            >
+              <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+            </button>
           </div>
         </section>
 
         <main className="flex-1 w-full px-0 pt-0 pb-4">
-          <div className="pt-3 pb-4">
+          <div className="pt-2 pb-4">
             <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-1 md:px-2">
               <div className={`text-[10px] font-black uppercase tracking-[0.24em] ${dark ? 'text-zinc-500' : 'text-slate-400'}`}>
                 {t('classifieds.templates.title', { defaultValue: 'İlan fikirleri' })}
@@ -449,23 +443,10 @@ export default function ClassifiedsScreen() {
             </div>
           </div>
           {isLoading ? (
-            <div className="flex items-start justify-center gap-6 px-1 md:gap-8">
-              {[0, 1, 2].map((columnIndex) => (
-                <div
-                  key={columnIndex}
-                  className={`flex-col flex-1 gap-6 md:gap-8 min-w-0 max-w-[420px] ${
-                    columnIndex === 0
-                      ? 'flex'
-                      : columnIndex === 1
-                        ? 'hidden sm:flex'
-                        : 'hidden lg:flex'
-                  }`}
-                >
-                  {[0, 1, 2].map(i => (
-                    <div key={`${columnIndex}-${i}`} className="skyline-feed-card elite-card overflow-hidden">
-                      <PostSkeleton theme={dark ? 'dark' : 'light'} />
-                    </div>
-                  ))}
+            <div className="mx-auto flex w-full max-w-2xl flex-col">
+              {[0, 1, 2].map(i => (
+                <div key={i} className="cv-item overflow-hidden !px-0">
+                  <PostSkeleton theme={dark ? 'dark' : 'light'} />
                 </div>
               ))}
             </div>
@@ -474,33 +455,20 @@ export default function ClassifiedsScreen() {
               <p className="text-red-500 text-sm font-medium">{error}</p>
             </div>
           ) : filteredPosts.length > 0 ? (
-            <div className="flex items-start justify-center gap-6 px-1 md:gap-8">
-              {classifiedColumns.map((column, columnIndex) => (
-                <div
-                  key={columnIndex}
-                  className={`flex-col flex-1 gap-6 md:gap-8 min-w-0 max-w-[420px] ${
-                    columnIndex === 0
-                      ? 'flex'
-                      : columnIndex === 1
-                        ? 'hidden sm:flex'
-                        : 'hidden lg:flex'
-                  }`}
-                >
-                  {column.map((post) => (
-                    <CoolVibesPostCard
-                      key={post.id}
-                      post={post}
-                      onProfileClick={handleProfileClick}
-                      onPostClick={handlePostClick}
-                    />
-                  ))}
-                  {isLoadingMore && (
-                    <div className="skyline-feed-card elite-card overflow-hidden">
-                      <PostSkeleton theme={dark ? 'dark' : 'light'} />
-                    </div>
-                  )}
-                </div>
+            <div className="mx-auto flex w-full max-w-2xl flex-col">
+              {filteredPosts.map((post) => (
+                <CoolVibesPostCard
+                  key={post.id}
+                  post={post}
+                  onProfileClick={handleProfileClick}
+                  onPostClick={handlePostClick}
+                />
               ))}
+              {isLoadingMore && (
+                <div className="cv-item overflow-hidden !px-0">
+                  <PostSkeleton theme={dark ? 'dark' : 'light'} />
+                </div>
+              )}
             </div>
           ) : (
             <div className="py-24 text-center">
@@ -533,8 +501,8 @@ export default function ClassifiedsScreen() {
             >
               <div className={`flex items-center justify-between px-6 h-14 border-b ${dark ? 'cv-card-surface-soft border-white/10' : 'bg-white/70 border-slate-200'}`}>
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${dark ? 'bg-white text-black' : 'bg-slate-900 text-white'}`}>
-                    <Briefcase className="w-4 h-4" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
+                    <Briefcase className="w-4 h-4" strokeWidth={2} />
                   </div>
                   <h3 className="text-sm font-semibold tracking-tight">
                     {postKind === JOB_KIND.offer

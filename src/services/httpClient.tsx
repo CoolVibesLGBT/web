@@ -10,7 +10,7 @@ class HttpClient {
   constructor(baseURL: string) {
     this.instance = axios.create({
       baseURL: `${baseURL}/api/`,
-      timeout: 10000000,
+      timeout: 10000,
     });
 
     // Request interceptor (örneğin token ekleme)

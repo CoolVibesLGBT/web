@@ -711,50 +711,38 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
 
   const content = (
     <>
-      <div className="mx-auto w-full max-w-5xl px-1 pb-8 pt-24 md:px-2 md:pt-28">
+      <div className="mx-auto w-full max-w-5xl px-1 pb-8 pt-0 md:px-2">
         <main className={`flex-1 w-full min-w-0 ${theme === 'dark' ? 'border-x border-white/10' : 'border-x border-gray-200/50'}`}>
           <div className={`min-h-full ${theme === 'dark' ? 'cv-card-surface-solid' : 'bg-white'}`}>
             <div className={`max-w-4xl mx-auto border-x ${theme === 'dark' ? 'border-white/10' : 'border-gray-200/50'}`}>
+              {/* Tabs — kept outside the motion.div below: framer-motion leaves an
+                  inline transform on its element even at rest, which breaks
+                  position:sticky on descendants (the tab bar needs to stick). */}
+              <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+                <div className="cv-tab-row">
+                  {[
+                    { id: 'overview', label: t('wallet.overview') || 'Overview' },
+                    { id: 'history', label: t('wallet.history') || 'History' },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setActiveTab(tab.id as 'overview' | 'history')}
+                      style={{ minWidth: 0 }}
+                      className={`cv-tab ${activeTab === tab.id ? 'is-active' : ''}`}
+                    >
+                      <span className="min-w-0 truncate">{tab.label}</span>
+                      <span className={`cv-tab-underline ${activeTab === tab.id ? 'is-on' : ''}`} />
+                    </button>
+                  ))}
+                </div>
+              </div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
                 className="space-y-6"
               >
-                {/* Tabs */}
-                <div className={`sticky z-20 border-b ${theme === 'dark' ? 'cv-card-surface-soft border-white/10' : 'border-gray-200/50 bg-white/95'} backdrop-blur-sm`} style={{ top: '0' }}>
-                  <div className="flex px-4 sm:px-6 relative">
-                    {[
-                      { id: 'overview', label: t('wallet.overview') || 'Overview' },
-                      { id: 'history', label: t('wallet.history') || 'History' },
-                    ].map((tab) => (
-                      <motion.button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id as 'overview' | 'history')}
-                        className={`flex-1 py-3 font-semibold text-sm relative transition-colors ${activeTab === tab.id
-                          ? theme === 'dark' ? 'text-white' : 'text-black'
-                          : theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
-                          }`}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <span className="relative z-10">{tab.label}</span>
-                        {activeTab === tab.id && (
-                          <motion.div
-                            className={`absolute bottom-0 left-0 right-0 h-1 rounded-t-full ${theme === 'dark' ? 'bg-white' : 'bg-gray-900'}`}
-                            layoutId="walletTabIndicator"
-                            transition={{
-                              type: "spring",
-                              stiffness: 380,
-                              damping: 30,
-                              mass: 0.8
-                            }}
-                          />
-                        )}
-                      </motion.button>
-                    ))}
-                  </div>
-                </div>
 
                 {/* Tab Content */}
                 <div className="px-4 sm:px-6 py-6">

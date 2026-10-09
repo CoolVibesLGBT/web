@@ -3255,8 +3255,8 @@ const Post: React.FC<PostProps> = ({
                 return (
                   <div
                     key={t}
-                    style={tagNameToColor(tagType.tag)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-white`}
+                    style={tagNameToColor(tagType.category)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl"
                   >
                     <Icon className="w-3.5 h-3.5" strokeWidth={2} />
                     <span className="text-xs font-bold">{getLocalizedContent(tagType.name, defaultLanguage)}</span>

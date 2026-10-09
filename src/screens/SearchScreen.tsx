@@ -453,7 +453,7 @@ const SearchScreen: React.FC = () => {
 
   return (
     <div className={`skyline-page-scroll w-full ${textColor}`}>
-        <main className="mx-auto flex min-h-full w-full max-w-[1360px] flex-col gap-5 px-1 pb-8 pt-[88px] md:px-2 md:pt-24">
+        <main className="mx-auto flex min-h-full w-full max-w-[1360px] flex-col gap-5 px-1 pb-8 pt-[72px] md:px-2">
         <section className={`shrink-0 rounded-[30px] border backdrop-blur-3xl lg:self-center lg:w-fit lg:max-w-full ${panelClass} shadow-[0_28px_90px_-48px_rgba(15,23,42,0.55)]`}>
           <form onSubmit={submitSearch} className="flex items-center gap-2 px-4 pt-4">
             <div className="relative flex-1">
@@ -487,8 +487,8 @@ const SearchScreen: React.FC = () => {
             </button>
           </form>
 
-          <div className="overflow-x-auto px-4 pb-3 pt-2 scrollbar-hide">
-            <div className="flex gap-1">
+          <div className="overflow-x-auto px-4 pb-1 pt-2 scrollbar-hide">
+            <div className="flex">
               {filters.map((filter) => {
                 const Icon = filter.icon;
                 const active = activeFilter === filter.id;
@@ -497,14 +497,12 @@ const SearchScreen: React.FC = () => {
                     key={filter.id}
                     type="button"
                     onClick={() => setActiveFilter(filter.id)}
-                    className={`flex shrink-0 items-center gap-2 rounded-[14px] px-4 py-2 text-[13px] font-bold transition-all ${
-                      active
-                        ? (isDark ? 'bg-white text-black' : 'bg-gray-900 text-white')
-                        : (isDark ? 'text-gray-400 hover:bg-white/[0.06] hover:text-white' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900')
-                    }`}
+                    style={{ minWidth: 0 }}
+                    className={`cv-tab !h-[48px] !text-[15px] ${active ? 'is-active' : ''}`}
                   >
-                    <Icon className="h-4 w-4" />
-                    <span>{filter.label}</span>
+                    <Icon className="h-[18px] w-[18px] shrink-0" />
+                    <span className="min-w-0 truncate">{filter.label}</span>
+                    <span className={`cv-tab-underline ${active ? 'is-on' : ''}`} />
                   </button>
                 );
               })}

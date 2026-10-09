@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from '@/router';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
 import {
     Check,
     Copy,
@@ -101,232 +100,204 @@ const ReferralsScreen: React.FC = () => {
         }
     };
 
-    const isDark = theme === 'dark';
-    const textColor = isDark ? 'text-white' : 'text-slate-950';
-    const secTextColor = isDark ? 'text-zinc-400' : 'text-slate-500';
-    const panelClassName = isDark
-        ? 'cv-card-surface-soft border-white/10'
-        : 'border-white/70 bg-white/75';
+    const divider = <div className="h-px w-full bg-[var(--cv-inner-border)]" />;
+
+    const stats = [
+        {
+            label: t('referrals.invited', { defaultValue: 'Invited' }),
+            subtitle: t('referrals.successful_registrations', { defaultValue: 'Successful registrations' }),
+            value: referralCount,
+            suffix: '',
+        },
+        {
+            label: t('referrals.tokens', { defaultValue: 'Tokens' }),
+            subtitle: t('referrals.total_rewards', { defaultValue: 'Total referral rewards' }),
+            value: referralAmount,
+            suffix: DEFAULT_TOKEN_SYMBOL,
+        },
+    ];
+
+    const steps = [
+        { num: '1', title: t('referrals.step_send', { defaultValue: 'Send Invitation' }), desc: t('referrals.step_send_desc', { defaultValue: 'Share your unique link with friends.' }) },
+        { num: '2', title: t('referrals.step_join', { defaultValue: 'Friends Join' }), desc: t('referrals.step_join_desc', { defaultValue: 'They create and verify an account.' }) },
+        { num: '3', title: t('referrals.step_reward', { defaultValue: 'Get Rewarded' }), desc: t('referrals.step_reward_desc', { defaultValue: `You instantly receive 50 ${DEFAULT_TOKEN_SYMBOL}.`, token: DEFAULT_TOKEN_SYMBOL }) },
+    ];
 
     return (
-        <div className={`skyline-page-scroll w-full ${textColor}`}>
-            <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col gap-5 px-1 pb-8 pt-24 md:px-2 md:pt-28">
-                <div className="grid w-full gap-5 lg:grid-cols-[1.18fr_0.82fr]">
-                    <motion.section
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                        className={`relative overflow-hidden rounded-[30px] border p-5 backdrop-blur-3xl md:p-6 ${panelClassName} shadow-[0_24px_70px_-48px_rgba(15,23,42,0.55)]`}
-                    >
-                        <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-sky-500/50 to-transparent" />
-                        <div className="flex flex-col gap-5">
-                            <div className="flex items-center gap-3">
-                                <div className="sky-glow flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-white">
-                                    <Gift className="h-6 w-6" strokeWidth={1.8} />
-                                </div>
-                                <div className="min-w-0">
-                                    <p className="text-[9px] font-black uppercase tracking-[0.32em] text-sky-600">
-                                        {t('app.nav.referrals', { defaultValue: 'Referrals' })}
-                                    </p>
-                                    <h2 className="mt-1 truncate text-2xl font-black leading-none tracking-tight md:text-3xl">
-                                        {t('referrals.invite_title', { defaultValue: 'Invite Friends' })}
-                                    </h2>
-                                </div>
-                            </div>
-                            <p className={`max-w-lg text-sm font-semibold leading-relaxed md:text-[15px] ${secTextColor}`}>
+        <div className="skyline-page-scroll w-full bg-[var(--cv-page-bg)] text-[var(--cv-neutral-1)]">
+            <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col gap-5 px-4 pb-10 pt-24 md:px-6 md:pt-28">
+                <h1 className="pt-2 text-[34px] font-bold leading-tight tracking-tight">
+                    {t('app.nav.referrals', { defaultValue: 'Referrals' })}
+                </h1>
+
+                {/* Invite */}
+                <section className="overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] bg-[var(--cv-card-bg-solid)]">
+                    <div className="flex items-center gap-3 p-4">
+                        <span className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
+                            <Gift className="h-[18px] w-[18px]" strokeWidth={2} />
+                        </span>
+                        <div className="min-w-0">
+                            <p className="text-[17px] font-semibold leading-tight">
+                                {t('referrals.invite_title', { defaultValue: 'Invite Friends' })}
+                            </p>
+                            <p className="text-[13px] leading-snug text-[var(--cv-neutral-2)]">
                                 {t('referrals.invite_subtitle', {
                                     defaultValue: `You receive 50 ${DEFAULT_TOKEN_SYMBOL} tokens instantly upon their successful registration.`,
                                     token: DEFAULT_TOKEN_SYMBOL,
                                 })}
                             </p>
+                        </div>
+                    </div>
+                    {divider}
+                    <div className="flex flex-col gap-3 p-4">
+                        <div className="flex min-w-0 items-center gap-3 rounded-[10px] bg-[var(--cv-surface-2)] px-3 py-3">
+                            <Users className="h-[18px] w-[18px] shrink-0 text-[var(--cv-neutral-3)]" />
+                            <p className="min-w-0 flex-1 truncate text-[14px] font-medium">{referralLink}</p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                            <button
+                                type="button"
+                                onClick={copyToClipboard}
+                                disabled={!referralCode}
+                                className={`flex h-11 items-center justify-center gap-2 rounded-[16px] text-[15px] font-semibold transition-all active:scale-[0.98] disabled:cursor-default disabled:opacity-50 ${copied
+                                    ? 'bg-[var(--cv-success)] text-white'
+                                    : 'bg-[var(--cv-neutral-1)] text-[var(--cv-page-bg)] hover:bg-[var(--cv-neutral-1-hover)]'
+                                    }`}
+                            >
+                                {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                                {copied ? t('action.copied', { defaultValue: 'Copied' }) : t('action.copy', { defaultValue: 'Copy' })}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleShare}
+                                disabled={!referralCode}
+                                className="flex h-11 items-center justify-center gap-2 rounded-[16px] bg-[var(--color-brand)] text-[15px] font-semibold text-white transition-all hover:bg-[var(--color-brand-hovered)] active:scale-[0.98] disabled:cursor-default disabled:opacity-50"
+                            >
+                                <Share className="h-4 w-4" />
+                                {t('action.share', { defaultValue: 'Share' })}
+                            </button>
+                        </div>
+                    </div>
+                </section>
 
-                            <div className={`flex flex-col gap-2 rounded-[26px] border p-2 md:flex-row md:items-center ${isDark ? 'cv-card-surface-muted border-white/10' : 'border-slate-200 bg-white/70'}`}>
-                                <div className={`flex min-w-0 flex-1 items-center gap-3 rounded-[20px] px-3 py-3 ${isDark ? 'bg-white/5' : 'bg-slate-50'}`}>
-                                    <Users className={`h-5 w-5 shrink-0 ${isDark ? 'text-zinc-400' : 'text-slate-500'}`} />
-                                    <p className="truncate text-sm font-bold">{referralLink}</p>
+                {/* Reward status */}
+                <section className="overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] bg-[var(--cv-card-bg-solid)]">
+                    <div className="flex items-center gap-3 p-4">
+                        <span className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
+                            <Sparkles className="h-[18px] w-[18px]" strokeWidth={2} />
+                        </span>
+                        <p className="text-[17px] font-semibold leading-tight">
+                            {t('referrals.reward_status', { defaultValue: 'Reward status' })}
+                        </p>
+                    </div>
+                    {divider}
+                    {stats.map((stat, i) => (
+                        <React.Fragment key={stat.label}>
+                            <div className="flex items-center justify-between gap-4 p-4">
+                                <div className="min-w-0">
+                                    <p className="text-[15px] font-medium leading-tight">{stat.label}</p>
+                                    <p className="mt-0.5 truncate text-[13px] leading-tight text-[var(--cv-neutral-2)]">{stat.subtitle}</p>
                                 </div>
-                                <div className="grid grid-cols-2 gap-2 md:flex md:shrink-0">
+                                <div className="shrink-0 text-right">
+                                    <p className="text-[22px] font-bold leading-none">{stat.value}</p>
+                                    {stat.suffix && (
+                                        <p className="mt-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--cv-neutral-2)]">{stat.suffix}</p>
+                                    )}
+                                </div>
+                            </div>
+                            {i < stats.length - 1 && divider}
+                        </React.Fragment>
+                    ))}
+                </section>
+
+                {/* How to earn */}
+                <section className="overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] bg-[var(--cv-card-bg-solid)]">
+                    <div className="flex items-center gap-3 p-4">
+                        <span className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
+                            <Sparkles className="h-[18px] w-[18px]" strokeWidth={2} />
+                        </span>
+                        <p className="text-[17px] font-semibold leading-tight">
+                            {t('referrals.how_to_earn', { defaultValue: 'How to Earn' })}
+                        </p>
+                    </div>
+                    {divider}
+                    {steps.map((step, i) => (
+                        <React.Fragment key={step.num}>
+                            <div className="flex items-center gap-3 p-4">
+                                <span className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[14px] font-bold text-[var(--color-brand)]">
+                                    {step.num}
+                                </span>
+                                <div className="min-w-0">
+                                    <p className="text-[15px] font-semibold leading-tight">{step.title}</p>
+                                    <p className="mt-0.5 text-[13px] leading-snug text-[var(--cv-neutral-2)]">{step.desc}</p>
+                                </div>
+                            </div>
+                            {i < steps.length - 1 && divider}
+                        </React.Fragment>
+                    ))}
+                </section>
+
+                {/* Recent referrals */}
+                <section className="overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] bg-[var(--cv-card-bg-solid)]">
+                    <div className="flex items-center justify-between gap-3 p-4">
+                        <p className="text-[17px] font-semibold leading-tight">
+                            {t('referrals.recent_title', { defaultValue: 'Recent Referrals' })}
+                        </p>
+                        <span className="rounded-full bg-[var(--cv-surface-3)] px-2.5 py-1 text-[11px] font-semibold text-[var(--cv-neutral-2)]">
+                            {referralHistory.length}
+                        </span>
+                    </div>
+                    {divider}
+                    {referralHistory.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
+                            <Users className="h-9 w-9 text-[var(--cv-neutral-3)]" />
+                            <p className="mt-4 text-[15px] font-semibold">
+                                {t('referrals.no_referrals', { defaultValue: 'No referrals yet' })}
+                            </p>
+                            <p className="mt-1 max-w-xs text-[13px] leading-snug text-[var(--cv-neutral-2)]">
+                                {t('referrals.no_referrals_desc', { defaultValue: 'Share your link and completed registrations will appear here.' })}
+                            </p>
+                        </div>
+                    ) : (
+                        referralHistory.map((engagement: ReferralEngagement, idx: number) => {
+                            const avatarSrc = getSafeImageURLEx(engagement.engager?.public_id, engagement.engager?.avatar || undefined, 'thumbnail') || undefined;
+                            const username = engagement.engager?.username || 'Member';
+                            const isLast = idx === referralHistory.length - 1;
+                            return (
+                                <React.Fragment key={engagement.id || `${username}-${idx}`}>
                                     <button
                                         type="button"
-                                        onClick={copyToClipboard}
-                                        disabled={!referralCode}
-                                        className={`inline-flex h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-black transition-all disabled:cursor-default disabled:opacity-50 ${copied
-                                            ? 'bg-emerald-500 text-white'
-                                            : isDark ? 'bg-white text-black hover:bg-zinc-200' : 'bg-slate-950 text-white hover:bg-slate-800'
-                                            }`}
+                                        onClick={() => engagement.engager?.username && navigate(`/${engagement.engager.username}`)}
+                                        className="flex w-full items-center justify-between gap-3 p-4 text-left transition-colors hover:bg-[var(--cv-surface-2-hover)]"
                                     >
-                                        {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                                        {copied ? t('action.copied', { defaultValue: 'Copied' }) : t('action.copy', { defaultValue: 'Copy' })}
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={handleShare}
-                                        disabled={!referralCode}
-                                        className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-sky-600 px-4 text-sm font-black text-white transition-all hover:bg-sky-500 disabled:cursor-default disabled:opacity-50"
-                                    >
-                                        <Share className="h-4 w-4" />
-                                        {t('action.share', { defaultValue: 'Share' })}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.section>
-
-                    <motion.section
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.04, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                        className={`overflow-hidden rounded-[30px] border backdrop-blur-3xl ${panelClassName} shadow-[0_24px_70px_-48px_rgba(15,23,42,0.55)]`}
-                    >
-                        <div className="flex items-center gap-3 px-5 py-4 md:px-6">
-                            <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${isDark ? 'bg-white/[0.08] text-zinc-300' : 'bg-white/80 text-slate-500'}`}>
-                                <Sparkles className="h-5 w-5" />
-                            </div>
-                            <div>
-                                <p className={`text-[11px] font-bold uppercase tracking-[0.2em] ${isDark ? 'text-zinc-500' : 'text-slate-400'}`}>
-                                    {t('referrals.overview', { defaultValue: 'Overview' })}
-                                </p>
-                                <p className="mt-0.5 text-sm font-black">
-                                    {t('referrals.reward_status', { defaultValue: 'Reward status' })}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className={`divide-y ${isDark ? 'divide-white/5' : 'divide-white/70'}`}>
-                            {[
-                                {
-                                    label: t('referrals.invited', { defaultValue: 'Invited' }),
-                                    subtitle: t('referrals.successful_registrations', { defaultValue: 'Successful registrations' }),
-                                    value: referralCount,
-                                    suffix: '',
-                                },
-                                {
-                                    label: t('referrals.tokens', { defaultValue: 'Tokens' }),
-                                    subtitle: t('referrals.total_rewards', { defaultValue: 'Total referral rewards' }),
-                                    value: referralAmount,
-                                    suffix: DEFAULT_TOKEN_SYMBOL,
-                                },
-                            ].map((stat) => (
-                                <div
-                                    key={stat.label}
-                                    className={`flex items-center justify-between gap-4 px-5 py-4 transition-colors md:px-6 ${isDark ? 'hover:bg-white/[0.04]' : 'hover:bg-sky-50/70'}`}
-                                >
-                                    <div className="min-w-0">
-                                        <p className="text-[15px] font-semibold leading-tight">{stat.label}</p>
-                                        <p className={`mt-0.5 truncate text-[12px] leading-tight ${secTextColor}`}>{stat.subtitle}</p>
-                                    </div>
-                                    <div className="shrink-0 text-right">
-                                        <p className="text-3xl font-black leading-none">{stat.value}</p>
-                                        {stat.suffix && (
-                                            <p className={`mt-1 text-[10px] font-black uppercase tracking-wider ${secTextColor}`}>{stat.suffix}</p>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </motion.section>
-                </div>
-
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-                    <motion.section
-                        initial={{ opacity: 0, y: 14 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.08, duration: 0.4 }}
-                        className={`rounded-[32px] border p-5 backdrop-blur-3xl ${panelClassName} shadow-[0_28px_90px_-48px_rgba(15,23,42,0.45)]`}
-                    >
-                        <div className="mb-5 flex items-center gap-3">
-                            <div className={`flex h-10 w-10 items-center justify-center rounded-full ${isDark ? 'bg-white/5 text-zinc-300' : 'bg-slate-100 text-slate-700'}`}>
-                                <Sparkles className="h-5 w-5" />
-                            </div>
-                            <h3 className="text-base font-black tracking-tight">How to Earn</h3>
-                        </div>
-
-                        <div className="grid gap-3">
-                            {[
-                                { num: '1', title: 'Send Invitation', desc: 'Share your unique link with friends.' },
-                                { num: '2', title: 'Friends Join', desc: 'They create and verify an account.' },
-                                { num: '3', title: 'Get Rewarded', desc: `You instantly receive 50 ${DEFAULT_TOKEN_SYMBOL}.` },
-                            ].map((step) => (
-                                <div
-                                    key={step.num}
-                                    className={`flex gap-3 rounded-[24px] border p-4 ${isDark ? 'border-white/10 bg-white/5' : 'border-slate-200 bg-white/70'}`}
-                                >
-                                    <div className="sky-glow flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-black text-white">
-                                        {step.num}
-                                    </div>
-                                    <div className="min-w-0">
-                                        <h4 className="text-sm font-black">{step.title}</h4>
-                                        <p className={`mt-1 text-xs font-semibold leading-relaxed ${secTextColor}`}>{step.desc}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </motion.section>
-
-                    <motion.section
-                        initial={{ opacity: 0, y: 14 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.14, duration: 0.4 }}
-                        className={`rounded-[32px] border p-5 backdrop-blur-3xl ${panelClassName} shadow-[0_28px_90px_-48px_rgba(15,23,42,0.45)]`}
-                    >
-                        <div className="mb-4 flex items-center justify-between gap-3">
-                            <div>
-                                <p className="text-[9px] font-black uppercase tracking-[0.32em] text-sky-600">Activity</p>
-                                <h3 className="mt-1 text-base font-black tracking-tight">Recent Referrals</h3>
-                            </div>
-                            <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider ${isDark ? 'bg-white/5 text-zinc-400' : 'bg-slate-100 text-slate-500'}`}>
-                                {referralHistory.length}
-                            </span>
-                        </div>
-
-                        {referralHistory.length === 0 ? (
-                            <div className={`flex min-h-[220px] flex-col items-center justify-center rounded-[28px] border px-6 py-10 text-center ${isDark ? 'border-white/10 bg-white/5' : 'border-slate-200 bg-white/70'}`}>
-                                <Users className={`h-10 w-10 ${isDark ? 'text-zinc-600' : 'text-slate-300'}`} />
-                                <p className="mt-4 text-sm font-black">No referrals yet</p>
-                                <p className={`mt-1 max-w-xs text-xs font-semibold leading-relaxed ${secTextColor}`}>
-                                    Share your link and completed registrations will appear here.
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="grid gap-3">
-                                {referralHistory.map((engagement: ReferralEngagement, idx: number) => {
-                                    const avatarSrc = getSafeImageURLEx(engagement.engager?.public_id, engagement.engager?.avatar || undefined, 'thumbnail') || undefined;
-                                    const username = engagement.engager?.username || 'Member';
-                                    return (
-                                        <button
-                                            key={engagement.id || `${username}-${idx}`}
-                                            type="button"
-                                            onClick={() => engagement.engager?.username && navigate(`/${engagement.engager.username}`)}
-                                            className={`group flex items-center justify-between gap-3 rounded-[24px] border p-3 text-left transition-all hover:-translate-y-0.5 ${isDark ? 'border-white/10 bg-white/5 hover:bg-white/10' : 'border-slate-200 bg-white/70 hover:bg-slate-50'}`}
-                                        >
-                                            <div className="flex min-w-0 items-center gap-3">
-                                                <div className={`h-11 w-11 shrink-0 overflow-hidden rounded-full border ${isDark ? 'border-white/10 bg-zinc-900' : 'border-white bg-slate-100'}`}>
-                                                    {avatarSrc ? (
-                                                        <img className="h-full w-full object-cover" src={avatarSrc} alt={username} />
-                                                    ) : (
-                                                        <div className={`flex h-full w-full items-center justify-center text-sm font-black uppercase ${secTextColor}`}>
-                                                            {username.slice(0, 1)}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                <div className="min-w-0">
-                                                    <p className="truncate text-sm font-black">{username}</p>
-                                                    <p className={`text-xs font-semibold ${secTextColor}`}>
-                                                        {engagement.created_at ? formatTime(engagement.created_at) : ''}
-                                                    </p>
-                                                </div>
+                                        <div className="flex min-w-0 items-center gap-3">
+                                            <div className="h-11 w-11 shrink-0 overflow-hidden rounded-full bg-[var(--cv-surface-2)]">
+                                                {avatarSrc ? (
+                                                    <img className="h-full w-full object-cover" src={avatarSrc} alt={username} />
+                                                ) : (
+                                                    <div className="flex h-full w-full items-center justify-center text-[15px] font-semibold uppercase text-[var(--cv-neutral-2)]">
+                                                        {username.slice(0, 1)}
+                                                    </div>
+                                                )}
                                             </div>
-                                            <div className="shrink-0 text-right">
-                                                <p className="text-sm font-black">{engagement.details?.amount || 0}</p>
-                                                <p className={`text-[10px] font-black uppercase tracking-wider ${secTextColor}`}>{DEFAULT_TOKEN_SYMBOL}</p>
+                                            <div className="min-w-0">
+                                                <p className="truncate text-[15px] font-semibold leading-tight">{username}</p>
+                                                <p className="text-[13px] text-[var(--cv-neutral-2)]">
+                                                    {engagement.created_at ? formatTime(engagement.created_at) : ''}
+                                                </p>
                                             </div>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </motion.section>
-                </div>
+                                        </div>
+                                        <div className="shrink-0 text-right">
+                                            <p className="text-[15px] font-semibold leading-tight">{engagement.details?.amount || 0}</p>
+                                            <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--cv-neutral-2)]">{DEFAULT_TOKEN_SYMBOL}</p>
+                                        </div>
+                                    </button>
+                                    {!isLast && divider}
+                                </React.Fragment>
+                            );
+                        })
+                    )}
+                </section>
             </div>
         </div>
     );

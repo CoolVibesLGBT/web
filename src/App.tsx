@@ -35,7 +35,7 @@ import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext';
 import { useSettings } from './contexts/SettingsContext';
 import AuthWizard from './features/auth/AuthWizard';
-import { MapPin, Grid, List, Square, Map as MapIcon, Bubbles, Lock, RefreshCw, Heart, Star, Ghost, MessageCircle, User, UserSearch, Users, X, Sun, Moon, MoreHorizontal, Bell, ChevronRight, LogOut, HandFist, Briefcase, Navigation, Settings as SettingsIcon, Globe, Video, Search, Sparkles, Home, MessageSquare, Plus, Filter, Command, TrendingUp, ArrowLeft, MousePointerClick } from 'lucide-react';
+import { MapPin, Heart, MessageCircle, User, Users, X, Sun, Moon, MoreHorizontal, Bell, ChevronRight, LogOut, HandFist, Briefcase, Navigation, Settings as SettingsIcon, Globe, Video, Search, Sparkles, Home, MessageSquare, Plus, Command, ArrowLeft } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import LanguageSelector from './components/ui/LanguageSelector';
 import { resolvePreferredLanguage } from './i18n';
@@ -89,7 +89,7 @@ const RESERVED_SINGLE_SEGMENT_ROUTES = new Set([
   'wallet',
 ]);
 
-const RIGHT_SIDEBAR_HIDDEN_PATHS_BASE = ['/messages', '/landing', '/classifieds', '/places', '/match', '/nearby', '/checkin', '/premium'];
+const RIGHT_SIDEBAR_HIDDEN_PATHS_BASE = ['/messages', '/landing', '/premium'];
 
 let bootSplashSeen = false;
 
@@ -146,14 +146,14 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         <header className="fixed top-4 inset-x-0 z-20 pointer-events-none flex justify-center px-4 md:top-8 md:px-12">
           <div className="w-full max-w-[1440px]">
             <div className="elite-floating pointer-events-auto inline-flex items-center gap-3 px-4 py-2 md:px-5 md:py-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sky-600 text-white shadow-lg shadow-sky-600/25">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white shadow-lg shadow-brand/25">
                 <Sparkles className="h-5 w-5" />
               </div>
               <div className="flex flex-col">
                 <span className="text-[11px] font-bold uppercase leading-none tracking-[0.34em] text-slate-950 dark:text-white">
                   {DEFAULT_APP_NAME}
                 </span>
-                <span className="mt-0.5 text-[8px] font-bold uppercase tracking-normal text-sky-600">
+                <span className="mt-0.5 text-[8px] font-bold uppercase tracking-normal text-brand">
                   {DEFAULT_APP_MOTTO}
                 </span>
               </div>
@@ -238,7 +238,7 @@ const SkylineDockButton = ({
     title={ariaLabel}
     className={`elite-btn w-12 h-12 relative ${
       active
-        ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30'
+        ? 'bg-brand text-white shadow-lg shadow-brand/30'
         : 'text-slate-400 dark:text-zinc-500 hover:bg-slate-100 dark:hover:bg-zinc-800'
     }`}
   >
@@ -257,50 +257,6 @@ const normalizePath = (path: string) => {
   return path;
 };
 
-type PlacesHeaderViewMode = 'grid' | 'map';
-
-type PlacesHeaderControlsState = {
-  viewMode: PlacesHeaderViewMode;
-  selectedCategory: string;
-  categories: string[];
-  resultCount: number;
-  isLoading: boolean;
-};
-
-type NearbyHeaderViewMode = 'bubble' | 'grid' | 'list' | 'card' | 'map';
-
-type NearbyHeaderControlsState = {
-  viewMode: NearbyHeaderViewMode;
-  resultCount: number;
-  isLoading: boolean;
-  isPremiumRequired: boolean;
-};
-
-type CheckInHeaderViewMode = 'map' | 'list';
-
-type CheckInHeaderControlsState = {
-  viewMode: CheckInHeaderViewMode;
-  resultCount: number;
-  isLoading: boolean;
-};
-
-type MatchHeaderTab = 'match_now' | 'matches' | 'liked' | 'passed';
-
-type MatchHeaderControlsState = {
-  activeTab: MatchHeaderTab;
-  resultCount: number;
-  isLoading: boolean;
-};
-
-type ClassifiedsHeaderTab = 'hiring' | 'seeking';
-
-type ClassifiedsHeaderControlsState = {
-  activeTab: ClassifiedsHeaderTab;
-  resultCount: number;
-  isLoading: boolean;
-  searchQuery: string;
-};
-
 function AppContent() {
   const [activeScreen, setActiveScreen] = useState('pride');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -309,14 +265,9 @@ function AppContent() {
   const [bootSeen, setBootSeen] = useState(() => bootSplashSeen);
   const [splashMinDone, setSplashMinDone] = useState(() => bootSplashSeen);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isRailProfileMenuOpen, setIsRailProfileMenuOpen] = useState(false);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
-  const [showSkylineTrends, setShowSkylineTrends] = useState(true);
   const [shellRouteSearchValue, setShellRouteSearchValue] = useState('');
-  const [placesHeaderControls, setPlacesHeaderControls] = useState<PlacesHeaderControlsState | null>(null);
-  const [nearbyHeaderControls, setNearbyHeaderControls] = useState<NearbyHeaderControlsState | null>(null);
-  const [checkInHeaderControls, setCheckInHeaderControls] = useState<CheckInHeaderControlsState | null>(null);
-  const [matchHeaderControls, setMatchHeaderControls] = useState<MatchHeaderControlsState | null>(null);
-  const [classifiedsHeaderControls, setClassifiedsHeaderControls] = useState<ClassifiedsHeaderControlsState | null>(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const rtlLangs = React.useMemo(() => new Set(['ar', 'he', 'fa', 'ur']), []);
@@ -347,12 +298,8 @@ function AppContent() {
   const followerCount = (user as any)?.engagements?.counts?.follower_count ?? 0;
   const avatarIconSrc = getSafeImageURLEx((user as any)?.public_id, (user as any)?.avatar, 'icon') || undefined;
   const rightSidebarHiddenPaths = React.useMemo(() => {
-    const paths = [...RIGHT_SIDEBAR_HIDDEN_PATHS_BASE];
-    if (liveEnabled) {
-      paths.push('/live');
-    }
-    return new Set(paths);
-  }, [liveEnabled]);
+    return new Set(RIGHT_SIDEBAR_HIDDEN_PATHS_BASE);
+  }, []);
   const shouldShowRightSidebar = !Array.from(rightSidebarHiddenPaths).some(p => location.pathname === p || location.pathname.startsWith(p + '/'));
   const premiumMembershipEnabled = React.useMemo(() => isFeatureEnabled('premium_membership'), []);
 
@@ -455,111 +402,6 @@ function AppContent() {
       armHomeHistoryGuard();
     }
   }, [isAuthReady, isAuthenticated, isHomePerformanceRoute]);
-
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (normalizedPath !== '/places') {
-      setPlacesHeaderControls(null);
-      return;
-    }
-
-    const handlePlacesControlsState = (event: Event) => {
-      const detail = (event as CustomEvent<PlacesHeaderControlsState | null>).detail;
-      setPlacesHeaderControls(detail ?? null);
-    };
-
-    window.addEventListener('cv:places-controls-state', handlePlacesControlsState);
-    window.dispatchEvent(new Event('cv:places-controls-request'));
-
-    return () => {
-      window.removeEventListener('cv:places-controls-state', handlePlacesControlsState);
-      setPlacesHeaderControls(null);
-    };
-  }, [normalizedPath]);
-
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (normalizedPath !== '/nearby') {
-      setNearbyHeaderControls(null);
-      return;
-    }
-
-    const handleNearbyControlsState = (event: Event) => {
-      const detail = (event as CustomEvent<NearbyHeaderControlsState | null>).detail;
-      setNearbyHeaderControls(detail ?? null);
-    };
-
-    window.addEventListener('cv:nearby-controls-state', handleNearbyControlsState);
-    window.dispatchEvent(new Event('cv:nearby-controls-request'));
-
-    return () => {
-      window.removeEventListener('cv:nearby-controls-state', handleNearbyControlsState);
-      setNearbyHeaderControls(null);
-    };
-  }, [normalizedPath]);
-
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (normalizedPath !== '/checkin') {
-      setCheckInHeaderControls(null);
-      return;
-    }
-
-    const handleCheckInControlsState = (event: Event) => {
-      const detail = (event as CustomEvent<CheckInHeaderControlsState | null>).detail;
-      setCheckInHeaderControls(detail ?? null);
-    };
-
-    window.addEventListener('cv:checkin-controls-state', handleCheckInControlsState);
-    window.dispatchEvent(new Event('cv:checkin-controls-request'));
-
-    return () => {
-      window.removeEventListener('cv:checkin-controls-state', handleCheckInControlsState);
-      setCheckInHeaderControls(null);
-    };
-  }, [normalizedPath]);
-
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (normalizedPath !== '/match') {
-      setMatchHeaderControls(null);
-      return;
-    }
-
-    const handleMatchControlsState = (event: Event) => {
-      const detail = (event as CustomEvent<MatchHeaderControlsState | null>).detail;
-      setMatchHeaderControls(detail ?? null);
-    };
-
-    window.addEventListener('cv:match-controls-state', handleMatchControlsState);
-    window.dispatchEvent(new Event('cv:match-controls-request'));
-
-    return () => {
-      window.removeEventListener('cv:match-controls-state', handleMatchControlsState);
-      setMatchHeaderControls(null);
-    };
-  }, [normalizedPath]);
-
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (normalizedPath !== '/classifieds') {
-      setClassifiedsHeaderControls(null);
-      return;
-    }
-
-    const handleClassifiedsControlsState = (event: Event) => {
-      const detail = (event as CustomEvent<ClassifiedsHeaderControlsState | null>).detail;
-      setClassifiedsHeaderControls(detail ?? null);
-    };
-
-    window.addEventListener('cv:classifieds-controls-state', handleClassifiedsControlsState);
-    window.dispatchEvent(new Event('cv:classifieds-controls-request'));
-
-    return () => {
-      window.removeEventListener('cv:classifieds-controls-state', handleClassifiedsControlsState);
-      setClassifiedsHeaderControls(null);
-    };
-  }, [normalizedPath]);
 
   React.useEffect(() => {
     if (!isAuthReady || isAuthenticated || !isProtectedRoutePath(normalizedPath)) {
@@ -986,48 +828,6 @@ function AppContent() {
     window.dispatchEvent(new Event(eventName));
   }, []);
 
-  const dispatchPlacesViewMode = React.useCallback((viewMode: PlacesHeaderViewMode) => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    window.dispatchEvent(new CustomEvent('cv:places-set-view-mode', { detail: { viewMode } }));
-  }, []);
-
-  const dispatchPlacesCategory = React.useCallback((category: string) => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    window.dispatchEvent(new CustomEvent('cv:places-set-category', { detail: { category } }));
-  }, []);
-
-  const dispatchNearbyViewMode = React.useCallback((viewMode: NearbyHeaderViewMode) => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    window.dispatchEvent(new CustomEvent('cv:nearby-set-view-mode', { detail: { viewMode } }));
-  }, []);
-
-  const dispatchCheckInViewMode = React.useCallback((viewMode: CheckInHeaderViewMode) => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    window.dispatchEvent(new CustomEvent('cv:checkin-set-view-mode', { detail: { viewMode } }));
-  }, []);
-
-  const dispatchMatchTab = React.useCallback((tab: MatchHeaderTab) => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    window.dispatchEvent(new CustomEvent('cv:match-set-tab', { detail: { tab } }));
-  }, []);
-
-  const dispatchClassifiedsTab = React.useCallback((tab: ClassifiedsHeaderTab) => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    window.dispatchEvent(new CustomEvent('cv:classifieds-set-tab', { detail: { tab } }));
-  }, []);
-
   const closeMobileMenu = React.useCallback(() => {
     setIsMobileMenuOpen(false);
   }, []);
@@ -1112,7 +912,7 @@ function AppContent() {
 
     return routeTitles[normalizedPath] || null;
   }, [isCheckInDetailRoute, isClassifiedDetailRoute, isPlaceDetailRoute, normalizedPath, profileEngagementType, t]);
-  const isContextBackRoute = isAuthenticated && (isPostDetailRoute || isCheckInDetailRoute || isClassifiedDetailRoute || isPlaceDetailRoute || Boolean(profileEngagementType) || Boolean(contextRouteTitle) || isProfileShellRoute);
+  const isContextBackRoute = (isPostDetailRoute || isCheckInDetailRoute || isClassifiedDetailRoute || isPlaceDetailRoute || Boolean(profileEngagementType) || Boolean(contextRouteTitle) || isProfileShellRoute);
   const shellBackTitle = isProfileEditRoute
     ? t('profile.edit_profile', { defaultValue: 'Edit Profile' })
     : contextRouteTitle
@@ -1179,7 +979,8 @@ function AppContent() {
     isProtectedRoutePath(normalizedPath)
   );
   const showShellHud = !isLandingRoute && !isAuthGateRoute;
-  const showRightRail = isAuthenticated && isHomePerformanceRoute && shouldShowRightSidebar && showSkylineTrends;
+  const showRightRail = isAuthenticated && shouldShowRightSidebar;
+  const showLeftRail = isAuthenticated && !isLandingRoute && !isAuthGateRoute;
   const showDock = isAuthenticated && !isLandingRoute && showBottomBar;
   const showHomeMenuGuide = settings.showDockTips &&
     isAuthReady &&
@@ -1193,7 +994,14 @@ function AppContent() {
     setIsMobileMenuOpen(true);
   }, []);
 
-  const mainShellClassName = 'min-h-0 flex-1 min-w-0 overflow-hidden';
+  const mainShellClassName = isLandingRoute || isAuthGateRoute || !shouldShowRightSidebar
+    // Auth-gate (logged-out), landing ve geniş düzen ekranları (sağ rail'i
+    // gizleyen rotalar: mesajlar, harita/liste görünümleri vb.) 600px'lik
+    // feed kolonuna sıkışmamalı — aksi halde çok-sütunlu içerik kırık/boş
+    // alanlı görünür. Dar, tek-sütun ekranlar (Ana Sayfa, Ayarlar, Profil…)
+    // bu sınırı korur.
+    ? 'min-h-0 flex-1 min-w-0 overflow-hidden'
+    : 'min-h-0 flex-1 min-w-0 overflow-hidden xl:max-w-[600px] xl:border-x xl:border-[var(--cv-inner-border)]';
   const isShellSearchRoute = normalizedPath === '/classifieds' || normalizedPath === '/places';
   const shellRouteSearchEventName = normalizedPath === '/places'
     ? 'cv:places-search-query'
@@ -1224,44 +1032,7 @@ function AppContent() {
     }
   }, [shellRouteSearchEventName]);
 
-  const showPlacesHeaderControls = normalizedPath === '/places';
   const showSearchHeaderControls = normalizedPath === '/search';
-  const placesHeaderState: PlacesHeaderControlsState = placesHeaderControls ?? {
-    viewMode: 'grid',
-    selectedCategory: 'all',
-    categories: ['all'],
-    resultCount: 0,
-    isLoading: true,
-  };
-  const placesHeaderCategories = placesHeaderState.categories.length > 0
-    ? placesHeaderState.categories
-    : ['all'];
-  const showNearbyHeaderControls = normalizedPath === '/nearby';
-  const nearbyHeaderState: NearbyHeaderControlsState = nearbyHeaderControls ?? {
-    viewMode: 'grid',
-    resultCount: 0,
-    isLoading: true,
-    isPremiumRequired: false,
-  };
-  const showCheckInHeaderControls = normalizedPath === '/checkin';
-  const checkInHeaderState: CheckInHeaderControlsState = checkInHeaderControls ?? {
-    viewMode: 'list',
-    resultCount: 0,
-    isLoading: true,
-  };
-  const showMatchHeaderControls = normalizedPath === '/match';
-  const matchHeaderState: MatchHeaderControlsState = matchHeaderControls ?? {
-    activeTab: 'match_now',
-    resultCount: 0,
-    isLoading: true,
-  };
-  const showClassifiedsHeaderControls = normalizedPath === '/classifieds';
-  const classifiedsHeaderState: ClassifiedsHeaderControlsState = classifiedsHeaderControls ?? {
-    activeTab: 'hiring',
-    resultCount: 0,
-    isLoading: true,
-    searchQuery: '',
-  };
   if (normalizedPath === '/splash') {
     return <SplashScreen autoDismiss={false} animate={true} />;
   }
@@ -1273,15 +1044,15 @@ function AppContent() {
       {shouldShowBootSplash && <SplashScreen autoDismiss={false} animate={true} />}
       {/* Skyline layout shell */}
       <div
-        className={`max-h-[100dvh] w-full flex mx-auto max-w-[1440px] min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide px-4 md:px-12 gap-0 xl:gap-12 ${
+        className={`max-h-[100dvh] w-full flex mx-auto max-w-[1265px] min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide px-4 md:px-6 gap-0 ${
           shouldShowBootSplash ? 'pointer-events-none' : ''
         }`}
       >
 
           {/* Skyline HUD */}
           {showShellHud && (
-            <header className="fixed top-8 inset-x-0 z-[600] pointer-events-none flex justify-center px-4 md:px-12">
-              <div className="grid w-full max-w-[1440px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3">
+            <header className="fixed top-4 inset-x-0 z-[600] pointer-events-none flex justify-center">
+              <div className="grid w-full max-w-[1265px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-4 md:px-6">
                 <div className="flex items-center gap-3 elite-floating px-4 py-2 md:px-5 md:py-2.5 pointer-events-auto backdrop-blur-md justify-self-start">
                   {isContextBackRoute ? (
                     <>
@@ -1301,7 +1072,7 @@ function AppContent() {
                         <span className="text-[11px] font-bold tracking-[0.28em] uppercase dark:text-white leading-none">
                           {shellBackTitle}
                         </span>
-                        <span className="text-[8px] font-bold text-sky-600 uppercase tracking-tighter mt-0.5">
+                        <span className="text-[8px] font-bold text-brand uppercase tracking-tighter mt-0.5">
                           {shellBackLabel}
                         </span>
                       </button>
@@ -1310,7 +1081,7 @@ function AppContent() {
                     <>
                       <button
                         type="button"
-                        className="w-9 h-9 bg-sky-600 rounded-full flex items-center justify-center text-white shadow-lg animate-pulse-slow cursor-pointer"
+                        className="w-9 h-9 bg-brand rounded-full flex items-center justify-center text-white shadow-lg animate-pulse-slow cursor-pointer"
                         onClick={() => navigateByNavId('pride')}
                         aria-label={t('app.nav.home', { defaultValue: 'Home' })}
                       >
@@ -1324,7 +1095,7 @@ function AppContent() {
                         <span className="text-[11px] font-bold tracking-[0.4em] uppercase dark:text-white leading-none">
                           {DEFAULT_APP_NAME}
                         </span>
-                        <span className="text-[8px] font-bold text-sky-600 uppercase tracking-tighter mt-0.5">
+                        <span className="text-[8px] font-bold text-brand uppercase tracking-tighter mt-0.5">
                           {DEFAULT_APP_MOTTO}
                         </span>
                       </button>
@@ -1332,464 +1103,7 @@ function AppContent() {
                   )}
                 </div>
 
-                <div className="pointer-events-auto hidden min-w-0 justify-center lg:flex">
-                  {showNearbyHeaderControls && (
-                    <div className="elite-floating flex h-11 w-[360px] max-w-full items-center gap-1.5 overflow-visible px-2 backdrop-blur-md">
-                      <div className={`flex min-w-0 flex-1 items-center justify-center gap-0.5 overflow-visible rounded-full p-1 ${
-                        theme === 'dark' ? 'bg-white/[0.04]' : 'bg-slate-100/90'
-                      }`}>
-                        {([
-                          { id: 'bubble' as const, icon: Bubbles, label: t('nearby.view_bubble', { defaultValue: 'Bubble' }) },
-                          { id: 'grid' as const, icon: Grid, label: t('nearby.view_grid', { defaultValue: 'Grid' }) },
-                          { id: 'list' as const, icon: List, label: t('nearby.view_list', { defaultValue: 'List' }) },
-                          { id: 'card' as const, icon: Square, label: t('nearby.view_card', { defaultValue: 'Card' }) },
-                          { id: 'map' as const, icon: MapIcon, label: t('nearby.view_map', { defaultValue: 'Map' }) },
-                        ]).map((mode) => {
-                          const Icon = mode.icon;
-                          const isActive = nearbyHeaderState.viewMode === mode.id;
-                          return (
-                            <motion.button
-                              key={mode.id}
-                              type="button"
-                              onClick={() => dispatchNearbyViewMode(mode.id)}
-                              disabled={!nearbyHeaderControls}
-                              whileTap={{ scale: 0.96 }}
-                              aria-labelledby={`nearby-header-tooltip-${mode.id}`}
-                              className={`group relative flex h-8 w-10 shrink-0 items-center justify-center rounded-full text-[10px] font-black uppercase tracking-[0.12em] transition-colors disabled:cursor-default disabled:opacity-60 ${
-                                isActive
-                                  ? 'text-white'
-                                  : theme === 'dark'
-                                    ? 'text-zinc-500 hover:text-white'
-                                    : 'text-slate-400 hover:text-slate-900'
-                              }`}
-                              aria-pressed={isActive}
-                            >
-                              {isActive && (
-                                <motion.span
-                                  layoutId="nearbyHeaderViewIndicator"
-                                  className="absolute inset-0 rounded-full bg-sky-600 shadow-lg shadow-sky-600/30"
-                                  transition={{ type: 'spring', stiffness: 380, damping: 34 }}
-                                />
-                              )}
-                              <span className="relative z-10 flex items-center gap-1.5">
-                                <Icon className="h-3.5 w-3.5" />
-                                {mode.id === 'bubble' && nearbyHeaderState.isPremiumRequired && <Lock className="h-3 w-3" />}
-                              </span>
-                              <span
-                                id={`nearby-header-tooltip-${mode.id}`}
-                                role="tooltip"
-                                className={`pointer-events-none absolute left-1/2 top-full z-[700] mt-2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-[9px] font-bold normal-case tracking-normal opacity-0 shadow-xl transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${
-                                  theme === 'dark'
-                                    ? 'bg-white text-slate-950'
-                                    : 'bg-slate-950 text-white'
-                                }`}
-                              >
-                                {mode.label}
-                              </span>
-                            </motion.button>
-                          );
-                        })}
-                      </div>
-
-                      <div className={`flex h-8 shrink-0 items-center gap-1.5 rounded-full px-2.5 text-[10px] font-black uppercase tracking-[0.12em] ${
-                        theme === 'dark' ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/80 text-slate-500 shadow-sm border border-slate-200/60'
-                      }`}>
-                        <Users className="h-3 w-3" />
-                        <span>{nearbyHeaderState.resultCount}</span>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => dispatchShellEvent('cv:nearby-refresh')}
-                        disabled={nearbyHeaderState.isLoading}
-                        aria-label={t('nearby.refresh', { defaultValue: 'Refresh nearby people' })}
-                        title={t('nearby.refresh', { defaultValue: 'Refresh nearby people' })}
-                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all disabled:cursor-default disabled:opacity-60 ${
-                          theme === 'dark'
-                            ? 'bg-white/10 text-white hover:bg-white/20'
-                            : 'bg-slate-950/90 text-white hover:bg-slate-800'
-                        }`}
-                      >
-                        <RefreshCw className={`h-3.5 w-3.5 ${nearbyHeaderState.isLoading ? 'animate-spin' : ''}`} />
-                      </button>
-                    </div>
-                  )}
-                  {showCheckInHeaderControls && (
-                    <div className="elite-floating flex h-11 w-[280px] max-w-full items-center gap-1.5 overflow-visible px-2 backdrop-blur-md">
-                      <div className={`flex min-w-0 flex-1 items-center justify-center gap-0.5 overflow-visible rounded-full p-1 ${
-                        theme === 'dark' ? 'bg-white/[0.04]' : 'bg-slate-100/90'
-                      }`}>
-                        {([
-                          { id: 'map' as const, icon: MapIcon, label: t('nearby.view_map', { defaultValue: 'Map' }) },
-                          { id: 'list' as const, icon: List, label: t('nearby.view_list', { defaultValue: 'List' }) },
-                        ]).map((mode) => {
-                          const Icon = mode.icon;
-                          const isActive = checkInHeaderState.viewMode === mode.id;
-                          return (
-                            <motion.button
-                              key={mode.id}
-                              type="button"
-                              onClick={() => dispatchCheckInViewMode(mode.id)}
-                              disabled={!checkInHeaderControls}
-                              whileTap={{ scale: 0.96 }}
-                              aria-labelledby={`checkin-header-tooltip-${mode.id}`}
-                              aria-pressed={isActive}
-                              className={`group relative flex h-8 w-10 shrink-0 items-center justify-center rounded-full transition-colors disabled:cursor-default disabled:opacity-60 ${
-                                isActive
-                                  ? 'text-white'
-                                  : theme === 'dark'
-                                    ? 'text-zinc-500 hover:text-white'
-                                    : 'text-slate-400 hover:text-slate-900'
-                              }`}
-                            >
-                              {isActive && (
-                                <motion.span
-                                  layoutId="checkInHeaderViewIndicator"
-                                  className="absolute inset-0 rounded-full bg-sky-600 shadow-lg shadow-sky-600/30"
-                                  transition={{ type: 'spring', stiffness: 380, damping: 34 }}
-                                />
-                              )}
-                              <Icon className="relative z-10 h-3.5 w-3.5" />
-                              <span
-                                id={`checkin-header-tooltip-${mode.id}`}
-                                role="tooltip"
-                                className={`pointer-events-none absolute left-1/2 top-full z-[700] mt-2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-[9px] font-bold opacity-0 shadow-xl transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${
-                                  theme === 'dark'
-                                    ? 'bg-white text-slate-950'
-                                    : 'bg-slate-950 text-white'
-                                }`}
-                              >
-                                {mode.label}
-                              </span>
-                            </motion.button>
-                          );
-                        })}
-                      </div>
-
-                      <div className={`flex h-8 shrink-0 items-center gap-1.5 rounded-full px-2.5 text-[10px] font-black uppercase tracking-[0.12em] ${
-                        theme === 'dark' ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/80 text-slate-500 shadow-sm border border-slate-200/60'
-                      }`}>
-                        <MapPin className="h-3 w-3" />
-                        <span>{checkInHeaderState.resultCount}</span>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => dispatchShellEvent('cv:checkin-open-create')}
-                        disabled={!checkInHeaderControls}
-                        aria-labelledby="checkin-header-tooltip-create"
-                        className="group relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sky-600 text-white shadow-md shadow-sky-600/25 transition-transform hover:scale-105 active:scale-95 disabled:cursor-default disabled:opacity-60"
-                      >
-                        <MapPin className="h-3.5 w-3.5" />
-                        <span
-                          id="checkin-header-tooltip-create"
-                          role="tooltip"
-                          className={`pointer-events-none absolute left-1/2 top-full z-[700] mt-2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-[9px] font-bold opacity-0 shadow-xl transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${
-                            theme === 'dark'
-                              ? 'bg-white text-slate-950'
-                              : 'bg-slate-950 text-white'
-                          }`}
-                        >
-                          {t('app.nav.checkin', { defaultValue: 'Check-in' })}
-                        </span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => dispatchShellEvent('cv:checkin-refresh')}
-                        disabled={checkInHeaderState.isLoading}
-                        aria-labelledby="checkin-header-tooltip-refresh"
-                        className={`group relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all disabled:cursor-default disabled:opacity-60 ${
-                          theme === 'dark'
-                            ? 'bg-white/10 text-white hover:bg-white/20'
-                            : 'bg-slate-950/90 text-white hover:bg-slate-800'
-                        }`}
-                      >
-                        <RefreshCw className={`h-3.5 w-3.5 ${checkInHeaderState.isLoading ? 'animate-spin' : ''}`} />
-                        <span
-                          id="checkin-header-tooltip-refresh"
-                          role="tooltip"
-                          className={`pointer-events-none absolute left-1/2 top-full z-[700] mt-2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-[9px] font-bold opacity-0 shadow-xl transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${
-                            theme === 'dark'
-                              ? 'bg-white text-slate-950'
-                              : 'bg-slate-950 text-white'
-                          }`}
-                        >
-                          {t('nearby.refresh', { defaultValue: 'Refresh' })}
-                        </span>
-                      </button>
-                    </div>
-                  )}
-                  {showMatchHeaderControls && (
-                    <div className="elite-floating flex h-11 w-[310px] max-w-full items-center gap-1.5 overflow-visible px-2 backdrop-blur-md">
-                      <div className={`flex min-w-0 flex-1 items-center justify-center gap-0.5 overflow-visible rounded-full p-1 ${
-                        theme === 'dark' ? 'bg-white/[0.04]' : 'bg-slate-100/90'
-                      }`}>
-                        {([
-                          { id: 'match_now' as const, icon: Heart, label: t('match.match_now', { defaultValue: 'Match Now' }) },
-                          { id: 'matches' as const, icon: Sparkles, label: t('match.my_matches', { defaultValue: 'Matches' }) },
-                          { id: 'liked' as const, icon: Star, label: t('match.liked', { defaultValue: 'Liked' }) },
-                          { id: 'passed' as const, icon: Ghost, label: t('match.passed', { defaultValue: 'Passed' }) },
-                        ]).map((tab) => {
-                          const Icon = tab.icon;
-                          const isActive = matchHeaderState.activeTab === tab.id;
-                          return (
-                            <motion.button
-                              key={tab.id}
-                              type="button"
-                              onClick={() => dispatchMatchTab(tab.id)}
-                              disabled={!matchHeaderControls}
-                              whileTap={{ scale: 0.96 }}
-                              aria-labelledby={`match-header-tooltip-${tab.id}`}
-                              aria-pressed={isActive}
-                              className={`group relative flex h-8 w-10 shrink-0 items-center justify-center rounded-full transition-colors disabled:cursor-default disabled:opacity-60 ${
-                                isActive
-                                  ? 'text-white'
-                                  : theme === 'dark'
-                                    ? 'text-zinc-500 hover:text-white'
-                                    : 'text-slate-400 hover:text-slate-900'
-                              }`}
-                            >
-                              {isActive && (
-                                <motion.span
-                                  layoutId="matchHeaderTabIndicator"
-                                  className="absolute inset-0 rounded-full bg-sky-600 shadow-lg shadow-sky-600/30"
-                                  transition={{ type: 'spring', stiffness: 380, damping: 34 }}
-                                />
-                              )}
-                              <Icon
-                                className="relative z-10 h-3.5 w-3.5"
-                                fill={tab.id === 'match_now' || tab.id === 'liked' ? 'currentColor' : 'none'}
-                              />
-                              <span
-                                id={`match-header-tooltip-${tab.id}`}
-                                role="tooltip"
-                                className={`pointer-events-none absolute left-1/2 top-full z-[700] mt-2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-[9px] font-bold opacity-0 shadow-xl transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${
-                                  theme === 'dark'
-                                    ? 'bg-white text-slate-950'
-                                    : 'bg-slate-950 text-white'
-                                }`}
-                              >
-                                {tab.label}
-                              </span>
-                            </motion.button>
-                          );
-                        })}
-                      </div>
-
-                      <div className={`flex h-8 shrink-0 items-center gap-1.5 rounded-full px-2.5 text-[10px] font-black uppercase tracking-[0.12em] ${
-                        theme === 'dark' ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/80 text-slate-500 shadow-sm border border-slate-200/60'
-                      }`}>
-                        <Users className="h-3 w-3" />
-                        <span>{matchHeaderState.resultCount}</span>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => dispatchShellEvent('cv:match-refresh')}
-                        disabled={matchHeaderState.isLoading}
-                        aria-labelledby="match-header-tooltip-refresh"
-                        className={`group relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all disabled:cursor-default disabled:opacity-60 ${
-                          theme === 'dark'
-                            ? 'bg-white/10 text-white hover:bg-white/20'
-                            : 'bg-slate-950/90 text-white hover:bg-slate-800'
-                        }`}
-                      >
-                        <RefreshCw className={`h-3.5 w-3.5 ${matchHeaderState.isLoading ? 'animate-spin' : ''}`} />
-                        <span
-                          id="match-header-tooltip-refresh"
-                          role="tooltip"
-                          className={`pointer-events-none absolute left-1/2 top-full z-[700] mt-2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-[9px] font-bold opacity-0 shadow-xl transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${
-                            theme === 'dark'
-                              ? 'bg-white text-slate-950'
-                              : 'bg-slate-950 text-white'
-                          }`}
-                        >
-                          {t('match.refresh', { defaultValue: 'Refresh' })}
-                        </span>
-                      </button>
-                    </div>
-                  )}
-                  {showPlacesHeaderControls && (
-                    <div className="elite-floating flex h-11 w-[360px] max-w-full items-center gap-1.5 overflow-hidden px-2 backdrop-blur-md xl:w-[560px]">
-                      <div className={`relative flex shrink-0 items-center gap-0.5 rounded-full p-1 ${
-                        theme === 'dark' ? 'bg-white/[0.04]' : 'bg-slate-100/90'
-                      }`}>
-                        {(['grid', 'map'] as const).map((mode) => {
-                          const isActive = placesHeaderState.viewMode === mode;
-                          const Icon = mode === 'grid' ? Grid : MapIcon;
-                          const label = mode === 'grid'
-                            ? t('nearby.view_grid', { defaultValue: 'Grid' })
-                            : t('nearby.view_map', { defaultValue: 'Map' });
-                          return (
-                            <motion.button
-                              key={mode}
-                              type="button"
-                              onClick={() => dispatchPlacesViewMode(mode)}
-                              whileTap={{ scale: 0.96 }}
-                              className={`relative flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-full px-2.5 text-[10px] font-black uppercase tracking-[0.12em] transition-colors xl:px-3 ${
-                                isActive
-                                  ? 'text-white'
-                                  : theme === 'dark'
-                                    ? 'text-zinc-500 hover:text-white'
-                                    : 'text-slate-400 hover:text-slate-900'
-                              }`}
-                              title={label}
-                              aria-pressed={isActive}
-                            >
-                              {isActive && (
-                                <motion.span
-                                  layoutId="placesHeaderViewIndicator"
-                                  className="absolute inset-0 rounded-full bg-sky-600 shadow-lg shadow-sky-600/30"
-                                  transition={{ type: 'spring', stiffness: 380, damping: 34 }}
-                                />
-                              )}
-                              <span className="relative z-10 flex items-center gap-1.5">
-                                <Icon className="h-3.5 w-3.5" />
-                                <span className="hidden xl:inline">{label}</span>
-                              </span>
-                            </motion.button>
-                          );
-                        })}
-                      </div>
-
-                      <div className={`h-5 w-px shrink-0 ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-200/80'}`} />
-
-                      <div className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto no-scrollbar">
-                        {placesHeaderCategories.map((category) => {
-                          const isAll = category === 'all';
-                          const isSelected = placesHeaderState.selectedCategory === category;
-                          const label = isAll
-                            ? t('places.all_categories', { defaultValue: 'All' })
-                            : `#${category}`;
-                          return (
-                            <motion.button
-                              key={category}
-                              type="button"
-                              onClick={() => dispatchPlacesCategory(category)}
-                              whileTap={{ scale: 0.95 }}
-                              className={`relative flex h-8 max-w-[148px] shrink-0 items-center rounded-full px-3 text-[10px] font-black uppercase tracking-[0.12em] transition-colors ${
-                                isSelected
-                                  ? 'text-white'
-                                  : theme === 'dark'
-                                    ? 'text-zinc-500 hover:text-white'
-                                    : 'text-slate-400 hover:text-slate-900'
-                              }`}
-                              title={label}
-                              aria-pressed={isSelected}
-                            >
-                              {isSelected && (
-                                <motion.span
-                                  layoutId="placesHeaderCategoryIndicator"
-                                  className="absolute inset-0 rounded-full bg-sky-600 shadow-md shadow-sky-600/30"
-                                  transition={{ type: 'spring', stiffness: 380, damping: 34 }}
-                                />
-                              )}
-                              <span className="relative z-10 truncate">{label}</span>
-                            </motion.button>
-                          );
-                        })}
-                      </div>
-
-                      <div className={`flex h-8 shrink-0 items-center gap-1.5 rounded-full px-2.5 text-[10px] font-black uppercase tracking-[0.12em] ${
-                        theme === 'dark' ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/80 text-slate-500 shadow-sm border border-slate-200/60'
-                      }`}>
-                        <MapPin className="h-3 w-3" />
-                        <span>{placesHeaderState.resultCount}</span>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => dispatchShellEvent('cv:places-refresh')}
-                        disabled={placesHeaderState.isLoading}
-                        aria-label={t('places.retry', { defaultValue: 'Refresh places' })}
-                        title={t('places.retry', { defaultValue: 'Refresh places' })}
-                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all disabled:cursor-default disabled:opacity-60 ${
-                          theme === 'dark'
-                            ? 'bg-white/10 text-white hover:bg-white/20'
-                            : 'bg-slate-950/90 text-white hover:bg-slate-800'
-                        }`}
-                      >
-                        <RefreshCw className={`h-3.5 w-3.5 ${placesHeaderState.isLoading ? 'animate-spin' : ''}`} />
-                      </button>
-                    </div>
-                  )}
-                  {showClassifiedsHeaderControls && (
-                    <div className="elite-floating flex h-11 w-[340px] max-w-full items-center gap-1.5 overflow-hidden px-2 backdrop-blur-md xl:w-[500px]">
-                      <div className={`relative flex min-w-0 flex-1 items-center gap-0.5 rounded-full p-1 ${
-                        theme === 'dark' ? 'bg-white/[0.04]' : 'bg-slate-100/90'
-                      }`}>
-                        {([
-                          { id: 'hiring' as const, icon: Briefcase, label: t('classifieds.hire', { defaultValue: 'Hiring' }) },
-                          { id: 'seeking' as const, icon: UserSearch, label: t('classifieds.jobs', { defaultValue: 'Looking for work' }) },
-                        ]).map((tab) => {
-                          const Icon = tab.icon;
-                          const isActive = classifiedsHeaderState.activeTab === tab.id;
-                          return (
-                            <motion.button
-                              key={tab.id}
-                              type="button"
-                              onClick={() => dispatchClassifiedsTab(tab.id)}
-                              whileTap={{ scale: 0.96 }}
-                              className={`relative flex h-8 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full px-2 text-[10px] font-black uppercase tracking-[0.12em] transition-colors ${
-                                isActive
-                                  ? 'text-white'
-                                  : theme === 'dark'
-                                    ? 'text-zinc-500 hover:text-white'
-                                    : 'text-slate-400 hover:text-slate-900'
-                              }`}
-                              title={tab.label}
-                              aria-pressed={isActive}
-                            >
-                              {isActive && (
-                                <motion.span
-                                  layoutId="classifiedsHeaderTabIndicator"
-                                  className="absolute inset-0 rounded-full bg-sky-600 shadow-lg shadow-sky-600/30"
-                                  transition={{ type: 'spring', stiffness: 380, damping: 34 }}
-                                />
-                              )}
-                              <span className="relative z-10 flex min-w-0 items-center gap-1.5">
-                                <Icon className="h-3.5 w-3.5 shrink-0" />
-                                <span className="hidden truncate xl:inline">{tab.label}</span>
-                              </span>
-                            </motion.button>
-                          );
-                        })}
-                      </div>
-
-                      <div className={`flex h-8 shrink-0 items-center gap-1.5 rounded-full px-2.5 text-[10px] font-black uppercase tracking-[0.12em] ${
-                        theme === 'dark' ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/80 text-slate-500 shadow-sm border border-slate-200/60'
-                      }`}>
-                        <Briefcase className="h-3 w-3" />
-                        <span>{classifiedsHeaderState.resultCount}</span>
-                      </div>
-
-                      {classifiedsHeaderState.searchQuery && (
-                        <div className={`hidden h-8 min-w-0 max-w-[120px] items-center gap-1.5 rounded-full px-2.5 text-[10px] font-black uppercase tracking-[0.12em] xl:flex ${
-                          theme === 'dark' ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/80 text-slate-500 shadow-sm border border-slate-200/60'
-                        }`}>
-                          <Search className="h-3 w-3 shrink-0" />
-                          <span className="truncate">{classifiedsHeaderState.searchQuery}</span>
-                        </div>
-                      )}
-
-                      <button
-                        type="button"
-                        onClick={() => dispatchShellEvent('cv:classifieds-refresh')}
-                        disabled={classifiedsHeaderState.isLoading}
-                        aria-label={t('classifieds.refresh', { defaultValue: 'Refresh listings' })}
-                        title={t('classifieds.refresh', { defaultValue: 'Refresh listings' })}
-                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all disabled:cursor-default disabled:opacity-60 ${
-                          theme === 'dark'
-                            ? 'bg-white/10 text-white hover:bg-white/20'
-                            : 'bg-slate-950/90 text-white hover:bg-slate-800'
-                        }`}
-                      >
-                        <RefreshCw className={`h-3.5 w-3.5 ${classifiedsHeaderState.isLoading ? 'animate-spin' : ''}`} />
-                      </button>
-                    </div>
-                  )}
-                </div>
+                <div className="pointer-events-auto hidden min-w-0 justify-center lg:flex" />
 
                 <div className="flex items-center gap-3 pointer-events-auto justify-self-end relative">
                   {normalizedPath === '/classifieds' && (
@@ -1800,21 +1114,6 @@ function AppContent() {
                       className="w-11 h-11 elite-floating sky-glow flex items-center justify-center !text-white transition-transform hover:scale-105 active:scale-95"
                     >
                       <Plus className="w-5 h-5 shrink-0 text-white" strokeWidth={2.6} />
-                    </button>
-                  )}
-                  {isHomePerformanceRoute && (
-                    <button
-                      type="button"
-                      onClick={() => setShowSkylineTrends(prev => !prev)}
-                      aria-label="Toggle trends"
-                      className={`w-11 h-11 elite-floating flex items-center justify-center group relative transition-all ${
-                        showSkylineTrends
-                          ? 'text-sky-600 bg-sky-50 dark:bg-sky-900/10'
-                          : 'backdrop-blur-md text-slate-400'
-                      }`}
-                    >
-                      <TrendingUp className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                      {showSkylineTrends && <div className="absolute top-3 right-3 w-2 h-2 bg-sky-600 rounded-full animate-pulse" />}
                     </button>
                   )}
                   {isAuthenticated ? (
@@ -1856,13 +1155,13 @@ function AppContent() {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 6, scale: 0.98 }}
                           transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                          className="absolute top-[calc(100%+0.75rem)] right-0 w-[min(18rem,calc(100vw-2rem))] rounded-3xl border border-sky-200 bg-white p-5 text-slate-950 shadow-[0_24px_80px_rgba(2,132,199,0.28)] dark:border-sky-500/30 dark:bg-zinc-950 dark:text-white md:w-80 z-[730]"
+                          className="absolute top-[calc(100%+0.75rem)] right-0 w-[min(18rem,calc(100vw-2rem))] rounded-3xl border border-brand/20 bg-white p-5 text-slate-950 shadow-[0_24px_80px_rgba(255,55,199,0.22)] dark:border-brand/30 dark:bg-zinc-950 dark:text-white md:w-80 z-[730]"
                         >
-                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-sky-600 dark:text-sky-400">
+                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand">
                             {t('app.home_guide_badge', { defaultValue: 'Quick start' })}
                           </p>
                           <div className="mt-3 flex items-center gap-3">
-                            <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-sky-600 text-white shadow-lg shadow-sky-600/30">
+                            <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand text-white shadow-lg shadow-brand/30">
                               <Command className="h-5 w-5" aria-hidden="true" />
                             </span>
                             <h2 id="home-menu-guide-title" className="text-base font-black leading-tight tracking-tight">
@@ -1887,8 +1186,8 @@ function AppContent() {
                       onClick={openNavigationMenu}
                       aria-label={t('app.open_navigation_menu', { defaultValue: 'Open navigation menu' })}
                       aria-describedby={showHomeMenuGuide ? 'home-menu-guide-description' : undefined}
-                      className={`w-11 h-11 elite-floating flex items-center justify-center text-slate-700 dark:text-slate-200 hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer transition-all hover:scale-105 active:scale-95 ${
-                        showHomeMenuGuide ? 'ring-4 ring-sky-400/50 shadow-[0_0_0_10px_rgba(56,189,248,0.14)] animate-pulse' : ''
+                      className={`w-11 h-11 elite-floating flex items-center justify-center text-slate-700 dark:text-slate-200 hover:text-brand cursor-pointer transition-all hover:scale-105 active:scale-95 ${
+                        showHomeMenuGuide ? 'ring-4 ring-brand/50 shadow-[0_0_0_10px_rgba(255,55,199,0.14)] animate-pulse' : ''
                       }`}
                     >
                       <Command className="w-5 h-5" />
@@ -2189,15 +1488,9 @@ function AppContent() {
                           </p>
                         </div>
                       </div>
-                      <div className={`w-11 h-5 rounded-full flex items-center px-1 ${theme === 'dark' ? 'bg-white/15' : 'bg-black/10'}`}>
-                        <span
-                          aria-hidden="true"
-                          className={`block h-4 w-4 rounded-full transition-transform duration-200 ease-out ${theme === 'dark'
-                            ? 'translate-x-[1.25rem] bg-white'
-                            : 'translate-x-0 bg-black'
-                            }`}
-                        />
-                      </div>
+                      <span aria-hidden="true" data-checked={theme === 'dark'} className="cv-switch pointer-events-none">
+                        <span className="cv-switch-thumb" />
+                      </span>
                     </div>
                   </motion.button>
 
@@ -2231,6 +1524,123 @@ function AppContent() {
           </aside>
 
 
+          {/* Left Rail — persistent primary navigation (desktop) */}
+          {showLeftRail && (
+            <aside className="hidden shrink-0 pt-24 xl:flex xl:w-[275px]">
+              <nav aria-label={t('app.sidebar.primary', { defaultValue: 'Discover' })} className="flex h-[calc(100vh-6rem)] w-full flex-col overflow-hidden pb-6 pr-3">
+                <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto no-scrollbar">
+                  {sidebarNavItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = activeScreen === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => navigate(item.path || '/')}
+                        title={item.label}
+                        aria-current={isActive ? 'page' : undefined}
+                        className={`flex items-center gap-5 rounded-full py-3 pl-4 pr-4 md:pl-5 text-left transition-colors [outline:none] ${
+                          isActive
+                            ? 'bg-[var(--cv-surface-3)] font-bold text-[var(--color-brand)]'
+                            : 'cv-row-interactive font-medium'
+                        } ${!isActive && (theme === 'dark' ? 'text-zinc-100' : 'text-slate-900')}`}
+                      >
+                        <Icon className="h-[26px] w-[26px] shrink-0" strokeWidth={isActive ? 2.3 : 1.8} />
+                        <span className="truncate text-[20px]">{item.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="shrink-0 pt-2">
+                <button
+                  type="button"
+                  onClick={openComposer}
+                  className="sky-gradient flex h-12 w-full items-center justify-center gap-2 rounded-full font-black text-white shadow-lg shadow-brand/30 transition-transform hover:scale-[1.02] active:scale-95 [outline:none]"
+                >
+                  <Plus className="h-5 w-5" />
+                  <span>{t('post.create', { defaultValue: 'Gönder' })}</span>
+                </button>
+
+                {/* Profile cell — pinned at the very bottom of the rail */}
+                <div className="relative mt-3">
+                  <AnimatePresence>
+                    {isRailProfileMenuOpen && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-40 cursor-default"
+                          onClick={() => setIsRailProfileMenuOpen(false)}
+                        />
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                          transition={{ duration: 0.16 }}
+                          className={`absolute bottom-full left-0 z-50 mb-2 w-[260px] overflow-hidden rounded-2xl border py-2 ${theme === 'dark'
+                            ? 'border-white/10 bg-zinc-900 shadow-2xl shadow-black/50'
+                            : 'border-slate-200 bg-white shadow-xl shadow-slate-950/10'
+                            }`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => { setIsRailProfileMenuOpen(false); openProfile(); }}
+                            className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-semibold ${theme === 'dark' ? 'text-white hover:bg-white/10' : 'text-slate-900 hover:bg-slate-100'}`}
+                          >
+                            <User className="h-4 w-4 shrink-0" />
+                            <span className="truncate">{t('app.view_profile', { defaultValue: 'Profile' })}</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => { setIsRailProfileMenuOpen(false); navigate('/settings'); }}
+                            className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-semibold ${theme === 'dark' ? 'text-white hover:bg-white/10' : 'text-slate-900 hover:bg-slate-100'}`}
+                          >
+                            <SettingsIcon className="h-4 w-4 shrink-0" />
+                            <span className="truncate">{t('app.nav.settings', { defaultValue: 'Settings' })}</span>
+                          </button>
+                          <div className={`mx-4 my-1 h-px ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-200'}`} />
+                          <button
+                            type="button"
+                            onClick={() => requestLogout(() => setIsRailProfileMenuOpen(false))}
+                            className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-semibold ${theme === 'dark' ? 'text-red-400 hover:bg-red-500/10' : 'text-red-600 hover:bg-red-50'}`}
+                          >
+                            <LogOut className="h-4 w-4 shrink-0" />
+                            <span className="truncate">{t('app.logout', { defaultValue: 'Log out' })}</span>
+                          </button>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                  <button
+                    type="button"
+                    onClick={() => setIsRailProfileMenuOpen((v) => !v)}
+                    aria-haspopup="menu"
+                    aria-expanded={isRailProfileMenuOpen}
+                    title={displayName}
+                    className="cv-row-interactive flex w-full items-center gap-3 rounded-full p-3 text-left [outline:none]"
+                  >
+                    {avatarIconSrc ? (
+                      <img src={avatarIconSrc} alt="" className="h-10 w-10 shrink-0 rounded-full object-cover" />
+                    ) : (
+                      <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${theme === 'dark' ? 'bg-white/10 text-zinc-300' : 'bg-slate-200 text-slate-500'}`}>
+                        <User className="h-5 w-5" />
+                      </span>
+                    )}
+                    <span className="min-w-0 flex-1">
+                      <span className={`block truncate text-[15px] font-bold leading-tight ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                        {displayName}
+                      </span>
+                      <span className={`block truncate text-sm leading-tight ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'}`}>
+                        @{username}
+                      </span>
+                    </span>
+                    <MoreHorizontal className={`h-5 w-5 shrink-0 ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'}`} />
+                  </button>
+                </div>
+                </div>
+              </nav>
+            </aside>
+          )}
+
           {/* Middle Section */}
           <main className={mainShellClassName}>
             <ChunkErrorBoundary>
@@ -2243,8 +1653,8 @@ function AppContent() {
           {/* Right Sidebar - Fixed */}
           {/* Hide right sidebar on messages and notifications routes for better UX */}
           {showRightRail && (
-            <aside className="hidden w-[300px] shrink-0 pt-28 xl:block">
-              <div className="sticky top-28 flex flex-col h-[calc(100vh-128px)] w-[300px] py-2 overflow-hidden">
+            <aside className="hidden w-[350px] shrink-0 pt-24 xl:block">
+              <div className="sticky top-24 flex flex-col h-[calc(100vh-112px)] w-[350px] py-2 pl-3 overflow-hidden">
                 {showSidebarInstallCard && (
                   <div className="mb-4">
                     <PwaInstallPrompt variant="card" />
@@ -2252,6 +1662,27 @@ function AppContent() {
                 )}
 
                 <div className="h-full overflow-y-auto no-scrollbar pr-1">
+                  <form
+                    className="mb-4"
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      const query = new FormData(event.currentTarget).get('q');
+                      if (typeof query === 'string' && query.trim()) {
+                        navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+                      } else {
+                        navigate('/search');
+                      }
+                    }}
+                  >
+                    <label className="cv-search">
+                      <Search className="h-[18px] w-[18px] shrink-0" />
+                      <input
+                        name="q"
+                        type="text"
+                        placeholder={t('app.search_placeholder', { defaultValue: 'Ara' })}
+                      />
+                    </label>
+                  </form>
                   <TrendsPanel limit={10} onTrendSelect={handleTrendSelect} />
                 </div>
               </div>
@@ -2260,7 +1691,7 @@ function AppContent() {
 
           {/* Skyline Dock */}
           {showDock && (
-            <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[300] flex items-center gap-2 p-2 elite-floating max-w-[calc(100vw-1rem)]">
+            <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[300] flex items-center gap-2 p-2 elite-floating max-w-[calc(100vw-1rem)] xl:hidden">
               <div className="flex items-center gap-1">
                 <SkylineDockButton
                   icon={Home}
@@ -2283,7 +1714,7 @@ function AppContent() {
                   whileTap={{ scale: 0.9 }}
                   onClick={openComposer}
                   aria-label={t('post.create', { defaultValue: 'Create post' })}
-                  className="w-14 h-14 rounded-full sky-gradient flex items-center justify-center text-white shadow-2xl shadow-sky-600/50 cursor-pointer border-4 border-white dark:border-zinc-900"
+                  className="w-14 h-14 rounded-full sky-gradient flex items-center justify-center text-white shadow-2xl shadow-brand/50 cursor-pointer border-4 border-white dark:border-zinc-900"
                 >
                   <Plus className="w-8 h-8" />
                 </motion.button>
@@ -2303,7 +1734,7 @@ function AppContent() {
                   aria-label={t('app.open_profile', { defaultValue: 'Open profile' })}
                   className={`w-12 h-12 rounded-2xl overflow-hidden transition-all relative ${
                     activeScreen === 'profile'
-                      ? 'ring-2 ring-sky-600 ring-offset-2 ring-offset-white dark:ring-offset-zinc-900 scale-100'
+                      ? 'ring-2 ring-brand ring-offset-2 ring-offset-white dark:ring-offset-zinc-900 scale-100'
                       : 'opacity-50 grayscale hover:opacity-100 hover:grayscale-0 scale-90'
                   }`}
                 >
@@ -2361,7 +1792,7 @@ function AppContent() {
                     type="button"
                     onClick={closeMobileMenu}
                     aria-label={t('app.close_navigation_menu', { defaultValue: 'Close navigation menu' })}
-                    className="absolute top-6 right-6 w-9 h-9 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-slate-500 hover:text-sky-600 transition-all border border-slate-200/50 dark:border-white/5 z-20"
+                    className="absolute top-6 right-6 w-9 h-9 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all border border-slate-200/50 dark:border-white/5 z-20"
                   >
                     <X className="w-4.5 h-4.5" />
                   </button>
@@ -2373,7 +1804,7 @@ function AppContent() {
                   >
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
                       <div>
-                        <p className="text-sky-600 font-bold text-[10px] uppercase tracking-[0.2em] mb-1">
+                        <p className="text-brand font-bold text-[10px] uppercase tracking-[0.2em] mb-1">
                           {DEFAULT_APP_NAME}
                         </p>
                         <h3 className="text-xl md:text-2xl font-medium text-slate-900 dark:text-white tracking-tight">
@@ -2390,7 +1821,7 @@ function AppContent() {
                           {avatarIconSrc ? (
                             <img src={avatarIconSrc} alt="" className="h-full w-full object-cover" />
                           ) : (
-                            <div className="flex h-full w-full items-center justify-center bg-sky-100 text-sky-600 dark:bg-sky-900/30">
+                            <div className="flex h-full w-full items-center justify-center bg-brand-light text-brand">
                               <User className="h-4 w-4" />
                             </div>
                           )}
@@ -2436,7 +1867,7 @@ function AppContent() {
                               <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
                                 isActive
                                   ? 'bg-white/10 text-white dark:bg-slate-900/10 dark:text-slate-900'
-                                  : 'cv-card-surface-muted bg-white text-slate-400 group-hover:text-sky-600'
+                                  : 'cv-card-surface-muted bg-white text-slate-400 group-hover:text-brand'
                               }`}>
                                 <Icon className="h-4 w-4" />
                               </span>

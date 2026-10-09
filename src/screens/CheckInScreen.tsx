@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, animate } from 'framer-motion';
 import {
     MapPin,
@@ -154,7 +154,7 @@ function HoneycombItem({ tag, pos, isSelected, hasSelection, onToggle, dark, def
             `}
         >
             <motion.div
-                 style={tagNameToColor(tag.tag)}
+                 style={tagNameToColor(tag.category)}
 
                 className={`absolute inset-0`}
                 initial={false}
@@ -209,11 +209,11 @@ export default function CheckInScreen() {
     const checkinTags: CheckInTag[] = ((appData?.checkin_tag_types as RawTag[]) ?? []).map((tag: RawTag) => ({
         ...tag,
         icon: resolveTagIcon(tag.icon),
-        color: tagByTagNameToColor(tag.tag).background?.toString() || '#8b5cf6'
+        color: tagByTagNameToColor(tag.category).background?.toString() || '#8b5cf6'
     } as CheckInTag));
 
-    function tagByTagNameToColor(tag: string) {
-        return tagNameToColor(tag) as any;
+    function tagByTagNameToColor(category: string) {
+        return tagNameToColor(category) as any;
     }
 
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -361,11 +361,6 @@ export default function CheckInScreen() {
     const panelClassName = dark
         ? 'cv-card-surface-soft border-white/10'
         : 'border-white/70 bg-white/75';
-    const checkinColumns = useMemo(() => {
-        return [0, 1, 2].map(columnIndex =>
-            posts.filter((_, postIndex) => postIndex % 3 === columnIndex)
-        );
-    }, [posts]);
 
     let mapContent = <div className={`h-full w-full ${dark ? 'cv-card-surface-solid' : 'bg-gray-100'}`} />;
     if (MapContainer && TileLayer && Marker && Popup) {
@@ -409,7 +404,7 @@ export default function CheckInScreen() {
 
                                                 {hasTags && firstTag && (
                                                     <div className="flex items-center gap-1.5 mt-2.5 mb-2">
-                                                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-md border" style={{ ...tagNameToColor(firstTag.tag), background: 'transparent', color: (tagNameToColor(firstTag.tag) as any).background, borderColor: dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)' }}>
+                                                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-md border" style={{ ...tagNameToColor(firstTag.category), background: 'transparent', color: (tagNameToColor(firstTag.category) as any).color, borderColor: dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)' }}>
                                                             <TagIcon className="w-3.5 h-3.5" />
                                                             <span className="text-[10px] font-bold uppercase tracking-wider">{getLocalizedContent(firstTag.name, defaultLanguage) as any}</span>
                                                         </div>
@@ -441,61 +436,45 @@ export default function CheckInScreen() {
                 </div>
             )}
 
-            <div className={`relative z-10 flex flex-col ${isMapView ? 'h-full pointer-events-none px-1 pt-24 md:px-2 md:pt-28' : 'px-1 pb-8 pt-24 md:px-2 md:pt-28'}`}>
-                <div className="pointer-events-auto z-50 mx-auto w-full max-w-7xl px-1 md:px-2 lg:hidden">
-                    <motion.section
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                        className="relative"
-                    >
-                        <div className={`${isMapView ? 'flex h-14 flex-nowrap items-center gap-2 overflow-hidden' : 'flex min-h-[50px] flex-nowrap items-center gap-2 overflow-hidden border-b pb-2'} ${isMapView
-                            ? dark
-                                ? 'cv-card-surface-soft rounded-[24px] border border-white/10 px-2 backdrop-blur-3xl shadow-[0_18px_60px_-42px_rgba(0,0,0,0.9)]'
-                                : 'rounded-[24px] border border-white/70 bg-white/75 px-2 backdrop-blur-3xl shadow-[0_18px_60px_-42px_rgba(15,23,42,0.55)]'
-                            : dark
-                                ? 'border-white/10'
-                                : 'border-slate-200/80'
-                            }`}>
-                            <div className={`flex min-w-0 flex-1 items-center gap-1 overflow-x-auto rounded-full p-1 no-scrollbar ${dark ? 'bg-white/[0.04]' : 'bg-slate-100/85'}`}>
-                                <button
-                                    type="button"
-                                    onClick={() => setCheckInViewMode('map')}
-                                    className={`flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] transition-all ${isMapView
-                                        ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/25'
-                                        : dark
-                                            ? 'text-zinc-500 hover:bg-white/10 hover:text-white'
-                                            : 'text-slate-500 hover:bg-white hover:text-slate-950'
-                                        }`}
-                                    title={t('nearby.view_map')}
-                                >
-                                    <MapIcon className="h-3.5 w-3.5" />
-                                    <span className="hidden sm:inline">{t('nearby.view_map')}</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setCheckInViewMode('list')}
-                                    className={`flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] transition-all ${!isMapView
-                                        ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/25'
-                                        : dark
-                                            ? 'text-zinc-500 hover:bg-white/10 hover:text-white'
-                                            : 'text-slate-500 hover:bg-white hover:text-slate-950'
-                                        }`}
-                                    title={t('nearby.view_list', { defaultValue: 'List' })}
-                                >
-                                    <List className="h-3.5 w-3.5" />
-                                    <span className="hidden sm:inline">{t('nearby.view_list', { defaultValue: 'List' })}</span>
-                                </button>
+            <div className={`relative z-10 flex flex-col ${isMapView ? 'h-full pointer-events-none px-1 pt-0 md:px-2' : 'px-1 pb-8 pt-0 md:px-2'}`}>
+                <div className="pointer-events-auto z-50 mx-auto w-full max-w-7xl">
+                    <section className="relative">
+                        <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+                            <div className="cv-tab-row">
+                                {(
+                                    [
+                                        { id: 'map' as const, icon: MapIcon, label: t('nearby.view_map') },
+                                        { id: 'list' as const, icon: List, label: t('nearby.view_list', { defaultValue: 'List' }) },
+                                    ]
+                                ).map((tab) => {
+                                    const Icon = tab.icon;
+                                    const active = isMapView ? tab.id === 'map' : tab.id === 'list';
+                                    return (
+                                        <button
+                                            key={tab.id}
+                                            type="button"
+                                            onClick={() => setCheckInViewMode(tab.id)}
+                                            style={{ minWidth: 0 }}
+                                            className={`cv-tab ${active ? 'is-active' : ''}`}
+                                            title={typeof tab.label === 'string' ? tab.label : tab.id}
+                                        >
+                                            <Icon className="h-5 w-5 shrink-0" />
+                                            <span className="min-w-0 truncate">{tab.label}</span>
+                                            <span className={`cv-tab-underline ${active ? 'is-on' : ''}`} />
+                                        </button>
+                                    );
+                                })}
                             </div>
-
-                            <div className="ml-auto flex shrink-0 items-center gap-2">
-                                <div className={`hidden h-9 shrink-0 items-center gap-2 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] sm:flex ${dark ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/70 text-slate-500'}`}>
-                                    <MapPin className="h-3.5 w-3.5" />
-                                    <span>{isMapView ? t('nearby.view_map') : t('nearby.view_list', { defaultValue: 'List' })}</span>
-                                </div>
-                                <div className={`flex h-9 shrink-0 items-center rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] ${dark ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/70 text-slate-500'}`}>
+                        </div>
+                        <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
+                            <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
+                                <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
+                                    <MapPin className="h-3.5 w-3.5 shrink-0" />
+                                    {isMapView ? t('nearby.view_map') : t('nearby.view_list', { defaultValue: 'List' })}
+                                </span>
+                                <span className="flex h-9 shrink-0 items-center rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[13px] font-semibold text-[var(--cv-neutral-2)]">
                                     {posts.length}
-                                </div>
+                                </span>
                             </div>
 
                             <motion.button
@@ -523,23 +502,16 @@ export default function CheckInScreen() {
                                 <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
                             </motion.button>
                         </div>
-                    </motion.section>
+                    </section>
                 </div>
 
                 {!isMapView && (
-                    <div className="pointer-events-auto mx-auto w-full max-w-7xl px-0 pt-4 md:px-1">
+                    <div className="pointer-events-auto mx-auto w-full max-w-2xl px-0 pt-2 md:px-1">
                         {loading ? (
-                            <div className="flex items-start justify-center gap-6 px-1 md:gap-8">
-                                {[0, 1, 2].map((columnIndex) => (
-                                    <div
-                                        key={columnIndex}
-                                        className={`flex-col flex-1 gap-6 md:gap-8 min-w-0 max-w-[420px] ${columnIndex === 0 ? 'flex' : columnIndex === 1 ? 'hidden sm:flex' : 'hidden lg:flex'}`}
-                                    >
-                                        {[0, 1, 2].map(i => (
-                                            <div key={`${columnIndex}-${i}`} className="skyline-feed-card elite-card overflow-hidden">
-                                                <PostSkeleton theme={dark ? 'dark' : 'light'} />
-                                            </div>
-                                        ))}
+                            <div className="flex flex-col">
+                                {[0, 1, 2].map(i => (
+                                    <div key={i} className="cv-item overflow-hidden !px-0">
+                                        <PostSkeleton theme={dark ? 'dark' : 'light'} />
                                     </div>
                                 ))}
                             </div>
@@ -555,22 +527,14 @@ export default function CheckInScreen() {
                                 <p className={`text-sm font-black ${dark ? 'text-zinc-300' : 'text-slate-600'}`}>{t('nearby.no_matches_found')}</p>
                             </div>
                         ) : (
-                            <div className="flex items-start justify-center gap-6 px-1 md:gap-8">
-                                {checkinColumns.map((column, columnIndex) => (
-                                    <div
-                                        key={columnIndex}
-                                        className={`flex-col flex-1 gap-6 md:gap-8 min-w-0 max-w-[420px] ${columnIndex === 0 ? 'flex' : columnIndex === 1 ? 'hidden sm:flex' : 'hidden lg:flex'}`}
-                                    >
-                                        {column.map(p => (
-                                            <div key={p.id} className="skyline-feed-card elite-card overflow-hidden">
-                                                <Post
-                                                    post={p}
-                                                    onProfileClick={handleProfileClick}
-                                                    onPostClick={(postId) => handleCheckinClick(postId)}
-                                                />
-                                            </div>
-                                        ))}
-                                    </div>
+                            <div className="flex flex-col">
+                                {posts.map(p => (
+                                    <Post
+                                        key={p.id}
+                                        post={p}
+                                        onProfileClick={handleProfileClick}
+                                        onPostClick={(postId) => handleCheckinClick(postId)}
+                                    />
                                 ))}
                             </div>
                         )}
@@ -589,19 +553,19 @@ export default function CheckInScreen() {
                             exit={{ opacity: 0 }}
                             className={`
                                 pointer-events-auto fixed inset-0 z-[700] flex min-h-0 flex-col
-                                ${dark ? 'bg-slate-950/96 text-white' : 'bg-sky-50/95 text-slate-950'}
+                                ${dark ? 'bg-slate-950/96 text-white' : 'bg-white/95 text-slate-950'}
                                 backdrop-blur-3xl
                             `}
                         >
                             <div className={`mx-3 mt-[calc(env(safe-area-inset-top)+0.75rem)] shrink-0 rounded-[26px] border px-3 py-2 backdrop-blur-3xl md:mx-auto md:w-full md:max-w-3xl ${panelClassName} shadow-[0_24px_80px_-48px_rgba(15,23,42,0.7)]`}>
-                                <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-sky-500/50 to-transparent" />
+                                <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[var(--color-brand)] to-transparent opacity-50" />
                                 <div className="flex items-center justify-between gap-3">
                                     <div className="flex min-w-0 items-center gap-3">
                                         <div className="sky-glow flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white">
                                             <MapPin className="h-5 w-5" />
                                         </div>
                                         <div className="min-w-0">
-                                            <p className="truncate text-[9px] font-black uppercase tracking-[0.3em] text-sky-600">
+                                            <p className="truncate text-[9px] font-black uppercase tracking-[0.3em] text-[var(--color-brand)]">
                                                 {t('app.nav.checkin', { defaultValue: 'Check-in' })}
                                             </p>
                                             <div className="mt-0.5 flex items-center gap-2">
@@ -695,8 +659,8 @@ export default function CheckInScreen() {
                                                         <button
                                                             key={t}
                                                             onClick={() => toggleTag(t)}
-                                                            style={tagNameToColor(tag.tag) as any}
-                                                            className="flex items-center gap-1.5 rounded-xl px-2 py-1 text-white"
+                                                            style={tagNameToColor(tag.category) as any}
+                                                            className="flex items-center gap-1.5 rounded-xl px-2 py-1"
                                                         >
                                                             <Icon className="w-3 h-3" strokeWidth={2} />
                                                             <span className="text-[10px] font-bold">{getLocalizedContent(tag.name, defaultLanguage) as any}</span>

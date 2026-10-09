@@ -1113,65 +1113,51 @@ const MatchScreen: React.FC = () => {
           : Heart;
 
     return (
-      <motion.section
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="relative lg:hidden"
-      >
-        <div className={`flex min-h-[50px] flex-wrap items-center gap-2 border-b pb-2 ${isDark ? 'border-white/10' : 'border-slate-200/80'}`}>
-          <div className={`flex max-w-full min-w-0 gap-1 overflow-x-auto rounded-full p-1 no-scrollbar ${isDark ? 'bg-white/[0.04]' : 'bg-slate-100/85'}`}>
+      <section className="relative">
+        <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+          <div className="cv-tab-row">
             {tabs.map((tab) => {
               const active = historyTab === tab.id;
               return (
-                <motion.button
+                <button
                   key={tab.id}
                   type="button"
                   onClick={() => setHistoryTab(tab.id)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`flex h-9 shrink-0 items-center gap-2 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] transition-all ${active
-                    ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/20'
-                    : isDark
-                      ? 'text-zinc-500 hover:bg-white/10 hover:text-white'
-                      : 'text-slate-500 hover:bg-white hover:text-slate-950'
-                    }`}
+                  style={{ minWidth: 0 }}
+                  className={`cv-tab ${active ? 'is-active' : ''}`}
                 >
-                  <span>{tab.label}</span>
-                  <span className={`flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] ${active ? 'bg-white/20 text-white' : isDark ? 'bg-white/10 text-white' : 'bg-white text-slate-700'}`}>
+                  <span className="min-w-0 truncate text-[13px]">{tab.label}</span>
+                  <span className={`flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1 text-[10px] font-black ${isDark ? 'bg-white/10 text-zinc-300' : 'bg-slate-950/[0.06] text-slate-600'}`}>
                     {tab.count}
                   </span>
-                </motion.button>
+                  <span className={`cv-tab-underline ${active ? 'is-on' : ''}`} />
+                </button>
               );
             })}
           </div>
-
-          <div className="ml-auto flex min-w-0 items-center gap-2">
-            <div className={`hidden h-9 shrink-0 items-center gap-2 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] sm:flex ${isDark ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/70 text-slate-500'}`}>
-              <ActiveIcon className="h-3.5 w-3.5" fill={ActiveIcon === Heart || ActiveIcon === Star ? 'currentColor' : 'none'} />
-              <span>{activeTab.label}</span>
-            </div>
-            <div className={`flex h-9 shrink-0 items-center rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] ${isDark ? 'bg-white/[0.04] text-zinc-400' : 'bg-white/70 text-slate-500'}`}>
+        </div>
+        <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
+          <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
+            <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
+              <ActiveIcon className="h-3.5 w-3.5 shrink-0" fill={ActiveIcon === Heart || ActiveIcon === Star ? 'currentColor' : 'none'} />
+              {activeTab.label}
+            </span>
+            <span className="flex h-9 shrink-0 items-center rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[13px] font-semibold text-[var(--cv-neutral-2)]">
               {activeTab.count}
-            </div>
+            </span>
           </div>
 
-          <motion.button
+          <button
             type="button"
             onClick={refreshCurrentTab}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
             disabled={isCurrentTabLoading}
             aria-label={t('match.refresh') || 'Refresh'}
-            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all disabled:cursor-default disabled:opacity-60 ${isDark
-              ? 'bg-white text-slate-950 hover:bg-zinc-200'
-              : 'bg-slate-950 text-white hover:bg-slate-800'
-              }`}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--cv-surface-3)] text-[var(--cv-neutral-1)] transition-all hover:bg-[var(--cv-surface-3-hover)] disabled:cursor-default disabled:opacity-60"
           >
             <RefreshCw className={`h-4 w-4 ${isCurrentTabLoading ? 'animate-spin' : ''}`} />
-          </motion.button>
+          </button>
         </div>
-      </motion.section>
+      </section>
     );
   };
 
@@ -1384,7 +1370,7 @@ const MatchScreen: React.FC = () => {
   if (isLoading) {
     return (
       <div className={`skyline-page-scroll w-full ${pageTextColor}`}>
-        <div className="mx-auto flex min-h-full w-full max-w-7xl flex-col gap-4 px-1 pb-8 pt-24 md:px-2 md:pt-28">
+        <div className="mx-auto flex min-h-full w-full max-w-7xl flex-col gap-2 px-1 pb-8 pt-0 md:px-2">
           {renderMatchHeader()}
           <div className="flex min-h-[430px] items-center justify-center px-4">
             <div className="elite-bubble rounded-[32px] px-10 py-12 text-center">
@@ -1574,7 +1560,7 @@ const MatchScreen: React.FC = () => {
       </AnimatePresence>
 
       <div className={`skyline-page-scroll w-full ${pageTextColor}`}>
-        <div className="mx-auto flex min-h-full w-full max-w-7xl flex-col gap-4 px-1 pb-8 pt-24 md:px-2 md:pt-28">
+        <div className="mx-auto flex min-h-full w-full max-w-7xl flex-col gap-2 px-1 pb-8 pt-0 md:px-2">
           {renderMatchHeader()}
           <div className="w-full">
             <AnimatePresence mode="wait">

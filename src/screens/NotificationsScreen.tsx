@@ -188,11 +188,8 @@ const NotificationsScreen: React.FC = () => {
   };
 
   const isDark = theme === 'dark';
-  const textColor = isDark ? 'text-white' : 'text-slate-950';
   const secTextColor = isDark ? 'text-zinc-400' : 'text-slate-500';
-  const panelClassName = isDark
-    ? 'cv-card-surface-soft border-white/10'
-    : 'border-white/70 bg-white/75';
+  const divider = <div className="h-px w-full bg-[var(--cv-inner-border)]" />;
   const emptyTitle = t(`notifications.no_${activeTab}`, {
     defaultValue: activeTab === 'all' ? t('notifications.no_notifications') : t('notifications.no_other'),
   });
@@ -201,139 +198,81 @@ const NotificationsScreen: React.FC = () => {
   });
 
   return (
-    <div className={`skyline-page-scroll w-full ${textColor}`}>
-      <div className="mx-auto flex min-h-full w-full max-w-4xl flex-col gap-4 px-1 pb-8 pt-24 md:gap-5 md:px-2 md:pt-28">
-        <motion.section
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className={`relative overflow-hidden rounded-[28px] border p-4 backdrop-blur-3xl md:p-5 ${panelClassName} shadow-[0_24px_70px_-48px_rgba(15,23,42,0.55)]`}
-        >
-          <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-sky-500/50 to-transparent" />
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex min-w-0 items-center gap-3">
-              <div className="sky-glow flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-white">
-                <Bell className="h-5 w-5" strokeWidth={1.8} />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[9px] font-black uppercase tracking-[0.32em] text-sky-600">
-                  {activeTabMeta.label}
-                </p>
-                <div className="mt-1 flex min-w-0 items-center gap-2">
-                  <h1 className="truncate text-2xl font-black leading-none tracking-tight md:text-[27px]">
-                    {t('notifications.title')}
-                  </h1>
-                  <span className={`shrink-0 rounded-full px-2 py-1 text-[10px] font-black uppercase tracking-[0.12em] ${unreadCount > 0
-                    ? 'bg-sky-600/10 text-sky-600 dark:bg-sky-400/10 dark:text-sky-300'
-                    : isDark ? 'bg-white/5 text-zinc-500' : 'bg-slate-100 text-slate-500'
-                  }`}>
-                    {unreadCount} {t('notifications.unread')}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 sm:flex sm:shrink-0">
-              <motion.button
-                type="button"
-                onClick={markAllAsRead}
-                disabled={unreadCount === 0}
-                aria-label={t('notifications.mark_all_read')}
-                whileHover={unreadCount > 0 ? { scale: 1.03 } : undefined}
-                whileTap={unreadCount > 0 ? { scale: 0.97 } : undefined}
-                className={`inline-flex h-10 items-center justify-center gap-2 rounded-full px-3 text-xs font-black transition-all disabled:cursor-default disabled:opacity-45 ${isDark
-                  ? 'bg-white text-black hover:bg-zinc-200'
-                  : 'bg-slate-950 text-white hover:bg-slate-800'
-                }`}
-                >
-                <CheckCheck className="h-4 w-4" />
-                <span className="hidden sm:inline">{t('notifications.mark_all_read')}</span>
-              </motion.button>
-              <button
-                type="button"
-                onClick={() => navigate('/settings')}
-                aria-label={t('notifications.settings')}
-                title={t('notifications.settings')}
-                className={`inline-flex h-10 items-center justify-center gap-2 rounded-full px-3 text-xs font-black transition-all ${isDark ? 'bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-950'}`}
-              >
-                <Settings className="h-4 w-4" />
-                <span className="hidden sm:inline">{t('notifications.settings')}</span>
-              </button>
-            </div>
+    <div className="skyline-page-scroll w-full bg-[var(--cv-page-bg)] text-[var(--cv-neutral-1)]">
+      <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col gap-5 px-4 pb-10 pt-24 md:px-6 md:pt-28">
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="pt-2 text-[34px] font-bold leading-tight tracking-tight">
+            {t('notifications.title')}
+          </h1>
+          <div className="flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              onClick={markAllAsRead}
+              disabled={unreadCount === 0}
+              aria-label={t('notifications.mark_all_read')}
+              className="flex h-10 items-center gap-1.5 rounded-[16px] bg-[var(--cv-neutral-1)] px-3.5 text-[13px] font-semibold text-[var(--cv-page-bg)] transition-all hover:bg-[var(--cv-neutral-1-hover)] active:scale-[0.98] disabled:cursor-default disabled:opacity-40"
+            >
+              <CheckCheck className="h-4 w-4 shrink-0" />
+              <span className="hidden sm:inline">{t('notifications.mark_all_read')}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('/settings')}
+              aria-label={t('notifications.settings')}
+              title={t('notifications.settings')}
+              className="flex h-10 w-10 items-center justify-center rounded-[16px] bg-[var(--cv-surface-3)] text-[var(--cv-neutral-1)] transition-all hover:bg-[var(--cv-surface-3-hover)]"
+            >
+              <Settings className="h-4 w-4" />
+            </button>
           </div>
+        </div>
 
-          <div className="mt-4 grid grid-cols-3 gap-2 border-t border-slate-200/60 pt-3 dark:border-white/10">
-            {[
-              { label: t('notifications.all'), value: notifications.length, icon: Bell },
-              { label: t('notifications.unread'), value: unreadCount, icon: CheckCheck },
-              { label: activeTabMeta.label, value: filteredNotifications.length, icon: ActiveTabIcon },
-            ].map((stat) => {
-              const Icon = stat.icon;
-              return (
-                <div key={`${stat.label}-${stat.value}`} className={`flex min-w-0 items-center gap-2 rounded-2xl border px-2.5 py-2.5 sm:px-3 ${isDark ? 'border-white/10 bg-white/5' : 'border-slate-200 bg-white/70'}`}>
-                  <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-xl ${isDark ? 'bg-white/5 text-zinc-400' : 'bg-slate-100 text-slate-500'}`}>
-                    <Icon className="h-3.5 w-3.5" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-lg font-black leading-none sm:text-xl">{stat.value}</p>
-                    <p className={`mt-1 truncate text-[8px] font-black uppercase tracking-[0.14em] sm:text-[9px] ${secTextColor}`}>
-                      {stat.label}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+        {/* Summary */}
+        <section className="overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] bg-[var(--cv-card-bg-solid)]">
+          <div className="flex items-center justify-between gap-4 p-4">
+            <p className="text-[15px] font-medium leading-tight">{t('notifications.all')}</p>
+            <p className="text-[17px] font-bold leading-none">{notifications.length}</p>
           </div>
-        </motion.section>
-
-        <section className={`flex min-w-0 items-center rounded-[20px] border p-1.5 backdrop-blur-3xl ${panelClassName} shadow-[0_18px_60px_-42px_rgba(15,23,42,0.4)]`}>
-          <div role="tablist" aria-label={t('notifications.title')} className={`flex min-w-0 flex-1 items-center gap-1 overflow-x-auto rounded-full p-1 no-scrollbar ${isDark ? 'bg-white/[0.04]' : 'bg-slate-100/90'}`}>
-            {notificationTabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <motion.button
-                  key={tab.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={isActive}
-                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                  whileTap={{ scale: 0.96 }}
-                  title={tab.label}
-                  className={`group relative flex h-9 shrink-0 items-center justify-center gap-1.5 overflow-hidden rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-500/70 sm:flex-1 sm:px-2.5 ${
-                    isActive
-                      ? 'text-white'
-                      : isDark
-                        ? 'text-zinc-500 hover:bg-white/10 hover:text-white'
-                        : 'text-slate-500 hover:bg-white hover:text-slate-950'
-                  }`}
-                >
-                  {isActive && (
-                    <motion.span
-                      layoutId="activeNotifTab"
-                      className="absolute inset-0 rounded-full bg-sky-600 shadow-lg shadow-sky-600/25"
-                      transition={{ type: 'spring', stiffness: 380, damping: 34 }}
-                    />
-                  )}
-                  <span className="relative z-10 flex items-center gap-1.5">
-                    <Icon className="h-4 w-4" />
-                    <span className="hidden sm:inline">
-                      {tab.label}
-                    </span>
-                  </span>
-                  {tab.count > 0 && (
-                    <span className={`relative z-10 min-w-5 rounded-full px-1.5 py-0.5 text-center text-[10px] font-black ${isActive
-                      ? 'bg-white/20 text-white'
-                      : isDark ? 'bg-white/10 text-zinc-300' : 'bg-white text-slate-600'
-                    }`}>
-                      {tab.count}
-                    </span>
-                  )}
-                </motion.button>
-              );
-            })}
+          {divider}
+          <div className="flex items-center justify-between gap-4 p-4">
+            <p className="text-[15px] font-medium leading-tight">{t('notifications.unread')}</p>
+            <p className={`text-[17px] font-bold leading-none ${unreadCount > 0 ? 'text-[var(--color-brand)]' : ''}`}>{unreadCount}</p>
           </div>
         </section>
+
+        {/* Filter chips */}
+        <div
+          role="tablist"
+          aria-label={t('notifications.title')}
+          className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 no-scrollbar"
+        >
+          {notificationTabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[13px] font-semibold transition-colors ${isActive
+                  ? 'bg-[var(--color-brand)] text-white'
+                  : 'bg-[var(--cv-surface-3)] text-[var(--cv-neutral-2)] hover:bg-[var(--cv-surface-3-hover)]'
+                  }`}
+              >
+                <Icon className="h-3.5 w-3.5 shrink-0" />
+                {tab.label}
+                {tab.count > 0 && (
+                  <span className={`flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full px-1 text-[10px] font-bold ${isActive ? 'bg-white/25 text-white' : 'bg-[var(--cv-neutral-1)] text-[var(--cv-page-bg)]'
+                    }`}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
 
         <main className="min-h-0">
           <AnimatePresence mode="wait">
@@ -342,13 +281,13 @@ const NotificationsScreen: React.FC = () => {
                 key="empty"
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className={`flex min-h-[360px] flex-col items-center justify-center rounded-[30px] border px-8 py-16 text-center backdrop-blur-3xl ${panelClassName} shadow-[0_24px_70px_-48px_rgba(15,23,42,0.45)]`}
+                className="flex min-h-[320px] flex-col items-center justify-center rounded-[12px] border border-[var(--cv-card-border)] bg-[var(--cv-card-bg-solid)] px-8 py-16 text-center"
               >
-                <div className={`mb-6 flex h-16 w-16 items-center justify-center rounded-full ${isDark ? 'bg-white/5 text-zinc-500' : 'bg-slate-100 text-slate-400'}`}>
-                  <Bell className="h-8 w-8" strokeWidth={1.5} />
+                <div className="mb-5 flex h-[36px] w-[36px] items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
+                  <Bell className="h-[18px] w-[18px]" strokeWidth={2} />
                 </div>
-                <h3 className="text-lg font-black tracking-tight">{emptyTitle}</h3>
-                <p className={`mt-2 max-w-[320px] text-sm font-medium leading-relaxed ${secTextColor}`}>
+                <h3 className="text-[15px] font-semibold">{emptyTitle}</h3>
+                <p className={`mt-1 max-w-[320px] text-[13px] leading-snug ${secTextColor}`}>
                   {emptyMessage}
                 </p>
               </motion.div>
@@ -358,19 +297,21 @@ const NotificationsScreen: React.FC = () => {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
-                className="space-y-2"
+                className="overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] bg-[var(--cv-card-bg-solid)]"
               >
                 {filteredNotifications.map((notification, index) => (
-                  <NotificationItem
-                    key={notification.id}
-                    notification={notification}
-                    markAsRead={markAsRead}
-                    onClick={() => handleNotificationClick(notification)}
-                    theme={theme}
-                    getNotificationIcon={getNotificationIcon}
-                    formatTime={formatTime}
-                    index={index}
-                  />
+                  <React.Fragment key={notification.id}>
+                    <NotificationItem
+                      notification={notification}
+                      markAsRead={markAsRead}
+                      onClick={() => handleNotificationClick(notification)}
+                      theme={theme}
+                      getNotificationIcon={getNotificationIcon}
+                      formatTime={formatTime}
+                      index={index}
+                    />
+                    {index < filteredNotifications.length - 1 && divider}
+                  </React.Fragment>
                 ))}
               </motion.div>
             )}

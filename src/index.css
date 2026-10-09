@@ -23,10 +23,30 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Uikit typefaces (uikit/tokens/tokens.css) — birebir tipografi */
+@font-face {
+  font-family: "Basel Grotesk";
+  src: url("/fonts/Basel-Grotesk-Book.woff2") format("woff2");
+  font-weight: 485;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Basel Grotesk";
+  src: url("/fonts/Basel-Grotesk-Medium.woff2") format("woff2");
+  font-weight: 535;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --font-sans: "Google Sans", sans-serif;
-  --color-brand: #0ea5e9;
-  --color-brand-light: #e0f2fe;
+  color-scheme: light;
+  --font-sans: "Basel Grotesk", -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  --color-brand: #ff37c7;
+  --color-brand-hovered: #e500a5;
+  --color-brand-light: rgba(255, 55, 199, 0.08);
+  --color-brand-light-solid: #fff3fc;
   --color-brand-glow: color-mix(in oklab, var(--color-brand), transparent 50%);
   --cv-page-bg: #f8fafc;
   --cv-card-bg: rgba(255, 255, 255, 0.92);
@@ -35,10 +55,53 @@
   --cv-card-bg-muted: rgba(241, 245, 249, 0.86);
   --cv-floating-bg: rgba(255, 255, 255, 0.88);
   --cv-card-border: rgba(255, 255, 255, 0.72);
-  --cv-inner-border: rgba(226, 232, 240, 0.8);
+  --cv-inner-border: rgba(19, 19, 19, 0.08);
+
+  /* Semantic text/surface scale, interaction states and shadows — token
+     values and naming mirror uikit/tokens (COLORS.json neutral and surface
+     scales, SHADOWS.json, DESIGN_TOKENS.json opacity) so every primitive
+     shares one source of truth for hover/press feedback instead of ad hoc
+     per-component opacity/shadow values. */
+  --cv-neutral-1: #131313;
+  --cv-neutral-1-hover: rgba(19, 19, 19, 0.83);
+  --cv-neutral-2: rgba(19, 19, 19, 0.63);
+  --cv-neutral-2-hover: rgba(19, 19, 19, 0.83);
+  --cv-neutral-3: rgba(19, 19, 19, 0.35);
+  --cv-neutral-3-hover: rgba(19, 19, 19, 0.55);
+  --cv-surface-2: #f9f9f9;
+  --cv-surface-2-hover: #f2f2f2;
+  --cv-surface-3: rgba(19, 19, 19, 0.08);
+  --cv-surface-3-hover: rgba(19, 19, 19, 0.1);
+
+  --cv-opacity-hover: 0.6;
+  --cv-opacity-press: 0.4;
+  --cv-opacity-disabled: 0.5;
+  --cv-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --cv-ease-dialog: cubic-bezier(0.6, 0, 0.8, 1);
+  --cv-duration-fast: 125ms;
+  --cv-duration-medium: 250ms;
+  --cv-duration-slow: 500ms;
+
+  --cv-shadow-short: 0px 1px 6px 2px rgba(0, 0, 0, 0.03), 0px 1px 2px 0px rgba(0, 0, 0, 0.02);
+  --cv-shadow-medium: 0px 6px 12px -3px rgba(19, 19, 19, 0.04), 0px 2px 5px -2px rgba(19, 19, 19, 0.03);
+  --cv-shadow-large: 0px 10px 20px -5px rgba(19, 19, 19, 0.05), 0px 4px 12px -3px rgba(19, 19, 19, 0.04);
+
+  /* Semantic status tokens (uikit/tokens COLORS.json success/warning/critical) —
+     used for category-coded chips (e.g. check-in tag badges) instead of ad hoc colors. */
+  --cv-success: #0c8911;
+  --cv-success-secondary: rgba(15, 194, 68, 0.06);
+  --cv-warning: #996f01;
+  --cv-warning-secondary: rgba(255, 191, 23, 0.1);
+  --cv-critical: #e10f0f;
+  --cv-critical-secondary: rgba(255, 0, 0, 0.05);
 }
 
 .dark {
+  color-scheme: dark;
+  --color-brand: #ff37c7;
+  --color-brand-hovered: #e500a5;
+  --color-brand-light: #261621;
+  --color-brand-light-solid: #261621;
   --cv-page-bg: #050505;
   --cv-card-bg: rgba(18, 20, 24, 0.92);
   --cv-card-bg-solid: #121418;
@@ -46,12 +109,34 @@
   --cv-card-bg-muted: rgba(255, 255, 255, 0.055);
   --cv-floating-bg: rgba(18, 20, 24, 0.84);
   --cv-card-border: rgba(255, 255, 255, 0.1);
-  --cv-inner-border: rgba(255, 255, 255, 0.08);
+  --cv-inner-border: rgba(255, 255, 255, 0.12);
+
+  --cv-neutral-1: #ffffff;
+  --cv-neutral-1-hover: rgba(255, 255, 255, 0.85);
+  --cv-neutral-2: rgba(255, 255, 255, 0.65);
+  --cv-neutral-2-hover: rgba(255, 255, 255, 0.85);
+  --cv-neutral-3: rgba(255, 255, 255, 0.38);
+  --cv-neutral-3-hover: rgba(255, 255, 255, 0.58);
+  --cv-surface-2: #1f1f1f;
+  --cv-surface-2-hover: #242424;
+  --cv-surface-3: rgba(255, 255, 255, 0.12);
+  --cv-surface-3-hover: rgba(255, 255, 255, 0.16);
+
+  --cv-shadow-short: 0px 1px 3px 0px rgba(0, 0, 0, 0.12), 0px 1px 2px 0px rgba(0, 0, 0, 0.24);
+  --cv-shadow-medium: 0px 10px 15px -3px rgba(19, 19, 19, 0.54), 0px 4px 6px -2px rgba(19, 19, 19, 0.4);
+  --cv-shadow-large: 0px 16px 24px -6px rgba(0, 0, 0, 0.6), 0px 8px 12px -4px rgba(0, 0, 0, 0.48);
+
+  --cv-success: #21c95e;
+  --cv-success-secondary: rgba(33, 201, 94, 0.12);
+  --cv-warning: #ffbf17;
+  --cv-warning-secondary: rgba(255, 191, 23, 0.08);
+  --cv-critical: #ff593c;
+  --cv-critical-secondary: rgba(255, 89, 60, 0.12);
 }
 
 @theme {
-  --font-sans: "Google Sans", sans-serif;
-  --font-mono: "Google Sans", sans-serif;
+  --font-sans: "Basel Grotesk", -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Basel Grotesk", -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
 
   --color-sky-50: #f0f9ff;
   --color-sky-100: #e0f2fe;
@@ -64,8 +149,10 @@
   --color-sky-800: #075985;
   --color-sky-900: #0c4a6e;
 
-  --color-brand: #0ea5e9;
-  --color-brand-light: #e0f2fe;
+  --color-brand: #ff37c7;
+  --color-brand-hovered: #e500a5;
+  --color-brand-light: rgba(255, 55, 199, 0.08);
+  --color-brand-light-solid: #fff3fc;
   --color-brand-glow: color-mix(in oklab, var(--color-brand), transparent 50%);
 }
 
@@ -380,8 +467,8 @@ body,
 
 .elite-card {
   @apply border rounded-[32px] shadow-[0_8px_30px_-10px_rgba(0,0,0,0.05)] transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] hover:-translate-y-2;
-  background: var(--cv-card-bg);
-  border-color: var(--cv-inner-border);
+  background: var(--cv-card-bg-solid);
+  border-color: var(--cv-surface-3);
 }
 
 .elite-card-static,
@@ -409,6 +496,312 @@ body,
   backdrop-filter: none !important;
   background: var(--cv-card-bg-solid);
 }
+
+/* Interactive feedback primitives — shared hover/press language for icon
+   buttons, ghost controls and list rows, so every control in the app dims
+   on hover/press by the same amount instead of each screen inventing its
+   own opacity/scale values. */
+.cv-pressable {
+  transition: opacity var(--cv-duration-fast) var(--cv-ease-standard), transform var(--cv-duration-fast) var(--cv-ease-standard);
+}
+
+.cv-pressable:hover {
+  opacity: var(--cv-opacity-hover);
+}
+
+.cv-pressable:active {
+  opacity: var(--cv-opacity-press);
+  transform: scale(0.96);
+}
+
+.cv-pressable:disabled,
+.cv-pressable[aria-disabled="true"] {
+  opacity: var(--cv-opacity-disabled);
+  pointer-events: none;
+}
+
+.cv-row-interactive {
+  transition: background-color 200ms var(--cv-ease-standard), border-color 200ms var(--cv-ease-standard), transform 150ms var(--cv-ease-standard);
+}
+
+.cv-row-interactive:hover {
+  background: var(--cv-surface-2-hover);
+}
+
+.cv-row-interactive:active {
+  transform: scale(0.98);
+}
+
+/* Switch — matches uikit's track/thumb proportions (44x24 track, 20px thumb)
+   and motion (opacity.hover/press tokens, standard easing) instead of the
+   bespoke w-11/h-5 toggles that used to be hand-rolled per screen. */
+.cv-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  padding: 2px;
+  border: 1px solid var(--cv-inner-border);
+  background: var(--cv-surface-3);
+  cursor: pointer;
+  transition: background-color 200ms var(--cv-ease-standard), border-color 200ms var(--cv-ease-standard);
+}
+
+.cv-switch:hover {
+  background: var(--cv-surface-3-hover);
+}
+
+.cv-switch[data-checked="true"] {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+}
+
+.cv-switch[data-checked="true"]:hover {
+  background: var(--color-brand-hovered);
+  border-color: var(--color-brand-hovered);
+}
+
+.cv-switch:disabled,
+.cv-switch[aria-disabled="true"] {
+  opacity: var(--cv-opacity-disabled);
+  cursor: not-allowed;
+}
+
+.cv-switch:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+.cv-switch-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--cv-card-bg-solid);
+  box-shadow: var(--cv-shadow-short);
+  transform: translateX(0);
+  transition: transform 200ms var(--cv-ease-standard);
+}
+
+.cv-switch[data-checked="true"] .cv-switch-thumb {
+  transform: translateX(20px);
+  background: #ffffff;
+}
+
+.cv-switch:active .cv-switch-thumb {
+  width: 20px;
+}
+
+/* Button system — mirrors uikit/demo/twitter.html's .btn variants so every
+   generic action button (not a bespoke overlay/media control) shares one
+   shape, radius and hover/press language instead of ad hoc per-screen
+   Tailwind soup. Use cv-btn + one modifier; cv-btn-sm for the compact size. */
+.cv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  font-weight: 535;
+  font-size: 16px;
+  line-height: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+  background: var(--cv-neutral-1);
+  color: var(--cv-card-bg-solid);
+  transition: background-color 100ms var(--cv-ease-standard), color 100ms var(--cv-ease-standard),
+    border-color 100ms var(--cv-ease-standard), transform 100ms var(--cv-ease-standard), opacity 150ms var(--cv-ease-standard);
+}
+.cv-btn:hover { background: var(--cv-neutral-1-hover); }
+.cv-btn:active { transform: scale(0.98); }
+.cv-btn:focus-visible { outline: 2px solid var(--cv-neutral-3-hover); outline-offset: 2px; }
+.cv-btn:disabled, .cv-btn[aria-disabled="true"] { opacity: var(--cv-opacity-disabled); pointer-events: none; }
+
+.cv-btn-secondary { background: var(--cv-surface-3); color: var(--cv-neutral-1); }
+.cv-btn-secondary:hover { background: var(--cv-surface-3-hover); }
+
+.cv-btn-tertiary { background: transparent; color: var(--cv-neutral-1); border-color: var(--cv-surface-3); }
+.cv-btn-tertiary:hover { background: var(--cv-surface-2); }
+
+.cv-btn-text { background: transparent; color: var(--color-brand); padding-inline: 8px; }
+.cv-btn-text:hover { background: var(--color-brand-light); }
+
+.cv-btn-branded { background: var(--color-brand); color: #ffffff; }
+.cv-btn-branded:hover { background: var(--color-brand); filter: brightness(0.92); }
+
+.cv-btn-sm {
+  padding: 7px 14px;
+  font-size: 14px;
+  line-height: 20px;
+  border-radius: 9999px;
+}
+
+.cv-btn-full { width: 100%; }
+
+/* Feed row — mirrors uikit/demo/twitter.html's .item: a flat full-width
+   timeline row with a bottom-border divider and a hover tint, not a
+   rounded floating card. Used in place of the old masonry card grid so the
+   feed is a single Twitter-style column. */
+.cv-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--cv-surface-3);
+  transition: background-color 100ms var(--cv-ease-standard);
+}
+.cv-item:hover { background: var(--cv-surface-2-hover); }
+
+/* Right-rail search box — mirrors uikit/demo/twitter.html's .search. */
+.cv-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  background: var(--cv-surface-2, var(--cv-card-bg-muted));
+  color: var(--cv-neutral-2);
+  transition: background-color 100ms var(--cv-ease-standard), border-color 100ms var(--cv-ease-standard);
+}
+.cv-search:focus-within { background: var(--cv-card-bg-solid); border-color: var(--color-brand); }
+.cv-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--cv-neutral-1);
+  font-size: 15px;
+}
+.cv-search input::placeholder { color: var(--cv-neutral-2); }
+
+/* Segmented header tabs (nearby/check-in/match/places/classifieds view
+   switchers) sit on transparent buttons inside pill chrome; Safari shows its
+   default focus ring here on click since nothing in the design overrides it. */
+.elite-floating button:focus,
+.elite-floating button:focus-visible {
+  outline: none;
+}
+
+/* Tab bar — mirrors uikit/demo/twitter.html's .feed-head/.tab/.tab-underline:
+   flat full-width text tabs with a sliding accent underline, not a
+   segmented pill control. The bar carries a 72px top pad so its background
+   starts at the viewport top, directly behind the floating shell header
+   (top-4 + ~56px pill): tabs sit flush below the header with no dead gap,
+   and the stuck bar reads as one unit with the header. Inline (non-page)
+   usages opt out with !pt-0. */
+.cv-tab-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 53px;
+  box-sizing: border-box;
+  background: var(--cv-card-bg-soft);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cv-inner-border);
+}
+
+/* No extra top clearance: the tab bar sticks flush at the viewport top
+   (top: 0) on every screen, floating pill header overlaps it visually. */
+.cv-tab-bar--top {
+}
+.cv-tab-row { position: relative; display: flex; width: 100%; }
+.cv-tab {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 53px;
+  padding: 0 4px;
+  color: var(--cv-neutral-2);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  transition: color 100ms var(--cv-ease-standard), background-color 100ms var(--cv-ease-standard);
+}
+.cv-tab:hover { background: var(--cv-surface-3); color: var(--cv-neutral-1); }
+.cv-tab:focus, .cv-tab:focus-visible { outline: none; }
+.cv-tab.is-active { color: var(--cv-neutral-1); }
+.cv-tab-underline {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  width: 100%;
+  background: var(--color-brand);
+  border-radius: 9999px;
+  opacity: 0;
+  transform: scaleX(0.4);
+  transition: opacity 200ms var(--cv-ease-standard), transform 200ms var(--cv-ease-standard);
+}
+.cv-tab-underline.is-on {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* Post card chrome — avatar + header row + action bar, matching
+   uikit/demo/twitter.html's .avatar / .post-top / .acts / .act exactly. */
+.cv-avatar {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  background: var(--cv-av, var(--color-brand));
+  color: #fff;
+  font-size: 15px;
+  font-weight: 535;
+  letter-spacing: 0.01em;
+  user-select: none;
+  overflow: hidden;
+}
+.cv-av-1 { --cv-av: #f50db4; } .cv-av-2 { --cv-av: #ffbf17; } .cv-av-3 { --cv-av: #ff8934; }
+.cv-av-4 { --cv-av: #0c8911; } .cv-av-5 { --cv-av: #00c3a0; } .cv-av-6 { --cv-av: #23a3ff; }
+.cv-av-7 { --cv-av: #4981ff; } .cv-av-8 { --cv-av: #4300b0; } .cv-av-9 { --cv-av: #78e744; }
+.cv-av-10 { --cv-av: #85754a; }
+
+.cv-post-top { display: flex; align-items: center; gap: 4px; font-size: 15px; line-height: 20px; min-width: 0; }
+.cv-post-name { display: inline-flex; align-items: center; gap: 4px; font-weight: 535; color: var(--cv-neutral-1); white-space: nowrap; }
+.cv-post-handle, .cv-post-time { color: var(--cv-neutral-2); white-space: nowrap; }
+.cv-post-handle:hover, .cv-post-time:hover { text-decoration: underline; }
+
+.cv-acts { display: flex; align-items: center; justify-content: space-between; margin: 8px -6px 0; max-width: 420px; }
+.cv-act {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  color: var(--cv-neutral-2);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 18px;
+  background: transparent;
+  border: 0;
+  transition: color 100ms var(--cv-ease-standard), background-color 100ms var(--cv-ease-standard);
+}
+.cv-act .cv-act-ico { width: 18px; height: 18px; transition: transform 200ms var(--cv-ease-standard); }
+.cv-act:hover .cv-act-ico { transform: scale(1.12); }
+.cv-act:hover { color: var(--color-brand); background: var(--color-brand-light); }
+.cv-act.is-green:hover { color: #0c8911; background: rgba(15, 194, 68, 0.06); }
+.cv-act.is-red:hover { color: #e10f0f; background: rgba(255, 0, 0, 0.05); }
+.cv-act.is-red.is-active { color: #e10f0f; }
+.cv-act.is-green.is-active { color: #0c8911; }
+.cv-act.is-amber:hover { color: #996f01; background: rgba(255, 191, 23, 0.1); }
+.cv-act.is-active.is-amber { color: #996f01; }
 
 .flow-masonry {
   display: grid;
@@ -534,7 +927,11 @@ body,
 }
 
 .sky-gradient {
-  @apply bg-gradient-to-tr from-sky-400 to-sky-700;
+  background-color: var(--color-brand);
+}
+
+.sky-gradient:hover {
+  background-color: var(--color-brand-hovered);
 }
 
 .skyline-feed-card > div {
@@ -547,7 +944,8 @@ body,
 }
 
 .sky-glow {
-  @apply bg-sky-600 shadow-[0_15px_40px_-10px_rgba(2,132,199,0.5)];
+  background-color: var(--color-brand);
+  box-shadow: 0 15px 40px -10px var(--color-brand-glow);
 }
 
 @keyframes skyline-float {

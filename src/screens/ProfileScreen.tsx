@@ -220,8 +220,6 @@ type ProfileEngagementItem = {
   visible: boolean;
   disabled?: boolean;
   requiresPremium?: boolean;
-  iconClassName: string;
-  accentClassName: string;
 };
 
 interface ApiResponse {
@@ -3653,7 +3651,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           transition={{ duration: 0.3 }}
           className="flex flex-col items-center gap-4"
         >
-          <div className={`w-16 h-16 border-4 ${theme === 'dark' ? 'border-white/10 border-t-sky-400' : 'border-sky-100 border-t-sky-600'} rounded-full animate-spin`} />
+          <div className={`w-16 h-16 border-4 ${theme === 'dark' ? 'border-white/10 border-t-brand' : 'border-brand border-t-brand-hovered'} rounded-full animate-spin`} />
           <p className={`text-base font-medium ${theme === 'dark' ? 'text-zinc-300' : 'text-slate-700'}`}>
             {t('profile.loading_profile')}
           </p>
@@ -3788,8 +3786,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       onClick: () => handleEngagementNavigate('followings'),
       visible: true,
       disabled: !canViewSensitiveProfileSections && !isOwnProfile,
-      iconClassName: theme === 'dark' ? 'bg-sky-400/10 text-sky-300' : 'bg-sky-50 text-sky-700',
-      accentClassName: 'bg-sky-500',
     },
     {
       id: 'followers',
@@ -3799,8 +3795,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       onClick: () => handleEngagementNavigate('followers'),
       visible: true,
       disabled: !canViewSensitiveProfileSections && !isOwnProfile,
-      iconClassName: theme === 'dark' ? 'bg-cyan-400/10 text-cyan-300' : 'bg-cyan-50 text-cyan-700',
-      accentClassName: 'bg-cyan-500',
     },
     {
       id: 'blocking',
@@ -3810,8 +3804,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       onClick: () => handleEngagementNavigate('blocking'),
       visible: canViewSensitiveProfileSections && (isOwnProfile || blockingCountDisplay > 0),
       requiresPremium: true,
-      iconClassName: theme === 'dark' ? 'bg-amber-400/10 text-amber-300' : 'bg-amber-50 text-amber-700',
-      accentClassName: 'bg-amber-500',
     },
     {
       id: 'blocked_by',
@@ -3821,8 +3813,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       onClick: () => handleEngagementNavigate('blocked_by'),
       visible: canViewSensitiveProfileSections && (isOwnProfile || blockedByCountDisplay > 0),
       requiresPremium: true,
-      iconClassName: theme === 'dark' ? 'bg-orange-400/10 text-orange-300' : 'bg-orange-50 text-orange-700',
-      accentClassName: 'bg-orange-500',
     },
     {
       id: 'like_given',
@@ -3832,8 +3822,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       onClick: () => handleEngagementNavigate('like_given'),
       visible: canViewSensitiveProfileSections && (isOwnProfile || likeGivenCountDisplay > 0),
       requiresPremium: true,
-      iconClassName: theme === 'dark' ? 'bg-emerald-400/10 text-emerald-300' : 'bg-emerald-50 text-emerald-700',
-      accentClassName: 'bg-emerald-500',
     },
     {
       id: 'like_received',
@@ -3843,8 +3831,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       onClick: () => handleEngagementNavigate('like_received'),
       visible: canViewSensitiveProfileSections && (isOwnProfile || likeReceivedCountDisplay > 0),
       requiresPremium: true,
-      iconClassName: theme === 'dark' ? 'bg-rose-400/10 text-rose-300' : 'bg-rose-50 text-rose-700',
-      accentClassName: 'bg-rose-500',
     },
     {
       id: 'dislike_given',
@@ -3854,8 +3840,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       onClick: () => handleEngagementNavigate('dislike_given'),
       visible: canViewSensitiveProfileSections && (isOwnProfile || dislikeGivenCountDisplay > 0),
       requiresPremium: true,
-      iconClassName: theme === 'dark' ? 'bg-violet-400/10 text-violet-300' : 'bg-violet-50 text-violet-700',
-      accentClassName: 'bg-violet-500',
     },
     {
       id: 'dislike_received',
@@ -3865,8 +3849,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       onClick: () => handleEngagementNavigate('dislike_received'),
       visible: canViewSensitiveProfileSections && (isOwnProfile || dislikeReceivedCountDisplay > 0),
       requiresPremium: true,
-      iconClassName: theme === 'dark' ? 'bg-fuchsia-400/10 text-fuchsia-300' : 'bg-fuchsia-50 text-fuchsia-700',
-      accentClassName: 'bg-fuchsia-500',
     },
     {
       id: 'matched',
@@ -3877,8 +3859,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       visible: canViewSensitiveProfileSections && (isOwnProfile || matchCountDisplay > 0),
       disabled: !isOwnProfile,
       requiresPremium: true,
-      iconClassName: theme === 'dark' ? 'bg-pink-400/10 text-pink-300' : 'bg-pink-50 text-pink-700',
-      accentClassName: 'bg-pink-500',
     },
     {
       id: 'view_received',
@@ -3888,8 +3868,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       onClick: () => handleEngagementNavigate('view_received'),
       visible: canViewSensitiveProfileSections && (isOwnProfile || viewReceivedCountDisplay > 0),
       requiresPremium: true,
-      iconClassName: theme === 'dark' ? 'bg-indigo-400/10 text-indigo-300' : 'bg-indigo-50 text-indigo-700',
-      accentClassName: 'bg-indigo-500',
     },
   ];
 
@@ -4087,7 +4065,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           type="application/ld+json"
         >{serializeJsonLd(profileJsonLd)}</script>
       )}
-      <div ref={profileViewRef} className={inline || isEmbed ? 'w-full' : 'mx-auto w-full max-w-[1380px] px-1 pb-8 pt-24 md:px-2 md:pt-28'}>
+      <div ref={profileViewRef} className={inline || isEmbed ? 'w-full' : 'mx-auto w-full pb-8 pt-0'}>
         {isEditMode ? (
           // Edit Profile View
           <main className={`flex-1 w-full min-w-0 overflow-hidden rounded-[36px] ${theme === 'dark' ? 'cv-card-surface-soft' : 'bg-white/70'}`}>
@@ -4105,7 +4083,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                       {t('profile.cover_image')}
                     </label>
                     <div className="relative">
-                      <div className={`w-full h-48 rounded-[28px] overflow-hidden border ${theme === 'dark' ? 'bg-white/[0.06] border-white/10' : 'bg-white/70 border-white/80'}`}>
+                      <div className={`w-full h-48 rounded-[28px] overflow-hidden border ${theme === 'dark' ? 'bg-white/[0.06] border-white/10' : 'bg-white/70 border-[var(--cv-inner-border)]'}`}>
                         {(coverImagePreview || getCoverImageUrl()) ? (
                           <img
                             src={coverImagePreview || getCoverImageUrl() || ''}
@@ -4114,7 +4092,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <ImageIcon className={`w-12 h-12 ${theme === 'dark' ? 'text-zinc-600' : 'text-sky-300'}`} />
+                            <ImageIcon className={`w-12 h-12 ${theme === 'dark' ? 'text-zinc-600' : 'text-brand'}`} />
                           </div>
                         )}
                       </div>
@@ -4153,7 +4131,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                     </label>
                     <div className="flex items-center gap-4">
                       <div className="relative">
-                        <div className={`w-32 h-32 rounded-full overflow-hidden border ${theme === 'dark' ? 'bg-white/[0.06] border-white/10' : 'bg-white/70 border-white/80'}`}>
+                        <div className={`w-32 h-32 rounded-full overflow-hidden border ${theme === 'dark' ? 'bg-white/[0.06] border-white/10' : 'bg-white/70 border-[var(--cv-inner-border)]'}`}>
                           {(profileImagePreview || getProfileImageUrl()) ? (
                             <img
                               src={profileImagePreview || getProfileImageUrl() || ''}
@@ -4162,7 +4140,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
-                              <ImageIcon className={`w-8 h-8 ${theme === 'dark' ? 'text-zinc-600' : 'text-sky-300'}`} />
+                              <ImageIcon className={`w-8 h-8 ${theme === 'dark' ? 'text-zinc-600' : 'text-brand'}`} />
                             </div>
                           )}
                         </div>
@@ -4175,7 +4153,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             : ''
                             } ${theme === 'dark'
                               ? 'cv-card-surface-solid text-white border-white/10 hover:bg-white/10'
-                              : 'bg-white text-slate-900 border-white/80 hover:bg-sky-50'
+                              : 'bg-white text-slate-900 border-[var(--cv-inner-border)] hover:bg-brand'
                             }`}
                         >
                           {uploadingProfileImage ? (
@@ -4201,38 +4179,24 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                   </div>
 
                   {/* Edit Tabs */}
-                  <div className={`sticky z-20 border-b ${theme === 'dark' ? 'cv-card-surface-soft border-white/10' : 'border-white/70 bg-white/70'} backdrop-blur-2xl`} style={{ top: '0' }}>
-                    <div className="flex px-4 sm:px-6 relative">
+                  <div className="cv-tab-bar -mx-1">
+                    <div className="cv-tab-row">
                       {[
                         { id: 'profile', label: t('profile.profile_info') || 'Profile Info' },
                         { id: 'attributes', label: t('profile.attributes') },
                         { id: 'interests', label: t('profile.interests') },
                         { id: 'fantasies', label: t('profile.fantasies') },
                       ].map((tab) => (
-                        <motion.button
+                        <button
                           key={tab.id}
+                          type="button"
                           onClick={() => setEditTab(tab.id as 'profile' | 'attributes' | 'interests' | 'fantasies')}
-                          className={`flex-1 py-3 font-semibold text-sm relative transition-colors ${editTab === tab.id
-                            ? theme === 'dark' ? 'text-white' : 'text-slate-950'
-                            : theme === 'dark' ? 'text-zinc-500 hover:text-zinc-300' : 'text-slate-500 hover:text-slate-700'
-                            }`}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
+                          style={{ minWidth: 0 }}
+                          className={`cv-tab !text-[15px] ${editTab === tab.id ? 'is-active' : ''}`}
                         >
-                          <span className="relative z-10">{tab.label}</span>
-                          {editTab === tab.id && (
-                            <motion.div
-                              className="absolute bottom-0 left-0 right-0 h-1 rounded-t-full bg-sky-600"
-                              layoutId="editModeTabIndicator"
-                              transition={{
-                                type: "spring",
-                                stiffness: 380,
-                                damping: 30,
-                                mass: 0.8
-                              }}
-                            />
-                          )}
-                        </motion.button>
+                          <span className="min-w-0 truncate">{tab.label}</span>
+                          <span className={`cv-tab-underline ${editTab === tab.id ? 'is-on' : ''}`} />
+                        </button>
                       ))}
                     </div>
                   </div>
@@ -4553,9 +4517,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
                           {isOwnProfile && (
                             <div
-                              className={`rounded-2xl border p-5 ${theme === 'dark'
-                                ? 'bg-gray-900/30 border-gray-900'
-                                : 'bg-white border-gray-200 shadow-sm'
+                              className={`rounded-2xl border p-5 shadow-[var(--cv-shadow-short)] ${theme === 'dark'
+                                ? 'cv-card-surface-solid border-white/10'
+                                : 'bg-white border-gray-200'
                                 }`}
                             >
                               <button
@@ -5491,12 +5455,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
                   {/* Action Buttons - Only show on profile tab */}
                   {editTab === 'profile' && (
-                    <div className={`flex items-center justify-end gap-3 pt-6 pb-8 px-4 sm:px-6 border-t ${theme === 'dark' ? 'cv-card-surface-soft border-white/10' : 'bg-white/60 border-white/70'}`}>
+                    <div className={`flex items-center justify-end gap-3 pt-6 pb-8 px-4 sm:px-6 border-t ${theme === 'dark' ? 'cv-card-surface-soft border-white/10' : 'bg-white/60 border-[var(--cv-inner-border)]'}`}>
                       <button
                         onClick={() => closeProfileEditMode({ replace: true })}
                         className={`px-6 py-3 rounded-full font-semibold transition-all duration-200 border ${theme === 'dark'
                           ? 'bg-white/[0.08] border-white/10 text-zinc-300 hover:bg-white/[0.12]'
-                          : 'bg-white/80 border-white/80 text-slate-700 hover:bg-white'
+                          : 'bg-white/80 border-[var(--cv-inner-border)] text-slate-700 hover:bg-white'
                           }`}
                       >
                         {t('profile.cancel')}
@@ -5506,9 +5470,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                         disabled={isSaving || uploadingProfileImage || uploadingCoverImage}
                         className={`px-6 py-3 rounded-full font-semibold transition-all duration-200 flex items-center gap-2 ${isSaving || uploadingProfileImage || uploadingCoverImage
                           ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          : theme === 'dark'
-                            ? 'bg-sky-400 text-zinc-950 hover:bg-sky-300'
-                            : 'bg-sky-600 text-white hover:bg-sky-700'
+                          : 'bg-brand text-white hover:bg-brand-hovered'
                           }`}
                       >
                         {isSaving || uploadingProfileImage || uploadingCoverImage ? (
@@ -5535,7 +5497,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           </main>
         ) : (
           // Profile View
-          <main className={`relative flex-1 w-full min-w-0 overflow-hidden rounded-[24px] border ${theme === 'dark' ? 'border-white/10 bg-[#090909]' : 'border-slate-200/80 bg-white'}`}>
+          <main className={`relative flex-1 w-full min-w-0 overflow-hidden ${theme === 'dark' ? 'bg-[#090909]' : 'bg-white'}`}>
 
             <section className="relative overflow-hidden">
               <div className={`relative h-[220px] overflow-hidden sm:h-[260px] ${theme === 'dark' ? 'bg-zinc-950' : 'bg-slate-100'}`}>
@@ -5585,21 +5547,21 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                       <div className="flex flex-wrap gap-2 lg:justify-end">
                         <button
                           onClick={() => navigate('/wallet')}
-                          className={`inline-flex h-10 items-center gap-2 rounded-full border px-4 text-sm font-bold transition-colors ${theme === 'dark' ? 'border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.1]' : 'border-slate-200 bg-white text-slate-800 hover:bg-slate-50'}`}
+                          className="cv-row-interactive inline-flex h-10 items-center gap-2 rounded-full border border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-muted)] px-4 text-sm font-bold text-slate-800 dark:text-white"
                         >
                           <Wallet className="h-4 w-4" />
                           <span>{t('wallet.title') || 'Wallet'}</span>
                         </button>
                         <button
                           onClick={() => navigate('/messages')}
-                          className={`inline-flex h-10 items-center gap-2 rounded-full border px-4 text-sm font-bold transition-colors ${theme === 'dark' ? 'border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.1]' : 'border-slate-200 bg-white text-slate-800 hover:bg-slate-50'}`}
+                          className="cv-row-interactive inline-flex h-10 items-center gap-2 rounded-full border border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-muted)] px-4 text-sm font-bold text-slate-800 dark:text-white"
                         >
                           <MessageCircle className="h-4 w-4" />
                           <span>{t('app.nav.messages', { defaultValue: 'Chat' })}</span>
                         </button>
                         <button
                           onClick={openProfileEditMode}
-                          className={`inline-flex h-10 items-center rounded-full px-5 text-sm font-black transition-colors ${theme === 'dark' ? 'bg-white text-black hover:bg-white/90' : 'bg-slate-950 text-white hover:bg-slate-800'}`}
+                          className={`cv-pressable inline-flex h-10 items-center rounded-full px-5 text-sm font-black ${theme === 'dark' ? 'bg-white text-black' : 'bg-slate-950 text-white'}`}
                         >
                           {t('profile.edit_profile_button')}
                         </button>
@@ -5609,21 +5571,17 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                         <button
                           onClick={handleFollowClick}
                           disabled={isFollowPending}
-                          className={`inline-flex h-10 items-center rounded-full px-5 text-sm font-black transition-colors ${isFollowing
-                            ? theme === 'dark'
-                              ? 'border border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.1]'
-                              : 'border border-slate-200 bg-white text-slate-800 hover:bg-slate-50'
-                            : theme === 'dark'
-                              ? 'bg-white text-black hover:bg-white/90'
-                              : 'bg-slate-950 text-white hover:bg-slate-800'
-                            } ${isFollowPending ? 'cursor-not-allowed opacity-60' : ''}`}
+                          className={`inline-flex h-10 items-center rounded-full px-5 text-sm font-black ${isFollowing
+                            ? 'cv-row-interactive border border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-muted)] text-slate-800 dark:text-white'
+                            : `cv-pressable ${theme === 'dark' ? 'bg-white text-black' : 'bg-slate-950 text-white'}`
+                            } ${isFollowPending ? 'cursor-not-allowed opacity-60 pointer-events-none' : ''}`}
                         >
                           {isFollowing ? t('profile.following') : t('profile.follow')}
                         </button>
                         <button
                           onClick={() => handleSendMessage(user)}
                           disabled={!canViewSensitiveProfileSections}
-                          className={`inline-flex h-10 items-center gap-2 rounded-full border px-4 text-sm font-bold transition-colors ${theme === 'dark' ? 'border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.1]' : 'border-slate-200 bg-white text-slate-800 hover:bg-slate-50'} ${!canViewSensitiveProfileSections ? 'cursor-not-allowed opacity-50' : ''}`}
+                          className={`cv-row-interactive inline-flex h-10 items-center gap-2 rounded-full border border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-muted)] px-4 text-sm font-bold text-slate-800 dark:text-white ${!canViewSensitiveProfileSections ? 'cursor-not-allowed opacity-50 pointer-events-none' : ''}`}
                         >
                           <MessageCircle className="h-4 w-4" />
                           <span>{t('profile.send_message', { defaultValue: 'Send Message' })}</span>
@@ -5670,7 +5628,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             <div className="px-4 sm:px-6 lg:px-8">
 
               {/* Stats */}
-              <div className={`mb-5 grid gap-2.5 ${canViewSensitiveProfileSections ? 'grid-cols-2 sm:grid-cols-3 xl:grid-cols-5' : 'grid-cols-2'}`}>
+              <div className="mb-5 -mx-4 flex gap-4 overflow-x-auto px-4 pb-1 no-scrollbar sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
                 {visibleEngagementItems
                   .map((item) => {
                     const isLocked = Boolean(item.requiresPremium && shouldLockPremiumEngagements);
@@ -5690,34 +5648,21 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                           item.onClick();
                         }}
                         disabled={item.disabled}
-                        className={`group relative min-h-[88px] overflow-hidden rounded-2xl border px-3.5 py-3 text-left transition-colors active:scale-[0.99] ${theme === 'dark'
-                          ? 'border-white/10 bg-white/[0.035] text-zinc-300 hover:bg-white/[0.07] hover:text-white'
-                          : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-950'
-                          } ${item.disabled ? 'cursor-default opacity-70 active:scale-100' : ''}`}
+                        className={`group flex w-[76px] shrink-0 flex-col items-center gap-2 text-center ${item.disabled ? 'cursor-default opacity-70' : ''}`}
                       >
-                        <span className="flex items-start justify-between gap-2">
-                          <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${item.iconClassName}`}>
-                            <ItemIcon className="h-4 w-4" strokeWidth={1.9} />
-                          </span>
+                        <span className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)] transition-transform group-active:scale-95">
+                          <ItemIcon className="h-6 w-6" strokeWidth={2} />
                           {isLocked && (
-                            <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${theme === 'dark' ? 'bg-white/[0.07] text-zinc-400' : 'bg-slate-100 text-slate-500'}`}>
-                              <Lock className="h-3.5 w-3.5" />
+                            <span className={`absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full border-2 ${theme === 'dark' ? 'border-[#090909] bg-zinc-800 text-zinc-400' : 'border-white bg-slate-200 text-slate-500'}`}>
+                              <Lock className="h-2.5 w-2.5" />
                             </span>
                           )}
                         </span>
-
-                        <span className="mt-2.5 flex min-w-0 items-end justify-between gap-2">
-                          <span className="min-w-0">
-                            <span className={`block text-[22px] font-black leading-none tabular-nums tracking-normal ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
-                              {item.value.toLocaleString()}
-                            </span>
-                            <span className={`mt-1 block min-h-[2rem] text-[11px] font-semibold leading-4 ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-500'}`}>
-                              {item.label}
-                            </span>
-                          </span>
-                          {!item.disabled && (
-                            <ChevronRight className={`mb-0.5 h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5 ${theme === 'dark' ? 'text-white/20' : 'text-slate-300'}`} />
-                          )}
+                        <span className={`block text-[15px] font-bold leading-none tabular-nums ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
+                          {item.value.toLocaleString()}
+                        </span>
+                        <span className={`line-clamp-2 block text-[11px] font-medium leading-tight ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-500'}`}>
+                          {item.label}
                         </span>
                       </button>
                     );
@@ -5727,8 +5672,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
             {/* Tabs - Sticky */}
             {canViewActivityTabs && (
-              <div className={`sticky z-20 border-b ${theme === 'dark' ? 'border-white/10 bg-[#090909]/95' : 'border-slate-200 bg-white/95'} backdrop-blur-xl`} style={{ top: '0' }}>
-                <div className="relative flex overflow-x-auto no-scrollbar">
+              <div className="cv-tab-bar -mx-1 !sticky">
+                <div className="cv-tab-row">
                   {[
                     { id: 'profile', label: t('profile.profile_tab') },
                     { id: 'posts', label: t('profile.posts_tab') },
@@ -5736,30 +5681,16 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                     { id: 'media', label: t('profile.media_tab') },
                     { id: 'likes', label: t('profile.likes_tab') },
                   ].map((tab) => (
-                    <motion.button
+                    <button
                       key={tab.id}
+                      type="button"
                       onClick={() => setActiveTab(tab.id as 'profile' | 'posts' | 'replies' | 'media' | 'likes')}
-                      className={`relative h-12 min-w-[88px] flex-1 px-3 text-sm font-bold transition-colors ${activeTab === tab.id
-                        ? theme === 'dark' ? 'text-white' : 'text-slate-950'
-                        : theme === 'dark' ? 'text-zinc-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'
-                        }`}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      style={{ minWidth: 0 }}
+                      className={`cv-tab ${activeTab === tab.id ? 'is-active' : ''}`}
                     >
-                      <span className="relative z-10">{tab.label}</span>
-                      {activeTab === tab.id && (
-                        <motion.div
-                          className={`absolute bottom-0 left-3 right-3 h-0.5 rounded-full ${theme === 'dark' ? 'bg-white' : 'bg-slate-950'}`}
-                          layoutId="profileViewTabIndicator"
-                          transition={{
-                            type: "spring",
-                            stiffness: 380,
-                            damping: 30,
-                            mass: 0.8
-                          }}
-                        />
-                      )}
-                    </motion.button>
+                      <span className="min-w-0 truncate text-[13px]">{tab.label}</span>
+                      <span className={`cv-tab-underline ${activeTab === tab.id ? 'is-on' : ''}`} />
+                    </button>
                   ))}
                 </div>
               </div>
@@ -5768,8 +5699,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             <div className="w-full min-h-[520px]">
               {!isAuthenticated ? (
                 <div className="flex flex-col items-center justify-center py-20 px-4 text-center space-y-6">
-                  <div className={`w-20 h-20 rounded-full flex items-center justify-center border ${theme === 'dark' ? 'bg-white/[0.06] border-white/10' : 'bg-white/70 border-white/80'}`}>
-                    <Lock className={`w-10 h-10 ${theme === 'dark' ? 'text-zinc-500' : 'text-sky-400'}`} />
+                  <div className={`w-20 h-20 rounded-full flex items-center justify-center border ${theme === 'dark' ? 'bg-white/[0.06] border-white/10' : 'bg-white/70 border-[var(--cv-inner-border)]'}`}>
+                    <Lock className={`w-10 h-10 ${theme === 'dark' ? 'text-zinc-500' : 'text-brand'}`} />
                   </div>
                   <div className="max-w-xs mx-auto">
                     <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
@@ -5782,8 +5713,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                   <button
                     onClick={() => setShowAuthWizard(true)}
                     className={`px-8 py-3 rounded-xl font-bold text-sm transition-all transform active:scale-95 ${theme === 'dark'
-                      ? 'bg-sky-400 text-zinc-950 hover:bg-sky-300'
-                      : 'bg-sky-600 text-white hover:bg-sky-700'
+                      ? 'bg-brand text-zinc-950 hover:bg-brand'
+                      : 'bg-brand-hovered text-white hover:bg-brand-hovered'
                       }`}
                   >
                     {t('auth.sign_in')}
@@ -5791,8 +5722,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                 </div>
               ) : shouldShowPrivacyGate ? (
                 <div className="flex flex-col items-center justify-center py-20 px-4 text-center space-y-6">
-                  <div className={`w-20 h-20 rounded-full flex items-center justify-center border ${theme === 'dark' ? 'bg-white/[0.06] border-white/10' : 'bg-white/70 border-white/80'}`}>
-                    <Lock className={`w-10 h-10 ${theme === 'dark' ? 'text-zinc-500' : 'text-sky-400'}`} />
+                  <div className={`w-20 h-20 rounded-full flex items-center justify-center border ${theme === 'dark' ? 'bg-white/[0.06] border-white/10' : 'bg-white/70 border-[var(--cv-inner-border)]'}`}>
+                    <Lock className={`w-10 h-10 ${theme === 'dark' ? 'text-zinc-500' : 'text-brand'}`} />
                   </div>
                   <div className="max-w-md mx-auto space-y-2">
                     <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
@@ -5810,8 +5741,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                       onClick={handleFollowClick}
                       disabled={isFollowPending}
                       className={`px-8 py-3 rounded-xl font-bold text-sm transition-all transform active:scale-95 ${theme === 'dark'
-                        ? 'bg-sky-400 text-zinc-950 hover:bg-sky-300'
-                        : 'bg-sky-600 text-white hover:bg-sky-700'
+                        ? 'bg-brand text-zinc-950 hover:bg-brand'
+                        : 'bg-brand-hovered text-white hover:bg-brand-hovered'
                         } ${isFollowPending ? 'opacity-60 cursor-not-allowed' : ''}`}
                     >
                       {isFollowPending
@@ -5837,7 +5768,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                         </div>
                         <div className={`rounded-[28px] overflow-hidden border ${theme === 'dark'
                           ? 'bg-zinc-900/[0.55] border-white/10'
-                          : 'bg-white/[0.62] border-white/80'
+                          : 'bg-white/[0.62] border-[var(--cv-inner-border)]'
                           }`}>
                           {USER_ATTRIBUTES.map((item, index) => {
                             // Get display value - use authUser if viewing own profile in edit context, otherwise use user
@@ -5930,15 +5861,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             return (
                               <div
                                 key={item.field}
-                                className={`group ${isMultipleSelection ? 'flex-col items-start' : 'flex items-center justify-between'} px-4 py-3 transition-all duration-200 ${!isLast ? `border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}` : ''
-                                  } ${theme === 'dark' ? 'hover:bg-white/[0.03] active:bg-white/[0.05]' : 'hover:bg-black/[0.02] active:bg-black/[0.03]'}`}
+                                className={`cv-row-interactive group ${isMultipleSelection ? 'flex-col items-start' : 'flex items-center justify-between'} px-4 py-3 ${!isLast ? `border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}` : ''
+                                  }`}
                               >
                                 <div className="flex items-center gap-3 min-w-0 flex-1 w-full">
-                                  <div className={`p-2.5 rounded-[10px] transition-all duration-200 flex-shrink-0 ${theme === 'dark'
-                                    ? 'bg-white/[0.08] group-hover:bg-white/[0.12]'
-                                    : 'bg-black/[0.04] group-hover:bg-black/[0.06]'
-                                    }`}>
-                                    <item.icon className={`w-7 h-7 ${theme === 'dark' ? 'text-white/90' : 'text-black/90'}`} />
+                                  <div className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
+                                    <item.icon className="h-[18px] w-[18px]" strokeWidth={2} />
                                   </div>
                                   <span className={`text-[15px] font-medium tracking-[-0.011em] ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                                     {item.label}
@@ -6019,7 +5947,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                       key={categorySlug}
                                       className={`rounded-[24px] overflow-hidden border ${theme === 'dark'
                                         ? 'bg-zinc-900/[0.55] border-white/10'
-                                        : 'bg-white/[0.62] border-white/80'
+                                        : 'bg-white/[0.62] border-[var(--cv-inner-border)]'
                                         }`}
                                     >
                                       <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
@@ -6074,7 +6002,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                       key={categorySlug}
                                       className={`rounded-[24px] overflow-hidden border ${theme === 'dark'
                                         ? 'bg-zinc-900/[0.55] border-white/10'
-                                        : 'bg-white/[0.62] border-white/80'
+                                        : 'bg-white/[0.62] border-[var(--cv-inner-border)]'
                                         }`}
                                     >
                                       <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
@@ -6167,7 +6095,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                       key={categoryId}
                                       className={`rounded-[24px] overflow-hidden border ${theme === 'dark'
                                         ? 'bg-zinc-900/[0.55] border-white/10'
-                                        : 'bg-white/[0.62] border-white/80'
+                                        : 'bg-white/[0.62] border-[var(--cv-inner-border)]'
                                         }`}
                                     >
                                       <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
@@ -6268,7 +6196,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                       key={categoryId}
                                       className={`rounded-[24px] overflow-hidden border ${theme === 'dark'
                                         ? 'bg-zinc-900/[0.55] border-white/10'
-                                        : 'bg-white/[0.62] border-white/80'
+                                        : 'bg-white/[0.62] border-[var(--cv-inner-border)]'
                                         }`}
                                     >
                                       <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>

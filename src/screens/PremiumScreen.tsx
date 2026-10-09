@@ -77,7 +77,7 @@ const PremiumScreen: React.FC = () => {
   if (!premiumFeatureEnabled) {
     return (
       <div className={`skyline-page-scroll w-full ${dark ? 'text-white' : 'text-slate-950'}`}>
-        <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col px-1 pb-8 pt-24 md:px-2 md:pt-28">
+        <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col px-1 pb-8 pt-[72px] md:px-2">
         <div className={`mx-auto w-full max-w-xl rounded-[30px] border p-8 text-center backdrop-blur-3xl ${dark ? 'cv-card-surface-soft border-white/10' : 'border-white/70 bg-white/75'} shadow-[0_24px_70px_-48px_rgba(15,23,42,0.55)]`}>
           <p className="text-xl font-semibold">
             {t('premium.disabled_title', { defaultValue: 'Premium is currently unavailable' })}
@@ -93,7 +93,7 @@ const PremiumScreen: React.FC = () => {
 
   return (
     <div className={`skyline-page-scroll w-full ${dark ? 'text-white' : 'text-slate-950'}`}>
-      <div className="mx-auto flex min-h-full w-full max-w-6xl flex-col gap-5 px-1 pb-8 pt-24 md:px-2 md:pt-28">
+      <div className="mx-auto flex min-h-full w-full max-w-6xl flex-col gap-5 px-1 pb-8 pt-[72px] md:px-2">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <div className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold ${dark ? 'border-white/20 bg-white/10 text-white' : 'border-black/15 bg-black/[0.04] text-black'}`}>
@@ -152,9 +152,7 @@ const PremiumScreen: React.FC = () => {
                   onClick={() => setBillingCycle(cycle)}
                   className={`rounded-full px-4 py-2 text-xs font-semibold transition ${
                     billingCycle === cycle
-                      ? dark
-                        ? 'bg-white text-black'
-                        : 'bg-black text-white'
+                      ? 'bg-[var(--color-brand)] text-white shadow-md shadow-[var(--color-brand-glow)]'
                       : dark
                         ? 'text-white/70'
                         : 'text-black/70'

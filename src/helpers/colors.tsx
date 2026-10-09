@@ -159,13 +159,22 @@ export const pickSeededColorsString = (seed: string, count = 3): string => {
 };
 
 
-export const tagNameToColor = (seed: string): React.CSSProperties => {
-  const numericSeed = stringToSeed(seed);
+// Check-in tag badges are color-coded by category (capacity | intent | availability |
+// personality | safety), not by a per-tag random hash — so badges read as one coherent
+// system (uikit design tokens) instead of 19 arbitrary candy gradients. `intent` gets the
+// brand accent since "what this person wants" is the most important signal in the UI;
+// `safety` gets the success/green token as a reassurance cue; everything else (capacity,
+// availability, personality) is a plain neutral chip.
+const TAG_CATEGORY_STYLES: Record<string, React.CSSProperties> = {
+  intent: { background: 'var(--color-brand-light)', color: 'var(--color-brand)' },
+  safety: { background: 'var(--cv-success-secondary)', color: 'var(--cv-success)' },
+};
 
-  const index = numericSeed % RainbowRankStyles.length;
+const TAG_CATEGORY_FALLBACK: React.CSSProperties = {
+  background: 'var(--cv-surface-3)',
+  color: 'var(--cv-neutral-1)',
+};
 
-  return {
-    background: RainbowRankStyles[index].background,
-    color: RainbowRankStyles[index].color,
-  };
+export const tagNameToColor = (category: string): React.CSSProperties => {
+  return TAG_CATEGORY_STYLES[category] || TAG_CATEGORY_FALLBACK;
 };

@@ -298,10 +298,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
   }, [navigate, onTrendSelect]);
 
   const subtitleColor = isDark ? 'text-zinc-400' : 'text-gray-500';
-  const cardBackground =
-    isDark
-      ? 'cv-card-surface-soft border border-white/10 shadow-[0_24px_70px_-48px_rgba(0,0,0,0.9)] backdrop-blur-3xl'
-      : 'border border-white/70 bg-gradient-to-br from-white via-white/97 to-gray-50 shadow-[0_24px_70px_-48px_rgba(15,23,42,0.35)]';
+  const cardBackground = 'bg-[var(--cv-surface-2)]';
 
   const MAX_COMPACT_ITEMS = 7;
   const hasOverflow = trends.length > MAX_COMPACT_ITEMS;

@@ -416,6 +416,14 @@ export const isWideMediaPost = (post: ApiPost): boolean => {
   return containsWideEmbedContent(post.content);
 };
 
+const getAvatarColorClass = (seed: string) => {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i += 1) {
+    hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+  }
+  return `cv-av-${(hash % 10) + 1}`;
+};
+
 export const CoolVibesPostCard = React.memo(({
   post,
   onPostClick,
@@ -447,9 +455,6 @@ export const CoolVibesPostCard = React.memo(({
   const [displayedViews, setDisplayedViews] = useState(views);
   const displayName = author?.displayname || author?.username || 'User';
   const username = author?.username || 'user';
-  const actionPressClassName = 'transition-all duration-150 ease-out active:scale-95';
-  const actionPressMotion = { scale: 0.94 };
-  const actionPressTransition = { type: 'spring', stiffness: 520, damping: 28 } as const;
   const postViewRef = useDwellView<HTMLElement>({
     key: user && post.public_id ? `post:${user.id}:${post.public_id}` : null,
     enabled: Boolean(
@@ -488,28 +493,24 @@ export const CoolVibesPostCard = React.memo(({
       <article
         ref={postViewRef}
         style={flowCardRenderStyle}
-        className="elite-card overflow-hidden group mb-6 break-inside-avoid cursor-pointer"
+        className="cv-item group cursor-pointer"
         onClick={handleOpen}
       >
-        <div className="px-4 py-3 flex items-center justify-between" onClick={e => e.stopPropagation()}>
-          <button className="flex items-center gap-2.5 min-w-0 text-left" onClick={handleProfile}>
-            <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-slate-50 dark:border-zinc-800/50 p-0.5 shrink-0">
+        <div className="flex items-center justify-between" onClick={e => e.stopPropagation()}>
+          <button className="flex items-center gap-3 min-w-0 text-left" onClick={handleProfile}>
+            <div className={`cv-avatar ${getAvatarColorClass(username)}`}>
               {avatarUrl ? (
                 <img src={avatarUrl} className="w-full h-full rounded-full object-cover" alt={displayName} />
               ) : (
-                <div className="w-full h-full rounded-full bg-sky-100 dark:bg-sky-900/30 flex items-center justify-center text-[12px] font-black text-sky-600">
-                  {displayName.charAt(0).toUpperCase()}
-                </div>
+                displayName.charAt(0).toUpperCase()
               )}
             </div>
-            <div className="leading-none min-w-0">
-              <div className="flex items-center gap-1 mb-0.5">
-                <h5 className="text-[12px] font-bold tracking-tight text-slate-900 dark:text-white uppercase truncate">
-                  {displayName}
-                </h5>
-                {(author as any)?.is_verified && <Zap className="w-2.5 h-2.5 text-sky-600 fill-current shrink-0" />}
+            <div className="min-w-0">
+              <div className="cv-post-top">
+                <span className="cv-post-name truncate">{displayName}</span>
+                {(author as any)?.is_verified && <Zap className="w-3.5 h-3.5 text-brand fill-current shrink-0" />}
+                <span className="cv-post-handle truncate">@{username}</span>
               </div>
-              <p className="text-[9px] font-medium text-slate-400 uppercase tracking-widest truncate">@{username}</p>
             </div>
           </button>
           <div className="flex shrink-0 items-center gap-1.5">
@@ -528,7 +529,7 @@ export const CoolVibesPostCard = React.memo(({
               trigger={
                 <button
                   type="button"
-                  className="rounded-full p-1.5 text-slate-300 transition-colors hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-sky-500/10"
+                  className="rounded-full p-1.5 text-slate-300 transition-colors hover:bg-brand-light hover:text-brand"
                   aria-label="Report post"
                 >
                   <MoreHorizontal className="w-4 h-4" />
@@ -539,7 +540,7 @@ export const CoolVibesPostCard = React.memo(({
         </div>
 
         {media.url && (
-          <div className="px-3 pb-2">
+          <div className="pt-3">
             <div className={`relative rounded-[28px] overflow-hidden bg-slate-50 dark:bg-black group/media ${media.isVideo ? 'aspect-video' : 'aspect-auto'}`}>
               {media.isVideo ? (
                 <video
@@ -566,7 +567,7 @@ export const CoolVibesPostCard = React.memo(({
           </div>
         )}
 
-        <div className="px-5 py-3">
+        <div className="pt-3">
           {hasContent && (
             <PostLexicalContent
               content={localizedContent}
@@ -577,82 +578,44 @@ export const CoolVibesPostCard = React.memo(({
             />
           )}
 
-          <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-50 dark:border-white/5" onClick={e => e.stopPropagation()}>
-            <div className="flex gap-8 px-2">
-              <motion.button
-                type="button"
-                onClick={() => setLiked(!liked)}
-                whileTap={actionPressMotion}
-                transition={actionPressTransition}
-                className={`group flex flex-col items-center gap-1.5 ${actionPressClassName}`}
-              >
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-                  liked
-                    ? 'bg-rose-50 text-rose-500 dark:bg-rose-500/10'
-                    : 'text-slate-400 group-hover:bg-rose-50 group-hover:text-rose-500 dark:group-hover:bg-rose-500/10'
-                }`}>
-                  <Heart className={`w-5 h-5 ${liked ? 'fill-current' : ''}`} />
-                </div>
-                <span className={`text-[11px] font-bold ${liked ? 'text-rose-500' : 'text-slate-400'}`}>
-                  {likes + (liked ? 1 : 0)}
-                </span>
-              </motion.button>
-              <motion.button
-                type="button"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setShowReply(true);
-                }}
-                whileTap={actionPressMotion}
-                transition={actionPressTransition}
-                className={`group flex flex-col items-center gap-1.5 text-slate-400 hover:text-sky-500 ${actionPressClassName}`}
-              >
-                <div className="w-10 h-10 rounded-full flex items-center justify-center group-hover:bg-sky-50 dark:group-hover:bg-sky-500/10 transition-all">
-                  <MessageCircle className="w-5 h-5" />
-                </div>
-                <span className="text-[11px] font-bold">{comments + replyCountOffset}</span>
-              </motion.button>
-              <ShareButton
-                url={resolveAppUrl(`/${username}/status/${post.public_id || post.id}`)}
-                title={displayName ? `${displayName}'s post` : 'Post'}
-                trigger={
-                  <motion.button
-                    type="button"
-                    whileTap={actionPressMotion}
-                    transition={actionPressTransition}
-                    className={`group flex flex-col items-center gap-1.5 text-slate-400 hover:text-emerald-500 ${actionPressClassName}`}
-                    aria-label="Share post"
-                  >
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 transition-all">
-                      <Share2 className="w-5 h-5" />
-                    </div>
-                    <span className="text-[11px] font-bold">{shares}</span>
-                  </motion.button>
-                }
-              />
-            </div>
-            <motion.button
+          <div className="cv-acts" onClick={e => e.stopPropagation()}>
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                setShowReply(true);
+              }}
+              className="cv-act"
+            >
+              <MessageCircle className="cv-act-ico" />
+              <span className="cv-act-num">{comments + replyCountOffset}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setLiked(!liked)}
+              className={`cv-act is-red ${liked ? 'is-active' : ''}`}
+            >
+              <Heart className={`cv-act-ico ${liked ? 'fill-current' : ''}`} />
+              <span className="cv-act-num">{likes + (liked ? 1 : 0)}</span>
+            </button>
+            <ShareButton
+              url={resolveAppUrl(`/${username}/status/${post.public_id || post.id}`)}
+              title={displayName ? `${displayName}'s post` : 'Post'}
+              trigger={
+                <button type="button" className="cv-act is-green" aria-label="Share post">
+                  <Share2 className="cv-act-ico" />
+                  <span className="cv-act-num">{shares}</span>
+                </button>
+              }
+            />
+            <button
               type="button"
               onClick={() => setSaved(!saved)}
-              whileTap={actionPressMotion}
-              transition={actionPressTransition}
-              className={`group flex flex-col items-center gap-1.5 ${actionPressClassName} ${
-                saved
-                  ? 'text-amber-600'
-                  : 'text-slate-300 hover:text-slate-600 dark:hover:text-slate-200'
-              }`}
+              className={`cv-act is-amber ${saved ? 'is-active is-amber' : ''}`}
             >
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-                saved
-                  ? 'bg-amber-100 dark:bg-amber-600/20'
-                  : 'group-hover:bg-slate-100 dark:group-hover:bg-white/5'
-              }`}>
-                <Bookmark className={`w-5 h-5 ${saved ? 'fill-current' : ''}`} />
-              </div>
-              <span className={`text-[11px] font-bold ${saved ? 'text-amber-600' : 'text-slate-400'}`}>
-                {bookmarks + (saved ? 1 : 0)}
-              </span>
-            </motion.button>
+              <Bookmark className={`cv-act-ico ${saved ? 'fill-current' : ''}`} />
+              <span className="cv-act-num">{bookmarks + (saved ? 1 : 0)}</span>
+            </button>
           </div>
         </div>
       </article>
@@ -1141,28 +1104,22 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick, scrollParent
           </div>
         ) : (
           <>
-            <div className="flow-masonry px-1">
-              {feedRows.map((item) => {
-                const isWidePost = item.kind === 'post' && isWideMediaPost(item.post);
-                return (
-                  <FlowMasonryItem
-                    key={item.id}
-                    wide={isWidePost}
-                  >
-                    {item.kind === 'ad' ? (
-                      <div style={flowCardRenderStyle} className="skyline-feed-card elite-card overflow-hidden">
-                        <FeatureAdCard theme={theme} placement="flows" />
-                      </div>
-                    ) : (
-                      <MemoizedPostItem
-                        post={item.post}
-                        onPostClick={onPostClick}
-                        onProfileClick={onProfileClick}
-                      />
-                    )}
-                  </FlowMasonryItem>
-                );
-              })}
+            <div className="flex flex-col">
+              {feedRows.map((item) => (
+                <React.Fragment key={item.id}>
+                  {item.kind === 'ad' ? (
+                    <div style={flowCardRenderStyle} className="cv-item overflow-hidden">
+                      <FeatureAdCard theme={theme} placement="flows" />
+                    </div>
+                  ) : (
+                    <MemoizedPostItem
+                      post={item.post}
+                      onPostClick={onPostClick}
+                      onProfileClick={onProfileClick}
+                    />
+                  )}
+                </React.Fragment>
+              ))}
             </div>
             <FeedFooter context={footerContext} />
           </>
