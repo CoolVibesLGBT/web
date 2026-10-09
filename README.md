@@ -4,6 +4,12 @@ Web client for **CoolVibes** — an inclusive LGBTIQA+ social and dating platfor
 
 **Live:** [coolvibes.lgbt](https://coolvibes.lgbt)
 
+## Screenshots
+
+| Home | Notifications | Referrals |
+| --- | --- | --- |
+| ![Home](./public/images/screenshots/home.png) | ![Notifications](./public/images/screenshots/notifications.png) | ![Referrals](./public/images/screenshots/referrals.png) |
+
 ## Quick start
 
 ```bash

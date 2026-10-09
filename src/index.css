@@ -55,7 +55,7 @@
   --cv-card-bg-muted: rgba(241, 245, 249, 0.86);
   --cv-floating-bg: rgba(255, 255, 255, 0.88);
   --cv-card-border: rgba(255, 255, 255, 0.72);
-  --cv-inner-border: rgba(19, 19, 19, 0.08);
+  --cv-inner-border: rgba(19, 19, 19, 0.14);
 
   /* Semantic text/surface scale, interaction states and shadows — token
      values and naming mirror uikit/tokens (COLORS.json neutral and surface
