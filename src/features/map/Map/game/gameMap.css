@@ -1,0 +1,250 @@
+/* Oyun tarzı harita: marker/oyuncu görselleri. Referans prototipten birebir
+   taşındı (class isimleri global çakışmayı önlemek için `gm-` ön ekiyle). */
+
+.gm-map-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.gm-map-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.gm-map-canvas .maplibregl-map {
+  width: 100%;
+  height: 100%;
+}
+
+.gm-map-root button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* -----------------------------------------
+   PLAYER (ekranın ortasında sabit, radar halkalı)
+----------------------------------------- */
+
+.gm-player-wrap {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+
+.gm-player-radius {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 170px;
+  height: 170px;
+  margin-left: -85px;
+  margin-top: -85px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0) 55%, rgba(255, 255, 255, 0.35) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+.gm-player-cone {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -24px;
+  margin-top: -95px;
+  border-left: 24px solid transparent;
+  border-right: 24px solid transparent;
+  border-bottom: 55px solid color-mix(in srgb, var(--color-brand) 22%, transparent);
+}
+
+.gm-player-pulse {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  margin-top: -14px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-brand) 45%, transparent) 0%, color-mix(in srgb, var(--color-brand) 0%, transparent) 72%);
+  animation: gm-player-pulse 2s ease-out infinite;
+}
+
+@keyframes gm-player-pulse {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+.gm-player-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  margin-top: -14px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 28%, #ffd6f5 0%, var(--color-brand) 55%, var(--color-brand-hovered) 100%);
+  border: 2.5px solid #ffffff;
+  box-shadow:
+    0 0 0 2px var(--color-brand-hovered),
+    0 0 0 6px color-mix(in srgb, var(--color-brand) 28%, transparent),
+    0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+.gm-player-ground-line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 10px;
+  margin-left: -2px;
+  margin-top: 13px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #ffb3ea 0%, var(--color-brand) 30%, var(--color-brand-hovered) 75%, #99006e 100%);
+  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) inset;
+}
+
+.gm-player-shadow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 4px;
+  margin-left: -7px;
+  margin-top: 23px;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.3);
+  filter: blur(1px);
+}
+
+/* -----------------------------------------
+   GAME OBJECTS (kişi/mekan marker'ları — avatar rozeti + yer gölgesi)
+----------------------------------------- */
+
+.gm-game-object {
+  position: relative;
+  width: 46px;
+  height: 62px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Avatar(46) + yer çizgisi(8) + gölge(6) ARA BOŞLUKSUZ dizilir — marker'ın
+   "havada asılı" değil, tam `anchor:'bottom'` noktasında (gölgenin altı)
+   zemine basmış gibi görünmesi için. */
+.gm-game-object .gm-shadow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 22px;
+  height: 6px;
+  margin-left: -11px;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.3);
+  filter: blur(1px);
+}
+
+/* Basılı/press hissiyatı: avatar rozetinin tamamı (halka dahil) birlikte
+   küçülür — pulse halkası ve yer gölgesi sabit kalır, elle tutulup
+   bırakılıyormuş gibi bir his verir. */
+.gm-avatar-wrap {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  margin-left: -23px;
+  transition: transform 120ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.gm-game-object:hover .gm-avatar-wrap {
+  transform: scale(1.06);
+}
+
+.gm-game-object:active .gm-avatar-wrap {
+  transform: scale(0.84);
+  transition-duration: 60ms;
+}
+
+.gm-pulse-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  box-shadow:
+    0 0 0 7px color-mix(in srgb, var(--color-brand) 24%, transparent),
+    0 0 0 16px color-mix(in srgb, var(--color-brand) 10%, transparent);
+  pointer-events: none;
+}
+
+.gm-avatar-circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 35% 30%, #fff0fa 0%, #ffb3ea 45%, var(--color-brand) 100%);
+  border: 2.5px solid var(--color-brand);
+  box-shadow:
+    0 0 0 2px var(--color-brand-hovered),
+    0 2px 6px rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.gm-avatar-circle img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gm-ground-line {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 4px;
+  height: 8px;
+  margin-left: -2px;
+  margin-top: 0;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #ffb3ea 0%, var(--color-brand) 30%, var(--color-brand-hovered) 75%, #99006e 100%);
+  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) inset;
+}
+
+/* Gym varyantı (şu an kullanılmıyor, ileride ayırt edici marker gerekirse
+   diye tutuluyor) — aynı press/gölge mekaniğini platform rengiyle kullanır. */
+.gm-gym .gm-avatar-circle {
+  border-radius: 28%;
+  background: linear-gradient(135deg, #ff6b6b, #e84c88);
+  border-color: #ff6b6b;
+  box-shadow:
+    0 0 0 2px #c2185b,
+    0 2px 6px rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.gm-gym .gm-pulse-ring {
+  box-shadow:
+    0 0 0 7px rgba(232, 76, 136, 0.22),
+    0 0 0 16px rgba(232, 76, 136, 0.1);
+}
+
+.gm-gym .gm-ground-line {
+  background: linear-gradient(180deg, #ffb3c6 0%, #e84c88 30%, #ad1457 75%, #880e4f 100%);
+}
+
+/* Zoom/konum/ortala kontrolleri artık GameMapControls (React/Tailwind)
+   içinde, uygulamanın temasına uygun şekilde render ediliyor — bkz.
+   GameMap.tsx. MapLibre'nin varsayılan NavigationControl'ü kullanılmıyor. */

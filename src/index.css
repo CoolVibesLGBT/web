@@ -20,6 +20,8 @@
 @import "./features/editor/Lexical/nodes/PageBreakNode/index.css";
 @import "./features/editor/Lexical/ui/ContentEditable.css";
 @import "./features/post/BubbleView/style.css";
+@import "maplibre-gl/dist/maplibre-gl.css";
+@import "./features/map/Map/game/gameMap.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 

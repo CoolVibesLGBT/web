@@ -302,10 +302,10 @@ function AppContent() {
   }, []);
   const shouldShowRightSidebar = !Array.from(rightSidebarHiddenPaths).some(p => location.pathname === p || location.pathname.startsWith(p + '/'));
 
-  // Nearby'nin bubble/map gibi immersive (tam ekran) görünümlerindeyken sol
-  // navigasyon rail'i haritanın arkasında kalıp tıklanamaz hale gelmesin diye
-  // tamamen kaldırılıyor — NearbyScreen bunu 'cv:nearby-controls-state'
-  // eventiyle bildiriyor.
+  // Nearby'nin bubble/map, Places'in de map gibi immersive (tam ekran)
+  // görünümlerindeyken sol/sağ navigasyon rail'leri haritanın arkasında kalıp
+  // tıklanamaz hale gelmesin diye tamamen kaldırılıyor — her iki ekran da
+  // kendi 'cv:*-controls-state' eventiyle hangi modda olduğunu bildiriyor.
   const [isNearbyImmersiveView, setIsNearbyImmersiveView] = React.useState(false);
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -316,6 +316,16 @@ function AppContent() {
     };
     window.addEventListener('cv:nearby-controls-state', handleNearbyControlsState);
     return () => window.removeEventListener('cv:nearby-controls-state', handleNearbyControlsState);
+  }, []);
+  const [isPlacesImmersiveView, setIsPlacesImmersiveView] = React.useState(false);
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handlePlacesControlsState = (event: Event) => {
+      const detail = (event as CustomEvent<{ viewMode?: string } | null>).detail;
+      setIsPlacesImmersiveView(detail?.viewMode === 'map');
+    };
+    window.addEventListener('cv:places-controls-state', handlePlacesControlsState);
+    return () => window.removeEventListener('cv:places-controls-state', handlePlacesControlsState);
   }, []);
   const premiumMembershipEnabled = React.useMemo(() => isFeatureEnabled('premium_membership'), []);
 
@@ -889,9 +899,6 @@ function AppContent() {
     if (isPlaceDetailRoute) {
       return t('app.nav.places', { defaultValue: 'Places' });
     }
-    if (isCheckInDetailRoute) {
-      return t('app.nav.checkin', { defaultValue: 'Check-In' });
-    }
     if (profileEngagementType) {
       const engagementTitles: Record<string, string> = {
         followers: t('profile.followers', { defaultValue: 'Followers' }),
@@ -917,8 +924,12 @@ function AppContent() {
     };
 
     return routeTitles[normalizedPath] || null;
-  }, [isCheckInDetailRoute, isClassifiedDetailRoute, isPlaceDetailRoute, normalizedPath, profileEngagementType, t]);
-  const isContextBackRoute = (isPostDetailRoute || isCheckInDetailRoute || isClassifiedDetailRoute || isPlaceDetailRoute || Boolean(profileEngagementType) || Boolean(contextRouteTitle) || isProfileShellRoute);
+  }, [isClassifiedDetailRoute, isPlaceDetailRoute, normalizedPath, profileEngagementType, t]);
+  // Check-in detay sayfası artık Settings gibi kendi sticky bar'ını (geri
+  // butonu + başlık) gösteriyor, bu yüzden üstteki yüzen HUD pilinin ayrıca
+  // bir "geri" durumuna geçmesine gerek yok — Settings ile aynı şekilde
+  // varsayılan logo/home haliyle kalıyor.
+  const isContextBackRoute = (isPostDetailRoute || isClassifiedDetailRoute || isPlaceDetailRoute || Boolean(profileEngagementType) || Boolean(contextRouteTitle) || isProfileShellRoute);
   const shellBackTitle = isProfileEditRoute
     ? t('profile.edit_profile', { defaultValue: 'Edit Profile' })
     : contextRouteTitle
@@ -987,11 +998,13 @@ function AppContent() {
   const showShellHud = !isLandingRoute && !isAuthGateRoute;
   const showRightRail = isAuthenticated && shouldShowRightSidebar;
   const showLeftRail = isAuthenticated && !isLandingRoute && !isAuthGateRoute;
-  // Nearby bubble/map gibi immersive görünümlerdeyken rail'in GENİŞLİĞİ
-  // (dolayısıyla ana içeriğin/üst bardaki tab'ların yatay konumu) sabit
-  // kalsın diye aside kaldırılmıyor; sadece içindeki nav içeriği gizlenip
-  // arkadaki tam ekran harita/bubble görünür hale geliyor.
-  const hideNearbyRailContent = normalizedPath === '/nearby' && isNearbyImmersiveView;
+  // Nearby (bubble/map) ve Places (map) gibi immersive görünümlerdeyken
+  // rail'in GENİŞLİĞİ (dolayısıyla ana içeriğin/üst bardaki tab'ların yatay
+  // konumu) sabit kalsın diye aside kaldırılmıyor; sadece içindeki nav
+  // içeriği gizlenip arkadaki tam ekran harita/bubble görünür hale geliyor.
+  const hideImmersiveRailContent =
+    (normalizedPath === '/nearby' && isNearbyImmersiveView) ||
+    (normalizedPath === '/places' && isPlacesImmersiveView);
   const showDock = isAuthenticated && !isLandingRoute && showBottomBar;
   const showHomeMenuGuide = settings.showDockTips &&
     isAuthReady &&
@@ -1005,7 +1018,7 @@ function AppContent() {
     setIsMobileMenuOpen(true);
   }, []);
 
-  const mainShellClassName = isLandingRoute || isAuthGateRoute || !shouldShowRightSidebar || hideNearbyRailContent
+  const mainShellClassName = isLandingRoute || isAuthGateRoute || !shouldShowRightSidebar || hideImmersiveRailContent
     // Auth-gate (logged-out), landing ve geniş düzen ekranları (sağ rail'i
     // gizleyen rotalar: mesajlar, harita/liste görünümleri vb.) 600px'lik
     // feed kolonuna sıkışmamalı — aksi halde çok-sütunlu içerik kırık/boş
@@ -1540,7 +1553,7 @@ function AppContent() {
           {/* Left Rail — persistent primary navigation (desktop) */}
           {showLeftRail && (
             <aside className="relative z-10 hidden shrink-0 pt-24 xl:flex xl:w-[275px]">
-              {!hideNearbyRailContent && (
+              {!hideImmersiveRailContent && (
               <nav aria-label={t('app.sidebar.primary', { defaultValue: 'Discover' })} className="flex h-[calc(100vh-6rem)] w-full flex-col overflow-hidden pb-6 pr-3">
                 <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto no-scrollbar">
                   {sidebarNavItems.map((item) => {
@@ -1669,7 +1682,7 @@ function AppContent() {
           {/* Hide right sidebar on messages and notifications routes for better UX */}
           {showRightRail && (
             <aside className="relative z-10 hidden w-[350px] shrink-0 pt-24 xl:block">
-              {!hideNearbyRailContent && (
+              {!hideImmersiveRailContent && (
               <div className="sticky top-24 flex flex-col h-[calc(100vh-112px)] w-[350px] py-2 pl-3 overflow-hidden">
                 {showSidebarInstallCard && (
                   <div className="mb-4">

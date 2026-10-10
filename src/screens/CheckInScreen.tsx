@@ -29,7 +29,6 @@ import {
     ArrowLeft,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import type * as Leaflet from 'leaflet';
 import { useNavigate, useLocation } from '@/router';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../contexts/ThemeContext';
@@ -39,11 +38,9 @@ import CreatePost from '../features/post/CreatePost';
 import { getLocalizedContent } from '../helpers/helpers';
 import Post from '../features/post/Post';
 import { PostSkeleton } from '../features/post/Flows';
-import useLeafletReady from '../features/map/Map/useLeafletReady';
+import GameMap, { type GameMarkerContent } from '../features/map/Map/game/GameMap';
 import { useAtom, useSetAtom } from 'jotai';
 import { checkinsStateAtom, fetchCheckinsAtom } from '@/state/checkins';
-
-type ReactLeafletModule = typeof import('react-leaflet');
 
 type TagCategory = 'capacity' | 'intent' | 'availability' | 'personality' | 'safety';
 
@@ -86,25 +83,6 @@ const resolveTagIcon = (icon?: string | LucideIcon): LucideIcon => {
     if (typeof icon === 'function') return icon as LucideIcon;
     const key = icon.toLowerCase();
     return LUCIDE_ICON_MAP[key] ?? MapPin;
-};
-
-const createUserIcon = (leaflet: typeof import('leaflet') | null, avatar: string, isSelf = false): Leaflet.DivIcon | undefined => {
-    if (!leaflet) {
-        return undefined;
-    }
-    return leaflet.divIcon({
-        className: '',
-        html: `
-          <div style="position:relative;width:48px;height:48px;display:flex;align-items:center;justify-content:center;transition:transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
-            <div style="width:42px;height:42px;border-radius:50%;overflow:hidden;border:2.5px solid ${isSelf ? '#8b5cf6' : '#ffffff'};box-shadow:0 6px 16px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.05);background-color:#f3f4f6;">
-              <img src="${avatar}" style="width:100%;height:100%;object-fit:cover;" referrerpolicy="no-referrer" onerror="this.src='https://i.pravatar.cc/150?u=a'"/>
-            </div>
-            ${isSelf ? `<div style="position:absolute;bottom:1px;right:1px;width:14px;height:14px;border-radius:50%;background:#10b981;border:2.5px solid #ffffff;box-shadow:0 2px 5px rgba(0,0,0,0.2);"></div>` : `<div style="position:absolute;bottom:2px;right:2px;width:12px;height:12px;border-radius:50%;background:#10b981;border:2px solid #ffffff;box-shadow:0 2px 4px rgba(0,0,0,0.2);"></div>`}
-          </div>
-        `,
-        iconSize: [48, 48],
-        iconAnchor: [24, 24],
-    });
 };
 
 /* ─── Hex position helper (Apple Watch spiral layout) ─────────────────────── */
@@ -190,15 +168,6 @@ export default function CheckInScreen() {
     const location = useLocation();
     const { t } = useTranslation('common');
     const { data: appData,defaultLanguage } = useApp();
-    const [leafletComponents, setLeafletComponents] = useState<ReactLeafletModule | null>(null);
-    const isLeafletReady = useLeafletReady();
-    const leaflet = (isLeafletReady && typeof window !== 'undefined'
-        ? ((window as any).L as typeof import('leaflet'))
-        : null);
-    const MapContainer = leafletComponents?.MapContainer;
-    const TileLayer = leafletComponents?.TileLayer;
-    const Marker = leafletComponents?.Marker;
-    const Popup = leafletComponents?.Popup;
     interface RawTag {
         id: string;
         tag: string;
@@ -229,21 +198,6 @@ export default function CheckInScreen() {
     // useMotionValue — drag sırasında lag yok, centerOnItem'da animate() ile smooth spring
     const dragX = useMotionValue(0);
     const dragY = useMotionValue(0);
-
-    useEffect(() => {
-        if (typeof window === 'undefined') return;
-        let active = true;
-        import('react-leaflet')
-            .then((mod) => {
-                if (active) setLeafletComponents(mod);
-            })
-            .catch((error) => {
-                console.error('Failed to load react-leaflet', error);
-            });
-        return () => {
-            active = false;
-        };
-    }, []);
 
     const fetchCheckIns = useCallback(async () => {
         await runFetchCheckins({ limit: 50 });
@@ -363,71 +317,30 @@ export default function CheckInScreen() {
         ? 'cv-card-surface-soft border-white/10'
         : 'border-white/70 bg-white/75';
 
-    let mapContent = <div className={`h-full w-full ${dark ? 'cv-card-surface-solid' : 'bg-gray-100'}`} />;
-    if (MapContainer && TileLayer && Marker && Popup) {
-        mapContent = (
-            <MapContainer
-                center={userLocation}
-                zoom={15}
-                style={{ height: '100%', width: '100%' }}
-                zoomControl={false}
-                attributionControl={false}
-            >
-                <TileLayer
-                    url={dark
-                        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-                        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-                    }
-                />
-                {leaflet && (
-                    <>
-                        <Marker position={userLocation} icon={createUserIcon(leaflet, 'https://i.pravatar.cc/150?u=me', true)} />
-                        {posts.map(p => {
-                            const postExtras = p.extras as any;
-                            const hasTags = postExtras?.tags && postExtras.tags.length > 0;
-                            const firstTag = hasTags ? checkinTags.find(t => t.tag === postExtras.tags[0]) : null;
-                            const TagIcon = firstTag?.icon || MapPin;
+    const checkInMarkerContent = useCallback((p: any): GameMarkerContent => ({
+        imageUrl: p?.author?.avatar?.variants?.image?.thumbnail?.url || p?.author?.avatar?.url || null,
+        label: p?.author?.username,
+        variant: 'pokestop',
+    }), []);
+    const checkInMarkerCoords = useCallback((p: any): [number, number] | null => (
+        p?.location ? [p.location.latitude, p.location.longitude] : null
+    ), []);
+    const checkInMarkerId = useCallback((p: any): string => String(p?.id), []);
+    const handleCheckInMarkerClick = useCallback((p: any) => {
+        if (p?.id) handleCheckinClick(p.id);
+    }, [handleCheckinClick]);
 
-                            return (
-                                p.location && <Marker key={p.id} position={[p.location.latitude, p.location.longitude]} icon={createUserIcon(leaflet, p.author.avatar?.variants?.image?.thumbnail?.url || p.author.avatar?.url || 'https://i.pravatar.cc/150?u=a')}>
-                                    <Popup className="custom-popup" closeButton={false}>
-                                        <div className="flex flex-col min-w-[150px] max-w-[220px]">
-                                            <div className="p-3.5">
-                                                <div className="flex items-center gap-2.5 mb-2">
-                                                    <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-gray-100 border border-black/5 shadow-sm">
-                                                        <img src={p.author.avatar?.variants?.image?.thumbnail?.url || p.author.avatar?.url || `https://i.pravatar.cc/150?u=${p.author_id}`} alt="avatar" className="w-full h-full object-cover" />
-                                                    </div>
-                                                    <div className="min-w-0 flex-1">
-                                                        <h4 className={`text-[13px] font-bold truncate leading-tight tracking-tight ${dark ? 'text-white' : 'text-gray-900'}`}>{p.author.displayname}</h4>
-                                                        <p className={`text-[11px] font-medium truncate leading-tight ${dark ? 'text-gray-400' : 'text-gray-500'}`}>@{p.author.username}</p>
-                                                    </div>
-                                                </div>
-
-                                                {hasTags && firstTag && (
-                                                    <div className="flex items-center gap-1.5 mt-2.5 mb-2">
-                                                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-md border" style={{ ...tagNameToColor(firstTag.category), background: 'transparent', color: (tagNameToColor(firstTag.category) as any).color, borderColor: dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)' }}>
-                                                            <TagIcon className="w-3.5 h-3.5" />
-                                                            <span className="text-[10px] font-bold uppercase tracking-wider">{getLocalizedContent(firstTag.name, defaultLanguage) as any}</span>
-                                                        </div>
-                                                    </div>
-                                                )}
-
-                                                {p.content && (
-                                                    <p className={`text-[12px] leading-relaxed mt-2 line-clamp-3 font-medium ${dark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                                        {getLocalizedContent(p.content, defaultLanguage) as any}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </Popup>
-                                </Marker>
-                            );
-                        })}
-                    </>
-                )}
-            </MapContainer>
-        );
-    }
+    const mapContent = (
+        <GameMap
+            locations={posts}
+            getMarkerId={checkInMarkerId}
+            getMarkerCoords={checkInMarkerCoords}
+            getMarkerContent={checkInMarkerContent}
+            onMarkerClick={handleCheckInMarkerClick}
+            playerPosition={userLocation}
+            initialCenter={userLocation}
+        />
+    );
 
     return (
         <div className={`relative ${isMapView ? 'h-full overflow-hidden' : 'skyline-page-scroll'} w-full font-sans ${dark ? 'text-white' : 'text-slate-950'}`}>

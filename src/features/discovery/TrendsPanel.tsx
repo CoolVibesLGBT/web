@@ -164,49 +164,13 @@ const rainbowRankStyles: Array<{ background: string; color: string }> = [
   },
 ];
 
-const darkRankStyles: Array<{ background: string; color: string }> = [
-  {
-    background: 'linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%)',
-    color: '#082f49',
-  },
-  {
-    background: 'linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%)',
-    color: '#e0f2fe',
-  },
-  {
-    background: 'linear-gradient(135deg, #075985 0%, #0284c7 100%)',
-    color: '#e0f2fe',
-  },
-  {
-    background: 'linear-gradient(135deg, #0c4a6e 0%, #075985 100%)',
-    color: '#bae6fd',
-  },
-  {
-    background: 'linear-gradient(135deg, #164e63 0%, #155e75 100%)',
-    color: '#bae6fd',
-  },
-  {
-    background: 'linear-gradient(135deg, #1e3a5f 0%, #164e63 100%)',
-    color: '#bae6fd',
-  },
-  {
-    background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
-    color: '#cbd5e1',
-  },
-];
+const darkRankStyles: Array<{ background: string; color: string }> = rainbowRankStyles;
 
 const getRankStyle = (rank: number, isDark = false) => {
   const rankStyles = isDark ? darkRankStyles : rainbowRankStyles;
 
   if (rank <= rankStyles.length) {
     return rankStyles[rank - 1];
-  }
-
-  if (isDark) {
-    return {
-      background: 'linear-gradient(135deg, rgba(14, 165, 233, 0.16) 0%, rgba(56, 189, 248, 0.08) 100%)',
-      color: '#bae6fd',
-    };
   }
 
   const hue = (rank * 47) % 360;
@@ -315,7 +279,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
       <div className="p-5 pb-4 flex items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <TrendingUp className={`h-5 w-5 ${isDark ? 'text-sky-300' : 'text-sky-600'}`} />
+            <TrendingUp className={`h-5 w-5 ${isDark ? 'text-[var(--color-brand)]' : 'text-sky-600'}`} />
             <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
               {t('app.trending_title')}
             </h2>
@@ -326,7 +290,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
           {lastUpdated && (
             <div className="mt-3 flex items-center gap-2">
               <span
-                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${isDark ? 'bg-sky-400/10 text-sky-200 ring-1 ring-inset ring-sky-300/10' : 'bg-gray-100 text-gray-600'
+                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${isDark ? 'bg-[var(--color-brand-light)] text-[var(--color-brand)] ring-1 ring-inset ring-[var(--color-brand)]/20' : 'bg-gray-100 text-gray-600'
                   }`}
               >
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-current" />
@@ -435,10 +399,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
                         whileHover={{ scale: 0.995, y: -1 }}
                         whileTap={{ scale: 0.985 }}
                         transition={{ type: 'spring', stiffness: 340, damping: 24, mass: 0.9 }}
-                        className={`group grid cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border px-3 py-2.5 transition-all duration-200 ${isDark
-                          ? 'cv-card-surface-muted border-white/[0.06] shadow-[0_12px_28px_-24px_rgba(0,0,0,0.9)] hover:border-sky-300/20 hover:bg-white/[0.075]'
-                          : 'border-slate-200/70 bg-white hover:bg-gray-50'
-                          }`}
+                        className="cv-row-interactive group grid cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-3 rounded-full px-3 py-2.5 transition-colors"
                       >
                         <span
                           style={rankStyle}
@@ -459,7 +420,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
                         <div className="flex items-center gap-2 justify-self-end">
                           {volumeLabel && (
                             <span
-                              className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${isDark ? 'bg-sky-400/10 text-sky-200 ring-1 ring-inset ring-sky-300/10' : 'bg-gray-100 text-gray-600'
+                              className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${isDark ? 'bg-[var(--color-brand-light)] text-[var(--color-brand)] ring-1 ring-inset ring-[var(--color-brand)]/20' : 'bg-gray-100 text-gray-600'
                                 }`}
                             >
                               <span className="inline-block h-1.5 w-1.5 rounded-full bg-current" />
@@ -482,7 +443,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
                           )}
                           <ArrowUpRight
                             className={`h-4 w-4 flex-shrink-0 transition-transform duration-200 ${isDark
-                              ? 'text-zinc-500 group-hover:translate-x-1 group-hover:text-sky-300'
+                              ? 'text-zinc-500 group-hover:translate-x-1 group-hover:text-[var(--color-brand)]'
                               : 'text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1'
                               }`}
                           />
@@ -500,7 +461,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
                   type="button"
                   onClick={() => setIsExpanded((prev) => !prev)}
                   className={`ml-auto inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${isDark
-                    ? 'bg-sky-400/10 text-sky-200 ring-1 ring-inset ring-sky-300/10 hover:bg-sky-400/20'
+                    ? 'bg-[var(--color-brand-light)] text-[var(--color-brand)] ring-1 ring-inset ring-[var(--color-brand)]/20 hover:bg-[var(--color-brand)]/20'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                 >
@@ -544,7 +505,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
             rank: 0,
           })}
           className={`inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isDark
-            ? 'bg-sky-500 text-white shadow-[0_12px_28px_-18px_rgba(14,165,233,0.95)] hover:bg-sky-400'
+            ? 'bg-[var(--color-brand)] text-white shadow-[0_12px_28px_-18px_rgba(255,55,199,0.55)] hover:bg-[var(--color-brand-hovered)]'
             : 'bg-gray-900 text-white hover:bg-gray-800'
             }`}
         >

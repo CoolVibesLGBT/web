@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { MapPin, Loader, RefreshCw, Grid, Map as MapIcon, ZoomIn, ZoomOut, LocateFixed, Shrink, X, Search, ArrowLeft } from 'lucide-react';
+import { MapPin, Loader, RefreshCw, Grid, Map as MapIcon, X, Search, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 import { api } from '../services/api';
@@ -9,120 +9,13 @@ import { DEFAULT_LIMIT } from '../constants/constants';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@/router';
 import { useSEO } from '../hooks/useSEO';
+import GameMap, { type GameMarkerContent } from '../features/map/Map/game/GameMap';
+import { generatePlaceImage } from '../helpers/helpers';
 
 type CursorType = {
   next: string | null;
   distance: number | null;
 } | null;
-
-type ReactLeafletModule = typeof import('react-leaflet');
-type PlaceMarkerComponentType = typeof import('../features/map/Map/PlaceMarker').default;
-
-type MapEventsHandlerProps = {
-  onMoveEnd: (lat: number, lng: number) => void;
-  useMapEvents: ReactLeafletModule['useMapEvents'];
-};
-
-const MapEventsHandler: React.FC<MapEventsHandlerProps> = ({ onMoveEnd, useMapEvents }) => {
-  useMapEvents({
-    moveend: (event: any) => {
-      const center = event.target.getCenter();
-      onMoveEnd(center.lat, center.lng);
-    },
-  });
-  return null;
-};
-
-type MapControlsProps = {
-  initialCenter: [number, number];
-  initialZoom: number;
-  theme: string;
-  useMap: ReactLeafletModule['useMap'];
-  useMapEvents: ReactLeafletModule['useMapEvents'];
-};
-
-const MapControls: React.FC<MapControlsProps> = ({
-  initialCenter,
-  initialZoom,
-  theme,
-  useMap,
-  useMapEvents,
-}) => {
-  const map = useMap();
-  const [isTouched, setIsTouched] = useState(false);
-
-  useMapEvents({
-    move() { if (!isTouched) setIsTouched(true); },
-    zoom() { if (!isTouched) setIsTouched(true); },
-  });
-
-  const handleLocate = () => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(position => {
-        map.flyTo([position.coords.latitude, position.coords.longitude], 16);
-      });
-    }
-  };
-
-  const handleCenter = () => {
-    if (!isTouched) return;
-    map.flyTo(initialCenter, initialZoom);
-    map.once('moveend', () => setIsTouched(false));
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 20, scale: 0.95 }}
-      animate={{ opacity: 1, x: 0, scale: 1 }}
-      className="absolute top-1/2 right-4 lg:right-6 -translate-y-1/2 z-[1000] flex flex-col gap-3"
-    >
-      <div className={`flex flex-col rounded-2xl border backdrop-blur-xl shadow-2xl overflow-hidden ${theme === 'dark'
-        ? 'cv-card-surface-soft border-white/10'
-        : 'bg-white/70 border-black/5'
-        }`}>
-        <button
-          onClick={() => map.zoomIn()}
-          className="p-3 transition-all hover:bg-black/5 dark:hover:bg-white/10 text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white"
-          title="Zoom In"
-        >
-          <ZoomIn size={20} />
-        </button>
-        <div className={`h-px w-full ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'}`} />
-        <button
-          onClick={() => map.zoomOut()}
-          className="p-3 transition-all hover:bg-black/5 dark:hover:bg-white/10 text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white"
-          title="Zoom Out"
-        >
-          <ZoomOut size={20} />
-        </button>
-      </div>
-
-      <div className={`flex flex-col rounded-2xl border backdrop-blur-xl shadow-2xl overflow-hidden ${theme === 'dark'
-        ? 'cv-card-surface-soft border-white/10'
-        : 'bg-white/70 border-black/5'
-        }`}>
-        <button
-          onClick={handleLocate}
-          className="p-3 transition-all hover:bg-black/5 dark:hover:bg-white/10 text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white"
-          title="Locate me"
-        >
-          <LocateFixed size={20} />
-        </button>
-        <div className={`h-px w-full ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'}`} />
-        <button
-          className={`p-3 transition-all ${isTouched
-            ? 'hover:bg-black/5 dark:hover:bg-white/10 text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white'
-            : 'opacity-30 cursor-default text-black/40 dark:text-white/40'
-            }`}
-          onClick={handleCenter}
-          title="Recenter"
-        >
-          <Shrink size={20} />
-        </button>
-      </div>
-    </motion.div>
-  );
-};
 
 const PlaceCardSkeleton = () => {
   const { theme } = useTheme();
@@ -167,28 +60,6 @@ const PlacesScreen: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
-  const [leafletComponents, setLeafletComponents] = useState<ReactLeafletModule | null>(null);
-  const [PlaceMarkerComponent, setPlaceMarkerComponent] = useState<PlaceMarkerComponentType | null>(null);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    let active = true;
-    Promise.all([
-      import('react-leaflet'),
-      import('../features/map/Map/PlaceMarker'),
-    ])
-      .then(([leafletModule, placeMarkerModule]) => {
-        if (!active) return;
-        setLeafletComponents(leafletModule);
-        setPlaceMarkerComponent(() => placeMarkerModule.default);
-      })
-      .catch((error) => {
-        console.error('Failed to load map dependencies', error);
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
 
   const fetchNearbyPlaces = useCallback(
     async (
@@ -501,7 +372,7 @@ const PlacesScreen: React.FC = () => {
     </div>
   );
 
-  // Use a ref for the initial center to prevent the MapContainer from re-rendering/re-mounting
+  // Use a ref for the initial center to prevent the map from re-rendering/re-mounting
   // when the user drags and updates the 'location' state.
   const initialCenter = useRef<[number, number] | null>(null);
   if (!initialCenter.current && location) {
@@ -510,70 +381,42 @@ const PlacesScreen: React.FC = () => {
 
   const defaultCenter: [number, number] = initialCenter.current || [41.0082, 28.9784];
 
-  const MapContainer = leafletComponents?.MapContainer;
-  const TileLayer = leafletComponents?.TileLayer;
-  const useMapEvents = leafletComponents?.useMapEvents;
-  const useMap = leafletComponents?.useMap;
+  const getPlaceMarkerId = useCallback((place: Place): string => place.public_id, []);
+  const getPlaceMarkerCoords = useCallback((place: Place): [number, number] | null => {
+    const { latitude, longitude } = (place as any).extras?.place ?? {};
+    return typeof latitude === 'number' && typeof longitude === 'number' ? [latitude, longitude] : null;
+  }, []);
+  const getPlaceMarkerContent = useCallback((place: Place): GameMarkerContent => {
+    const { image, name } = (place as any).extras?.place ?? {};
+    return {
+      imageUrl: image || generatePlaceImage(place.public_id),
+      label: name,
+      variant: 'pokestop',
+    };
+  }, []);
+  const handlePlaceMarkerClick = useCallback((place: Place) => {
+    setSelectedPlaceId(place.public_id);
+    navigate(`/places/${place.public_id}`, { state: { place } });
+  }, [navigate]);
 
-  const renderMap = useMemo(() => {
-    if (!MapContainer || !TileLayer || !useMapEvents || !useMap || !PlaceMarkerComponent) {
-      return (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute inset-0 z-0 bg-gray-100 dark:bg-gray-900"
-        />
-      );
-    }
-
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="absolute inset-0 z-0 bg-gray-100 dark:bg-gray-900"
-      >
-        <MapContainer
-          key={`map-${theme}`}
-          center={defaultCenter}
-          zoom={13}
-          minZoom={5}
-          maxZoom={19}
-          style={{
-            width: '100%',
-            height: '100%',
-            background: theme === 'dark' ? '#030712' : '#f3f4f6'
-          }}
-          zoomControl={false}
-          preferCanvas={true}
-          className="z-0"
-        >
-          <TileLayer
-            key={`tile-${theme}`}
-            attribution='&copy; CARTO'
-            url={theme === 'dark'
-              ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-              : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'}
-            keepBuffer={2}
-          />
-          <MapEventsHandler useMapEvents={useMapEvents} onMoveEnd={handleMapMove} />
-
-          {filteredPlaces.map((place: Place) => (
-            <PlaceMarkerComponent
-              key={place.public_id}
-              place={place}
-              selected={selectedPlaceId === place.public_id}
-              onClick={(p: Place) => {
-                setSelectedPlaceId(p.public_id);
-                navigate(`/places/${p.public_id}`, { state: { place: p } });
-              }}
-            />
-          ))}
-
-          <MapControls useMap={useMap} useMapEvents={useMapEvents} initialCenter={defaultCenter} initialZoom={13} theme={theme} />
-        </MapContainer>
-      </motion.div>
-    );
-  }, [theme, filteredPlaces, selectedPlaceId, handleMapMove, navigate, defaultCenter, MapContainer, TileLayer, useMapEvents, useMap, PlaceMarkerComponent]);
+  const renderMap = (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="absolute inset-0 z-0"
+    >
+      <GameMap
+        locations={filteredPlaces}
+        getMarkerId={getPlaceMarkerId}
+        getMarkerCoords={getPlaceMarkerCoords}
+        getMarkerContent={getPlaceMarkerContent}
+        onMarkerClick={handlePlaceMarkerClick}
+        onMapMoveEnd={handleMapMove}
+        playerPosition={location ? [location.latitude, location.longitude] : null}
+        initialCenter={defaultCenter}
+      />
+    </motion.div>
+  );
 
   const renderContent = () => {
     if (loadingInitial && places.length === 0) {
@@ -698,7 +541,9 @@ const PlacesScreen: React.FC = () => {
       </motion.div>
 
       {/* Scrollable overlay — always the same structure */}
-      <div className="relative z-10 h-full overflow-y-auto skyline-page-scroll">
+      <div className={`relative z-10 h-full skyline-page-scroll ${
+        viewMode === 'map' ? 'overflow-hidden pointer-events-none' : 'overflow-y-auto'
+      }`}>
         <div className={`flex flex-col px-1 md:px-2 ${
           viewMode === 'map' ? 'pointer-events-none min-h-full' : 'min-h-full'
         }`}>

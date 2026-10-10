@@ -229,7 +229,15 @@ const NearbyScreen: React.FC = () => {
       const currentCursor = cursorRef.current;
 
       // Build filter payload
+      // Haritayı yeni bir alana sürüklemek (lat/lng verilmesi) o bölge için
+      // SIFIRDAN bir sayfalama/cursor isteği gerektirir — ama görünürdeki
+      // marker listesini SİLMEMELİ: kullanıcı İstanbul'dan Yalova'ya
+      // sürükleyince İstanbul'daki marker'lar "Yalova'ya taşınmış" gibi
+      // görünmemeli, sadece yeni bölgedeki kullanıcılar mevcut listeye
+      // eklenmeli. Listeyi tamamen sıfırlamak yalnızca açık bir
+      // refresh'te (refreshing=true) olmalı.
       const shouldResetPagination = refreshing || (lat !== undefined && lng !== undefined);
+      const shouldResetList = refreshing;
       const requestCursor = shouldResetPagination ? null : currentCursor?.next ?? null;
 
       if (
@@ -273,7 +281,7 @@ const NearbyScreen: React.FC = () => {
                     ? response.data
                     : [];
       const responseCursor = normalizeNearbyCursor(response);
-      const existingUsers = shouldResetPagination ? [] : nearbyUsersRef.current;
+      const existingUsers = shouldResetList ? [] : nearbyUsersRef.current;
       const existingIds = new Set(existingUsers.map((user: any) => user.id));
       const newUsers = responseUsers.filter(
         (user: any) => !existingIds.has(user.id)
@@ -289,7 +297,7 @@ const NearbyScreen: React.FC = () => {
         (shouldResetPagination || newUsers.length > 0) &&
         cursorAdvanced;
       const nextCursor = nextHasMore ? responseCursor : null;
-      const nextUsers = shouldResetPagination ? responseUsers : [...existingUsers, ...newUsers];
+      const nextUsers = shouldResetList ? responseUsers : [...existingUsers, ...newUsers];
 
       // CRITICAL: Update cursor ref synchronously so the next observer call reads the new cursor
       cursorRef.current = nextCursor;
@@ -297,7 +305,7 @@ const NearbyScreen: React.FC = () => {
       // Update hasMore based on response
       hasMoreRef.current = nextHasMore;
       nearbyUsersRef.current = nextUsers;
-      shouldAutoContinue = nextHasMore && nextUsers.length > 0 && (shouldResetPagination || newUsers.length > 0);
+      shouldAutoContinue = nextHasMore && nextUsers.length > 0 && (shouldResetList || newUsers.length > 0);
 
       setState((prevState: any) => ({
         ...prevState,
