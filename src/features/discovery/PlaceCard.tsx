@@ -2,6 +2,7 @@ import React from 'react';
 import type { Place } from '../../types/places';
 import { useTheme } from '../../contexts/ThemeContext';
 import { MapPin } from 'lucide-react';
+import { generatePlaceImage } from '../../helpers/helpers';
 
 interface PlaceCardProps {
   place: Place;
@@ -16,8 +17,10 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, selected, onClick, classNa
   const title = place.title?.['tr'] || place.title?.['en'] || name;
   const locationString = place.location ? [place.location.city, place.location.country].filter(Boolean).join(', ') : '';
   const hasRemoteImage = typeof image === 'string' && image.startsWith('http');
-  const tags = Array.isArray(place.hashtags) ? place.hashtags.slice(0, 3) : [];
-  const fallbackInitial = title?.trim()?.charAt(0)?.toUpperCase() || 'P';
+  const fallbackImage = generatePlaceImage(place.public_id);
+  // Kart dar olduğu için en fazla 2 etiket gösteriliyor — 3. etiket genelde
+  // yarım kesilip kart kenarından taşıyordu (bkz. aşağıdaki truncate da ek güvence).
+  const tags = Array.isArray(place.hashtags) ? place.hashtags.slice(0, 2) : [];
 
   return (
     <article
@@ -27,30 +30,21 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, selected, onClick, classNa
         } ${selected ? 'ring-1 ring-[var(--color-brand)]' : ''} ${className ?? ''}`}
     >
       <div className="relative h-[220px] w-full shrink-0 overflow-hidden rounded-xl bg-slate-100">
-        {hasRemoteImage ? (
-          <img
-            src={image}
-            alt={title}
-            className="h-full w-full object-cover"
-            loading="lazy"
-            decoding="async"
-            sizes="(min-width: 1024px) 390px, (min-width: 640px) 50vw, 100vw"
-          />
-        ) : (
-          <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
-            <div className="absolute inset-0 bg-[linear-gradient(135deg,#131313_0%,#3a3a3a_100%)]" />
-            <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 text-4xl font-black text-white backdrop-blur-md">
-              {fallbackInitial}
-            </div>
-          </div>
-        )}
+        <img
+          src={hasRemoteImage ? image : fallbackImage}
+          alt={title}
+          className="h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+          sizes="(min-width: 1024px) 390px, (min-width: 640px) 50vw, 100vw"
+        />
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/55 to-transparent" />
         {tags.length > 0 && (
-          <div className="absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] gap-1.5 overflow-hidden">
+          <div className="absolute left-3 right-3 top-3 flex gap-1.5">
             {tags.map((tag: any) => (
               <span
                 key={tag.tag || tag}
-                className="rounded-full bg-white/85 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-slate-700 shadow-lg backdrop-blur-md"
+                className="min-w-0 shrink truncate rounded-full bg-white/85 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-slate-700 shadow-lg backdrop-blur-md"
               >
                 #{tag.tag || tag}
               </span>

@@ -3238,14 +3238,14 @@ const Post: React.FC<PostProps> = ({
         {/* Check-In Section */}
         {(post.type === 'checkin' || post.post_kind === 'checkin') && Array.isArray(postExtras.tags) && postExtras.tags.length > 0 && (
           <div className="px-4 py-3">
-            <div className={`px-4 py-3 rounded-2xl flex flex-wrap gap-2 ${theme === 'dark' ? 'bg-white/[0.04] border border-white/[0.06]' : 'bg-gray-50 border border-black/[0.06]'}`}>
+            <div className="flex flex-wrap gap-2 rounded-2xl border border-[var(--cv-inner-border)] bg-[var(--cv-surface-2)] px-4 py-3">
               {postExtras.tags.map((t: string) => {
                 const tagType = appData?.checkin_tag_types?.find((ct: unknown) => ct.tag === t);
                 if (!tagType) {
                   return (
                     <div
                       key={t}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl ${theme === 'dark' ? 'bg-white/10 text-white' : 'bg-black/10 text-gray-800'}`}
+                      className="flex cursor-default items-center gap-1.5 rounded-xl border border-[var(--cv-inner-border)] bg-[var(--cv-surface-3)] px-3 py-1.5 text-[var(--cv-neutral-1)] transition-all duration-150 hover:scale-[1.03] hover:bg-[var(--cv-surface-3-hover)]"
                     >
                       <span className="text-xs font-bold">{t}</span>
                     </div>
@@ -3256,7 +3256,7 @@ const Post: React.FC<PostProps> = ({
                   <div
                     key={t}
                     style={tagNameToColor(tagType.category)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl"
+                    className="flex cursor-default items-center gap-1.5 rounded-xl border border-[var(--cv-inner-border)] px-3 py-1.5 transition-all duration-150 hover:scale-[1.03] hover:brightness-95"
                   >
                     <Icon className="w-3.5 h-3.5" strokeWidth={2} />
                     <span className="text-xs font-bold">{getLocalizedContent(tagType.name, defaultLanguage)}</span>

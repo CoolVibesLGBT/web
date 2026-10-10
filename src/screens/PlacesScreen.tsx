@@ -20,18 +20,11 @@ type CursorType = {
 const PlaceCardSkeleton = () => {
   const { theme } = useTheme();
   return (
-    <div className="elite-card-static h-full animate-pulse overflow-hidden p-3">
-      <div className={`h-[220px] w-full rounded-[28px] ${theme === 'dark' ? 'bg-zinc-800' : 'bg-slate-100'}`} />
-      <div className="space-y-3 px-2 pb-2 pt-4">
-        <div className={`h-5 rounded-full ${theme === 'dark' ? 'bg-zinc-800' : 'bg-slate-200'}`} />
-        <div className="flex items-center gap-2 pt-1">
-          <div className={`h-4 w-4 rounded-full ${theme === 'dark' ? 'bg-zinc-800' : 'bg-slate-200'}`} />
-          <div className={`h-3 w-1/2 rounded-full ${theme === 'dark' ? 'bg-zinc-800' : 'bg-slate-200'}`} />
-        </div>
-        <div className="space-y-1 pt-1">
-          <div className={`h-3 w-full rounded-full ${theme === 'dark' ? 'bg-zinc-800' : 'bg-slate-100'}`} />
-          <div className={`h-3 w-5/6 rounded-full ${theme === 'dark' ? 'bg-zinc-800' : 'bg-slate-100'}`} />
-        </div>
+    <div className="h-full animate-pulse overflow-hidden rounded-2xl border border-[var(--cv-surface-3)] p-1">
+      <div className={`h-[220px] w-full rounded-xl ${theme === 'dark' ? 'bg-zinc-800' : 'bg-slate-100'}`} />
+      <div className="space-y-2 px-3 py-2">
+        <div className={`h-4 w-3/4 rounded-full ${theme === 'dark' ? 'bg-zinc-800' : 'bg-slate-200'}`} />
+        <div className={`h-3 w-1/2 rounded-full ${theme === 'dark' ? 'bg-zinc-800' : 'bg-slate-100'}`} />
       </div>
     </div>
   );
@@ -59,7 +52,6 @@ const PlacesScreen: React.FC = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-  const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
 
   const fetchNearbyPlaces = useCallback(
     async (
@@ -350,7 +342,7 @@ const PlacesScreen: React.FC = () => {
 
   const renderGrid = () => (
     <div className="space-y-4 pb-8">
-      <div className="grid auto-rows-[384px] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
         {filteredPlaces.map(place => (
           <PlaceCard
             key={place.public_id}
@@ -395,7 +387,6 @@ const PlacesScreen: React.FC = () => {
     };
   }, []);
   const handlePlaceMarkerClick = useCallback((place: Place) => {
-    setSelectedPlaceId(place.public_id);
     navigate(`/places/${place.public_id}`, { state: { place } });
   }, [navigate]);
 
@@ -421,7 +412,7 @@ const PlacesScreen: React.FC = () => {
   const renderContent = () => {
     if (loadingInitial && places.length === 0) {
       return (
-        <div className="grid auto-rows-[384px] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
           {Array.from({ length: 9 }).map((_, i) => (
             <PlaceCardSkeleton key={i} />
           ))}

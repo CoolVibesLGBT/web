@@ -500,15 +500,27 @@ const MatchScreen: React.FC = () => {
     >
       {profiles.length === 0 ? (
         <div className="flex min-h-[430px] items-center justify-center px-1 py-6">
-          <div className="elite-bubble flex w-full max-w-xl flex-col items-center justify-center rounded-[36px] px-8 py-14 text-center">
-            <div className="sky-glow mb-5 flex h-16 w-16 items-center justify-center rounded-full text-white">
+          {/* `.elite-bubble`'ın varsayılan arkaplanı/border'ı (rgba(255,255,255,.78) +
+              neredeyse beyaz border) light temada sayfanın beyaza yakın
+              arkaplanıyla karışıp kartı görünmez kılıyordu — burada görünür bir
+              kontrast garanti etmek için inline override veriyoruz (paylaşılan
+              `.elite-bubble` class'ını diğer kullanım yerlerini etkilememek için
+              global değiştirmedik). */}
+          <div
+            className="relative flex w-full max-w-xl flex-col items-center justify-center overflow-hidden rounded-[36px] border px-8 py-14 text-center shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] backdrop-blur-3xl"
+            style={{
+              background: isDark ? 'rgba(22, 24, 29, 0.78)' : '#ffffff',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(15, 23, 42, 0.08)',
+            }}
+          >
+            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-brand)] text-white">
               <Heart className="h-8 w-8" fill="currentColor" />
             </div>
             <p className={`mb-6 max-w-sm text-base font-bold leading-relaxed ${isDark ? 'text-zinc-300' : 'text-slate-600'}`}>
               {t('match.no_profiles') || 'No profiles to show right now. Come back soon!'}
             </p>
             <button
-              className="elite-floating sky-glow flex items-center gap-2 px-6 py-3 text-sm font-black text-white transition-all hover:scale-105 active:scale-95"
+              className="flex items-center gap-2 rounded-full bg-[var(--color-brand)] px-6 py-3 text-sm font-black text-white shadow-lg transition-all hover:scale-105 hover:bg-[var(--color-brand-hovered)] active:scale-95"
               onClick={() => fetchMatchNowProfiles(100)}
               disabled={isLoading}
             >
@@ -1148,12 +1160,12 @@ const MatchScreen: React.FC = () => {
         </div>
         <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
           <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
+            {/* Aktif sekme adı ve sayısı zaten üstteki tab bar'da (rozetiyle
+                birlikte) gösteriliyor — burada tekrar etmek yerine, Nearby/
+                Places/Check-in'deki ikinci satırla tutarlı tek bir özet rozeti. */}
             <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
               <ActiveIcon className="h-3.5 w-3.5 shrink-0" fill={ActiveIcon === Heart || ActiveIcon === Star ? 'currentColor' : 'none'} />
-              {activeTab.label}
-            </span>
-            <span className="flex h-9 shrink-0 items-center rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[13px] font-semibold text-[var(--cv-neutral-2)]">
-              {activeTab.count}
+              {t('match.result_count', { count: activeTab.count, defaultValue: '{{count}} profil' })}
             </span>
           </div>
 

@@ -302,10 +302,11 @@ function AppContent() {
   }, []);
   const shouldShowRightSidebar = !Array.from(rightSidebarHiddenPaths).some(p => location.pathname === p || location.pathname.startsWith(p + '/'));
 
-  // Nearby'nin bubble/map, Places'in de map gibi immersive (tam ekran)
-  // görünümlerindeyken sol/sağ navigasyon rail'leri haritanın arkasında kalıp
-  // tıklanamaz hale gelmesin diye tamamen kaldırılıyor — her iki ekran da
-  // kendi 'cv:*-controls-state' eventiyle hangi modda olduğunu bildiriyor.
+  // Nearby'nin bubble/map, Places'in ve Check-In'in de map gibi immersive
+  // (tam ekran) görünümlerindeyken sol/sağ navigasyon rail'leri haritanın
+  // arkasında kalıp tıklanamaz hale gelmesin diye tamamen kaldırılıyor — her
+  // ekran da kendi 'cv:*-controls-state' eventiyle hangi modda olduğunu
+  // bildiriyor.
   const [isNearbyImmersiveView, setIsNearbyImmersiveView] = React.useState(false);
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -326,6 +327,16 @@ function AppContent() {
     };
     window.addEventListener('cv:places-controls-state', handlePlacesControlsState);
     return () => window.removeEventListener('cv:places-controls-state', handlePlacesControlsState);
+  }, []);
+  const [isCheckInImmersiveView, setIsCheckInImmersiveView] = React.useState(false);
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handleCheckInControlsState = (event: Event) => {
+      const detail = (event as CustomEvent<{ viewMode?: string } | null>).detail;
+      setIsCheckInImmersiveView(detail?.viewMode === 'map');
+    };
+    window.addEventListener('cv:checkin-controls-state', handleCheckInControlsState);
+    return () => window.removeEventListener('cv:checkin-controls-state', handleCheckInControlsState);
   }, []);
   const premiumMembershipEnabled = React.useMemo(() => isFeatureEnabled('premium_membership'), []);
 
@@ -896,9 +907,6 @@ function AppContent() {
     if (isClassifiedDetailRoute) {
       return t('app.nav.classifieds', { defaultValue: 'Classifieds' });
     }
-    if (isPlaceDetailRoute) {
-      return t('app.nav.places', { defaultValue: 'Places' });
-    }
     if (profileEngagementType) {
       const engagementTitles: Record<string, string> = {
         followers: t('profile.followers', { defaultValue: 'Followers' }),
@@ -924,12 +932,12 @@ function AppContent() {
     };
 
     return routeTitles[normalizedPath] || null;
-  }, [isClassifiedDetailRoute, isPlaceDetailRoute, normalizedPath, profileEngagementType, t]);
-  // Check-in detay sayfası artık Settings gibi kendi sticky bar'ını (geri
-  // butonu + başlık) gösteriyor, bu yüzden üstteki yüzen HUD pilinin ayrıca
-  // bir "geri" durumuna geçmesine gerek yok — Settings ile aynı şekilde
-  // varsayılan logo/home haliyle kalıyor.
-  const isContextBackRoute = (isPostDetailRoute || isClassifiedDetailRoute || isPlaceDetailRoute || Boolean(profileEngagementType) || Boolean(contextRouteTitle) || isProfileShellRoute);
+  }, [isClassifiedDetailRoute, normalizedPath, profileEngagementType, t]);
+  // Check-in ve Place detay sayfaları artık Settings gibi kendi sticky
+  // bar'larını (geri butonu + başlık) gösteriyor, bu yüzden üstteki yüzen
+  // HUD pilinin ayrıca bir "geri" durumuna geçmesine gerek yok — Settings
+  // ile aynı şekilde varsayılan logo/home haliyle kalıyor.
+  const isContextBackRoute = (isPostDetailRoute || isClassifiedDetailRoute || Boolean(profileEngagementType) || Boolean(contextRouteTitle) || isProfileShellRoute);
   const shellBackTitle = isProfileEditRoute
     ? t('profile.edit_profile', { defaultValue: 'Edit Profile' })
     : contextRouteTitle
@@ -998,13 +1006,15 @@ function AppContent() {
   const showShellHud = !isLandingRoute && !isAuthGateRoute;
   const showRightRail = isAuthenticated && shouldShowRightSidebar;
   const showLeftRail = isAuthenticated && !isLandingRoute && !isAuthGateRoute;
-  // Nearby (bubble/map) ve Places (map) gibi immersive görünümlerdeyken
-  // rail'in GENİŞLİĞİ (dolayısıyla ana içeriğin/üst bardaki tab'ların yatay
-  // konumu) sabit kalsın diye aside kaldırılmıyor; sadece içindeki nav
-  // içeriği gizlenip arkadaki tam ekran harita/bubble görünür hale geliyor.
+  // Nearby (bubble/map), Places (map) ve Check-In (map) gibi immersive
+  // görünümlerdeyken rail'in GENİŞLİĞİ (dolayısıyla ana içeriğin/üst bardaki
+  // tab'ların yatay konumu) sabit kalsın diye aside kaldırılmıyor; sadece
+  // içindeki nav içeriği gizlenip arkadaki tam ekran harita/bubble görünür
+  // hale geliyor.
   const hideImmersiveRailContent =
     (normalizedPath === '/nearby' && isNearbyImmersiveView) ||
-    (normalizedPath === '/places' && isPlacesImmersiveView);
+    (normalizedPath === '/places' && isPlacesImmersiveView) ||
+    (normalizedPath === '/checkin' && isCheckInImmersiveView);
   const showDock = isAuthenticated && !isLandingRoute && showBottomBar;
   const showHomeMenuGuide = settings.showDockTips &&
     isAuthReady &&

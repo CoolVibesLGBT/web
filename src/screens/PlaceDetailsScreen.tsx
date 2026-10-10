@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from '@/router';
 import { motion } from 'framer-motion';
-import { MapPin, Globe, Phone, Loader, Mail, Compass, Navigation } from 'lucide-react';
+import { ArrowLeft, ChevronRight, MapPin, Globe, Phone, Loader, Mail, Compass, Navigation } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import type { Place } from '../types/places';
 import { api } from '../services/api';
-import { generatePlaceImage } from '../helpers/helpers';
-import Post from '../features/post/Post';
+import { generatePlaceImage, getLocalizedContent } from '../helpers/helpers';
+import { PostLexicalContent } from '../features/post/Post';
 import { useSEO } from '../hooks/useSEO';
+import { useApp } from '../contexts/AppContext';
 
 interface LocationState {
   place?: Place;
@@ -17,6 +18,7 @@ interface LocationState {
 const PlaceDetailsScreen: React.FC = () => {
   const { theme } = useTheme();
   const { t } = useTranslation('common');
+  const { defaultLanguage } = useApp();
   const navigate = useNavigate();
   const { publicId } = useParams<{ publicId: string }>();
   const location = useLocation();
@@ -70,14 +72,33 @@ const PlaceDetailsScreen: React.FC = () => {
 
   const isDark = theme === 'dark';
   const pageClassName = 'skyline-page-scroll w-full';
-  const contentClassName = 'mx-auto w-full max-w-5xl px-1 pb-8 pt-24 md:px-2 md:pt-28';
+  const contentClassName = 'mx-auto w-full max-w-5xl px-1 pb-8 md:px-2';
   const panelClassName = isDark
     ? 'cv-card-surface-soft border-white/10 text-zinc-300'
     : 'border-white/70 bg-white/75 text-slate-600';
 
+  // Settings/Check-in detayıyla birebir aynı sticky bar: yuvarlak geri
+  // butonu + başlık, `/places` listesine döner.
+  const header = (
+    <div className="sticky top-0 z-20 mb-3 flex h-[53px] items-center gap-3 border-b border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-soft)] pl-4 pr-5 backdrop-blur-[12px] md:pr-6">
+      <button
+        type="button"
+        onClick={() => navigate('/places', { replace: true })}
+        aria-label={t('app.back', { defaultValue: 'Back' })}
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
+      >
+        <ArrowLeft className="h-4 w-4" />
+      </button>
+      <h1 className="truncate text-[20px] font-bold leading-tight tracking-tight">
+        {place?.extras?.place?.name || t('app.nav.places', { defaultValue: 'Places' })}
+      </h1>
+    </div>
+  );
+
   if (loading) {
     return (
       <div className={pageClassName}>
+        {header}
         <main className={contentClassName}>
           <div className={`flex min-h-[340px] items-center justify-center rounded-[30px] border backdrop-blur-3xl ${panelClassName}`}>
             <Loader className={`h-8 w-8 animate-spin ${isDark ? 'text-white' : 'text-slate-950'}`} />
@@ -90,6 +111,7 @@ const PlaceDetailsScreen: React.FC = () => {
   if (error || !place) {
     return (
       <div className={pageClassName}>
+        {header}
         <main className={contentClassName}>
           <div className={`mx-auto max-w-xl rounded-[30px] border p-10 text-center backdrop-blur-3xl ${panelClassName}`}>
             <p className="text-sm font-black text-red-500">
@@ -141,6 +163,7 @@ const PlaceDetailsScreen: React.FC = () => {
 
   return (
     <div className={pageClassName}>
+      {header}
       <main className={contentClassName}>
         <motion.section
           initial={{ opacity: 0, y: 8 }}
@@ -208,23 +231,29 @@ const PlaceDetailsScreen: React.FC = () => {
           </div>
         </motion.section>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
-          <section className="min-w-0 space-y-4">
-            <div className="skyline-feed-card elite-card overflow-hidden">
-              <Post
-                post={place as any}
-                defaultShowReply={false}
-                loadChildren={false}
-              />
-            </div>
+        <div className="mx-auto mt-6 flex max-w-2xl flex-col gap-6">
+          <section className="min-w-0 space-y-5">
+            {place.content && (
+              <div>
+                <h2 className={`px-1 pb-1.5 text-[13px] font-normal ${isDark ? 'text-zinc-400' : 'text-slate-500'}`}>
+                  {t('places.about', { defaultValue: 'Hakkında' })}
+                </h2>
+                <div className="overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] bg-[var(--cv-card-bg-solid)] p-4">
+                  <PostLexicalContent
+                    content={getLocalizedContent(place.content as Record<string, unknown>, defaultLanguage)}
+                    theme={theme}
+                  />
+                </div>
+              </div>
+            )}
 
             {tags.length > 0 && (
-              <section className={`rounded-[30px] border p-4 backdrop-blur-3xl ${panelClassName}`}>
+              <section className="overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] bg-[var(--cv-card-bg-solid)] p-4">
                 <div className="flex flex-wrap gap-2">
                   {tags.map((tag) => (
                     <span
                       key={tag.id || tag.tag}
-                      className={`rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] ${isDark ? 'bg-white/[0.06] text-zinc-400' : 'bg-white/80 text-slate-500'}`}
+                      className={`rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] ${isDark ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-500'}`}
                     >
                       #{tag.tag}
                     </span>
@@ -234,133 +263,113 @@ const PlaceDetailsScreen: React.FC = () => {
             )}
           </section>
 
-          <aside className="space-y-4">
-            <section className={`rounded-[30px] border p-4 backdrop-blur-3xl ${panelClassName}`}>
-              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-sky-600">
-                {t('places.contact', { defaultValue: 'İletişim' })}
-              </p>
-              <div className="mt-4 space-y-4">
-                {telephone && (
-                  <a href={`tel:${telephone}`} className="flex min-w-0 items-center gap-3">
-                    <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isDark ? 'bg-white/[0.06] text-zinc-300' : 'bg-white/80 text-slate-600'}`}>
-                      <Phone className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className={`block text-[10px] font-black uppercase tracking-[0.16em] ${isDark ? 'text-zinc-500' : 'text-slate-400'}`}>
-                        {t('places.phone', { defaultValue: 'Telefon' })}
-                      </span>
-                      <span className={`block truncate text-sm font-black ${isDark ? 'text-white' : 'text-slate-950'}`}>
-                        {telephone}
-                      </span>
-                    </span>
-                  </a>
-                )}
+          <aside className="flex flex-col gap-5">
+            {(() => {
+              const secondaryColor = isDark ? 'text-zinc-400' : 'text-slate-500';
+              const chevronColor = isDark ? 'text-zinc-600' : 'text-slate-300';
+              const groupBg = 'bg-[var(--cv-card-bg-solid)]';
+              const rowHover = 'hover:bg-[var(--cv-surface-2-hover)]';
+              const rowClass = `flex w-full min-w-0 items-center gap-3 px-4 py-2 min-h-[52px] text-left transition-all duration-150 active:opacity-60 ${rowHover}`;
+              const iconClass = 'flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]';
+              const divider = <div className="h-px w-full bg-[var(--cv-inner-border)]" />;
+              const contactRows = [
+                telephone && { key: 'phone', icon: Phone, label: telephone, subtitle: t('places.phone', { defaultValue: 'Telefon' }), href: `tel:${telephone}` },
+                email && { key: 'email', icon: Mail, label: email, subtitle: t('places.email', { defaultValue: 'E-Posta' }), href: `mailto:${email}` },
+                mainUrl && { key: 'website', icon: Globe, label: mainUrl, subtitle: t('places.website', { defaultValue: 'Web Sitesi' }), href: mainUrl.startsWith('http') ? mainUrl : `https://${mainUrl}` },
+              ].filter(Boolean) as { key: string; icon: typeof Phone; label: string; subtitle: string; href: string }[];
 
-                {email && (
-                  <a href={`mailto:${email}`} className="flex min-w-0 items-center gap-3">
-                    <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isDark ? 'bg-white/[0.06] text-zinc-300' : 'bg-white/80 text-slate-600'}`}>
-                      <Mail className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className={`block text-[10px] font-black uppercase tracking-[0.16em] ${isDark ? 'text-zinc-500' : 'text-slate-400'}`}>
-                        {t('places.email', { defaultValue: 'E-Posta' })}
-                      </span>
-                      <span className={`block truncate text-sm font-black ${isDark ? 'text-white' : 'text-slate-950'}`}>
-                        {email}
-                      </span>
-                    </span>
-                  </a>
-                )}
+              return (
+                <>
+                  <section>
+                    <h2 className={`px-1 pb-1.5 text-[13px] font-normal ${secondaryColor}`}>
+                      {t('places.contact', { defaultValue: 'İletişim' })}
+                    </h2>
+                    <div className={`overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] ${groupBg}`}>
+                      {contactRows.length === 0 && (
+                        <p className={`px-4 py-3 text-[15px] ${secondaryColor}`}>
+                          {t('places.no_contact', { defaultValue: 'İletişim bilgisi bulunmuyor.' })}
+                        </p>
+                      )}
+                      {contactRows.map((row, idx) => {
+                        const RowIcon = row.icon;
+                        return (
+                          <div key={row.key}>
+                            <a href={row.href} target={row.key === 'website' ? '_blank' : undefined} rel={row.key === 'website' ? 'noreferrer' : undefined} className={rowClass}>
+                              <span className={iconClass}>
+                                <RowIcon size={17} strokeWidth={2.2} />
+                              </span>
+                              <span className="min-w-0 flex-1">
+                                <span className="block truncate text-[17px] leading-snug">{row.label}</span>
+                                <span className={`block truncate text-[13px] ${secondaryColor}`}>{row.subtitle}</span>
+                              </span>
+                              <ChevronRight size={20} className={`shrink-0 ${chevronColor}`} />
+                            </a>
+                            {idx < contactRows.length - 1 && divider}
+                          </div>
+                        );
+                      })}
+                      {contactRows.length > 0 && divider}
+                      <div>
+                        <a href={directionsUrl} target="_blank" rel="noopener noreferrer" className={rowClass}>
+                          <span className={iconClass}>
+                            <Navigation size={17} strokeWidth={2.2} />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-[17px] leading-snug">
+                              {address || locationText || t('places.no_address', { defaultValue: 'Adres bilgisi yok' })}
+                            </span>
+                            <span className={`block truncate text-[13px] ${secondaryColor}`}>
+                              {postcode || t('places.get_directions', { defaultValue: 'Yol Tarifi Al' })}
+                            </span>
+                          </span>
+                          <Compass size={20} className={`shrink-0 ${chevronColor}`} />
+                        </a>
+                      </div>
+                    </div>
+                  </section>
 
-                {mainUrl && (
-                  <a href={mainUrl.startsWith('http') ? mainUrl : `https://${mainUrl}`} target="_blank" rel="noreferrer" className="flex min-w-0 items-center gap-3">
-                    <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isDark ? 'bg-white/[0.06] text-zinc-300' : 'bg-white/80 text-slate-600'}`}>
-                      <Globe className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className={`block text-[10px] font-black uppercase tracking-[0.16em] ${isDark ? 'text-zinc-500' : 'text-slate-400'}`}>
-                        {t('places.website', { defaultValue: 'Web Sitesi' })}
-                      </span>
-                      <span className={`block truncate text-sm font-black ${isDark ? 'text-white' : 'text-slate-950'}`}>
-                        {mainUrl}
-                      </span>
-                    </span>
-                  </a>
-                )}
+                  <section>
+                    <h2 className={`px-1 pb-1.5 text-[13px] font-normal ${secondaryColor}`}>
+                      {t('places.added_by', { defaultValue: 'Added By User' })}
+                    </h2>
+                    <div className={`overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] ${groupBg}`}>
+                      {authorUsername ? (
+                        <button type="button" onClick={() => navigate(`/${authorUsername}`)} className={rowClass}>
+                          <img
+                            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${authorAvatarSeed}`}
+                            alt={authorName}
+                            className="h-[36px] w-[36px] shrink-0 rounded-full object-cover"
+                          />
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-[17px] leading-snug">{authorName}</span>
+                            <span className={`block truncate text-[13px] ${secondaryColor}`}>@{authorUsername}</span>
+                          </span>
+                          <ChevronRight size={20} className={`shrink-0 ${chevronColor}`} />
+                        </button>
+                      ) : (
+                        <div className={rowClass}>
+                          <img
+                            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${authorAvatarSeed}`}
+                            alt={authorName}
+                            className="h-[36px] w-[36px] shrink-0 rounded-full object-cover"
+                          />
+                          <span className="min-w-0 flex-1 truncate text-[17px] leading-snug">{authorName}</span>
+                        </div>
+                      )}
+                    </div>
+                  </section>
 
-                {!telephone && !email && !mainUrl && (
-                  <p className={`text-sm font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
-                    {t('places.no_contact', { defaultValue: 'İletişim bilgisi bulunmuyor.' })}
-                  </p>
-                )}
-              </div>
-            </section>
-
-            <section className={`rounded-[30px] border p-4 backdrop-blur-3xl ${panelClassName}`}>
-              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-sky-600">
-                {t('places.location', { defaultValue: 'Konum' })}
-              </p>
-              <div className="mt-4 flex items-start gap-3">
-                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isDark ? 'bg-white/[0.06] text-zinc-300' : 'bg-white/80 text-slate-600'}`}>
-                  <Navigation className="h-4 w-4" />
-                </span>
-                <div className="min-w-0">
-                  <p className={`text-sm font-black leading-snug ${isDark ? 'text-white' : 'text-slate-950'}`}>
-                    {address || locationText || t('places.no_address', { defaultValue: 'Adres bilgisi yok' })}
-                  </p>
-                  {postcode && (
-                    <p className={`mt-1 text-xs font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
-                      {postcode}
+                  <div className="px-2 text-center">
+                    <p className={`text-[11px] font-medium uppercase tracking-[0.18em] ${isDark ? 'text-zinc-600' : 'text-slate-400'}`}>
+                      {t('places.business_id', { defaultValue: 'Business ID' })}: {place.public_id}
                     </p>
-                  )}
-                </div>
-              </div>
-              <a href={directionsUrl} target="_blank" rel="noopener noreferrer" className={`${actionButtonClass} mt-4 w-full`}>
-                <Compass className="h-4 w-4" />
-                <span>{t('places.get_directions', { defaultValue: 'Yol Tarifi Al' })}</span>
-              </a>
-            </section>
-
-            <section className={`rounded-[30px] border p-4 backdrop-blur-3xl ${panelClassName}`}>
-              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-sky-600">
-                {t('places.added_by', { defaultValue: 'Added By User' })}
-              </p>
-              <div className="mt-4 flex items-center gap-3">
-                <img
-                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${authorAvatarSeed}`}
-                  alt={authorName}
-                  className="h-12 w-12 shrink-0 rounded-full object-cover"
-                />
-                <div className="min-w-0 flex-1">
-                  <h4 className={`truncate text-sm font-black ${isDark ? 'text-white' : 'text-slate-950'}`}>
-                    {authorName}
-                  </h4>
-                  {authorUsername && (
-                    <p className={`truncate text-xs font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
-                      @{authorUsername}
+                    <p className={`mt-1 text-[11px] ${isDark ? 'text-zinc-600' : 'text-slate-400'}`}>
+                      {t('places.verified_by', { defaultValue: 'Verified by {{domain}}', domain: place.domain })}
                     </p>
-                  )}
-                </div>
-              </div>
-              {authorUsername && (
-                <button
-                  type="button"
-                  onClick={() => navigate(`/${authorUsername}`)}
-                  className={`${secondaryButtonClass} mt-4 w-full`}
-                >
-                  {t('places.view_profile', { defaultValue: 'Profili Gör' })}
-                </button>
-              )}
-            </section>
-
-            <div className="px-2 text-center">
-              <p className={`text-[10px] font-black uppercase tracking-[0.18em] ${isDark ? 'text-zinc-600' : 'text-slate-400'}`}>
-                {t('places.business_id', { defaultValue: 'Business ID' })}: {place.public_id}
-              </p>
-              <p className={`mt-1 text-[10px] font-bold ${isDark ? 'text-zinc-600' : 'text-slate-400'}`}>
-                {t('places.verified_by', { defaultValue: 'Verified by {{domain}}', domain: place.domain })}
-              </p>
-            </div>
+                  </div>
+                </>
+              );
+            })()}
           </aside>
         </div>
       </main>

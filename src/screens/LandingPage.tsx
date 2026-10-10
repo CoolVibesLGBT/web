@@ -51,7 +51,7 @@ const LandingPage: React.FC = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-[11px] font-bold uppercase leading-none tracking-[0.34em]">{DEFAULT_APP_NAME}</span>
-              <span className="mt-0.5 text-[8px] font-bold uppercase tracking-normal text-sky-600">{DEFAULT_APP_MOTTO}</span>
+              <span className="mt-0.5 text-[8px] font-bold uppercase tracking-normal text-[var(--color-brand)]">{DEFAULT_APP_MOTTO}</span>
             </div>
           </div>
 
@@ -69,7 +69,7 @@ const LandingPage: React.FC = () => {
             </button>
             <button
               onClick={() => setIsAuthWizardOpen(true)}
-              className="hidden h-11 items-center gap-2 rounded-full bg-sky-600 px-6 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-sky-600/25 transition hover:bg-sky-500 sm:flex"
+              className="hidden h-11 items-center gap-2 rounded-full bg-[var(--color-brand)] px-6 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-[var(--color-brand)]/25 transition hover:bg-[var(--color-brand-hovered)] sm:flex"
             >
               Join
               <ArrowRight className="h-4 w-4" />
@@ -86,7 +86,7 @@ const LandingPage: React.FC = () => {
             transition={{ duration: 0.7 }}
             className="max-w-3xl"
           >
-            <p className="mb-5 text-[10px] font-black uppercase tracking-[0.34em] text-sky-700 dark:text-sky-300">
+            <p className="mb-5 text-[10px] font-black uppercase tracking-[0.34em] text-[var(--color-brand)]">
               {DEFAULT_APP_MOTTO}
             </p>
             <h1 className="text-5xl font-black uppercase leading-[0.9] tracking-normal text-slate-950 drop-shadow-[0_16px_50px_rgba(255,255,255,0.45)] dark:text-white dark:drop-shadow-[0_20px_50px_rgba(0,0,0,0.55)] md:text-7xl xl:text-8xl">
@@ -145,7 +145,7 @@ const LandingPage: React.FC = () => {
             <button
               key={item.label}
               title={item.label}
-              className={`elite-btn relative h-11 w-11 md:h-12 md:w-12 ${item.active ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30' : theme === 'dark' ? 'text-zinc-500 hover:bg-zinc-800 hover:text-white' : 'text-slate-400 hover:bg-slate-100 hover:text-sky-600'}`}
+              className={`elite-btn relative h-11 w-11 md:h-12 md:w-12 ${item.active ? 'bg-[var(--color-brand)] text-white shadow-lg shadow-[var(--color-brand)]/30' : theme === 'dark' ? 'text-zinc-500 hover:bg-zinc-800 hover:text-white' : 'text-slate-400 hover:bg-slate-100 hover:text-[var(--color-brand)]'}`}
             >
               <item.icon className="h-5 w-5" />
             </button>

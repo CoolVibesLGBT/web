@@ -312,8 +312,8 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
 
   const inputClass = `w-full rounded-full border px-5 py-4 text-[15px] font-semibold outline-none transition-all duration-300 ${
     theme === 'dark'
-      ? 'border-white/5 bg-white/[0.05] text-white placeholder:text-zinc-600 focus:border-sky-600 focus:bg-white/[0.08] focus:ring-4 focus:ring-sky-600/10'
-      : 'border-slate-200/60 bg-slate-50/70 text-slate-950 placeholder:text-slate-400 focus:border-sky-600 focus:bg-white focus:ring-4 focus:ring-sky-600/10'
+      ? 'border-white/5 bg-white/[0.05] text-white placeholder:text-zinc-600 focus:border-[var(--color-brand)] focus:bg-white/[0.08] focus:ring-4 focus:ring-[var(--color-brand)]/10'
+      : 'border-slate-200/60 bg-slate-50/70 text-slate-950 placeholder:text-slate-400 focus:border-[var(--color-brand)] focus:bg-white focus:ring-4 focus:ring-[var(--color-brand)]/10'
   }`;
 
   const renderFormField = () => {
@@ -325,15 +325,15 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
               <motion.button
                 onClick={() => setAuthMode('login')}
                 className={`group w-full rounded-[26px] border p-4 text-left transition-all duration-500 ${authMode === 'login'
-                  ? 'border-sky-600 bg-sky-600 text-white shadow-2xl shadow-sky-600/25'
+                  ? 'border-[var(--color-brand)] bg-[var(--color-brand)] text-white shadow-2xl shadow-[var(--color-brand)]/25'
                   : theme === 'dark'
-                    ? 'border-white/5 bg-white/[0.04] text-white hover:border-sky-600/30 hover:bg-white/[0.07]'
-                    : 'border-slate-100 bg-slate-50/80 text-slate-900 hover:border-sky-200 hover:bg-white'
+                    ? 'border-white/5 bg-white/[0.04] text-white hover:border-[var(--color-brand)]/30 hover:bg-white/[0.07]'
+                    : 'border-slate-100 bg-slate-50/80 text-slate-900 hover:border-[var(--color-brand)]/30 hover:bg-white'
                   }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-2xl transition-all ${authMode === 'login' ? 'bg-white/15 text-white' : 'bg-sky-600/10 text-sky-600 group-hover:bg-sky-600 group-hover:text-white'}`}>
+                <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-2xl transition-all ${authMode === 'login' ? 'bg-white/15 text-white' : 'bg-[var(--color-brand)]/10 text-[var(--color-brand)] group-hover:bg-[var(--color-brand)] group-hover:text-white'}`}>
                   <User className="h-5 w-5" />
                 </div>
                 <h3 className="mb-2 text-sm font-black uppercase tracking-tight sm:text-base">{t('auth.have_account')}</h3>
@@ -349,15 +349,15 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                   setAuthMode('register');
                 }}
                 className={`group w-full rounded-[26px] border p-4 text-left transition-all duration-500 ${authMode === 'register'
-                  ? 'border-sky-600 bg-sky-600 text-white shadow-2xl shadow-sky-600/25'
+                  ? 'border-[var(--color-brand)] bg-[var(--color-brand)] text-white shadow-2xl shadow-[var(--color-brand)]/25'
                   : theme === 'dark'
-                    ? 'border-white/5 bg-white/[0.04] text-white hover:border-sky-600/30 hover:bg-white/[0.07]'
-                    : 'border-slate-100 bg-slate-50/80 text-slate-900 hover:border-sky-200 hover:bg-white'
+                    ? 'border-white/5 bg-white/[0.04] text-white hover:border-[var(--color-brand)]/30 hover:bg-white/[0.07]'
+                    : 'border-slate-100 bg-slate-50/80 text-slate-900 hover:border-[var(--color-brand)]/30 hover:bg-white'
                   }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-2xl transition-all ${authMode === 'register' ? 'bg-white/15 text-white' : 'bg-sky-600/10 text-sky-600 group-hover:bg-sky-600 group-hover:text-white'}`}>
+                <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-2xl transition-all ${authMode === 'register' ? 'bg-white/15 text-white' : 'bg-[var(--color-brand)]/10 text-[var(--color-brand)] group-hover:bg-[var(--color-brand)] group-hover:text-white'}`}>
                   <Heart className="h-5 w-5" />
                 </div>
                 <h3 className="mb-2 text-sm font-black uppercase tracking-tight sm:text-base">{t('auth.create_account')}</h3>
@@ -558,7 +558,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
             <span className={`text-[10px] font-black uppercase leading-none tracking-[0.34em] ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
               {DEFAULT_APP_NAME}
             </span>
-            <span className="mt-1 text-[8px] font-bold uppercase tracking-tighter text-sky-600">
+            <span className="mt-1 text-[8px] font-bold uppercase tracking-tighter text-[var(--color-brand)]">
               {DEFAULT_APP_MOTTO}
             </span>
           </div>
@@ -604,7 +604,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
               <div
                 key={index}
                 className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${index <= getCurrentStepIndex()
-                  ? 'bg-sky-600 shadow-sm shadow-sky-600/30'
+                  ? 'bg-[var(--color-brand)] shadow-sm shadow-[var(--color-brand)]/30'
                   : theme === 'dark' ? 'bg-white/10' : 'bg-slate-200'
                   }`}
               />
@@ -624,11 +624,11 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         className="px-5 py-5 text-left sm:px-6"
       >
         <div className="mb-4 flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[20px] bg-sky-600/10 text-sky-600 ring-1 ring-sky-600/10">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[20px] bg-[var(--color-brand)]/10 text-[var(--color-brand)] ring-1 ring-[var(--color-brand)]/10">
             <currentStepData.icon className="h-6 w-6" />
           </div>
           <div>
-            <p className="mb-1 text-[9px] font-black uppercase tracking-[0.35em] text-sky-600">
+            <p className="mb-1 text-[9px] font-black uppercase tracking-[0.35em] text-[var(--color-brand)]">
               {DEFAULT_APP_NAME} Access
             </p>
             <h2 className={`text-2xl font-black uppercase leading-none tracking-tight ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
@@ -700,7 +700,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
             onClick={handleNext}
             disabled={!canProceed() || isPending}
             className={`flex min-w-0 flex-1 items-center justify-center rounded-full px-5 py-3.5 text-sm font-black uppercase tracking-widest transition-all duration-300 ${canProceed() && !isPending
-              ? 'bg-sky-600 text-white shadow-2xl shadow-sky-600/25 hover:bg-sky-500'
+              ? 'bg-[var(--color-brand)] text-white shadow-2xl shadow-[var(--color-brand)]/25 hover:bg-[var(--color-brand-hovered)]'
               : theme === 'dark'
                 ? 'cursor-not-allowed bg-white/[0.05] text-zinc-700'
                 : 'cursor-not-allowed bg-slate-200 text-slate-400'
