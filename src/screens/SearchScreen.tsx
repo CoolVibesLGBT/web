@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   AlertCircle,
+  ArrowLeft,
   ArrowUpRight,
   Calendar,
   Loader2,
@@ -16,13 +17,12 @@ import { useTranslation } from 'react-i18next';
 import { useSEO } from '../hooks/useSEO';
 import { useLocation, useNavigate } from '@/router';
 import { api, type GlobalSearchResponse, type GlobalSearchScope } from '../services/api';
-import { CoolVibesPostCard, FlowMasonryItem, isWideMediaPost } from '../features/post/Flows';
+import { CoolVibesPostCard, PostSkeleton } from '../features/post/Flows';
 import type { ApiPost } from '../features/post/Post';
+import PlaceCard from '../features/discovery/PlaceCard';
+import { UserCard } from '../features/profile/UserCard';
 import {
-  generateFallbackImage,
-  generatePlaceImage,
   getLocalizedContent,
-  getSafeImageURLEx,
   htmlToPlainText,
 } from '../helpers/helpers';
 
@@ -113,9 +113,12 @@ const normalizeResponse = (response: GlobalSearchResponse | null | undefined): G
   places: Array.isArray(response?.places) ? response.places : [],
 });
 
-const getPlaceData = (record: SearchRecord): SearchRecord => (
-  getRecord(getRecord(record, 'extras'), 'place') || {}
-);
+const SECTION_PREVIEW_LIMIT: Record<ResultType, number> = {
+  people: 6,
+  locations: 4,
+  posts: 3,
+  events: 4,
+};
 
 const SearchScreen: React.FC = () => {
   const { theme } = useTheme();
@@ -218,49 +221,55 @@ const SearchScreen: React.FC = () => {
     { id: 'locations' as const, label: t('search.filters.locations', { defaultValue: 'Places' }), icon: MapPin },
   ], [t]);
 
+  const grouped = useMemo<Record<ResultType, SearchItem[]>>(() => {
+    const groups: Record<ResultType, SearchItem[]> = {
+      people: [],
+      events: [],
+      posts: [],
+      locations: [],
+    };
+
+    (response.users || []).forEach((user, index) => {
+      const data = asRecord(user) || {};
+      groups.people.push({ id: `people-${recordId(data, String(index))}`, type: 'people', data });
+    });
+    (response.events || []).forEach((event, index) => {
+      const data = asRecord(event) || {};
+      groups.events.push({ id: `events-${recordId(data, String(index))}`, type: 'events', data });
+    });
+    (response.posts || []).forEach((post, index) => {
+      const data = asRecord(post) || {};
+      groups.posts.push({ id: `posts-${recordId(data, String(index))}`, type: 'posts', data });
+    });
+    (response.places || []).forEach((place, index) => {
+      const data = asRecord(place) || {};
+      groups.locations.push({ id: `locations-${recordId(data, String(index))}`, type: 'locations', data });
+    });
+
+    return groups;
+  }, [response]);
+
   const items = useMemo<SearchItem[]>(() => {
-    const nextItems: SearchItem[] = [];
-
-    if (activeFilter === 'all' || activeFilter === 'people') {
-      (response.users || []).forEach((user, index) => {
-        const data = asRecord(user) || {};
-        nextItems.push({ id: `people-${recordId(data, String(index))}`, type: 'people', data });
-      });
+    if (activeFilter === 'all') {
+      return [...grouped.people, ...grouped.events, ...grouped.posts, ...grouped.locations];
     }
-    if (activeFilter === 'all' || activeFilter === 'events') {
-      (response.events || []).forEach((event, index) => {
-        const data = asRecord(event) || {};
-        nextItems.push({ id: `events-${recordId(data, String(index))}`, type: 'events', data });
-      });
-    }
-    if (activeFilter === 'all' || activeFilter === 'posts') {
-      (response.posts || []).forEach((post, index) => {
-        const data = asRecord(post) || {};
-        nextItems.push({ id: `posts-${recordId(data, String(index))}`, type: 'posts', data });
-      });
-    }
-    if (activeFilter === 'all' || activeFilter === 'locations') {
-      (response.places || []).forEach((place, index) => {
-        const data = asRecord(place) || {};
-        nextItems.push({ id: `locations-${recordId(data, String(index))}`, type: 'locations', data });
-      });
-    }
-
-    return nextItems;
-  }, [activeFilter, response]);
+    if (activeFilter === 'locations') return grouped.locations;
+    return grouped[activeFilter];
+  }, [activeFilter, grouped]);
 
   const clearSearch = useCallback(() => {
     setSearchQuery('');
     setResponse(EMPTY_RESPONSE);
     setError(null);
     navigate('/search', { replace: true });
+    searchInputRef.current?.focus();
   }, [navigate]);
 
   const submitSearch = useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const value = searchQuery.trim();
     navigate(value ? `/search?q=${encodeURIComponent(value)}` : '/search', { replace: true });
-    searchInputRef.current?.focus();
+    searchInputRef.current?.blur();
   }, [navigate, searchQuery]);
 
   const openResult = useCallback((item: SearchItem) => {
@@ -297,297 +306,365 @@ const SearchScreen: React.FC = () => {
     }
   }, [openResult]);
 
-  const renderResult = (item: SearchItem) => {
-    const id = recordId(item.data, item.id);
-    const cardClass = `group rounded-[24px] border p-4 transition-all duration-200 ${
-      isDark
-        ? 'cv-card-surface-solid border-white/10 hover:bg-white/[0.06]'
-        : 'border-gray-100 bg-white shadow-sm hover:bg-gray-50'
-    }`;
+  const renderEventCard = (item: SearchItem) => {
+    const event = getRecord(item.data, 'event') || item.data;
+    const title = localizedText(event.title, language)
+      || localizedText(item.data.title, language)
+      || t('search.untitled_event', { defaultValue: 'Untitled event' });
+    const description = localizedText(event.description, language) || localizedText(item.data.content, language);
+    const startTime = getString(event, 'start_time') || getString(item.data, 'start_time');
+    const eventLocation = getRecord(event, 'location') || getRecord(item.data, 'location');
+    const locationText = [
+      getString(eventLocation, 'address'),
+      getString(eventLocation, 'city') || getString(eventLocation, 'town'),
+      getString(eventLocation, 'country'),
+    ].filter(Boolean).join(', ');
 
-    if (item.type === 'people') {
-      const username = getString(item.data, 'username');
-      const displayName = getString(item.data, 'displayname') || username || t('search.unknown_user', { defaultValue: 'CoolVibes member' });
-      const bio = localizedText(item.data.bio, language);
-      const avatar = getSafeImageURLEx(id, item.data.avatar, 'medium') || generateFallbackImage(id);
-      const locationRecord = getRecord(item.data, 'location');
-      const locationText = getString(locationRecord, 'display') || getString(locationRecord, 'city');
-
-      return (
-        <motion.article
-          key={item.id}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          role="button"
-          tabIndex={0}
-          onClick={() => openResult(item)}
-          onKeyDown={(event) => handleResultKeyDown(event, item)}
-          className={cardClass}
-        >
-          <div className="flex items-center gap-4">
-            <img
-              src={avatar}
-              alt={displayName}
-              loading="lazy"
-              className={`h-16 w-16 shrink-0 rounded-[20px] object-cover ring-2 ${isDark ? 'ring-white/10' : 'ring-gray-100'}`}
-            />
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
-                <h3 className={`truncate text-[16px] font-bold ${textColor}`}>{displayName}</h3>
-                {(item.data.is_verified === true || item.data.verified === true) && (
-                  <span className="rounded-full bg-sky-500 px-1.5 py-0.5 text-[9px] font-black text-white">✓</span>
-                )}
-              </div>
-              {username && <p className={`mt-0.5 truncate text-[13px] font-medium ${secondaryTextColor}`}>@{username}</p>}
-              {(bio || locationText) && (
-                <p className={`mt-1 line-clamp-2 text-[13px] ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  {bio || locationText}
-                </p>
-              )}
-            </div>
+    return (
+      <article
+        key={item.id}
+        role="button"
+        tabIndex={0}
+        onClick={() => openResult(item)}
+        onKeyDown={(event) => handleResultKeyDown(event, item)}
+        className={`group flex cursor-pointer gap-4 rounded-xl border p-4 transition-colors ${
+          isDark
+            ? 'cv-card-surface-solid border-white/10 hover:bg-white/[0.04]'
+            : 'border-gray-100 bg-white hover:bg-gray-50'
+        }`}
+      >
+        <div className={`flex h-20 w-20 shrink-0 items-center justify-center rounded-[18px] ${isDark ? 'bg-fuchsia-500/15 text-fuchsia-300' : 'bg-fuchsia-50 text-fuchsia-600'}`}>
+          <Calendar className="h-7 w-7" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start gap-3">
+            <h3 className={`min-w-0 flex-1 truncate text-[15px] font-bold ${textColor}`}>{title}</h3>
             <ArrowUpRight className={`h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${secondaryTextColor}`} />
           </div>
-        </motion.article>
-      );
-    }
+          {startTime && <p className="mt-1 text-[12px] font-bold text-fuchsia-500">{formatDate(startTime, i18n.language)}</p>}
+          {locationText && (
+            <p className={`mt-1 flex items-center gap-1 truncate text-[12px] ${secondaryTextColor}`}>
+              <MapPin className="h-3.5 w-3.5 shrink-0" />
+              {locationText}
+            </p>
+          )}
+          {description && <p className={`mt-2 line-clamp-2 text-[13px] ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{description}</p>}
+        </div>
+      </article>
+    );
+  };
 
-    if (item.type === 'events') {
-      const event = getRecord(item.data, 'event') || item.data;
-      const title = localizedText(event.title, language)
-        || localizedText(item.data.title, language)
-        || t('search.untitled_event', { defaultValue: 'Untitled event' });
-      const description = localizedText(event.description, language) || localizedText(item.data.content, language);
-      const startTime = getString(event, 'start_time') || getString(item.data, 'start_time');
-      const eventLocation = getRecord(event, 'location') || getRecord(item.data, 'location');
-      const locationText = [
-        getString(eventLocation, 'address'),
-        getString(eventLocation, 'city') || getString(eventLocation, 'town'),
-        getString(eventLocation, 'country'),
-      ].filter(Boolean).join(', ');
-
-      return (
-        <motion.article
+  const renderPeopleGrid = (people: SearchItem[]) => (
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+      {people.map((item) => (
+        <UserCard
           key={item.id}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          role="button"
-          tabIndex={0}
-          onClick={() => openResult(item)}
-          onKeyDown={(event) => handleResultKeyDown(event, item)}
-          className={cardClass}
-        >
-          <div className="flex gap-4">
-            <div className={`flex h-20 w-20 shrink-0 items-center justify-center rounded-[18px] ${isDark ? 'bg-fuchsia-500/15 text-fuchsia-300' : 'bg-fuchsia-50 text-fuchsia-600'}`}>
-              <Calendar className="h-7 w-7" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-start gap-3">
-                <h3 className={`min-w-0 flex-1 truncate text-[16px] font-bold ${textColor}`}>{title}</h3>
-                <ArrowUpRight className={`h-4 w-4 shrink-0 ${secondaryTextColor}`} />
-              </div>
-              {startTime && <p className="mt-1 text-[12px] font-bold text-fuchsia-500">{formatDate(startTime, i18n.language)}</p>}
-              {locationText && (
-                <p className={`mt-1 flex items-center gap-1 truncate text-[12px] ${secondaryTextColor}`}>
-                  <MapPin className="h-3.5 w-3.5 shrink-0" />
-                  {locationText}
-                </p>
-              )}
-              {description && <p className={`mt-2 line-clamp-2 text-[13px] ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{description}</p>}
-            </div>
-          </div>
-        </motion.article>
-      );
-    }
+          user={item.data as any}
+          viewMode="compact"
+        />
+      ))}
+    </div>
+  );
 
-    if (item.type === 'posts') {
-      return (
+  const renderPlacesGrid = (places: SearchItem[]) => (
+    <div className="grid auto-rows-[384px] grid-cols-1 gap-4 sm:grid-cols-2">
+      {places.map((item) => (
+        <PlaceCard
+          key={item.id}
+          place={item.data as any}
+          selected={false}
+          className="h-full"
+          onClick={(place) => {
+            const publicId = recordId(asRecord(place) || {}, '');
+            if (publicId) navigate(`/places/${encodeURIComponent(publicId)}`, { state: { place } });
+          }}
+        />
+      ))}
+    </div>
+  );
+
+  const renderPostsList = (posts: SearchItem[]) => (
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-3">
+      {posts.map((item) => (
         <CoolVibesPostCard
           key={item.id}
           post={item.data as unknown as ApiPost}
           onPostClick={() => openResult(item)}
           onProfileClick={openProfile}
         />
-      );
-    }
+      ))}
+    </div>
+  );
 
-    const place = getPlaceData(item.data);
-    const placeName = getString(place, 'name') || localizedText(item.data.title, language) || t('search.untitled_place', { defaultValue: 'Untitled place' });
-    const address = [
-      getString(place, 'address'),
-      getString(place, 'town') || getString(place, 'city'),
-      getString(place, 'province'),
-      getString(place, 'country'),
-    ].filter(Boolean).join(', ');
-    const placeImage = getString(place, 'image') || getSafeImageURLEx(id, item.data.attachments, 'medium') || generatePlaceImage(id);
+  const renderEventsList = (events: SearchItem[]) => (
+    <div className="flex flex-col gap-2.5">
+      {events.map((item) => renderEventCard(item))}
+    </div>
+  );
 
+  const renderSectionHeader = (filterId: SearchFilter, count: number, showAll: boolean) => {
+    const filter = filters.find((entry) => entry.id === filterId);
+    if (!filter || count === 0) return null;
     return (
-      <motion.article
-        key={item.id}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        role="button"
-        tabIndex={0}
-        onClick={() => openResult(item)}
-        onKeyDown={(event) => handleResultKeyDown(event, item)}
-        className={cardClass}
-      >
-        <div className="flex gap-4">
-          <img src={placeImage} alt={placeName} loading="lazy" className="h-20 w-20 shrink-0 rounded-[18px] object-cover" />
-          <div className="min-w-0 flex-1">
-            <div className="flex items-start gap-3">
-              <h3 className={`min-w-0 flex-1 truncate text-[16px] font-bold ${textColor}`}>{placeName}</h3>
-              <ArrowUpRight className={`h-4 w-4 shrink-0 ${secondaryTextColor}`} />
-            </div>
-            {address && <p className={`mt-1 line-clamp-2 text-[13px] ${secondaryTextColor}`}>{address}</p>}
-            <p className={`mt-2 flex items-center gap-1 text-[12px] font-semibold ${isDark ? 'text-emerald-300' : 'text-emerald-600'}`}>
-              <MapPin className="h-3.5 w-3.5" />
-              {t('search.open_place', { defaultValue: 'Open place details' })}
-            </p>
-          </div>
-        </div>
-      </motion.article>
+      <div className="flex items-center justify-between gap-2 px-1 pb-2 pt-1">
+        <span className={`text-[11px] font-black uppercase tracking-[0.16em] ${secondaryTextColor}`}>
+          {filter.label} · {count}
+        </span>
+        {showAll && (
+          <button
+            type="button"
+            onClick={() => setActiveFilter(filterId)}
+            className="flex shrink-0 items-center gap-0.5 text-[12px] font-bold text-[var(--color-brand)] transition-opacity hover:opacity-80"
+          >
+            {t('search.show_all', { defaultValue: 'Show all' })}
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </button>
+        )}
+      </div>
     );
   };
 
-  const panelClass = isDark ? 'cv-card-surface-soft border-white/10' : 'border-white/70 bg-white/75';
+  const renderSkeletons = () => {
+    if (activeFilter === 'posts') {
+      return (
+        <div className="mx-auto flex w-full max-w-2xl flex-col gap-3">
+          {[0, 1].map((index) => (
+            <PostSkeleton key={index} theme={isDark ? 'dark' : 'light'} />
+          ))}
+        </div>
+      );
+    }
+    if (activeFilter === 'people') {
+      return (
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div
+              key={index}
+              className={`aspect-[3/4] animate-pulse rounded-xl border ${isDark ? 'border-white/10 bg-white/[0.04]' : 'border-gray-100 bg-gray-50'}`}
+            />
+          ))}
+        </div>
+      );
+    }
+    if (activeFilter === 'locations') {
+      return (
+        <div className="grid auto-rows-[384px] grid-cols-1 gap-4 sm:grid-cols-2">
+          {Array.from({ length: 2 }).map((_, index) => (
+            <div
+              key={index}
+              className={`h-full animate-pulse rounded-2xl border p-1 ${isDark ? 'border-white/10 bg-white/[0.04]' : 'border-gray-100 bg-gray-50'}`}
+            >
+              <div className={`h-[220px] w-full rounded-xl ${isDark ? 'bg-white/[0.06]' : 'bg-gray-100'}`} />
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return (
+      <div className="flex flex-col gap-2.5">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div
+            key={index}
+            className={`h-[112px] animate-pulse rounded-xl border ${isDark ? 'border-white/10 bg-white/[0.04]' : 'border-gray-100 bg-gray-50'}`}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  const renderFilteredResults = () => {
+    if (activeFilter === 'people') return renderPeopleGrid(grouped.people);
+    if (activeFilter === 'locations') return renderPlacesGrid(grouped.locations);
+    if (activeFilter === 'posts') return renderPostsList(grouped.posts);
+    return renderEventsList(grouped.events);
+  };
+
+  const renderAllSections = () => {
+    const sections: { id: ResultType; count: number; node: React.ReactNode }[] = [
+      {
+        id: 'people' as ResultType,
+        count: grouped.people.length,
+        node: renderPeopleGrid(grouped.people.slice(0, SECTION_PREVIEW_LIMIT.people)),
+      },
+      {
+        id: 'locations' as ResultType,
+        count: grouped.locations.length,
+        node: renderPlacesGrid(grouped.locations.slice(0, SECTION_PREVIEW_LIMIT.locations)),
+      },
+      {
+        id: 'posts' as ResultType,
+        count: grouped.posts.length,
+        node: renderPostsList(grouped.posts.slice(0, SECTION_PREVIEW_LIMIT.posts)),
+      },
+      {
+        id: 'events' as ResultType,
+        count: grouped.events.length,
+        node: renderEventsList(grouped.events.slice(0, SECTION_PREVIEW_LIMIT.events)),
+      },
+    ].filter((section) => section.count > 0);
+
+    return (
+      <div className="flex flex-col gap-6">
+        {sections.map((section) => (
+          <section key={section.id}>
+            {renderSectionHeader(section.id, section.count, section.count > SECTION_PREVIEW_LIMIT[section.id])}
+            {section.node}
+          </section>
+        ))}
+      </div>
+    );
+  };
+
+  const renderContent = () => {
+    if (isSearching && items.length === 0) {
+      return renderSkeletons();
+    }
+
+    if (!isSearching && error) {
+      return (
+        <div className={`mx-auto flex max-w-xl flex-col items-center rounded-2xl border p-8 text-center ${isDark ? 'cv-card-surface-solid border-white/10' : 'border-gray-200/50 bg-white'}`} role="alert">
+          <AlertCircle className="h-8 w-8 text-rose-500" />
+          <h2 className={`mt-3 text-base font-bold ${textColor}`}>{t('search.error_title', { defaultValue: 'Search failed' })}</h2>
+          <p className={`mt-2 text-sm ${secondaryTextColor}`}>{error}</p>
+          <button
+            type="button"
+            onClick={() => setRetryNonce((current) => current + 1)}
+            className={`mt-5 rounded-full px-4 py-2 text-xs font-bold ${isDark ? 'bg-white text-black' : 'bg-gray-900 text-white'}`}
+          >
+            {t('search.retry', { defaultValue: 'Try again' })}
+          </button>
+        </div>
+      );
+    }
+
+    if (!isSearching && trimmedQuery.length < 2) {
+      return (
+        <div className="flex flex-col items-center justify-center px-8 py-24 text-center">
+          <div className={`flex h-16 w-16 items-center justify-center rounded-[22px] ${isDark ? 'cv-card-surface-muted' : 'bg-gray-50'}`}>
+            <Search className={`h-8 w-8 ${isDark ? 'text-gray-600' : 'text-gray-300'}`} strokeWidth={1.5} />
+          </div>
+          <h2 className={`mt-5 text-[17px] font-bold ${textColor}`}>{t('search.start_title', { defaultValue: 'Find your community' })}</h2>
+          <p className={`mt-2 max-w-sm text-[14px] leading-relaxed ${secondaryTextColor}`}>
+            {t('search.start_subtitle', { defaultValue: 'Enter at least two characters to search people, events, posts and places.' })}
+          </p>
+        </div>
+      );
+    }
+
+    if (!isSearching && items.length === 0) {
+      return (
+        <AnimatePresence mode="wait">
+          <motion.div
+            key="empty"
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center justify-center px-8 py-24 text-center"
+          >
+            <div className={`flex h-16 w-16 items-center justify-center rounded-[22px] ${isDark ? 'cv-card-surface-muted' : 'bg-gray-50'}`}>
+              <Search className={`h-8 w-8 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} strokeWidth={1.5} />
+            </div>
+            <h2 className={`mt-5 text-[17px] font-bold ${textColor}`}>{t('search.no_results', { defaultValue: 'No results found' })}</h2>
+            <p className={`mt-2 max-w-sm text-[14px] leading-relaxed ${secondaryTextColor}`}>
+              {t('search.no_results_subtitle', { defaultValue: 'Try another search term or choose a different category.' })}
+            </p>
+          </motion.div>
+        </AnimatePresence>
+      );
+    }
+
+    if (items.length === 0) return null;
+
+    return activeFilter === 'all' ? renderAllSections() : renderFilteredResults();
+  };
 
   return (
-    <div className={`skyline-page-scroll w-full ${textColor}`}>
-        <main className="mx-auto flex min-h-full w-full max-w-[1360px] flex-col gap-5 px-1 pb-8 pt-[72px] md:px-2">
-        <section className={`shrink-0 rounded-[30px] border backdrop-blur-3xl lg:self-center lg:w-fit lg:max-w-full ${panelClass} shadow-[0_28px_90px_-48px_rgba(15,23,42,0.55)]`}>
-          <form onSubmit={submitSearch} className="flex items-center gap-2 px-4 pt-4">
-            <div className="relative flex-1">
-              <Search className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 ${secondaryTextColor}`} />
-              <input
-                ref={searchInputRef}
-                type="text"
-                autoComplete="off"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder={t('search.placeholder', { defaultValue: 'Search people, posts, events or places...' })}
-                aria-label={t('search.placeholder', { defaultValue: 'Search people, posts, events or places...' })}
-                className="w-full bg-transparent py-2.5 pl-10 pr-10 text-[15px] outline-none placeholder:text-gray-500"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={clearSearch}
-                  aria-label={t('search.clear', { defaultValue: 'Clear search' })}
-                  className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1.5 transition-colors ${isDark ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
-                >
-                  <X className="h-4 w-4 text-gray-400" />
-                </button>
-              )}
-            </div>
-            <button
-              type="submit"
-              className={`hidden rounded-full px-4 py-2 text-xs font-bold sm:block ${isDark ? 'bg-white text-black' : 'bg-gray-900 text-white'}`}
-            >
-              {t('search.submit', { defaultValue: 'Search' })}
-            </button>
-          </form>
-
-          <div className="overflow-x-auto px-4 pb-1 pt-2 scrollbar-hide">
-            <div className="flex">
-              {filters.map((filter) => {
-                const Icon = filter.icon;
-                const active = activeFilter === filter.id;
-                return (
-                  <button
-                    key={filter.id}
-                    type="button"
-                    onClick={() => setActiveFilter(filter.id)}
-                    style={{ minWidth: 0 }}
-                    className={`cv-tab !h-[48px] !text-[15px] ${active ? 'is-active' : ''}`}
-                  >
-                    <Icon className="h-[18px] w-[18px] shrink-0" />
-                    <span className="min-w-0 truncate">{filter.label}</span>
-                    <span className={`cv-tab-underline ${active ? 'is-on' : ''}`} />
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="flex-1">
-          {isSearching && (
-            <div className="flex items-center justify-center gap-3 py-12" role="status" aria-live="polite">
-              <Loader2 className="h-5 w-5 animate-spin text-sky-500" />
-              <span className={`text-sm font-medium ${secondaryTextColor}`}>
-                {t('search.loading', { defaultValue: 'Searching...' })}
-              </span>
-            </div>
-          )}
-
-          {!isSearching && error && (
-            <div className={`mx-auto flex max-w-xl flex-col items-center rounded-[24px] border p-8 text-center ${panelClass}`} role="alert">
-              <AlertCircle className="h-8 w-8 text-rose-500" />
-              <h2 className={`mt-3 text-base font-bold ${textColor}`}>{t('search.error_title', { defaultValue: 'Search failed' })}</h2>
-              <p className={`mt-2 text-sm ${secondaryTextColor}`}>{error}</p>
-              <button
-                type="button"
-                onClick={() => setRetryNonce((current) => current + 1)}
-                className={`mt-5 rounded-full px-4 py-2 text-xs font-bold ${isDark ? 'bg-white text-black' : 'bg-gray-900 text-white'}`}
-              >
-                {t('search.retry', { defaultValue: 'Try again' })}
-              </button>
-            </div>
-          )}
-
-          {!isSearching && !error && trimmedQuery.length < 2 && (
-            <div className="flex flex-col items-center justify-center px-8 py-24 text-center">
-              <div className={`flex h-16 w-16 items-center justify-center rounded-[22px] ${isDark ? 'cv-card-surface-muted' : 'bg-gray-50'}`}>
-                <Search className={`h-8 w-8 ${isDark ? 'text-gray-600' : 'text-gray-300'}`} strokeWidth={1.5} />
-              </div>
-              <h2 className={`mt-5 text-[17px] font-bold ${textColor}`}>{t('search.start_title', { defaultValue: 'Find your community' })}</h2>
-              <p className={`mt-2 max-w-sm text-[14px] leading-relaxed ${secondaryTextColor}`}>
-                {t('search.start_subtitle', { defaultValue: 'Enter at least two characters to search people, events, posts and places.' })}
-              </p>
-            </div>
-          )}
-
-          {!isSearching && !error && trimmedQuery.length >= 2 && items.length === 0 && (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key="empty"
-                initial={{ opacity: 0, scale: 0.97 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center px-8 py-24 text-center"
-              >
-                <div className={`flex h-16 w-16 items-center justify-center rounded-[22px] ${isDark ? 'cv-card-surface-muted' : 'bg-gray-50'}`}>
-                  <Search className={`h-8 w-8 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} strokeWidth={1.5} />
-                </div>
-                <h2 className={`mt-5 text-[17px] font-bold ${textColor}`}>{t('search.no_results', { defaultValue: 'No results found' })}</h2>
-                <p className={`mt-2 max-w-sm text-[14px] leading-relaxed ${secondaryTextColor}`}>
-                  {t('search.no_results_subtitle', { defaultValue: 'Try another search term or choose a different category.' })}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          )}
-
-          {!isSearching && !error && items.length > 0 && (
-            <div>
-              <div className={`px-1 text-[11px] font-black uppercase tracking-[0.16em] ${secondaryTextColor}`}>
-                {t('search.result_count', { defaultValue: '{{count}} results', count: items.length })}
-              </div>
-              <div className="flow-masonry px-1 pt-3">
-                <AnimatePresence initial={false} mode="sync">
-                  {items.map((item) => (
-                    <FlowMasonryItem
-                      key={item.id}
-                      wide={item.type === 'posts' && isWideMediaPost(item.data as unknown as ApiPost)}
+    <motion.div
+      className="relative h-full w-full overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+    >
+      <div className="skyline-page-scroll relative z-10 h-full overflow-y-auto">
+        <div className="flex min-h-full flex-col px-1 md:px-2">
+          <div className="pointer-events-auto z-50 mx-auto w-full max-w-7xl">
+            <section className="relative">
+              <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
+                <div className="cv-tab-row">
+                  <div className="flex shrink-0 items-center pl-4">
+                    <button
+                      type="button"
+                      onClick={() => navigate('/')}
+                      aria-label={t('app.back', { defaultValue: 'Back' })}
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
                     >
-                      {renderResult(item)}
-                    </FlowMasonryItem>
-                  ))}
-                </AnimatePresence>
+                      <ArrowLeft className="h-4 w-4" />
+                    </button>
+                  </div>
+                  {filters.map((filter) => {
+                    const Icon = filter.icon;
+                    const isActive = activeFilter === filter.id;
+                    return (
+                      <button
+                        key={filter.id}
+                        type="button"
+                        onClick={() => setActiveFilter(filter.id)}
+                        style={{ minWidth: 0 }}
+                        className={`cv-tab ${isActive ? 'is-active' : ''}`}
+                        title={filter.label}
+                      >
+                        <Icon className="h-5 w-5 shrink-0" />
+                        <span className="hidden min-w-0 truncate text-[13px] sm:inline">{filter.label}</span>
+                        <span className={`cv-tab-underline ${isActive ? 'is-on' : ''}`} />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          )}
-        </section>
-      </main>
-    </div>
+
+              <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
+                <form
+                  onSubmit={submitSearch}
+                  className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-full bg-[var(--cv-surface-3)] px-3.5"
+                >
+                  <Search className="h-3.5 w-3.5 shrink-0 text-[var(--cv-neutral-2)]" />
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    autoComplete="off"
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    placeholder={t('search.placeholder', { defaultValue: 'Search people, posts, events or places...' })}
+                    aria-label={t('search.placeholder', { defaultValue: 'Search people, posts, events or places...' })}
+                    className="min-w-0 flex-1 bg-transparent text-[13px] font-semibold text-[var(--cv-neutral-1)] outline-none placeholder:text-[var(--cv-neutral-2)] placeholder:opacity-60"
+                  />
+                  {isSearching ? (
+                    <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-[var(--cv-neutral-2)]" />
+                  ) : searchQuery ? (
+                    <button
+                      type="button"
+                      onClick={clearSearch}
+                      aria-label={t('search.clear', { defaultValue: 'Clear search' })}
+                      className="flex shrink-0 items-center justify-center rounded-full transition-opacity hover:opacity-70"
+                    >
+                      <X className="h-3.5 w-3.5 text-[var(--cv-neutral-2)]" />
+                    </button>
+                  ) : null}
+                </form>
+                <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
+                  <Search className="h-3.5 w-3.5 shrink-0" />
+                  {items.length}
+                </span>
+              </div>
+            </section>
+          </div>
+
+          <div className="pointer-events-auto mx-auto w-full max-w-7xl flex-1 px-0 pb-8 pt-2 md:px-1">
+            {renderContent()}
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 
