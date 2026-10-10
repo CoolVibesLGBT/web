@@ -631,7 +631,7 @@ const NearbyScreen: React.FC = () => {
       )}
       {isBubbleView && (
         <div className="fixed inset-0 z-0">
-          <BubbleView />
+          <BubbleView onUserSelect={handleMarkerClick} />
         </div>
       )}
 

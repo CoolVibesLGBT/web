@@ -301,6 +301,22 @@ function AppContent() {
     return new Set(RIGHT_SIDEBAR_HIDDEN_PATHS_BASE);
   }, []);
   const shouldShowRightSidebar = !Array.from(rightSidebarHiddenPaths).some(p => location.pathname === p || location.pathname.startsWith(p + '/'));
+
+  // Nearby'nin bubble/map gibi immersive (tam ekran) görünümlerindeyken sol
+  // navigasyon rail'i haritanın arkasında kalıp tıklanamaz hale gelmesin diye
+  // tamamen kaldırılıyor — NearbyScreen bunu 'cv:nearby-controls-state'
+  // eventiyle bildiriyor.
+  const [isNearbyImmersiveView, setIsNearbyImmersiveView] = React.useState(false);
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handleNearbyControlsState = (event: Event) => {
+      const detail = (event as CustomEvent<{ viewMode?: string } | null>).detail;
+      const mode = detail?.viewMode;
+      setIsNearbyImmersiveView(mode === 'map' || mode === 'bubble');
+    };
+    window.addEventListener('cv:nearby-controls-state', handleNearbyControlsState);
+    return () => window.removeEventListener('cv:nearby-controls-state', handleNearbyControlsState);
+  }, []);
   const premiumMembershipEnabled = React.useMemo(() => isFeatureEnabled('premium_membership'), []);
 
   React.useEffect(() => {
@@ -971,6 +987,11 @@ function AppContent() {
   const showShellHud = !isLandingRoute && !isAuthGateRoute;
   const showRightRail = isAuthenticated && shouldShowRightSidebar;
   const showLeftRail = isAuthenticated && !isLandingRoute && !isAuthGateRoute;
+  // Nearby bubble/map gibi immersive görünümlerdeyken rail'in GENİŞLİĞİ
+  // (dolayısıyla ana içeriğin/üst bardaki tab'ların yatay konumu) sabit
+  // kalsın diye aside kaldırılmıyor; sadece içindeki nav içeriği gizlenip
+  // arkadaki tam ekran harita/bubble görünür hale geliyor.
+  const hideNearbyRailContent = normalizedPath === '/nearby' && isNearbyImmersiveView;
   const showDock = isAuthenticated && !isLandingRoute && showBottomBar;
   const showHomeMenuGuide = settings.showDockTips &&
     isAuthReady &&
@@ -984,12 +1005,14 @@ function AppContent() {
     setIsMobileMenuOpen(true);
   }, []);
 
-  const mainShellClassName = isLandingRoute || isAuthGateRoute || !shouldShowRightSidebar
+  const mainShellClassName = isLandingRoute || isAuthGateRoute || !shouldShowRightSidebar || hideNearbyRailContent
     // Auth-gate (logged-out), landing ve geniş düzen ekranları (sağ rail'i
     // gizleyen rotalar: mesajlar, harita/liste görünümleri vb.) 600px'lik
     // feed kolonuna sıkışmamalı — aksi halde çok-sütunlu içerik kırık/boş
     // alanlı görünür. Dar, tek-sütun ekranlar (Ana Sayfa, Ayarlar, Profil…)
-    // bu sınırı korur.
+    // bu sınırı korur. Nearby immersive (bubble/map) modundayken de bölücü
+    // çizgiler (border-x) ve 600px sınırı kaldırılır — arka plan tam ekran
+    // bleed yapar.
     ? 'min-h-0 flex-1 min-w-0 overflow-hidden'
     : 'min-h-0 flex-1 min-w-0 overflow-hidden xl:max-w-[600px] xl:border-x xl:border-[var(--cv-inner-border)]';
   const isShellSearchRoute = normalizedPath === '/classifieds' || normalizedPath === '/places';
@@ -1516,7 +1539,8 @@ function AppContent() {
 
           {/* Left Rail — persistent primary navigation (desktop) */}
           {showLeftRail && (
-            <aside className="hidden shrink-0 pt-24 xl:flex xl:w-[275px]">
+            <aside className="relative z-10 hidden shrink-0 pt-24 xl:flex xl:w-[275px]">
+              {!hideNearbyRailContent && (
               <nav aria-label={t('app.sidebar.primary', { defaultValue: 'Discover' })} className="flex h-[calc(100vh-6rem)] w-full flex-col overflow-hidden pb-6 pr-3">
                 <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto no-scrollbar">
                   {sidebarNavItems.map((item) => {
@@ -1628,6 +1652,7 @@ function AppContent() {
                 </div>
                 </div>
               </nav>
+              )}
             </aside>
           )}
 
@@ -1643,7 +1668,8 @@ function AppContent() {
           {/* Right Sidebar - Fixed */}
           {/* Hide right sidebar on messages and notifications routes for better UX */}
           {showRightRail && (
-            <aside className="hidden w-[350px] shrink-0 pt-24 xl:block">
+            <aside className="relative z-10 hidden w-[350px] shrink-0 pt-24 xl:block">
+              {!hideNearbyRailContent && (
               <div className="sticky top-24 flex flex-col h-[calc(100vh-112px)] w-[350px] py-2 pl-3 overflow-hidden">
                 {showSidebarInstallCard && (
                   <div className="mb-4">
@@ -1676,6 +1702,7 @@ function AppContent() {
                   <TrendsPanel limit={10} onTrendSelect={handleTrendSelect} />
                 </div>
               </div>
+              )}
             </aside>
           )}
 

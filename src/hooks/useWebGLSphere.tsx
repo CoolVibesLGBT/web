@@ -8,6 +8,7 @@ uniform mat4 uWorldMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uProjectionMatrix;
 uniform vec3 uCameraPosition;
+uniform float uMinAlpha;
 
 in vec3 aModelPosition;
 in vec3 aModelNormal;
@@ -28,7 +29,7 @@ void main() {
     vec4 viewPosition = uViewMatrix * vec4(centerPos, 1.);
     viewPosition.xy += aModelPosition.xy * instanceScale;
     gl_Position = uProjectionMatrix * viewPosition;
-    vAlpha = smoothstep(0.5, 1., normalize(centerPos).z) * .9 + .1;
+    vAlpha = smoothstep(0.5, 1., normalize(centerPos).z) * (1.0 - uMinAlpha) + uMinAlpha;
     vUvs = aModelUvs;
     vInstanceId = gl_InstanceID;
 }
@@ -263,14 +264,19 @@ class InfiniteGridMenu {
     discInstances: any = {}; worldMatrix = mat4.create(); tex: WebGLTexture | null = null; atlasSize = 1;
     control: ArcballControl | null = null; animationFrameId: number | null = null;
     visible = true;
+    minAlpha = 0.1;
 
-    constructor(canvas: HTMLCanvasElement, items: any[], onActiveItemChange: (i: number) => void, onMovementChange: (b: boolean) => void, onItemSelect: (index: number) => void) {
-        this.canvas = canvas; this.items = items; this.onActiveItemChange = onActiveItemChange; this.onMovementChange = onMovementChange; this.onItemSelect = onItemSelect;
+    constructor(canvas: HTMLCanvasElement, items: any[], onActiveItemChange: (i: number) => void, onMovementChange: (b: boolean) => void, onItemSelect: (index: number) => void, minAlpha = 0.1) {
+        this.canvas = canvas; this.items = items; this.onActiveItemChange = onActiveItemChange; this.onMovementChange = onMovementChange; this.onItemSelect = onItemSelect; this.minAlpha = minAlpha;
         this.#init();
     }
-    
+
     public setVisible(isVisible: boolean) {
         this.visible = isVisible;
+    }
+
+    public setMinAlpha(minAlpha: number) {
+        this.minAlpha = minAlpha;
     }
 
     destroy() {
@@ -304,7 +310,7 @@ class InfiniteGridMenu {
         vec2.set(this.viewportSize, this.canvas.clientWidth, this.canvas.clientHeight);
         this.discProgram = createProgram(gl, [discVertShaderSource, discFragShaderSource], null, { aModelPosition: 0, aModelNormal: 1, aModelUvs: 2, aInstanceMatrix: 3 }); if (!this.discProgram) return;
         this.discLocations = {
-            aModelPosition: gl.getAttribLocation(this.discProgram, 'aModelPosition'), aModelUvs: gl.getAttribLocation(this.discProgram, 'aModelUvs'), aInstanceMatrix: gl.getAttribLocation(this.discProgram, 'aInstanceMatrix'), uWorldMatrix: gl.getUniformLocation(this.discProgram, 'uWorldMatrix'), uViewMatrix: gl.getUniformLocation(this.discProgram, 'uViewMatrix'), uProjectionMatrix: gl.getUniformLocation(this.discProgram, 'uProjectionMatrix'), uCameraPosition: gl.getUniformLocation(this.discProgram, 'uCameraPosition'), uScaleFactor: gl.getUniformLocation(this.discProgram, 'uScaleFactor'), uTex: gl.getUniformLocation(this.discProgram, 'uTex'), uFrames: gl.getUniformLocation(this.discProgram, 'uFrames'), uItemCount: gl.getUniformLocation(this.discProgram, 'uItemCount'), uAtlasSize: gl.getUniformLocation(this.discProgram, 'uAtlasSize')
+            aModelPosition: gl.getAttribLocation(this.discProgram, 'aModelPosition'), aModelUvs: gl.getAttribLocation(this.discProgram, 'aModelUvs'), aInstanceMatrix: gl.getAttribLocation(this.discProgram, 'aInstanceMatrix'), uWorldMatrix: gl.getUniformLocation(this.discProgram, 'uWorldMatrix'), uViewMatrix: gl.getUniformLocation(this.discProgram, 'uViewMatrix'), uProjectionMatrix: gl.getUniformLocation(this.discProgram, 'uProjectionMatrix'), uCameraPosition: gl.getUniformLocation(this.discProgram, 'uCameraPosition'), uScaleFactor: gl.getUniformLocation(this.discProgram, 'uScaleFactor'), uTex: gl.getUniformLocation(this.discProgram, 'uTex'), uFrames: gl.getUniformLocation(this.discProgram, 'uFrames'), uItemCount: gl.getUniformLocation(this.discProgram, 'uItemCount'), uAtlasSize: gl.getUniformLocation(this.discProgram, 'uAtlasSize'), uMinAlpha: gl.getUniformLocation(this.discProgram, 'uMinAlpha')
         };
         this.discGeo = new DiscGeometry(56, 1); this.discBuffers = this.discGeo.data;
         const posBuffer = makeBuffer(gl, this.discBuffers.vertices, gl.STATIC_DRAW);
@@ -369,6 +375,7 @@ class InfiniteGridMenu {
         gl.uniform1i(this.discLocations.uItemCount, this.items.length); gl.uniform1i(this.discLocations.uAtlasSize, this.atlasSize);
         gl.uniform1f(this.discLocations.uFrames, this.#frames); 
         gl.uniform1f(this.discLocations.uScaleFactor, this.scaleFactor);
+        gl.uniform1f(this.discLocations.uMinAlpha, this.minAlpha);
         gl.uniform1i(this.discLocations.uTex, 0); 
         gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, this.tex);
         gl.bindVertexArray(this.discVAO); 
@@ -466,14 +473,15 @@ export const useWebGLSphere = (
     items: any[],
     onActiveItemChange: (index: number) => void,
     onMovementChange: (isMoving: boolean) => void,
-    onItemSelect: (index: number) => void
+    onItemSelect: (index: number) => void,
+    minAlpha = 0.1
 ): React.RefObject<InfiniteGridMenu | null> => {
     const sketchRef = useRef<InfiniteGridMenu | null>(null);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         if (canvas && items.length > 0) {
-            const sketch = new InfiniteGridMenu(canvas, items, onActiveItemChange, onMovementChange, onItemSelect);
+            const sketch = new InfiniteGridMenu(canvas, items, onActiveItemChange, onMovementChange, onItemSelect, minAlpha);
             sketch.run();
             sketchRef.current = sketch;
 
@@ -495,6 +503,10 @@ export const useWebGLSphere = (
         }
      
     }, [canvasRef, items, onActiveItemChange, onItemSelect, onMovementChange]);
+
+    useEffect(() => {
+        sketchRef.current?.setMinAlpha(minAlpha);
+    }, [minAlpha]);
 
     return sketchRef;
 };

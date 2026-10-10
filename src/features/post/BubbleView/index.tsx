@@ -29,9 +29,10 @@ interface BubbleUser {
 
 type BubbleViewProps = {
     users?: any[];
+    onUserSelect?: (user: BubbleUser) => void;
 };
 
-export default function BubbleView({ users: externalUsers }: BubbleViewProps) {
+export default function BubbleView({ users: externalUsers, onUserSelect }: BubbleViewProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [state] = useAtom(globalState);
 
@@ -84,16 +85,28 @@ export default function BubbleView({ users: externalUsers }: BubbleViewProps) {
     }, [location.pathname, location.search, navigate]);
 
     const handleOpenProfile = useCallback(() => {
-        openProfile(activeUser);
-    }, [activeUser, openProfile]);
+        if (!activeUser) return;
+        if (onUserSelect) {
+            onUserSelect(activeUser);
+        } else {
+            openProfile(activeUser);
+        }
+    }, [activeUser, onUserSelect, openProfile]);
 
     const handleItemSelect = useCallback((index: number) => {
         const selectedUser = users[index % users.length] as BubbleUser | undefined;
         setActiveUser(selectedUser ?? null);
-        openProfile(selectedUser);
-    }, [openProfile, users]);
+        if (!selectedUser) return;
+        if (onUserSelect) {
+            onUserSelect(selectedUser);
+        } else {
+            openProfile(selectedUser);
+        }
+    }, [onUserSelect, openProfile, users]);
 
-    useWebGLSphere(canvasRef as React.RefObject<HTMLCanvasElement>, users, handleActiveItemChange, setIsMoving, handleItemSelect);
+    const sphereMinAlpha = theme === 'dark' ? 0.1 : 0.4;
+
+    useWebGLSphere(canvasRef as React.RefObject<HTMLCanvasElement>, users, handleActiveItemChange, setIsMoving, handleItemSelect, sphereMinAlpha);
 
 
 
