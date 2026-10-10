@@ -1,7 +1,6 @@
 import React from 'react';
 import type { Place } from '../../types/places';
 import { useTheme } from '../../contexts/ThemeContext';
-import { motion } from 'framer-motion';
 import { MapPin } from 'lucide-react';
 
 interface PlaceCardProps {
@@ -21,29 +20,26 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, selected, onClick, classNa
   const fallbackInitial = title?.trim()?.charAt(0)?.toUpperCase() || 'P';
 
   return (
-    <motion.article
+    <article
       onClick={() => onClick(place)}
-      className={`elite-card-static group flex h-full min-h-0 cursor-pointer flex-col overflow-hidden p-3 ${
-        selected
-          ? (theme === 'dark' ? 'ring-1 ring-sky-500/50' : 'ring-1 ring-sky-300')
-          : ''
-      } ${className ?? ''}`}
+      className={`cv-card-lift group flex h-full min-h-0 cursor-pointer flex-col gap-1 overflow-hidden rounded-2xl border border-[var(--cv-surface-3)] p-1 ${
+        theme === 'dark' ? 'bg-[#131313]' : 'bg-white'
+        } ${selected ? 'ring-1 ring-[var(--color-brand)]' : ''} ${className ?? ''}`}
     >
-      <div className="cv-card-surface-muted relative h-[220px] w-full shrink-0 overflow-hidden rounded-[28px] bg-slate-100">
+      <div className="relative h-[220px] w-full shrink-0 overflow-hidden rounded-xl bg-slate-100">
         {hasRemoteImage ? (
           <img
             src={image}
             alt={title}
-            className="h-full w-full object-cover transition-transform duration-[3500ms] group-hover:scale-105"
+            className="h-full w-full object-cover"
             loading="lazy"
             decoding="async"
             sizes="(min-width: 1024px) 390px, (min-width: 640px) 50vw, 100vw"
           />
         ) : (
           <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(14,165,233,0.38),transparent_34%),radial-gradient(circle_at_80%_0%,rgba(16,185,129,0.36),transparent_30%),linear-gradient(135deg,#0f172a,#0369a1_52%,#14b8a6)]" />
-            <div className="absolute inset-0 bg-black/10" />
-            <div className="relative flex h-20 w-20 items-center justify-center rounded-[28px] bg-white/20 text-4xl font-black text-white shadow-2xl backdrop-blur-md">
+            <div className="absolute inset-0 bg-[linear-gradient(135deg,#131313_0%,#3a3a3a_100%)]" />
+            <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 text-4xl font-black text-white backdrop-blur-md">
               {fallbackInitial}
             </div>
           </div>
@@ -68,12 +64,13 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, selected, onClick, classNa
           </div>
         )}
       </div>
-      <div className="flex min-h-0 flex-1 flex-col px-2 pb-2 pt-4">
-        <h3 className={`truncate text-lg font-black leading-6 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>{title}</h3>
-
-        <p className={`mt-2 line-clamp-2 min-h-[2.75rem] text-sm leading-[1.45] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-500'}`}>{description}</p>
+      <div className="flex min-h-[24px] flex-col justify-center px-3 py-2">
+        <h3 className={`truncate text-sm font-normal leading-5 ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>{title}</h3>
+        <p className={`mt-0.5 truncate text-xs leading-4 ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'}`}>
+          {[locationString, description].filter(Boolean).join(' · ')}
+        </p>
       </div>
-    </motion.article>
+    </article>
   );
 };
 

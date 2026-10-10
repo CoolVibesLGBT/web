@@ -896,16 +896,6 @@ function AppContent() {
     }
 
     const routeTitles: Record<string, string> = {
-      '/settings': t('settings.title', { defaultValue: 'Settings' }),
-      '/search': t('app.nav.search', { defaultValue: 'Search' }),
-      '/messages': t('app.nav.messages', { defaultValue: 'Chat' }),
-      '/notifications': t('app.nav.notifications', { defaultValue: 'Notifications' }),
-      '/nearby': t('app.nav.nearby', { defaultValue: 'Nearby' }),
-      '/match': t('app.nav.match', { defaultValue: 'Match' }),
-      '/places': t('app.nav.places', { defaultValue: 'Places' }),
-      '/classifieds': t('app.nav.classifieds', { defaultValue: 'Classifieds' }),
-      '/referrals': t('app.nav.referrals', { defaultValue: 'Referrals' }),
-      '/checkin': t('app.nav.checkin', { defaultValue: 'Check-In' }),
       '/wallet': t('wallet.title', { defaultValue: 'Wallet' }),
       '/premium': t('premium.title', { defaultValue: 'Premium' }),
     };

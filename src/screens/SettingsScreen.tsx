@@ -18,6 +18,7 @@ import {
     ShieldCheck,
     Lightbulb,
     Search,
+    ArrowLeft,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
@@ -27,6 +28,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from '@/router';
 import { api } from '../services/api';
 import { openExternalUrl } from '../platform/runtime';
+import { getSafeImageURLEx } from '../helpers/helpers';
 import ConfirmationModal from '../components/ui/ConfirmationModal';
 import LanguageSelectorModal from '../components/ui/LanguageSelector';
 import Switch from '../components/ui/Switch';
@@ -269,16 +271,26 @@ export default function SettingsScreen() {
     const rowHover = 'hover:bg-[var(--cv-surface-2-hover)]';
 
     const displayName = user?.displayname || user?.username || '';
-    const avatarUrl = user?.profile_image_url || '';
+    const avatarUrl = getSafeImageURLEx((user as any)?.public_id, (user as any)?.avatar, 'icon')
+      || user?.profile_image_url
+      || '';
 
     return (
         <div className={`skyline-page-scroll w-full ${pageBg} text-[var(--cv-neutral-1)]`}>
-            <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col px-4 pb-10 pt-[72px] md:px-6">
-                {/* iOS large title */}
-                <h1 className="pt-2 text-[34px] font-bold leading-tight tracking-tight">
+            <div className="sticky top-0 z-20 flex h-[53px] items-center gap-3 border-b border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-soft)] pl-4 pr-5 backdrop-blur-[12px] md:pr-6">
+                <button
+                    type="button"
+                    onClick={() => navigate(-1)}
+                    aria-label={t('app.back', { defaultValue: 'Back' })}
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                </button>
+                <h1 className="text-[20px] font-bold leading-tight tracking-tight">
                     {t('settings.title', { defaultValue: 'Settings' })}
                 </h1>
-
+            </div>
+            <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col px-4 pb-10 pt-4 md:px-6">
                 {/* iOS search field */}
                 <div className={`mt-3 flex h-9 items-center gap-2 rounded-[10px] px-2.5 ${isDark ? 'bg-white/10' : 'bg-black/[0.06]'}`}>
                     <Search className={`h-4 w-4 shrink-0 ${secondaryColor}`} />

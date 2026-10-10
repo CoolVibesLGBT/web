@@ -15,6 +15,7 @@ import {
   Eye,
   Users,
   AlertCircle,
+  ArrowLeft,
 } from 'lucide-react';
 import { api } from '../services/api';
 import { useAtom } from 'jotai';
@@ -199,34 +200,43 @@ const NotificationsScreen: React.FC = () => {
 
   return (
     <div className="skyline-page-scroll w-full bg-[var(--cv-page-bg)] text-[var(--cv-neutral-1)]">
-      <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col gap-5 px-4 pb-10 pt-24 md:px-6 md:pt-28">
-        <div className="flex items-center justify-between gap-3">
-          <h1 className="pt-2 text-[34px] font-bold leading-tight tracking-tight">
+      <div className="sticky top-0 z-20 flex h-[53px] items-center justify-between gap-3 border-b border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-soft)] pl-4 pr-5 backdrop-blur-[12px] md:pr-6">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            aria-label={t('app.back', { defaultValue: 'Back' })}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+          <h1 className="text-[20px] font-bold leading-tight tracking-tight">
             {t('notifications.title')}
           </h1>
-          <div className="flex shrink-0 items-center gap-2">
-            <button
-              type="button"
-              onClick={markAllAsRead}
-              disabled={unreadCount === 0}
-              aria-label={t('notifications.mark_all_read')}
-              className="flex h-10 items-center gap-1.5 rounded-[16px] bg-[var(--cv-neutral-1)] px-3.5 text-[13px] font-semibold text-[var(--cv-page-bg)] transition-all hover:bg-[var(--cv-neutral-1-hover)] active:scale-[0.98] disabled:cursor-default disabled:opacity-40"
-            >
-              <CheckCheck className="h-4 w-4 shrink-0" />
-              <span className="hidden sm:inline">{t('notifications.mark_all_read')}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate('/settings')}
-              aria-label={t('notifications.settings')}
-              title={t('notifications.settings')}
-              className="flex h-10 w-10 items-center justify-center rounded-[16px] bg-[var(--cv-surface-3)] text-[var(--cv-neutral-1)] transition-all hover:bg-[var(--cv-surface-3-hover)]"
-            >
-              <Settings className="h-4 w-4" />
-            </button>
-          </div>
         </div>
-
+        <div className="flex shrink-0 items-center gap-2">
+          <button
+            type="button"
+            onClick={markAllAsRead}
+            disabled={unreadCount === 0}
+            aria-label={t('notifications.mark_all_read')}
+            className="flex h-10 items-center gap-1.5 rounded-[16px] bg-[var(--cv-neutral-1)] px-3.5 text-[13px] font-semibold text-[var(--cv-page-bg)] transition-all hover:bg-[var(--cv-neutral-1-hover)] active:scale-[0.98] disabled:cursor-default disabled:opacity-40"
+          >
+            <CheckCheck className="h-4 w-4 shrink-0" />
+            <span className="hidden sm:inline">{t('notifications.mark_all_read')}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/settings')}
+            aria-label={t('notifications.settings')}
+            title={t('notifications.settings')}
+            className="flex h-10 w-10 items-center justify-center rounded-[16px] bg-[var(--cv-surface-3)] text-[var(--cv-neutral-1)] transition-all hover:bg-[var(--cv-surface-3-hover)]"
+          >
+            <Settings className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+      <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col gap-5 px-4 pb-10 pt-4 md:px-6">
         {/* Summary */}
         <section className="overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] bg-[var(--cv-card-bg-solid)]">
           <div className="flex items-center justify-between gap-4 p-4">

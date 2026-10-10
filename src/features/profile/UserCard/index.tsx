@@ -73,7 +73,10 @@ const CompactView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blo
       onClick={handleProfileClick}
     >
       <div className="relative aspect-square overflow-hidden">
-        <img src={avatarURL} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-top" />
+        <span className={`absolute inset-0 flex items-center justify-center text-2xl font-black ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-400'}`}>
+          {(user.displayname || user.name || 'A').charAt(0).toUpperCase()}
+        </span>
+        <img src={avatarURL} alt="" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = 'none'; }} className="absolute inset-0 h-full w-full object-cover object-top" />
         {user.isOnline && (
           <div className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-green-500 border border-white" />
         )}
@@ -124,8 +127,11 @@ const ListView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blocke
       }`}
     onClick={handleProfileClick}
   >
-    <div className="w-[72px] h-[72px] shrink-0 overflow-hidden">
-      <img src={avatarURL} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-top" />
+    <div className="relative w-[72px] h-[72px] shrink-0 overflow-hidden">
+      <span className={`absolute inset-0 flex items-center justify-center text-xl font-black ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-400'}`}>
+        {(user.displayname || user.name || 'A').charAt(0).toUpperCase()}
+      </span>
+      <img src={avatarURL} alt="" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = 'none'; }} className="absolute inset-0 h-full w-full object-cover object-top" />
     </div>
 
     <div className="flex-1 flex flex-col justify-center px-3 min-w-0 overflow-hidden">
@@ -194,7 +200,10 @@ const CardView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blocke
       onClick={handleProfileClick}
     >
       <div className="relative aspect-[3/4] overflow-hidden">
-        <img src={avatarURL} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-top" />
+        <span className={`absolute inset-0 flex items-center justify-center text-4xl font-black ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-400'}`}>
+          {(user.displayname || user.name || 'A').charAt(0).toUpperCase()}
+        </span>
+        <img src={avatarURL} alt="" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = 'none'; }} className="absolute inset-0 h-full w-full object-cover object-top" />
         {user.isOnline && (
           <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 border border-white/20">
             <div className="w-1.5 h-1.5 rounded-full bg-green-400" />

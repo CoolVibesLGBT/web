@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import type { PanInfo } from 'framer-motion';
-import { Heart, X, Star, MapPin, Camera, Shield, Sparkles, MessageCircle, Ghost, RefreshCw, Info } from 'lucide-react';
+import { Heart, X, Star, MapPin, Camera, Shield, Sparkles, MessageCircle, Ghost, RefreshCw, Info, ArrowLeft } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -1114,8 +1114,18 @@ const MatchScreen: React.FC = () => {
 
     return (
       <section className="relative">
-        <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+        <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
           <div className="cv-tab-row">
+            <div className="flex shrink-0 items-center pl-4">
+              <button
+                type="button"
+                onClick={() => navigate('/')}
+                aria-label={t('app.back', { defaultValue: 'Back' })}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+            </div>
             {tabs.map((tab) => {
               const active = historyTab === tab.id;
               return (
@@ -1370,7 +1380,7 @@ const MatchScreen: React.FC = () => {
   if (isLoading) {
     return (
       <div className={`skyline-page-scroll w-full ${pageTextColor}`}>
-        <div className="mx-auto flex min-h-full w-full max-w-7xl flex-col gap-2 px-1 pb-8 pt-0 md:px-2">
+        <div className="mx-auto flex min-h-full w-full max-w-7xl flex-col gap-2 px-1 pb-8 md:px-2">
           {renderMatchHeader()}
           <div className="flex min-h-[430px] items-center justify-center px-4">
             <div className="elite-bubble rounded-[32px] px-10 py-12 text-center">
@@ -1560,7 +1570,7 @@ const MatchScreen: React.FC = () => {
       </AnimatePresence>
 
       <div className={`skyline-page-scroll w-full ${pageTextColor}`}>
-        <div className="mx-auto flex min-h-full w-full max-w-7xl flex-col gap-2 px-1 pb-8 pt-0 md:px-2">
+        <div className="mx-auto flex min-h-full w-full max-w-7xl flex-col gap-2 px-1 pb-8 md:px-2">
           {renderMatchHeader()}
           <div className="w-full">
             <AnimatePresence mode="wait">

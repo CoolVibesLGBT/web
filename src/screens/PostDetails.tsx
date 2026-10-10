@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import { useParams, useNavigate } from '@/router';
 import { useTheme } from '../contexts/ThemeContext';
 import Post, { type PostProps, type ApiPost } from '../features/post/Post';
@@ -243,10 +244,22 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
 
   const pageClassName = 'skyline-page-scroll w-full';
   const contentClassName = 'mx-auto w-full max-w-[760px] px-1 pb-8 pt-24 md:px-2 md:pt-28';
-  const detailCardClassName = 'skyline-feed-card elite-card-static overflow-hidden';
+  const detailCardClassName = 'cv-item overflow-hidden';
   const panelClassName = theme === 'dark'
     ? 'cv-card-surface-soft border-white/10 text-zinc-300'
     : 'border-white/70 bg-white/75 text-slate-600';
+  const backHeader = (
+    <div className="mb-3 flex items-center gap-3 px-1 md:px-2">
+      <button
+        type="button"
+        onClick={() => navigate(-1)}
+        aria-label={t('app.back', { defaultValue: 'Back' })}
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
+      >
+        <ArrowLeft className="h-4 w-4" />
+      </button>
+    </div>
+  );
   const replyPosts = React.useMemo(
     () => (post?.children || []).filter((child) => !isDeletedMarker(child.deleted_at)),
     [post?.children, isDeletedMarker]
@@ -281,6 +294,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
     return (
       <div className={pageClassName}>
         <main className={contentClassName}>
+          {backHeader}
           <div className={detailCardClassName}>
             <PostSkeleton theme={theme} />
           </div>
@@ -293,6 +307,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
     return (
       <div className={pageClassName}>
         <div className={contentClassName}>
+          {backHeader}
           <div className={`rounded-[30px] border p-10 text-center backdrop-blur-3xl ${panelClassName}`}>
             <p className="text-sm font-black">{t('post_details.deleted')}</p>
           </div>
@@ -305,6 +320,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
     return (
       <div className={pageClassName}>
         <div className={contentClassName}>
+          {backHeader}
           <div className={`rounded-[30px] border p-10 text-center backdrop-blur-3xl ${panelClassName}`}>
             <p className="text-sm font-black text-red-500">{error || t('post_details.errors.not_found')}</p>
           </div>
@@ -321,6 +337,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
         >{serializeJsonLd(postJsonLd)}</script>
       )}
       <main className={contentClassName}>
+        {backHeader}
         <div className="space-y-6">
           <div className={detailCardClassName}>
             <Post
@@ -341,13 +358,9 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
               <div className={`px-2 text-sm font-semibold ${theme === 'dark' ? 'text-zinc-300' : 'text-slate-700'}`}>
                 Replies ({replyPosts.length})
               </div>
-              <div className="columns-1 gap-5 sm:columns-2">
+              <div>
                 {replyPosts.map((reply) => (
-                  <div
-                    key={reply.id}
-                    style={replyMasonryItemStyle}
-                    className="mb-5 break-inside-avoid skyline-feed-card elite-card-static overflow-hidden"
-                  >
+                  <div key={reply.id} style={replyMasonryItemStyle}>
                     <Post
                       post={reply}
                       onPostClick={restProps.onPostClick || handlePostClick}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { MapPin, Loader, RefreshCw, Grid, Map as MapIcon, ZoomIn, ZoomOut, LocateFixed, Shrink, X, Search } from 'lucide-react';
+import { MapPin, Loader, RefreshCw, Grid, Map as MapIcon, ZoomIn, ZoomOut, LocateFixed, Shrink, X, Search, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 import { api } from '../services/api';
@@ -699,7 +699,7 @@ const PlacesScreen: React.FC = () => {
 
       {/* Scrollable overlay — always the same structure */}
       <div className="relative z-10 h-full overflow-y-auto skyline-page-scroll">
-        <div className={`flex flex-col px-1 pt-0 md:px-2 ${
+        <div className={`flex flex-col px-1 md:px-2 ${
           viewMode === 'map' ? 'pointer-events-none min-h-full' : 'min-h-full'
         }`}>
 
@@ -707,9 +707,19 @@ const PlacesScreen: React.FC = () => {
           <section className="relative">
 
             {/* ── View Mode Bar ──────────────────────────────────────────────── */}
-            <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+            <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
               {/* View switcher */}
               <div className="cv-tab-row">
+                <div className="flex shrink-0 items-center pl-4">
+                  <button
+                    type="button"
+                    onClick={() => navigate('/')}
+                    aria-label={t('app.back', { defaultValue: 'Back' })}
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                  </button>
+                </div>
                 {(['grid', 'map'] as const).map((mode) => {
                   const isActive = viewMode === mode;
                   const Icon = mode === 'grid' ? Grid : MapIcon;

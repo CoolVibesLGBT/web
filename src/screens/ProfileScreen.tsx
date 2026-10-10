@@ -4065,7 +4065,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           type="application/ld+json"
         >{serializeJsonLd(profileJsonLd)}</script>
       )}
-      <div ref={profileViewRef} className={inline || isEmbed ? 'w-full' : 'mx-auto w-full pb-8 pt-0'}>
+      <div ref={profileViewRef} className={inline || isEmbed ? 'w-full' : 'mx-auto w-full pb-8 pt-[72px]'}>
         {isEditMode ? (
           // Edit Profile View
           <main className={`flex-1 w-full min-w-0 overflow-hidden rounded-[36px] ${theme === 'dark' ? 'cv-card-surface-soft' : 'bg-white/70'}`}>

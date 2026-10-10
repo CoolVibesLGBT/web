@@ -26,6 +26,7 @@ import {
     List,
     Map as MapIcon,
     RefreshCw,
+    ArrowLeft,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type * as Leaflet from 'leaflet';
@@ -436,11 +437,21 @@ export default function CheckInScreen() {
                 </div>
             )}
 
-            <div className={`relative z-10 flex flex-col ${isMapView ? 'h-full pointer-events-none px-1 pt-0 md:px-2' : 'px-1 pb-8 pt-0 md:px-2'}`}>
+            <div className={`relative z-10 flex flex-col ${isMapView ? 'h-full pointer-events-none px-1 md:px-2' : 'px-1 pb-8 md:px-2'}`}>
                 <div className="pointer-events-auto z-50 mx-auto w-full max-w-7xl">
                     <section className="relative">
-                        <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+                        <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
                             <div className="cv-tab-row">
+                                <div className="flex shrink-0 items-center pl-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/')}
+                                        aria-label={t('app.back', { defaultValue: 'Back' })}
+                                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
+                                    >
+                                        <ArrowLeft className="h-4 w-4" />
+                                    </button>
+                                </div>
                                 {(
                                     [
                                         { id: 'map' as const, icon: MapIcon, label: t('nearby.view_map') },

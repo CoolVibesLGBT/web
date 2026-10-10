@@ -2583,7 +2583,7 @@ const MessagesScreen: React.FC = () => {
   }
 
   return (
-    <div className="h-full w-full overflow-hidden pt-[72px]">
+    <div className="h-full w-full overflow-hidden">
       <div className="mx-auto flex h-full min-h-0 w-full max-w-7xl flex-row overflow-hidden">
         <div
           className={`flex flex-row h-full w-full flex-1 min-h-0 overflow-hidden ${theme === 'dark'
@@ -2677,7 +2677,7 @@ const MessagesScreen: React.FC = () => {
                         type="button"
                         onClick={() => setActiveFilter(tab.id)}
                         style={{ minWidth: 0, flex: 'none' }}
-                        className={`cv-tab !h-12 !pt-0 !text-[13px] ${isActive ? 'is-active' : ''}`}
+                        className={`cv-tab !h-12 !text-[13px] ${isActive ? 'is-active' : ''}`}
                       >
                         <span className="min-w-0 truncate px-2">{tab.label}</span>
                         <span className={`cv-tab-underline ${isActive ? 'is-on' : ''}`} />

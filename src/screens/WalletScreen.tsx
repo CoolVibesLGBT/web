@@ -711,14 +711,14 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
 
   const content = (
     <>
-      <div className="mx-auto w-full max-w-5xl px-1 pb-8 pt-0 md:px-2">
+      <div className="mx-auto w-full max-w-5xl px-1 pb-8 md:px-2">
         <main className={`flex-1 w-full min-w-0 ${theme === 'dark' ? 'border-x border-white/10' : 'border-x border-gray-200/50'}`}>
           <div className={`min-h-full ${theme === 'dark' ? 'cv-card-surface-solid' : 'bg-white'}`}>
             <div className={`max-w-4xl mx-auto border-x ${theme === 'dark' ? 'border-white/10' : 'border-gray-200/50'}`}>
               {/* Tabs — kept outside the motion.div below: framer-motion leaves an
                   inline transform on its element even at rest, which breaks
                   position:sticky on descendants (the tab bar needs to stick). */}
-              <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+              <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
                 <div className="cv-tab-row">
                   {[
                     { id: 'overview', label: t('wallet.overview') || 'Overview' },

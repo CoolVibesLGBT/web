@@ -13,6 +13,7 @@ import {
   GraduationCap,
   PawPrint,
   RefreshCw,
+  ArrowLeft,
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
@@ -338,7 +339,7 @@ export default function ClassifiedsScreen() {
     <motion.div
       ref={containerRef}
       onScroll={handleScroll}
-      className="skyline-page-scroll w-full pt-0"
+      className="skyline-page-scroll w-full"
       initial={{ opacity: 0, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 0 }}
@@ -346,8 +347,18 @@ export default function ClassifiedsScreen() {
     >
       <div className="flex min-h-full flex-col">
         <div className="mx-auto w-full max-w-7xl">
-          <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+          <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
             <div className="cv-tab-row">
+              <div className="flex shrink-0 items-center pl-4">
+                <button
+                  type="button"
+                  onClick={() => navigate('/')}
+                  aria-label={t('app.back', { defaultValue: 'Back' })}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </button>
+              </div>
               {classifiedTabs.map((tab) => {
                 const Icon = tab.icon;
                 const active = activeTab === tab.id;

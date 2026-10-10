@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo, type CSSProperties } from 'react';
-import { Users, Grid, List, Square, RefreshCw, X, Map as MapIcon, Bubbles, Lock } from 'lucide-react';
+import { Users, Grid, List, Square, RefreshCw, X, Map as MapIcon, Bubbles, Lock, ArrowLeft } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { UserCard } from '../features/profile/UserCard';
@@ -635,11 +635,21 @@ const NearbyScreen: React.FC = () => {
         </div>
       )}
 
-      <div className={`relative z-10 flex flex-col ${isImmersiveView ? 'h-full pointer-events-none px-2 pt-0' : 'px-1 pb-8 pt-0 md:px-2'}`}>
+      <div className={`relative z-10 flex flex-col ${isImmersiveView ? 'h-full pointer-events-none px-2' : 'px-1 pb-8 md:px-2'}`}>
         <div className={`pointer-events-auto z-50 mx-auto w-full ${isImmersiveView ? 'max-w-5xl' : 'max-w-7xl'}`}>
           <section className="relative">
-            <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+            <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
               <div className="cv-tab-row">
+                <div className="flex shrink-0 items-center pl-4">
+                  <button
+                    type="button"
+                    onClick={() => navigate('/')}
+                    aria-label={t('app.back', { defaultValue: 'Back' })}
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                  </button>
+                </div>
                 {(
                   [
                     { id: 'bubble' as const, icon: Bubbles, label: t('nearby.view_bubble'), locked: isPremiumRequired },

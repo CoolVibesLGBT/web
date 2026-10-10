@@ -203,7 +203,7 @@ const HomeScreen: React.FC = () => {
       className="flex h-full flex-col overflow-y-auto no-scrollbar">
 
       {(
-        <div className="cv-tab-bar cv-tab-bar--top -mx-1">
+        <div className="cv-tab-bar cv-tab-bar--top">
           <div className="cv-tab-row">
             {liveEnabled && (
               <button

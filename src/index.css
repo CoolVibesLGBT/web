@@ -687,11 +687,8 @@ body,
 
 /* Tab bar — mirrors uikit/demo/twitter.html's .feed-head/.tab/.tab-underline:
    flat full-width text tabs with a sliding accent underline, not a
-   segmented pill control. The bar carries a 72px top pad so its background
-   starts at the viewport top, directly behind the floating shell header
-   (top-4 + ~56px pill): tabs sit flush below the header with no dead gap,
-   and the stuck bar reads as one unit with the header. Inline (non-page)
-   usages opt out with !pt-0. */
+   segmented pill control. Slim 53px bar that sticks just below the floating
+   shell header; page containers clear the header with their own top pad. */
 .cv-tab-bar {
   position: sticky;
   top: 0;
@@ -924,6 +921,16 @@ body,
 
 .elite-btn {
   @apply rounded-full transition-all duration-500 active:scale-90 hover:scale-[1.1] flex items-center justify-center;
+}
+
+/* Card lift — mirrors interface-main NFTCard hover: translateY(-4px) with a
+   surface3-tinted shadow, 200ms standard easing. */
+.cv-card-lift {
+  transition: transform 200ms var(--cv-ease-standard), box-shadow 200ms var(--cv-ease-standard), background-color 100ms var(--cv-ease-standard);
+}
+.cv-card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 4px 12px -3px var(--cv-surface-3), 0px 2px 5px -2px var(--cv-surface-3);
 }
 
 .sky-gradient {
