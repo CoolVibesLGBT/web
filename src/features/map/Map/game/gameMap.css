@@ -28,7 +28,13 @@
 ----------------------------------------- */
 
 .gm-player-wrap {
-  position: relative;
+  /* NOT: `position` bilerek YOK — bu eleman doğrudan MapLibre Marker root'u.
+     MapLibre'nin `.maplibregl-marker { position:absolute; left:0; top:0 }`
+     kuralı geçerli kalmalı; `relative` yazmak onu ezer, marker'ları normal
+     akışa sokar: üst üste yığılır, birbirini iter ve harita sürüklenip yeni
+     marker eklendikçe MEVCUT marker'lar zıplar ("sürükleyince lokasyon
+     değişiyor" bug'ı). İçerideki absolute çocuklar için konumlanan ata
+     görevi zaten MapLibre'nin absolute'u ile görülür. */
   width: 10px;
   height: 10px;
   pointer-events: none;
@@ -126,7 +132,9 @@
 ----------------------------------------- */
 
 .gm-game-object {
-  position: relative;
+  /* NOT: `position` bilerek YOK — gerekçe yukarıda (.gm-player-wrap).
+     Marker root'u MapLibre'nin absolute konumlandırmasına bırakılır;
+     `relative` burada da aynı zıplama/kayma bug'ına yol açıyordu. */
   width: 46px;
   height: 62px;
   cursor: pointer;
