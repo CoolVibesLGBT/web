@@ -200,10 +200,10 @@ const HomeScreen: React.FC = () => {
         overflowY: 'auto',
         WebkitOverflowScrolling: 'touch',
       }}
-      className="flex h-full flex-col overflow-y-auto no-scrollbar">
+      className="flex h-full flex-col overflow-y-auto no-scrollbar max-md:pt-[84px]">
 
       {(
-        <div className="cv-tab-bar cv-tab-bar--top">
+        <div className="cv-tab-bar cv-tab-bar--top cv-tab-bar--below-hud max-md:bg-[var(--cv-card-bg-solid)]">
           <div className="cv-tab-row">
             {liveEnabled && (
               <button

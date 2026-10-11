@@ -579,18 +579,49 @@ const PlacesScreen: React.FC = () => {
             </div>
 
             <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
-              <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
-                <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
-                  <MapPin className="h-3.5 w-3.5 shrink-0" />
-                  {filteredPlaces.length}
+              <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
+                <MapPin className="h-3.5 w-3.5 shrink-0" />
+                {filteredPlaces.length}
+              </span>
+              {searchQuery && (
+                <span className="flex h-9 min-w-0 shrink-0 items-center gap-1.5 rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[13px] font-semibold text-[var(--cv-neutral-2)]">
+                  <Search className="h-3.5 w-3.5 shrink-0" />
+                  <span className="max-w-[140px] truncate md:max-w-[200px]">{searchQuery}</span>
                 </span>
-                {searchQuery && (
-                  <span className="flex h-9 min-w-0 shrink-0 items-center gap-1.5 rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[13px] font-semibold text-[var(--cv-neutral-2)]">
-                    <Search className="h-3.5 w-3.5 shrink-0" />
-                    <span className="max-w-[140px] truncate md:max-w-[200px]">{searchQuery}</span>
-                  </span>
-                )}
-              </div>
+              )}
+
+              {/* ── Category Tags (sayaç ile yenile arasında, ortada) ── */}
+              {categories.length > 1 && (
+                <div
+                  className={`flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto no-scrollbar ${
+                    viewMode === 'map'
+                      ? isDark
+                        ? 'rounded-full border border-white/8 bg-black/40 px-2 py-1 backdrop-blur-2xl'
+                        : 'rounded-full border border-white/60 bg-white/75 px-2 py-1 backdrop-blur-2xl shadow-sm'
+                      : ''
+                  }`}
+                >
+                  {categories.map((cat: any) => {
+                    const isAll = cat === 'all';
+                    const isSelected = selectedCategory === cat;
+                    const label = isAll ? (t('places.all_categories') || 'Tümü') : `#${cat}`;
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setSelectedCategory(cat)}
+                        aria-pressed={isSelected}
+                        className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2 text-[13px] font-semibold transition-colors ${isSelected
+                          ? 'bg-[var(--color-brand)] text-white'
+                          : 'bg-[var(--cv-surface-3)] text-[var(--cv-neutral-2)] hover:bg-[var(--cv-surface-3-hover)]'
+                          }`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
 
               <button
                 type="button"
@@ -603,52 +634,6 @@ const PlacesScreen: React.FC = () => {
                 <RefreshCw className={`h-4 w-4 ${loadingInitial && places.length === 0 ? 'animate-spin' : ''}`} />
               </button>
             </div>
-
-            {/* ── Category Tags ──────────────────────────────────────────────── */}
-            {categories.length > 1 && (
-              <motion.div
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-                className={`flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5 ${
-                  viewMode === 'map'
-                    ? isDark
-                      ? 'rounded-2xl border border-white/8 bg-black/40 px-2 py-1.5 backdrop-blur-2xl'
-                      : 'rounded-2xl border border-white/60 bg-white/75 px-2 py-1.5 backdrop-blur-2xl shadow-sm'
-                    : ''
-                }`}
-              >
-                {categories.map((cat: any) => {
-                  const isAll = cat === 'all';
-                  const isSelected = selectedCategory === cat;
-                  const label = isAll ? (t('places.all_categories') || 'Tümü') : `#${cat}`;
-                  return (
-                    <motion.button
-                      key={cat}
-                      type="button"
-                      onClick={() => setSelectedCategory(cat)}
-                      whileTap={{ scale: 0.95 }}
-                      className={`relative h-8 whitespace-nowrap rounded-full px-3.5 text-[10px] font-black uppercase tracking-[0.14em] transition-colors ${
-                        isSelected
-                          ? 'text-white'
-                          : isDark
-                            ? 'text-zinc-500 hover:text-white'
-                            : 'text-slate-400 hover:text-slate-900'
-                      }`}
-                    >
-                      {isSelected && (
-                        <motion.span
-                          layoutId="placesCategoryIndicator"
-                          className="absolute inset-0 rounded-full bg-[var(--color-brand)] shadow-md shadow-[var(--color-brand-glow)]"
-                          transition={{ type: 'spring', stiffness: 380, damping: 34 }}
-                        />
-                      )}
-                      <span className="relative z-10">{label}</span>
-                    </motion.button>
-                  );
-                })}
-              </motion.div>
-            )}
           </section>
         </div>
 

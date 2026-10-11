@@ -245,15 +245,18 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
   }, [postId, processingAttachmentCount, handlePostUpdate, resolveFetchedPost, isProcessingAttachment]);
 
   const pageClassName = 'skyline-page-scroll w-full';
+  // Check-in detay liste ile birebir aynı genişlikte: kenar boşluksuz, Post
+  // kendi iç ritmini korur (liste görünümünde de sarmalayıcı yok).
   const contentClassName = isCheckInRoute
-    ? 'mx-auto w-full max-w-[760px] px-1 pb-8 md:px-2'
-    : 'mx-auto w-full max-w-[760px] px-1 pb-8 pt-24 md:px-2 md:pt-28';
+    ? 'mx-auto w-full max-w-[760px] pb-8'
+    : 'mx-auto w-full max-w-[760px] px-1 pb-8 md:px-2';
+  const detailCardClassName = isCheckInRoute ? 'overflow-hidden' : 'cv-item overflow-hidden';
   const detailCardClassName = 'cv-item overflow-hidden';
   const panelClassName = theme === 'dark'
     ? 'cv-card-surface-soft border-white/10 text-zinc-300'
     : 'border-white/70 bg-white/75 text-slate-600';
   const backHeader = (
-    <div className="mb-3 flex items-center gap-3 px-1 md:px-2">
+    <div className="sticky top-0 z-20 mb-3 flex h-[53px] items-center gap-3 border-b border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-soft)] pl-4 pr-5 backdrop-blur-[12px] md:pr-6">
       <button
         type="button"
         onClick={() => navigate(-1)}
@@ -262,6 +265,9 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
       >
         <ArrowLeft className="h-4 w-4" />
       </button>
+      <h1 className="text-[20px] font-bold leading-tight tracking-tight">
+        {t('post_details.title', { defaultValue: 'Post' })}
+      </h1>
     </div>
   );
   // Check-in detay sayfası Settings ekranındaki gibi tam genişlikte, sticky

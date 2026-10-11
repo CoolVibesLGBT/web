@@ -195,7 +195,7 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
                   <p className="truncate text-[13px] font-extrabold text-white leading-tight">
                     {user.displayname || user.username}
                   </p>
-                  <CheckCircle2 className="h-3 w-3 shrink-0 text-sky-400 fill-sky-400/20" />
+                  <CheckCircle2 className="h-3 w-3 shrink-0 text-[var(--color-brand)] fill-[var(--color-brand)]/20" />
                 </div>
                 <p className="text-[10px] font-semibold text-white/50 truncate">@{user.username}{age !== null ? ` · ${age}` : ''}</p>
                 {followers !== undefined && followers > 0 && (
@@ -205,7 +205,7 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
                 )}
 
                 {/* Follow CTA */}
-                <div className="mt-1.5 flex items-center justify-center gap-1 rounded-xl bg-white/[0.12] group-hover:bg-sky-500 backdrop-blur-sm py-1.5 text-[10px] font-bold text-white transition-all duration-200 border border-white/10 group-hover:border-sky-400">
+                <div className="mt-1.5 flex items-center justify-center gap-1 rounded-xl bg-white/[0.12] group-hover:bg-[var(--color-brand)] backdrop-blur-sm py-1.5 text-[10px] font-bold text-white transition-all duration-200 border border-white/10 group-hover:border-[var(--color-brand)]">
                   <UserPlus className="h-2.5 w-2.5" />
                   <span>Takip Et</span>
                 </div>
@@ -274,7 +274,7 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
               transition={{ delay: index * 0.04 }}
               className={`group relative overflow-hidden rounded-3xl border ${
                 isDark
-                  ? 'cv-card-surface-solid border-white/10 hover:border-sky-500/40'
+                  ? 'cv-card-surface-solid border-white/10 hover:border-[var(--color-brand)]/40'
                   : 'border-gray-100 bg-white hover:border-gray-300'
               } aspect-[3/4] transition-all cursor-pointer`}
             >
@@ -291,9 +291,9 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
               <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-4 text-left">
                 <div className="flex items-center gap-1.5">
                   <p className="truncate text-base font-bold text-white">{user.displayname || user.username}</p>
-                  <CheckCircle2 className="h-4 w-4 text-sky-400 fill-sky-400/20 shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-[var(--color-brand)] fill-[var(--color-brand)]/20 shrink-0" />
                 </div>
-                <p className="text-xs font-semibold text-sky-300/90">@{user.username} {age !== null ? `· ${age} yaş` : ''}</p>
+                <p className="text-xs font-semibold text-[var(--color-brand)]/90">@{user.username} {age !== null ? `· ${age} yaş` : ''}</p>
               </div>
             </motion.button>
           );
@@ -310,8 +310,8 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
           <div className="flex items-center justify-between px-4 pb-3 pt-1">
             <div className="flex items-center gap-2.5">
               <span
-                className="flex h-8 w-8 items-center justify-center rounded-[14px] text-white shadow-lg shadow-sky-600/30"
-                style={{ background: 'linear-gradient(135deg,#0ea5e9 0%,#6366f1 100%)' }}
+                className="flex h-8 w-8 items-center justify-center rounded-[14px] text-white shadow-lg shadow-[var(--color-brand)]/30"
+                style={{ background: 'linear-gradient(135deg,#ff37c7 0%,#e500a5 100%)' }}
               >
                 <Sparkles className="h-4 w-4" />
               </span>

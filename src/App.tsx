@@ -1103,7 +1103,7 @@ function AppContent() {
                       <button
                         type="button"
                         onClick={handleShellBack}
-                        className="flex flex-col text-left"
+                        className="hidden min-w-0 flex-col text-left sm:flex"
                       >
                         <span className="text-[11px] font-bold tracking-[0.28em] uppercase dark:text-white leading-none">
                           {shellBackTitle}
@@ -1126,7 +1126,7 @@ function AppContent() {
                       <button
                         type="button"
                         onClick={() => navigateByNavId('pride')}
-                        className="flex flex-col text-left"
+                        className="hidden min-w-0 flex-col text-left sm:flex"
                       >
                         <span className="text-[11px] font-bold tracking-[0.4em] uppercase dark:text-white leading-none">
                           {DEFAULT_APP_NAME}

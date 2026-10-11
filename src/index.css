@@ -710,6 +710,14 @@ body,
    (top: 0) on every screen, floating pill header overlaps it visually. */
 .cv-tab-bar--top {
 }
+/* Yüzen HUD haplarıyla çakışan sayfalar için (yalnızca dar ekran): bar hem
+   akışta hem yapışıkken HUD'un altında durur — içerik logonun altından
+   başlar. Masaüstünde orijinal davranış korunur. */
+@media (max-width: 767px) {
+  .cv-tab-bar--below-hud {
+    top: 84px;
+  }
+}
 .cv-tab-row { position: relative; display: flex; width: 100%; }
 .cv-tab {
   position: relative;
