@@ -1103,12 +1103,12 @@ function AppContent() {
                       <button
                         type="button"
                         onClick={handleShellBack}
-                        className="hidden min-w-0 flex-col text-left sm:flex"
+                        className="flex min-w-0 flex-col text-left"
                       >
-                        <span className="text-[11px] font-bold tracking-[0.28em] uppercase dark:text-white leading-none">
+                        <span className="truncate text-[10px] font-bold uppercase leading-none tracking-[0.25em] dark:text-white sm:text-[11px] sm:tracking-[0.28em]">
                           {shellBackTitle}
                         </span>
-                        <span className="text-[8px] font-bold text-brand uppercase tracking-tighter mt-0.5">
+                        <span className="mt-0.5 hidden text-[8px] font-bold uppercase tracking-tighter text-brand sm:block">
                           {shellBackLabel}
                         </span>
                       </button>
@@ -1126,12 +1126,12 @@ function AppContent() {
                       <button
                         type="button"
                         onClick={() => navigateByNavId('pride')}
-                        className="hidden min-w-0 flex-col text-left sm:flex"
+                        className="flex min-w-0 flex-col text-left"
                       >
-                        <span className="text-[11px] font-bold tracking-[0.4em] uppercase dark:text-white leading-none">
+                        <span className="text-[10px] font-bold uppercase leading-none tracking-[0.25em] dark:text-white sm:text-[11px] sm:tracking-[0.4em]">
                           {DEFAULT_APP_NAME}
                         </span>
-                        <span className="text-[8px] font-bold text-brand uppercase tracking-tighter mt-0.5">
+                        <span className="mt-0.5 hidden text-[8px] font-bold uppercase tracking-tighter text-brand sm:block">
                           {DEFAULT_APP_MOTTO}
                         </span>
                       </button>
@@ -1141,7 +1141,7 @@ function AppContent() {
 
                 <div className="pointer-events-auto hidden min-w-0 justify-center lg:flex" />
 
-                <div className="flex items-center gap-3 pointer-events-auto justify-self-end relative">
+                <div className="flex items-center gap-3 pointer-events-auto justify-self-end relative col-start-3">
                   {normalizedPath === '/classifieds' && (
                     <button
                       type="button"
@@ -1680,7 +1680,7 @@ function AppContent() {
           )}
 
           {/* Middle Section */}
-          <main className={mainShellClassName}>
+          <main className={`${mainShellClassName} ${isLandingRoute || isAuthGateRoute ? '' : 'cv-center-col'}`}>
             <ChunkErrorBoundary>
               <Suspense fallback={<RouteLoader />}>
                 {routeElement}

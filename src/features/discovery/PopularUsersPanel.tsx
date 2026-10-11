@@ -304,6 +304,8 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
 
   /* ─── HORIZONTAL LAYOUT WRAPPER ─────────────────────────────────────── */
   if (variant === 'horizontal') {
+    // Veri yoksa başlık + boş satır bırakma — üst üste yığılmış ölü boşluk olur.
+    if (!isLoading && (error || users.length === 0)) return null;
     return (
       <div className="w-full">
         {showHeader && (

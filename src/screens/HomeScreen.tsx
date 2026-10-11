@@ -9,8 +9,9 @@ import VibesGL from '../features/post/VibesGL/VibesGL';
 import { AnimatePresence, motion } from 'framer-motion';
 import { isFeatureEnabled } from '@/config/featureFlags';
 import { resolvePublicAssetUrl } from '@/platform/runtime';
-import { useSetAtom } from 'jotai';
+import { useSetAtom, useAtom } from 'jotai';
 import { flowsStateAtom } from '@/state/flows';
+import { storiesStateAtom } from '@/state/stories';
 import { api } from '@/services/api';
 import type { ApiPost } from '@/features/post/Post';
 import {
@@ -49,6 +50,10 @@ const HomeScreen: React.FC = () => {
   const location = useLocation();
   const liveEnabled = isFeatureEnabled('live_enabled');
   const setFeedState = useSetAtom(flowsStateAtom);
+  const [storiesState] = useAtom(storiesStateAtom);
+  // Hikâye satırı boşken (yüklenmiyor + veri yok) 112px'lik ölü alan
+  // ayırtma — bar ile içerik arası boşluk gibi görünüyordu.
+  const reserveStoriesSpace = storiesState.isLoading || storiesState.items.length > 0;
   const [activeTab, setActiveTab] = useState('flows');
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
   const { setShowBottomBar } = useSettings();
@@ -117,7 +122,10 @@ const HomeScreen: React.FC = () => {
     const storiesShell = storiesShellRef.current;
     if (storiesShell) {
       storiesShell.style.opacity = progress.toFixed(3);
-      storiesShell.style.pointerEvents = progress < 0.2 ? 'none' : 'auto';
+      // Bar hikâye bloğunu ortadan kesmesin diye en ufak kaydırmada kapat:
+      // eşik yüksekte, yükseklik de kapanır, akış boşluğu yutar.
+      storiesShell.style.maxHeight = progress < 0.85 ? '0px' : '640px';
+      storiesShell.style.pointerEvents = progress < 0.85 ? 'none' : 'auto';
     }
     isTickingRef.current = false;
   }, []);
@@ -200,10 +208,10 @@ const HomeScreen: React.FC = () => {
         overflowY: 'auto',
         WebkitOverflowScrolling: 'touch',
       }}
-      className="flex h-full flex-col overflow-y-auto no-scrollbar max-md:pt-[84px]">
+      className="flex h-full flex-col overflow-y-auto no-scrollbar">
 
       {(
-        <div className="cv-tab-bar cv-tab-bar--top cv-tab-bar--below-hud max-md:bg-[var(--cv-card-bg-solid)]">
+        <div className="cv-tab-bar cv-tab-bar--top bg-[var(--cv-card-bg-solid)]">
           <div className="cv-tab-row">
             {liveEnabled && (
               <button
@@ -255,12 +263,13 @@ const HomeScreen: React.FC = () => {
         activeTab === "flows" && (
           <div
             ref={storiesShellRef}
-            className="flex-shrink-0 px-1 pb-4 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex flex-col gap-4"
+            className="flex-shrink-0 px-1 pb-4 transition-[opacity,max-height] duration-200 ease-out flex flex-col gap-4 overflow-hidden"
             style={{
               opacity: 1,
               pointerEvents: 'auto',
+              maxHeight: 640,
             }}>
-            <div style={{ minHeight: 112 }}>
+            <div style={{ minHeight: reserveStoriesSpace ? 112 : 0 }}>
               <Stories />
             </div>
             <div className="w-full">

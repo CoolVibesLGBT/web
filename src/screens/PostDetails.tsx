@@ -251,7 +251,6 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
     ? 'mx-auto w-full max-w-[760px] pb-8'
     : 'mx-auto w-full max-w-[760px] px-1 pb-8 md:px-2';
   const detailCardClassName = isCheckInRoute ? 'overflow-hidden' : 'cv-item overflow-hidden';
-  const detailCardClassName = 'cv-item overflow-hidden';
   const panelClassName = theme === 'dark'
     ? 'cv-card-surface-soft border-white/10 text-zinc-300'
     : 'border-white/70 bg-white/75 text-slate-600';
