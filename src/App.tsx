@@ -397,7 +397,13 @@ function AppContent() {
     () => (!liveEnabled && location.pathname === '/live' ? '/' : location.pathname),
     [liveEnabled, location.pathname]
   );
-  const routeSeo = React.useMemo(() => getRouteSeo(routeSeoPath), [routeSeoPath]);
+  const routeSeo = React.useMemo(() => {
+    const seo = getRouteSeo(routeSeoPath);
+    if (routeSeoPath === '/landing' || (routeSeoPath === '/' && !isAuthenticated)) {
+      return { ...seo, title: t('seo_title', { ns: 'landing' }), description: t('seo_description', { ns: 'landing' }), canonical: '/' };
+    }
+    return seo;
+  }, [isAuthenticated, routeSeoPath, t]);
   useSEO(routeSeo);
 
   const hasTrackedInitialView = React.useRef(false);
@@ -452,7 +458,7 @@ function AppContent() {
 
     // Public routes
     if (path === '/splash') return <SplashScreen autoDismiss={false} animate={true} />;
-    if (path === '/landing') return <LandingPage />;
+    if (path === '/landing' || (path === '/' && !isAuthenticated)) return <LandingPage />;
     if (path === '/places') return <PlacesScreen />;
     if (/^\/places\/[^/]+$/.test(path)) return <PlaceDetailsScreen />;
     if (/^\/ref\/[^/]+$/.test(path)) return <ReferralHandler />;
@@ -601,7 +607,7 @@ function AppContent() {
     }
 
     return <HomeScreen />;
-  }, [liveEnabled, normalizedPath, premiumMembershipEnabled]);
+  }, [isAuthenticated, liveEnabled, normalizedPath, premiumMembershipEnabled]);
 
   // Update activeScreen based on current URL
   React.useEffect(() => {
@@ -889,8 +895,10 @@ function AppContent() {
     setIsLogoutModalOpen(true);
   }, []);
 
-  const shouldShowBootSplash = !bootSeen && (!isAuthReady || !splashMinDone);
-  const isLandingRoute = normalizedPath === '/landing';
+  const isLandingRoute = normalizedPath === '/landing' || (normalizedPath === '/' && !isAuthenticated);
+  const isLegalRoute = normalizedPath === '/legal' || normalizedPath.startsWith('/legal/');
+  const isPublicPage = isLandingRoute || isLegalRoute;
+  const shouldShowBootSplash = !isPublicPage && !bootSeen && (!isAuthReady || !splashMinDone);
   const isPostDetailRoute = /^\/[^/]+\/status\/[^/]+$/.test(normalizedPath) || /^\/status\/[^/]+$/.test(normalizedPath);
   const singleSegment = normalizedPath.match(/^\/([^/]+)$/)?.[1] || null;
   const isProfileShellRoute = normalizedPath === '/profile' || Boolean(singleSegment && !RESERVED_SINGLE_SEGMENT_ROUTES.has(singleSegment));
@@ -1003,9 +1011,9 @@ function AppContent() {
     normalizedPath === '/pride' ||
     isProtectedRoutePath(normalizedPath)
   );
-  const showShellHud = !isLandingRoute && !isAuthGateRoute;
-  const showRightRail = isAuthenticated && shouldShowRightSidebar;
-  const showLeftRail = isAuthenticated && !isLandingRoute && !isAuthGateRoute;
+  const showShellHud = !isPublicPage && !isAuthGateRoute;
+  const showRightRail = isAuthenticated && !isPublicPage && shouldShowRightSidebar;
+  const showLeftRail = isAuthenticated && !isPublicPage && !isAuthGateRoute;
   // Nearby (bubble/map), Places (map) ve Check-In (map) gibi immersive
   // görünümlerdeyken rail'in GENİŞLİĞİ (dolayısıyla ana içeriğin/üst bardaki
   // tab'ların yatay konumu) sabit kalsın diye aside kaldırılmıyor; sadece
@@ -1015,7 +1023,7 @@ function AppContent() {
     (normalizedPath === '/nearby' && isNearbyImmersiveView) ||
     (normalizedPath === '/places' && isPlacesImmersiveView) ||
     (normalizedPath === '/checkin' && isCheckInImmersiveView);
-  const showDock = isAuthenticated && !isLandingRoute && showBottomBar;
+  const showDock = isAuthenticated && !isPublicPage && showBottomBar;
   const showHomeMenuGuide = settings.showDockTips &&
     isAuthReady &&
     isAuthenticated &&
@@ -1028,7 +1036,7 @@ function AppContent() {
     setIsMobileMenuOpen(true);
   }, []);
 
-  const mainShellClassName = isLandingRoute || isAuthGateRoute || !shouldShowRightSidebar || hideImmersiveRailContent
+  const mainShellClassName = isPublicPage || isAuthGateRoute || !shouldShowRightSidebar || hideImmersiveRailContent
     // Auth-gate (logged-out), landing ve geniş düzen ekranları (sağ rail'i
     // gizleyen rotalar: mesajlar, harita/liste görünümleri vb.) 600px'lik
     // feed kolonuna sıkışmamalı — aksi halde çok-sütunlu içerik kırık/boş
@@ -1080,7 +1088,7 @@ function AppContent() {
       {shouldShowBootSplash && <SplashScreen autoDismiss={false} animate={true} />}
       {/* Skyline layout shell */}
       <div
-        className={`max-h-[100dvh] w-full flex mx-auto max-w-[1265px] min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide px-4 md:px-6 gap-0 ${
+        className={`max-h-[100dvh] w-full flex mx-auto min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide gap-0 ${isPublicPage ? '' : 'max-w-[1265px] px-4 md:px-6'} ${
           shouldShowBootSplash ? 'pointer-events-none' : ''
         }`}
       >
@@ -1680,7 +1688,7 @@ function AppContent() {
           )}
 
           {/* Middle Section */}
-          <main className={`${mainShellClassName} ${isLandingRoute || isAuthGateRoute ? '' : 'cv-center-col'}`}>
+          <main className={`${mainShellClassName} ${isPublicPage || isAuthGateRoute ? '' : 'cv-center-col'}`}>
             <ChunkErrorBoundary>
               <Suspense fallback={<RouteLoader />}>
                 {routeElement}

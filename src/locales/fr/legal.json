@@ -1,0 +1,245 @@
+{
+  "center_title": "Centre juridique et communautaire",
+  "center_description": "Votre vie privée, vos droits et les valeurs partagées derrière notre communauté. Retrouvez toutes nos politiques, directives et ressources d’assistance en un seul endroit.",
+  "legal_label": "Confidentialité, confiance et communauté",
+  "home": "Retour à l'accueil",
+  "all_documents": "Tous les documents",
+  "table_of_contents": "Sur cette page",
+  "read_document": "Lire le document",
+  "related": "Documents associés",
+  "need_help": "Besoin d'un peu d'aide ?",
+  "help_cta": "Visitez le centre d'aide",
+  "not_found": "Page introuvable",
+  "not_found_body": "Le document que vous recherchez n'est pas disponible.",
+  "image_alt": "Une illustration d'une ville gay sur le thème de l'arc-en-ciel pour {{title}}, avec des résidents humains adultes de différents types de corps.",
+  "copyright": "CoolVibes. Dans toutes vos couleurs.",
+  "pages": {
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "description": "Dernière mise à jour : mars 2025",
+      "sections": [
+        {
+          "heading": "Informations que nous collectons",
+          "body": "Nous collectons les informations que vous nous fournissez directement, par exemple lorsque vous créez un compte, mettez à jour votre profil ou communiquez avec d'autres utilisateurs. Cela inclut votre nom, votre nom d'utilisateur, votre adresse e-mail, votre mot de passe et vos informations de profil."
+        },
+        {
+          "heading": "Comment nous utilisons vos informations",
+          "body": "Nous utilisons les informations que nous collectons pour fournir, maintenir et améliorer nos services, traiter les transactions, vous envoyer des avis techniques et des messages d'assistance, répondre à vos commentaires et questions et vous envoyer des communications marketing lorsque la loi le permet."
+        },
+        {
+          "heading": "Partage de données",
+          "body": "Nous ne vendons pas vos informations personnelles. Nous pouvons partager des informations avec des fournisseurs, des consultants et d'autres prestataires de services qui ont besoin d'accéder à ces informations pour effectuer des travaux en notre nom."
+        },
+        {
+          "heading": "Conservation des données",
+          "body": "Nous conservons vos données personnelles aussi longtemps que nécessaire pour fournir les services et remplir les finalités décrites dans la présente politique, à moins qu'une période de conservation plus longue ne soit requise ou autorisée par la loi."
+        },
+        {
+          "heading": "Vos droits",
+          "body": "En vertu du RGPD, du CCPA et du CPRA, vous avez le droit d'accéder, de corriger ou de supprimer vos données personnelles. Vous pouvez également vous opposer au traitement ou demander la portabilité des données à tout moment."
+        },
+        {
+          "heading": "Suppression de compte et de données",
+          "body": "Vous pouvez supprimer votre compte et toutes les données associées directement depuis les paramètres. Une fois lancés, toutes les informations personnelles, publications et correspondances seront définitivement supprimées de nos serveurs actifs dans les 30 jours."
+        },
+        {
+          "heading": "Contacter",
+          "body": "Si vous avez des questions concernant cette politique de confidentialité, veuillez nous contacter à Privacy@coolvibes.lgbt."
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Politique en matière de cookies",
+      "description": "Dernière mise à jour : mars 2025",
+      "sections": [
+        {
+          "heading": "Que sont les cookies",
+          "body": "Les cookies sont de petits fichiers texte stockés sur votre appareil lorsque vous visitez notre site Internet. Ils nous aident à mémoriser vos préférences et à améliorer votre expérience."
+        },
+        {
+          "heading": "Cookies essentiels",
+          "body": "Ces cookies sont nécessaires au fonctionnement du site Web et ne peuvent pas être désactivés. Ils incluent des jetons d'authentification et des identifiants de session."
+        },
+        {
+          "heading": "Cookies d'analyse",
+          "body": "Nous utilisons des cookies analytiques pour comprendre comment les visiteurs interagissent avec notre site. Ces informations sont utilisées pour améliorer nos services."
+        },
+        {
+          "heading": "Gestion des cookies",
+          "body": "Vous pouvez contrôler les cookies via les paramètres de votre navigateur. Notez que la désactivation de certains cookies peut affecter la fonctionnalité du site."
+        }
+      ]
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "description": "Dernière mise à jour : mars 2025",
+      "sections": [
+        {
+          "heading": "Âge et éligibilité",
+          "body": "Vous devez avoir au moins 18 ans pour créer un compte et utiliser CoolVibes. En utilisant le service, vous déclarez que vous remplissez cette condition d’âge."
+        },
+        {
+          "heading": "Comptes utilisateur",
+          "body": "Vous êtes responsable de la protection de vos informations d'identification. Nous nous réservons le droit de vérifier les identités et de supprimer les comptes fournissant de fausses informations."
+        },
+        {
+          "heading": "Reconnaissance du CLUF Apple",
+          "body": "En utilisant CoolVibes sur un appareil iOS, vous reconnaissez que ces conditions s'appliquent uniquement à vous et CoolVibes, et non à Apple. Votre utilisation de l’application doit également être conforme au CLUF standard d’Apple."
+        },
+        {
+          "heading": "SLA de modération UGC",
+          "body": "Nous maintenons une politique de tolérance zéro pour les contenus répréhensibles. Tous les rapports concernant le contenu généré par l'utilisateur (UGC) sont examinés dans les 24 heures. Nous nous réservons le droit de supprimer le contenu non conforme et de bannir immédiatement les utilisateurs."
+        },
+        {
+          "heading": "Contenu interdit",
+          "body": "Vous ne pouvez pas publier de contenu illégal, préjudiciable ou violant les droits d'autrui. Cela inclut une interdiction stricte du « Sugar Dating », de la sollicitation sexuelle et de toute forme de harcèlement."
+        },
+        {
+          "heading": "Tolérance zéro pour les contenus CSAM",
+          "body": "Nous appliquons une tolérance zéro à l'égard des contenus pédopornographiques (CSAM). Tout contenu de ce type sera immédiatement supprimé et les comptes concernés seront signalés aux autorités compétentes."
+        },
+        {
+          "heading": "Résiliation",
+          "body": "Nous pouvons résilier ou suspendre votre compte à notre seule discrétion, sans préavis, pour toute conduite qui, selon nous, viole les présentes Conditions ou est préjudiciable à notre communauté."
+        },
+        {
+          "heading": "Modifications des conditions",
+          "body": "Nous nous réservons le droit de modifier les présentes conditions à tout moment. L'utilisation continue du service après des modifications constitue l'acceptation des nouvelles conditions."
+        }
+      ]
+    },
+    "guidelines": {
+      "title": "Règlement de la communauté",
+      "description": "Construire un espace sûr et inclusif",
+      "sections": [
+        {
+          "heading": "Soyez respectueux",
+          "body": "CoolVibes est un espace sécurisé pour la communauté LGBTQ+ et ses alliés. Traitez tous les membres avec gentillesse et respect, quelle que soit leur identité ou leur origine."
+        },
+        {
+          "heading": "Tolérance zéro pour la haine",
+          "body": "Les discours de haine, la discrimination, le harcèlement ou l'intimidation fondés sur l'orientation sexuelle, l'identité de genre, la race, l'origine ethnique, la religion ou toute autre caractéristique sont strictement interdits."
+        },
+        {
+          "heading": "Profils authentiques",
+          "body": "Utilisez votre véritable identité ou un pseudonyme cohérent. Se faire passer pour d'autres personnes ou créer de faux profils n'est pas autorisé."
+        },
+        {
+          "heading": "Contenu sécurisé",
+          "body": "Gardez le contenu approprié. Le contenu à caractère sexuel explicite doit être marqué comme tel. Le matériel pédopornographique (CSAM) est strictement interdit et sera signalé aux autorités."
+        },
+        {
+          "heading": "Contenu sécurisé",
+          "body": "Gardez le contenu approprié. Le contenu à caractère sexuel explicite doit être marqué comme tel. Nous maintenons une politique de tolérance zéro en matière de harcèlement et de comportement abusif."
+        },
+        {
+          "heading": "Signalement et blocage",
+          "body": "Si vous constatez une violation ou si vous ne vous sentez pas en sécurité, utilisez immédiatement les fonctionnalités « Signaler » ou « Bloquer ». Tous les rapports sont examinés par notre équipe de sécurité dans les 24 heures afin de garantir un environnement sûr pour tous."
+        }
+      ]
+    },
+    "accessibility": {
+      "title": "Accessibilité",
+      "description": "Notre engagement pour une expérience inclusive",
+      "sections": [
+        {
+          "heading": "Notre engagement",
+          "body": "CoolVibes s'engage à garantir l'accessibilité numérique aux personnes handicapées. Nous améliorons continuellement l’expérience utilisateur pour chacun."
+        },
+        {
+          "heading": "Normes",
+          "body": "Nous visons à nous conformer aux directives pour l'accessibilité du contenu Web (WCAG) 2.1 au niveau AA. Ces directives expliquent comment rendre le contenu Web plus accessible."
+        },
+        {
+          "heading": "Fonctionnalités",
+          "body": "Notre plate-forme prend en charge les lecteurs d'écran, la navigation au clavier, un contraste de couleurs suffisant et un texte redimensionnable pour garantir la convivialité pour tous les utilisateurs."
+        },
+        {
+          "heading": "Commentaires",
+          "body": "Nous apprécions vos commentaires sur l'accessibilité de CoolVibes. Veuillez nous contacter à l'adresse Accessibility@coolvibes.lgbt si vous rencontrez des obstacles à l'accessibilité."
+        }
+      ]
+    },
+    "about": {
+      "title": "À propos de CoolVibes",
+      "description": "Histoires de l'arc-en-ciel",
+      "sections": [
+        {
+          "heading": "Notre mission",
+          "body": "CoolVibes est une plateforme sociale conçue pour la communauté LGBTQ+. Notre mission est de créer un espace sûr, dynamique et inclusif où chacun peut s'exprimer de manière authentique."
+        },
+        {
+          "heading": "Nos valeurs",
+          "body": "Nous croyons en l'authenticité, l'inclusivité, le respect et la communauté. Chaque fonctionnalité que nous développons est conçue en gardant à l'esprit la sécurité et l'autonomisation des personnes LGBTQ+."
+        },
+        {
+          "heading": "L'équipe",
+          "body": "CoolVibes est construit et maintenu par une équipe diversifiée et passionnée de personnes qui croient au pouvoir de la communauté et de la connexion."
+        },
+        {
+          "heading": "Contacter",
+          "body": "Contactez-nous à hello@coolvibes.lgbt pour des partenariats, des demandes de presse ou des questions générales."
+        }
+      ]
+    },
+    "help": {
+      "title": "Centre d'aide",
+      "description": "Questions fréquemment posées",
+      "sections": [
+        {
+          "heading": "Mise en route",
+          "body": "Créez un compte, complétez votre profil et commencez à vous connecter avec la communauté LGBTQ+ près de chez vous. Utilisez la fonctionnalité À proximité pour découvrir des personnes dans votre région."
+        },
+        {
+          "heading": "Problèmes de compte",
+          "body": "Si vous rencontrez des difficultés pour vous connecter, utilisez l'option « Mot de passe oublié » sur l'écran de connexion. Si vous continuez à rencontrer des problèmes, contactez support@coolvibes.lgbt."
+        },
+        {
+          "heading": "Confidentialité et sécurité",
+          "body": "Vous pouvez bloquer ou signaler n'importe quel utilisateur à partir de sa page de profil. Les rapports sont examinés par notre équipe de modération dans les 24 heures."
+        },
+        {
+          "heading": "Suppression de votre compte",
+          "body": "Vous pouvez supprimer votre compte depuis Paramètres → Compte → Supprimer le compte. Cette action est permanente et toutes vos données seront supprimées dans un délai de 30 jours."
+        },
+        {
+          "heading": "Contacter l'assistance",
+          "body": "Pour tout autre problème, envoyez-nous un e-mail à support@coolvibes.lgbt ou utilisez le bouton de commentaires dans l'application dans Paramètres."
+        }
+      ]
+    },
+    "conduct": {
+      "title": "Code de conduite",
+      "description": "Prioriser la sécurité et le bien-être de tous les membres",
+      "sections": [
+        {
+          "heading": "Principe fondamental",
+          "body": "CoolVibes donne la priorité à la sécurité et au bien-être des personnes marginalisées plutôt qu'au confort des membres privilégiés. Nous nous engageons à offrir à tous une expérience sans harcèlement."
+        },
+        {
+          "heading": "Conduite interdite",
+          "body": "Nous ne tolérons pas le harcèlement, l'intimidation ou la discrimination. Cela inclut : aucune remise en question des identités déclarées, aucune incitation à la violence, aucune « sortie » délibérée et aucune publication de communications privées sans consentement."
+        },
+        {
+          "heading": "Tolérance zéro pour la haine",
+          "body": "Aucun comportement raciste, sexiste, cissexiste, capacitaire ou autrement oppressif n'est autorisé, qu'il soit occasionnel ou explicite. Cela inclut des propos ou des actions préjudiciables envers les personnes de couleur, les personnes trans et les membres handicapés."
+        },
+        {
+          "heading": "Signalement des violations",
+          "body": "Si vous constatez une violation, veuillez utiliser le bouton de rapport sur le profil ou la publication. Notre équipe de modération examine tous les signalements dans les 24 heures et donnera la priorité au bien-être des personnes concernées."
+        },
+        {
+          "heading": "Conséquences",
+          "body": "Les participants invités à cesser tout comportement préjudiciable doivent s'y conformer immédiatement. Les administrateurs peuvent prendre toute mesure jugée appropriée, pouvant aller jusqu'à l'expulsion définitive de CoolVibes."
+        },
+        {
+          "heading": "Responsabilité communautaire",
+          "body": "Nous favorisons une culture de responsabilité et de croissance. Nous encourageons les discussions remettant en question les privilèges et respectons le travail émotionnel fourni par les membres marginalisés de notre communauté."
+        }
+      ]
+    }
+  },
+  "theme_light": "Lumière",
+  "theme_dark": "Sombre",
+  "section_image_alt": "{{heading}} : une illustration d'aventure rétro sur le thème rose, violet et arc-en-ciel représentant des résidents adultes gays de la ville avec des types de corps et des tons de peau variés."
+}

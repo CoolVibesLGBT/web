@@ -1,0 +1,245 @@
+{
+  "center_title": "Pusat Hukum & Komunitas",
+  "center_description": "Privasi Anda, hak Anda, dan nilai-nilai bersama di balik komunitas kami. Temukan semua kebijakan, pedoman, dan sumber daya dukungan kami di satu tempat.",
+  "legal_label": "Privasi, kepercayaan & komunitas",
+  "home": "Kembali ke rumah",
+  "all_documents": "Semua dokumen",
+  "table_of_contents": "Di halaman ini",
+  "read_document": "Baca dokumen",
+  "related": "Dokumen terkait",
+  "need_help": "Butuh sedikit bantuan?",
+  "help_cta": "Kunjungi pusat bantuan",
+  "not_found": "Halaman tidak ditemukan",
+  "not_found_body": "Dokumen yang Anda cari tidak tersedia.",
+  "image_alt": "Ilustrasi kota gay bertema pelangi untuk {{title}}, dengan penghuni manusia dewasa dengan tipe tubuh berbeda.",
+  "copyright": "Getaran Keren. Dalam semua warnamu.",
+  "pages": {
+    "privacy": {
+      "title": "Kebijakan Privasi",
+      "description": "Terakhir diperbarui: Maret 2025",
+      "sections": [
+        {
+          "heading": "Informasi yang Kami Kumpulkan",
+          "body": "Kami mengumpulkan informasi yang Anda berikan langsung kepada kami, seperti saat Anda membuat akun, memperbarui profil, atau berkomunikasi dengan pengguna lain. Ini termasuk nama, nama pengguna, alamat email, kata sandi, dan informasi profil Anda."
+        },
+        {
+          "heading": "Bagaimana Kami Menggunakan Informasi Anda",
+          "body": "Kami menggunakan informasi yang kami kumpulkan untuk menyediakan, memelihara, dan meningkatkan layanan kami, memproses transaksi, mengirimi Anda pemberitahuan teknis dan pesan dukungan, menanggapi komentar dan pertanyaan Anda, dan mengirimi Anda komunikasi pemasaran jika diizinkan oleh hukum."
+        },
+        {
+          "heading": "Berbagi Data",
+          "body": "Kami tidak menjual informasi pribadi Anda. Kami dapat berbagi informasi dengan vendor, konsultan, dan penyedia layanan lainnya yang memerlukan akses ke informasi tersebut untuk melaksanakan pekerjaan atas nama kami."
+        },
+        {
+          "heading": "Retensi Data",
+          "body": "Kami menyimpan data pribadi Anda selama diperlukan untuk menyediakan layanan dan memenuhi tujuan yang dijelaskan dalam kebijakan ini, kecuali periode penyimpanan yang lebih lama diwajibkan atau diizinkan oleh hukum."
+        },
+        {
+          "heading": "Hak Anda",
+          "body": "Berdasarkan GDPR, CCPA, dan CPRA, Anda berhak mengakses, memperbaiki, atau menghapus data pribadi Anda. Anda juga dapat menolak pemrosesan atau meminta portabilitas data kapan saja."
+        },
+        {
+          "heading": "Penghapusan Akun & Data",
+          "body": "Anda dapat menghapus akun Anda dan semua data terkait langsung dari Pengaturan. Setelah dimulai, semua informasi pribadi, postingan, dan kecocokan akan dihapus secara permanen dari server aktif kami dalam waktu 30 hari."
+        },
+        {
+          "heading": "Kontak",
+          "body": "Jika Anda memiliki pertanyaan tentang Kebijakan Privasi ini, silakan hubungi kami di privacy@coolvibes.lgbt."
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Kebijakan Cookie",
+      "description": "Terakhir diperbarui: Maret 2025",
+      "sections": [
+        {
+          "heading": "Apa Itu Cookie",
+          "body": "Cookie adalah file teks kecil yang disimpan di perangkat Anda saat Anda mengunjungi situs web kami. Mereka membantu kami mengingat preferensi Anda dan meningkatkan pengalaman Anda."
+        },
+        {
+          "heading": "Cookie Penting",
+          "body": "Cookie ini diperlukan agar situs web dapat berfungsi dan tidak dapat dinonaktifkan. Ini termasuk token autentikasi dan pengidentifikasi sesi."
+        },
+        {
+          "heading": "Cookie Analisis",
+          "body": "Kami menggunakan cookie analitik untuk memahami bagaimana pengunjung berinteraksi dengan situs kami. Informasi ini digunakan untuk meningkatkan layanan kami."
+        },
+        {
+          "heading": "Mengelola Cookie",
+          "body": "Anda dapat mengontrol cookie melalui pengaturan browser Anda. Perlu diperhatikan bahwa menonaktifkan cookie tertentu dapat memengaruhi fungsionalitas situs."
+        }
+      ]
+    },
+    "terms": {
+      "title": "Ketentuan Layanan",
+      "description": "Terakhir diperbarui: Maret 2025",
+      "sections": [
+        {
+          "heading": "Usia & Kelayakan",
+          "body": "Anda harus berusia minimal 18 tahun untuk membuat akun dan menggunakan CoolVibes. Dengan menggunakan layanan ini, Anda menyatakan bahwa Anda memenuhi persyaratan usia ini."
+        },
+        {
+          "heading": "Akun Pengguna",
+          "body": "Anda bertanggung jawab untuk menjaga kredensial Anda. Kami berhak memverifikasi identitas dan menghapus akun yang memberikan informasi palsu."
+        },
+        {
+          "heading": "Pengakuan EULA Apple",
+          "body": "Dengan menggunakan CoolVibes di perangkat iOS, Anda mengakui bahwa ketentuan ini hanya antara Anda dan CoolVibes, bukan Apple. Penggunaan Anda atas aplikasi juga harus mematuhi EULA Standar Apple."
+        },
+        {
+          "heading": "SLA Moderasi UGC",
+          "body": "Kami menerapkan kebijakan tanpa toleransi terhadap konten yang tidak pantas. Semua laporan mengenai Konten Buatan Pengguna (UGC) ditinjau dalam waktu 24 jam. Kami berhak menghapus konten yang tidak patuh dan segera mencekal pengguna."
+        },
+        {
+          "heading": "Konten Terlarang",
+          "body": "Anda tidak boleh memposting konten yang ilegal, berbahaya, atau melanggar hak orang lain. Hal ini termasuk larangan ketat terhadap \"Kencan Gula\", ajakan seksual, dan segala bentuk pelecehan."
+        },
+        {
+          "heading": "Tidak Ada Toleransi untuk CSAM",
+          "body": "Kami tidak menoleransi Materi Pelecehan Seksual terhadap Anak (CSAM). Konten semacam itu akan segera dihapus, dan akun yang terlibat akan dilaporkan ke pihak yang berwenang."
+        },
+        {
+          "heading": "Penghentian",
+          "body": "Kami dapat menghentikan atau menangguhkan akun Anda atas kebijakan kami sendiri, tanpa pemberitahuan sebelumnya, atas tindakan apa pun yang kami yakini melanggar Ketentuan ini atau membahayakan komunitas kami."
+        },
+        {
+          "heading": "Perubahan Ketentuan",
+          "body": "Kami berhak mengubah ketentuan ini kapan saja. Penggunaan layanan yang berkelanjutan setelah perubahan merupakan penerimaan terhadap persyaratan baru."
+        }
+      ]
+    },
+    "guidelines": {
+      "title": "Pedoman Komunitas",
+      "description": "Membangun ruang yang aman dan inklusif",
+      "sections": [
+        {
+          "heading": "Bersikap Hormat",
+          "body": "CoolVibes adalah ruang aman bagi komunitas LGBTQ+ dan sekutunya. Perlakukan semua anggota dengan baik dan hormat, tanpa memandang identitas atau latar belakang mereka."
+        },
+        {
+          "heading": "Tidak Ada Toleransi terhadap Kebencian",
+          "body": "Perkataan kebencian, diskriminasi, pelecehan, atau intimidasi berdasarkan orientasi seksual, identitas gender, ras, etnis, agama, atau karakteristik lainnya dilarang keras."
+        },
+        {
+          "heading": "Profil Asli",
+          "body": "Gunakan identitas asli Anda atau nama samaran yang konsisten. Meniru identitas orang lain atau membuat profil palsu tidak diperbolehkan."
+        },
+        {
+          "heading": "Konten Aman",
+          "body": "Jaga agar konten tetap sesuai. Konten seksual eksplisit harus ditandai seperti itu. Materi pelecehan seksual terhadap anak (CSAM) dilarang keras dan akan dilaporkan kepada pihak berwenang."
+        },
+        {
+          "heading": "Konten Aman",
+          "body": "Jaga agar konten tetap sesuai. Konten seksual eksplisit harus ditandai seperti itu. Kami menerapkan kebijakan tanpa toleransi terhadap pelecehan dan perilaku kasar."
+        },
+        {
+          "heading": "Pelaporan & Pemblokiran",
+          "body": "Jika Anda menemukan pelanggaran atau merasa tidak aman, segera gunakan fitur \"Laporkan\" atau \"Blokir\". Semua laporan ditinjau oleh tim keselamatan kami dalam waktu 24 jam untuk memastikan lingkungan yang aman bagi semua."
+        }
+      ]
+    },
+    "accessibility": {
+      "title": "Aksesibilitas",
+      "description": "Komitmen kami terhadap pengalaman inklusif",
+      "sections": [
+        {
+          "heading": "Komitmen Kami",
+          "body": "CoolVibes berkomitmen untuk memastikan aksesibilitas digital bagi penyandang disabilitas. Kami terus meningkatkan pengalaman pengguna untuk semua orang."
+        },
+        {
+          "heading": "Standar",
+          "body": "Kami bertujuan untuk mematuhi Pedoman Aksesibilitas Konten Web (WCAG) 2.1 di Level AA. Pedoman ini menjelaskan cara membuat konten web lebih mudah diakses."
+        },
+        {
+          "heading": "Fitur",
+          "body": "Platform kami mendukung pembaca layar, navigasi keyboard, kontras warna yang memadai, dan teks yang dapat diubah ukurannya untuk memastikan kegunaan bagi semua pengguna."
+        },
+        {
+          "heading": "Umpan balik",
+          "body": "Kami menyambut masukan Anda tentang aksesibilitas CoolVibes. Silakan hubungi kami di accessibilitas@coolvibes.lgbt jika Anda mengalami hambatan aksesibilitas."
+        }
+      ]
+    },
+    "about": {
+      "title": "Tentang CoolVibes",
+      "description": "Cerita dari Pelangi",
+      "sections": [
+        {
+          "heading": "Misi Kami",
+          "body": "CoolVibes adalah platform sosial yang dibangun untuk komunitas LGBTQ+. Misi kami adalah menciptakan ruang yang aman, dinamis, dan inklusif di mana setiap orang dapat mengekspresikan diri mereka secara otentik."
+        },
+        {
+          "heading": "Nilai-Nilai Kita",
+          "body": "Kami percaya pada keaslian, inklusivitas, rasa hormat, dan komunitas. Setiap fitur yang kami buat dirancang dengan mempertimbangkan keselamatan dan pemberdayaan individu LGBTQ+."
+        },
+        {
+          "heading": "Tim",
+          "body": "CoolVibes dibangun dan dikelola oleh tim yang beragam dan penuh semangat yang percaya pada kekuatan komunitas dan koneksi."
+        },
+        {
+          "heading": "Kontak",
+          "body": "Hubungi kami di hello@coolvibes.lgbt untuk kemitraan, pertanyaan pers, atau pertanyaan umum."
+        }
+      ]
+    },
+    "help": {
+      "title": "Pusat Bantuan",
+      "description": "Pertanyaan yang sering diajukan",
+      "sections": [
+        {
+          "heading": "Memulai",
+          "body": "Buat akun, lengkapi profil Anda, dan mulailah terhubung dengan komunitas LGBTQ+ di dekat Anda. Gunakan fitur Terdekat untuk menemukan orang-orang di daerah Anda."
+        },
+        {
+          "heading": "Masalah Akun",
+          "body": "Jika Anda mengalami kesulitan saat login, gunakan opsi \"Lupa Kata Sandi\" di layar login. Jika Anda terus mengalami masalah, hubungi support@coolvibes.lgbt."
+        },
+        {
+          "heading": "Privasi & Keamanan",
+          "body": "Anda dapat memblokir atau melaporkan pengguna mana pun dari halaman profil mereka. Laporan ditinjau oleh tim moderasi kami dalam waktu 24 jam."
+        },
+        {
+          "heading": "Menghapus Akun Anda",
+          "body": "Anda dapat menghapus akun Anda dari Pengaturan → Akun → Hapus Akun. Tindakan ini bersifat permanen dan semua data Anda akan dihapus dalam waktu 30 hari."
+        },
+        {
+          "heading": "Hubungi Dukungan",
+          "body": "Untuk masalah lainnya, kirim email kepada kami di support@coolvibes.lgbt atau gunakan tombol masukan dalam aplikasi di Pengaturan."
+        }
+      ]
+    },
+    "conduct": {
+      "title": "Kode Etik",
+      "description": "Mengutamakan keselamatan dan kesejahteraan seluruh anggota",
+      "sections": [
+        {
+          "heading": "Prinsip Inti",
+          "body": "CoolVibes memprioritaskan keselamatan dan kesejahteraan orang-orang yang terpinggirkan di atas kenyamanan anggota yang memiliki hak istimewa. Kami berdedikasi untuk memberikan pengalaman bebas pelecehan bagi semua orang."
+        },
+        {
+          "heading": "Perilaku yang Dilarang",
+          "body": "Kami tidak menoleransi pelecehan, intimidasi, atau diskriminasi. Hal ini mencakup: tidak ada pertanyaan mengenai identitas yang disebutkan, tidak ada hasutan untuk melakukan kekerasan, tidak ada \"jalan-jalan\" yang disengaja, dan tidak ada publikasi komunikasi pribadi tanpa persetujuan."
+        },
+        {
+          "heading": "Tidak Ada Toleransi terhadap Kebencian",
+          "body": "Perilaku rasis, seksis, cissexist, cakap, atau menindas tidak diperbolehkan, baik secara kasual maupun eksplisit. Hal ini mencakup bahasa atau tindakan yang merugikan terhadap orang kulit berwarna, kaum trans, dan anggota penyandang disabilitas."
+        },
+        {
+          "heading": "Melaporkan Pelanggaran",
+          "body": "Jika Anda melihat pelanggaran, silakan gunakan tombol lapor di profil atau postingan. Tim moderasi kami meninjau semua laporan dalam waktu 24 jam dan akan memprioritaskan kesejahteraan mereka yang terkena dampak."
+        },
+        {
+          "heading": "Konsekuensi",
+          "body": "Peserta yang diminta menghentikan perilaku berbahaya harus segera mematuhinya. Administrator dapat mengambil tindakan apa pun yang dianggap perlu, hingga dan termasuk pengusiran permanen dari CoolVibes."
+        },
+        {
+          "heading": "Akuntabilitas Masyarakat",
+          "body": "Kami memupuk budaya akuntabilitas dan pertumbuhan. Kami mendorong diskusi yang menantang hak istimewa dan menghormati kerja emosional yang dilakukan oleh anggota komunitas kami yang terpinggirkan."
+        }
+      ]
+    }
+  },
+  "theme_light": "Ringan",
+  "theme_dark": "Gelap",
+  "section_image_alt": "{{heading}}: ilustrasi petualangan retro bertema merah muda, ungu, dan pelangi tentang penduduk kota gay dewasa dengan tipe tubuh dan warna kulit yang bervariasi."
+}

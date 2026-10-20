@@ -1,13 +1,15 @@
 // LanguageSelectorModal.tsx
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../../contexts/AppContext';
 import { useTheme } from '../../contexts/ThemeContext';
-import { X, Check, Globe } from 'lucide-react';
+import { X, Check, Globe, Search } from 'lucide-react';
 import { setLanguage } from '../../i18n';
 import { resolvePublicAssetUrl } from '../../platform/runtime';
 import { useTranslation } from 'react-i18next';
+import { SUPPORTED_LOCALES } from '@/seo/seoConfig';
+import { normalizeLanguage } from '@/i18n/language';
 
 interface Props {
   isOpen: boolean;
@@ -45,8 +47,7 @@ const LANGUAGE_FLAG_CODES: Record<string, string> = {
 const normalizeLanguageCode = (code?: string) => {
   const normalized = `${code || ''}`.trim().toLowerCase().replace('_', '-').replace(/\.svg$/, '');
 
-  if (normalized === 'zh-tw') return 'tw';
-  if (normalized === 'zh-hk') return 'hk';
+  if (/^(zh|ko|yue)(-|$)/.test(normalized)) return normalizeLanguage(normalized);
 
   return normalized.split('-')[0] || normalized;
 };
@@ -129,7 +130,7 @@ const LanguageItem = memo(({ lang, isSelected, onClick, theme }: any) => {
         <motion.div
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="w-5 h-5 rounded-full flex items-center justify-center bg-emerald-500"
+          className="w-5 h-5 rounded-full flex items-center justify-center bg-brand"
         >
           <Check className="w-3 h-3 text-white stroke-[3.5]" />
         </motion.div>
@@ -145,6 +146,38 @@ const LanguageSelectorModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const { theme } = useTheme();
   const { t } = useTranslation('common');
   const [isDesktop, setIsDesktop] = useState(false);
+  const [search, setSearch] = useState('');
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    panelRef.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+      if (event.key !== 'Tab') return;
+      const elements = panelRef.current?.querySelectorAll<HTMLElement>('button, input');
+      if (!elements?.length) return;
+      const first = elements[0];
+      const last = elements[elements.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      previousFocus?.focus();
+    };
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (!isOpen) setSearch('');
+  }, [isOpen]);
 
   useEffect(() => {
     const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
@@ -154,12 +187,23 @@ const LanguageSelectorModal: React.FC<Props> = ({ isOpen, onClose }) => {
   }, []);
 
   const handleLanguageSelect = (langCode: string) => {
-    setDefaultLanguage(langCode);
-    setLanguage(langCode);
+    const locale = normalizeLanguage(langCode);
+    setDefaultLanguage(locale);
+    setLanguage(locale);
     onClose();
   };
 
-  const languages = Object.values(data?.languages ?? {}) as LanguageOption[];
+  const remoteLanguages = Object.values(data?.languages ?? {}) as LanguageOption[];
+  const fallbackLanguages = SUPPORTED_LOCALES.map(({ lang }) => ({
+    code: lang,
+    name: ({ hk: '繁體中文（香港）', tw: '繁體中文（台灣）', kp: '조선말', kr: '한국어' } as Record<string, string>)[lang] || new Intl.DisplayNames([lang], { type: 'language' }).of(lang) || lang,
+  }));
+  const languages = fallbackLanguages.map(language => ({
+    ...language,
+    ...remoteLanguages.find(remote => normalizeLanguage(remote.code) === language.code),
+    code: language.code,
+  }));
+  const visibleLanguages = languages.filter(({ name, code }) => `${name} ${code}`.toLocaleLowerCase().includes(search.toLocaleLowerCase().trim()));
 
   const modal = (
     <AnimatePresence>
@@ -176,11 +220,16 @@ const LanguageSelectorModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
           {/* Compact Content Panel */}
           <motion.div
+            ref={panelRef}
+            tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('app.language', { defaultValue: 'Language' })}
             initial={isDesktop ? { scale: 0.98, opacity: 0 } : { y: '100%' }}
             animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0 }}
             exit={isDesktop ? { scale: 0.98, opacity: 0 } : { y: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 400 }}
-            className={`relative w-full lg:max-w-[340px] max-h-[70vh] flex flex-col overflow-hidden ${theme === 'dark'
+            className={`relative w-full lg:max-w-[400px] max-h-[75dvh] flex flex-col overflow-hidden outline-none ${theme === 'dark'
               ? 'cv-card-surface-solid border-t lg:border border-white/10'
               : 'bg-white border-t lg:border border-gray-100'
               } rounded-t-[28px] lg:rounded-[24px] shadow-2xl pointer-events-auto`}
@@ -196,13 +245,14 @@ const LanguageSelectorModal: React.FC<Props> = ({ isOpen, onClose }) => {
               }`}>
               <div className="flex items-center gap-2.5">
                 <Globe className={`w-4 h-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
-                <h2 className={`text-[11px] font-black uppercase tracking-[0.15em] ${theme === 'dark' ? 'text-white/90' : 'text-gray-900'
+                <h2 className={`text-[15px] font-medium tracking-tight ${theme === 'dark' ? 'text-white/90' : 'text-gray-900'
                   }`}>
                   {t('app.language', { defaultValue: 'Language' })}
                 </h2>
               </div>
               <button
                 onClick={onClose}
+                aria-label={t('app.close', { defaultValue: 'Close' })}
                 className={`p-1.5 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-white/5 text-gray-500' : 'hover:bg-gray-50 text-gray-400'
                   }`}
               >
@@ -210,10 +260,15 @@ const LanguageSelectorModal: React.FC<Props> = ({ isOpen, onClose }) => {
               </button>
             </div>
 
+            <label className={`mx-5 my-3 flex items-center gap-2 rounded-xl border px-3 py-2.5 ${theme === 'dark' ? 'border-white/10 bg-white/[0.03] text-white/50' : 'border-gray-100 bg-gray-50 text-gray-400'}`}>
+              <Search className="h-4 w-4 shrink-0" />
+              <input value={search} onChange={event => setSearch(event.target.value)} aria-label={t('app.search', { defaultValue: 'Search' })} placeholder={t('app.search', { defaultValue: 'Search' })} className="min-w-0 w-full bg-transparent text-[13px] text-[var(--cv-neutral-1)] outline-none" />
+            </label>
+
             {/* Language Scroll List */}
             <div className="flex-1 overflow-y-auto scrollbar-hide py-1">
               <div className={`divide-y ${theme === 'dark' ? 'divide-gray-800/30' : 'divide-gray-50'}`}>
-                {languages.map((lang) => (
+                {visibleLanguages.map((lang) => (
                   <LanguageItem
                     key={lang.code}
                     lang={lang}

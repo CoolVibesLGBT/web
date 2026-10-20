@@ -3,7 +3,7 @@ import type { SEOOptions } from '@/seo/seoConfig'
 type RouteMatcher = string | RegExp | ((path: string) => boolean)
 
 export const ROUTE_DEFAULT_TITLES: Record<string, string> = {
-  '/': 'LGBTQIA+ Social Network',
+  '/': 'LGBTIQA+ Sosyal Medya ve Gay Dating Uygulaması',
   '/home': 'Home',
   '/pride': 'LGBTQIA+ Social Feed',
   '/live': 'Live',
@@ -19,14 +19,14 @@ export const ROUTE_DEFAULT_TITLES: Record<string, string> = {
   '/checkin': 'Check-In',
   '/settings': 'Settings',
   '/profile': 'Profile',
-  '/landing': 'LGBTQIA+ Social Network & Gay Dating App',
+  '/landing': 'LGBTIQA+ Sosyal Medya ve Gay Dating Uygulaması',
   '/legal': 'Legal',
   '/premium': 'Premium',
   '/splash': 'Splash Preview',
 }
 
 const ROUTE_DESCRIPTIONS: Record<string, string> = {
-  '/': 'CoolVibes is a LGBTQIA+ social network and gay dating app. Discover posts, meet people, and build meaningful connections worldwide.',
+  '/': 'Kendi renginde, kendi insanlarınla. CoolVibes’ta LGBTIQA+ topluluğunu keşfet, yeni arkadaşlar edin, gay dating deneyimini yaşa ve anlamlı bağlar kur.',
   '/home': 'Your CoolVibes home base for updates and new connections.',
   '/pride': 'Explore the LGBTQIA+ social feed and discover the CoolVibes community.',
   '/live': 'Watch and join live broadcasts on CoolVibes.',
@@ -42,7 +42,7 @@ const ROUTE_DESCRIPTIONS: Record<string, string> = {
   '/checkin': 'Share check-ins at LGBTQ+ friendly places.',
   '/settings': 'Manage your CoolVibes account settings.',
   '/profile': 'Your profile and activity on CoolVibes.',
-  '/landing': 'CoolVibes is a LGBTQIA+ social network and LGBT gay dating app. Connect, chat, and build relationships in an inclusive community.',
+  '/landing': 'Kendi renginde, kendi insanlarınla. CoolVibes’ta LGBTIQA+ topluluğunu keşfet, yeni arkadaşlar edin, gay dating deneyimini yaşa ve anlamlı bağlar kur.',
   '/legal': 'Legal information, policies, and guidelines for CoolVibes.',
   '/premium': 'Learn about CoolVibes Premium benefits.',
   '/splash': 'CoolVibes splash screen preview.',

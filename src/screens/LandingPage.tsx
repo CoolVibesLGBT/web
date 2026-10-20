@@ -1,161 +1,470 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
+  ArrowDown,
   ArrowRight,
-  Bell,
-  Globe,
+  Check,
+  ChevronDown,
+  Globe2,
   Heart,
-  MessageSquare,
+  MapPin,
+  Menu,
+  MessageCircle,
   Moon,
-  Search,
-  Shield,
+  ShieldCheck,
   Sparkles,
   Sun,
   Users,
-} from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
-import { useSEO } from '../hooks/useSEO';
-import AuthWizard from '../features/auth/AuthWizard';
-import { DEFAULT_APP_MOTTO, DEFAULT_APP_NAME } from '../constants/constants';
+  X,
+} from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
+import { useNavigate } from '@/router'
+import { useSEO } from '@/hooks/useSEO'
+import LanguageSelector, {
+  getLanguageFlagDisplay,
+} from '@/components/ui/LanguageSelector'
+import AuthWizard from '@/features/auth/AuthWizard'
+import Brand from '@/features/landing/Brand'
+import ProductPreview from '@/features/landing/ProductPreview'
+import CharacterPortrait from '@/features/landing/CharacterPortrait'
+import { getLocalizedHero } from '@/features/landing/localizedHero'
+import { getLanguageTag, normalizeLanguage } from '@/i18n/language'
+import './LandingPage.css'
 
-const previewImages = [
-  'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=900',
-  'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=900',
-  'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=900',
-  'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=900',
-];
+const sections = [
+  {
+    id: 'community',
+    copy: 'community',
+    detail: 'community',
+    icon: Users,
+    image: 'tokyo-community',
+    city: 'Tokyo',
+    country: 'Japan',
+  },
+  {
+    id: 'dating',
+    copy: 'dating',
+    detail: 'dating',
+    icon: Heart,
+    image: 'taipei-dating',
+    city: 'Taipei',
+    country: 'Taiwan',
+  },
+  {
+    id: 'nearby',
+    copy: 'nearby',
+    detail: 'nearby',
+    icon: MapPin,
+    image: 'shanghai-nearby',
+    city: 'Shanghai',
+    country: 'China',
+  },
+  {
+    id: 'chat',
+    copy: 'messages',
+    detail: 'chat',
+    icon: MessageCircle,
+    image: 'tel-aviv-chat',
+    city: 'Tel Aviv',
+    country: 'Israel',
+  },
+]
+const portraits = [0, 1, 2, 3, 4, 5]
 
-const LandingPage: React.FC = () => {
-  const { theme, toggleTheme } = useTheme();
-  const [isAuthWizardOpen, setIsAuthWizardOpen] = useState(false);
+export default function LandingPage() {
+  const { t, i18n } = useTranslation('landing')
+  const { theme, toggleTheme } = useTheme()
+  const { isAuthenticated } = useAuth()
+  const navigate = useNavigate()
+  const pageRef = useRef<HTMLDivElement>(null)
+  const [authOpen, setAuthOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [languageOpen, setLanguageOpen] = useState(false)
+  const languageCode = normalizeLanguage(i18n.language)
+  const languageFlag = getLanguageFlagDisplay(undefined, languageCode)
+  const hero = getLocalizedHero(i18n.language)
 
   useSEO({
-    title: 'LGBTQIA+ Social Network & Gay Dating App',
-    description: 'CoolVibes is a LGBTQIA+ social network and LGBT gay dating app. Connect, share, and build meaningful relationships worldwide.',
-    keywords: 'gay social network, LGBTQIA+ social media, LGBT gay dating, LGBTQIA+ dating app, queer community, inclusive social platform, CoolVibes',
-    canonical: '/landing',
+    title: t('seo_title'),
+    description: t('seo_description'),
+    keywords:
+      'LGBTIQA+, gay social network, gay dating, queer community, LGBT social media, CoolVibes',
+    canonical: '/',
     type: 'website',
-  });
+  })
+
+  const scrollTo = (id: string) => {
+    setMenuOpen(false)
+    pageRef.current?.querySelector<HTMLElement>(`#${id}`)?.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'instant'
+        : 'smooth',
+      block: 'start',
+    })
+  }
+  const scrollHome = () =>
+    pageRef.current?.scrollTo({
+      top: 0,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'instant'
+        : 'smooth',
+    })
+  const join = () => {
+    setMenuOpen(false)
+    if (isAuthenticated) navigate('/pride')
+    else setAuthOpen(true)
+  }
 
   return (
-    <div className="cv-pride-hero-bg relative h-[100dvh] w-full overflow-hidden text-slate-950 transition-colors duration-700 dark:text-white">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className={theme === 'dark' ? 'absolute inset-0 bg-gradient-to-b from-black/24 via-black/10 to-[#050505]/58' : 'absolute inset-0 bg-gradient-to-b from-white/10 via-white/18 to-slate-50/68'} />
-      </div>
-
-      <header className="fixed top-4 inset-x-0 z-[60] pointer-events-none flex justify-center px-4 md:top-8 md:px-12">
-        <div className="flex w-full max-w-[1440px] items-center justify-between">
-          <div className="elite-floating pointer-events-auto flex items-center gap-3 px-4 py-2 md:px-5 md:py-2.5">
-            <div className="sky-glow flex h-9 w-9 items-center justify-center rounded-full text-white">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[11px] font-bold uppercase leading-none tracking-[0.34em]">{DEFAULT_APP_NAME}</span>
-              <span className="mt-0.5 text-[8px] font-bold uppercase tracking-normal text-[var(--color-brand)]">{DEFAULT_APP_MOTTO}</span>
-            </div>
-          </div>
-
-          <div className="pointer-events-auto flex items-center gap-2 md:gap-3">
-            <div className="elite-floating hidden h-11 items-center gap-3 px-4 text-slate-400 md:flex">
-              <Search className="h-4 w-4" />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Arama</span>
-            </div>
+    <div
+      ref={pageRef}
+      className="cv-landing"
+      lang={getLanguageTag(i18n.language)}
+      dir={i18n.dir()}
+    >
+      <a className="cv-landing-skip" href="#landing-main">
+        {t('skip')}
+      </a>
+      <header className="cv-landing-header">
+        <div className="cv-landing-header-inner">
+          <Brand onClick={scrollHome} />
+          <nav
+            className={`cv-landing-nav${menuOpen ? ' is-open' : ''}`}
+            aria-label={t('main_nav')}
+          >
+            <button onClick={() => scrollTo('kesfet')}>
+              {t('nav_discover')}
+            </button>
+            <button onClick={() => scrollTo('guvenlik')}>
+              {t('nav_safety')}
+            </button>
+            <button onClick={() => scrollTo('sorular')}>{t('nav_faq')}</button>
+          </nav>
+          <div className="cv-landing-header-actions">
             <button
-              onClick={toggleTheme}
-              className={`elite-btn elite-floating h-11 w-11 ${theme === 'dark' ? 'text-amber-300' : 'text-indigo-500'}`}
-              aria-label="Toggle theme"
+              className="cv-landing-language"
+              onClick={() => setLanguageOpen(true)}
+              aria-label={t('language')}
+              aria-haspopup="dialog"
             >
-              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              {languageFlag.src ? (
+                <img src={languageFlag.src} alt="" width={20} height={20} />
+              ) : (
+                <Globe2 size={17} />
+              )}
+              <span>{languageCode.toUpperCase()}</span>
+              <ChevronDown size={12} />
             </button>
             <button
-              onClick={() => setIsAuthWizardOpen(true)}
-              className="hidden h-11 items-center gap-2 rounded-full bg-[var(--color-brand)] px-6 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-[var(--color-brand)]/25 transition hover:bg-[var(--color-brand-hovered)] sm:flex"
+              className="cv-landing-theme"
+              onClick={toggleTheme}
+              aria-label={t(theme === 'dark' ? 'theme_light' : 'theme_dark')}
             >
-              Join
-              <ArrowRight className="h-4 w-4" />
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <button className="cv-landing-login" onClick={join}>
+              {t(isAuthenticated ? 'open_app' : 'login')}
+              <ArrowRight size={15} />
+            </button>
+            <button
+              className="cv-landing-mobile-menu"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={t(menuOpen ? 'close_menu' : 'open_menu')}
+              aria-expanded={menuOpen}
+            >
+              {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
       </header>
 
-      <main className="relative z-10 mx-auto grid h-full max-w-[1440px] grid-cols-1 items-center gap-10 px-4 pb-28 pt-28 md:px-12 md:pb-36 md:pt-36 lg:grid-cols-12">
-        <section className="lg:col-span-7">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="max-w-3xl"
-          >
-            <p className="mb-5 text-[10px] font-black uppercase tracking-[0.34em] text-[var(--color-brand)]">
-              {DEFAULT_APP_MOTTO}
-            </p>
-            <h1 className="text-5xl font-black uppercase leading-[0.9] tracking-normal text-slate-950 drop-shadow-[0_16px_50px_rgba(255,255,255,0.45)] dark:text-white dark:drop-shadow-[0_20px_50px_rgba(0,0,0,0.55)] md:text-7xl xl:text-8xl">
-              {DEFAULT_APP_NAME}
-              <span className="block bg-[linear-gradient(90deg,#d04b36,#e36511,#ffba00,#00b180,#147aab,#675997)] bg-clip-text text-transparent drop-shadow-none">Rainbow</span>
-              Community
-            </h1>
-            <p className={`mt-7 max-w-2xl text-base font-semibold leading-relaxed md:text-lg ${theme === 'dark' ? 'text-white/72' : 'text-slate-700'}`}>
-              LGBTQ+ topluluğu için güvenli, renkli ve kapsayıcı sosyal keşif, sohbet ve bağlantı deneyimi.
-            </p>
-
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+      <main id="landing-main">
+        <section className="cv-landing-hero" aria-labelledby="landing-title">
+          <img
+            className="cv-landing-hero-image"
+            src={hero.image}
+            alt={t('hero_image_alt', { place: hero.place })}
+            width={1536}
+            height={1024}
+            fetchPriority="high"
+          />
+          <div className="cv-landing-hero-shade" />
+          <div className="cv-landing-hero-inner">
+            <div className="cv-landing-hero-content">
+              <p className="cv-landing-eyebrow">
+                <span className="cv-landing-pride-stripes" />
+                {t('eyebrow')}
+              </p>
+              <h1 id="landing-title">
+                {t('hero_title')}
+                <br />
+                <span>{t('hero_accent')}</span>
+              </h1>
+              <p className="cv-landing-hero-description">
+                {t('hero_description_1')}
+                <br />
+                {t('hero_description_2')}
+              </p>
               <button
-                onClick={() => setIsAuthWizardOpen(true)}
-                className="inline-flex h-14 items-center justify-center gap-3 rounded-full bg-slate-950 px-8 text-[12px] font-black uppercase tracking-[0.18em] text-white shadow-2xl shadow-slate-950/20 transition hover:bg-slate-800 dark:bg-white dark:text-black dark:hover:bg-white/90"
+                className="cv-landing-button cv-landing-button-primary"
+                onClick={join}
               >
-                Başla
-                <ArrowRight className="h-5 w-5" />
+                {t('hero_cta')}
+                <ArrowRight size={18} />
               </button>
-              <button className={`inline-flex h-14 items-center justify-center gap-3 rounded-full border px-8 text-[12px] font-black uppercase tracking-[0.18em] transition ${theme === 'dark' ? 'border-white/12 bg-white/[0.08] text-white hover:bg-white/[0.12]' : 'border-white/80 bg-white/75 text-slate-950 hover:bg-white'}`}>
-                <Globe className="h-5 w-5" />
-                Explore
-              </button>
+              <p className="cv-landing-hero-note">
+                <ShieldCheck size={14} />
+                {t('hero_note')}
+                <span>18+</span>
+              </p>
             </div>
-          </motion.div>
+          </div>
+          <div className="cv-landing-hero-bottom">
+            <button onClick={() => scrollTo('kesfet')}>
+              {t('scroll')}
+              <ArrowDown size={16} />
+            </button>
+            <span>
+              <MapPin size={14} />
+              <bdi>{hero.place}</bdi>
+            </span>
+          </div>
         </section>
 
-        <section className="hidden lg:col-span-5 lg:block">
-          <div className="grid grid-cols-2 gap-5">
-            {previewImages.map((src, index) => (
-              <motion.div
-                key={src}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + index * 0.08 }}
-                className={`overflow-hidden rounded-[30px] border border-white/65 bg-white/55 p-3 shadow-[0_28px_80px_rgba(15,23,42,0.16)] backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.07] dark:shadow-black/40 ${index % 2 === 1 ? 'translate-y-10' : ''}`}
+        <div className="cv-landing-explore-bar">
+          <div>
+            {sections.map(({ id, copy, icon: Icon }) => (
+              <button key={id} onClick={() => scrollTo(id)}>
+                <Icon size={17} />
+                {t(`${copy}_tag`)}
+                <ArrowRight size={14} />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <section
+          id="kesfet"
+          className="cv-landing-introduction cv-landing-container"
+          aria-labelledby="discover-title"
+        >
+          <div>
+            <p className="cv-landing-kicker">
+              <Sparkles size={15} />
+              {t('welcome')}
+            </p>
+            <h2 id="discover-title">
+              {t('discover_title')}
+              <br />
+              <span>{t('discover_accent')}</span>
+            </h2>
+          </div>
+          <p>
+            {t('discover_desc_1')}
+            <br />
+            {t('discover_desc_2')}
+          </p>
+        </section>
+
+        <div className="cv-landing-product-sections cv-landing-container">
+          {sections.map(
+            ({ id, copy, detail, icon: Icon, image, city, country }, index) => (
+              <section
+                id={id}
+                key={id}
+                className={`cv-landing-product-section${index % 2 ? ' is-reversed' : ''}${index === 0 ? ' has-demo' : ''}`}
+                aria-labelledby={`${id}-title`}
               >
-                <div className="aspect-[3/4] overflow-hidden rounded-[24px]">
-                  <img src={src} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                <div className="cv-landing-section-copy">
+                  <p className="cv-landing-kicker">
+                    <Icon size={16} />
+                    {t(`${copy}_tag`)}
+                  </p>
+                  <h2 id={`${id}-title`}>
+                    {t(`${copy}_title`)}
+                    <br />
+                    <span>{t(`${copy}_title_2`)}</span>
+                  </h2>
+                  <p className="cv-landing-section-lead">{t(`${copy}_body`)}</p>
+                  <p className="cv-landing-section-detail">
+                    {t(`${detail}_detail`)}
+                  </p>
+                  <ul className="cv-landing-section-points">
+                    {[1, 2, 3].map((item) => (
+                      <li key={item}>
+                        <Check size={16} />
+                        <span>{t(`${detail}_point_${item}`)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    className="cv-landing-text-link"
+                    onClick={id === 'nearby' ? () => navigate('/places') : join}
+                  >
+                    {t(`${copy}_cta`)}
+                    <ArrowRight size={17} />
+                  </button>
                 </div>
-              </motion.div>
+                <div className="cv-landing-section-visual">
+                  <div className="cv-landing-section-image">
+                    <img
+                      src={`/images/landing/${image}.avif`}
+                      alt={t(`${detail}_image_alt`)}
+                      width={1536}
+                      height={1024}
+                      loading="lazy"
+                    />
+                    <span className="cv-landing-city-label">
+                      <MapPin size={13} />
+                      {city}
+                      <span>{country}</span>
+                    </span>
+                  </div>
+                  {index === 0 && (
+                    <div className="cv-landing-product-demo">
+                      <ProductPreview onJoin={join} />
+                    </div>
+                  )}
+                </div>
+              </section>
+            ),
+          )}
+
+          <section
+            id="guvenlik"
+            className="cv-landing-product-section cv-landing-safety"
+            aria-labelledby="safety-title"
+          >
+            <div className="cv-landing-section-copy">
+              <p className="cv-landing-kicker">
+                <ShieldCheck size={16} />
+                {t('safety_tag')}
+              </p>
+              <h2 id="safety-title">
+                {t('safety_title')}
+                <br />
+                <span>{t('safety_accent')}</span>
+              </h2>
+              <p className="cv-landing-section-lead">{t('safety_body')}</p>
+              <ul className="cv-landing-section-points">
+                {['safety_photos', 'safety_block', 'safety_pace'].map((key) => (
+                  <li key={key}>
+                    <Check size={16} />
+                    <span>{t(key)}</span>
+                  </li>
+                ))}
+              </ul>
+              <button
+                className="cv-landing-text-link"
+                onClick={() => navigate('/legal/privacy')}
+              >
+                {t('privacy_cta')}
+                <ArrowRight size={17} />
+              </button>
+            </div>
+            <div className="cv-landing-section-visual">
+              <div className="cv-landing-section-image">
+                <img
+                  src="/images/landing/hong-kong-privacy.avif"
+                  alt={t('safety_image_alt')}
+                  width={1536}
+                  height={1024}
+                  loading="lazy"
+                />
+                <span className="cv-landing-city-label">
+                  <MapPin size={13} />
+                  Hong Kong
+                </span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section
+          id="sorular"
+          className="cv-landing-faq cv-landing-container"
+          aria-labelledby="faq-title"
+        >
+          <div>
+            <p className="cv-landing-kicker">{t('faq_tag')}</p>
+            <h2 id="faq-title">
+              {t('faq_title')}
+              <br />
+              <span>{t('faq_accent')}</span>
+            </h2>
+            <p>{t('faq_note')}</p>
+          </div>
+          <div className="cv-landing-faq-list">
+            {[1, 2, 3, 4, 5].map((item) => (
+              <details key={item}>
+                <summary>
+                  {t(`faq_${item}_q`)}
+                  <ChevronDown size={18} />
+                </summary>
+                <p>{t(`faq_${item}_a`)}</p>
+              </details>
             ))}
           </div>
         </section>
+
+        <section className="cv-landing-final">
+          <div className="cv-landing-final-avatars" aria-hidden="true">
+            {portraits.map((character) => (
+              <CharacterPortrait key={character} character={character} />
+            ))}
+          </div>
+          <p className="cv-landing-kicker">{t('final_tag')}</p>
+          <h2>{t('final_title')}</h2>
+          <p>{t('final_body')}</p>
+          <button
+            className="cv-landing-button cv-landing-button-primary"
+            onClick={join}
+          >
+            {t('join')}
+            <ArrowRight size={18} />
+          </button>
+          <small>{t('age_note')}</small>
+        </section>
       </main>
 
-      <div className="fixed bottom-5 left-1/2 z-[70] -translate-x-1/2 md:bottom-10">
-        <div className="elite-floating flex items-center gap-1.5 p-2">
-          {[
-            { icon: Users, label: 'People' },
-            { icon: Heart, label: 'Match' },
-            { icon: MessageSquare, label: 'Chat', active: true },
-            { icon: Bell, label: 'Alerts' },
-            { icon: Shield, label: 'Safety' },
-          ].map((item) => (
-            <button
-              key={item.label}
-              title={item.label}
-              className={`elite-btn relative h-11 w-11 md:h-12 md:w-12 ${item.active ? 'bg-[var(--color-brand)] text-white shadow-lg shadow-[var(--color-brand)]/30' : theme === 'dark' ? 'text-zinc-500 hover:bg-zinc-800 hover:text-white' : 'text-slate-400 hover:bg-slate-100 hover:text-[var(--color-brand)]'}`}
-            >
-              <item.icon className="h-5 w-5" />
+      <footer className="cv-landing-footer cv-landing-container">
+        <div className="cv-landing-footer-main">
+          <div>
+            <Brand onClick={scrollHome} />
+            <p>{t('footer_motto')}</p>
+          </div>
+          <nav aria-label={t('footer_nav')}>
+            <button onClick={() => navigate('/legal/terms')}>
+              {t('terms')}
             </button>
-          ))}
+            <button onClick={() => navigate('/legal/privacy')}>
+              {t('privacy')}
+            </button>
+            <button onClick={() => navigate('/legal/guidelines')}>
+              {t('guidelines')}
+            </button>
+          </nav>
+          <button className="cv-landing-footer-join" onClick={join}>
+            {t('footer_join')}
+            <ArrowRight size={15} />
+          </button>
         </div>
-      </div>
-
-      <AuthWizard isOpen={isAuthWizardOpen} onClose={() => setIsAuthWizardOpen(false)} />
+        <div className="cv-landing-footer-bottom">
+          <span>
+            © {new Date().getFullYear()} {t('footer_copyright')}
+          </span>
+          <span>
+            <span className="cv-landing-pride-stripes" />
+            {t('footer_pride')}
+          </span>
+        </div>
+      </footer>
+      <LanguageSelector
+        isOpen={languageOpen}
+        onClose={() => setLanguageOpen(false)}
+      />
+      <AuthWizard isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </div>
-  );
-};
-
-export default LandingPage;
+  )
+}

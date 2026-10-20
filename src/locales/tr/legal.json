@@ -1,0 +1,245 @@
+{
+  "center_title": "Yasal ve Topluluk Merkezi",
+  "center_description": "Gizliliğin, hakların ve topluluğumuzu bir arada tutan değerler. Politikalarımızı, topluluk kurallarını ve destek kaynaklarını tek bir yerde bul.",
+  "legal_label": "Gizlilik, güven ve topluluk",
+  "home": "Ana sayfaya dön",
+  "all_documents": "Tüm belgeler",
+  "table_of_contents": "Bu sayfada",
+  "read_document": "Belgeyi oku",
+  "related": "İlgili belgeler",
+  "need_help": "Bir sorunun mu var?",
+  "help_cta": "Destek merkezine git",
+  "not_found": "Sayfa bulunamadı",
+  "not_found_body": "Aradığın belgeye ulaşılamıyor.",
+  "image_alt": "{{title}} için, farklı beden tiplerinde yetişkin gay şehir sakinlerinin bulunduğu gökkuşağı temalı şehir illüstrasyonu.",
+  "copyright": "CoolVibes. Bütün renklerinle.",
+  "pages": {
+    "privacy": {
+      "title": "Gizlilik Politikası",
+      "description": "Son güncelleme: Mart 2025",
+      "sections": [
+        {
+          "heading": "Topladığımız bilgiler",
+          "body": "Bir hesap oluşturduğunda, profilini güncellediğinde veya diğer kullanıcılarla iletişime geçtiğinde doğrudan bize sağladığın bilgileri toplarız. Bunlar adın, kullanıcı adın, e-posta adresin, şifren ve profil bilgilerini içerir."
+        },
+        {
+          "heading": "Bilgilerini nasıl kullanıyoruz?",
+          "body": "Topladığımız bilgileri hizmetlerimizi sunmak, sürdürmek ve geliştirmek, işlemleri gerçekleştirmek, teknik bildirimler, güncellemeler ve destek mesajları göndermek, yorum ve sorularını yanıtlamak ve hukuken izin verilen durumlarda pazarlama iletişimleri göndermek için kullanırız."
+        },
+        {
+          "heading": "Veri paylaşımı",
+          "body": "Kişisel bilgilerini satmayız. Bilgilerini, bizim adımıza çalışmalar yürütmek için bu bilgilere erişmesi gereken tedarikçiler, danışmanlar ve diğer hizmet sağlayıcılarla paylaşabiliriz."
+        },
+        {
+          "heading": "Verilerin saklanması",
+          "body": "Kişisel verilerini, hizmetleri sunmak ve bu politikada açıklanan amaçları yerine getirmek için gerekli olduğu sürece saklarız. Yasaların daha uzun bir saklama süresi gerektirdiği veya buna izin verdiği durumlar saklıdır."
+        },
+        {
+          "heading": "Hakların",
+          "body": "GDPR, CCPA ve CPRA kapsamında kişisel verilerine erişme, bunları düzeltme veya silme hakkına sahipsin. Ayrıca istediğin zaman veri işlenmesine itiraz edebilir veya veri taşınabilirliği talebinde bulunabilirsin."
+        },
+        {
+          "heading": "Hesap ve verilerin silinmesi",
+          "body": "Hesabını ve ilişkili tüm verilerini doğrudan Ayarlar üzerinden silebilirsin. İşlem başlatıldıktan sonra tüm kişisel bilgiler, paylaşımlar ve eşleşmeler 30 gün içinde aktif sunucularımızdan kalıcı olarak kaldırılır."
+        },
+        {
+          "heading": "İletişim",
+          "body": "Bu Gizlilik Politikası hakkında soruların varsa privacy@coolvibes.lgbt adresinden bize ulaşabilirsin."
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Çerez Politikası",
+      "description": "Son güncelleme: Mart 2025",
+      "sections": [
+        {
+          "heading": "Çerez nedir?",
+          "body": "Çerezler, internet sitemizi ziyaret ettiğinde cihazına kaydedilen küçük metin dosyalarıdır. Tercihlerini hatırlamamıza ve deneyimini geliştirmemize yardımcı olurlar."
+        },
+        {
+          "heading": "Zorunlu çerezler",
+          "body": "Bu çerezler, internet sitesinin çalışması için gereklidir ve devre dışı bırakılamaz. Kimlik doğrulama belirteçleri ve oturum tanımlayıcıları bunlara dahildir."
+        },
+        {
+          "heading": "Analiz çerezleri",
+          "body": "Ziyaretçilerin sitemizle nasıl etkileşim kurduğunu anlamak için analiz çerezleri kullanırız. Bu bilgiler hizmetlerimizi geliştirmek için kullanılır."
+        },
+        {
+          "heading": "Çerezleri yönetme",
+          "body": "Çerezleri tarayıcı ayarlarından kontrol edebilirsin. Bazı çerezlerin devre dışı bırakılması, sitenin işlevlerini etkileyebilir."
+        }
+      ]
+    },
+    "terms": {
+      "title": "Kullanım Koşulları",
+      "description": "Son güncelleme: Mart 2025",
+      "sections": [
+        {
+          "heading": "Yaş ve uygunluk",
+          "body": "Hesap oluşturmak ve CoolVibes’ı kullanmak için en az 18 yaşında olmalısın. Hizmeti kullanarak bu yaş koşulunu karşıladığını beyan edersin."
+        },
+        {
+          "heading": "Kullanıcı hesapları",
+          "body": "Hesabına ait giriş bilgilerini korumaktan sen sorumlusun. Kimlikleri doğrulama ve yanlış bilgi sağlayan hesapları kaldırma hakkımızı saklı tutarız."
+        },
+        {
+          "heading": "Apple EULA kabulü",
+          "body": "CoolVibes’ı bir iOS cihazında kullanarak bu koşulların Apple ile değil, yalnızca sen ve CoolVibes arasında olduğunu kabul edersin. Uygulamayı kullanımın ayrıca Apple’ın Standart Son Kullanıcı Lisans Sözleşmesi’ne uygun olmalıdır."
+        },
+        {
+          "heading": "Kullanıcı içeriklerinin denetlenmesi",
+          "body": "Uygunsuz içeriklere karşı sıfır tolerans politikası uygularız. Kullanıcı tarafından oluşturulan içeriklerle ilgili tüm bildirimler 24 saat içinde incelenir. Koşullara uymayan içerikleri kaldırma ve kullanıcıları derhal yasaklama hakkımızı saklı tutarız."
+        },
+        {
+          "heading": "Yasak içerikler",
+          "body": "Yasa dışı, zararlı veya başkalarının haklarını ihlal eden içerikler paylaşamazsın. Maddi menfaate dayalı flört, cinsel hizmet talebi ve her türlü taciz kesin olarak yasaktır."
+        },
+        {
+          "heading": "Çocuk istismarı materyallerine sıfır tolerans",
+          "body": "Çocukların cinsel istismarına ilişkin materyallere karşı sıfır tolerans uygularız. Bu tür içerikler derhal kaldırılır ve ilgili hesaplar yetkili makamlara bildirilir."
+        },
+        {
+          "heading": "Hesabın sonlandırılması",
+          "body": "Bu Koşulları ihlal ettiğine veya topluluğumuza zarar verdiğine inandığımız davranışlar nedeniyle hesabını önceden bildirimde bulunmaksızın, kendi takdirimize bağlı olarak sonlandırabilir veya askıya alabiliriz."
+        },
+        {
+          "heading": "Koşullardaki değişiklikler",
+          "body": "Bu koşulları istediğimiz zaman değiştirme hakkını saklı tutarız. Değişikliklerden sonra hizmeti kullanmaya devam etmen, yeni koşulları kabul ettiğin anlamına gelir."
+        }
+      ]
+    },
+    "guidelines": {
+      "title": "Topluluk Kuralları",
+      "description": "Güvenli ve kapsayıcı bir alanı birlikte kuruyoruz.",
+      "sections": [
+        {
+          "heading": "Saygılı ol",
+          "body": "CoolVibes, LGBTIQA+ topluluğu ve destekçileri için güvenli bir alandır. Kimliği veya geçmişi ne olursa olsun tüm üyelere nezaket ve saygıyla yaklaş."
+        },
+        {
+          "heading": "Nefrete sıfır tolerans",
+          "body": "Cinsel yönelim, cinsiyet kimliği, ırk, etnik köken, din veya başka herhangi bir özelliğe dayalı nefret söylemi, ayrımcılık, taciz ve zorbalık kesinlikle yasaktır."
+        },
+        {
+          "heading": "Gerçek profiller",
+          "body": "Gerçek kimliğini veya tutarlı bir takma ad kullan. Başkalarını taklit etmek veya sahte profiller oluşturmak yasaktır."
+        },
+        {
+          "heading": "Güvenli içerik",
+          "body": "İçeriklerini uygun tut. Açık cinsel içerikler buna uygun biçimde işaretlenmelidir. Çocukların cinsel istismarına ilişkin materyaller kesinlikle yasaktır ve yetkili makamlara bildirilir."
+        },
+        {
+          "heading": "Taciz ve kötüye kullanım",
+          "body": "İçeriklerini uygun tut. Açık cinsel içerikler buna uygun biçimde işaretlenmelidir. Taciz ve kötüye kullanım davranışlarına karşı sıfır tolerans uygularız."
+        },
+        {
+          "heading": "Bildirme ve engelleme",
+          "body": "Bir ihlalle karşılaşırsan veya kendini güvende hissetmezsen Bildir ya da Engelle özelliklerini hemen kullan. Güvenlik ekibimiz, herkes için güvenli bir ortam sağlamak amacıyla tüm bildirimleri 24 saat içinde inceler."
+        }
+      ]
+    },
+    "accessibility": {
+      "title": "Erişilebilirlik",
+      "description": "Herkesi kapsayan bir deneyim için çalışıyoruz.",
+      "sections": [
+        {
+          "heading": "Taahhüdümüz",
+          "body": "CoolVibes, engelli kişiler için dijital erişilebilirliği sağlamaya kararlıdır. Herkes için kullanıcı deneyimini sürekli geliştiriyoruz."
+        },
+        {
+          "heading": "Standartlar",
+          "body": "Web İçeriği Erişilebilirlik Yönergeleri’nin (WCAG) 2.1 AA düzeyine uygun olmayı hedefliyoruz. Bu yönergeler, internet içeriğinin nasıl daha erişilebilir hale getirileceğini açıklar."
+        },
+        {
+          "heading": "Özellikler",
+          "body": "Platformumuz, herkesin kullanabilmesi için ekran okuyucuları, klavye ile gezinmeyi, yeterli renk kontrastını ve yeniden boyutlandırılabilir metni destekler."
+        },
+        {
+          "heading": "Geri bildirim",
+          "body": "CoolVibes’ın erişilebilirliği hakkındaki geri bildirimlerini bekliyoruz. Erişilebilirlik engelleriyle karşılaşırsan accessibility@coolvibes.lgbt adresinden bize ulaşabilirsin."
+        }
+      ]
+    },
+    "about": {
+      "title": "CoolVibes Hakkında",
+      "description": "Gökkuşağının bütün renklerinden hikâyeler.",
+      "sections": [
+        {
+          "heading": "Misyonumuz",
+          "body": "CoolVibes, LGBTIQA+ topluluğu için oluşturulmuş bir sosyal platformdur. Misyonumuz, herkesin kendini özgün biçimde ifade edebildiği güvenli, canlı ve kapsayıcı bir alan yaratmaktır."
+        },
+        {
+          "heading": "Değerlerimiz",
+          "body": "Özgünlüğe, kapsayıcılığa, saygıya ve topluluğa inanıyoruz. Geliştirdiğimiz her özellikte LGBTIQA+ bireylerin güvenliğini ve güçlenmesini gözetiyoruz."
+        },
+        {
+          "heading": "Ekibimiz",
+          "body": "CoolVibes, topluluğun ve insanlar arasındaki bağların gücüne inanan, farklı geçmişlerden gelen tutkulu bir ekip tarafından geliştirilir ve sürdürülür."
+        },
+        {
+          "heading": "İletişim",
+          "body": "İş birlikleri, basın talepleri veya genel soruların için hello@coolvibes.lgbt adresinden bize ulaşabilirsin."
+        }
+      ]
+    },
+    "help": {
+      "title": "Destek Merkezi",
+      "description": "Sık sorulan sorular ve ihtiyacın olan yanıtlar.",
+      "sections": [
+        {
+          "heading": "Başlarken",
+          "body": "Bir hesap oluştur, profilini tamamla ve yakınındaki LGBTIQA+ topluluğuyla bağlantı kurmaya başla. Çevrendeki kişileri keşfetmek için Yakındakiler özelliğini kullan."
+        },
+        {
+          "heading": "Hesap sorunları",
+          "body": "Giriş yapmakta zorlanıyorsan giriş ekranındaki Şifremi Unuttum seçeneğini kullan. Sorun devam ederse support@coolvibes.lgbt adresinden bize ulaş."
+        },
+        {
+          "heading": "Gizlilik ve güvenlik",
+          "body": "Herhangi bir kullanıcıyı profil sayfasından engelleyebilir veya bildirebilirsin. Bildirimler moderasyon ekibimiz tarafından 24 saat içinde incelenir."
+        },
+        {
+          "heading": "Hesabını silme",
+          "body": "Hesabını Ayarlar, Hesap, Hesabı Sil adımlarını izleyerek silebilirsin. Bu işlem kalıcıdır ve tüm verilerin 30 gün içinde kaldırılır."
+        },
+        {
+          "heading": "Destek ile iletişim",
+          "body": "Diğer sorunlar için support@coolvibes.lgbt adresine e-posta gönderebilir veya Ayarlar’daki uygulama içi geri bildirim düğmesini kullanabilirsin."
+        }
+      ]
+    },
+    "conduct": {
+      "title": "Davranış İlkeleri",
+      "description": "Bütün üyelerin güvenliğini ve iyilik halini önceliklendiriyoruz.",
+      "sections": [
+        {
+          "heading": "Temel ilkemiz",
+          "body": "CoolVibes, ötekileştirilen kişilerin güvenliğini ve iyilik halini ayrıcalıklı üyelerin rahatlığının önünde tutar. Herkes için tacizden uzak bir deneyim sunmaya kararlıyız."
+        },
+        {
+          "heading": "Yasak davranışlar",
+          "body": "Tacize, zorbalığa ve ayrımcılığa izin vermeyiz. Beyan edilen kimlikleri sorgulamak, şiddete teşvik etmek, kişilerin kimliklerini rızaları olmadan açığa çıkarmak ve özel yazışmaları izinsiz yayımlamak buna dahildir."
+        },
+        {
+          "heading": "Nefrete sıfır tolerans",
+          "body": "Gündelik veya açık biçimde olsun, ırkçı, cinsiyetçi, cis cinsiyetçiliğe dayalı, engelli karşıtı ya da baskıcı davranışlara izin verilmez. Farklı ırklardan kişilere, trans bireylere ve engelli üyelere yönelik zararlı dil ve eylemler de buna dahildir."
+        },
+        {
+          "heading": "İhlalleri bildirme",
+          "body": "Bir ihlal görürsen profil veya paylaşımdaki bildirme düğmesini kullan. Moderasyon ekibimiz tüm bildirimleri 24 saat içinde inceler ve etkilenen kişilerin iyilik halini önceliklendirir."
+        },
+        {
+          "heading": "Sonuçlar",
+          "body": "Zararlı davranışını durdurması istenen katılımcılar bu isteğe derhal uymalıdır. Yöneticiler, CoolVibes’tan kalıcı olarak çıkarma dahil olmak üzere uygun gördükleri önlemleri alabilir."
+        },
+        {
+          "heading": "Topluluk sorumluluğu",
+          "body": "Sorumluluk ve gelişim kültürünü destekleriz. Ayrıcalıkları sorgulayan tartışmaları teşvik eder ve ötekileştirilen topluluk üyelerinin verdiği duygusal emeğe saygı duyarız."
+        }
+      ]
+    }
+  },
+  "theme_light": "Açık",
+  "theme_dark": "Koyu",
+  "section_image_alt": "{{heading}}: farklı beden tipleri ve ten renklerinde yetişkin gay şehir sakinlerinin yer aldığı, pembe-mor ve gökkuşağı temalı retro macera oyunu illüstrasyonu."
+}

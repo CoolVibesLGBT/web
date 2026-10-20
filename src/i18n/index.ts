@@ -21,16 +21,13 @@ import id from '../locales/id/common.json';
 import pl from '../locales/pl/common.json';
 import kp from '../locales/kp/common.json';
 import kr from '../locales/kr/common.json';
+import { normalizeLanguage } from './language';
 
 
 
 const fallbackLng = 'en';
 
-const normalizeLang = (lang: string) => {
-  if (lang === 'zh-tw') return 'tw';
-  if (lang === 'zh-hk') return 'hk';
-  return lang;
-};
+const landingResources = import.meta.glob<Record<string, string>>('../locales/*/{landing,legal}.json', { eager: true, import: 'default' });
 
 export const resolvePreferredLanguage = () => {
   if (typeof window === 'undefined') {
@@ -39,12 +36,12 @@ export const resolvePreferredLanguage = () => {
   const storedLang = localStorage.getItem('lang');
   const browserLang =
     typeof navigator !== 'undefined'
-      ? (navigator.language || 'en').split('-')[0]
+      ? (navigator.language || 'en')
       : 'en';
-  return normalizeLang(storedLang || browserLang || fallbackLng);
+  return normalizeLanguage(storedLang || browserLang || fallbackLng);
 };
 
-const lng = fallbackLng;
+const lng = resolvePreferredLanguage();
 
 
 i18n
@@ -75,16 +72,23 @@ i18n
     },
     lng,
     fallbackLng,
-    ns: ['common'],
+    ns: ['common', 'landing', 'legal'],
     defaultNS: 'common',
     interpolation: { escapeValue: false },
     returnEmptyString: false,
   });
 
+for (const [path, translations] of Object.entries(landingResources)) {
+  const language = path.split('/')[2];
+  const namespace = path.split('/')[3].replace('.json', '');
+  i18n.addResourceBundle(language, namespace, translations, true, false);
+}
+
 export const setLanguage = (lang: string) => {
-  i18n.changeLanguage(lang);
+  const language = normalizeLanguage(lang);
+  i18n.changeLanguage(language);
   if (typeof window !== 'undefined') {
-    localStorage.setItem('lang', lang);
+    localStorage.setItem('lang', language);
   }
 };
 
