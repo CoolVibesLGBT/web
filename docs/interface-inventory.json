@@ -502,7 +502,13 @@
       "headings": [],
       "dialogs": [],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "scope": "Original auth artwork on choice cards and login/register form headings",
+        "evidence": "docs/auth-artwork-checks.json",
+        "outcome": "Original AVIF images decode, both cards and Back work, actions remain reachable without horizontal overflow at 320/390/820/1440px in Turkish/English/Arabic, light/dark and enlarged text cases.",
+        "limits": "DOM and image decoding checks only; no screenshot or simulator, APIs blocked and no account created."
+      }
     },
     {
       "file": "src/features/auth/AuthWizard.tsx",
@@ -608,7 +614,13 @@
         "Sheet"
       ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "scope": "Original auth artwork on choice cards and login/register form headings",
+        "evidence": "docs/auth-artwork-checks.json",
+        "outcome": "Original AVIF images decode, both cards and Back work, actions remain reachable without horizontal overflow at 320/390/820/1440px in Turkish/English/Arabic, light/dark and enlarged text cases.",
+        "limits": "DOM and image decoding checks only; no screenshot or simulator, APIs blocked and no account created."
+      }
     },
     {
       "file": "src/features/chat/AttachmentMenu.tsx",

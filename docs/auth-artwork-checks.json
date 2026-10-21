@@ -1,0 +1,37 @@
+{
+  "method": "DOM and image decoding; no screenshots, no simulator, API blocked; no account created",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "largeText": false,
+      "passed": true,
+      "checks": "Original AVIF decoding, both cards, form artwork, Back, reachable action, no horizontal overflow or render errors"
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "largeText": false,
+      "passed": true,
+      "checks": "Original AVIF decoding, both cards, form artwork, Back, reachable action, no horizontal overflow or render errors"
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "largeText": true,
+      "passed": true,
+      "checks": "Original AVIF decoding, both cards, form artwork, Back, reachable action, no horizontal overflow or render errors"
+    },
+    {
+      "width": 1440,
+      "language": "tr",
+      "theme": "light",
+      "largeText": false,
+      "passed": true,
+      "checks": "Original AVIF decoding, both cards, form artwork, Back, reachable action, no horizontal overflow or render errors"
+    }
+  ]
+}

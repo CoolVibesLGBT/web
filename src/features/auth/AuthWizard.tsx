@@ -13,6 +13,7 @@ import LanguageSelectorModal, { getLanguageFlagDisplay } from '../../components/
 import { DEFAULT_APP_MOTTO, DEFAULT_APP_NAME } from '../../constants/constants';
 import { getLanguageTag, normalizeLanguage } from '@/i18n/language';
 import { FormField, Sheet } from '@/components/ui/Interface';
+import AuthIllustration from '@/features/auth/AuthIllustration';
 
 interface AuthWizardProps {
   isOpen: boolean;
@@ -342,11 +343,13 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-2xl transition-all ${authMode === 'login' ? 'bg-white/15 text-white' : 'bg-[var(--color-brand)]/10 text-[var(--color-brand)] group-hover:bg-[var(--color-brand)] group-hover:text-white'}`}>
-                  <User className="h-5 w-5" />
+                <div className="flex items-center gap-3 sm:flex-col sm:items-start">
+                  <AuthIllustration kind="login" />
+                  <div className="min-w-0">
+                    <h3 className="mb-2 text-sm font-semibold normal-case tracking-tight sm:text-base">{t('have_account')}</h3>
+                    <p className="text-xs font-medium leading-relaxed opacity-75">{t('sign_in_subtitle')}</p>
+                  </div>
                 </div>
-                <h3 className="mb-2 text-sm font-semibold normal-case tracking-tight sm:text-base">{t('have_account')}</h3>
-                <p className="text-xs font-medium leading-relaxed opacity-75">{t('sign_in_subtitle')}</p>
               </motion.button>
 
               <motion.button
@@ -367,16 +370,18 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-2xl transition-all ${authMode === 'register' ? 'bg-white/15 text-white' : 'bg-[var(--color-brand)]/10 text-[var(--color-brand)] group-hover:bg-[var(--color-brand)] group-hover:text-white'}`}>
-                  <Heart className="h-5 w-5" />
+                <div className="flex items-center gap-3 sm:flex-col sm:items-start">
+                  <AuthIllustration kind="register" />
+                  <div className="min-w-0">
+                    <h3 className="mb-2 text-sm font-semibold normal-case tracking-tight sm:text-base">{t('create_account')}</h3>
+                    <p className="text-xs font-medium leading-relaxed opacity-75">{t('create_account_subtitle')}</p>
+                    {externalRegistrationURL && (
+                      <p className="mt-2 text-[0.765rem] font-semibold normal-case tracking-normal opacity-70">
+                        {t('opens_in_browser', { defaultValue: 'Opens in your browser' })}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <h3 className="mb-2 text-sm font-semibold normal-case tracking-tight sm:text-base">{t('create_account')}</h3>
-                <p className="text-xs font-medium leading-relaxed opacity-75">{t('create_account_subtitle')}</p>
-                {externalRegistrationURL && (
-                  <p className="mt-2 text-[0.765rem] font-semibold normal-case tracking-normal opacity-70">
-                    {t('opens_in_browser', { defaultValue: 'Opens in your browser' })}
-                  </p>
-                )}
               </motion.button>
             </div>
           </div>
@@ -543,10 +548,14 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         className="px-5 py-5 text-start sm:px-6"
       >
         <div className="mb-4 flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[20px] bg-[var(--color-brand)]/10 text-[var(--color-brand)] ring-1 ring-[var(--color-brand)]/10">
-            <currentStepData.icon className="h-6 w-6" />
-          </div>
-          <div>
+          {currentStep > 0 && authMode ? (
+            <AuthIllustration kind={authMode} placement="heading" />
+          ) : (
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[20px] bg-[var(--color-brand)]/10 text-[var(--color-brand)] ring-1 ring-[var(--color-brand)]/10">
+              <currentStepData.icon className="h-6 w-6" />
+            </div>
+          )}
+          <div className="min-w-0">
             <p className="mb-1 text-[0.765rem] font-semibold normal-case tracking-normal text-[var(--color-brand)]">
               {t('access_label')}
             </p>

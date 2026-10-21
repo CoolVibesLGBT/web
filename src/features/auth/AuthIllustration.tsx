@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { resolvePublicAssetUrl } from '@/platform/runtime'
 
 type AuthIllustrationProps = {
   kind: 'login' | 'register'
@@ -12,7 +13,7 @@ export default function AuthIllustration({
   const { t } = useTranslation('auth')
   return (
     <img
-      src={`/images/auth/${kind}-bear.avif`}
+      src={resolvePublicAssetUrl(`/images/auth/${kind}-bear.avif`)}
       width={512}
       height={512}
       alt={t(`${kind}_illustration_alt`)}
