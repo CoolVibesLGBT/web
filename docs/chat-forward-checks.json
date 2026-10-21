@@ -14,6 +14,34 @@
         "bodyPadding": "0px",
         "topPeers": 2
       },
+      "properties": {
+        "scale": 1,
+        "background": "rgb(244, 244, 245)",
+        "expectedBackground": "rgb(244, 244, 245)",
+        "shadow": "none",
+        "border": "0px",
+        "radius": 40,
+        "headerHeight": 56,
+        "titleFont": 20,
+        "titleWeight": "500",
+        "iconSize": 24,
+        "cardBackground": "rgb(255, 255, 255)",
+        "expectedCard": "rgb(255, 255, 255)",
+        "cardRadius": 24,
+        "cardShadow": "rgba(0, 0, 0, 0.05) 0px 1px 4px 0px",
+        "tile": {
+          "width": 78,
+          "height": 98,
+          "avatarTop": 12,
+          "avatarWidth": 54,
+          "labelBottom": 12,
+          "font": 12
+        }
+      },
+      "hover": {
+        "background": "rgb(238, 246, 253)",
+        "expected": "rgb(238, 246, 253)"
+      },
       "requests": 4,
       "checks": [
         "source popup 420px/80%, 40px radius, 56px header",
@@ -36,6 +64,34 @@
         "headerHeight": 56,
         "bodyPadding": "0px",
         "topPeers": 2
+      },
+      "properties": {
+        "scale": 1,
+        "background": "rgb(24, 24, 24)",
+        "expectedBackground": "rgb(24, 24, 24)",
+        "shadow": "none",
+        "border": "0px",
+        "radius": 40,
+        "headerHeight": 56,
+        "titleFont": 20,
+        "titleWeight": "500",
+        "iconSize": 24,
+        "cardBackground": "rgb(33, 33, 33)",
+        "expectedCard": "rgb(33, 33, 33)",
+        "cardRadius": 24,
+        "cardShadow": "rgba(0, 0, 0, 0.12) 0px 1px 4px 0px",
+        "tile": {
+          "width": 78,
+          "height": 98,
+          "avatarTop": 12,
+          "avatarWidth": 54,
+          "labelBottom": 12,
+          "font": 12
+        }
+      },
+      "hover": {
+        "background": "rgb(41, 39, 48)",
+        "expected": "rgb(41, 39, 48)"
       },
       "requests": 5,
       "checks": [
@@ -61,6 +117,34 @@
         "bodyPadding": "0px",
         "topPeers": 2
       },
+      "properties": {
+        "scale": 1.5,
+        "background": "rgb(24, 24, 24)",
+        "expectedBackground": "rgb(24, 24, 24)",
+        "shadow": "none",
+        "border": "0px",
+        "radius": 60,
+        "headerHeight": 84,
+        "titleFont": 30,
+        "titleWeight": "500",
+        "iconSize": 36,
+        "cardBackground": "rgb(33, 33, 33)",
+        "expectedCard": "rgb(33, 33, 33)",
+        "cardRadius": 36,
+        "cardShadow": "rgba(0, 0, 0, 0.12) 0px 1px 4px 0px",
+        "tile": {
+          "width": 117,
+          "height": 147,
+          "avatarTop": 18,
+          "avatarWidth": 81,
+          "labelBottom": 18,
+          "font": 18
+        }
+      },
+      "hover": {
+        "background": "rgb(41, 39, 48)",
+        "expected": "rgb(41, 39, 48)"
+      },
       "requests": 4,
       "checks": [
         "source popup 420px/80%, 40px radius, 56px header",
@@ -83,6 +167,34 @@
         "headerHeight": 56,
         "bodyPadding": "0px",
         "topPeers": 2
+      },
+      "properties": {
+        "scale": 1,
+        "background": "rgb(244, 244, 245)",
+        "expectedBackground": "rgb(244, 244, 245)",
+        "shadow": "none",
+        "border": "0px",
+        "radius": 40,
+        "headerHeight": 56,
+        "titleFont": 20,
+        "titleWeight": "500",
+        "iconSize": 24,
+        "cardBackground": "rgb(255, 255, 255)",
+        "expectedCard": "rgb(255, 255, 255)",
+        "cardRadius": 24,
+        "cardShadow": "rgba(0, 0, 0, 0.05) 0px 1px 4px 0px",
+        "tile": {
+          "width": 78,
+          "height": 98,
+          "avatarTop": 12,
+          "avatarWidth": 54,
+          "labelBottom": 12,
+          "font": 12
+        }
+      },
+      "hover": {
+        "background": "rgb(238, 246, 253)",
+        "expected": "rgb(238, 246, 253)"
       },
       "requests": 4,
       "checks": [

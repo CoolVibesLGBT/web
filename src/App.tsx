@@ -14,6 +14,7 @@ const ChatBackgroundScreen = lazy(() => import('./screens/AppearanceScreen').the
 const ProfileEngagementsScreen = lazy(() => import('./screens/ProfileEngagementsScreen'));
 const SearchScreen = lazy(() => import('./screens/SearchScreen'));
 const MessagesScreen = lazy(() => import('./screens/MessagesScreen'));
+const GroupInviteScreen = lazy(() => import('./screens/GroupInviteScreen'));
 const NotificationsScreen = lazy(() => import('./screens/NotificationsScreen'));
 const PlaceDetailsScreen = lazy(() => import('./screens/PlaceDetailsScreen'));
 const HomeScreen = lazy(() => import('./screens/HomeScreen'));
@@ -536,6 +537,8 @@ function AppContent() {
         </ProtectedRoute>
       );
     }
+    if (/^\/invite\/[A-Za-z0-9_-]{43}$/.test(path)) return <GroupInviteScreen token={path.split('/')[2]} />;
+    if (/^\/group\/[a-zA-Z][a-zA-Z0-9_]{4,31}$/.test(path)) return <GroupInviteScreen username={path.split('/')[2]} />;
     if (path === '/messages') {
       return (
         <ProtectedRoute>
@@ -1080,7 +1083,7 @@ function AppContent() {
                           <button
                             type="button"
                             onClick={() => { setIsRailProfileMenuOpen(false); openProfile(); }}
-                            className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-semibold ${theme === 'dark' ? 'text-white hover:bg-white/10' : 'text-slate-900 hover:bg-slate-100'}`}
+                            className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-semibold ${theme === 'dark' ? 'text-white hover:bg-[var(--cv-list-hover)]' : 'text-slate-900 hover:bg-[var(--cv-list-hover)]'}`}
                           >
                             <User className="h-4 w-4 shrink-0" />
                             <span className="truncate">{t('app.view_profile', { defaultValue: 'Profile' })}</span>
@@ -1088,7 +1091,7 @@ function AppContent() {
                           <button
                             type="button"
                             onClick={() => { setIsRailProfileMenuOpen(false); navigate('/settings'); }}
-                            className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-semibold ${theme === 'dark' ? 'text-white hover:bg-white/10' : 'text-slate-900 hover:bg-slate-100'}`}
+                            className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-semibold ${theme === 'dark' ? 'text-white hover:bg-[var(--cv-list-hover)]' : 'text-slate-900 hover:bg-[var(--cv-list-hover)]'}`}
                           >
                             <SettingsIcon className="h-4 w-4 shrink-0" />
                             <span className="truncate">{t('app.nav.settings', { defaultValue: 'Settings' })}</span>
@@ -1097,7 +1100,7 @@ function AppContent() {
                           <button
                             type="button"
                             onClick={() => requestLogout(() => setIsRailProfileMenuOpen(false))}
-                            className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-semibold ${theme === 'dark' ? 'text-red-400 hover:bg-red-500/10' : 'text-red-600 hover:bg-red-50'}`}
+                            className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-semibold ${theme === 'dark' ? 'text-red-400 hover:bg-[var(--cv-list-hover)]' : 'text-red-600 hover:bg-[var(--cv-list-hover)]'}`}
                           >
                             <LogOut className="h-4 w-4 shrink-0" />
                             <span className="truncate">{t('app.logout', { defaultValue: 'Log out' })}</span>

@@ -1,4 +1,5 @@
 import ViewTabs from '@/components/ui/ViewTabs';
+import SearchField from '@/components/ui/SearchField';
 import ChatWallpaper from '@/features/appearance/ChatWallpaper';
 import '@/features/chat/telegram-chat.css';
 import TelegramChatListRow from '@/features/chat/TelegramChatListRow';
@@ -9,11 +10,15 @@ import MessageActionsMenu, { type MessageAction } from '@/features/chat/MessageA
 import FloatingContextMenu from '@/features/chat/FloatingContextMenu';
 import ForwardPicker from '@/features/chat/ForwardPicker';
 import GroupComposer, { type CreatedGroup } from '@/features/chat/GroupComposer';
+import GroupDetails from '@/features/chat/GroupDetails';
+import ClipboardFeedback from '@/features/chat/ClipboardFeedback';
+import useClipboard from '@/hooks/useClipboard';
 import '@/features/chat/chat-confirm.css';
 import { Sheet, ListRow } from '@/components/ui/Interface';
 import Switch from '@/components/ui/Switch';
 import EmptyConversation from '@/features/chat/EmptyConversation';
-import LottieAnimation from '@/features/animations/LottieAnimation';
+import StickerMedia from '@/features/emoticons/StickerMedia';
+import GifMedia from '@/features/emoticons/GifMedia';
 import { normalizeEmoticon, type ChatEmoticon, type EmoticonSelection } from '@/features/emoticons/types';
 import React, { useState, useRef, useEffect, useCallback, useLayoutEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
@@ -28,7 +33,6 @@ import { api } from '../services/api';
 import { Actions } from '../services/actions';
 import {
   MessageCircle,
-  Search,
   MoreVertical,
   Paperclip,
   Lock,
@@ -293,6 +297,7 @@ function sameMessageGroup(first?: ChatMessage, second?: ChatMessage) {
 }
 
 interface MessageItemProps {
+  onMediaReady?: () => void;
   selected?: boolean;
   selectionMode?: boolean;
   onSelect?: (id: string, range?: boolean) => void;
@@ -488,6 +493,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
   selectionMode = false,
   onSelect,
   onReplyOpen,
+  onMediaReady,
   msg,
   groupFirst = true,
   groupLast = true,
@@ -567,12 +573,14 @@ const MessageItem: React.FC<MessageItemProps> = ({
         data-has-text={!!msg.text}
         data-has-timer={msg.isDisappearing || undefined}
         className="cv-chat-bubble"
+        onLoadCapture={onMediaReady}
+        onLoadedMetadataCapture={onMediaReady}
       >
         {groupLast && <svg className="cv-message-tail" width="11" height="20" viewBox="0 0 11 20" aria-hidden="true"><g transform="translate(9 -14)" fillRule="evenodd"><path d="M-6 16h6v17c-.193-2.84-.876-5.767-2.05-8.782-.904-2.325-2.446-4.485-4.625-6.48A1 1 0 01-6 16z" transform="matrix(1 0 0 -1 0 49)" /></g></svg>}
         {!isHiddenDisappearing && msg.forwardedFrom && <div className="cv-chat-forwarded"><span>{t('chat_actions.forwarded_message')}</span><strong><bdi>{msg.forwardedFrom.name}</bdi></strong></div>}
         {!isHiddenDisappearing && msg.reply && <button type="button" className="cv-chat-reply" onClick={() => onReplyOpen?.(msg.reply!.id)}><strong>{t('chat_actions.reply')}</strong><span>{msg.reply.text || t('messages.media')}</span></button>}
-        {!isHiddenDisappearing && msg.emoticon?.kind === 'sticker' && <LottieAnimation src={msg.emoticon.url} size={180} />}
-        {!isHiddenDisappearing && msg.emoticon?.kind === 'gif' && <img className="cv-message-gif" src={msg.emoticon.url} alt={t('emoticons.gifs')} />}
+        {!isHiddenDisappearing && msg.emoticon?.kind === 'sticker' && <StickerMedia document={msg.emoticon} size={180} onReady={onMediaReady} />}
+        {!isHiddenDisappearing && msg.emoticon?.kind === 'gif' && <GifMedia className="cv-message-gif" document={msg.emoticon} />}
         {msg.viewOnce && (
           <div className="mb-2">
             <ViewOnceMessageCard
@@ -809,6 +817,7 @@ const SelectedMediaThumbnail: React.FC<SelectedMediaThumbnailProps> = ({
 
 
 const MessagesScreen: React.FC = () => {
+  const clipboard = useClipboard();
   const { theme } = useTheme();
   const { isAuthenticated, user } = useAuth();
   const { setShowBottomBar } = useSettings();
@@ -861,6 +870,7 @@ const MessagesScreen: React.FC = () => {
   }, [message, selectedChat]);
   const [messageExpirySeconds, setMessageExpirySeconds] = useState<MessageExpirySeconds>(0);
   const [viewOnceEnabled, setViewOnceEnabled] = useState(false);
+  const [failedEmoticon, setFailedEmoticon] = useState<ChatEmoticon | null>(null);
   const [countdownNow, setCountdownNow] = useState(() => Date.now());
   const [activeMedia, setActiveMedia] = useState<{ messageId: string; attachmentId: string } | null>(null);
   const [viewOnceSession, setViewOnceSession] = useState<ViewOnceSession | null>(null);
@@ -1247,9 +1257,13 @@ const MessagesScreen: React.FC = () => {
                   chatMessage.viewOnce && chatMessage.text === newMessage.text
                 ))
                 : undefined;
-              const matchingByContent = newMessage.text
-                ? optimisticMessages.find((chatMessage) => chatMessage.text === newMessage.text)
+              const matchingByContent = newMessage.emoticon
+                ? optimisticMessages.find(chatMessage => chatMessage.emoticon?.id === newMessage.emoticon?.id && chatMessage.emoticon?.kind === newMessage.emoticon?.kind)
+                : newMessage.text
+                ? optimisticMessages.find((chatMessage) => !chatMessage.emoticon && chatMessage.text === newMessage.text)
                 : optimisticMessages.find((chatMessage) => (
+                  !chatMessage.emoticon
+                  &&
                   chatMessage.text === ''
                   && getAttachmentSignature(chatMessage) === getAttachmentSignature(newMessage)
                 ));
@@ -1400,7 +1414,14 @@ const MessagesScreen: React.FC = () => {
 
   // Handle navigation state to open chat from MatchScreen
   React.useEffect(() => {
-    const state = location.state as { openChat?: string; userId?: string; publicId?: number; username?: string } | null;
+    const state = location.state as { openChat?: string; userId?: string; publicId?: number; username?: string; groupChat?: ChatItem } | null;
+    if (state?.groupChat) {
+      const group = state.groupChat;
+      setChatsList(previous => [group, ...previous.filter(chat => chat.chatId !== group.chatId)]);
+      setSelectedChat(group.id); setShowSidebar(false); setShowProfile(false);
+      navigate(location.pathname, { replace: true, state: {} });
+      return;
+    }
     if (state?.openChat || state?.userId || state?.publicId) {
       // Find chat by chat ID, username, or user ID
       setChatsList(prev => {
@@ -1504,7 +1525,7 @@ const MessagesScreen: React.FC = () => {
           const isGroup = chat.type === 'group';
           const displayName = isGroup ? getMessageText({ content: chat.title }, t('messages.groups')) : otherUser?.displayname || otherUser?.username || 'Unknown';
           const username = isGroup ? '' : otherUser?.username || '';
-          const avatar = isGroup ? chat.avatar?.file?.url || null : getSafeImageURLEx(otherUser?.public_id, otherUser?.avatar, "thumbnail");
+          const avatar = isGroup ? chat.avatar ? getSafeImageURLEx(chat.id, chat.avatar, 'thumbnail') : null : getSafeImageURLEx(otherUser?.public_id, otherUser?.avatar, "thumbnail");
           const avatarLetter = displayName.charAt(0).toUpperCase();
 
           // Telegram-style compact time; use the application's active language.
@@ -1548,8 +1569,11 @@ const MessagesScreen: React.FC = () => {
 
           return {
             id: isGroup ? chat.id : otherUser?.id || chat.id,
+            peerId: isGroup ? undefined : String(otherUser?.public_id || otherParticipant?.user_id || otherUser?.id || ''),
             type: chat.type,
             participantCount: chat.participants?.length,
+            description: getMessageText({ content: chat.description }),
+            visibility: chat.visibility || 'private', publicUsername: chat.public_username || '',
             chatId: chat.id, // Real chat ID from backend (UUID)
             name: displayName,
             username: username,
@@ -1694,6 +1718,8 @@ const MessagesScreen: React.FC = () => {
 
 
 
+  const messagesRequestRef = useRef(0);
+  const initialScrollRef = useRef(false);
   const activePeerRef = useRef<ChatItem | null>(null);
   const listedPrivateChat = chatsList.find(chat => chat.id === selectedChat);
   useLayoutEffect(() => { if (listedPrivateChat) activePeerRef.current = listedPrivateChat; }, [listedPrivateChat]);
@@ -1718,6 +1744,8 @@ const MessagesScreen: React.FC = () => {
     }
 
     const realChatId = currentChat.chatId;
+    const requestId = ++messagesRequestRef.current;
+    if (!showRefreshing) initialScrollRef.current = true;
 
     // Validate that chatId is a UUID format
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -1734,6 +1762,7 @@ const MessagesScreen: React.FC = () => {
         setIsLoadingMessages(true);
       }
       const response = (await api.fetchMessages(realChatId)) as { messages: BackendChatMessage[] };
+      if (requestId !== messagesRequestRef.current || selectedChatRef.current !== selectedChat) return;
       if (response?.messages && Array.isArray(response.messages)) {
         const mappedMessages = response.messages
           .map((msg) => normalizeChatMessage(msg, String(user.id)))
@@ -1750,11 +1779,22 @@ const MessagesScreen: React.FC = () => {
         setMessages([]);
       }
     } catch (error) {
-      console.error('Error fetching messages:', error);
-      setMessages([]);
+      if (requestId === messagesRequestRef.current && selectedChatRef.current === selectedChat) {
+        console.error('Error fetching messages:', error);
+        setMessages([]);
+      }
     } finally {
-      setIsLoadingMessages(false);
-      setIsRefreshingMessages(false);
+      if (requestId === messagesRequestRef.current && selectedChatRef.current === selectedChat) {
+        setIsLoadingMessages(false);
+        setIsRefreshingMessages(false);
+        if (!showRefreshing) {
+          const align = () => {
+            if (initialScrollRef.current && requestId === messagesRequestRef.current && selectedChatRef.current === selectedChat) messageListRef.current?.scrollTo({ top: Number.MAX_SAFE_INTEGER, behavior: 'auto' });
+          };
+          requestAnimationFrame(() => requestAnimationFrame(align));
+          void document.fonts.ready.then(() => requestAnimationFrame(align));
+        }
+      }
     }
      
   }, [selectedChat, user?.id]); // chatsList removed from deps to avoid refetch whenever chat list updates
@@ -1820,6 +1860,7 @@ const MessagesScreen: React.FC = () => {
 
   // Handle message context menu (long press / right click)
   const handleMessageContextMenu = (point: { clientX: number; clientY: number }, messageId: string) => {
+    initialScrollRef.current = false;
     if (selectedMessages.size > 0) { toggleMessageSelection(messageId); return; }
     setSelectedMessageId(messageId);
     setResolvedMessageMenuPosition(null);
@@ -1886,7 +1927,7 @@ const MessagesScreen: React.FC = () => {
     };
   }, [messageMenuPosition, selectedMessageId, updateMessageContextMenuPosition]);
 
-  // Close message menu on scroll or outside tap
+  // User scrolling dismisses the menu; late media/list measurements do not.
   React.useEffect(() => {
     const handleClickOutside = (e: PointerEvent) => {
       const target = e.target as HTMLElement;
@@ -1894,7 +1935,7 @@ const MessagesScreen: React.FC = () => {
         closeMessageContextMenu();
       }
     };
-    const handleScroll = (event: Event) => { if (event.target instanceof Node && messageMenuRef.current?.contains(event.target)) return; closeMessageContextMenu(); };
+    const handleScrollIntent = (event: Event) => { if (event.target instanceof Node && messageMenuRef.current?.contains(event.target)) return; closeMessageContextMenu(); };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') closeMessageContextMenu();
     };
@@ -1903,12 +1944,14 @@ const MessagesScreen: React.FC = () => {
       const listenerTimer = window.setTimeout(() => {
         document.addEventListener('pointerdown', handleClickOutside);
       }, 0);
-      document.addEventListener('scroll', handleScroll, true);
+      document.addEventListener('wheel', handleScrollIntent, { capture: true, passive: true });
+      document.addEventListener('touchmove', handleScrollIntent, { capture: true, passive: true });
       document.addEventListener('keydown', handleKeyDown);
       return () => {
         window.clearTimeout(listenerTimer);
         document.removeEventListener('pointerdown', handleClickOutside);
-        document.removeEventListener('scroll', handleScroll, true);
+        document.removeEventListener('wheel', handleScrollIntent, true);
+        document.removeEventListener('touchmove', handleScrollIntent, true);
         document.removeEventListener('keydown', handleKeyDown);
       };
     }
@@ -1980,7 +2023,7 @@ const MessagesScreen: React.FC = () => {
   }, [showChatMenu]);
 
   const handleMessageOpen = useCallback(async (messageId: string) => {
-    if (messageOpenRequestsRef.current.has(messageId)) return;
+    if (!user?.id || messageOpenRequestsRef.current.has(messageId)) return;
 
     const targetMessage = messages.find((chatMessage) => chatMessage.id === messageId);
     const currentChat = chatsList.find((chat) => chat.id === selectedChat);
@@ -2117,6 +2160,8 @@ const MessagesScreen: React.FC = () => {
   }, [chatsList, fetchMessages, messages, selectedChat, setMessages, user?.id]);
 
   const handleSendMessage = async (emoticon?: ChatEmoticon) => {
+    if (!user?.id) return;
+    setFailedEmoticon(null); setActionError(false);
     if (pendingForward && !emoticon) {
       const target = chatsList.find(chat => chat.id === selectedChat && chat.chatId === pendingForward.targetChatId);
       if (!target || forwardingBusyRef.current) return;
@@ -2146,10 +2191,6 @@ const MessagesScreen: React.FC = () => {
       finally { setActionBusy(false); }
       return;
     }
-    if (!emoticon && viewOnceEnabled && !hasValidViewOncePhoto) {
-      viewOnceImageInputRef.current?.click();
-      return;
-    }
 
     // Find the selected chat to get the real chat ID
     const currentChat = chatsList.find(chat => chat.id === selectedChat);
@@ -2161,6 +2202,7 @@ const MessagesScreen: React.FC = () => {
     }
 
     const realChatId = currentChat.chatId;
+    const selectedChatAtSend = selectedChat;
 
     // Validate that chatId is a UUID format (not a username or user ID)
     // UUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (36 characters with hyphens)
@@ -2253,6 +2295,10 @@ const MessagesScreen: React.FC = () => {
 
     // Add message to UI immediately
     setMessages(prev => [...prev, newMessage]);
+    initialScrollRef.current = true;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (initialScrollRef.current && selectedChatRef.current === selectedChatAtSend) messageListRef.current?.scrollTo({ top: Number.MAX_SAFE_INTEGER, behavior: 'auto' });
+    }));
     setMessage('');
     setReplyTo(null);
     setSelectedImages([]);
@@ -2295,6 +2341,8 @@ const MessagesScreen: React.FC = () => {
       };
 
       const resolvedMessage = response?.message;
+      if (selectedChatRef.current !== selectedChatAtSend) { void refreshChatsRef.current?.(); return; }
+      if (!resolvedMessage && !response?.message_id && !response?.id) throw new Error('Missing sent message');
 
       if (resolvedMessage) {
         const normalizedMessage = normalizeChatMessage(resolvedMessage, String(user.id), {
@@ -2354,7 +2402,7 @@ const MessagesScreen: React.FC = () => {
             const newId = response.message_id || response.id;
             if (newId) {
               const exists = prev.some(m => m.id === newId);
-              if (!exists && (messageText || (tempAttachments?.length || 0) > 0)) {
+              if (!exists && (emoticon || messageText || (tempAttachments?.length || 0) > 0)) {
                 return [...prev, {
                   ...newMessage,
                   id: newId,
@@ -2368,9 +2416,16 @@ const MessagesScreen: React.FC = () => {
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      // Remove message from UI if API call failed
-      setMessages(prev => prev.filter(msg => msg.id !== tempMessageId));
-      // Optionally show error message to user
+      if (selectedChatRef.current === selectedChatAtSend) {
+        setMessages(prev => prev.filter(msg => msg.id !== tempMessageId));
+        setActionError(true);
+        if (emoticon) setFailedEmoticon(emoticon);
+        else {
+          setMessage(current => current || messageText);
+          setSelectedImages(current => current.length ? current : imagesToSend);
+          setSelectedVideos(current => current.length ? current : videosToSend);
+        }
+      }
     }
   };
 
@@ -2471,6 +2526,7 @@ const MessagesScreen: React.FC = () => {
   };
 
   const handleChatSelect = (chatId: string) => {
+    setFailedEmoticon(null);
     setPendingForward(null);
     setActiveMedia(null);
     setViewOnceSession(null);
@@ -2553,8 +2609,7 @@ const MessagesScreen: React.FC = () => {
   }
   async function copyMessages(items: ChatMessage[]) {
     closeMessageContextMenu();
-    try { await navigator.clipboard.writeText(items.map(item => item.text).filter(Boolean).join('\n')); }
-    catch { setActionError(true); }
+    await clipboard.copy(items.map(item => item.text).filter(Boolean).join('\n'));
   }
   const canForwardMessage = (item: ChatMessage) => !item.viewOnce && !item.isDisappearing && !item.contentHidden && !!(item.text || item.emoticon || item.attachments?.length);
   async function pinMessage(item: ChatMessage) {
@@ -2581,7 +2636,7 @@ const MessagesScreen: React.FC = () => {
     setActionBusy(false); void refreshChatsRef.current?.();
   }
   function openCreatedGroup(chat: CreatedGroup, title: string) {
-    const item: ChatItem = { id: chat.id, chatId: chat.id, type: 'group', name: title, username: '', emojis: '', avatar: null, avatarLetter: title.charAt(0).toLocaleUpperCase(), lastMessage: '', lastTime: '', unread: 0, online: false, verified: false, encrypted: false, canManage: true, participantCount: chat.participants?.length };
+    const item: ChatItem = { id: chat.id, chatId: chat.id, type: 'group', name: title, username: '', emojis: '', avatar: chat.avatar ? getSafeImageURLEx(chat.id, chat.avatar, 'thumbnail') : null, avatarLetter: title.charAt(0).toLocaleUpperCase(), lastMessage: '', lastTime: '', unread: 0, online: false, verified: false, encrypted: false, canManage: true, participantCount: chat.participants?.length, visibility: chat.visibility || 'private', publicUsername: chat.public_username || '' };
     setChatsList(previous => [item, ...previous.filter(existing => existing.chatId !== chat.id)]);
     setCreatingGroup(false); setPendingForward(null); setSelectedChat(item.id); setShowSidebar(false); setShowProfile(false);
     void refreshChatsRef.current?.();
@@ -2720,7 +2775,12 @@ const MessagesScreen: React.FC = () => {
   const hasValidViewOncePhoto = selectedImages.length === 1 && selectedVideos.length === 0;
 
   const handleViewOnceToggle = () => {
-    setViewOnceEnabled(enabled => !enabled);
+    if (viewOnceEnabled) { setViewOnceEnabled(false); return; }
+    if (hasValidViewOncePhoto) { setViewOnceEnabled(true); return; }
+    // Canceling the explicit photo choice leaves one-time mode off. Sending
+    // ordinary text or a sticker never opens a file input.
+    setShowComposerOptions(false);
+    viewOnceImageInputRef.current?.click();
   };
 
   const activeViewerMessage = useMemo(
@@ -2819,22 +2879,7 @@ const MessagesScreen: React.FC = () => {
             </div>
 
             <div className="cv-chat-search-area p-3 sm:p-4 flex-shrink-0">
-              {/* Search */}
-              <div className="relative mb-3 sm:mb-4 z-20">
-                <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 z-10 ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'
-                  }`} />
-                <input
-                  type="text"
-                  placeholder={t('messages.search')}
-                  aria-label={t('messages.search')}
-                  value={chatSearch}
-                  onChange={event => setChatSearch(event.target.value)}
-                  className={`relative w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-full border text-sm z-10 outline-none transition-all focus:ring-2 ${theme === 'dark'
-                    ? 'bg-white/[0.08] border-white/10 text-white placeholder-zinc-500 focus:ring-brand/20'
-                    : 'bg-white/[0.85] border-[var(--cv-inner-border)] text-slate-900 placeholder-slate-500 focus:ring-brand/20'
-                    }`}
-                />
-              </div>
+              <SearchField value={chatSearch} onChange={setChatSearch} label={t('messages.search')} />
 
               {/* Filter Tabs */}
               <div className="cv-tab-bar -mx-1">
@@ -2868,7 +2913,7 @@ const MessagesScreen: React.FC = () => {
                   ))}
                 </div>
               ) : chatsList.filter((chat: ChatItem) => {
-                if (chatSearch && !`${chat.name} ${chat.username}`.toLocaleLowerCase().includes(chatSearch.toLocaleLowerCase())) return false;
+                if (chatSearch && !`${chat.name} ${chat.username}`.toLocaleLowerCase().includes(chatSearch.trim().replace(/^@/, '').toLocaleLowerCase())) return false;
                 if (activeFilter === 'all') return true;
                 if (activeFilter === 'unread') return chat.unread > 0;
                 if (activeFilter === 'unencrypted') return !chat.encrypted;
@@ -2880,7 +2925,7 @@ const MessagesScreen: React.FC = () => {
                 </div>
               ) : (() => {
                 const visibleChats = chatsList.filter((chat: ChatItem) => {
-                  if (chatSearch && !`${chat.name} ${chat.username}`.toLocaleLowerCase().includes(chatSearch.toLocaleLowerCase())) return false;
+                  if (chatSearch && !`${chat.name} ${chat.username}`.toLocaleLowerCase().includes(chatSearch.trim().replace(/^@/, '').toLocaleLowerCase())) return false;
                   if (activeFilter === 'all') return true;
                   if (activeFilter === 'unread') return chat.unread > 0;
                   if (activeFilter === 'unencrypted') return !chat.encrypted;
@@ -2904,7 +2949,10 @@ const MessagesScreen: React.FC = () => {
             {selectedChat ? (
               <div
                 key={`chat-view-${selectedChat}`}
-                className="cv-chat-thread flex-1 flex flex-col min-h-0 min-w-0 relative z-10 h-full"
+                onWheelCapture={() => { initialScrollRef.current = false; }} onTouchMoveCapture={() => { initialScrollRef.current = false; }}
+                onPointerDownCapture={() => { initialScrollRef.current = false; }}
+                onKeyDownCapture={event => { if (['PageUp', 'PageDown', 'Home', 'End', 'ArrowUp', 'ArrowDown'].includes(event.key) && !(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)) initialScrollRef.current = false; }}
+                className={`cv-chat-thread flex-1 flex flex-col min-h-0 min-w-0 relative z-10 h-full${showProfile && selectedPrivateChat?.type === 'group' ? ' cv-chat-showing-group-info' : ''}`}
                 style={{
                   flex: '1 1 auto',
                   minHeight: 0,
@@ -2915,6 +2963,7 @@ const MessagesScreen: React.FC = () => {
                 }}
               >
                 <ChatWallpaper />
+                <ClipboardFeedback status={clipboard.status} />
                 {/* Chat Header */}
                 <div
                   ref={headerRef}
@@ -2953,8 +3002,8 @@ const MessagesScreen: React.FC = () => {
                   </div>
                 </div>
 
-                {actionError && <div className="cv-chat-action-error" role="alert">{t('chat_actions.action_failed')}<button type="button" aria-label={t('app.close')} onClick={() => setActionError(false)}><X /></button></div>}
-                {selectedPrivateChat?.pinnedMessageId && <button type="button" className="cv-chat-pinned" onClick={() => scrollToMessage(selectedPrivateChat.pinnedMessageId!)}><TelegramIcon name="pin" /><span><strong>{t('chat_actions.pin')}</strong><small>{selectedPrivateChat.pinnedMessageText || t('messages.media')}</small></span></button>}
+                {actionError && <div className="cv-chat-action-error" role="alert">{t('chat_actions.action_failed')}{failedEmoticon && <button type="button" onClick={() => void handleSendMessage(failedEmoticon)}>{t('emoticons.retry')}</button>}<button type="button" aria-label={t('app.close')} onClick={() => { setActionError(false); setFailedEmoticon(null); }}><X /></button></div>}
+                {!showProfile && selectedPrivateChat?.pinnedMessageId && <button type="button" className="cv-chat-pinned" onClick={() => scrollToMessage(selectedPrivateChat.pinnedMessageId!)}><TelegramIcon name="pin" /><span><strong>{t('chat_actions.pin')}</strong><small>{selectedPrivateChat.pinnedMessageText || t('messages.media')}</small></span></button>}
                 {/* Messages or Profile */}
                 <AnimatePresence mode="wait">
                   {showProfile && selectedPrivateChat ? (
@@ -2967,7 +3016,7 @@ const MessagesScreen: React.FC = () => {
                         duration: 0.25,
                         ease: [0.4, 0, 0.2, 1]
                       }}
-                      className="flex-1 overflow-y-auto no-scrollbar min-h-0"
+                      className="cv-chat-information flex-1 overflow-y-auto no-scrollbar min-h-0"
                       style={{
                         flexGrow: 1,
                         flexShrink: 1,
@@ -2976,7 +3025,7 @@ const MessagesScreen: React.FC = () => {
                       }}
                     >
                       <div className="h-full">
-                        <ProfileScreen inline isEmbed username={selectedPrivateChat.username || selectedPrivateChat.name.toLowerCase()} />
+                        {selectedPrivateChat.type === 'group' ? <GroupDetails key={selectedPrivateChat.chatId} chat={selectedPrivateChat} chats={chatsList} viewerId={String(user?.id)} viewerName={user?.displayname || user?.username || ''} onClose={() => setShowProfile(false)} onUpdated={() => { void refreshChatsRef.current?.(); }} onLeave={() => { setShowProfile(false); setSelectedChat(null); setShowSidebar(true); void refreshChatsRef.current?.(); }} /> : <ProfileScreen inline isEmbed username={selectedPrivateChat.username || selectedPrivateChat.name.toLowerCase()} />}
                       </div>
                     </motion.div>
                   ) : (
@@ -3034,11 +3083,14 @@ const MessagesScreen: React.FC = () => {
                           </div>
                         ) : (
                           <div className="flex-1 min-h-0"> {/* Container for Virtuoso */}
-                            {messages.length === 0 ? <EmptyConversation key={selectedChat} onGreeting={sticker => void handleSendMessage(sticker)} /> : <Virtuoso ref={messageListRef}
+                            {messages.length === 0 ? <EmptyConversation key={selectedChat} onGreeting={sticker => void handleSendMessage(sticker)} /> : <Virtuoso key={selectedChat} ref={messageListRef}
                               style={{ height: '100%' }}
                               data={messages}
-                              initialTopMostItemIndex={messages.length - 1}
-                              followOutput="auto"
+                              defaultItemHeight={80}
+                              totalListHeightChanged={() => { if (initialScrollRef.current) requestAnimationFrame(() => { if (initialScrollRef.current && selectedChatRef.current === selectedChat) messageListRef.current?.scrollTo({ top: Number.MAX_SAFE_INTEGER, behavior: 'auto' }); }); }}
+                              alignToBottom
+                              computeItemKey={(_, item) => item.id}
+                              followOutput={atBottom => atBottom && !selectedMessageId ? 'auto' : false}
                               itemContent={(index, msg) => (
                                 <div className="cv-chat-message-row pb-3">
                                   {index === 0 && (
@@ -3057,6 +3109,7 @@ const MessagesScreen: React.FC = () => {
                                     selectionMode={selectedMessages.size > 0}
                                     onSelect={toggleMessageSelection}
                                     onReplyOpen={scrollToMessage}
+                                    onMediaReady={() => { if (initialScrollRef.current) requestAnimationFrame(() => { if (initialScrollRef.current) messageListRef.current?.scrollTo({ top: Number.MAX_SAFE_INTEGER, behavior: 'auto' }); }); }}
                                     groupFirst={!sameMessageGroup(messages[index - 1], msg)}
                                     groupLast={!sameMessageGroup(msg, messages[index + 1])}
                                     theme={theme}
@@ -3259,6 +3312,7 @@ const MessagesScreen: React.FC = () => {
                   <div className={`cv-chat-empty flex-1 flex items-center justify-center ${theme === 'dark' ? 'cv-card-surface-muted' : 'bg-[var(--cv-page-bg)]'
                     }`}>
                     <ChatWallpaper />
+                <ClipboardFeedback status={clipboard.status} />
                     <div className="cv-chat-empty-label text-center px-4">
                       <span className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
                         <MessageCircle className="h-7 w-7" strokeWidth={2} />

@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { createAnimationPlayer } from './player';
 
-export default function LottieAnimation({ src, size = 160, className = '', autoplay = true, onReady }: {
-  src: string; size?: number; className?: string; autoplay?: boolean; onReady?: () => void;
+export default function LottieAnimation({ src, size = 160, className = '', autoplay = true, onReady, onError }: {
+  src: string; size?: number; className?: string; autoplay?: boolean; onReady?: () => void; onError?: () => void;
 }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const ready = useRef(onReady); ready.current = onReady;
+  const error = useRef(onError); error.current = onError;
   const [failed, setFailed] = useState(false);
   useEffect(() => {
     const element = canvas.current;
@@ -26,7 +27,7 @@ export default function LottieAnimation({ src, size = 160, className = '', autop
         loading = createAnimationPlayer(src, element).then(async result => {
           if (!alive) { await result.destroy(); return; }
           player = result; element.dataset.ready = 'true'; ready.current?.(); sync();
-        }).catch(() => { if (alive) setFailed(true); });
+        }).catch(() => { if (alive) { setFailed(true); error.current?.(); } });
       }
       sync();
     });

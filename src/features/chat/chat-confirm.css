@@ -1,7 +1,7 @@
 /* tweb clearHistory.ts → confirmationPopup.ts → popups/peer.tsx.
    _peer.scss, _popup.scss and themeController's primary/danger colors. */
-.cv-sheet.cv-chat-confirm { --tg-confirm-unit: .9411764706rem; width: min(400px, calc(100vw - 32px)); max-width: none; min-width: min(312px, calc(100vw - 32px)); padding: calc(var(--tg-confirm-unit) * .75) calc(var(--tg-confirm-unit) * .5); margin: auto; border: 0; border-radius: calc(var(--tg-confirm-unit) * 2.5); box-shadow: none; color: var(--cv-neutral-1); background: var(--cv-card-bg-solid); overflow: hidden; }
-.cv-chat-confirm::backdrop { background: rgb(0 0 0 / 30%); }
+.cv-sheet.cv-chat-confirm { --tg-confirm-unit: .9411764706rem; width: min(400px, calc(100vw - 32px)); max-width: none; min-width: min(312px, calc(100vw - 32px)); padding: calc(var(--tg-confirm-unit) * .75) calc(var(--tg-confirm-unit) * .5); margin: auto; border: 0; border-radius: calc(var(--tg-confirm-unit) * 2.5); height: fit-content; box-shadow: var(--cv-popup-shadow); color: var(--cv-neutral-1); background: var(--cv-popup-background); overflow: hidden; }
+.cv-chat-confirm::backdrop { background: var(--cv-popup-backdrop); }
 .cv-chat-confirm > .cv-sheet-header { position: static; min-height: calc(var(--tg-confirm-unit) * 2.5); padding: 0 var(--tg-confirm-unit); border: 0; margin: 0; background: transparent; }
 .cv-chat-confirm > .cv-sheet-header h2 { font-size: calc(var(--tg-confirm-unit) * 1.25); line-height: 1.3; font-weight: 500; letter-spacing: 0; }
 .cv-chat-confirm > .cv-sheet-body { padding: calc(var(--tg-confirm-unit) * .625) var(--tg-confirm-unit) calc(var(--tg-confirm-unit) * .5); font-size: var(--tg-confirm-unit); line-height: 1.5; color: var(--cv-neutral-1); }

@@ -33,6 +33,29 @@
       "visualVerification": "pending"
     },
     {
+      "file": "src/components/ui/ContentPanel.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [
+        8
+      ],
+      "dialogs": [
+        "Sheet"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "private-photo-ui-checks.json",
+          "profile-tab-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
       "file": "src/components/ui/Footer.tsx",
       "states": [],
       "fields": [
@@ -80,9 +103,9 @@
       "states": [],
       "fields": [],
       "headings": [
-        28,
-        43,
-        117
+        29,
+        44,
+        123
       ],
       "dialogs": [],
       "virtualized": false,
@@ -112,6 +135,15 @@
       "dialogs": [
         "Sheet"
       ],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/Popover.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -189,6 +221,24 @@
       "visualVerification": "pending"
     },
     {
+      "file": "src/components/ui/RippleEffects.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/pointer/keyboard fixtures, no screenshots or real account mutations",
+        "evidence": [
+          "group-row-interaction-checks.json"
+        ],
+        "limits": "Only states recorded in the linked fixtures; no real-device or pixel-identity claim."
+      }
+    },
+    {
       "file": "src/components/ui/RouteLoader.tsx",
       "states": [],
       "fields": [],
@@ -196,6 +246,30 @@
       "dialogs": [],
       "virtualized": false,
       "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/SearchField.tsx",
+      "states": [],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 14
+        }
+      ],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "group-member-checks.json",
+          "theme-list-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
     },
     {
       "file": "src/components/ui/ShareButton.tsx",
@@ -246,7 +320,17 @@
       "headings": [],
       "dialogs": [],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/pointer/keyboard fixtures, no screenshots or real account mutations",
+        "evidence": [
+          "group-row-interaction-checks.json",
+          "profile-catalog-checks.json"
+        ],
+        "limits": "Only states recorded in the linked fixtures; no real-device or pixel-identity claim."
+      }
     },
     {
       "file": "src/components/ui/TipButton.tsx",
@@ -354,6 +438,30 @@
       "dialogs": [
         "Sheet"
       ],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "profile-tab-checks.json",
+          "profile-social-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/appearance/AppearanceRange.tsx",
+      "states": [],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 7
+        }
+      ],
+      "headings": [],
+      "dialogs": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -501,6 +609,736 @@
       ],
       "virtualized": false,
       "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/chat/AttachmentMenu.tsx",
+      "states": [
+        {
+          "name": "[choosingExpiry, setChoosingExpiry]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "chat-compose-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/chat/ChatAvatarImage.tsx",
+      "states": [
+        {
+          "name": "[loaded, setLoaded]",
+          "type": "{ source: string; url: string } | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/chat/ChatMediaViewer.tsx",
+      "states": [
+        {
+          "name": "[activeIndex, setActiveIndex]",
+          "type": null,
+          "initial": "() => Math.max(0, initialIndex)"
+        },
+        {
+          "name": "[hasLoadError, setHasLoadError]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/chat/ChatPeerHeader.tsx",
+      "states": [
+        {
+          "name": "[failedAvatar, setFailedAvatar]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/chat/ClipboardFeedback.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/chat/EmptyConversation.tsx",
+      "states": [
+        {
+          "name": "[greeting, setGreeting]",
+          "type": "ChatEmoticon | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/chat/FloatingContextMenu.tsx",
+      "states": [
+        {
+          "name": "[position, setPosition]",
+          "type": "{ x: number; y: number } | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/chat/ForwardPicker.tsx",
+      "states": [
+        {
+          "name": "[query, setQuery]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[multiSelect, setMultiSelect]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[selected, setSelected]",
+          "type": "ChatItem[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[comment, setComment]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[busy, setBusy]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[failed, setFailed]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "textarea",
+          "line": 55
+        },
+        {
+          "tag": "input",
+          "line": 60
+        }
+      ],
+      "headings": [],
+      "dialogs": [
+        "Sheet"
+      ],
+      "virtualized": true,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "chat-forward-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/chat/GroupAvatarField.tsx",
+      "states": [
+        {
+          "name": "[url, setUrl]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[zoom, setZoom]",
+          "type": null,
+          "initial": "1"
+        },
+        {
+          "name": "[angle, setAngle]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[size, setSize]",
+          "type": null,
+          "initial": "{ width: 0, height: 0 }"
+        },
+        {
+          "name": "[pan, setPan]",
+          "type": null,
+          "initial": "{ x: 0, y: 0 }"
+        },
+        {
+          "name": "[failed, setFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[busy, setBusy]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[viewport, setViewport]",
+          "type": null,
+          "initial": "280"
+        },
+        {
+          "name": "[editing, setEditing]",
+          "type": "File | null",
+          "initial": "null"
+        },
+        {
+          "name": "[preview, setPreview]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[failed, setFailed]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 48
+        }
+      ],
+      "headings": [],
+      "dialogs": [
+        "Sheet"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/chat/GroupComposer.tsx",
+      "states": [
+        {
+          "name": "[step, setStep]",
+          "type": "'members' | 'details'",
+          "initial": "'members'"
+        },
+        {
+          "name": "[query, setQuery]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[found, setFound]",
+          "type": "Peer[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[contacts, setContacts]",
+          "type": "Peer[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[contactsNext, setContactsNext]",
+          "type": "string",
+          "initial": null
+        },
+        {
+          "name": "[contactsLoading, setContactsLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[contactsFailed, setContactsFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[selected, setSelected]",
+          "type": "Peer[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[name, setName]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[avatar, setAvatar]",
+          "type": "File | null",
+          "initial": "null"
+        },
+        {
+          "name": "[description, setDescription]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[isPublic, setIsPublic]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[publicUsername, setPublicUsername]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[searching, setSearching]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[busy, setBusy]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[failed, setFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[scrollParent, setScrollParent]",
+          "type": "HTMLDivElement | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "FormField",
+          "line": 106
+        },
+        {
+          "tag": "input",
+          "line": 106
+        },
+        {
+          "tag": "FormField",
+          "line": 107
+        },
+        {
+          "tag": "textarea",
+          "line": 107
+        },
+        {
+          "tag": "FormField",
+          "line": 109
+        },
+        {
+          "tag": "input",
+          "line": 109
+        }
+      ],
+      "headings": [
+        99,
+        118
+      ],
+      "dialogs": [],
+      "virtualized": true,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "group-member-checks.json",
+          "chat-group-avatar-checks.json",
+          "group-row-interaction-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/chat/GroupDetails.tsx",
+      "states": [
+        {
+          "name": "[members, setMembers]",
+          "type": "Participant[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[loading, setLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[editing, setEditing]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[adding, setAdding]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[name, setName]",
+          "type": null,
+          "initial": "chat.name"
+        },
+        {
+          "name": "[description, setDescription]",
+          "type": null,
+          "initial": "chat.description || ''"
+        },
+        {
+          "name": "[isPublic, setIsPublic]",
+          "type": null,
+          "initial": "chat.visibility === 'public'"
+        },
+        {
+          "name": "[username, setUsername]",
+          "type": null,
+          "initial": "chat.publicUsername || ''"
+        },
+        {
+          "name": "[avatar, setAvatar]",
+          "type": "File | null",
+          "initial": "null"
+        },
+        {
+          "name": "[removeAvatar, setRemoveAvatar]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[invite, setInvite]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[inviteFailed, setInviteFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[scrollParent, setScrollParent]",
+          "type": "HTMLDivElement | null",
+          "initial": "null"
+        },
+        {
+          "name": "[failed, setFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[busy, setBusy]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[confirmation, setConfirmation]",
+          "type": "{ kind: 'revoke' | 'remove' | 'leave'; peer?: Participant } | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "FormField",
+          "line": 78
+        },
+        {
+          "tag": "input",
+          "line": 78
+        },
+        {
+          "tag": "FormField",
+          "line": 79
+        },
+        {
+          "tag": "textarea",
+          "line": 79
+        },
+        {
+          "tag": "FormField",
+          "line": 81
+        },
+        {
+          "tag": "input",
+          "line": 81
+        }
+      ],
+      "headings": [
+        73,
+        84
+      ],
+      "dialogs": [
+        "Sheet"
+      ],
+      "virtualized": true,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "group-member-checks.json",
+          "chat-group-avatar-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/chat/MessageActionsMenu.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/chat/TelegramChatListRow.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/chat/TelegramIcon.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/emoticons/EmoticonPicker.tsx",
+      "states": [
+        {
+          "name": "[tab, setTab]",
+          "type": null,
+          "initial": "initialTab"
+        },
+        {
+          "name": "[query, setQuery]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[category, setCategory]",
+          "type": null,
+          "initial": "'Smileys & Emotion'"
+        },
+        {
+          "name": "[suggested, setSuggested]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[stickerGroup, setStickerGroup]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[pack, setPack]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[searchFocused, setSearchFocused]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[tonePicker, setTonePicker]",
+          "type": "{ item: EmojiEntry; anchor: HTMLButtonElement } | null",
+          "initial": "null"
+        },
+        {
+          "name": "[preview, setPreview]",
+          "type": "ChatEmoticon | null",
+          "initial": "null"
+        },
+        {
+          "name": "[tones, setTones]",
+          "type": "Record<string, number>",
+          "initial": "() => {\n    try { const saved = JSON.parse(localStorage.getItem('cv.emoticons.tones.v1') || '{}'); return saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {}; } catch { return {}; }\n  }"
+        },
+        {
+          "name": "[recent, setRecent]",
+          "type": "EmoticonSelection[]",
+          "initial": "() => {\n    try {\n      const saved = JSON.parse(localStorage.getItem(RECENT) || '[]');\n      return Array.isArray(saved) ? saved.flatMap(item => item?.kind === 'emoji' && typeof item.emoji === 'string' ? [item] : normalizeEmoticon(item) ? [normalizeEmoticon(item)!] : []).slice(0, 48) : [];\n    } catch { return []; }\n  }"
+        },
+        {
+          "name": "[gifs, setGifs]",
+          "type": "ChatEmoticon[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[page, setPage]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[next, setNext]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[loading, setLoading]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[failed, setFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[retry, setRetry]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[gifsAtBottom, setGifsAtBottom]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 121
+        }
+      ],
+      "headings": [],
+      "dialogs": [
+        "Sheet"
+      ],
+      "virtualized": true,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "chat-sticker-checks.json",
+          "chat-gif-checks.json",
+          "chat-compose-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/emoticons/EmoticonTile.tsx",
+      "states": [
+        {
+          "name": "[pressed, setPressed]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/emoticons/GifMedia.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "chat-gif-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/emoticons/StickerMedia.tsx",
+      "states": [
+        {
+          "name": "[failed, setFailed]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "chat-sticker-checks.json",
+          "chat-compose-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/emoticons/StickerPreview.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "chat-sticker-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
     },
     {
       "file": "src/features/post/BubbleView/index.tsx",
@@ -1587,6 +2425,331 @@
       "visualVerification": "pending"
     },
     {
+      "file": "src/features/profile/FriendsPanel.tsx",
+      "states": [
+        {
+          "name": "[tab, setTab]",
+          "type": null,
+          "initial": "'friends'"
+        },
+        {
+          "name": "[rows, setRows]",
+          "type": "Friend[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[next, setNext]",
+          "type": "string",
+          "initial": null
+        },
+        {
+          "name": "[loading, setLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[failed, setFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[busy, setBusy]",
+          "type": null,
+          "initial": "''"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": true,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "profile-tab-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/profile/PhotoAlbum.tsx",
+      "states": [
+        {
+          "name": "[height, setHeight]",
+          "type": null,
+          "initial": "160"
+        },
+        {
+          "name": "[tab, setTab]",
+          "type": null,
+          "initial": "'private'"
+        },
+        {
+          "name": "[requests, setRequests]",
+          "type": "AccessRequest[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[photos, setPhotos]",
+          "type": "Photo[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[access, setAccess]",
+          "type": "PhotoAccess",
+          "initial": "{ status: 'none' }"
+        },
+        {
+          "name": "[count, setCount]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[reload, setReload]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[loading, setLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[failed, setFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[busy, setBusy]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[viewing, setViewing]",
+          "type": "Photo | null",
+          "initial": "null"
+        },
+        {
+          "name": "[deleting, setDeleting]",
+          "type": "Photo | null",
+          "initial": "null"
+        },
+        {
+          "name": "[uploadOpen, setUploadOpen]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [
+        "PhotoUploadSheet",
+        "Sheet"
+      ],
+      "virtualized": true,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "private-photo-ui-checks.json",
+          "profile-social-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/profile/PhotoUploadSheet.tsx",
+      "states": [
+        {
+          "name": "[src, setSrc]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[failed, setFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[files, setFiles]",
+          "type": "File[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[busy, setBusy]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[dragging, setDragging]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[error, setError]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[progress, setProgress]",
+          "type": "number | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 41
+        }
+      ],
+      "headings": [],
+      "dialogs": [
+        "Sheet"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "private-photo-ui-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/profile/PreferenceSection.tsx",
+      "states": [
+        {
+          "name": "[expanded, setExpanded]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[all, setAll]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[scrollParent, setScrollParent]",
+          "type": "HTMLElement",
+          "initial": null
+        }
+      ],
+      "fields": [],
+      "headings": [
+        49
+      ],
+      "dialogs": [],
+      "virtualized": true,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/pointer/keyboard fixtures, no screenshots or real account mutations",
+        "evidence": [
+          "profile-catalog-checks.json"
+        ],
+        "limits": "Only states recorded in the linked fixtures; no real-device or pixel-identity claim."
+      }
+    },
+    {
+      "file": "src/features/profile/ProfileHeader.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [
+        31
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "profile-tab-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/profile/ProfileSocialTools.tsx",
+      "states": [
+        {
+          "name": "[friend, setFriend]",
+          "type": "Friend | null",
+          "initial": "null"
+        },
+        {
+          "name": "[friendLoading, setFriendLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[friendFailed, setFriendFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[grant, setGrant]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[grantLoading, setGrantLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[grantFailed, setGrantFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[remove, setRemove]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[failed, setFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[busy, setBusy]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[retry, setRetry]",
+          "type": null,
+          "initial": "0"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [
+        "Sheet"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "profile-social-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
+    },
+    {
       "file": "src/features/profile/ProfileWizard.tsx",
       "states": [],
       "fields": [],
@@ -1683,19 +2846,44 @@
     },
     {
       "file": "src/screens/AppearanceScreen.tsx",
-      "states": [],
-      "fields": [],
+      "states": [
+        {
+          "name": "[uploading, setUploading]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[error, setError]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 57
+        },
+        {
+          "tag": "input",
+          "line": 97
+        },
+        {
+          "tag": "input",
+          "line": 110
+        }
+      ],
       "headings": [],
       "dialogs": [],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
-        "scope": "/settings/appearance and /settings/appearance/background",
-        "change": "Settings preview: nine original theme cards, four variants plus system, 49 accents, wallpaper and text controls. Saved draft only; no global application.",
-        "evidence": "docs/appearance-checks.json",
-        "outcome": "Settings navigation, cards, variants, persistence, preview isolation and responsive DOM checks passed.",
-        "limits": "Fixture-only; no screenshots, real devices or actual chat theme application.",
-        "colorRegression": "docs/theme-picker-regressions.json"
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "appearance-input-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
       }
     },
     {
@@ -1837,19 +3025,19 @@
       "fields": [
         {
           "tag": "input",
-          "line": 532
+          "line": 522
         },
         {
           "tag": "input",
-          "line": 562
+          "line": 552
         },
         {
           "tag": "input",
-          "line": 571
+          "line": 561
         }
       ],
       "headings": [
-        490
+        480
       ],
       "dialogs": [],
       "virtualized": false,
@@ -1860,6 +3048,46 @@
         "outcome": "Original illustrated background loads; distinct crops, wrapping labels and keyboard create prefill pass.",
         "limits": "Fixture-only, no live listing creation or screenshots."
       }
+    },
+    {
+      "file": "src/screens/GroupInviteScreen.tsx",
+      "states": [
+        {
+          "name": "[group, setGroup]",
+          "type": "Preview | null",
+          "initial": "null"
+        },
+        {
+          "name": "[failed, setFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[busy, setBusy]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[auth, setAuth]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[retry, setRetry]",
+          "type": null,
+          "initial": "0"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        36,
+        39
+      ],
+      "dialogs": [
+        "AuthWizard"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending"
     },
     {
       "file": "src/screens/HomeScreen.tsx",
@@ -2281,11 +3509,6 @@
       "file": "src/screens/MessagesScreen.tsx",
       "states": [
         {
-          "name": "[isPressed, setIsPressed]",
-          "type": null,
-          "initial": "false"
-        },
-        {
           "name": "[previewUrl, setPreviewUrl]",
           "type": "string | null",
           "initial": "null"
@@ -2309,6 +3532,11 @@
           "name": "[viewOnceEnabled, setViewOnceEnabled]",
           "type": null,
           "initial": "false"
+        },
+        {
+          "name": "[failedEmoticon, setFailedEmoticon]",
+          "type": "ChatEmoticon | null",
+          "initial": "null"
         },
         {
           "name": "[countdownNow, setCountdownNow]",
@@ -2351,6 +3579,16 @@
           "initial": "false"
         },
         {
+          "name": "[showComposerOptions, setShowComposerOptions]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[chatSearch, setChatSearch]",
+          "type": null,
+          "initial": "''"
+        },
+        {
           "name": "[selectedImages, setSelectedImages]",
           "type": "File[]",
           "initial": "[]"
@@ -2364,16 +3602,6 @@
           "name": "[isMobile, setIsMobile]",
           "type": null,
           "initial": "false"
-        },
-        {
-          "name": "[inputHeight, setInputHeight]",
-          "type": null,
-          "initial": "0"
-        },
-        {
-          "name": "[headerHeight, setHeaderHeight]",
-          "type": null,
-          "initial": "0"
         },
         {
           "name": "[selectedMessageId, setSelectedMessageId]",
@@ -2391,6 +3619,61 @@
           "initial": "null"
         },
         {
+          "name": "[selectedMessages, setSelectedMessages]",
+          "type": "Set<string>",
+          "initial": "() => new Set()"
+        },
+        {
+          "name": "[replyTo, setReplyTo]",
+          "type": "ChatMessage | null",
+          "initial": "null"
+        },
+        {
+          "name": "[editingMessage, setEditingMessage]",
+          "type": "ChatMessage | null",
+          "initial": "null"
+        },
+        {
+          "name": "[actionError, setActionError]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[deleteRequest, setDeleteRequest]",
+          "type": "ChatMessage[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[deleteForAll, setDeleteForAll]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[actionBusy, setActionBusy]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[creatingGroup, setCreatingGroup]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[forwardMessages, setForwardMessages]",
+          "type": "ChatMessage[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[pendingForward, setPendingForward]",
+          "type": "{ sourceChatId: string; messages: ChatMessage[]; targetChatId: string } | null",
+          "initial": "null"
+        },
+        {
+          "name": "[forwardSourceId, setForwardSourceId]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
           "name": "[showChatMenu, setShowChatMenu]",
           "type": null,
           "initial": "false"
@@ -2401,6 +3684,21 @@
           "initial": "null"
         },
         {
+          "name": "[chatItemMenuPoint, setChatItemMenuPoint]",
+          "type": null,
+          "initial": "{ x: 0, y: 0 }"
+        },
+        {
+          "name": "[chatRequest, setChatRequest]",
+          "type": "{ chat: ChatItem; kind: 'delete' | 'clear' } | null",
+          "initial": "null"
+        },
+        {
+          "name": "[chatRequestForAll, setChatRequestForAll]",
+          "type": null,
+          "initial": "false"
+        },
+        {
           "name": "[showProfile, setShowProfile]",
           "type": null,
           "initial": "false"
@@ -2409,40 +3707,43 @@
       "fields": [
         {
           "tag": "input",
-          "line": 2653
-        },
-        {
-          "tag": "select",
-          "line": 3415
+          "line": 3242
         },
         {
           "tag": "input",
-          "line": 3468
+          "line": 3250
         },
         {
           "tag": "input",
-          "line": 3476
+          "line": 3258
         },
         {
-          "tag": "input",
-          "line": 3484
-        },
-        {
-          "tag": "input",
-          "line": 3542
+          "tag": "textarea",
+          "line": 3276
         }
       ],
       "headings": [
-        2612,
-        2751,
-        2948,
-        3611
+        2843,
+        3320
       ],
       "dialogs": [
-        "AuthWizard"
+        "AuthWizard",
+        "Sheet"
       ],
       "virtualized": true,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "chat-compose-checks.json",
+          "chat-sticker-checks.json",
+          "chat-forward-checks.json",
+          "chat-action-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/NearbyScreen.tsx",
@@ -2660,13 +3961,6 @@
     },
     {
       "file": "src/screens/ProfileBio.tsx",
-      "runtimeVerification": {
-        "scope": "/profile and /profile?edit=1 biography preview and editor",
-        "change": "Wrap imported text and inline nodes in paragraphs before appending them to the Lexical root.",
-        "evidence": "DOM-only Playwright checks against localhost:5173 with intercepted API fixtures: plain text, inline HTML and mixed blocks at 390/768/1280px; edit/save at 390px with English, Turkish, Arabic/RTL, dark appearance and 24px root text.",
-        "outcome": "Biography renders without Lexical errors; edited content reaches the fixture save request; no document horizontal overflow.",
-        "limits": "No screenshots, simulator, real device or live profile writes. Other profile subflows remain unverified."
-      },
       "states": [
         {
           "name": "[activeEditor, setActiveEditor]",
@@ -2683,7 +3977,14 @@
       "headings": [],
       "dialogs": [],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "scope": "/profile and /profile?edit=1 biography preview and editor",
+        "change": "Wrap imported text and inline nodes in paragraphs before appending them to the Lexical root.",
+        "evidence": "DOM-only Playwright checks against localhost:5173 with intercepted API fixtures: plain text, inline HTML and mixed blocks at 390/768/1280px; edit/save at 390px with English, Turkish, Arabic/RTL, dark appearance and 24px root text.",
+        "outcome": "Biography renders without Lexical errors; edited content reaches the fixture save request; no document horizontal overflow.",
+        "limits": "No screenshots, simulator, real device or live profile writes. Other profile subflows remain unverified."
+      }
     },
     {
       "file": "src/screens/ProfileEngagementsScreen.tsx",
@@ -2810,7 +4111,7 @@
         },
         {
           "name": "[activeTab, setActiveTab]",
-          "type": "'profile' | 'posts' | 'replies' | 'media' | 'likes'",
+          "type": "'profile' | 'photos' | 'friends' | 'posts' | 'replies' | 'media' | 'likes'",
           "initial": "'profile'"
         },
         {
@@ -2825,6 +4126,11 @@
         },
         {
           "name": "[showAuthWizard, setShowAuthWizard]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showProfileStats, setShowProfileStats]",
           "type": null,
           "initial": "false"
         },
@@ -2927,76 +4233,80 @@
           "name": "[isBirthdateSectionOpen, setIsBirthdateSectionOpen]",
           "type": null,
           "initial": "false"
+        },
+        {
+          "name": "[friendshipAccepted, setFriendshipAccepted]",
+          "type": null,
+          "initial": "false"
         }
       ],
       "fields": [
         {
           "tag": "input",
-          "line": 4119
+          "line": 4225
         },
         {
           "tag": "input",
-          "line": 4167
+          "line": 4273
         },
         {
           "tag": "input",
-          "line": 4306
+          "line": 4412
         },
         {
           "tag": "input",
-          "line": 4328
+          "line": 4434
         },
         {
           "tag": "input",
-          "line": 4344
+          "line": 4450
         },
         {
           "tag": "input",
-          "line": 4459
+          "line": 4565
         },
         {
           "tag": "input",
-          "line": 4579
+          "line": 4685
         },
         {
           "tag": "input",
-          "line": 4606
+          "line": 4712
         },
         {
           "tag": "input",
-          "line": 4633
+          "line": 4739
         }
       ],
       "headings": [
-        4217,
-        4411,
-        4527,
-        4701,
-        5029,
-        5231,
-        5524,
-        5681,
-        5704,
-        5737,
-        5886,
-        5929,
-        5984,
-        6032,
-        6077,
-        6178,
-        6250,
-        6307
+        4323,
+        4517,
+        4633,
+        4807,
+        5135,
+        5337,
+        5692,
+        5719,
+        5786,
+        5843
       ],
       "dialogs": [
-        "AuthWizard"
+        "AuthWizard",
+        "Sheet"
       ],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
-        "scope": "Profile header, tabs, metrics sheet, biography edit",
-        "evidence": "docs/profile-layout-checks.json",
-        "outcome": "No duplicate top gap, name overlap or horizontal overflow in tested fixtures; navigation, sheet and edit interactions passed.",
-        "limits": "No live profile writes or screenshots."
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "profile-tab-checks.json",
+          "profile-social-checks.json",
+          "private-photo-ui-checks.json",
+          "profile-catalog-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
       }
     },
     {
@@ -3012,16 +4322,25 @@
       "file": "src/screens/ReferralsScreen.tsx",
       "states": [
         {
-          "name": "[copied, setCopied]",
-          "type": null,
-          "initial": "false"
+          "name": "[scrollParent, setScrollParent]",
+          "type": "HTMLDivElement | null",
+          "initial": "null"
         }
       ],
       "fields": [],
       "headings": [],
       "dialogs": [],
-      "virtualized": false,
-      "visualVerification": "pending"
+      "virtualized": true,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "status": "fixture-passed",
+        "date": "2026-10-21",
+        "method": "DOM/HTTP/Canvas/video fixtures as applicable; no screenshots or real account writes",
+        "evidence": [
+          "theme-list-checks.json"
+        ],
+        "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/SearchScreen.tsx",
@@ -3097,12 +4416,7 @@
           "initial": "''"
         }
       ],
-      "fields": [
-        {
-          "tag": "input",
-          "line": 282
-        }
-      ],
+      "fields": [],
       "headings": [],
       "dialogs": [
         "LanguageSelectorModal",
@@ -3289,7 +4603,56 @@
       "login-bear.avif",
       "register-bear.avif"
     ],
-    "systemIcons": "Existing lucide-react vector icons; brand illustrations remain in navigation and domain content.",
-    "font": "System font stack; no proprietary font downloads."
+    "systemIcons": "Original tweb tgico SVG paths in chat/emoticons; lucide-react remains on other routes. Brand illustrations remain in domain content.",
+    "font": "Original tweb Roboto WOFF2 with Apache license; system fallback for uncovered scripts.",
+    "visualReference": "docs/telegram-ui-reference.md",
+    "popupTokens": "src/styles/telegram-panels.css",
+    "profileLockLottie": "public/animations/telegram/assets/UtyanPasscode.json",
+    "stickerPacks": [
+      {
+        "title": "Duck",
+        "documents": 40
+      },
+      {
+        "title": "Hot Cherry",
+        "documents": 34
+      },
+      {
+        "title": "Tidy Tie Tom",
+        "documents": 23
+      },
+      {
+        "title": "Just zoo it!",
+        "documents": 50
+      },
+      {
+        "title": "Bunnyta",
+        "documents": 22
+      },
+      {
+        "title": "Melie the Cavy",
+        "documents": 21
+      },
+      {
+        "title": "Office Turkey",
+        "documents": 15
+      },
+      {
+        "title": "Resistance Dog",
+        "documents": 27
+      },
+      {
+        "title": "The Foods",
+        "documents": 25
+      },
+      {
+        "title": "Utya",
+        "documents": 17
+      },
+      {
+        "title": "Vitamin Party",
+        "documents": 20
+      }
+    ]
   }
 }

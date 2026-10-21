@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/Canvas/HTTP fixtures; real bundled sticker assets, no screenshots",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "base": "day",
+      "status": "passed",
+      "grid": {
+        "columns": 5,
+        "items": 25
+      },
+      "checks": [
+        "11 actual Telegram packs/294 documents",
+        "five columns and virtualization",
+        "original SVG icons and metadata-based emoji filters",
+        "visible Lottie frames, no failed cells",
+        "full viewport animated preview; release never sends",
+        "WEBP send and history reload"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "base": "night",
+      "status": "passed",
+      "grid": {
+        "columns": 5,
+        "items": 20
+      },
+      "checks": [
+        "11 actual Telegram packs/294 documents",
+        "five columns and virtualization",
+        "original SVG icons and metadata-based emoji filters",
+        "visible Lottie frames, no failed cells",
+        "full viewport animated preview; release never sends",
+        "WEBP send and history reload"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "base": "tinted",
+      "status": "passed",
+      "grid": {
+        "columns": 5,
+        "items": 20
+      },
+      "checks": [
+        "11 actual Telegram packs/294 documents",
+        "five columns and virtualization",
+        "original SVG icons and metadata-based emoji filters",
+        "visible Lottie frames, no failed cells",
+        "full viewport animated preview; release never sends",
+        "WEBP send and history reload"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "base": "light",
+      "status": "passed",
+      "grid": {
+        "columns": 5,
+        "items": 20
+      },
+      "checks": [
+        "11 actual Telegram packs/294 documents",
+        "five columns and virtualization",
+        "original SVG icons and metadata-based emoji filters",
+        "visible Lottie frames, no failed cells",
+        "full viewport animated preview; release never sends",
+        "WEBP send and history reload"
+      ]
+    }
+  ]
+}

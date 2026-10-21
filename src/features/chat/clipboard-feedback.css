@@ -1,0 +1,3 @@
+.cv-clipboard-feedback { position: absolute; z-index: 6; bottom: max(1rem, env(safe-area-inset-bottom)); inset-inline: 1rem; display: flex; justify-content: center; pointer-events: none; }
+.cv-clipboard-feedback > span { max-width: 100%; padding: .625rem 1rem; border: 0; border-radius: .588rem; background: rgb(0 0 0 / 78%); color: #fff; box-shadow: 0 2px 8px rgb(0 0 0 / 12%); font-size: .824rem; line-height: 1.4; text-align: center; overflow-wrap: anywhere; }
+.cv-clipboard-feedback > span[data-tone='failed'] { background: var(--cv-menu-danger); }

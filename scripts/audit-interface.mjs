@@ -3,7 +3,8 @@ import path from 'node:path'
 import ts from 'typescript'
 
 const root = process.cwd()
-const sources = ['src/screens', 'src/features/auth', 'src/features/profile', 'src/features/post', 'src/components/ui']
+const sources = ['src/screens', 'src/features/auth', 'src/features/profile', 'src/features/post', 'src/features/appearance', 'src/features/chat', 'src/features/emoticons', 'src/components/ui']
+const previous = new Map(JSON.parse(fs.readFileSync('docs/interface-inventory.json', 'utf8')).sources.map(item => [item.file, item]))
 const files = []
 function scan(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
@@ -32,10 +33,10 @@ const screens = files.sort().map(file => {
     ts.forEachChild(node, visit)
   }
   visit(ast)
-  return { file, states, fields, headings, dialogs: [...new Set(dialogs)], virtualized, visualVerification: 'pending' }
+  return { file, states, fields, headings, dialogs: [...new Set(dialogs)], virtualized, visualVerification: 'pending', ...(previous.get(file)?.runtimeVerification ? { runtimeVerification: previous.get(file).runtimeVerification } : {}) }
 })
 const catalog = JSON.parse(fs.readFileSync('src/features/illustrations/icon-catalog.json', 'utf8'))
 const missingIcons = catalog.filter(item => !fs.existsSync(`public/images/icons/dott/${item.key}.avif`)).map(item => item.key)
-const assets = { illustratedIcons: catalog.length, missingIcons, authAssets: fs.readdirSync('public/images/auth'), systemIcons: 'Existing lucide-react vector icons; brand illustrations remain in navigation and domain content.', font: 'System font stack; no proprietary font downloads.' }
+const assets = { illustratedIcons: catalog.length, missingIcons, authAssets: fs.readdirSync('public/images/auth'), systemIcons: 'Original tweb tgico SVG paths in chat/emoticons; lucide-react remains on other routes. Brand illustrations remain in domain content.', font: 'Original tweb Roboto WOFF2 with Apache license; system fallback for uncovered scripts.', visualReference: 'docs/telegram-ui-reference.md', popupTokens: 'src/styles/telegram-panels.css', profileLockLottie: 'public/animations/telegram/assets/UtyanPasscode.json', stickerPacks: JSON.parse(fs.readFileSync('src/features/emoticons/sticker-packs.json', 'utf8')).map(pack => ({ title: pack.title, documents: pack.documents.length })) }
 fs.writeFileSync('docs/interface-inventory.json', JSON.stringify({ generatedBy: 'yarn node scripts/audit-interface.mjs', sources: screens, assets }, null, 2) + '\n')
 console.log(JSON.stringify({ sources: screens.length, screens: screens.filter(item => item.file.startsWith('src/screens/')).length, fields: screens.reduce((sum, item) => sum + item.fields.length, 0), assets },null,2))

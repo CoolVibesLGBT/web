@@ -4,7 +4,7 @@
 .cv-message-actions button svg { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; color: inherit; }
 .cv-message-actions button:hover, .cv-message-actions button:active { background: var(--cv-menu-hover); }
 .cv-message-actions button[data-danger='true'] { margin-top: .25rem; color: var(--cv-menu-danger); }
-.cv-message-actions button[data-danger='true']:hover { background: color-mix(in srgb, var(--cv-menu-danger) 8%, transparent); }
+.cv-message-actions button[data-danger='true']:hover { background: var(--cv-list-hover); }
 .cv-message-actions button[data-danger='true'] svg { color: inherit; }
 .cv-chat-message-selectable { align-items: center; gap: .75rem; border-radius: 8px; }
 .cv-chat-message-selectable[data-selected='true'] { background: color-mix(in srgb, var(--color-brand) 18%, transparent); }

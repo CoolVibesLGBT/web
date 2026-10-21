@@ -1,0 +1,33 @@
+/* Shared panel tokens used by forwarding, albums, permissions and upload flows. */
+:root { --cv-popup-background: var(--cv-page-bg); --cv-popup-surface: var(--cv-card-bg-solid); --cv-popup-radius: calc(var(--tg-unit) * 2.5); --cv-popup-card-radius: calc(var(--tg-unit) * 1.5); --cv-popup-shadow: none; --cv-popup-backdrop: rgb(0 0 0 / 30%); }
+.cv-sheet.cv-panel-sheet, .cv-sheet.cv-panel-sheet.cv-profile-social-sheet { width: min(420px, calc(100vw - 24px)); max-width: none; height: fit-content; max-height: min(80dvh, calc(var(--cv-viewport-height, 100dvh) - 24px)); margin: auto; padding: 0; border: 0; border-radius: var(--cv-popup-radius); background: var(--cv-popup-background); color: var(--cv-neutral-1); box-shadow: var(--cv-popup-shadow); overflow: hidden; }
+.cv-panel-sheet::backdrop { background: var(--cv-popup-backdrop); }
+.cv-panel-sheet > .cv-sheet-header { flex: 0 0 auto; min-height: calc(var(--tg-unit) * 3.5); padding: 0 var(--tg-unit); gap: var(--tg-unit); border: 0; background: var(--cv-popup-background); }
+.cv-panel-sheet > .cv-sheet-header h2 { flex: 1; min-width: 0; font-size: calc(var(--tg-unit) * 1.25); font-weight: 500; line-height: 1.3; letter-spacing: 0; }
+.cv-panel-sheet > .cv-sheet-header > .cv-icon-button { order: -1; width: 44px; height: 44px; margin-inline-start: calc(var(--tg-unit) * -.5); color: var(--cv-neutral-2); }
+.cv-panel-sheet > .cv-sheet-body { display: flex; flex: 0 1 auto; min-height: 0; flex-direction: column; gap: var(--tg-unit); padding: 0 var(--tg-unit) var(--tg-unit); overflow: hidden; }
+.cv-panel-sheet > .cv-sheet-actions { padding: calc(var(--tg-unit) * .75) var(--tg-unit) var(--tg-unit); background: var(--cv-popup-background); border: 0; }
+.cv-panel-card { min-width: 0; border: 0; border-radius: var(--cv-popup-card-radius); background: var(--cv-popup-surface); box-shadow: var(--cv-telegram-section-shadow); padding: calc(var(--tg-unit) * .5); overflow: hidden; }
+.cv-panel-sheet .cv-profile-social-list.cv-panel-card { min-height: 5rem; }
+.cv-panel-sheet .cv-adaptive-tabs { flex-shrink: 0; }
+
+.cv-panel-sheet > .cv-sheet-header > .cv-panel-header-action { order: 1; margin-inline: auto 0; color: var(--color-brand); }
+.cv-panel-sheet .cv-panel-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .706rem; padding: 1.882rem var(--tg-unit); text-align: center; color: var(--cv-neutral-2); }
+.cv-panel-empty > svg { width: 2.824rem; height: 2.824rem; color: var(--cv-neutral-2); }
+.cv-panel-empty p { margin: 0; font-size: var(--tg-unit); color: var(--cv-neutral-1); }
+.cv-panel-empty > span { font-size: calc(var(--tg-unit) * .875); line-height: 1.5; }
+.cv-panel-empty > button { min-height: 44px; padding: .5rem 1rem; border: 0; border-radius: var(--tg-radius-control); background: transparent; color: var(--color-brand); font-weight: 500; }
+.cv-panel-empty > button:hover { background: var(--cv-list-hover); }
+.cv-panel-loading { display: flex; align-items: center; justify-content: center; gap: .706rem; padding: 2rem var(--tg-unit); color: var(--cv-neutral-2); }
+.cv-panel-loading progress { width: 3rem; height: 4px; accent-color: var(--color-brand); }
+.cv-panel-sheet .cv-adaptive-tab, .cv-panel-sheet .cv-adaptive-more { padding: .588rem .706rem; min-height: 44px; font-size: calc(var(--tg-unit) * .875); font-weight: 500; }
+.cv-panel-sheet .cv-adaptive-tab[aria-selected='true'] { font-weight: 500; }
+.cv-adaptive-tab:focus-visible, .cv-adaptive-more:focus-visible { outline: none; border-radius: .706rem; box-shadow: inset 0 0 0 1px var(--color-brand); background: var(--cv-list-hover); }
+.cv-adaptive-tab:hover, .cv-adaptive-more:hover { background: var(--cv-list-hover); }
+
+.cv-embedded-panel { width: 100%; min-width: 0; color: var(--cv-neutral-1); background: var(--cv-page-bg); }
+.cv-embedded-panel > .cv-sheet-header { position: static; display: flex; align-items: center; min-height: calc(var(--tg-unit) * 3.5); }
+.cv-embedded-panel > .cv-sheet-header h2 { margin: 0; }
+.cv-embedded-panel > .cv-sheet-body { flex: 0 1 auto; overflow: visible; }
+.cv-embedded-panel .cv-profile-photo-grid-container { max-height: none; }
+.cv-embedded-panel .cv-panel-empty { min-height: 12rem; }

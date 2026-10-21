@@ -1,0 +1,42 @@
+/* Information/edit/group type sections follow tweb's rightSidebar/editChat flows. */
+.cv-group-info { position: relative; display: flex; flex-direction: column; height: 100%; min-height: 0; background: var(--cv-page-bg); color: var(--cv-neutral-1); }
+.cv-group-info > .cv-navigation-bar { flex: 0 0 auto; padding: .25rem .75rem; border: 0; background: var(--cv-card-bg-solid); }
+.cv-group-info > .cv-navigation-bar h1 { font-size: 1.176rem; font-weight: 500; text-align: start; }
+.cv-group-info .cv-icon-button { color: var(--cv-neutral-2); border-radius: 50%; }
+.cv-group-info .cv-icon-button svg { width: 1.412rem; height: 1.412rem; }
+.cv-group-info-summary { flex: 0 0 auto; text-align: center; padding: 1rem; background: var(--cv-card-bg-solid); }
+.cv-group-info-avatar { position: relative; display: grid; place-items: center; width: 7.058rem; height: 7.058rem; overflow: hidden; border-radius: 50%; color: white; background: linear-gradient(#5caffa, #408acf); font-size: 2.353rem; margin: 0 auto .75rem; }
+.cv-group-info-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cv-group-info-summary h2 { margin: 0; font-size: 1.412rem; font-weight: 500; overflow-wrap: anywhere; }
+.cv-group-info-summary p { margin: .25rem 0 0; font-size: .824rem; color: var(--cv-neutral-2); }
+.cv-group-info-content { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-gutter: stable; padding-bottom: 1rem; }
+.cv-group-info-sections { padding: .941rem; }
+.cv-group-info .cv-grouped-section { margin: 0; }
+.cv-group-info .cv-grouped-list { border: 0; border-radius: 1.412rem; box-shadow: var(--cv-telegram-section-shadow); padding: .5rem; background: var(--cv-card-bg-solid); }
+.cv-group-info .cv-list-row { border-radius: .588rem; gap: .941rem; padding: .5rem; min-height: 3.529rem; }
+.cv-group-info .cv-list-row::after { display: none; }
+.cv-group-info .cv-list-row:hover { background: var(--cv-telegram-row-hover); }
+.cv-group-info .cv-list-icon { background: transparent; color: var(--cv-neutral-2); }
+.cv-group-info .cv-list-icon > svg { width: 1.412rem; height: 1.412rem; }
+.cv-group-info .cv-list-title { font-size: .941rem; font-weight: 400; overflow-wrap: anywhere; }
+.cv-group-info .cv-list-description { font-size: .824rem; overflow-wrap: anywhere; color: var(--cv-neutral-2); }
+.cv-group-add, .cv-group-leave, .cv-group-save { display: flex; align-items: center; justify-content: center; gap: .75rem; width: 100%; min-height: 44px; margin-top: .5rem; padding: .75rem; border: 0; border-radius: .941rem; background: var(--cv-card-bg-solid); color: var(--color-brand); font-size: .941rem; font-weight: 500; }
+.cv-group-add:hover, .cv-group-save:hover { background: var(--color-brand-light); }
+.cv-group-leave { color: var(--cv-menu-danger); }
+.cv-group-add svg { width: 1.412rem; height: 1.412rem; }
+.cv-group-info-members { min-height: 0; padding: .5rem; margin: 0 .941rem .941rem; background: var(--cv-card-bg-solid); border-radius: 1.412rem; box-shadow: var(--cv-telegram-section-shadow); }
+.cv-group-member-avatar { position: relative; display: grid; place-items: center; flex-shrink: 0; width: 2.529rem; height: 2.529rem; border-radius: 50%; overflow: hidden; background: linear-gradient(#5caffa, #408acf); color: white; font-size: 1.176rem; }
+.cv-group-member-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cv-group-info-edit { min-height: 0; padding: 1rem; background: var(--cv-card-bg-solid); }
+.cv-group-info-edit .cv-form-field { margin: .75rem 0; }
+.cv-group-info-edit > .cv-form-field > :is(input,textarea) { width: 100%; min-width: 0; min-height: 44px; padding: .75rem; border: 1px solid var(--cv-inner-border); border-radius: .941rem; background: transparent; color: var(--cv-neutral-1); font-size: .941rem; }
+.cv-group-info-edit > .cv-form-field > :is(input,textarea):focus { border-color: var(--color-brand); outline: none; box-shadow: inset 0 0 0 1px var(--color-brand); }
+.cv-group-info-edit .cv-group-save { color: white; background: var(--color-brand); }
+.cv-group-info-edit .cv-group-save:disabled { opacity: .4; }
+.cv-group-info button:focus-visible { outline: 2px solid var(--color-brand); outline-offset: -2px; }
+@media (max-height: 650px) { .cv-group-info-summary { padding: .5rem; } .cv-group-info-avatar { width: 4.7rem; height: 4.7rem; } }
+.cv-group-invitation { min-height: 70dvh; color: var(--cv-neutral-1); background: var(--cv-page-bg); }
+.cv-group-invitation-card { max-width: 25rem; margin: 2rem auto; padding: 1.5rem; border-radius: 1.412rem; background: var(--cv-card-bg-solid); box-shadow: var(--cv-telegram-section-shadow); text-align: center; }
+.cv-group-invitation-card h1 { font-size: 1.412rem; font-weight: 500; overflow-wrap: anywhere; }
+.cv-group-invitation-card p { overflow-wrap: anywhere; }
+.cv-group-invitation-card .cv-group-save { color: white; background: var(--color-brand); }

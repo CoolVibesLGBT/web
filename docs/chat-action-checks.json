@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/HTTP fixtures; no screenshots",
+  "status": "passed",
+  "checks": [
+    "right click, keyboard and Escape",
+    "clipboard contents",
+    "unified reply composer and persisted reply",
+    "edit and pin/unpin commands",
+    "multi select and gated delete confirmation",
+    "history reload"
+  ]
+}

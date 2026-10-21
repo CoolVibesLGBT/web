@@ -3,6 +3,9 @@ import { createRoot } from 'react-dom/client'
 import AppRoot from '@/entry/AppRoot'
 import '@/index.css'
 import '@/styles/interface.css'
+import '@/styles/telegram-fonts.css'
+import '@/styles/telegram-foundation.css'
+import '@/styles/telegram-panels.css'
 
 const rootElement = document.getElementById('root')
 

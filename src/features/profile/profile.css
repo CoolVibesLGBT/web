@@ -201,3 +201,52 @@
   .cv-profile-attribute-value { justify-content: flex-start; padding-inline-start: 2.5rem; }
   .cv-profile-attribute-value > span { text-align: start; }
 }
+
+/* Telegram peer information hierarchy: centered 120px avatar, 24px title and
+   16px spacing. Keep the product's existing cover, biography and profile data. */
+.cv-profile-summary { padding: var(--tg-unit); gap: var(--tg-unit); }
+.cv-profile-identity { display: flex; flex-direction: column; align-items: center; gap: calc(var(--tg-unit) * .75); text-align: center; }
+.cv-profile-avatar { width: calc(var(--tg-unit) * 7.5); height: calc(var(--tg-unit) * 7.5); border: 0; flex-shrink: 0; }
+.cv-profile-name h1 { font-size: calc(var(--tg-unit) * 1.5); font-weight: 500; line-height: 1.2; letter-spacing: normal; }
+.cv-profile-name p { font-size: calc(var(--tg-unit) * .875); text-align: center; }
+.cv-profile-action { min-height: max(44px, var(--tg-control-height)); padding: calc(var(--tg-unit) * .75) var(--tg-unit); border: 0; border-radius: var(--tg-radius-control); background: var(--cv-telegram-row-hover); font-size: var(--tg-unit); font-weight: 500; box-shadow: none; }
+.cv-profile-action-primary { background: var(--color-brand); color: white; }
+.cv-profile-action:hover { filter: none; background: var(--cv-surface-3); }
+.cv-profile-action-primary:hover { background: var(--color-brand-hovered); }
+.cv-profile-connections strong { font-weight: 500; }
+
+/* Keep profile information on the same section grid as Settings and group info. */
+.cv-profile-view { background: var(--cv-page-bg); }
+.cv-profile-header { background: var(--cv-card-bg-solid); }
+.cv-profile-summary { gap: calc(var(--tg-unit) * .75); }
+.cv-profile-metadata { font-size: calc(var(--tg-unit) * .875); gap: .5rem 1rem; }
+.cv-profile-metadata :is(svg,img) { width: calc(var(--tg-unit) * 1.25); height: calc(var(--tg-unit) * 1.25); color: var(--cv-neutral-2); }
+.cv-profile-metadata a { color: var(--color-brand); text-decoration: none; }
+.cv-profile-connections { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 0; border: 0; gap: .5rem; }
+.cv-profile-connection { flex-direction: row; flex-wrap: wrap; align-items: baseline; justify-content: flex-start; column-gap: .375rem; padding: .5rem; min-height: 44px; border-radius: var(--tg-radius-control); }
+.cv-profile-connection strong { font-size: var(--tg-unit); }
+.cv-profile-connection span { font-size: calc(var(--tg-unit) * .875); }
+.cv-profile-connection:not(:disabled):hover { background: var(--cv-list-hover); }
+.cv-profile-view .cv-profile-social-tools { padding: var(--tg-unit); }
+.cv-profile-social-tools > .cv-grouped-section { margin: 0; }
+.cv-profile-social-tools .cv-grouped-list { padding: calc(var(--tg-unit) * .5); }
+.cv-profile-social-tools .cv-list-row { min-height: calc(var(--tg-unit) * 3.5); padding: calc(var(--tg-unit) * .5); border-radius: calc(var(--tg-unit) * .625); gap: var(--tg-unit); }
+.cv-profile-social-tools .cv-list-row::after { display: none; }
+.cv-profile-tabs { padding-inline: var(--tg-unit); border: 0; box-shadow: 0 1px 0 var(--cv-inner-border); }
+.cv-profile-tabs .cv-adaptive-tab, .cv-profile-tabs .cv-adaptive-more { font-size: calc(var(--tg-unit) * .875); font-weight: 500; }
+.cv-profile-action:hover { background: var(--cv-list-hover); }
+.cv-profile-action-primary:hover { background: var(--color-brand-hovered); }
+.cv-profile-statistics > .cv-sheet-body { overflow-y: auto; }
+.cv-profile-statistics .cv-grouped-section { margin: 0; }
+.cv-profile-connections { display: flex; align-items: center; }
+.cv-profile-connection { flex: 1; }
+.cv-profile-statistics-action { flex: 0 0 44px; width: 44px; height: 44px; }
+.cv-profile-details { padding: var(--tg-unit); gap: calc(var(--tg-unit) * 1.25); }
+.cv-profile-section-heading { display: flex; align-items: center; gap: .5rem; min-height: 44px; padding-inline: var(--tg-unit); margin-bottom: .5rem; }
+.cv-profile-section-heading h2 { flex: 1; margin: 0; font-size: var(--tg-unit); font-weight: 500; color: var(--color-brand); }
+.cv-profile-section-heading > span { font-size: calc(var(--tg-unit) * .875); color: var(--cv-neutral-2); }
+.cv-profile-traits-list { padding: calc(var(--tg-unit) * .5); }
+.cv-profile-traits .cv-profile-attribute { display: block; }
+.cv-profile-traits .cv-list-row { border-radius: calc(var(--tg-unit) * .625); }
+.cv-profile-traits .cv-list-icon { width: calc(var(--tg-unit) * 2); height: calc(var(--tg-unit) * 2); }
+.cv-profile-traits .cv-list-description { white-space: normal; }

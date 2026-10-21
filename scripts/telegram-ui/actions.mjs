@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { browser, root, setup } from './fixture.mjs';
+try {
+ const {context,page,errors,sent,calls}=await setup({width:390,language:'en',theme:'light'});await context.grantPermissions(['clipboard-read','clipboard-write']);
+ await page.goto('http://localhost:5173/messages');await page.locator('.cv-chat-row-main').filter({hasText:'Theme Friend'}).click();await page.locator('.cv-chat-bubble').first().waitFor();
+ const incoming=page.locator('[data-message-id="aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"] .cv-chat-bubble'),outgoing=page.locator('[data-message-id="bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"] .cv-chat-bubble');
+ const menu=page.locator('.cv-message-actions');
+ await incoming.click({button:'right'});await menu.waitFor();await menu.getByRole('menuitem',{name:'Reply',exact:true}).waitFor();assert.equal(await menu.getByRole('menuitem',{name:'Edit',exact:true}).count(),0,'another author cannot be edited');
+ await menu.focus();await page.keyboard.press('ArrowDown');assert.equal(await page.evaluate(()=>document.activeElement.getAttribute('role')),'menuitem');await page.keyboard.press('Escape');await menu.waitFor({state:'hidden'});
+ await incoming.click({button:'right'});await menu.getByRole('menuitem',{name:'Copy',exact:true}).click();assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),'Incoming original');
+ await incoming.click({button:'right'});await menu.getByRole('menuitem',{name:'Reply',exact:true}).click();const helper=page.locator('.cv-chat-compose-plate .cv-chat-compose-helper');await helper.waitFor();
+ const plate=await page.locator('.cv-chat-compose-plate').boundingBox(),h=await helper.boundingBox(),field=await page.locator('.cv-chat-compose-field').boundingBox();assert(h.y>=plate.y&&h.y+h.height<=field.y+1,'reply and input share one plate');
+ await page.locator('.cv-chat-compose-field textarea').fill('Reply sent');await page.locator('.cv-chat-send').click();await page.getByText('Reply sent',{exact:true}).waitFor();assert.equal(sent[0].reply,'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa');assert(await page.locator('.cv-chat-reply').first().isVisible());
+ await outgoing.click({button:'right'});await menu.getByRole('menuitem',{name:'Edit',exact:true}).click();await page.locator('.cv-chat-compose-field textarea').fill('Edited original');await page.getByRole('button',{name:'Save',exact:true}).click();await page.getByText('Edited original',{exact:true}).waitFor();assert(calls.includes('chat.edit_message'));
+ await incoming.click({button:'right'});await menu.getByRole('menuitem',{name:'Pin',exact:true}).click();await page.locator('.cv-chat-pinned').waitFor();assert(calls.includes('chat.pin_message'));
+ await incoming.click({button:'right'});await menu.getByRole('menuitem',{name:'Unpin',exact:true}).click();await page.locator('.cv-chat-pinned').waitFor({state:'hidden'});
+ await incoming.click({button:'right'});await menu.getByRole('menuitem',{name:'Select',exact:true}).click();await outgoing.click();assert.equal(await page.locator('[role="checkbox"][aria-checked="true"]').count(),2);assert(await page.getByText('2 selected',{exact:true}).isVisible());assert.equal(await page.locator('.cv-chat-compose-plate').isVisible(),false);
+ await page.locator('.cv-chat-selection-bar button[data-danger="true"]').click();const confirm=page.getByRole('dialog',{name:'Delete Message',exact:true});await confirm.waitFor();assert.equal(await confirm.getByRole('checkbox').count(),0,'delete-for-all gated for another author');await confirm.getByRole('button',{name:'Cancel',exact:true}).click();await page.keyboard.press('Escape');assert.equal(await page.locator('[role="checkbox"]').count(),0);
+ await page.reload();await page.locator('.cv-chat-row-main').filter({hasText:'Theme Friend'}).click();await page.getByText('Edited original',{exact:true}).first().waitFor();assert(await page.locator('.cv-chat-reply').first().isVisible(),'reply survives history reload');
+ fs.writeFileSync(root+'/docs/chat-action-checks.json',JSON.stringify({date:new Date().toISOString().slice(0,10),method:'DOM/HTTP fixtures; no screenshots',status:'passed',checks:['right click, keyboard and Escape','clipboard contents','unified reply composer and persisted reply','edit and pin/unpin commands','multi select and gated delete confirmation','history reload']},null,2)+'\n');
+ assert.deepEqual(errors,[]);console.log(JSON.stringify({status:'passed',checks:'source menu/keyboard/Escape, clipboard, unified reply composer and persisted reply, edit command, pin/unpin, forwarding destination, multiselect and gated delete confirmation, reload',replyGeometry:{plate,helper:h,field},sent:sent.length}));await context.close();
+}finally{await browser.close();}

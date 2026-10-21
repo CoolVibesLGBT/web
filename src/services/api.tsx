@@ -535,15 +535,25 @@ export class ApiService {
     });
   }
 
-  async createChat(participantIds: string[], type: string = "private", title?: string, description?: string) {
+  async createChat(participantIds: string[], type: string = "private", title?: string, description?: string, avatar?: File | null, visibility?: string, publicUsername?: string) {
     const normalizedIds = participantIds.map(id => String(id)).filter(Boolean);
     return this.call(Actions.CMD_CHAT_CREATE, {
       method: "POST",
-      body: { type, "participant_ids[]": normalizedIds, title, description },
+      body: { type, "participant_ids[]": normalizedIds, title, description, avatar, visibility, public_username: publicUsername },
     });
   }
 
   // Nearby
+  async updateGroup(chatId: string, values: { title: string; description: string; avatar?: File | null; remove_avatar: boolean; visibility: string; public_username: string }) {
+    return this.call(Actions.CMD_CHAT_GROUP_UPDATE, { method: 'POST', body: { chat_id: chatId, ...values } });
+  }
+  async fetchChatParticipants(chatId: string) { return this.call(Actions.CMD_CHAT_PARTICIPANTS_FETCH, { method: 'POST', body: { chat_id: chatId } }); }
+  async addChatParticipant(chatId: string, participantId: string) { return this.call(Actions.CMD_CHAT_PARTICIPANT_ADD, { method: 'POST', body: { chat_id: chatId, participant_id: participantId } }); }
+  async removeChatParticipant(chatId: string, participantId: string) { return this.call(Actions.CMD_CHAT_PARTICIPANT_REMOVE, { method: 'POST', body: { chat_id: chatId, participant_id: participantId } }); }
+  async exportGroupInvite(chatId: string, rotate = false) { return this.call(Actions.CMD_CHAT_GROUP_INVITE, { method: 'POST', body: { chat_id: chatId, rotate } }); }
+  async previewGroup(link: { invite_token?: string; public_username?: string }) { return this.call(Actions.CMD_CHAT_GROUP_PREVIEW, { method: 'POST', body: link }); }
+  async joinGroup(link: { invite_token?: string; public_username?: string }) { return this.call(Actions.CMD_CHAT_GROUP_JOIN, { method: 'POST', body: link }); }
+
   async fetchNearbyUsers(payload: Record<string, unknown>) {
     return this.call(Actions.CMD_USER_FETCH_NEARBY_USERS, {
       method: "POST",

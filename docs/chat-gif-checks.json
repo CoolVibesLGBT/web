@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/native video/HTTP fixtures; no screenshots",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "media": {
+        "src": "http://localhost:4001/static/telegram/gifs/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00.mp4",
+        "width": 96,
+        "paused": true,
+        "muted": true,
+        "loop": true
+      },
+      "checks": [
+        "unavailable service and retry",
+        "own API only; relative media URL resolved",
+        "MP4 decoded; muted looping; reduced motion pauses",
+        "query resets cursor; pagination; clear restores first page",
+        "send and history use typed GIF documents"
+      ],
+      "limits": "HTTP fixtures and a generated test video; no live Telegram account/session"
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "status": "passed",
+      "media": {
+        "src": "http://localhost:4001/static/telegram/gifs/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00.mp4",
+        "width": 96,
+        "paused": true,
+        "muted": true,
+        "loop": true
+      },
+      "checks": [
+        "unavailable service and retry",
+        "own API only; relative media URL resolved",
+        "MP4 decoded; muted looping; reduced motion pauses",
+        "query resets cursor; pagination; clear restores first page",
+        "send and history use typed GIF documents"
+      ],
+      "limits": "HTTP fixtures and a generated test video; no live Telegram account/session"
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "status": "passed",
+      "media": {
+        "src": "http://localhost:4001/static/telegram/gifs/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00.mp4",
+        "width": 96,
+        "paused": true,
+        "muted": true,
+        "loop": true
+      },
+      "checks": [
+        "unavailable service and retry",
+        "own API only; relative media URL resolved",
+        "MP4 decoded; muted looping; reduced motion pauses",
+        "query resets cursor; pagination; clear restores first page",
+        "send and history use typed GIF documents"
+      ],
+      "limits": "HTTP fixtures and a generated test video; no live Telegram account/session"
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "status": "passed",
+      "media": {
+        "src": "http://localhost:4001/static/telegram/gifs/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00.mp4",
+        "width": 96,
+        "paused": true,
+        "muted": true,
+        "loop": true
+      },
+      "checks": [
+        "unavailable service and retry",
+        "own API only; relative media URL resolved",
+        "MP4 decoded; muted looping; reduced motion pauses",
+        "query resets cursor; pagination; clear restores first page",
+        "send and history use typed GIF documents"
+      ],
+      "limits": "HTTP fixtures and a generated test video; no live Telegram account/session"
+    }
+  ]
+}

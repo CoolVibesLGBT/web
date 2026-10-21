@@ -65,9 +65,9 @@ export default function ViewTabs<T extends string>({ items, activeId, onSelect, 
   const visibleIndexes = fitTabs(widths, size.width, size.more, activeIndex)
   const hiddenItems = items.filter((_, index) => !visibleIndexes.includes(index))
   useEffect(() => { if (hiddenItems.length === 0) setMenuOpen(false) }, [hiddenItems.length])
-  const select = (item: ViewTabItem<T>) => {
+  const select = (item: ViewTabItem<T>, focus = false) => {
     if (disabled || item.disabled) return
-    pendingFocus.current = item.id
+    pendingFocus.current = focus ? item.id : null
     setMenuOpen(false)
     onSelect(item.id)
   }
@@ -88,7 +88,7 @@ export default function ViewTabs<T extends string>({ items, activeId, onSelect, 
       const direction = i18n.dir() === 'rtl' ? -1 : 1
       const offset = event.key === 'ArrowRight' ? direction : -direction
       const next = event.key === 'Home' ? enabled[0] : event.key === 'End' ? enabled[enabled.length - 1] : enabled[(current + offset + enabled.length) % enabled.length]
-      select(next)
+      select(next, true)
     }}>
       {visibleIndexes.map(index => {
         const item = items[index]
@@ -101,7 +101,7 @@ export default function ViewTabs<T extends string>({ items, activeId, onSelect, 
       <span ref={moreMeasurement} className="cv-adaptive-more"><span>{moreLabel}</span><ChevronDown /></span>
     </div>
     <Sheet isOpen={menuOpen && hiddenItems.length > 0} onClose={() => setMenuOpen(false)} title={label}>
-      <GroupedSection>{items.map(item => <ListRow key={item.id} title={item.label} icon={item.icon} value={item.count ? String(item.count) : undefined} onClick={disabled || item.disabled ? undefined : () => select(item)} accessory={item.id === activeId ? <Check aria-label={item.label} className="h-5 w-5 text-[var(--cv-action-tint)]" /> : item.locked ? <Lock aria-hidden="true" className="h-4 w-4" /> : undefined} />)}</GroupedSection>
+      <GroupedSection>{items.map(item => <ListRow key={item.id} title={item.label} icon={item.icon} value={item.count ? String(item.count) : undefined} onClick={disabled || item.disabled ? undefined : () => select(item, true)} accessory={item.id === activeId ? <Check aria-label={item.label} className="h-5 w-5 text-[var(--cv-action-tint)]" /> : item.locked ? <Lock aria-hidden="true" className="h-4 w-4" /> : undefined} />)}</GroupedSection>
     </Sheet>
   </div>
 }

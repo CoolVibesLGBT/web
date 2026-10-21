@@ -1,0 +1,34 @@
+.cv-profile-social-tools { padding: 0 var(--tg-unit); color: var(--cv-neutral-1); }
+.cv-profile-social-tools .cv-list-row { gap: .75rem; }
+.cv-profile-social-row-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: .25rem; max-width: 60%; }
+.cv-profile-social-row-actions > button:not(.cv-switch) { min-height: 44px; padding: .375rem .625rem; border: 0; border-radius: var(--tg-radius-control); background: transparent; color: var(--color-brand); font-size: .824rem; font-weight: 500; }
+.cv-profile-social-row-actions > button:hover { background: var(--cv-telegram-row-hover); }
+.cv-profile-social-row-actions > button:disabled { opacity: .4; }
+.cv-profile-social-row-actions > .is-danger { color: var(--cv-menu-danger); }
+.cv-sheet.cv-profile-social-sheet { width: min(28.235rem, calc(100vw - 24px)); height: min(38rem, calc(var(--cv-viewport-height, 100dvh) - 32px)); }
+.cv-profile-social-sheet > .cv-sheet-body { display: flex; flex: 1; min-height: 0; flex-direction: column; gap: .5rem; overflow: hidden; }
+.cv-profile-social-list { flex: 1; min-height: 5rem; min-width: 0; }
+.cv-profile-social-list .cv-list-row { gap: .75rem; padding-inline: .5rem; }
+.cv-profile-social-avatar { display: grid; place-items: center; position: relative; width: 2.529rem; height: 2.529rem; border-radius: 50%; overflow: hidden; background: var(--color-brand); color: white; }
+.cv-profile-social-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cv-profile-social-list .cv-list-icon:has(.cv-profile-social-avatar) { width: 2.529rem; height: 2.529rem; }
+.cv-profile-social-primary { display: flex; align-items: center; justify-content: center; gap: .5rem; width: 100%; min-height: max(44px,var(--tg-control-height)); padding: .5rem var(--tg-unit); border: 0; border-radius: var(--tg-radius-control); background: var(--color-brand); color: white; font-size: var(--tg-unit); font-weight: 500; }
+.cv-profile-social-primary:hover { background: var(--color-brand-hovered); }
+.cv-profile-social-primary:disabled { opacity: .4; }
+.cv-profile-social-primary svg { width: 1.412rem; height: 1.412rem; }
+.cv-profile-social-empty { text-align: center; padding: 1.5rem .5rem; color: var(--cv-neutral-2); font-size: .824rem; }
+.cv-profile-social-error { padding: .5rem; margin: 0; color: var(--cv-menu-danger); font-size: .824rem; }
+.cv-profile-social-error button { min-height: 44px; padding-inline: .5rem; color: var(--color-brand); }
+.cv-profile-photo-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 4px; }
+.cv-profile-photo-cell { min-width: 0; }
+.cv-profile-photo { min-width: 0; overflow: hidden; border-radius: .588rem; background: var(--cv-surface-2); }
+.cv-profile-photo-open { position: relative; display: grid; place-items: center; width: 100%; aspect-ratio: 1; padding: 0; border: 0; border-radius: .588rem; overflow: hidden; }
+.cv-profile-photo-open img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cv-profile-photo-actions { display: flex; justify-content: center; align-items: center; min-height: 44px; gap: .25rem; background: var(--cv-card-bg-solid); }
+.cv-profile-photo-actions .cv-icon-button { width: 44px; height: 44px; color: var(--cv-neutral-2); }
+.cv-profile-photo-locked { display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem; gap: 1rem; text-align: center; color: var(--cv-neutral-2); }
+.cv-profile-photo-locked > svg { width: 2rem; height: 2rem; }
+.cv-profile-photo-locked p { margin: 0; }
+.cv-profile-photo-preview .cv-sheet-body { display: grid; place-items: center; }
+.cv-profile-photo-preview .cv-sheet-body > img { max-width: 100%; max-height: 65dvh; object-fit: contain; }
+@media (max-width:360px) { .cv-profile-social-row-actions { max-width: 65%; } .cv-profile-photo-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }

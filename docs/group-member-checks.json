@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/HTTP fixtures; no screenshots or real group mutations",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "field": {
+        "height": 44,
+        "padding": "0px",
+        "border": "0px",
+        "shadow": "none",
+        "outline": "none",
+        "separate": true
+      },
+      "checks": [
+        "accepted friend without prior chat available",
+        "existing members/self excluded; contact/search dedup by public identity",
+        "@ username search; no input ring or icon overlap",
+        "full peer body and switch select; add persists; failure retains selection",
+        "empty state is separate; no white strip or disabled floating action"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "status": "passed",
+      "field": {
+        "height": 44,
+        "padding": "0px",
+        "border": "0px",
+        "shadow": "none",
+        "outline": "none",
+        "separate": true
+      },
+      "checks": [
+        "accepted friend without prior chat available",
+        "existing members/self excluded; contact/search dedup by public identity",
+        "@ username search; no input ring or icon overlap",
+        "full peer body and switch select; add persists; failure retains selection",
+        "empty state is separate; no white strip or disabled floating action"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "status": "passed",
+      "field": {
+        "height": 44,
+        "padding": "0px",
+        "border": "0px",
+        "shadow": "none",
+        "outline": "none",
+        "separate": true
+      },
+      "checks": [
+        "accepted friend without prior chat available",
+        "existing members/self excluded; contact/search dedup by public identity",
+        "@ username search; no input ring or icon overlap",
+        "full peer body and switch select; add persists; failure retains selection",
+        "empty state is separate; no white strip or disabled floating action"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "status": "passed",
+      "field": {
+        "height": 44,
+        "padding": "0px",
+        "border": "0px",
+        "shadow": "none",
+        "outline": "none",
+        "separate": true
+      },
+      "checks": [
+        "accepted friend without prior chat available",
+        "existing members/self excluded; contact/search dedup by public identity",
+        "@ username search; no input ring or icon overlap",
+        "full peer body and switch select; add persists; failure retains selection",
+        "empty state is separate; no white strip or disabled floating action"
+      ]
+    }
+  ]
+}

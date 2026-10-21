@@ -17,7 +17,8 @@ export default function RippleEffects() {
     const wave = (target: EventTarget | null, x?: number, y?: number) => {
       if (reduced.matches || !(target instanceof Element)) return;
       const host = target.closest<HTMLElement>('button, a[href], [role="button"], label.cv-list-row');
-      if (!host || host.matches(':disabled, [aria-disabled="true"], [role="switch"], [data-ripple="off"]')) return;
+      if (!host || host.matches(':disabled, [aria-disabled="true"], [data-ripple="off"]')) return;
+      if (host.matches('[role="switch"]') && host.dataset.ripple !== 'on') return;
       // Navigation re-renders replace className during the wave. Keep its containing
       // block inline so the still-running ripple cannot jump to the sidebar/page.
       if (getComputedStyle(host).position === 'static') {

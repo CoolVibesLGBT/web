@@ -29,9 +29,9 @@ Use one package manager consistently per change. Since `yarn.lock` is present, p
 - Linting: `eslint.config.js` with `typescript-eslint` and `react-hooks` rules (Next.js compatible).
 
 ## Testing Guidelines
-No automated test framework is currently configured in `package.json`. For contributions:
+For contributions:
 - run `npm run lint` before opening a PR,
-- verify key user flows manually in `npm run dev`,
+- verify key user flows manually in `yarn dev`; `yarn check:telegram-ui` runs isolated Playwright DOM/Canvas/video fixtures for groups, emoticons and profile permissions (see `docs/telegram-ui-reference.md`),
 - include reproduction and verification steps in the PR description.
 
 If tests are introduced later, place them near related modules (for example, `src/features/map/__tests__/`).
@@ -49,6 +49,11 @@ For pull requests:
 - keep changes focused and avoid unrelated refactors.
 
 ## Binding Interface Standard
+
+### Current visual reference (user override, 2026-10-21)
+
+The user explicitly requested `/Users/ersanyakit/Downloads/tweb-master` as the shared visual reference across the application. Telegram geometry, colors, Roboto fonts, original SVG icons, hover/press behavior, fields, menus and dialogs take precedence over older Apple appearance values below. Apply changes through `telegram-foundation.css`, `telegram-panels.css` and shared controls, then verify each composed flow. Profile Photos and Friends belong to the existing profile tabs; do not add a second destination or an extra modal for browsing them. Read-only optional properties use localized “Not specified”, while “Select…” is reserved for editing. Shared popup and chosen-accent list-hover tokens are the default; avoid route-specific copies. Preserve native web behavior, authentication, API permissions, localization, 44px targets, virtualization and the prohibition on screenshots/simulators. A common stylesheet does not prove that every route matches Telegram. See `docs/telegram-ui-reference.md` for the reference mapping and verification status.
+
 
 This standard supersedes older visual references to pixel matching the sibling UIKit demo. It applies to every route and subflow in this web repository. The user requested Apple visual design and typography while retaining web/Android browser behavior; this is not a native iOS app migration. Do not use an iOS simulator or capture screenshots for this task; the user explicitly requested direct implementation and review in the running web app.
 

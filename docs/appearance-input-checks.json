@@ -1,0 +1,275 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/Canvas/HTTP fixtures; no screenshots",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "dark",
+      "mode": "night",
+      "status": "passed",
+      "cards": [
+        {
+          "chroma": 144,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 51,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 75,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 70,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 52,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 109,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 96,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 96,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 78,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        }
+      ],
+      "slider": {
+        "outline": "none",
+        "shadow": "none",
+        "border": "0px",
+        "height": 44,
+        "progress": "62.5%"
+      },
+      "application": {
+        "background": "rgb(194, 120, 121)",
+        "text": "rgb(255, 255, 255)",
+        "expectedBackground": "rgb(194, 120, 121)",
+        "expectedText": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "mode": "tinted",
+      "status": "passed",
+      "cards": [
+        {
+          "chroma": 56,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 23,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 64,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 35,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 61,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 42,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 40,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 30,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 34,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        }
+      ],
+      "slider": {
+        "outline": "none",
+        "shadow": "none",
+        "border": "0px",
+        "height": 44,
+        "progress": "62.5%"
+      },
+      "application": {
+        "background": "rgb(194, 120, 121)",
+        "text": "rgb(255, 255, 255)",
+        "expectedBackground": "rgb(194, 120, 121)",
+        "expectedText": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "mode": "night",
+      "large": true,
+      "status": "passed",
+      "cards": [
+        {
+          "chroma": 144,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 51,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 75,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 70,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 52,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 109,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 96,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 96,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 78,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        }
+      ],
+      "slider": {
+        "outline": "none",
+        "shadow": "none",
+        "border": "0px",
+        "height": 44,
+        "progress": "62.5%"
+      },
+      "application": {
+        "background": "rgb(194, 120, 121)",
+        "text": "rgb(255, 255, 255)",
+        "expectedBackground": "rgb(194, 120, 121)",
+        "expectedText": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "mode": "day",
+      "status": "passed",
+      "cards": [
+        {
+          "chroma": 74,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 90,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 110,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 83,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 109,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 101,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 120,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 145,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        },
+        {
+          "chroma": 155,
+          "blackMask": false,
+          "canvasOpacity": "1"
+        }
+      ],
+      "slider": {
+        "outline": "none",
+        "shadow": "none",
+        "border": "0px",
+        "height": 44,
+        "progress": "62.5%"
+      },
+      "application": {
+        "background": "rgb(255, 248, 221)",
+        "text": "rgb(0, 0, 0)",
+        "expectedBackground": "rgb(255, 248, 221)",
+        "expectedText": "rgb(0, 0, 0)"
+      }
+    }
+  ]
+}

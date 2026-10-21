@@ -94,8 +94,8 @@ const LanguageItem = memo(({ lang, isSelected, onClick, theme }: any) => {
     <button
       onClick={() => onClick(lang.code)}
       className={`w-full flex items-center justify-between p-3.5 px-5 transition-all outline-none ${theme === 'dark'
-        ? 'hover:bg-white/[0.04] active:bg-white/[0.08]'
-        : 'hover:bg-gray-50 active:bg-gray-100'
+        ? 'hover:bg-[var(--cv-list-hover)] active:bg-[var(--cv-list-pressed)]'
+        : 'hover:bg-[var(--cv-list-hover)] active:bg-[var(--cv-list-pressed)]'
         } ${isSelected ? (theme === 'dark' ? 'bg-white/[0.02]' : 'bg-gray-50/30') : ''}`}
     >
       <div className="flex items-center gap-3.5">

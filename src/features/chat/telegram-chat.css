@@ -10,8 +10,6 @@
 .cv-chat-sidebar-header button svg, .cv-chat-topbar button:not(.cv-chat-peer) svg { width: 1.375rem; height: 1.375rem; color: inherit; }
 .cv-chat-search-area { padding: .5rem .75rem 0 !important; }
 .cv-chat-search-area > :first-child { margin-block-end: .5rem; }
-.cv-chat-search-area input { background: var(--cv-surface-2) !important; border: 1px solid transparent !important; min-height: 2.625rem; color: var(--cv-neutral-1); font-size: .941rem; }
-.cv-chat-search-area input:focus { border-color: var(--color-brand) !important; }
 .cv-chat-search-area .cv-tab-bar { margin: 0; }
 /* tweb _chatlist.scss: two independent title/subtitle rows with inline-end metadata. */
 .cv-chat-row { position: relative; margin: .125rem .5rem; padding: 0 !important; min-height: 4.5rem; border-radius: .625rem; --dialog-text: var(--cv-neutral-1); --dialog-secondary: var(--cv-neutral-2); }
@@ -42,6 +40,9 @@
 .cv-chat-row:hover .cv-chat-row-actions > button, .cv-chat-row:focus-within .cv-chat-row-actions > button { opacity: 1; }
 .cv-chat-row-actions > div { inset-inline-end: 0; inset-inline-start: auto; }
 .cv-chat-thread { isolation: isolate; }
+/* Keep the wallpaper behind normal-flow profile/group surfaces as well as messages. */
+.cv-chat-thread > .cv-chat-wallpaper { z-index: -1; }
+.cv-chat-information { position: relative; z-index: 1; background: var(--cv-page-bg); color: var(--cv-neutral-1); }
 .cv-chat-topbar { padding: .375rem 1rem !important; min-height: 3.5rem; }
 .cv-chat-topbar .cv-chat-peer { min-height: 44px; padding: 0; gap: .75rem; background: transparent; border: 0; }
 .cv-chat-peer > * { margin-inline: 0 !important; }
@@ -69,7 +70,7 @@
 .cv-chat-compose-field { display: flex; align-items: flex-end; width: 100%; min-height: 3rem; border: 0; border-radius: 24px; background: var(--cv-card-bg-solid); box-shadow: 0 1px 8px 1px rgb(0 0 0 / 12%); padding: .25rem; gap: .25rem; }
 .cv-chat-compose-field button { display: grid; place-items: center; flex: 0 0 auto; width: max(44px, 2.5rem); height: max(44px, 2.5rem); min-height: 44px; padding: .5rem; margin: 0; border: 0; border-radius: 50%; color: var(--cv-neutral-2); background: transparent; }
 .cv-chat-compose-field button svg { width: 1.5rem; height: 1.5rem; }
-.cv-chat-compose-field button:hover { background: color-mix(in srgb, var(--cv-neutral-1) 6%, transparent); }
+.cv-chat-compose-field button:hover { background: var(--cv-list-hover); }
 .cv-chat-compose-field button:active { background: color-mix(in srgb, var(--cv-neutral-1) 12%, transparent); }
 .cv-chat-compose-field textarea { flex: 1; align-self: center; resize: none; max-height: 10rem; line-height: 1.3125; padding: .625rem 0; min-width: 0; width: 0; min-height: 44px; min-block-size: 44px; color: var(--cv-neutral-1); background: transparent; border: 0; border-radius: 0; outline: none; font-size: max(16px, var(--cv-chat-font-size)); box-shadow: none; }
 .cv-chat-compose-field textarea:is(:focus, :focus-visible) { outline: none; border: 0; box-shadow: none; }
@@ -141,3 +142,10 @@
 .cv-chat-forwarded strong { font-weight: 500; }
 .cv-chat-bubble[data-side='outgoing'] .cv-chat-forwarded { color: var(--cv-chat-outgoing-meta, var(--color-brand)); }
 .cv-chat-bubble[data-kind='sticker']:has(.cv-chat-forwarded) .cv-chat-forwarded { background: var(--cv-chat-incoming); color: var(--cv-chat-incoming-text); padding: .375rem .625rem; border-radius: .75rem; }
+
+/* One header at the same column baseline, including group info and creation. */
+.cv-chat-showing-group-info > .cv-chat-topbar { display: none; }
+.cv-chat-information:has(.cv-group-info), .cv-chat-information:has(.cv-group-composer) { overflow: hidden !important; }
+.cv-telegram-chat :is(.cv-chat-sidebar-header, .cv-chat-topbar), .cv-group-info > .cv-navigation-bar, .cv-group-composer > .cv-navigation-bar { box-sizing: border-box; flex: 0 0 auto; height: 3.2941176471rem; min-height: 3.2941176471rem; padding-block: .3529411765rem !important; }
+.cv-group-info > .cv-navigation-bar .cv-navigation-leading { margin-inline-end: .25rem; }
+.cv-group-info > .cv-navigation-bar h1 { padding: 0; margin: 0; line-height: 1.25; }

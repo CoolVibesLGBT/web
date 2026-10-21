@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState, type ReactNode } from 'react';
 import { defaultAppearance, readAppearance, resolveAppearance, type Appearance, type ThemeChoice, type ThemeSelection, type ResolvedAppearance, type Wallpaper } from '@/features/appearance/model';
-import { hexToRgb, mixColors, rgbaToHexa } from '@/features/appearance/telegram-colors';
+import { hexToRgb, mixColors, rgbaToHexa, rgbaToHsla } from '@/features/appearance/telegram-colors';
 import { readWallpaper, saveWallpaper } from '@/features/appearance/wallpaperStore';
 
 type Theme = 'light' | 'dark';
@@ -72,23 +72,26 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     root.classList.toggle('dark', palette.dark);
     root.classList.toggle('light', !palette.dark);
     root.dataset.appearance = palette.base;
+    const accentHSL = rgbaToHsla(...hexToRgb(palette.accent));
     const values: Record<string, string> = {
-      '--cv-action-tint': palette.accent, '--color-brand': palette.accent, '--color-brand-hovered': palette.accent,
+      '--cv-action-tint': palette.accent, '--color-brand': palette.accent, '--color-brand-hovered': `hsl(${accentHSL.h}, ${accentHSL.s}%, ${Math.max(0, accentHSL.l - 4)}%)`,
       '--color-brand-light-solid': `color-mix(in srgb, ${palette.accent} 12%, ${palette.surface})`,
       '--color-brand-light': `color-mix(in srgb, ${palette.accent} 12%, transparent)`,
       '--cv-page-bg': palette.background, '--cv-card-bg': palette.surface, '--cv-card-bg-solid': palette.surface,
       '--cv-card-bg-soft': palette.surface, '--cv-floating-bg': palette.surface, '--cv-card-bg-muted': palette.background,
       '--cv-card-border': palette.border, '--cv-inner-border': palette.border,
       '--cv-menu-background': `color-mix(in srgb, ${palette.surface} ${palette.dark ? 75 : 85}%, transparent)`,
-      '--cv-telegram-row-hover': rgbaToHexa(mixColors(hexToRgb(palette.secondary), hexToRgb(palette.surface), .08)),
+      '--cv-list-hover': rgbaToHexa(mixColors(hexToRgb(palette.accent), hexToRgb(palette.surface), .08)),
+      '--cv-list-pressed': rgbaToHexa(mixColors(hexToRgb(palette.accent), hexToRgb(palette.surface), .12)),
+      '--cv-telegram-row-hover': 'var(--cv-list-hover)',
       '--cv-telegram-section-shadow': `0px 1px 4px 0px rgba(0, 0, 0, ${palette.dark ? .12 : .05})`,
-      '--cv-menu-hover': `color-mix(in srgb, ${palette.secondary} 8%, transparent)`,
+      '--cv-menu-hover': 'var(--cv-list-hover)',
       '--cv-menu-danger': palette.dark ? '#ff595a' : '#df3f40',
       '--cv-neutral-1': palette.text, '--cv-neutral-1-hover': palette.text,
       '--cv-neutral-2': palette.secondary, '--cv-neutral-3': palette.secondary,
-      '--cv-surface-2': palette.background, '--cv-surface-2-hover': `color-mix(in srgb, ${palette.accent} 8%, ${palette.surface})`,
+      '--cv-surface-2': palette.background, '--cv-surface-2-hover': 'var(--cv-list-hover)',
       '--cv-surface-3': `color-mix(in srgb, ${palette.secondary} 12%, ${palette.surface})`,
-      '--cv-surface-3-hover': `color-mix(in srgb, ${palette.secondary} 18%, ${palette.surface})`,
+      '--cv-surface-3-hover': 'var(--cv-list-hover)',
       '--cv-chat-incoming': palette.incoming, '--cv-chat-outgoing': palette.outgoing,
       '--cv-chat-incoming-text': palette.text, '--cv-chat-outgoing-text': palette.outgoingText,
       '--cv-chat-incoming-meta': palette.secondary, '--cv-chat-outgoing-meta': palette.outgoingMeta,

@@ -329,8 +329,8 @@ const SearchScreen: React.FC = () => {
         onKeyDown={(event) => handleResultKeyDown(event, item)}
         className={`group flex cursor-pointer gap-4 rounded-xl border p-4 transition-colors ${
           isDark
-            ? 'cv-card-surface-solid border-white/10 hover:bg-white/[0.04]'
-            : 'border-gray-100 bg-white hover:bg-gray-50'
+            ? 'cv-card-surface-solid border-white/10 hover:bg-[var(--cv-list-hover)]'
+            : 'border-gray-100 bg-white hover:bg-[var(--cv-list-hover)]'
         }`}
       >
         <div className={`flex h-20 w-20 shrink-0 items-center justify-center rounded-[18px] ${isDark ? 'bg-fuchsia-500/15 text-fuchsia-300' : 'bg-fuchsia-50 text-fuchsia-600'}`}>

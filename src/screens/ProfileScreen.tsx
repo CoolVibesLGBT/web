@@ -1,11 +1,17 @@
 import ViewTabs from '@/components/ui/ViewTabs';
 import { GroupedSection, ListRow, Sheet } from '@/components/ui/Interface';
+import TelegramIcon from '@/features/chat/TelegramIcon';
+import { Calendar as CalendarOutline, MapPin as MapPinOutline, Wallet as WalletOutline, MessageCircle as MessageCircleOutline } from 'lucide-react';
+import PhotoAlbum from '@/features/profile/PhotoAlbum';
+import FriendsPanel from '@/features/profile/FriendsPanel';
+import PreferenceSection, { resolveCatalogSelection, type ProfilePreferenceSelection } from '@/features/profile/PreferenceSection';
+import ProfileSocialTools from '@/features/profile/ProfileSocialTools';
 import ProfileHeader from '@/features/profile/ProfileHeader';
 import React, { useState, useEffect, useRef, type CSSProperties } from 'react';
 import { useSEO } from '../hooks/useSEO';
 import { useParams, useNavigate, useLocation } from '@/router';
 import type { TravelData } from '../interfaces/user';
-import { Calendar, MapPin, Link, Heart, Baby, Cigarette, Wine, Ruler, PawPrint, Church, GraduationCap, Eye, EyeOff, Lock, Palette, Accessibility, Paintbrush, RulerDimensionLine, Vegan, PersonStanding, Sparkles, Drama, Banana, Save, Camera, Image as ImageIcon, ChevronRight, Check, HeartHandshake, FileText, MessageCircle, Panda, Ghost, Rainbow, Transgender, Rabbit, ChevronLeft, ChevronDown, LocateFixed, UserCircle, Clock, Smile, HeartPulse, Bubbles, Leaf, Fingerprint, Wallet, Users, UserPlus, ThumbsUp, ThumbsDown, Shield, type IllustratedIconComponent } from '@/components/ui/illustratedIcons';
+import { Heart, Baby, Cigarette, Wine, Ruler, PawPrint, Church, GraduationCap, Eye, EyeOff, Lock, Palette, Accessibility, Paintbrush, RulerDimensionLine, Vegan, PersonStanding, Sparkles, Drama, Banana, Save, Camera, Image as ImageIcon, ChevronRight, Check, HeartHandshake, FileText, MessageCircle, Panda, Ghost, Rainbow, Transgender, Rabbit, ChevronLeft, ChevronDown, LocateFixed, UserCircle, Clock, Smile, HeartPulse, Bubbles, Leaf, Fingerprint, Users, UserPlus, ThumbsUp, ThumbsDown, Shield, type IllustratedIconComponent } from '@/components/ui/illustratedIcons';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useApp, type InitialData } from '../contexts/AppContext';
@@ -120,6 +126,7 @@ interface ProfileUser {
   is_premium?: boolean;
   is_verified?: boolean;
   preferences_flags?: string;
+  selected_preference_bits?: number[];
   created_at: string;
   updated_at: string;
   default_language: string;
@@ -237,11 +244,7 @@ interface ApiResponse {
   [key: string]: unknown;
 }
 
-const profileSectionRenderStyle: CSSProperties = {
-  contentVisibility: 'auto',
-  contain: 'layout paint style',
-  containIntrinsicSize: '1px 420px',
-};
+
 
 const profileFeedItemRenderStyle: CSSProperties = {
   contentVisibility: 'auto',
@@ -462,8 +465,8 @@ const normalizeProfileUser = (rawUser: unknown): ProfileUser | null => {
 
   return {
     ...(userObj as ProfileUser),
-    profile_image_url: getProfileAvatarUrl(userObj),
-    cover_image_url: getProfileCoverUrl(userObj),
+    profile_image_url: getProfileAvatarUrl(userObj) ?? undefined,
+    cover_image_url: getProfileCoverUrl(userObj) ?? undefined,
     followers_count: followerCount,
     following_count: followingCount,
     engagements: {
@@ -1329,9 +1332,20 @@ const parsePreferencesFlags = (flags: string | null | undefined): bigint => {
 };
 
 const serializePreferencesFlags = (flags: bigint): string => {
-  if (flags === BigInt(0)) return '';
+  if (flags === BigInt(0)) return '0';
   return flags.toString(16); // Return as hex string without 0x prefix
 };
+
+// Auth responses return selected catalog indexes; older servers used raw hex.
+const selectedPreferenceBits = (flags: bigint): number[] => {
+  const bits: number[] = [];
+  for (let index = 0, remaining = flags; remaining > 0n; index++, remaining >>= 1n) {
+    if (remaining & 1n) bits.push(index);
+  }
+  return bits;
+};
+const hasPreferenceState = (value: { selected_preference_bits?: number[]; preferences_flags?: string }) =>
+  Array.isArray(value.selected_preference_bits) || typeof value.preferences_flags === 'string';
 
 const isBitSet = (flags: bigint, bitIndex: number): boolean => {
   return (flags & (BigInt(1) << BigInt(bitIndex))) !== BigInt(0);
@@ -1368,7 +1382,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const { theme } = useTheme();
   const { user: rawAuthUser, isAuthenticated, updateUser } = useAuth();
   const authUser = rawAuthUser as ProfileUser | null;
-  const { data: appData, defaultLanguage } = useApp();
+  const { data: appData, defaultLanguage, loading: initialSyncLoading, error: initialSyncError, refresh: refreshInitialSync } = useApp();
   const { t } = useTranslation('common');
   const { premiumFeatureEnabled, isPremiumUser } = usePremiumAccess();
   const [user, setUser] = useState<ProfileUser | null>(null);
@@ -1378,7 +1392,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const [postsLoading, setPostsLoading] = useState(true);
   const [mediasLoading, setMediasLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'profile' | 'posts' | 'replies' | 'media' | 'likes'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'photos' | 'friends' | 'posts' | 'replies' | 'media' | 'likes'>('profile');
+  const profileTabsRef = useRef<HTMLDivElement>(null);
+  const preferenceMutationRef = useRef(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const skipFollowSyncRef = useRef(false);
   const [isFollowPending, setIsFollowPending] = useState(false);
@@ -1868,7 +1884,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   }, [isOwnProfile, isAuthenticated, user, authUser]);
 
   const isMutualConnection = viewerFollowsProfile && profileFollowsViewer;
-  const isFriendConnection = isMutualConnection;
+  const [friendshipAccepted, setFriendshipAccepted] = useState(false);
+  useEffect(() => { setFriendshipAccepted(false); }, [user?.id]);
+  const isFriendConnection = friendshipAccepted;
   const privacyAccess = React.useMemo(
     () => {
       if (isOwnProfile) {
@@ -1957,11 +1975,15 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   };
 
   // Get preferences_flags from user
-  const userToCheck = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? authUser : user;
+  const userToCheck = (isAuthenticated && isOwnProfile && authUser) ? authUser : user;
   const preferencesFlags = React.useMemo(() => {
-    const flagsString = (userToCheck as ProfileUser & { preferences_flags?: string })?.preferences_flags || '';
-    return parsePreferencesFlags(flagsString);
+    if (Array.isArray(userToCheck?.selected_preference_bits)) {
+      return userToCheck.selected_preference_bits.reduce((flags, bit) => Number.isSafeInteger(bit) && bit >= 0 && bit <= 1_000_000 ? setBit(flags, bit) : flags, 0n);
+    }
+    return parsePreferencesFlags(userToCheck?.preferences_flags);
   }, [userToCheck]);
+
+  const hasPreferencesFlags = Array.isArray(userToCheck?.selected_preference_bits) || (typeof userToCheck?.preferences_flags === 'string' && userToCheck.preferences_flags.trim() !== '');
 
   // Build fieldOptions from preferences.attributes
   const fieldOptions: Record<string, Array<{ id: string; name: string; display_order: number; bit_index?: number; allow_multiple?: boolean }>> = {};
@@ -1969,7 +1991,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
   // Read from preferences.attributes if available, otherwise fallback to old structure
   const preferencesAttributes = (appData as InitialData | null)?.preferences?.attributes;
-  if (preferencesAttributes && Array.isArray(preferencesAttributes)) {
+  if (Array.isArray(preferencesAttributes) && preferencesAttributes.length > 0) {
     preferencesAttributes.forEach((attr: { tag?: string; slug?: string; allow_multiple?: boolean | number | string | null; items?: Array<{ id: string; display_order?: number; title?: Record<string, string>; bit_index?: number }> }) => {
       const tag = attr.tag || attr.slug;
       if (!tag) return;
@@ -2041,7 +2063,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
     // Read from preferences.interests if available, otherwise fallback to old structure
     const preferencesInterests = (appData as InitialData | null)?.preferences?.interests;
-    if (preferencesInterests && Array.isArray(preferencesInterests)) {
+    if (Array.isArray(preferencesInterests) && preferencesInterests.length > 0) {
       preferencesInterests.forEach((interest: { id: string; title?: Record<string, string>; allow_multiple?: boolean | number | string | null; items?: Array<{ id: string; title?: Record<string, string>; icon?: string; bit_index?: number }> }) => {
         const categoryName = interest.title?.[defaultLanguage] || interest.title?.en || (interest.title ? Object.values(interest.title)[0] : '') || '';
         const allowMultiple = normalizeAllowMultiple(interest.allow_multiple);
@@ -2101,7 +2123,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     });
 
     // Fallback to old structure if preferences_flags is empty and we have interests array
-    if (selectedIds.length === 0) {
+    if (selectedIds.length === 0 && !hasPreferencesFlags) {
       const interestsSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as any).interests : (user as any)?.interests;
       if (interestsSource) {
         return interestsSource.map((i: any) => {
@@ -2114,7 +2136,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     }
 
     return selectedIds;
-  }, [preferencesFlags, interestOptions, user, authUser, isEditMode, isAuthenticated, isOwnProfile]);
+  }, [preferencesFlags, hasPreferencesFlags, interestOptions, user, authUser, isEditMode, isAuthenticated, isOwnProfile]);
 
   // Get selected interest items grouped by category for display in category list from preferences_flags
   const userSelectedInterestsByCategory = React.useMemo(() => {
@@ -2138,7 +2160,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     });
 
     // Fallback to old structure if preferences_flags is empty
-    if (Object.keys(grouped).length === 0) {
+    if (Object.keys(grouped).length === 0 && !hasPreferencesFlags) {
       const interestsSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as any).interests : (user as any)?.interests;
       if (interestsSource) {
         interestsSource.forEach((userInterest: any) => {
@@ -2166,7 +2188,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     }
 
     return grouped;
-  }, [preferencesFlags, interestOptions, user, authUser, isEditMode, isAuthenticated, isOwnProfile, defaultLanguage]);
+  }, [preferencesFlags, hasPreferencesFlags, interestOptions, user, authUser, isEditMode, isAuthenticated, isOwnProfile, defaultLanguage]);
 
   // Build fantasyOptions and fantasyCategories from preferences.fantasies
   // Build fantasyOptions and fantasyCategories from preferences.fantasies
@@ -2177,7 +2199,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
     // Read from preferences.fantasies if available, otherwise fallback to old structure
     const preferencesFantasies = (appData as any)?.preferences?.fantasies;
-    if (preferencesFantasies && Array.isArray(preferencesFantasies)) {
+    if (Array.isArray(preferencesFantasies) && preferencesFantasies.length > 0) {
       preferencesFantasies.forEach((fantasy: any) => {
         const categorySlug = fantasy.slug;
         const allowMultiple = normalizeAllowMultiple(fantasy.allow_multiple);
@@ -2256,15 +2278,15 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     });
 
     // Fallback to old structure if preferences_flags is empty
-    if (selectedIds.length === 0) {
+    if (selectedIds.length === 0 && !hasPreferencesFlags) {
       const fantasiesSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as any).fantasies : user?.fantasies;
       if (fantasiesSource) {
-        return fantasiesSource.map((f: any) => (f as any).fantasy_id || (f as any).id);
+        return fantasiesSource.map((f: any) => String(typeof f === 'object' && f !== null ? f.fantasy_id || f.fantasy?.id || f.id : f));
       }
     }
 
     return selectedIds;
-  }, [preferencesFlags, fantasyOptions, user, authUser, isEditMode, isAuthenticated, isOwnProfile]);
+  }, [preferencesFlags, hasPreferencesFlags, fantasyOptions, user, authUser, isEditMode, isAuthenticated, isOwnProfile]);
 
   // Get selected fantasy items grouped by category for display in category list from preferences_flags
   const userSelectedFantasiesByCategory = React.useMemo(() => {
@@ -2287,7 +2309,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     });
 
     // Fallback to old structure if preferences_flags is empty
-    if (Object.keys(grouped).length === 0) {
+    if (Object.keys(grouped).length === 0 && !hasPreferencesFlags) {
       const fantasiesSource = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? (authUser as any).fantasies : (user as any)?.fantasies;
       if (fantasiesSource && (appData as any)?.fantasies) {
         fantasiesSource.forEach((userFantasy: any) => {
@@ -2317,7 +2339,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
     }
 
     return grouped;
-  }, [preferencesFlags, fantasyOptions, user, authUser, isEditMode, isAuthenticated, isOwnProfile, appData, defaultLanguage]);
+  }, [preferencesFlags, hasPreferencesFlags, fantasyOptions, user, authUser, isEditMode, isAuthenticated, isOwnProfile, appData, defaultLanguage]);
 
 
   const USER_ATTRIBUTES = [
@@ -2356,6 +2378,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   ];
 
   const handleFieldOptionSelect = async (field: string, value: string) => {
+    if (!isOwnProfile || !isAuthenticated || preferenceMutationRef.current) return;
     // Find the selected option to get both id and name
     const options = fieldOptions[field] || [];
     const selectedOption = options.find(opt => opt.id === value);
@@ -2366,6 +2389,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       return;
     }
 
+    preferenceMutationRef.current = true;
     // Set loading state for this field
     setUpdatingAttributes({ ...updatingAttributes, [field]: true });
 
@@ -2388,7 +2412,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           }
         });
         // Set the selected bit
-        newPreferencesFlags = setBit(newPreferencesFlags, selectedOption.bit_index);
+        if (!isBitSet(preferencesFlags, selectedOption.bit_index)) newPreferencesFlags = setBit(newPreferencesFlags, selectedOption.bit_index);
       }
     }
 
@@ -2418,6 +2442,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         response = await api.updateAttribute({ attribute_id: attributeId }) as any;
       }
 
+      if (usePreferencesFlags && response?.user && !hasPreferenceState(response.user)) {
+        response = { ...response, user: { ...response.user, preferences_flags: serializePreferencesFlags(newPreferencesFlags), selected_preference_bits: selectedPreferenceBits(newPreferencesFlags) } };
+      }
+
       // Update auth context - always update if authenticated
       if (isAuthenticated && authUser) {
         // If response contains updated user, use that
@@ -2440,6 +2468,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             const updatedUserData = {
               ...authUser,
               preferences_flags: flagsString,
+              selected_preference_bits: selectedPreferenceBits(newPreferencesFlags),
             } as Parameters<typeof updateUser>[0];
             updateUser(updatedUserData as Parameters<typeof updateUser>[0]);
             if (user && (authUser.id === user.id || authUser.username === user.username)) {
@@ -2523,6 +2552,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       console.error(`Error updating ${field}:`, err);
       setError(err.response?.data?.message || `Failed to update ${field}`);
     } finally {
+      preferenceMutationRef.current = false;
       // Clear loading state
       setUpdatingAttributes({ ...updatingAttributes, [field]: false });
     }
@@ -2539,6 +2569,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
 
   const handleInterestItemToggle = async (itemId: string) => {
+    if (!isOwnProfile || !isAuthenticated || preferenceMutationRef.current) return;
+    preferenceMutationRef.current = true;
     const currentSelected = userSelectedInterestIds || [];
     const isSelected = currentSelected.includes(itemId);
 
@@ -2574,7 +2606,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           });
         }
         // Set the selected bit
-        newPreferencesFlags = setBit(newPreferencesFlags, interestItem.bit_index);
+        if (!isSelected) newPreferencesFlags = setBit(newPreferencesFlags, interestItem.bit_index);
       }
     }
 
@@ -2645,6 +2677,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         response = (await api.updateInterest({ interest_id: itemId })) as ApiResponse;
       }
 
+      if (usePreferencesFlags && response?.user && !hasPreferenceState(response.user)) {
+        response = { ...response, user: { ...response.user, preferences_flags: serializePreferencesFlags(newPreferencesFlags), selected_preference_bits: selectedPreferenceBits(newPreferencesFlags) } };
+      }
+
       // Update auth context - use response if available, otherwise use local state
       if (isAuthenticated && authUser) {
         if (response?.user) {
@@ -2666,6 +2702,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             const updatedUserData: ProfileUser = {
               ...authUser,
               preferences_flags: flagsString,
+              selected_preference_bits: selectedPreferenceBits(newPreferencesFlags),
             };
             updateUser(updatedUserData);
             if (user && (authUser.id === user.id || authUser.username === user.username)) {
@@ -2744,6 +2781,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       const errorMessage = (err as any)?.response?.data?.message || (err as any)?.message || 'Failed to update interests';
       setError(errorMessage);
     } finally {
+      preferenceMutationRef.current = false;
       setUpdatingInterests(false);
     }
   };
@@ -2751,6 +2789,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
 
   const handleFantasyItemToggle = async (fantasyId: string) => {
+    if (!isOwnProfile || !isAuthenticated || preferenceMutationRef.current) return;
+    preferenceMutationRef.current = true;
     const currentSelected = userSelectedFantasyIds || [];
     const isSelected = currentSelected.includes(fantasyId);
 
@@ -2786,18 +2826,19 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           });
         }
         // Set the selected bit
-        newPreferencesFlags = setBit(newPreferencesFlags, fantasyItem.bit_index);
+        if (!isSelected) newPreferencesFlags = setBit(newPreferencesFlags, fantasyItem.bit_index);
       }
     }
 
     // Optimistically update preferences_flags in user state for immediate UI feedback
     if (usePreferencesFlags && fantasyItem?.bit_index !== undefined) {
       const flagsString = serializePreferencesFlags(newPreferencesFlags);
-      const userToUpdate = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? authUser : user;
+      const userToUpdate = userToCheck;
       if (userToUpdate) {
         const updatedUserData = {
           ...userToUpdate,
           preferences_flags: flagsString,
+          selected_preference_bits: selectedPreferenceBits(newPreferencesFlags),
         };
 
         // Update auth context if it's the auth user
@@ -2859,6 +2900,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
         response = (await api.updateFantasy({ fantasy_id: fantasyId })) as any;
       }
 
+      if (usePreferencesFlags && response?.user && !hasPreferenceState(response.user)) {
+        response = { ...response, user: { ...response.user, preferences_flags: serializePreferencesFlags(newPreferencesFlags), selected_preference_bits: selectedPreferenceBits(newPreferencesFlags) } };
+      }
+
       // Update auth context - use response if available, otherwise use local state
       if (isAuthenticated && authUser) {
         if (response?.user) {
@@ -2891,7 +2936,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       // Revert optimistic update on error
       if (usePreferencesFlags && fantasyItem?.bit_index !== undefined) {
         // Revert preferences_flags
-        const userToRevert = (isEditMode && isAuthenticated && isOwnProfile && authUser) ? authUser : user;
+        const userToRevert = userToCheck;
         if (userToRevert) {
           const originalFlagsString = (userToRevert as any)?.preferences_flags || '';
           const revertedUserData = {
@@ -2943,6 +2988,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       const errorMessage = (err as any)?.response?.data?.message || (err as any)?.message || 'Failed to update fantasies';
       setError(errorMessage);
     } finally {
+      preferenceMutationRef.current = false;
       setUpdatingFantasies(false);
     }
   };
@@ -3423,17 +3469,17 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   }, [username, authUser, isAuthenticated, isEditMode, isViewingOwnProfileRoute, setUser, setError, setLoading]); // Removed api, added authUser and isAuthenticated
 
   useEffect(() => {
-    if (canViewActivityTabs || activeTab === 'profile') {
+    if (canViewActivityTabs || activeTab === 'profile' || (isAuthenticated && activeTab === 'photos')) {
       return;
     }
     setActiveTab('profile');
-  }, [canViewActivityTabs, activeTab]);
+  }, [canViewActivityTabs, activeTab, isAuthenticated]);
 
   // Fetch posts based on active tab
   useEffect(() => {
     const fetchUserPosts = async () => {
       // Don't fetch if on profile tab or privacy does not allow activity visibility
-      if (activeTab === 'profile' || !canViewActivityTabs) {
+      if (!['posts', 'replies', 'likes'].includes(activeTab) || !canViewActivityTabs) {
         setPosts([]);
         setPostsLoading(false);
         return;
@@ -3485,7 +3531,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       }
     };
 
-    if (activeTab !== 'profile' && canViewActivityTabs) {
+    if (['posts', 'replies', 'likes'].includes(activeTab) && canViewActivityTabs) {
       fetchUserPosts();
     } else if (!canViewActivityTabs) {
       setPosts([]);
@@ -3914,6 +3960,92 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
     return false;
   };
+
+  const profileTraitSelections: ProfilePreferenceSelection = Object.fromEntries(USER_ATTRIBUTES.map(item => {
+                            // Get display value - use authUser if viewing own profile in edit context, otherwise use user
+                            const userToCheck = (isOwnProfile && isAuthenticated && authUser) ? authUser : user;
+                            let displayValue = '';
+                            let hasValue = false;
+
+                            // Get options for this field
+                            const options = fieldOptions[item.field] || [];
+                            const usePreferencesFlags = options.some(opt => opt.bit_index !== undefined);
+                            const allowMultiple = normalizeAllowMultiple(fieldAllowMultiple[item.field]) ?? false;
+                            let selectedOptions: Array<{ id: string; name: string; display_order: number; bit_index?: number; allow_multiple?: boolean }> = [];
+
+                            // First check if using preferences_flags with bit_index
+                            if (usePreferencesFlags && hasPreferencesFlags) {
+                              // Find selected options from preferences_flags
+                              selectedOptions = options.filter(opt =>
+                                opt.bit_index !== undefined && isBitSet(preferencesFlags, opt.bit_index)
+                              );
+
+                              if (selectedOptions.length > 0) {
+                                if (allowMultiple) {
+                                  // Multiple selection: show all selected options
+                                  displayValue = selectedOptions.map(opt => opt.name).join(', ');
+                                } else {
+                                  // Single selection
+                                  displayValue = selectedOptions[0].name;
+                                }
+                                hasValue = true;
+                              }
+                            } else if (item.field === 'gender_identity') {
+                              // Fallback to old structure
+                              // Check both structures: direct array or nested in sexual_identities
+                              const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
+                              const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
+                              if (genderIdentity?.name) {
+                                displayValue = genderIdentity.name[defaultLanguage] ||
+                                  genderIdentity.name.en ||
+                                  Object.values(genderIdentity.name as any)[0] || '';
+                                hasValue = !!displayValue;
+                              }
+                            } else if (item.field === 'sexual_orientation') {
+                              // Fallback to old structure
+                              // Check both structures: direct array or nested in sexual_identities
+                              const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
+                              const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
+                              if (sexualOrientation?.name) {
+                                displayValue = sexualOrientation.name[defaultLanguage] ||
+                                  sexualOrientation.name.en ||
+                                  Object.values(sexualOrientation.name as any)[0] || '';
+                                hasValue = !!displayValue;
+                              }
+                            } else if (item.field === 'sex_role') {
+                              // Fallback to old structure
+                              // Check multiple structures: sexual_role, sex_role, or nested in sexual_identities
+                              const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
+                              if (sexRole?.name) {
+                                displayValue = sexRole.name[defaultLanguage] ||
+                                  sexRole.name.en ||
+                                  Object.values(sexRole.name as any)[0] || '';
+                                hasValue = !!displayValue;
+                              }
+                            } else {
+                              // Regular attribute from user_attributes (fallback to old structure)
+                              const currentUserAttribute = (userToCheck as any)?.user_attributes?.find(
+                                (ua: any) => ua.category_type === item.field
+                              );
+
+                              if (currentUserAttribute?.attribute?.name) {
+                                displayValue = currentUserAttribute.attribute.name[defaultLanguage] ||
+                                  currentUserAttribute.attribute.name.en ||
+                                  Object.values(currentUserAttribute.attribute.name as any)[0] || '';
+                                hasValue = !!displayValue;
+                              }
+
+                              if (item.field === 'relationship_status' && !hasValue) {
+                                displayValue = (userToCheck as any)?.relationship_status || '';
+                                hasValue = !!displayValue;
+                              }
+                            }
+
+                            return [item.field, selectedOptions.length ? selectedOptions : hasValue ? [{ id: options.find(option => option.name === displayValue)?.id || `legacy:${item.field}`, name: displayValue }] : []];
+  }));
+  const profileInterestSelections = resolveCatalogSelection(interestOptions, userSelectedInterestIds, userSelectedInterestsByCategory);
+  const profileFantasySelections = resolveCatalogSelection(fantasyOptions, userSelectedFantasyIds, userSelectedFantasiesByCategory);
+  const profilePreferencesBusy = updatingInterests || updatingFantasies || Object.values(updatingAttributes).some(Boolean);
 
   const attributeCompletionMap = USER_ATTRIBUTES.reduce((acc, attr) => {
     acc[attr.field] = isAttributeFieldFilled(attr.field);
@@ -5501,11 +5633,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                     {t('profile.edit_profile_button')}
                   </button>
                   <button type="button" onClick={() => navigate('/wallet')} className="cv-profile-action">
-                    <Wallet aria-hidden="true" />
+                    <WalletOutline aria-hidden="true" />
                     <span>{t('wallet.title')}</span>
                   </button>
                   <button type="button" onClick={() => navigate('/messages')} className="cv-profile-action">
-                    <MessageCircle aria-hidden="true" />
+                    <MessageCircleOutline aria-hidden="true" />
                     <span>{t('app.nav.messages')}</span>
                   </button>
                 </>
@@ -5526,7 +5658,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                     disabled={!canViewSensitiveProfileSections}
                     className={`cv-profile-action${isFollowing ? ' cv-profile-action-primary' : ''}`}
                   >
-                    <MessageCircle aria-hidden="true" />
+                    <MessageCircleOutline aria-hidden="true" />
                     <span>{t('profile.send_message', { defaultValue: 'Send Message' })}</span>
                   </button>
                 </>
@@ -5539,17 +5671,17 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
               )}
               <div className="cv-profile-metadata">
                 {canViewSensitiveProfileSections && getLocationDisplay(user.location) && (
-                  <div><MapPin aria-hidden="true" /><span>{getLocationDisplay(user.location)}</span></div>
+                  <div><MapPinOutline aria-hidden="true" /><span>{getLocationDisplay(user.location)}</span></div>
                 )}
                 {canViewSensitiveProfileSections && user.website && (
                   <a href={user.website} target="_blank" rel="noopener noreferrer">
-                    <Link aria-hidden="true" /><span>{user.website.replace(/^https?:\/\//, '')}</span>
+                    <TelegramIcon name="link" /><span>{user.website.replace(/^https?:\/\//, '')}</span>
                   </a>
                 )}
                 {!canViewSensitiveProfileSections && (
-                  <div><Lock aria-hidden="true" /><span>{t('profile.privacy_limited_badge', { defaultValue: 'Limited by privacy settings' })}</span></div>
+                  <div><TelegramIcon name="lock" /><span>{t('profile.privacy_limited_badge', { defaultValue: 'Limited by privacy settings' })}</span></div>
                 )}
-                <div><Calendar aria-hidden="true" /><span>{formatJoinDate(user.created_at)}</span></div>
+                <div><CalendarOutline aria-hidden="true" /><span>{formatJoinDate(user.created_at)}</span></div>
               </div>
               <div className="cv-profile-connections">
                 {visibleEngagementItems.filter(item => item.id === 'followers' || item.id === 'followings').map(item => (
@@ -5557,24 +5689,25 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                     <strong>{item.value.toLocaleString()}</strong><span>{item.label}</span>
                   </button>
                 ))}
-                {visibleEngagementItems.some(item => item.id !== 'followers' && item.id !== 'followings') && (
-                  <button type="button" className="cv-profile-stats-trigger" onClick={() => setShowProfileStats(true)} aria-haspopup="dialog">
-                    <span>{t('match.stats')}</span><ChevronRight aria-hidden="true" />
-                  </button>
-                )}
+                {visibleEngagementItems.some(item => item.id !== 'followers' && item.id !== 'followings') && <button type="button" className="cv-icon-button cv-profile-statistics-action" aria-label={t('match.stats')} title={t('match.stats')} onClick={() => setShowProfileStats(true)}><TelegramIcon name="info" /></button>}
               </div>
             </ProfileHeader>
+            <ProfileSocialTools key={String(user.public_id || user.id)} ownerId={String(user.public_id || user.id)} viewerId={String(authUser?.public_id || authUser?.id || '')} own={!!isOwnProfile} authenticated={isAuthenticated} onLogin={() => setShowAuthWizard(true)} onFriendshipChange={setFriendshipAccepted} />
 
             {/* Tabs - Sticky */}
-            {canViewActivityTabs && (
-              <div className="cv-profile-tabs">
+            {isAuthenticated && (
+              <div ref={profileTabsRef} className="cv-profile-tabs">
                 <ViewTabs items={[
                     { id: 'profile', label: t('profile.profile_tab') },
-                    { id: 'posts', label: t('profile.posts_tab') },
-                    { id: 'replies', label: t('profile.replies_tab') },
-                    { id: 'media', label: t('profile.media_tab') },
-                    { id: 'likes', label: t('profile.likes_tab') },
-                  ]} activeId={activeTab} onSelect={id => setActiveTab(id as 'profile' | 'posts' | 'replies' | 'media' | 'likes')} label={t('app.nav.profile')} />
+                    { id: 'photos', label: t('social.photos') },
+                    ...(isOwnProfile ? [{ id: 'friends', label: t('social.friends') }] : []),
+                    ...(canViewActivityTabs ? [
+                     { id: 'posts', label: t('profile.posts_tab') },
+                     { id: 'replies', label: t('profile.replies_tab') },
+                     { id: 'media', label: t('profile.media_tab') },
+                     { id: 'likes', label: t('profile.likes_tab') },
+                    ] : []),
+                  ]} activeId={activeTab} onSelect={id => { setActiveTab(id as typeof activeTab); requestAnimationFrame(() => profileTabsRef.current?.scrollIntoView({ block: 'start', behavior: 'instant' })); }} label={t('app.nav.profile')} />
               </div>
             )}
 
@@ -5602,6 +5735,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                     {t('auth.sign_in')}
                   </button>
                 </div>
+              ) : activeTab === 'photos' ? (
+                <PhotoAlbum key={String(user.public_id || user.id)} ownerId={String(user.public_id || user.id)} own={!!isOwnProfile} embedded onClose={() => setActiveTab('profile')} />
+              ) : activeTab === 'friends' && isOwnProfile ? (
+                <FriendsPanel embedded onClose={() => setActiveTab('profile')} />
               ) : shouldShowPrivacyGate ? (
                 <div className="flex flex-col items-center justify-center py-20 px-4 text-center space-y-6">
                   <div className={`w-20 h-20 rounded-full flex items-center justify-center border ${theme === 'dark' ? 'bg-white/[0.06] border-white/10' : 'bg-white/70 border-[var(--cv-inner-border)]'}`}>
@@ -5638,495 +5775,15 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                   {/* Profile */}
                   {activeTab === 'profile' && (
                     <div className="cv-profile-details">
-                      {/* Attributes Section */}
-                      <div className="w-full" style={profileSectionRenderStyle}>
-                        <div className="flex items-center justify-between mb-4">
-                          <h2 className={`text-[1.294rem] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
-                            <span className="inline-flex items-center gap-2"><IllustratedIcon name="system-user" className="h-10 w-10" />{t('profile.attributes')}</span>
-                          </h2>
-                          <span className={`text-[0.765rem] font-semibold ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
-                            {filledAttributeCount} / {USER_ATTRIBUTES.length}
-                          </span>
-                        </div>
-                        <div className={`rounded-[20px] overflow-hidden border ${theme === 'dark'
-                          ? 'bg-zinc-900/[0.55] border-white/10'
-                          : 'bg-white/[0.62] border-[var(--cv-inner-border)]'
-                          }`}>
-                          {USER_ATTRIBUTES.map((item, index) => {
-                            // Get display value - use authUser if viewing own profile in edit context, otherwise use user
-                            const userToCheck = (isOwnProfile && isAuthenticated && authUser) ? authUser : user;
-                            let displayValue = '';
-                            let hasValue = false;
-
-                            // Get options for this field
-                            const options = fieldOptions[item.field] || [];
-                            const usePreferencesFlags = options.some(opt => opt.bit_index !== undefined);
-                            const allowMultiple = normalizeAllowMultiple(fieldAllowMultiple[item.field]) ?? false;
-                            let selectedOptions: Array<{ id: string; name: string; display_order: number; bit_index?: number; allow_multiple?: boolean }> = [];
-
-                            // First check if using preferences_flags with bit_index
-                            if (usePreferencesFlags) {
-                              // Find selected options from preferences_flags
-                              selectedOptions = options.filter(opt =>
-                                opt.bit_index !== undefined && isBitSet(preferencesFlags, opt.bit_index)
-                              );
-
-                              if (selectedOptions.length > 0) {
-                                if (allowMultiple) {
-                                  // Multiple selection: show all selected options
-                                  displayValue = selectedOptions.map(opt => opt.name).join(', ');
-                                } else {
-                                  // Single selection
-                                  displayValue = selectedOptions[0].name;
-                                }
-                                hasValue = true;
-                              }
-                            } else if (item.field === 'gender_identity') {
-                              // Fallback to old structure
-                              // Check both structures: direct array or nested in sexual_identities
-                              const genderIdentities = (userToCheck as any)?.gender_identities || (userToCheck as any)?.sexual_identities?.gender_identities;
-                              const genderIdentity = genderIdentities?.[0] || (userToCheck as any)?.gender_identity;
-                              if (genderIdentity?.name) {
-                                displayValue = genderIdentity.name[defaultLanguage] ||
-                                  genderIdentity.name.en ||
-                                  Object.values(genderIdentity.name as any)[0] || '';
-                                hasValue = !!displayValue;
-                              }
-                            } else if (item.field === 'sexual_orientation') {
-                              // Fallback to old structure
-                              // Check both structures: direct array or nested in sexual_identities
-                              const sexualOrientations = (userToCheck as any)?.sexual_orientations || (userToCheck as any)?.sexual_identities?.sexual_orientations;
-                              const sexualOrientation = sexualOrientations?.[0] || (userToCheck as any)?.sexual_orientation;
-                              if (sexualOrientation?.name) {
-                                displayValue = sexualOrientation.name[defaultLanguage] ||
-                                  sexualOrientation.name.en ||
-                                  Object.values(sexualOrientation.name as any)[0] || '';
-                                hasValue = !!displayValue;
-                              }
-                            } else if (item.field === 'sex_role') {
-                              // Fallback to old structure
-                              // Check multiple structures: sexual_role, sex_role, or nested in sexual_identities
-                              const sexRole = (userToCheck as any)?.sexual_role || (userToCheck as any)?.sex_role || (userToCheck as any)?.sexual_identities?.sex_role;
-                              if (sexRole?.name) {
-                                displayValue = sexRole.name[defaultLanguage] ||
-                                  sexRole.name.en ||
-                                  Object.values(sexRole.name as any)[0] || '';
-                                hasValue = !!displayValue;
-                              }
-                            } else {
-                              // Regular attribute from user_attributes (fallback to old structure)
-                              const currentUserAttribute = (userToCheck as any)?.user_attributes?.find(
-                                (ua: any) => ua.category_type === item.field
-                              );
-
-                              if (currentUserAttribute?.attribute?.name) {
-                                displayValue = currentUserAttribute.attribute.name[defaultLanguage] ||
-                                  currentUserAttribute.attribute.name.en ||
-                                  Object.values(currentUserAttribute.attribute.name as any)[0] || '';
-                                hasValue = !!displayValue;
-                              }
-
-                              if (item.field === 'relationship_status' && !hasValue) {
-                                displayValue = (userToCheck as any)?.relationship_status || '';
-                                hasValue = !!displayValue;
-                              }
-                            }
-
-                            if (!hasValue) {
-                              displayValue = t('profile.select_option');
-                            }
-
-                            const isLast = index === USER_ATTRIBUTES.length - 1;
-
-                            const isMultipleSelection = allowMultiple && usePreferencesFlags && selectedOptions.length > 1;
-
-                            return (
-                              <div
-                                key={item.field}
-                                data-multiple={isMultipleSelection || undefined}
-                                className={`cv-profile-attribute cv-row-interactive group ${isMultipleSelection ? 'flex-col items-start' : 'flex items-center justify-between'} px-4 py-3 ${!isLast ? `border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}` : ''
-                                  }`}
-                              >
-                                <div className="flex items-center gap-3 min-w-0 flex-1 w-full">
-                                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
-                                    <IllustratedIcon name={`attribute-${item.field}`} className="h-10 w-10" />
-                                  </div>
-                                  <span className={`text-[0.882rem] font-medium tracking-[-0.011em] ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                                    {item.label}
-                                  </span>
-                                </div>
-                                <div className="cv-profile-attribute-value flex items-center gap-2">
-                                  {!hasValue && (
-                                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${theme === 'dark' ? 'bg-yellow-400/80' : 'bg-yellow-500/80'}`} />
-                                  )}
-                                  {isMultipleSelection ? (
-                                    <div className="flex flex-wrap gap-1.5 flex-1 min-w-0">
-                                      {selectedOptions.map((opt) => (
-                                        <span
-                                          key={opt.id}
-                                          className={`inline-flex items-center px-2.5 py-1 text-[0.765rem] font-medium tracking-[-0.006em] rounded-full ${theme === 'dark'
-                                            ? 'bg-white/[0.08] text-gray-300'
-                                            : 'bg-black/[0.04] text-gray-700'
-                                            }`}
-                                        >
-                                          {opt.name}
-                                        </span>
-                                      ))}
-                                    </div>
-                                  ) : (
-                                    <span className={`text-[0.765rem] font-medium tracking-[-0.006em] ${isMultipleSelection ? 'break-words' : 'whitespace-nowrap'} ${hasValue
-                                      ? (theme === 'dark' ? 'text-gray-400' : 'text-gray-500')
-                                      : (theme === 'dark' ? 'text-yellow-400/90' : 'text-yellow-600/90')
-                                      }`}>
-                                      {displayValue}
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* Fantasies Section */}
-                      <div style={profileSectionRenderStyle}>
-                        <div className="flex items-center justify-between mb-4">
-                          <h2 className={`text-[1.294rem] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
-                            <span className="inline-flex items-center gap-2"><IllustratedIcon name="fantasy-category-amusement" className="h-10 w-10" />{t('profile.fantasies')}</span>
-                          </h2>
-                          {(() => {
-                            // Count fantasies from preferences_flags or fallback to old structure
-                            const totalCount = Object.values(userSelectedFantasiesByCategory).reduce((sum, items) => sum + items.length, 0);
-                            const fallbackCount = (() => {
-                              const fantasiesSource = (isOwnProfile && isAuthenticated && authUser) ? (authUser as any).fantasies : user?.fantasies;
-                              return fantasiesSource?.length || 0;
-                            })();
-                            const displayCount = totalCount > 0 ? totalCount : fallbackCount;
-                            if (displayCount > 0) {
-                              return (
-                                <span className={`text-[0.765rem] font-semibold ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
-                                  {displayCount}
-                                </span>
-                              );
-                            }
-                            return null;
-                          })()}
-                        </div>
-                        {(() => {
-                          // Use preferences_flags data first, fallback to old structure
-                          const hasPreferencesData = Object.keys(userSelectedFantasiesByCategory).length > 0;
-
-                          if (hasPreferencesData) {
-                            // Use new preferences_flags structure
-                            return (
-                              <div className="space-y-3">
-                                {Object.entries(userSelectedFantasiesByCategory).map(([categorySlug, categoryFantasies]) => {
-                                  // Get category name from fantasyCategories
-                                  const category = fantasyCategories.find(c => c.id === categorySlug);
-                                  const categoryName = category?.name || categorySlug;
-
-                                  return (
-                                    <div
-                                      key={categorySlug}
-                                      className={`rounded-[24px] overflow-hidden border ${theme === 'dark'
-                                        ? 'bg-zinc-900/[0.55] border-white/10'
-                                        : 'bg-white/[0.62] border-[var(--cv-inner-border)]'
-                                        }`}
-                                    >
-                                      <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
-                                        <h3 className={`text-[0.765rem] font-bold normal-case tracking-[0.08em] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
-                                          <span className="inline-flex items-center gap-2"><IllustratedIcon name={categorySlug} className="h-8 w-8" />{categoryName}</span>
-                                        </h3>
-                                      </div>
-                                      <div className="p-3.5 flex flex-wrap gap-2">
-                                        {categoryFantasies.map((fantasy) => (
-                                          <span
-                                            key={fantasy.id}
-                                            className={`px-4 py-2 text-[0.824rem] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
-                                              ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
-                                              : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
-                                              }`}
-                                          >
-                                            <span className="inline-flex items-center gap-2"><IllustratedIcon name={fantasy.id} className="h-7 w-7" />{fantasy.name}</span>
-                                          </span>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            );
-                          }
-
-                          // Fallback to old structure
-                          const fantasiesSource = (isOwnProfile && isAuthenticated && authUser) ? (authUser as any).fantasies : user?.fantasies;
-                          if (fantasiesSource && fantasiesSource.length > 0) {
-                            // Group fantasies by category slug
-                            const fantasiesByCategory: Record<string, typeof fantasiesSource> = {};
-                            fantasiesSource.forEach((f: any) => {
-                              const categorySlug = f.fantasy?.slug || 'other';
-                              if (!fantasiesByCategory[categorySlug]) {
-                                fantasiesByCategory[categorySlug] = [];
-                              }
-                              fantasiesByCategory[categorySlug].push(f);
-                            });
-
-                            return (
-                              <div className="space-y-3">
-                                {Object.entries(fantasiesByCategory).map(([categorySlug, categoryFantasies]) => {
-                                  // Get category name from the first fantasy in this group
-                                  const firstFantasy = categoryFantasies[0]?.fantasy;
-                                  const categoryName = firstFantasy?.category?.[defaultLanguage] ||
-                                    firstFantasy?.category?.en ||
-                                    (firstFantasy?.category ? Object.values(firstFantasy.category)[0] : null) ||
-                                    categorySlug;
-                                  return (
-                                    <div
-                                      key={categorySlug}
-                                      className={`rounded-[24px] overflow-hidden border ${theme === 'dark'
-                                        ? 'bg-zinc-900/[0.55] border-white/10'
-                                        : 'bg-white/[0.62] border-[var(--cv-inner-border)]'
-                                        }`}
-                                    >
-                                      <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
-                                        <h3 className={`text-[0.765rem] font-bold normal-case tracking-[0.08em] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
-                                          <span className="inline-flex items-center gap-2"><IllustratedIcon name={categorySlug} className="h-8 w-8" />{categoryName}</span>
-                                        </h3>
-                                      </div>
-                                      <div className="p-3.5 flex flex-wrap gap-2">
-                                        {categoryFantasies.map((f: any) => {
-                                          const label = f.fantasy?.label?.[defaultLanguage] ||
-                                            f.fantasy?.label?.en ||
-                                            Object.values(f.fantasy?.label || {})[0] ||
-                                            `Fantasy ${f.fantasy_id || f.id}`;
-                                          return (
-                                            <span
-                                              key={f.id || f.fantasy_id}
-                                              className={`px-4 py-2 text-[0.824rem] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
-                                                ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
-                                                : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
-                                                }`}
-                                            >
-                                              <span className="inline-flex items-center gap-2"><IllustratedIcon name={f.fantasy_id || f.fantasy?.label?.en || f.id} className="h-7 w-7" />{label}</span>
-                                            </span>
-                                          );
-                                        })}
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            );
-                          }
-
-                          // No fantasies
-                          return (
-                            <div className={`text-center py-16 rounded-[18px] ${theme === 'dark'
-                              ? 'border border-white/[0.06]'
-                              : 'border border-black/[0.06]'
-                              }`}>
-                              <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${theme === 'dark' ? 'bg-white/[0.08]' : 'bg-black/[0.04]'}`}>
-                                <Sparkles className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
-                              </div>
-                              <p className={`text-[0.882rem] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_fantasies_added')}</p>
-                            </div>
-                          );
-                        })()}
-                      </div>
-
-                      {/* Interests Section */}
-                      <div style={profileSectionRenderStyle}>
-                        <div className="flex items-center justify-between mb-4">
-                          <h2 className={`text-[1.294rem] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
-                            <span className="inline-flex items-center gap-2"><IllustratedIcon name="interest-category-lifestyle" className="h-10 w-10" />{t('profile.interests')}</span>
-                          </h2>
-                          {(() => {
-                            // Count interests from preferences_flags or fallback to old structure
-                            const totalCount = Object.values(userSelectedInterestsByCategory).reduce((sum, items) => sum + items.length, 0);
-                            const fallbackCount = (() => {
-                              const interestsSource = (isOwnProfile && isAuthenticated && authUser && (authUser as any).interests)
-                                ? (authUser as any).interests
-                                : user?.interests;
-                              return interestsSource?.length || 0;
-                            })();
-                            const displayCount = totalCount > 0 ? totalCount : fallbackCount;
-                            if (displayCount > 0) {
-                              return (
-                                <span className={`text-[0.765rem] font-semibold ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
-                                  {displayCount}
-                                </span>
-                              );
-                            }
-                            return null;
-                          })()}
-                        </div>
-                        {(() => {
-                          // Use preferences_flags data first, fallback to old structure
-                          const hasPreferencesData = Object.keys(userSelectedInterestsByCategory).length > 0;
-
-                          if (hasPreferencesData) {
-                            // Use new preferences_flags structure
-                            return (
-                              <div className="space-y-3">
-                                {Object.entries(userSelectedInterestsByCategory).map(([categoryId, categoryInterests]) => {
-                                  // Get category name from interestCategories
-                                  const category = interestCategories.find(c => c.id === categoryId);
-                                  const categoryName = category?.name || categoryId;
-
-                                  return (
-                                    <div
-                                      key={categoryId}
-                                      className={`rounded-[24px] overflow-hidden border ${theme === 'dark'
-                                        ? 'bg-zinc-900/[0.55] border-white/10'
-                                        : 'bg-white/[0.62] border-[var(--cv-inner-border)]'
-                                        }`}
-                                    >
-                                      <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
-                                        <h3 className={`text-[0.765rem] font-bold normal-case tracking-[0.08em] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
-                                          <span className="inline-flex items-center gap-2"><IllustratedIcon name={categoryId} className="h-8 w-8" />{categoryName}</span>
-                                        </h3>
-                                      </div>
-                                      <div className="p-3.5 flex flex-wrap gap-2">
-                                        {categoryInterests.map((item) => (
-                                          <span
-                                            key={item.id}
-                                            className={`inline-flex items-center gap-1.5 px-4 py-2 text-[0.824rem] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
-                                              ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
-                                              : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
-                                              }`}
-                                          >
-                                            <IllustratedIcon name={item.id} fallback="system-heart" className="inline-block h-7 w-7 align-middle" />
-                                            <span>{item.name}</span>
-                                          </span>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            );
-                          }
-
-                          // Fallback to old structure
-                          const interestsSource = (isOwnProfile && isAuthenticated && authUser && (authUser as any).interests)
-                            ? (authUser as any).interests
-                            : user?.interests;
-
-                          if (interestsSource && interestsSource.length > 0) {
-                            // Group interests by category
-                            const interestsByCategory: Record<string, Array<{ id: string; name: string; emoji?: string; categoryId: string; categoryName: string }>> = {};
-
-                            interestsSource.forEach((interest: any) => {
-                              if (typeof interest === 'object' && interest !== null && interest.interest_item) {
-                                const itemName = interest.interest_item.name[defaultLanguage] ||
-                                  interest.interest_item.name.en ||
-                                  Object.values(interest.interest_item.name as any)[0] ||
-                                  `Interest ${interest.interest_item.id}`;
-
-                                const categoryId = interest.interest_item.interest_id || interest.interest_item.interest?.id || 'other';
-                                const categoryName = interest.interest_item.interest?.name?.[defaultLanguage] ||
-                                  interest.interest_item.interest?.name?.en ||
-                                  (interest.interest_item.interest?.name ? Object.values(interest.interest_item.interest.name as any)[0] : null) ||
-                                  'Other';
-
-                                if (!interestsByCategory[categoryId]) {
-                                  interestsByCategory[categoryId] = [];
-                                }
-
-                                interestsByCategory[categoryId].push({
-                                  id: interest.interest_item.id || interest.id,
-                                  name: itemName,
-                                  emoji: interest.interest_item.emoji,
-                                  categoryId,
-                                  categoryName,
-                                });
-                              } else {
-                                const interestNameById: Record<number, string> = {
-                                  247: '3D printing',
-                                  175: 'Acting',
-                                  21: 'Action films',
-                                  253: 'Adventure',
-                                  125: 'Afrobeats',
-                                  88: 'Animal lover',
-                                  228: 'Badminton',
-                                  229: 'Graduate degree or higher',
-                                  221: 'Exercising',
-                                  136: 'Sci-fi books',
-                                  25: 'Sci-fi films',
-                                };
-
-                                const categoryId = 'uncategorized';
-                                if (!interestsByCategory[categoryId]) {
-                                  interestsByCategory[categoryId] = [];
-                                }
-
-                                interestsByCategory[categoryId].push({
-                                  id: String(interest),
-                                  name: typeof interest === 'number' ? (interestNameById[interest] || `Interest #${interest}`) : String(interest),
-                                  emoji: undefined,
-                                  categoryId,
-                                  categoryName: 'Other',
-                                });
-                              }
-                            });
-
-                            return (
-                              <div className="space-y-3">
-                                {Object.entries(interestsByCategory).map(([categoryId, categoryInterests]) => {
-                                  const categoryName = categoryInterests[0]?.categoryName || 'Other';
-                                  return (
-                                    <div
-                                      key={categoryId}
-                                      className={`rounded-[24px] overflow-hidden border ${theme === 'dark'
-                                        ? 'bg-zinc-900/[0.55] border-white/10'
-                                        : 'bg-white/[0.62] border-[var(--cv-inner-border)]'
-                                        }`}
-                                    >
-                                      <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
-                                        <h3 className={`text-[0.765rem] font-bold normal-case tracking-[0.08em] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
-                                          <span className="inline-flex items-center gap-2"><IllustratedIcon name={categoryId} className="h-8 w-8" />{categoryName}</span>
-                                        </h3>
-                                      </div>
-                                      <div className="p-3.5 flex flex-wrap gap-2">
-                                        {categoryInterests.map((item) => (
-                                          <span
-                                            key={item.id}
-                                            className={`inline-flex items-center gap-1.5 px-4 py-2 text-[0.824rem] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
-                                              ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
-                                              : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
-                                              }`}
-                                          >
-                                            <IllustratedIcon name={item.id} fallback="system-heart" className="inline-block h-7 w-7 align-middle" />
-                                            <span>{item.name}</span>
-                                          </span>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            );
-                          }
-
-                          // No interests
-                          return (
-                            <div className={`text-center py-16 rounded-[18px] ${theme === 'dark'
-                              ? 'border border-white/[0.06]'
-                              : 'border border-black/[0.06]'
-                              }`}>
-                              <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${theme === 'dark' ? 'bg-white/[0.08]' : 'bg-black/[0.04]'}`}>
-                                <Heart className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
-                              </div>
-                              <p className={`text-[0.882rem] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_interests_added')}</p>
-                            </div>
-                          );
-                        })()}
-                      </div>
+                      {error && isOwnProfile && <div className="cv-profile-preferences-feedback" role="alert"><span>{t('chat_actions.action_failed')}</span><button type="button" className="cv-icon-button" aria-label={t('app.close')} onClick={() => setError(null)}><TelegramIcon name="close" /></button></div>}
+                      <PreferenceSection title={t('profile.attributes')} kind="attributes" categories={USER_ATTRIBUTES.map(item => ({ id: item.field, name: item.label, icon: `attribute-${item.field}` }))} options={fieldOptions} selected={profileTraitSelections} canEdit={!!isOwnProfile} busy={profilePreferencesBusy} loading={initialSyncLoading} failed={initialSyncError} onRetry={() => void refreshInitialSync()} onToggle={(field, id) => void handleFieldOptionSelect(field, id)} emptyLabel={t('profile.not_specified')} limit={6} />
+                      <PreferenceSection title={t('profile.fantasies')} kind="fantasies" categories={fantasyCategories} options={fantasyOptions} selected={profileFantasySelections} canEdit={!!isOwnProfile} busy={profilePreferencesBusy} loading={initialSyncLoading} failed={initialSyncError} onRetry={() => void refreshInitialSync()} onToggle={(_, id) => void handleFantasyItemToggle(id)} emptyLabel={t('profile.no_fantasies_added')} />
+                      <PreferenceSection title={t('profile.interests')} kind="interests" categories={interestCategories} options={interestOptions} selected={profileInterestSelections} canEdit={!!isOwnProfile} busy={profilePreferencesBusy} loading={initialSyncLoading} failed={initialSyncError} onRetry={() => void refreshInitialSync()} onToggle={(_, id) => void handleInterestItemToggle(id)} emptyLabel={t('profile.no_interests_added')} />
                     </div>
                   )}
 
                   {/* Posts / Media Masonry / Likes */}
-                  {activeTab !== 'profile' && (
+                  {['posts', 'replies', 'media', 'likes'].includes(activeTab) && (
                   <div>
                     {activeTab === 'media' ? (
                       // Media Masonry Grid
@@ -6253,7 +5910,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           </main>
         )}
       </div>
-      <Sheet isOpen={showProfileStats} onClose={() => setShowProfileStats(false)} title={t('match.stats')}>
+      <Sheet isOpen={showProfileStats} onClose={() => setShowProfileStats(false)} title={t('match.stats')} className="cv-panel-sheet cv-profile-statistics" closeIcon={<TelegramIcon name="close" />}>
         <GroupedSection>
           {visibleEngagementItems.map(item => {
             const ItemIcon = item.icon;

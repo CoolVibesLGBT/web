@@ -1,0 +1,131 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/CSS/HTTP fixtures; no screenshots",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "mode": "day",
+      "status": "passed",
+      "first": "#f6f2fb",
+      "second": "#f1f4fd",
+      "settingsCard": {
+        "background": "rgb(255, 255, 255)",
+        "radius": "24px",
+        "border": "0px",
+        "shadow": "rgba(0, 0, 0, 0.05) 0px 1px 4px 0px"
+      },
+      "referralCard": {
+        "background": "rgb(255, 255, 255)",
+        "radius": "24px",
+        "border": "0px",
+        "shadow": "rgba(0, 0, 0, 0.05) 0px 1px 4px 0px"
+      },
+      "groupHover": {
+        "actual": "rgb(241, 244, 253)",
+        "expected": "rgb(241, 244, 253)"
+      },
+      "checks": [
+        "theme change updates one shared hover token",
+        "Settings, referrals, chat and group rows match",
+        "referral cards match Settings border/radius/shadow/surface",
+        "150 referrals virtualized; no overflow; translated labels"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "mode": "night",
+      "status": "passed",
+      "first": "#2c272f",
+      "second": "#262731",
+      "settingsCard": {
+        "background": "rgb(33, 33, 33)",
+        "radius": "24px",
+        "border": "0px",
+        "shadow": "rgba(0, 0, 0, 0.12) 0px 1px 4px 0px"
+      },
+      "referralCard": {
+        "background": "rgb(33, 33, 33)",
+        "radius": "24px",
+        "border": "0px",
+        "shadow": "rgba(0, 0, 0, 0.12) 0px 1px 4px 0px"
+      },
+      "groupHover": {
+        "actual": "rgb(38, 39, 49)",
+        "expected": "rgb(38, 39, 49)"
+      },
+      "checks": [
+        "theme change updates one shared hover token",
+        "Settings, referrals, chat and group rows match",
+        "referral cards match Settings border/radius/shadow/surface",
+        "150 referrals virtualized; no overflow; translated labels"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "mode": "tinted",
+      "large": true,
+      "status": "passed",
+      "first": "#352e41",
+      "second": "#2c2c4a",
+      "settingsCard": {
+        "background": "rgb(40, 39, 60)",
+        "radius": "36px",
+        "border": "0px",
+        "shadow": "rgba(0, 0, 0, 0.12) 0px 1px 4px 0px"
+      },
+      "referralCard": {
+        "background": "rgb(40, 39, 60)",
+        "radius": "36px",
+        "border": "0px",
+        "shadow": "rgba(0, 0, 0, 0.12) 0px 1px 4px 0px"
+      },
+      "groupHover": {
+        "actual": "rgb(44, 44, 74)",
+        "expected": "rgb(44, 44, 74)"
+      },
+      "checks": [
+        "theme change updates one shared hover token",
+        "Settings, referrals, chat and group rows match",
+        "referral cards match Settings border/radius/shadow/surface",
+        "150 referrals virtualized; no overflow; translated labels"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "mode": "light",
+      "status": "passed",
+      "first": "#f7f2fa",
+      "second": "#f2f4fb",
+      "settingsCard": {
+        "background": "rgb(255, 255, 255)",
+        "radius": "24px",
+        "border": "0px",
+        "shadow": "rgba(0, 0, 0, 0.05) 0px 1px 4px 0px"
+      },
+      "referralCard": {
+        "background": "rgb(255, 255, 255)",
+        "radius": "24px",
+        "border": "0px",
+        "shadow": "rgba(0, 0, 0, 0.05) 0px 1px 4px 0px"
+      },
+      "groupHover": {
+        "actual": "rgb(242, 244, 251)",
+        "expected": "rgb(242, 244, 251)"
+      },
+      "checks": [
+        "theme change updates one shared hover token",
+        "Settings, referrals, chat and group rows match",
+        "referral cards match Settings border/radius/shadow/surface",
+        "150 referrals virtualized; no overflow; translated labels"
+      ]
+    }
+  ]
+}

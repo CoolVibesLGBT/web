@@ -1,5 +1,7 @@
 # Web interface design record
 
+Current standard: the supplied Telegram source, as documented in `telegram-ui-reference.md`, supersedes the earlier Apple and preview-only entries below. Current profiles use embedded Photos/Friends tabs, shared popup tones, real photo-permission actions and the existing source Lottie lock. Earlier entries are historical verification records.
+
 Scope: this web repository only. Apple visual hierarchy and typography; web/Android browser behavior remains native. No hotel flows, UIKit handlers or mobile project were added.
 
 ## Shared implementation
@@ -74,6 +76,8 @@ DOM-only Playwright checks at `localhost:5173`, with intercepted API fixtures, p
 
 ## Appearance settings preview (2026-10-21)
 
+Superseded behavior: appearance now applies to the site, chat bubbles and text; see the source contract and `appearance-input-checks.json`. The original preview-only checks below describe the earlier implementation.
+
 A Settings → Appearance row opens `/settings/appearance`; Chat Wallpaper opens `/settings/appearance/background`, with parent navigation in the app header. This is deliberately a saved preview, as requested: selections do not change the application's active light/dark preference or actual messages.
 
 The nine-card strip contains the default home theme and the eight original chick, snowman, diamond, teacher, tulip, heart, tree and game themes. Bundled public theme data includes all four variants (Classic/Night/Day/Dark); each original SVG pattern is stored locally. The default pattern, 49 accent presets, color adaptation and 50×50 mesh-gradient interpolation come from the supplied `tweb-master` source. Tinted wallpapers use its 85% nearest-base blending rule. Colors were not sampled from screenshots. Source attribution and license are in `public/images/chat/NOTICE.txt` and `LICENSE-telegram.txt`.
@@ -96,3 +100,28 @@ The previous gallery check missed a real defect: all eight cloud Day variants im
 The gallery is now a separate `TelegramThemePicker.tsx`, adapted from the supplied `chatThemesPicker.tsx` and `_themes.scss`: `scrollable scrollable-x themes-container`, 4.5rem × 6rem cards, original bubble/emoji positions, an external 2px selection border, horizontal scrolling, RTL-aware arrows and one toolbar tab stop. Wallpaper layers have an explicit foreground stacking order and the source's color placeholder before canvas drawing.
 
 `node scripts/check-appearance-colors.mjs` passes for all 36 theme/mode previews, zero sentinels, original SVG files and explicit custom monochrome wallpapers. DOM/canvas checks passed at 320px Turkish, 390px dark English, 820px Arabic/RTL with 150% text, and 1440px English. Each check samples actual canvas chroma across all 36 combinations, checks dimensions/layers, and exercises keyboard scrolling/selection. Results: `theme-picker-regressions.json`. No screenshot or live chat write was performed.
+
+
+## Telegram profile, media and shared-control pass (2026-10-21)
+
+Source mapping, finite sticker availability and verification limits are recorded in `telegram-ui-reference.md`. The shared foundation uses original Roboto files, tgico outlines, source popup/section geometry and the selected Appearance palette. List hover/press colors follow the chosen accent as explicitly requested.
+
+The profile keeps Friends and Photos in its own adaptive tabs. It removes the extra owner action card; album browsing and friendship requests do not open a second page. Photo privacy, owner access requests and incoming/outgoing friendship scopes remain backed by their existing APIs. An empty album has a compact state; populated grids reserve their measured rows. Photo upload uses native selection plus explicit preview/confirmation, with truthful transport/processing states and retained files after failure. The locked album uses the existing Telegram safe-lock Lottie through the shared worker. Property rows display actual values or localized “Not specified”, with a separate owner edit action and no misleading selection prompt/yellow markers.
+
+Shared modal colors, cards, header geometry, border, radius, shadow and backdrop are centralized in `telegram-panels.css`; `ContentPanel` supports both embedded and native-dialog presentation. Adaptive tabs retain keyboard focus and use an inset focus treatment. Search fields share logical icon/text layout; native base styles no longer override component padding. Referrals uses Settings section surfaces, while groups and history retain virtualized lists. Member selection includes accepted contacts without prior chats. Forward recent peers have an inner card inset.
+
+Browser evidence is recorded in `private-photo-ui-checks.json`, `profile-tab-checks.json`, `profile-social-checks.json`, `chat-compose-checks.json`, `group-member-checks.json` and `theme-list-checks.json`, alongside the group, sticker, GIF-fixture, forward, appearance and message-action artifacts. Cases use Turkish/English/Arabic, dark/light, 320–1440px widths and enlarged RTL text. They use isolated HTTP fixtures, block external sockets and do not capture screenshots or mutate real accounts. No claim of pixel identity for unseen routes or live GIF service is made. The current core working tree has unrelated GIF handler/bridge removals; they are preserved.
+
+## Profile preference catalogs and unified member selection (2026-10-21)
+
+The public `system.initial_sync` response already supplies 32 attribute categories, 13 interest categories (274 items), and five fantasy categories (66 items). The missing profile catalogs came from rendering only existing selections. Shared `PreferenceSection` now exposes the full owner catalog in place, with compact native category accordions and virtualized choices using the existing profile scroll parent. Traits initially show six categories with View all for the remainder. Visitors retain selected-only interest/fantasy views and cannot edit. Empty values remain localized. Initial-sync failure offers retry; failed saves restore selections, and high-bit preference updates preserve other categories.
+
+All 274 interest and 66 fantasy item IDs map to the existing designed AVIF illustrations. Option rows and selected chips now render those item-specific illustrations, in addition to category illustrations. No replacement artwork or runtime copy of the catalog was introduced. `profile-catalog-checks.json` covers the sanitized public catalog fixture, responsive/RTL/dark cases, real image decoding, save/clear/reload behavior, failure rollback and visitors. The existing profile, photo, member and list suites passed again after the change.
+
+Group member selection is one native button with switch semantics and a decorative indicator. The whole row shares hover, press and bounded ripple, including the indicator area; pointer and keyboard activation toggle once. `group-row-interaction-checks.json` records the four responsive cases with normal-motion ripple geometry and reduced-motion behavior. Production build, interface regression checks and all 524 existing illustration assets pass. Full TypeScript checking still reports pre-existing editor/post/map errors outside these changes.
+
+### Saved preference switches (2026-10-21)
+
+The first catalog fixture incorrectly returned the entire persistence-shaped user, including `preferences_flags`. The real `AuthUserResponse` deliberately excludes that stored bitset, so updates persisted while switches appeared off. Authenticated login/user-info/update responses now carry owner-only `selected_preference_bits`, decoded from the persisted hexadecimal flags. Public profiles retain their existing boundary. The profile reads these indexes before legacy flags; empty arrays clear prior selections, optimistic fantasy updates carry the same state, and older update responses without preference fields preserve the confirmed local choice.
+
+`profile-catalog-checks.json` now uses the safe account response without raw flags, checks the actual switch indicator and thumb position, and reopens saved choices after reload in four responsive/theme/language cases. Backend projection tests cover bit indexes 0, 63, 511, 784 and 849, explicit empty choices and exclusion from public profiles. Targeted Go suites for use cases, HTTP handlers, user domain and repositories passed, as did the frontend production build and interface regression checks. The updated local backend was rebuilt and restarted on port 4001. Fixture tests do not mutate a real account.

@@ -80,6 +80,7 @@ interface AppContextType {
   data: InitialData | null;
   refresh: () => Promise<void>;
   loading: boolean;
+  error: boolean;
   defaultLanguage: string;
   setDefaultLanguage: (lang: string) => void;
 }
@@ -88,6 +89,7 @@ const AppContext = createContext<AppContextType>({
   data: null,
   refresh: async () => { },
   loading: true,
+  error: false,
   defaultLanguage: "en",
   setDefaultLanguage: () => { }
 });
@@ -95,15 +97,18 @@ const AppContext = createContext<AppContextType>({
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [data, setData] = useState<InitialData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [defaultLanguage, setDefaultLanguage] = useState<string>(() => i18n.language || "en");
 
 
   const refresh = async () => {
     setLoading(true);
+    setError(false);
     try {
       const res = await api.fetchInitialSync() as InitialData;
       setData(res || null);
     } catch (err) {
+      setError(true);
       console.error("Initial sync failed:", err);
       setData((prev) => prev ?? EMPTY_INITIAL_DATA);
     } finally {
@@ -141,6 +146,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       data,
       refresh,
       loading,
+      error,
       defaultLanguage,
       setDefaultLanguage,
     }}>

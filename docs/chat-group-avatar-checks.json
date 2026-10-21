@@ -1,0 +1,217 @@
+{
+  "date": "2026-10-21",
+  "method": "Playwright DOM and multipart fixtures; no screenshots, no real user mutations",
+  "results": [
+    {
+      "width": 320,
+      "height": 700,
+      "language": "tr",
+      "theme": "light",
+      "base": "day",
+      "status": "passed",
+      "geometry": {
+        "x": 0,
+        "right": 319,
+        "width": 319,
+        "formScroll": "visible",
+        "center": 0.0078125,
+        "avatar": 119.984375
+      },
+      "cropStyles": {
+        "x": 12,
+        "y": 114,
+        "right": 308,
+        "bottom": 586,
+        "height": 472,
+        "rangeBorder": "0px",
+        "rangeHeight": "44px"
+      },
+      "background": {
+        "panel": "rgb(244, 244, 245)",
+        "summary": "rgb(255, 255, 255)",
+        "wallpaper": "-1"
+      },
+      "checks": [
+        "one scrolling column and centered avatar",
+        "file chooser opens; cancel and reselect same photo",
+        "zoom and rotate produce 640px JPEG",
+        "crop modal fits including short viewport",
+        "no inherited border on crop range",
+        "failed create retains fields/photo",
+        "multipart avatar and public group settings sent",
+        "group header opens group details; wallpaper below opaque surfaces",
+        "one scroll with 120 virtualized members; aligned header replaces chat header",
+        "copy success expires, repeat dedupes, denied copy never claims success"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "language": "en",
+      "theme": "dark",
+      "base": "night",
+      "status": "passed",
+      "geometry": {
+        "x": 0,
+        "right": 389,
+        "width": 389,
+        "formScroll": "visible",
+        "center": 0.0078125,
+        "avatar": 119.984375
+      },
+      "cropStyles": {
+        "x": 12,
+        "y": 54,
+        "right": 378,
+        "bottom": 596,
+        "height": 542,
+        "rangeBorder": "0px",
+        "rangeHeight": "44px"
+      },
+      "background": {
+        "panel": "rgb(24, 24, 24)",
+        "summary": "rgb(33, 33, 33)",
+        "wallpaper": "-1"
+      },
+      "checks": [
+        "one scrolling column and centered avatar",
+        "file chooser opens; cancel and reselect same photo",
+        "zoom and rotate produce 640px JPEG",
+        "crop modal fits including short viewport",
+        "no inherited border on crop range",
+        "failed create retains fields/photo",
+        "multipart avatar and public group settings sent",
+        "group header opens group details; wallpaper below opaque surfaces",
+        "one scroll with 120 virtualized members; aligned header replaces chat header",
+        "copy success expires, repeat dedupes, denied copy never claims success"
+      ]
+    },
+    {
+      "width": 820,
+      "height": 900,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "base": "tinted",
+      "status": "passed",
+      "geometry": {
+        "x": 1,
+        "right": 820,
+        "width": 819,
+        "formScroll": "visible",
+        "center": 0,
+        "avatar": 179.96875
+      },
+      "cropStyles": {
+        "x": 210,
+        "y": 142.25,
+        "right": 610,
+        "bottom": 757.75,
+        "height": 615.5,
+        "rangeBorder": "0px",
+        "rangeHeight": "44px"
+      },
+      "background": {
+        "panel": "rgb(20, 31, 46)",
+        "summary": "rgb(26, 43, 64)",
+        "wallpaper": "-1"
+      },
+      "checks": [
+        "one scrolling column and centered avatar",
+        "file chooser opens; cancel and reselect same photo",
+        "zoom and rotate produce 640px JPEG",
+        "crop modal fits including short viewport",
+        "no inherited border on crop range",
+        "failed create retains fields/photo",
+        "multipart avatar and public group settings sent",
+        "group header opens group details; wallpaper below opaque surfaces",
+        "one scroll with 120 virtualized members; aligned header replaces chat header",
+        "copy success expires, repeat dedupes, denied copy never claims success"
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 800,
+      "language": "en",
+      "theme": "light",
+      "base": "light",
+      "status": "passed",
+      "geometry": {
+        "x": 388,
+        "right": 727,
+        "width": 339,
+        "formScroll": "visible",
+        "center": 0.0078125,
+        "avatar": 119.984375
+      },
+      "cropStyles": {
+        "x": 520,
+        "y": 112,
+        "right": 920,
+        "bottom": 688,
+        "height": 576,
+        "rangeBorder": "0px",
+        "rangeHeight": "44px"
+      },
+      "background": {
+        "panel": "rgb(244, 244, 245)",
+        "summary": "rgb(255, 255, 255)",
+        "wallpaper": "-1"
+      },
+      "checks": [
+        "one scrolling column and centered avatar",
+        "file chooser opens; cancel and reselect same photo",
+        "zoom and rotate produce 640px JPEG",
+        "crop modal fits including short viewport",
+        "no inherited border on crop range",
+        "failed create retains fields/photo",
+        "multipart avatar and public group settings sent",
+        "group header opens group details; wallpaper below opaque surfaces",
+        "one scroll with 120 virtualized members; aligned header replaces chat header",
+        "copy success expires, repeat dedupes, denied copy never claims success"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 480,
+      "language": "tr",
+      "theme": "dark",
+      "base": "night",
+      "status": "passed",
+      "geometry": {
+        "x": 0,
+        "right": 389,
+        "width": 389,
+        "formScroll": "visible",
+        "center": 0.0078125,
+        "avatar": 119.984375
+      },
+      "cropStyles": {
+        "x": 12,
+        "y": 6,
+        "right": 378,
+        "bottom": 474,
+        "height": 468,
+        "rangeBorder": "0px",
+        "rangeHeight": "44px"
+      },
+      "background": {
+        "panel": "rgb(24, 24, 24)",
+        "summary": "rgb(33, 33, 33)",
+        "wallpaper": "-1"
+      },
+      "checks": [
+        "one scrolling column and centered avatar",
+        "file chooser opens; cancel and reselect same photo",
+        "zoom and rotate produce 640px JPEG",
+        "crop modal fits including short viewport",
+        "no inherited border on crop range",
+        "failed create retains fields/photo",
+        "multipart avatar and public group settings sent",
+        "group header opens group details; wallpaper below opaque surfaces",
+        "one scroll with 120 virtualized members; aligned header replaces chat header",
+        "copy success expires, repeat dedupes, denied copy never claims success"
+      ]
+    }
+  ]
+}

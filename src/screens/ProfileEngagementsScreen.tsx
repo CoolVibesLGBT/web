@@ -835,8 +835,8 @@ const ProfileEngagementsScreen: React.FC = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.03 }}
                       className={`group flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-200 ${theme === 'dark'
-                        ? 'cv-card-surface-solid border border-white/10 hover:bg-white/[0.04] hover:border-white/15'
-                        : 'bg-white border border-gray-200/50 hover:bg-gray-50 hover:border-gray-300'
+                        ? 'cv-card-surface-solid border border-white/10 hover:bg-[var(--cv-list-hover)] hover:border-white/15'
+                        : 'bg-white border border-gray-200/50 hover:bg-[var(--cv-list-hover)] hover:border-gray-300'
                         }`}
                     >
                       <div className="relative flex-shrink-0">

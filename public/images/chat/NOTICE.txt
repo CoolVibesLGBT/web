@@ -3,4 +3,8 @@ Bundled pattern.svg, theme preset data and adapted gradient/color algorithms ori
 Local reference supplied by the user: tweb-master.
 The upstream license is included as LICENSE-telegram.txt.
 
-The eight public color-theme bundles and their original SVG wallpaper patterns are included for the local appearance preview. No account, authentication or access-hash data is included.
+The eight public color-theme bundles plus the default theme, their four appearance variants and original SVG wallpaper patterns supply saved application/chat appearance. No account, authentication or access-hash data is included.
+
+Original tgico SVG paths, Lottie worker/player, fonts declarations and adapted interaction/layout algorithms are attributed to the same supplied source. Roboto font files and their separate Apache license are in /fonts/telegram/.
+
+The sticker picker uses 294 public documents from 11 public Telegram sticker sets, imported through this project's Bot API access. These are separate from tweb's bundled greeting/animated-emoji assets. Set names and emoji metadata are retained in src/features/emoticons/sticker-packs.json; credentials, Telegram file IDs and download tokens are excluded. The import script is scripts/import-telegram-stickers.mjs. Public sticker artwork belongs to the respective set creators; this notice does not assign ownership of their artwork to tweb or CoolVibes.

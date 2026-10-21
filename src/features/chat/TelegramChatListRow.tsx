@@ -1,3 +1,4 @@
+import ChatAvatarImage from './ChatAvatarImage';
 // Adapted from tweb _chatlist.scss / _row.scss and base.scss's avatar palette.
 import { Check, CheckCheck, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -27,7 +28,7 @@ export default function TelegramChatListRow({ chat, selected, typing, onSelect, 
     <button type="button" className="cv-chat-row-main" aria-current={!selection && selected ? 'true' : undefined} aria-pressed={selection ? selected : undefined} data-ripple={ripple ? undefined : 'off'} onClick={onSelect}>
       <span className="cv-dialog-avatar dialog-avatar" style={{ background: `linear-gradient(180deg, ${color[0]}, ${color[1]})` }}>
         <span className="cv-dialog-initial">{chat.avatarLetter || chat.name.charAt(0).toLocaleUpperCase()}</span>
-        {chat.avatar && <img src={chat.avatar} alt="" onError={event => { event.currentTarget.style.display = 'none'; }} />}
+        {chat.avatar && <ChatAvatarImage protectedMedia={chat.type === 'group'} src={chat.avatar} alt="" onError={event => { event.currentTarget.style.display = 'none'; }} />}
         {chat.online && <span className="cv-dialog-online" />}
       </span>
       <span className="cv-dialog-copy">

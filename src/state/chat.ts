@@ -35,8 +35,12 @@ export interface Attachment {
 }
 
 export interface ChatItem {
+  peerId?: string;
   type?: string;
   participantCount?: number;
+  description?: string;
+  visibility?: string;
+  publicUsername?: string;
   muted?: boolean;
   canManage?: boolean;
   pinnedMessageId?: string | null;

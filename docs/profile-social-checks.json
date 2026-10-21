@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/HTTP fixtures, sockets blocked, no real account mutations or screenshots",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "base": "day",
+      "status": "passed",
+      "checks": [
+        "friend request/cancel/incoming accept with public IDs",
+        "remove cancellation leaves friendship intact",
+        "share/hide my private album; failed grant retains state",
+        "locked photos contain no URLs; request/pending/approval",
+        "authorized image fetch; revocation removes open preview",
+        "owner photo privacy switch moves to correct album",
+        "access approval/revocation with switches",
+        "multipart upload and cancel deletion",
+        "responsive dark/RTL/enlarged text"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "base": "night",
+      "status": "passed",
+      "checks": [
+        "friend request/cancel/incoming accept with public IDs",
+        "remove cancellation leaves friendship intact",
+        "share/hide my private album; failed grant retains state",
+        "locked photos contain no URLs; request/pending/approval",
+        "authorized image fetch; revocation removes open preview",
+        "owner photo privacy switch moves to correct album",
+        "access approval/revocation with switches",
+        "multipart upload and cancel deletion",
+        "responsive dark/RTL/enlarged text"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "base": "tinted",
+      "status": "passed",
+      "checks": [
+        "friend request/cancel/incoming accept with public IDs",
+        "remove cancellation leaves friendship intact",
+        "share/hide my private album; failed grant retains state",
+        "locked photos contain no URLs; request/pending/approval",
+        "authorized image fetch; revocation removes open preview",
+        "owner photo privacy switch moves to correct album",
+        "access approval/revocation with switches",
+        "multipart upload and cancel deletion",
+        "responsive dark/RTL/enlarged text"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "base": "light",
+      "status": "passed",
+      "checks": [
+        "friend request/cancel/incoming accept with public IDs",
+        "remove cancellation leaves friendship intact",
+        "share/hide my private album; failed grant retains state",
+        "locked photos contain no URLs; request/pending/approval",
+        "authorized image fetch; revocation removes open preview",
+        "owner photo privacy switch moves to correct album",
+        "access approval/revocation with switches",
+        "multipart upload and cancel deletion",
+        "responsive dark/RTL/enlarged text"
+      ]
+    }
+  ]
+}

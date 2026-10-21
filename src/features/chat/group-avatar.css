@@ -1,0 +1,22 @@
+/* Telegram avatarEdit / avatar crop: circular preview, square export, pan/zoom/rotate. */
+.cv-group-avatar-field { display: flex; flex-direction: column; align-items: center; gap: .5rem; margin-block-end: 1rem; }
+.cv-group-avatar-field .cv-group-avatar { position: relative; display: grid; place-items: center; width: 7.058rem; height: 7.058rem; padding: 0; margin: 0; border: 0; border-radius: 50%; background: var(--color-brand-light); color: var(--color-brand); cursor: pointer; overflow: hidden; }
+.cv-group-avatar-field .cv-group-avatar > svg { width: 2.82rem; height: 2.82rem; }
+.cv-group-avatar-field .cv-group-avatar > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cv-group-avatar-edit { position: absolute; inset-inline: 0; bottom: 0; display: grid; place-items: center; height: 2rem; background: rgb(0 0 0 / 35%); color: white; }
+.cv-group-avatar-edit svg { width: 1.176rem; height: 1.176rem; }
+.cv-group-avatar-remove { min-height: 44px; padding: .25rem .75rem; border: 0; border-radius: .941rem; background: transparent; color: var(--color-brand); font-size: .824rem; }
+.cv-group-avatar-remove:hover { background: var(--color-brand-light); }
+.cv-sheet.cv-avatar-editor { width: min(400px, calc(100vw - 24px)); max-width: none; margin: auto; border: 0; border-radius: 1.412rem; background: var(--cv-card-bg-solid); color: var(--cv-neutral-1); box-shadow: none; }
+.cv-avatar-editor::backdrop { background: rgb(0 0 0 / 30%); }
+.cv-avatar-editor > .cv-sheet-header { border: 0; background: transparent; }
+.cv-avatar-editor > .cv-sheet-header h2 { font-size: 1.176rem; font-weight: 500; }
+.cv-avatar-editor > .cv-sheet-body { padding: 0 1rem 1rem; }
+.cv-avatar-crop { position: relative; aspect-ratio: 1; width: 100%; overflow: hidden; border-radius: .941rem; background: #111; cursor: grab; touch-action: none; }
+.cv-avatar-crop img { position: absolute; left: 50%; top: 50%; max-width: none; pointer-events: none; user-select: none; transform-origin: center; }
+.cv-avatar-crop-mask { position: absolute; inset: 0; border: 1px solid rgb(255 255 255 / 60%); border-radius: 50%; box-shadow: 0 0 0 1000px rgb(0 0 0 / 40%); pointer-events: none; }
+.cv-avatar-editor > .cv-sheet-actions { border: 0; justify-content: space-between; padding: 0 1rem 1rem; }
+.cv-avatar-editor .cv-sheet-actions button { min-width: 44px; min-height: 44px; border: 0; border-radius: .941rem; background: transparent; color: var(--color-brand); font-size: .941rem; font-weight: 500; padding: .5rem 1rem; }
+.cv-avatar-editor .cv-sheet-actions button:hover { background: var(--color-brand-light); }
+.cv-avatar-rotate svg { width: 1.412rem; height: 1.412rem; }
+.cv-avatar-editor [role='alert'], .cv-group-avatar-field [role='alert'] { color: var(--cv-menu-danger); }

@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/HTTP fixtures; no screenshots or real account mutations",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "row": {
+        "height": 64,
+        "description": "rgb(112, 117, 121)",
+        "title": "rgb(0, 0, 0)"
+      },
+      "checks": [
+        "Friends/Photos are adaptive profile tabs; no extra owner action card or album dialog",
+        "selected profile tab stays visible at enlarged RTL sizes",
+        "32 readable property rows retain server values; empty values say Not specified",
+        "optional fields have no warning dots or edit prompts",
+        "friend requests accept into real friends tab; correct empty states",
+        "tab changes unmount prior flow; no page overflow"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "status": "passed",
+      "row": {
+        "height": 64,
+        "description": "rgb(170, 170, 170)",
+        "title": "rgb(255, 255, 255)"
+      },
+      "checks": [
+        "Friends/Photos are adaptive profile tabs; no extra owner action card or album dialog",
+        "selected profile tab stays visible at enlarged RTL sizes",
+        "32 readable property rows retain server values; empty values say Not specified",
+        "optional fields have no warning dots or edit prompts",
+        "friend requests accept into real friends tab; correct empty states",
+        "tab changes unmount prior flow; no page overflow"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "status": "passed",
+      "row": {
+        "height": 96,
+        "description": "rgb(170, 170, 170)",
+        "title": "rgb(255, 255, 255)"
+      },
+      "checks": [
+        "Friends/Photos are adaptive profile tabs; no extra owner action card or album dialog",
+        "selected profile tab stays visible at enlarged RTL sizes",
+        "32 readable property rows retain server values; empty values say Not specified",
+        "optional fields have no warning dots or edit prompts",
+        "friend requests accept into real friends tab; correct empty states",
+        "tab changes unmount prior flow; no page overflow"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "status": "passed",
+      "row": {
+        "height": 64,
+        "description": "rgb(112, 117, 121)",
+        "title": "rgb(0, 0, 0)"
+      },
+      "checks": [
+        "Friends/Photos are adaptive profile tabs; no extra owner action card or album dialog",
+        "selected profile tab stays visible at enlarged RTL sizes",
+        "32 readable property rows retain server values; empty values say Not specified",
+        "optional fields have no warning dots or edit prompts",
+        "friend requests accept into real friends tab; correct empty states",
+        "tab changes unmount prior flow; no page overflow"
+      ]
+    }
+  ]
+}

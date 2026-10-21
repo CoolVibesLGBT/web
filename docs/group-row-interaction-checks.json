@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/pointer/keyboard fixtures; no screenshots or real group creation",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "hover": {
+        "actual": "rgb(238, 246, 253)",
+        "expected": "rgb(238, 246, 253)"
+      },
+      "checks": [
+        "single native button with switch semantics",
+        "one theme hover across avatar/name/switch",
+        "pointer ripple fills entire row and stays clipped after selection rerender",
+        "indicator/avatar/Space/Enter toggle once",
+        "visual indicator is not a second focus target",
+        "reduced motion keeps selection functional"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "status": "passed",
+      "hover": {
+        "actual": "rgb(41, 39, 48)",
+        "expected": "rgb(41, 39, 48)"
+      },
+      "checks": [
+        "single native button with switch semantics",
+        "one theme hover across avatar/name/switch",
+        "pointer ripple fills entire row and stays clipped after selection rerender",
+        "indicator/avatar/Space/Enter toggle once",
+        "visual indicator is not a second focus target",
+        "reduced motion keeps selection functional"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "status": "passed",
+      "hover": {
+        "actual": "rgb(41, 39, 48)",
+        "expected": "rgb(41, 39, 48)"
+      },
+      "checks": [
+        "single native button with switch semantics",
+        "one theme hover across avatar/name/switch",
+        "pointer ripple fills entire row and stays clipped after selection rerender",
+        "indicator/avatar/Space/Enter toggle once",
+        "visual indicator is not a second focus target",
+        "reduced motion keeps selection functional"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "status": "passed",
+      "hover": {
+        "actual": "rgb(238, 246, 253)",
+        "expected": "rgb(238, 246, 253)"
+      },
+      "checks": [
+        "single native button with switch semantics",
+        "one theme hover across avatar/name/switch",
+        "pointer ripple fills entire row and stays clipped after selection rerender",
+        "indicator/avatar/Space/Enter toggle once",
+        "visual indicator is not a second focus target",
+        "reduced motion keeps selection functional"
+      ]
+    }
+  ]
+}

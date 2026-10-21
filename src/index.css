@@ -538,6 +538,8 @@ body,
   background: var(--cv-surface-3-hover);
 }
 
+.cv-switch-indicator { pointer-events: none; }
+
 .cv-switch[data-checked="true"] {
   background: var(--color-brand);
   border-color: var(--color-brand);

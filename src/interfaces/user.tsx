@@ -172,4 +172,5 @@ export interface User {
     };
   }>;
   preferences_flags?: string;
+  selected_preference_bits?: number[];
 }

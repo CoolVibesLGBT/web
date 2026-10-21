@@ -1,4 +1,4 @@
-/* Apple visual hierarchy; native HTML and browser navigation on every platform. */
+/* Shared native browser semantics. Telegram visual tokens are defined in telegram-foundation.css. */
 :root {
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
@@ -47,21 +47,21 @@ button, input, textarea, select { font-family: var(--font-sans); }
 button, [role='button'], a, summary { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 button, [role='button'], summary { min-block-size: 44px; }
 button:empty, button:has(> svg:only-child), button:has(> img:only-child) { min-inline-size: 44px; }
-input:not([type='hidden']):not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']), select, textarea {
-  min-block-size: 44px;
-  font-size: 1rem;
-  line-height: 1.4;
-  border-radius: 10px;
+:where(input:not([type='hidden']):not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']), select, textarea) {
+  min-block-size: max(44px, 2.8235294118rem);
+  font-size: .9411764706rem;
+  line-height: 1.375;
+  border-radius: .9411764706rem;
   scroll-margin-block: 80px;
 }
 textarea { min-block-size: 88px; }
 input[type='checkbox'], input[type='radio'], input[type='range'] { accent-color: var(--color-brand); }
 /* Keep focus visible in headers and tabs that previously suppressed it. */
 :is(button, a, summary, input, textarea, select, [tabindex]):focus-visible {
-  outline: 3px solid var(--color-brand);
+  outline: 2px solid var(--color-brand);
   outline-offset: 3px;
 }
-.elite-floating button:focus-visible, .cv-tab:focus-visible { outline: 3px solid var(--color-brand); outline-offset: -3px; }
+.elite-floating button:focus-visible, .cv-tab:focus-visible { outline: 2px solid var(--color-brand); outline-offset: -3px; }
 .elite-card, .elite-card-static, .elite-bubble { border-radius: 20px; box-shadow: var(--cv-shadow-short); }
 .elite-card:hover, .elite-card-static:hover, .cv-card-lift:hover { transform: none; box-shadow: var(--cv-shadow-medium); }
 .elite-btn { border-radius: 10px; transition: background-color 150ms, color 150ms; }

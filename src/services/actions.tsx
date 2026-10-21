@@ -17,6 +17,14 @@ export const Actions = {
 
   // CHAT
   CMD_CHAT_CREATE: "chat.create", // Chat olustur
+  CMD_CHAT_GIFS_SEARCH: "chat.media.gifs",
+  CMD_CHAT_GROUP_UPDATE: "chat.group.update",
+  CMD_CHAT_GROUP_INVITE: "chat.group.invite",
+  CMD_CHAT_GROUP_PREVIEW: "chat.group.preview",
+  CMD_CHAT_GROUP_JOIN: "chat.group.join",
+  CMD_CHAT_PARTICIPANTS_FETCH: "chat.participants.fetch",
+  CMD_CHAT_PARTICIPANT_ADD: "chat.participant.add",
+  CMD_CHAT_PARTICIPANT_REMOVE: "chat.participant.remove",
   CMD_TYPING: "chat.typing",
   CMD_EDIT_MESSAGE: "chat.edit_message",
   CMD_FORWARD_MESSAGES: "chat.forward_messages",
@@ -41,6 +49,24 @@ export const Actions = {
 
 
   // USER
+  CMD_FRIEND_STATUS: "user.friend.status",
+  CMD_FRIEND_REQUEST: "user.friend.request",
+  CMD_FRIEND_RESPOND: "user.friend.respond",
+  CMD_FRIEND_CANCEL: "user.friend.cancel",
+  CMD_FRIEND_REMOVE: "user.friend.remove",
+  CMD_FRIEND_FETCH: "user.friend.fetch",
+  CMD_FRIEND_REQUESTS: "user.friend.requests",
+  CMD_PRIVATE_PHOTOS_FETCH: "user.private_photos.fetch",
+  CMD_PROFILE_PHOTOS_FETCH: "user.profile_photos.fetch",
+  CMD_PHOTOS_MOVE: "user.photos.move",
+  CMD_PRIVATE_PHOTOS_UPLOAD: "user.private_photos.upload",
+  CMD_PRIVATE_PHOTOS_DELETE: "user.private_photos.delete",
+  CMD_PHOTO_ACCESS_REQUEST: "user.private_photos.access.request",
+  CMD_PHOTO_ACCESS_REQUESTS: "user.private_photos.access.requests",
+  CMD_PHOTO_ACCESS_RESPOND: "user.private_photos.access.respond",
+  CMD_PHOTO_ACCESS_REVOKE: "user.private_photos.access.revoke",
+  CMD_PHOTO_ACCESS_GRANT: "user.private_photos.access.grant",
+  CMD_PHOTO_ACCESS_STATUS: "user.private_photos.access.status",
   CMD_USER_GET_NOTIFICATIONS: "user.fetch.notifications",
   CMD_USER_MARK_NOTIFICATIONS_SEEN: "user.notifications.mark.seen",
 

@@ -1,3 +1,4 @@
+import ChatAvatarImage from './ChatAvatarImage';
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Virtuoso } from 'react-virtuoso';
@@ -10,7 +11,7 @@ import './forward-picker.css';
 const AVATAR_COLORS = ['#cc5049', '#d67722', '#955cd7', '#41a344', '#26aaa5', '#368ad1', '#c7508b'];
 function PeerAvatar({ chat }: { chat: ChatItem }) {
   const color = AVATAR_COLORS[Array.from(chat.id).reduce((sum, c) => sum + c.charCodeAt(0), 0) % AVATAR_COLORS.length];
-  return <span className="cv-forward-peer-avatar" style={{ background: color }}><span>{chat.avatarLetter || chat.name.charAt(0).toLocaleUpperCase()}</span>{chat.avatar && <img src={chat.avatar} alt="" onError={event => { event.currentTarget.style.display = 'none'; }} />}</span>;
+  return <span className="cv-forward-peer-avatar" style={{ background: color }}><span>{chat.avatarLetter || chat.name.charAt(0).toLocaleUpperCase()}</span>{chat.avatar && <ChatAvatarImage protectedMedia={chat.type === 'group'} src={chat.avatar} alt="" onError={event => { event.currentTarget.style.display = 'none'; }} />}</span>;
 }
 
 /** Adapted from tweb popups/forward, pickUser, appSelectPeers and _selector.scss. */

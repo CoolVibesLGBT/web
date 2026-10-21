@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/HTTP fixtures; real bundled animations; no screenshots",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "geometry": {
+        "left": 8.5,
+        "right": 284.75,
+        "top": 635.5,
+        "bottom": 830.203125,
+        "border": "0px",
+        "radius": "16px",
+        "shadow": "rgba(0, 0, 0, 0.15) 0px 0px 10px 0px"
+      },
+      "checks": [
+        "themed expiry submenu; no native select",
+        "six choices; keyboard/Escape returns to parent",
+        "cancel one-time photo then send text without chooser",
+        "animated TGS send; visible at bottom; failed send explicit retry",
+        "WEBM send and history reload; no file chooser for stickers"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "status": "passed",
+      "geometry": {
+        "left": 8.5,
+        "right": 284.75,
+        "top": 635.5,
+        "bottom": 830.203125,
+        "border": "0px",
+        "radius": "16px",
+        "shadow": "rgba(0, 0, 0, 0.15) 0px 0px 10px 0px"
+      },
+      "checks": [
+        "themed expiry submenu; no native select",
+        "six choices; keyboard/Escape returns to parent",
+        "cancel one-time photo then send text without chooser",
+        "animated TGS send; visible at bottom; failed send explicit retry",
+        "WEBM send and history reload; no file chooser for stickers"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "status": "passed",
+      "geometry": {
+        "left": 405.625,
+        "right": 820,
+        "top": 237,
+        "bottom": 464.4375,
+        "border": "0px",
+        "radius": "16px",
+        "shadow": "rgba(0, 0, 0, 0.15) 0px 0px 10px 0px"
+      },
+      "checks": [
+        "themed expiry submenu; no native select",
+        "six choices; keyboard/Escape returns to parent",
+        "cancel one-time photo then send text without chooser",
+        "animated TGS send; visible at bottom; failed send explicit retry",
+        "WEBM send and history reload; no file chooser for stickers"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "status": "passed",
+      "geometry": {
+        "left": 745,
+        "right": 1021.25,
+        "top": 631.25,
+        "bottom": 825.953125,
+        "border": "0px",
+        "radius": "16px",
+        "shadow": "rgba(0, 0, 0, 0.15) 0px 0px 10px 0px"
+      },
+      "checks": [
+        "themed expiry submenu; no native select",
+        "six choices; keyboard/Escape returns to parent",
+        "cancel one-time photo then send text without chooser",
+        "animated TGS send; visible at bottom; failed send explicit retry",
+        "WEBM send and history reload; no file chooser for stickers"
+      ]
+    }
+  ]
+}

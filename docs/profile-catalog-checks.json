@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/HTTP fixtures using public initial-sync catalog data; no screenshots or real preference mutations",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "initialCalls": 7,
+      "mutations": 6,
+      "checks": [
+        "real initial-sync catalog shape: 32 traits/13 interests/5 fantasies",
+        "all categories visible before selections; owner edits in-place",
+        "274 interest and 66 fantasy item IDs map to the existing original assets",
+        "option rows and collapsed chips show their own icons",
+        "safe owner projection returns selected indexes without raw flags; switch indicator and thumb follow persisted high bits",
+        "failure rolls back; clearing and single-valued changes preserve other categories",
+        "reload restores active switches; older mutation responses without preference state remain usable; initial-sync failure offers working retry"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "status": "passed",
+      "initialCalls": 7,
+      "mutations": 7,
+      "checks": [
+        "real initial-sync catalog shape: 32 traits/13 interests/5 fantasies",
+        "all categories visible before selections; owner edits in-place",
+        "274 interest and 66 fantasy item IDs map to the existing original assets",
+        "option rows and collapsed chips show their own icons",
+        "safe owner projection returns selected indexes without raw flags; switch indicator and thumb follow persisted high bits",
+        "failure rolls back; clearing and single-valued changes preserve other categories",
+        "reload restores active switches; older mutation responses without preference state remain usable; initial-sync failure offers working retry"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "status": "passed",
+      "initialCalls": 7,
+      "mutations": 6,
+      "checks": [
+        "real initial-sync catalog shape: 32 traits/13 interests/5 fantasies",
+        "all categories visible before selections; owner edits in-place",
+        "274 interest and 66 fantasy item IDs map to the existing original assets",
+        "option rows and collapsed chips show their own icons",
+        "safe owner projection returns selected indexes without raw flags; switch indicator and thumb follow persisted high bits",
+        "failure rolls back; clearing and single-valued changes preserve other categories",
+        "reload restores active switches; older mutation responses without preference state remain usable; initial-sync failure offers working retry"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "status": "passed",
+      "initialCalls": 7,
+      "mutations": 6,
+      "checks": [
+        "real initial-sync catalog shape: 32 traits/13 interests/5 fantasies",
+        "all categories visible before selections; owner edits in-place",
+        "274 interest and 66 fantasy item IDs map to the existing original assets",
+        "option rows and collapsed chips show their own icons",
+        "safe owner projection returns selected indexes without raw flags; switch indicator and thumb follow persisted high bits",
+        "failure rolls back; clearing and single-valued changes preserve other categories",
+        "reload restores active switches; older mutation responses without preference state remain usable; initial-sync failure offers working retry"
+      ]
+    }
+  ]
+}

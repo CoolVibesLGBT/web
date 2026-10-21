@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
+import SearchField from '@/components/ui/SearchField';
 import { useSEO } from '../hooks/useSEO';
 import {
     Bell,
@@ -17,8 +18,7 @@ import {
     FileText,
     ShieldCheck,
     Lightbulb,
-    Search,
-    Palette,
+      Palette,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
@@ -283,27 +283,7 @@ export default function SettingsScreen() {
     return (
         <div className={`skyline-page-scroll w-full ${pageBg} text-[var(--cv-neutral-1)]`}>
             <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col px-4 pb-10 pt-4 md:px-6">
-                {/* iOS search field */}
-                <div className={`mt-3 flex h-9 items-center gap-2 rounded-[10px] px-2.5 ${isDark ? 'bg-white/10' : 'bg-black/[0.06]'}`}>
-                    <Search className={`h-4 w-4 shrink-0 ${secondaryColor}`} />
-                    <input
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder={t('app.search_placeholder', { defaultValue: 'Ara' })}
-                        aria-label={t('app.search_placeholder', { defaultValue: 'Ara' })}
-                        className="w-full bg-transparent text-[1.0rem] outline-none placeholder:text-[var(--cv-neutral-3)]"
-                    />
-                    {searchQuery && (
-                        <button
-                            type="button"
-                            onClick={() => setSearchQuery('')}
-                            aria-label={t('search.clear', { defaultValue: 'Clear search' })}
-                            className={`text-[0.882rem] font-medium ${secondaryColor}`}
-                        >
-                            ×
-                        </button>
-                    )}
-                </div>
+                <SearchField className="mt-3" value={searchQuery} onChange={setSearchQuery} label={t('app.search_placeholder', { defaultValue: 'Ara' })} />
 
                 {/* iOS Apple-Account style profile cell */}
                 {!normalizedQuery && (

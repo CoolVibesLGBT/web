@@ -1,0 +1,17 @@
+/* The same grouped surfaces and rows used by SettingsScreen. */
+.cv-referrals { position: relative; width: 100%; color: var(--cv-neutral-1); background: var(--cv-page-bg); }
+.cv-referrals-content { width: 100%; max-width: 64rem; margin-inline: auto; padding: .941rem .941rem 2rem; }
+.cv-referrals .cv-grouped-section { margin-block: 0 1.176rem; }
+.cv-referrals-link { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cv-referrals-actions { display: flex; gap: .5rem; padding: .5rem .941rem; }
+.cv-referrals-actions .cv-btn { flex: 1; min-width: 0; display: flex; gap: .5rem; align-items: center; justify-content: center; white-space: normal; padding: .5rem; }
+.cv-referrals-actions .cv-btn svg { width: 1.176rem; height: 1.176rem; flex-shrink: 0; }
+.cv-referrals-step { color: var(--color-brand); font-size: .941rem; font-weight: 500; }
+.cv-referrals-history { min-height: 3.765rem; }
+.cv-referrals-history .cv-list-icon { width: 2.588rem; height: 2.588rem; }
+.cv-referrals-avatar { display: grid; place-items: center; width: 2.588rem; height: 2.588rem; border-radius: 50%; overflow: hidden; background: var(--color-brand-light-solid); color: var(--color-brand); }
+.cv-referrals-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.cv-referrals-empty { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: 2rem .941rem; text-align: center; }
+.cv-referrals-empty > svg { width: 1.882rem; height: 1.882rem; color: var(--color-brand); }
+.cv-referrals-empty p { margin: .5rem 0 0; font-size: .941rem; font-weight: 500; }
+.cv-referrals-empty > span { max-width: 24rem; color: var(--cv-neutral-2); font-size: .824rem; }
