@@ -164,18 +164,6 @@ button.cv-list-row:hover { background: var(--cv-surface-2-hover); }
 .cv-language-list { overflow: hidden; border-radius: 12px; background: var(--cv-card-bg-solid); }
 .cv-language-list > button { min-height: 56px; border-bottom: 1px solid var(--cv-inner-border); }
 .cv-language-list > button:last-child { border-bottom: 0; }
-.cv-auth-panel .cv-auth-brand { justify-content: flex-end; padding-top: 0; }
-.cv-auth-panel .cv-auth-brand > div:first-child { display: none; }
-.cv-auth-panel .cv-form-field input { font-weight: 400; }
-.cv-auth-panel :is(h2, h3) { letter-spacing: -.02em; text-transform: none; line-height: 1.25; }
-.cv-auth-panel h2 { font-size: 1.65rem; }
-.cv-auth-panel button[aria-pressed] { border-radius: 14px; }
-.cv-auth-panel button { letter-spacing: normal; text-transform: none; }
-.cv-sheet:has(.cv-auth-panel) { max-width: 520px; }
-.cv-sheet:has(.cv-auth-panel) > .cv-sheet-body { padding: 16px 0 0; }
-@media (max-width: 639px) {
-  .cv-sheet:has(.cv-auth-panel) { margin: auto; width: calc(100% - 24px); border-radius: 20px; }
-}
 /* Headers occupy layout space. Page tools remain inside their own scroll area. */
 .cv-app-shell { display: flex; flex-direction: column; }
 .cv-app-header { position: relative; z-index: 600; flex: none; background: var(--cv-card-bg-solid); border-bottom: 1px solid var(--cv-inner-border); padding-top: env(safe-area-inset-top, 0px); }
@@ -229,9 +217,6 @@ button.cv-list-row:hover { background: var(--cv-surface-2-hover); }
 :root { --cv-action-tint: #b50080; }
 .dark { --cv-action-tint: #ff80da; }
 .cv-icon-button, .cv-list-icon, .cv-app-tab[aria-current='page'], .cv-tab.is-active, .cv-nav-tile[aria-current='page'] { color: var(--cv-action-tint); }
-.cv-auth-panel button[aria-pressed='true'] { background: #b50080; border-color: #b50080; color: #fff; }
-.cv-auth-panel button[aria-pressed='true'] svg { color: #fff; }
-.cv-auth-panel .cv-auth-submit:not(:disabled) { background: #b50080; color: #fff; }
 /* Adaptive view navigation: stable type sizes, selected view pinned, overflow in a sheet. */
 .cv-adaptive-tabs { position: relative; display: flex; align-items: stretch; width: 100%; min-width: 0; gap: 4px; }
 .cv-adaptive-visible { display: flex; flex: 1; min-width: 0; align-items: stretch; }
