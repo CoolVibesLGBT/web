@@ -535,11 +535,11 @@ export class ApiService {
     });
   }
 
-  async createChat(participantIds: string[], type: string = "private") {
+  async createChat(participantIds: string[], type: string = "private", title?: string, description?: string) {
     const normalizedIds = participantIds.map(id => String(id)).filter(Boolean);
     return this.call(Actions.CMD_CHAT_CREATE, {
       method: "POST",
-      body: { type, "participant_ids[]": normalizedIds },
+      body: { type, "participant_ids[]": normalizedIds, title, description },
     });
   }
 
@@ -563,6 +563,13 @@ export class ApiService {
     return this.call(Actions.CMD_FETCH_MESSAGES, {
       method: "POST",
       body: { chat_id: chatId },
+    });
+  }
+
+  async forwardMessages(sourceChatId: string, targetChatId: string, messageIds: string[], comment = "") {
+    return this.call(Actions.CMD_FORWARD_MESSAGES, {
+      method: "POST",
+      body: { source_chat_id: sourceChatId, chat_id: targetChatId, "message_ids[]": messageIds, content: comment },
     });
   }
 

@@ -142,7 +142,7 @@ export const HoneycombMenu: React.FC<HoneycombMenuProps> = ({ nodes, onNodeClick
                             <span className="text-white drop-shadow-md pb-1">
                                 {node.icon}
                             </span>
-                            <span className="text-white text-[10px] font-bold leading-tight text-center px-1 max-w-full truncate drop-shadow-md">
+                            <span className="text-white text-[0.765rem] font-bold leading-tight text-center px-1 max-w-full truncate drop-shadow-md">
                                 {node.label}
                             </span>
                         </button>

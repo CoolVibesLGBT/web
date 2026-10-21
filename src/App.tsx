@@ -9,6 +9,8 @@ const MatchScreen = lazy(() => import('./screens/MatchScreen'));
 const NearbyScreen = lazy(() => import('./screens/NearbyScreen'));
 const LiveScreen = lazy(() => import('./screens/LiveScreen'));
 const ProfileScreen = lazy(() => import('./screens/ProfileScreen'));
+const AppearanceScreen = lazy(() => import('./screens/AppearanceScreen'));
+const ChatBackgroundScreen = lazy(() => import('./screens/AppearanceScreen').then(module => ({ default: module.ChatBackgroundScreen })));
 const ProfileEngagementsScreen = lazy(() => import('./screens/ProfileEngagementsScreen'));
 const SearchScreen = lazy(() => import('./screens/SearchScreen'));
 const MessagesScreen = lazy(() => import('./screens/MessagesScreen'));
@@ -35,14 +37,16 @@ import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext';
 import { useSettings } from './contexts/SettingsContext';
 import AuthWizard from './features/auth/AuthWizard';
-import { MapPin, Heart, MessageCircle, User, Users, X, Sun, Moon, MoreHorizontal, Bell, ChevronRight, LogOut, HandFist, Briefcase, Navigation, Settings as SettingsIcon, Globe, Video, Search, Sparkles, Home, MessageSquare, Plus, Command, ArrowLeft } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { MapPin, Heart, MessageCircle, User, Users, Sun, Moon, MoreHorizontal, Bell, LogOut, HandFist, Briefcase, Navigation, Settings as SettingsIcon, Globe, Video, Search, Sparkles, Home, Plus, Menu, ArrowLeft } from 'lucide-react';
+import { AppHeader, AppTabBar, GroupedSection, ListRow, Sheet } from '@/components/ui/Interface';
 import LanguageSelector from './components/ui/LanguageSelector';
 import { resolvePreferredLanguage } from './i18n';
+import IllustratedIcon from '@/components/ui/IllustratedIcon';
+import '@/features/illustrations/IllustratedNavigation.css';
+import { getLanguageTag, normalizeLanguage } from '@/i18n/language';
 import { useSEO } from '@/hooks/useSEO';
 import { getRouteSeo } from '@/seo/routeSeo';
 import { useTranslation } from 'react-i18next';
-import { applicationName } from './appSettings';
 import { DEFAULT_APP_MOTTO, DEFAULT_APP_NAME } from './constants/constants';
 import { getSafeImageURLEx } from './helpers/helpers';
 import TrendsPanel, { type NormalizedTrend } from './features/discovery/TrendsPanel';
@@ -175,7 +179,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
               <div className="mt-8 flex flex-wrap gap-2.5">
                 {publicHomeHighlights.map((item) => {
                   const Icon = item.icon;
-                  return (
+                                    return (
                     <div
                       key={item.label}
                       className={`inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/68 px-4 py-2 text-sm font-black uppercase tracking-[0.12em] shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.06] ${theme === 'dark' ? 'text-white/82' : 'text-slate-700'}`}
@@ -219,36 +223,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-const SkylineDockButton = ({
-  icon: Icon,
-  active = false,
-  onClick,
-  badge = false,
-  ariaLabel,
-}: {
-  icon: LucideIcon
-  active?: boolean
-  onClick?: () => void
-  badge?: boolean
-  ariaLabel: string
-}) => (
-  <button
-    onClick={onClick}
-    aria-label={ariaLabel}
-    title={ariaLabel}
-    className={`elite-btn w-12 h-12 relative ${
-      active
-        ? 'bg-brand text-white shadow-lg shadow-brand/30'
-        : 'text-slate-400 dark:text-zinc-500 hover:bg-slate-100 dark:hover:bg-zinc-800'
-    }`}
-  >
-    <Icon className="w-5.5 h-5.5" />
-    {badge && !active && (
-      <div className="absolute top-3 right-3 w-1.5 h-1.5 bg-rose-500 rounded-full glow-rose" />
-    )}
-  </button>
-);
-
 const normalizePath = (path: string) => {
   if (!path) return '/';
   if (path !== '/' && path.endsWith('/')) {
@@ -264,17 +238,15 @@ function AppContent() {
   const [isLanguageSelectorOpen, setIsLanguageSelectorOpen] = useState(false);
   const [bootSeen, setBootSeen] = useState(() => bootSplashSeen);
   const [splashMinDone, setSplashMinDone] = useState(() => bootSplashSeen);
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isRailProfileMenuOpen, setIsRailProfileMenuOpen] = useState(false);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
-  const [shellRouteSearchValue, setShellRouteSearchValue] = useState('');
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const rtlLangs = React.useMemo(() => new Set(['ar', 'he', 'fa', 'ur']), []);
 
   const { theme, toggleTheme } = useTheme();
   const { user, isAuthenticated, isAuthReady, logout } = useAuth();
-  const { settings, showBottomBar, setShowBottomBar } = useSettings();
+  const { showBottomBar, setShowBottomBar } = useSettings();
   const location = useLocation();
   const navigate = useNavigate();
   const prefetch = usePrefetch();
@@ -294,8 +266,6 @@ function AppContent() {
   const profilePath = React.useMemo(() => `/${user?.username || 'profile'}`, [user?.username]);
   const displayName = user?.displayname || user?.username || 'User';
   const username = user?.username || 'username';
-  const followingCount = (user as any)?.engagements?.counts?.following_count ?? 0;
-  const followerCount = (user as any)?.engagements?.counts?.follower_count ?? 0;
   const avatarIconSrc = getSafeImageURLEx((user as any)?.public_id, (user as any)?.avatar, 'icon') || undefined;
   const rightSidebarHiddenPaths = React.useMemo(() => {
     return new Set(RIGHT_SIDEBAR_HIDDEN_PATHS_BASE);
@@ -358,15 +328,16 @@ function AppContent() {
     ].filter(Boolean);
 
     const warmChunks = () => {
-      if (liveEnabled) {
-        import('./screens/LiveScreen');
-      }
-      import('./screens/MessagesScreen');
-      import('./screens/NotificationsScreen');
-      import('./screens/ProfileScreen');
+      // Prefetching is optional: failures must not become unhandled page errors.
+      void Promise.allSettled([
+        ...(liveEnabled ? [import('./screens/LiveScreen')] : []),
+        import('./screens/MessagesScreen'),
+        import('./screens/NotificationsScreen'),
+        import('./screens/ProfileScreen'),
+      ]);
     };
 
-    let timeoutId: number | undefined;
+    let timeoutId: ReturnType<typeof globalThis.setTimeout> | undefined;
     let idleId: number | undefined;
     let cancelled = false;
 
@@ -379,7 +350,7 @@ function AppContent() {
     if ('requestIdleCallback' in window) {
       idleId = (window as any).requestIdleCallback(warmRoutes, { timeout: 2000 });
     } else {
-      timeoutId = window.setTimeout(warmRoutes, 1800);
+      timeoutId = globalThis.setTimeout(warmRoutes, 1800);
     }
 
     return () => {
@@ -387,8 +358,8 @@ function AppContent() {
       if (typeof idleId === 'number' && 'cancelIdleCallback' in window) {
         (window as any).cancelIdleCallback(idleId);
       }
-      if (typeof timeoutId === 'number') {
-        window.clearTimeout(timeoutId);
+      if (timeoutId !== undefined) {
+        globalThis.clearTimeout(timeoutId);
       }
     };
   }, [liveEnabled, prefetch, profilePath]);
@@ -579,6 +550,9 @@ function AppContent() {
         </ProtectedRoute>
       );
     }
+    if (path === '/settings/appearance' || path === '/settings/appearance/background') {
+      return <ProtectedRoute>{path.endsWith('/background') ? <ChatBackgroundScreen /> : <AppearanceScreen />}</ProtectedRoute>;
+    }
     if (path === '/settings') {
       return (
         <ProtectedRoute>
@@ -623,6 +597,8 @@ function AppContent() {
       setActiveScreen('checkin');
     } else if (path === '/' && tab === 'live') {
       setActiveScreen(liveEnabled ? 'live' : 'pride');
+    } else if (path.startsWith('/settings/')) {
+      setActiveScreen('settings');
     } else if (nextScreen) {
       setActiveScreen(nextScreen);
     } else if (path.startsWith('/') && path.split('/').length === 2) {
@@ -686,12 +662,12 @@ function AppContent() {
 
   React.useEffect(() => {
     if (typeof document === 'undefined') return;
-    const lang = (i18n?.language || 'en').toLowerCase();
-    const baseLang = lang.split('-')[0] || lang;
+    const baseLang = normalizeLanguage(i18n?.language);
+    const languageTag = getLanguageTag(baseLang);
     const dir = rtlLangs.has(baseLang) ? 'rtl' : 'ltr';
     const root = document.documentElement;
-    if (root.getAttribute('lang') !== baseLang) {
-      root.setAttribute('lang', baseLang);
+    if (root.getAttribute('lang') !== languageTag) {
+      root.setAttribute('lang', languageTag);
     }
     if (root.getAttribute('dir') !== dir) {
       root.setAttribute('dir', dir);
@@ -793,35 +769,7 @@ function AppContent() {
     }
   ], [profilePath, t]).filter((item) => liveEnabled || item.id !== 'live');
 
-  const mobileNavItems = React.useMemo(() => {
-    const mobileOrder = ['pride', 'nearby', 'checkin', 'messages', 'match', 'places', 'classifieds', 'notifications', 'referrals', 'settings', 'profile'];
-    return mobileOrder
-      .map((id) => sidebarNavItems.find((item) => item.id === id))
-      .filter(Boolean) as typeof sidebarNavItems;
-  }, [sidebarNavItems]);
 
-  const sidebarNavSections = React.useMemo(() => {
-    const primaryOrder = ['live', 'pride', 'nearby', 'checkin', 'messages', 'match', 'places', 'classifieds'];
-    const secondaryOrder = ['notifications', 'referrals', 'settings', 'profile'];
-
-    const sortByOrder = (ids: string[]) =>
-      ids
-        .map((id) => sidebarNavItems.find((item) => item.id === id))
-        .filter(Boolean) as typeof sidebarNavItems;
-
-    return [
-      {
-        id: 'primary',
-        title: t('app.sidebar.primary', { defaultValue: 'Discover' }),
-        items: sortByOrder(primaryOrder)
-      },
-      {
-        id: 'secondary',
-        title: t('app.sidebar.secondary', { defaultValue: 'Manage' }),
-        items: sortByOrder(secondaryOrder)
-      }
-    ];
-  }, [sidebarNavItems, t]);
 
   const handleTrendSelect = React.useCallback((trend: NormalizedTrend) => {
     if (trend?.url) {
@@ -912,6 +860,10 @@ function AppContent() {
   );
   const profileEngagementType = profileEngagementMatch?.[2] || null;
   const contextRouteTitle = React.useMemo(() => {
+    if (normalizedPath === '/settings/appearance/background') return t('appearance.wallpaper');
+    if (normalizedPath === '/settings/appearance') return t('appearance.title');
+    if (isPlaceDetailRoute) return t('app.nav.places');
+    if (isCheckInDetailRoute) return t('app.nav.checkin');
     if (isClassifiedDetailRoute) {
       return t('app.nav.classifieds', { defaultValue: 'Classifieds' });
     }
@@ -940,11 +892,7 @@ function AppContent() {
     };
 
     return routeTitles[normalizedPath] || null;
-  }, [isClassifiedDetailRoute, normalizedPath, profileEngagementType, t]);
-  // Check-in ve Place detay sayfaları artık Settings gibi kendi sticky
-  // bar'larını (geri butonu + başlık) gösteriyor, bu yüzden üstteki yüzen
-  // HUD pilinin ayrıca bir "geri" durumuna geçmesine gerek yok — Settings
-  // ile aynı şekilde varsayılan logo/home haliyle kalıyor.
+  }, [isClassifiedDetailRoute, isPlaceDetailRoute, isCheckInDetailRoute, normalizedPath, profileEngagementType, t]);
   const isContextBackRoute = (isPostDetailRoute || isClassifiedDetailRoute || Boolean(profileEngagementType) || Boolean(contextRouteTitle) || isProfileShellRoute);
   const shellBackTitle = isProfileEditRoute
     ? t('profile.edit_profile', { defaultValue: 'Edit Profile' })
@@ -955,6 +903,10 @@ function AppContent() {
     : t('post_details.title', { defaultValue: 'Post' });
   const shellBackLabel = t('post_details.back', { defaultValue: 'Back' });
   const handleShellBack = React.useCallback(() => {
+    if (normalizedPath.startsWith('/settings/appearance')) {
+      navigate(normalizedPath.endsWith('/background') ? '/settings/appearance' : '/settings', { replace: true });
+      return;
+    }
     const state = location.state as { fromPostDetails?: boolean; postId?: string; postUsername?: string; returnTo?: string } | null;
     if (isProfileEditRoute) {
       const params = new URLSearchParams(location.search || '');
@@ -1024,13 +976,7 @@ function AppContent() {
     (normalizedPath === '/places' && isPlacesImmersiveView) ||
     (normalizedPath === '/checkin' && isCheckInImmersiveView);
   const showDock = isAuthenticated && !isPublicPage && showBottomBar;
-  const showHomeMenuGuide = settings.showDockTips &&
-    isAuthReady &&
-    isAuthenticated &&
-    isHomePerformanceRoute &&
-    showDock &&
-    !shouldShowBootSplash &&
-    !isMobileMenuOpen;
+
 
   const openNavigationMenu = React.useCallback(() => {
     setIsMobileMenuOpen(true);
@@ -1046,537 +992,42 @@ function AppContent() {
     // bleed yapar.
     ? 'min-h-0 flex-1 min-w-0 overflow-hidden'
     : 'min-h-0 flex-1 min-w-0 overflow-hidden xl:max-w-[600px] xl:border-x xl:border-[var(--cv-inner-border)]';
-  const isShellSearchRoute = normalizedPath === '/classifieds' || normalizedPath === '/places';
-  const shellRouteSearchEventName = normalizedPath === '/places'
-    ? 'cv:places-search-query'
-    : normalizedPath === '/classifieds'
-      ? 'cv:classifieds-search-query'
-      : normalizedPath === '/search'
-        ? 'cv:search-query'
-      : null;
-  const shellRouteSearchPlaceholder = normalizedPath === '/places'
-    ? t('places.search_placeholder', { defaultValue: 'Search places...' })
-    : normalizedPath === '/classifieds'
-      ? t('classifieds.search_placeholder_hiring', { defaultValue: 'Search listings...' })
-      : t('search.placeholder', { defaultValue: 'Search people, posts, events or places...' });
-
-  React.useEffect(() => {
-    if (normalizedPath === '/search') {
-      const params = new URLSearchParams(location.search || '');
-      setShellRouteSearchValue(params.get('q') || params.get('query') || '');
-      return;
-    }
-    setShellRouteSearchValue('');
-  }, [location.search, normalizedPath]);
-
-  const updateShellRouteSearch = React.useCallback((value: string) => {
-    setShellRouteSearchValue(value);
-    if (typeof window !== 'undefined' && shellRouteSearchEventName) {
-      window.dispatchEvent(new CustomEvent(shellRouteSearchEventName, { detail: { query: value } }));
-    }
-  }, [shellRouteSearchEventName]);
-
-  const showSearchHeaderControls = normalizedPath === '/search';
   if (normalizedPath === '/splash') {
     return <SplashScreen autoDismiss={false} animate={true} />;
   }
 
   return (
-    <div className={`w-screen h-screen select-none overflow-hidden text-slate-950 transition-colors duration-700 dark:text-white ${
+    <div data-tab-bar={showDock ? 'true' : 'false'} className={`cv-app-shell overflow-hidden text-slate-950 transition-colors duration-700 dark:text-white ${
       isHomePerformanceRoute ? 'cv-home-performance' : ''
     }`}>
       {shouldShowBootSplash && <SplashScreen autoDismiss={false} animate={true} />}
-      {/* Skyline layout shell */}
+      {showShellHud && <AppHeader
+        title={isContextBackRoute ? shellBackTitle : sidebarNavItems.find(item => item.id === activeScreen)?.label || contextRouteTitle || DEFAULT_APP_NAME}
+        leading={<button type="button" className="cv-icon-button" onClick={isContextBackRoute ? handleShellBack : openNavigationMenu} aria-label={isContextBackRoute ? shellBackLabel : t('app.sidebar.primary')}>
+          {isContextBackRoute ? <ArrowLeft aria-hidden="true" /> : <Menu aria-hidden="true" />}
+        </button>}
+        actions={<>
+          {isAuthenticated && <button type="button" className="cv-icon-button" onClick={normalizedPath === '/classifieds' ? () => dispatchShellEvent('cv:classifieds-open-create') : openComposer} aria-label={normalizedPath === '/classifieds' ? t('classifieds.new_job_listing') : t('post.create')}><Plus aria-hidden="true" /></button>}
+          <button type="button" className="cv-icon-button" onClick={isAuthenticated ? openProfile : () => setIsAuthWizardOpen(true)} aria-label={isAuthenticated ? t('app.open_profile') : t('app.open_auth')}>
+            {avatarIconSrc ? <img src={avatarIconSrc} alt="" className="h-8 w-8 rounded-full object-cover" /> : <User aria-hidden="true" />}
+          </button>
+        </>}
+      />}
+      {/* Main application columns */}
       <div
-        className={`max-h-[100dvh] w-full flex mx-auto min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide gap-0 ${isPublicPage ? '' : 'max-w-[1265px] px-4 md:px-6'} ${
+        className={`cv-shell-columns max-h-[100dvh] w-full flex mx-auto min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide gap-0 ${isPublicPage ? '' : 'max-w-[1265px] px-4 md:px-6'} ${
           shouldShowBootSplash ? 'pointer-events-none' : ''
         }`}
       >
 
-          {/* Skyline HUD */}
-          {showShellHud && (
-            <header className="fixed top-4 inset-x-0 z-[600] pointer-events-none flex justify-center">
-              <div className="grid w-full max-w-[1265px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-4 md:px-6">
-                <div className="flex items-center gap-3 elite-floating px-4 py-2 md:px-5 md:py-2.5 pointer-events-auto backdrop-blur-md justify-self-start">
-                  {isContextBackRoute ? (
-                    <>
-                      <button
-                        type="button"
-                        className="w-9 h-9 bg-slate-950 dark:bg-white rounded-full flex items-center justify-center text-white dark:text-slate-950 shadow-lg cursor-pointer transition-transform hover:scale-105 active:scale-95"
-                        onClick={handleShellBack}
-                        aria-label={shellBackLabel}
-                      >
-                        <ArrowLeft className="w-5 h-5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleShellBack}
-                        className="flex min-w-0 flex-col text-left"
-                      >
-                        <span className="truncate text-[10px] font-bold uppercase leading-none tracking-[0.25em] dark:text-white sm:text-[11px] sm:tracking-[0.28em]">
-                          {shellBackTitle}
-                        </span>
-                        <span className="mt-0.5 hidden text-[8px] font-bold uppercase tracking-tighter text-brand sm:block">
-                          {shellBackLabel}
-                        </span>
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        type="button"
-                        className="w-9 h-9 bg-brand rounded-full flex items-center justify-center text-white shadow-lg animate-pulse-slow cursor-pointer"
-                        onClick={() => navigateByNavId('pride')}
-                        aria-label={t('app.nav.home', { defaultValue: 'Home' })}
-                      >
-                        <Sparkles className="w-5 h-5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => navigateByNavId('pride')}
-                        className="flex min-w-0 flex-col text-left"
-                      >
-                        <span className="text-[10px] font-bold uppercase leading-none tracking-[0.25em] dark:text-white sm:text-[11px] sm:tracking-[0.4em]">
-                          {DEFAULT_APP_NAME}
-                        </span>
-                        <span className="mt-0.5 hidden text-[8px] font-bold uppercase tracking-tighter text-brand sm:block">
-                          {DEFAULT_APP_MOTTO}
-                        </span>
-                      </button>
-                    </>
-                  )}
-                </div>
-
-                <div className="pointer-events-auto hidden min-w-0 justify-center lg:flex" />
-
-                <div className="flex items-center gap-3 pointer-events-auto justify-self-end relative col-start-3">
-                  {normalizedPath === '/classifieds' && (
-                    <button
-                      type="button"
-                      onClick={() => dispatchShellEvent('cv:classifieds-open-create')}
-                      aria-label={t('classifieds.new_job_listing', { defaultValue: 'New listing' })}
-                      className="w-11 h-11 elite-floating sky-glow flex items-center justify-center !text-white transition-transform hover:scale-105 active:scale-95"
-                    >
-                      <Plus className="w-5 h-5 shrink-0 text-white" strokeWidth={2.6} />
-                    </button>
-                  )}
-                  {isAuthenticated ? (
-                    <button
-                      type="button"
-                      className="w-11 h-11 rounded-full p-0.5 backdrop-blur-md elite-floating group cursor-pointer overflow-hidden"
-                      onClick={openProfile}
-                      aria-label={t('app.open_profile', { defaultValue: 'Open profile' })}
-                    >
-                      {avatarIconSrc ? (
-                        <img src={avatarIconSrc} className="w-full h-full rounded-full object-cover transition-transform group-hover:scale-110" alt="me" />
-                      ) : (
-                        <div className={`flex h-full w-full items-center justify-center rounded-full ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-100'}`}>
-                          <User className="h-5 w-5 text-slate-500" />
-                        </div>
-                      )}
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => setIsAuthWizardOpen(true)}
-                      aria-label={t('app.open_auth', { defaultValue: 'Open sign in' })}
-                      className="w-11 h-11 rounded-full p-0.5 backdrop-blur-md elite-floating group cursor-pointer overflow-hidden flex items-center justify-center"
-                    >
-                      <User className="h-5 w-5 text-slate-500" />
-                    </button>
-                  )}
-
-                  {/* Top-Right Navigation Menu Trigger */}
-                  <div className="relative">
-                    <AnimatePresence>
-                      {showHomeMenuGuide && (
-                        <motion.div
-                          role="status"
-                          aria-live="polite"
-                          aria-labelledby="home-menu-guide-title"
-                          aria-describedby="home-menu-guide-description"
-                          initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                          transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                          className="absolute top-[calc(100%+0.75rem)] right-0 w-[min(18rem,calc(100vw-2rem))] rounded-3xl border border-brand/20 bg-white p-5 text-slate-950 shadow-[0_24px_80px_rgba(255,55,199,0.22)] dark:border-brand/30 dark:bg-zinc-950 dark:text-white md:w-80 z-[730]"
-                        >
-                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand">
-                            {t('app.home_guide_badge', { defaultValue: 'Quick start' })}
-                          </p>
-                          <div className="mt-3 flex items-center gap-3">
-                            <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand text-white shadow-lg shadow-brand/30">
-                              <Command className="h-5 w-5" aria-hidden="true" />
-                            </span>
-                            <h2 id="home-menu-guide-title" className="text-base font-black leading-tight tracking-tight">
-                              {t('app.home_guide_title', { defaultValue: 'Menüden Başla' })}
-                            </h2>
-                          </div>
-                          <p id="home-menu-guide-description" className="mt-2 text-xs font-medium leading-5 text-slate-600 dark:text-zinc-300">
-                            {t('app.home_guide_description', { defaultValue: 'Sağ üst köşedeki menü butonuna basarak CoolVibes alt sayfalarını keşfedin.' })}
-                          </p>
-                          <button
-                            type="button"
-                            onClick={() => navigate('/settings')}
-                            className="mt-3 rounded-full bg-slate-950 px-3.5 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-white transition-transform hover:scale-105 active:scale-95 dark:bg-white dark:text-slate-950"
-                          >
-                            {t('app.home_guide_manage', { defaultValue: 'Ayarlar' })}
-                          </button>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                    <button
-                      type="button"
-                      onClick={openNavigationMenu}
-                      aria-label={t('app.open_navigation_menu', { defaultValue: 'Open navigation menu' })}
-                      aria-describedby={showHomeMenuGuide ? 'home-menu-guide-description' : undefined}
-                      className={`w-11 h-11 elite-floating flex items-center justify-center text-slate-700 dark:text-slate-200 hover:text-brand cursor-pointer transition-all hover:scale-105 active:scale-95 ${
-                        showHomeMenuGuide ? 'ring-4 ring-brand/50 shadow-[0_0_0_10px_rgba(255,55,199,0.14)] animate-pulse' : ''
-                      }`}
-                    >
-                      <Command className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </header>
-          )}
-
-          {/* Legacy sidebar content is kept for the slide-out navigation drawer. */}
-          <aside className="hidden">
-            <div className="p-4 sticky top-0 h-screen overflow-y-auto scrollbar-hide flex flex-col">
-              {/* Logo */}
-              <div className="mb-4 px-1 py-1">
-                <button
-                  onClick={() => navigateByNavId('pride')}
-                  className={`w-full flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors group ${theme === 'dark'
-                    ? 'hover:bg-white/[0.04]'
-                    : 'hover:bg-black/[0.03]'
-                    }`}
-                >
-                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${theme === 'dark'
-                    ? 'bg-white/10 text-white'
-                    : 'bg-black text-white'
-                    }`}>
-                    <span className="text-sm font-bold">C</span>
-                  </div>
-                  <div className="min-w-0 text-left">
-                    <h1 className={`text-[18px] leading-5 font-black tracking-tight truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                      {applicationName}
-                    </h1>
-                    <p className={`text-[11px] mt-0.5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                      {t('app.subtitle', { defaultValue: 'Stories from the Rainbow' })}
-                    </p>
-                  </div>
-                </button>
-              </div>
-
-              <div className="flex flex-col gap-5 flex-1">
-                {isAuthenticated ? (
-                  <div className={`relative rounded-2xl px-4 py-4 ${theme === 'dark'
-                    ? 'bg-gray-900/30'
-                    : 'bg-white'
-                    }`}>
-                    <div className="flex items-center gap-3">
-                      <div className="relative shrink-0">
-                        <div className={`w-11 h-11 rounded-full overflow-hidden ring-2 ${theme === 'dark' ? 'ring-white/10' : 'ring-black/10'}`}>
-                          <img
-                            src={avatarIconSrc}
-                            alt="Profile"
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <span className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 ring-2 ${theme === 'dark' ? 'ring-black' : 'ring-white'}`} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-semibold truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                          {displayName}
-                        </p>
-                        <p className={`text-xs text-gray-500 truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                          @{username}
-                        </p>
-                        <div className="mt-1.5 flex items-center gap-3">
-                          <span className={`text-[11px] ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                            <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                              {followingCount}
-                            </span>{' '}
-                            {t('app.following')}
-                          </span>
-                          <span className={`text-[11px] ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                            <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                              {followerCount}
-                            </span>{' '}
-                            {t('app.followers')}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={openLanguageSelector}
-                          aria-label={t('app.open_language_selector', { defaultValue: 'Open language selector' })}
-                          className={`p-1.5 rounded-lg transition-all flex items-center gap-1 ${theme === 'dark' ? 'hover:bg-white/10 text-white/50 hover:text-white' : 'hover:bg-black/5 text-gray-500 hover:text-gray-800'}`}
-                        >
-                          <Globe className="w-3.5 h-3.5" />
-                          <span className="text-[10px] font-bold">{languageDisplay}</span>
-                        </button>
-                        <div className="relative">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setIsProfileMenuOpen(!isProfileMenuOpen);
-                            }}
-                            aria-label={t('app.open_profile_menu', { defaultValue: 'Open profile menu' })}
-                            className={`p-2 rounded-xl transition ${theme === 'dark'
-                              ? 'text-white/70 hover:bg-white/10'
-                              : 'text-gray-600 hover:bg-gray-100'
-                              } ${isProfileMenuOpen ? (theme === 'dark' ? 'bg-white/10 text-white' : 'bg-gray-200 text-gray-900') : ''}`}
-                          >
-                            <MoreHorizontal className="w-4 h-4" />
-                          </button>
-                          
-                          <AnimatePresence>
-                            {isProfileMenuOpen && (
-                              <motion.div
-                                initial={{ opacity: 0, scale: 0.95, y: -6 }}
-                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.95, y: -6 }}
-                                transition={{ duration: 0.18 }}
-                                className={`absolute top-full right-0 mt-2 w-52 z-50 rounded-xl overflow-hidden border ${theme === 'dark'
-                                  ? 'bg-gray-900 border-gray-800'
-                                  : 'bg-white border-gray-200 shadow-lg'
-                                  }`}
-                              >
-                                <button
-                                  onClick={() => {
-                                    openProfile();
-                                    setIsProfileMenuOpen(false);
-                                  }}
-                                  className={`w-full px-4 py-3 flex items-center gap-3 text-left ${theme === 'dark'
-                                    ? 'text-white hover:bg-white/10'
-                                    : 'text-gray-900 hover:bg-gray-50'
-                                    }`}
-                                >
-                                  <User className="w-4 h-4" />
-                                  <span className="text-sm font-semibold">{t('app.nav.profile')}</span>
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    navigate('/settings');
-                                    setIsProfileMenuOpen(false);
-                                  }}
-                                  className={`w-full px-4 py-3 flex items-center gap-3 text-left ${theme === 'dark'
-                                    ? 'text-white hover:bg-white/10'
-                                    : 'text-gray-900 hover:bg-gray-50'
-                                    }`}
-                                >
-                                  <SettingsIcon className="w-4 h-4" />
-                                  <span className="text-sm font-semibold">{t('app.nav.settings')}</span>
-                                </button>
-                                <div className={`h-px ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`} />
-                                <button
-                                  onClick={() => requestLogout(() => setIsProfileMenuOpen(false))}
-                                  className={`w-full px-4 py-3 flex items-center gap-3 text-left ${theme === 'dark'
-                                    ? 'text-red-400 hover:bg-red-500/10'
-                                    : 'text-red-600 hover:bg-red-50'
-                                    }`}
-                                >
-                                  <LogOut className="w-4 h-4" />
-                                  <span className="text-sm font-semibold">{t('app.logout')}</span>
-                                </button>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <AnimatePresence>
-                      {isProfileMenuOpen && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="fixed inset-0 z-40"
-                          onClick={() => setIsProfileMenuOpen(false)}
-                        />
-                      )}
-                    </AnimatePresence>
-                    
-                    <div className="grid grid-cols-2 gap-2 mt-4">
-                      <button
-                        onClick={openProfile}
-                        className={`rounded-xl px-3 py-2 text-sm font-semibold ${theme === 'dark'
-                          ? 'bg-white text-black'
-                          : 'bg-gray-900 text-white'
-                          }`}
-                      >
-                        {t('app.view_profile', { defaultValue: 'Profile' })}
-                      </button>
-                      <button
-                        onClick={() => requestLogout()}
-                        className={`rounded-xl px-3 py-2 text-sm font-semibold ${theme === 'dark'
-                          ? 'bg-white/5 text-white hover:bg-white/10'
-                          : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-                          }`}
-                      >
-                        {t('app.logout')}
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className={`rounded-[24px] px-4 py-4 ${theme === 'dark'
-                    ? 'bg-gray-900/30'
-                    : 'bg-white'
-                    }`}>
-                    <div className="flex items-center justify-between">
-                      <p className={`text-[10px] uppercase tracking-[0.3em] ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {t('app.join_title', { defaultValue: 'Welcome' })}
-                      </p>
-                      <button
-                        onClick={openLanguageSelector}
-                        className={`p-1.5 rounded-lg transition-all flex items-center gap-1 ${theme === 'dark' ? 'hover:bg-white/10 text-white/50 hover:text-white' : 'hover:bg-black/5 text-gray-400 hover:text-gray-700'}`}
-                      >
-                        <Globe className="w-3 h-3" />
-                        <span className="text-[10px] font-bold">{languageDisplay}</span>
-                      </button>
-                    </div>
-                    <p className={`text-lg font-semibold mt-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                      {t('app.join_subtitle', { defaultValue: 'Create your profile' })}
-                    </p>
-                    <button
-                      onClick={() => setIsAuthWizardOpen(true)}
-                      className={`mt-4 w-full px-4 py-3 rounded-2xl font-semibold transition-all ${theme === 'dark'
-                        ? 'bg-white text-black hover:bg-white/90'
-                        : 'bg-black text-white hover:bg-black/90'
-                        }`}
-                    >
-                      {t('app.join_now')}
-                    </button>
-                  </div>
-                )}
-
-                {/* Navigation */}
-                <nav className="flex-1">
-                  <div className={`rounded-2xl p-2.5 space-y-3 ${theme === 'dark'
-                    ? 'bg-gray-900/25'
-                    : 'bg-white'
-                    }`}>
-                    {sidebarNavSections.map((section) => (
-                      <div key={section.id}>
-                        <p className={`px-2 pb-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                          {section.title}
-                        </p>
-                        <div className="grid grid-cols-2 gap-2 auto-rows-fr">
-                          {section.items.map((item) => {
-                            const Icon = item.icon;
-                            const isActive = activeScreen === item.id;
-                            return (
-                              <button
-                                key={item.id}
-                                onClick={() => navigate(item.path || '/')}
-                                className={`group relative h-[84px] w-full rounded-xl px-2.5 py-2 transition-colors border flex flex-col items-center justify-center text-center ${theme === 'dark'
-                                  ? 'border-gray-900 text-white bg-transparent hover:bg-gray-900/50'
-                                  : 'border-gray-200/50 text-gray-900 bg-transparent hover:bg-gray-50'
-                                  } ${isActive
-                                    ? (theme === 'dark'
-                                      ? 'bg-gray-900/50'
-                                      : 'bg-gray-50')
-                                  : ''
-                                  }`}
-                              >
-                                <div className={`w-8 h-8 mb-2 rounded-full flex items-center justify-center border transition-all duration-300 ${isActive
-                                  ? 'bg-black text-white'
-                                  : 'bg-transparent'
-                                  } ${theme === 'dark'
-                                    ? 'border-white/10 text-white'
-                                    : 'border-black/10 text-gray-900'
-                                  }`}>
-                                  <Icon className="w-4 h-4" />
-                                </div>
-                                <p className="text-[0.9375rem] font-normal leading-snug tracking-normal">
-                                  {item.label}
-                                </p>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </nav>
-
-                {/* Quick Actions */}
-                <div className="flex flex-col gap-2 pt-2">
-                  <motion.button
-                    onClick={toggleTheme}
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`rounded-xl px-3 py-2.5 text-left transition-all ${theme === 'dark'
-                      ? 'bg-gray-900/35 hover:bg-gray-800/60 text-white'
-                      : 'bg-white hover:bg-black/[0.03] text-gray-900'
-                      }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        {theme === 'dark' ? (
-                          <Sun className="w-4 h-4 text-amber-300" />
-                        ) : (
-                          <Moon className="w-4 h-4 text-indigo-500" />
-                        )}
-                        <div>
-                          <p className="text-[10px] uppercase tracking-[0.2em] opacity-70">
-                            {t('app.theme', { defaultValue: 'Theme' })}
-                          </p>
-                          <p className="text-sm font-semibold">
-                            {theme === 'dark' ? t('app.light_mode') : t('app.dark_mode')}
-                          </p>
-                        </div>
-                      </div>
-                      <span aria-hidden="true" data-checked={theme === 'dark'} className="cv-switch pointer-events-none">
-                        <span className="cv-switch-thumb" />
-                      </span>
-                    </div>
-                  </motion.button>
-
-                  <motion.button
-                    onClick={openLanguageSelector}
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`rounded-xl px-3 py-2.5 text-left transition-all ${theme === 'dark'
-                      ? 'bg-gray-900/35 hover:bg-gray-800/60 text-white'
-                      : 'bg-white hover:bg-black/[0.03] text-gray-900'
-                      }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Globe className={`w-4 h-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`} />
-                        <div>
-                          <p className="text-[10px] uppercase tracking-[0.2em] opacity-70">
-                            {t('app.language', { defaultValue: 'Language' })}
-                          </p>
-                          <p className="text-sm font-semibold">
-                            {languageDisplay}
-                          </p>
-                        </div>
-                      </div>
-                      <ChevronRight className={`w-4 h-4 opacity-50 ${theme === 'dark' ? 'text-white' : 'text-black'}`} />
-                    </div>
-                  </motion.button>
-                </div>
-              </div>
-            </div>
-          </aside>
-
-
           {/* Left Rail — persistent primary navigation (desktop) */}
           {showLeftRail && (
-            <aside className="relative z-10 hidden shrink-0 pt-24 xl:flex xl:w-[275px]">
+            <aside className="relative z-10 cv-desktop-navigation hidden shrink-0 pt-4 xl:flex xl:w-[275px]">
               {!hideImmersiveRailContent && (
               <nav aria-label={t('app.sidebar.primary', { defaultValue: 'Discover' })} className="flex h-[calc(100vh-6rem)] w-full flex-col overflow-hidden pb-6 pr-3">
-                <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto no-scrollbar">
+                <div className="cv-nav-grid min-h-0 flex-1 overflow-y-auto no-scrollbar">
                   {sidebarNavItems.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = activeScreen === item.id;
+                                        const isActive = activeScreen === item.id;
                     return (
                       <button
                         key={item.id}
@@ -1584,14 +1035,14 @@ function AppContent() {
                         onClick={() => navigate(item.path || '/')}
                         title={item.label}
                         aria-current={isActive ? 'page' : undefined}
-                        className={`flex items-center gap-5 rounded-full py-3 pl-4 pr-4 md:pl-5 text-left transition-colors [outline:none] ${
+                        className={`cv-nav-tile ${
                           isActive
                             ? 'bg-[var(--cv-surface-3)] font-bold text-[var(--color-brand)]'
                             : 'cv-row-interactive font-medium'
                         } ${!isActive && (theme === 'dark' ? 'text-zinc-100' : 'text-slate-900')}`}
                       >
-                        <Icon className="h-[26px] w-[26px] shrink-0" strokeWidth={isActive ? 2.3 : 1.8} />
-                        <span className="truncate text-[20px]">{item.label}</span>
+                        <IllustratedIcon name={`nav-${item.id}`} className="cv-nav-art" />
+                        <span className="cv-nav-label">{item.label}</span>
                       </button>
                     );
                   })}
@@ -1601,7 +1052,7 @@ function AppContent() {
                 <button
                   type="button"
                   onClick={openComposer}
-                  className="sky-gradient flex h-12 w-full items-center justify-center gap-2 rounded-full font-black text-white shadow-lg shadow-brand/30 transition-transform hover:scale-[1.02] active:scale-95 [outline:none]"
+                  className="sky-gradient flex h-12 w-full items-center justify-center gap-2 rounded-[12px] font-black text-white shadow-lg shadow-brand/30 transition-transform hover:scale-[1.02] active:scale-95 [outline:none]"
                 >
                   <Plus className="h-5 w-5" />
                   <span>{t('post.create', { defaultValue: 'Gönder' })}</span>
@@ -1661,7 +1112,7 @@ function AppContent() {
                     aria-haspopup="menu"
                     aria-expanded={isRailProfileMenuOpen}
                     title={displayName}
-                    className="cv-row-interactive flex w-full items-center gap-3 rounded-full p-3 text-left [outline:none]"
+                    className="cv-row-interactive flex w-full items-center gap-3 rounded-[12px] p-3 text-left [outline:none]"
                   >
                     {avatarIconSrc ? (
                       <img src={avatarIconSrc} alt="" className="h-10 w-10 shrink-0 rounded-full object-cover" />
@@ -1689,9 +1140,9 @@ function AppContent() {
 
           {/* Middle Section */}
           <main className={`${mainShellClassName} ${isPublicPage || isAuthGateRoute ? '' : 'cv-center-col'}`}>
-            <ChunkErrorBoundary>
+            <ChunkErrorBoundary key={normalizedPath}>
               <Suspense fallback={<RouteLoader />}>
-                {routeElement}
+                <div className="cv-interface-screen" data-screen={normalizedPath}>{routeElement}</div>
               </Suspense>
             </ChunkErrorBoundary>
           </main>
@@ -1699,9 +1150,9 @@ function AppContent() {
           {/* Right Sidebar - Fixed */}
           {/* Hide right sidebar on messages and notifications routes for better UX */}
           {showRightRail && (
-            <aside className="relative z-10 hidden w-[350px] shrink-0 pt-24 xl:block">
+            <aside className="relative z-10 hidden w-[350px] shrink-0 pt-4 xl:block">
               {!hideImmersiveRailContent && (
-              <div className="sticky top-24 flex flex-col h-[calc(100vh-112px)] w-[350px] py-2 pl-3 overflow-hidden">
+              <div className="sticky top-0 flex flex-col h-full w-[350px] py-2 pl-3 overflow-hidden">
                 {showSidebarInstallCard && (
                   <div className="mb-4">
                     <PwaInstallPrompt variant="card" />
@@ -1737,243 +1188,30 @@ function AppContent() {
             </aside>
           )}
 
-          {/* Skyline Dock */}
-          {showDock && (
-            <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[300] flex items-center gap-2 p-2 elite-floating max-w-[calc(100vw-1rem)] xl:hidden">
-              <div className="flex items-center gap-1">
-                <SkylineDockButton
-                  icon={Home}
-                  ariaLabel={t('app.nav.home', { defaultValue: 'Feed' })}
-                  active={activeScreen === 'pride'}
-                  onClick={() => navigateByNavId('pride')}
-                />
-                <SkylineDockButton
-                  icon={Search}
-                  ariaLabel={t('app.nav.search', { defaultValue: 'Explore' })}
-                  active={activeScreen === 'search'}
-                  onClick={() => navigate('/search')}
-                />
-              </div>
+          {/* Persistent navigation contains destinations; creation stays in the toolbar. */}
+          {showDock && <AppTabBar label={t('app.sidebar.primary', { defaultValue: 'Discover' })} items={[
+            { id: 'pride', label: t('app.nav.home'), icon: Home, active: activeScreen === 'pride', onSelect: () => navigateByNavId('pride') },
+            { id: 'nearby', label: t('app.nav.nearby'), icon: MapPin, active: activeScreen === 'nearby', onSelect: () => navigateByNavId('nearby') },
+            { id: 'messages', label: t('app.nav.messages'), icon: MessageCircle, active: activeScreen === 'messages', onSelect: () => navigateByNavId('messages') },
+            { id: 'profile', label: t('app.nav.profile'), icon: User, active: activeScreen === 'profile', onSelect: openProfile },
+            { id: 'more', label: t('app.nav.more', { defaultValue: 'More' }), icon: MoreHorizontal, active: isMobileMenuOpen, onSelect: openNavigationMenu },
+          ]} />}
 
-              <div className="mx-2 flex items-center justify-center">
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.1, rotate: 90 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={openComposer}
-                  aria-label={t('post.create', { defaultValue: 'Create post' })}
-                  className="w-14 h-14 rounded-full sky-gradient flex items-center justify-center text-white shadow-2xl shadow-brand/50 cursor-pointer border-4 border-white dark:border-zinc-900"
-                >
-                  <Plus className="w-8 h-8" />
-                </motion.button>
-              </div>
-
-              <div className="flex items-center gap-1">
-                <SkylineDockButton
-                  icon={MessageSquare}
-                  ariaLabel={t('app.nav.messages', { defaultValue: 'Inbox' })}
-                  active={activeScreen === 'messages'}
-                  onClick={() => navigateByNavId('messages')}
-                  badge
-                />
-                <button
-                  type="button"
-                  onClick={openProfile}
-                  aria-label={t('app.open_profile', { defaultValue: 'Open profile' })}
-                  className={`w-12 h-12 rounded-2xl overflow-hidden transition-all relative ${
-                    activeScreen === 'profile'
-                      ? 'ring-2 ring-brand ring-offset-2 ring-offset-white dark:ring-offset-zinc-900 scale-100'
-                      : 'opacity-50 grayscale hover:opacity-100 hover:grayscale-0 scale-90'
-                  }`}
-                >
-                  {avatarIconSrc ? (
-                    <img src={avatarIconSrc} className="w-full h-full object-cover" alt="p" />
-                  ) : (
-                    <div className={`flex h-full w-full items-center justify-center ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-100'}`}>
-                      <User className="h-5 w-5 text-slate-500" />
-                    </div>
-                  )}
-                </button>
-                <div className="w-[1px] h-6 bg-slate-200 dark:bg-zinc-800 mx-1" />
-                <SkylineDockButton
-                  icon={SettingsIcon}
-                  ariaLabel={t('app.nav.settings', { defaultValue: 'Settings' })}
-                  active={activeScreen === 'settings'}
-                  onClick={() => navigateByNavId('settings')}
-                />
-              </div>
+          <Sheet isOpen={isMobileMenuOpen} onClose={closeMobileMenu} title={t('app.sidebar.primary', { defaultValue: 'Discover' })}>
+            <GroupedSection>
+              <ListRow title={displayName} description={`@${username}`} onClick={openProfile} icon={avatarIconSrc ? <img src={avatarIconSrc} alt="" className="h-8 w-8 rounded-full" /> : <User />} />
+            </GroupedSection>
+            <nav aria-label={t('app.sidebar.primary')}>
+              <GroupedSection>
+                {sidebarNavItems.map(item => <ListRow key={item.id} title={item.label} selected={activeScreen === item.id} icon={<IllustratedIcon name={`nav-${item.id}`} className="h-8 w-8" />} onClick={() => { navigateByNavId(item.id); closeMobileMenus(); }} />)}
+              </GroupedSection>
             </nav>
-          )}
-
-
-
-          {/* Skyline Navigation Modal */}
-          <AnimatePresence
-            mode="wait"
-            onExitComplete={() => {
-              document.body.style.overflow = '';
-            }}
-          >
-            {isMobileMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="fixed inset-0 z-[800] bg-slate-50/60 dark:bg-black/60 backdrop-blur-2xl flex items-center justify-center p-4 md:p-12"
-                onClick={closeMobileMenu}
-                onAnimationStart={() => {
-                  if (isMobileMenuOpen) {
-                    document.body.style.overflow = 'hidden';
-                  }
-                }}
-              >
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.96, y: 24 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.96, y: 24 }}
-                  transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                  className="max-w-4xl w-full h-[80vh] relative elite-bubble flex flex-col p-5 md:p-8 border-none shadow-[0_32px_128px_rgba(0,0,0,0.12)] dark:shadow-[0_32px_128px_rgba(0,0,0,0.4)]"
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  <button
-                    type="button"
-                    onClick={closeMobileMenu}
-                    aria-label={t('app.close_navigation_menu', { defaultValue: 'Close navigation menu' })}
-                    className="absolute top-6 right-6 w-9 h-9 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all border border-slate-200/50 dark:border-white/5 z-20"
-                  >
-                    <X className="w-4.5 h-4.5" />
-                  </button>
-
-                  <motion.div
-                    initial={{ y: 10, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    className="mb-6 pr-12"
-                  >
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-                      <div>
-                        <p className="text-brand font-bold text-[10px] uppercase tracking-[0.2em] mb-1">
-                          {DEFAULT_APP_NAME}
-                        </p>
-                        <h3 className="text-xl md:text-2xl font-medium text-slate-900 dark:text-white tracking-tight">
-                          {t('app.sidebar.primary', { defaultValue: 'Discover' })}
-                        </h3>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={openProfile}
-                        className="relative flex w-full items-center gap-3 rounded-full bg-slate-100/50 dark:bg-zinc-900/50 border border-slate-200/30 dark:border-white/5 px-3 py-2 text-left transition-all hover:bg-white dark:hover:bg-zinc-900 md:w-[320px]"
-                      >
-                        <div className="h-9 w-9 shrink-0 overflow-hidden rounded-full border border-white/60 dark:border-white/10">
-                          {avatarIconSrc ? (
-                            <img src={avatarIconSrc} alt="" className="h-full w-full object-cover" />
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center bg-brand-light text-brand">
-                              <User className="h-4 w-4" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="truncate text-[13px] font-bold text-slate-900 dark:text-white">
-                            {displayName}
-                          </p>
-                          <p className="truncate text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                            @{username}
-                          </p>
-                        </div>
-                      </button>
-                    </div>
-                    <div className="h-[1px] w-full bg-slate-100 dark:bg-zinc-900/30" />
-                  </motion.div>
-
-                  <div className="flex-1 overflow-y-auto no-scrollbar">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1.5">
-                      {mobileNavItems.map((item, index) => {
-                        const Icon = item.icon;
-                        const isActive = activeScreen === item.id;
-                        return (
-                          <motion.button
-                            key={item.id}
-                            type="button"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: index * 0.01 }}
-                            whileHover={isActive ? { scale: 0.98 } : { y: -1, backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.03)' }}
-                            whileTap={{ scale: 0.96 }}
-                            onClick={() => {
-                              navigateByNavId(item.id);
-                              closeMobileMenus();
-                            }}
-                            className={`group flex items-center justify-between px-3.5 py-3 rounded-lg border transition-all text-left cursor-pointer ${
-                              isActive
-                                ? 'bg-slate-900 dark:bg-white border-slate-900 dark:border-white shadow-md'
-                                : 'bg-slate-50/50 dark:bg-zinc-900/10 border-transparent hover:border-slate-200 dark:hover:border-white/10'
-                            }`}
-                          >
-                            <span className="flex min-w-0 items-center gap-3">
-                              <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
-                                isActive
-                                  ? 'bg-white/10 text-white dark:bg-slate-900/10 dark:text-slate-900'
-                                  : 'cv-card-surface-muted bg-white text-slate-400 group-hover:text-brand'
-                              }`}>
-                                <Icon className="h-4 w-4" />
-                              </span>
-                              <span className={`truncate text-[13px] font-medium transition-colors ${
-                                isActive
-                                  ? 'text-white dark:text-slate-900'
-                                  : 'text-slate-600 dark:text-zinc-400 group-hover:text-slate-900 dark:group-hover:text-white'
-                              }`}>
-                                {item.label}
-                              </span>
-                            </span>
-                            <ChevronRight className={`w-3 h-3 shrink-0 transition-transform group-hover:translate-x-0.5 ${
-                              isActive
-                                ? 'text-white/50 dark:text-slate-400'
-                                : 'text-slate-300 dark:text-zinc-700'
-                            }`} />
-                          </motion.button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="mt-5 grid shrink-0 grid-cols-1 gap-2 border-t border-slate-100 pt-4 dark:border-zinc-900/60 sm:grid-cols-3">
-                    <button
-                      type="button"
-                      onClick={toggleTheme}
-                      className="flex items-center justify-between rounded-lg bg-slate-50/50 px-3.5 py-3 text-left transition-all hover:bg-slate-100 dark:bg-zinc-900/10 dark:hover:bg-white/5"
-                    >
-                      <span className="flex items-center gap-3 text-[13px] font-medium text-slate-600 dark:text-zinc-400">
-                        {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                        {theme === 'dark' ? t('app.light_mode') : t('app.dark_mode')}
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={openLanguageSelector}
-                      className="flex items-center justify-between rounded-lg bg-slate-50/50 px-3.5 py-3 text-left transition-all hover:bg-slate-100 dark:bg-zinc-900/10 dark:hover:bg-white/5"
-                    >
-                      <span className="flex items-center gap-3 text-[13px] font-medium text-slate-600 dark:text-zinc-400">
-                        <Globe className="h-4 w-4" />
-                        {languageDisplay}
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => requestLogout(closeMobileMenus)}
-                      className="flex items-center justify-between rounded-lg bg-slate-50/50 px-3.5 py-3 text-left transition-all hover:bg-red-50 dark:bg-zinc-900/10 dark:hover:bg-red-500/10"
-                    >
-                      <span className="flex items-center gap-3 text-[13px] font-medium text-red-600 dark:text-red-400">
-                        <LogOut className="h-4 w-4" />
-                        {t('app.logout')}
-                      </span>
-                    </button>
-                  </div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            <GroupedSection>
+              <ListRow title={theme === 'dark' ? t('app.light_mode') : t('app.dark_mode')} icon={theme === 'dark' ? <Sun /> : <Moon />} onClick={toggleTheme} />
+              <ListRow title={t('app.language')} value={languageDisplay} icon={<Globe />} onClick={openLanguageSelector} />
+              <ListRow title={t('app.logout')} destructive icon={<LogOut />} onClick={() => requestLogout(closeMobileMenus)} />
+            </GroupedSection>
+          </Sheet>
       </div>
 
       {/* Footer - Only show on home screen */}

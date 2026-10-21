@@ -777,8 +777,8 @@ const Stories: React.FC = () => {
           <span className='mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-full bg-white text-black shadow-lg'>
             <ImagePlus className='h-5 w-5' />
           </span>
-          <span className='block text-sm font-black'>Add photo or video</span>
-          <span className='mt-1 block text-[11px] font-medium text-white/65'>or start with a text story below</span>
+          <span className='block text-sm font-semibold'>Add photo or video</span>
+          <span className='mt-1 block text-[0.765rem] font-medium text-white/65'>or start with a text story below</span>
         </button>
       )}
       {hasStoryText && (
@@ -842,7 +842,7 @@ const Stories: React.FC = () => {
                   <Plus className="h-6 w-6 text-sky-600" />
                 </div>
               </div>
-              <span className={`max-w-16 truncate text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
+              <span className={`max-w-16 truncate text-[0.765rem] font-bold normal-case tracking-widest ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
                 Your Story
               </span>
             </button>
@@ -892,7 +892,7 @@ const Stories: React.FC = () => {
                         )}
                       </div>
                     </div>
-                    <span className={`max-w-16 truncate text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
+                    <span className={`max-w-16 truncate text-[0.765rem] font-bold normal-case tracking-widest ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
                       {story.name}
                     </span>
                   </button>
@@ -977,11 +977,11 @@ const Stories: React.FC = () => {
                           </div>
                         )}
                         <div>
-                          <p className="text-white font-bold text-[15px] tracking-[-0.011em] drop-shadow-lg">
+                          <p className="text-white font-bold text-[0.882rem] tracking-[-0.011em] drop-shadow-lg">
                             {selectedStoryData.name}
                           </p>
                           {selectedStoryData.created_at && (
-                            <p className="text-white/80 text-[13px] font-medium drop-shadow-lg">
+                            <p className="text-white/80 text-[0.765rem] font-medium drop-shadow-lg">
                               {formatStoryAge(selectedStoryData.created_at)}
                             </p>
                           )}
@@ -991,7 +991,7 @@ const Stories: React.FC = () => {
                   </div>
 
                   <div className="absolute bottom-5 left-0 right-0 z-2 px-4 pb-[env(safe-area-inset-bottom)] sm:bottom-6">
-                    <div className="mx-auto grid w-full max-w-[330px] grid-cols-3 gap-2 rounded-[28px] border border-white/15 bg-white/10 p-2 shadow-[0_24px_90px_rgba(0,0,0,0.4)] backdrop-blur-2xl">
+                    <div className="mx-auto grid w-full max-w-[330px] grid-cols-3 gap-2 rounded-[20px] border border-white/15 bg-white/10 p-2 shadow-[0_24px_90px_rgba(0,0,0,0.4)] backdrop-blur-2xl">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -1008,7 +1008,7 @@ const Stories: React.FC = () => {
                           }`}>
                           <Heart className={`h-5 w-5 ${isSelectedStoryLiked ? 'fill-current' : ''}`} />
                         </div>
-                        <span className="max-w-full truncate text-center text-[11px] font-semibold leading-tight text-white drop-shadow-lg">
+                        <span className="max-w-full truncate text-center text-[0.765rem] font-semibold leading-tight text-white drop-shadow-lg">
                           Like
                         </span>
                       </button>
@@ -1028,7 +1028,7 @@ const Stories: React.FC = () => {
                         <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/15 text-white shadow-lg shadow-black/20 transition-colors duration-150 group-hover:bg-white/20">
                           <MessageCircle className="h-5 w-5" />
                         </div>
-                        <span className="max-w-full truncate text-center text-[11px] font-semibold leading-tight text-white drop-shadow-lg">
+                        <span className="max-w-full truncate text-center text-[0.765rem] font-semibold leading-tight text-white drop-shadow-lg">
                           Message
                         </span>
                       </button>
@@ -1046,7 +1046,7 @@ const Stories: React.FC = () => {
                         <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/15 text-white shadow-lg shadow-black/20 transition-colors duration-150 group-hover:bg-white/20">
                           <UserRound className="h-5 w-5" />
                         </div>
-                        <span className="max-w-full text-center text-[11px] font-semibold leading-tight text-white drop-shadow-lg">
+                        <span className="max-w-full text-center text-[0.765rem] font-semibold leading-tight text-white drop-shadow-lg">
                           View Profile
                         </span>
                       </button>
@@ -1102,7 +1102,7 @@ const Stories: React.FC = () => {
 
                 <div className='relative z-10 flex min-h-0 flex-1 flex-col gap-3 overflow-hidden px-3 pb-[calc(env(safe-area-inset-bottom)+0.65rem)] pt-3 sm:px-4 sm:pb-4 md:flex-row'>
                   <div className='relative flex min-h-0 shrink-0 items-center justify-center md:min-w-0 md:flex-1'>
-                    <div className='relative h-[min(43dvh,420px)] max-h-full w-auto max-w-full aspect-[9/16] overflow-hidden rounded-[24px] border border-white/12 bg-black shadow-[0_30px_90px_rgba(0,0,0,0.5)] md:h-full md:max-h-full md:rounded-[28px]'>{renderComposerPreview()}</div>
+                    <div className='relative h-[min(43dvh,420px)] max-h-full w-auto max-w-full aspect-[9/16] overflow-hidden rounded-[24px] border border-white/12 bg-black shadow-[0_30px_90px_rgba(0,0,0,0.5)] md:h-full md:max-h-full md:rounded-[20px]'>{renderComposerPreview()}</div>
                   </div>
 
                   <div className='relative z-20 min-h-0 flex-1 overflow-y-auto px-0.5 pb-1 no-scrollbar md:w-[min(100%,430px)] md:flex-[0_0_48%] md:px-0'>
@@ -1114,8 +1114,8 @@ const Stories: React.FC = () => {
                           <SelectedFileIcon className='h-4 w-4' />
                         </span>
                         <div className='min-w-0'>
-                          <p className='text-[10px] font-black uppercase tracking-[0.16em] text-white/55'>{selectedFileTypeLabel}</p>
-                          <p className='truncate text-[12px] font-semibold text-white'>{selectedFileName}</p>
+                          <p className='text-[0.765rem] font-semibold normal-case tracking-normal text-white/55'>{selectedFileTypeLabel}</p>
+                          <p className='truncate text-[0.765rem] font-semibold text-white'>{selectedFileName}</p>
                         </div>
                       </div>
 
@@ -1129,14 +1129,14 @@ const Stories: React.FC = () => {
                         <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/12 text-white'>
                           <Type className='h-4 w-4' />
                         </div>
-                        <textarea value={storyText} onChange={(event) => setStoryText(event.target.value.slice(0, 180))} disabled={storyTextControlsDisabled} placeholder='Write a vibe' rows={1} className='min-h-[38px] flex-1 resize-none rounded-2xl border border-white/10 bg-white/10 px-3 py-2 text-[14px] font-semibold text-white outline-none placeholder:text-white/45 focus:border-white/30 disabled:cursor-not-allowed disabled:opacity-50' />
+                        <textarea value={storyText} onChange={(event) => setStoryText(event.target.value.slice(0, 180))} disabled={storyTextControlsDisabled} placeholder='Write a vibe' rows={1} className='min-h-[38px] flex-1 resize-none rounded-2xl border border-white/10 bg-white/10 px-3 py-2 text-[0.824rem] font-semibold text-white outline-none placeholder:text-white/45 focus:border-white/30 disabled:cursor-not-allowed disabled:opacity-50' />
                       </div>
 
                       {!isVideo && hasStoryText && (
                         <>
                           <div className='mb-2 flex gap-1 overflow-x-auto no-scrollbar rounded-full bg-white/[0.08] p-1'>
                             {STORY_FONT_OPTIONS.map((font) => (
-                              <button key={font.id} type='button' onClick={() => setStoryFontId(font.id)} disabled={storyTextControlsDisabled} className={`h-8 shrink-0 rounded-full px-3 text-[12px] font-black transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 ${storyFontId === font.id ? 'bg-white text-black' : 'text-white/75 hover:bg-white/10 hover:text-white'}`} style={{ fontFamily: font.css }}>
+                              <button key={font.id} type='button' onClick={() => setStoryFontId(font.id)} disabled={storyTextControlsDisabled} className={`h-8 shrink-0 rounded-full px-3 text-[0.765rem] font-semibold transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 ${storyFontId === font.id ? 'bg-white text-black' : 'text-white/75 hover:bg-white/10 hover:text-white'}`} style={{ fontFamily: font.css }}>
                                 {font.name}
                               </button>
                             ))}
@@ -1185,8 +1185,8 @@ const Stories: React.FC = () => {
                             </div>
                             <div className='min-w-0'>
                               <div className='mb-1.5 flex items-center justify-between gap-2'>
-                                <span className='text-[11px] font-black uppercase tracking-[0.14em] text-white/60'>Size</span>
-                                <span className='rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-bold tabular-nums text-white/80'>{storyTextSize}px</span>
+                                <span className='text-[0.765rem] font-semibold normal-case tracking-normal text-white/60'>Size</span>
+                                <span className='rounded-full bg-white/10 px-2 py-0.5 text-[0.765rem] font-bold tabular-nums text-white/80'>{storyTextSize}px</span>
                               </div>
                               <input
                                 type='range'
@@ -1204,7 +1204,7 @@ const Stories: React.FC = () => {
                                 }
                               />
                             </div>
-                            <div className='text-right text-[11px] font-bold text-white/50'>range</div>
+                            <div className='text-end text-[0.765rem] font-bold text-white/50'>range</div>
                           </div>
 
                           <div className='grid grid-cols-[2.25rem_minmax(0,1fr)_3rem] items-center gap-3'>
@@ -1213,8 +1213,8 @@ const Stories: React.FC = () => {
                             </div>
                             <div className='min-w-0'>
                               <div className='mb-1.5 flex items-center justify-between gap-2'>
-                                <span className='text-[11px] font-black uppercase tracking-[0.14em] text-white/60'>Vertical</span>
-                                <span className='rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-bold tabular-nums text-white/80'>{storyTextPosition}%</span>
+                                <span className='text-[0.765rem] font-semibold normal-case tracking-normal text-white/60'>Vertical</span>
+                                <span className='rounded-full bg-white/10 px-2 py-0.5 text-[0.765rem] font-bold tabular-nums text-white/80'>{storyTextPosition}%</span>
                               </div>
                               <input
                                 type='range'
@@ -1232,7 +1232,7 @@ const Stories: React.FC = () => {
                                 }
                               />
                             </div>
-                            <div className='text-right text-[11px] font-bold text-white/50'>top</div>
+                            <div className='text-end text-[0.765rem] font-bold text-white/50'>top</div>
                           </div>
                         </div>
                       )}
@@ -1280,7 +1280,7 @@ const Stories: React.FC = () => {
                         <X className='h-5 w-5' />
                       </button>
 
-                      <button type='button' onClick={handleShareStory} disabled={isUploading} className='flex h-12 min-w-0 items-center justify-center gap-2 rounded-full bg-white px-5 text-[14px] font-black tracking-[-0.011em] text-black shadow-[0_18px_60px_rgba(255,255,255,0.25)] transition-all duration-150 hover:bg-gray-100 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-white/45 disabled:text-black/50'>
+                      <button type='button' onClick={handleShareStory} disabled={isUploading} className='flex h-12 min-w-0 items-center justify-center gap-2 rounded-full bg-white px-5 text-[0.824rem] font-semibold tracking-[-0.011em] text-black shadow-[0_18px_60px_rgba(255,255,255,0.25)] transition-all duration-150 hover:bg-gray-100 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-white/45 disabled:text-black/50'>
                         {isUploading ? (
                           <>
                             <Loader2 className='h-5 w-5 animate-spin' />

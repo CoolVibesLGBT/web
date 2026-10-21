@@ -14,7 +14,8 @@ export function normalizeLanguage(language?: string): string {
   }
   if (parts[0] === 'yue') return 'hk'
   if (parts[0] === 'ko') return parts.includes('kp') ? 'kp' : 'kr'
-  const base = ({ iw: 'he', in: 'id' } as Record<string, string>)[parts[0]] || parts[0]
+  const base =
+    ({ iw: 'he', in: 'id' } as Record<string, string>)[parts[0]] || parts[0]
   return supported.has(base) ? base : 'en'
 }
 

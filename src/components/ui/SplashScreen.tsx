@@ -78,7 +78,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
               ease: [0.22, 1, 0.36, 1],
               delay: 0.12,
             }}
-            className={`relative mx-6 w-full max-w-[360px] rounded-[32px] border px-6 py-7 text-center backdrop-blur-3xl ${panelClass}`}
+            className={`relative mx-6 w-full max-w-[360px] rounded-[20px] border px-6 py-7 text-center backdrop-blur-3xl ${panelClass}`}
           >
             <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-[26px] border border-white/20 bg-white/12 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.25)]">
               <img
@@ -108,7 +108,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
                 ease: [0.22, 1, 0.36, 1],
                 delay: 0.28,
               }}
-              className="text-[28px] font-black leading-none text-current"
+              className="text-[1.647rem] font-semibold leading-none text-current"
             >
               {applicationName}
             </motion.h1>
@@ -134,7 +134,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
                 ease: 'easeOut',
                 delay: 0.52,
               }}
-              className="mx-auto mt-5 flex w-fit items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.16em] text-current/60"
+              className="mx-auto mt-5 flex w-fit items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[0.765rem] font-semibold normal-case tracking-normal text-current/60"
             >
               CoolVibes
             </motion.div>

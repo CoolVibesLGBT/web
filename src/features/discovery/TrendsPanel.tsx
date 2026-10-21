@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TrendingUp, RefreshCw, ExternalLink, Search, Loader2, ArrowUpRight } from 'lucide-react';
+import { TrendingUp, RefreshCw, ExternalLink, Search, Loader2, ArrowUpRight } from '@/components/ui/illustratedIcons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@/router';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -290,7 +290,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
           {lastUpdated && (
             <div className="mt-3 flex items-center gap-2">
               <span
-                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${isDark ? 'bg-[var(--color-brand-light)] text-[var(--color-brand)] ring-1 ring-inset ring-[var(--color-brand)]/20' : 'bg-gray-100 text-gray-600'
+                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[0.765rem] font-semibold ${isDark ? 'bg-[var(--color-brand-light)] text-[var(--color-brand)] ring-1 ring-inset ring-[var(--color-brand)]/20' : 'bg-gray-100 text-gray-600'
                   }`}
               >
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-current" />
@@ -300,7 +300,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
               </span>
               {trends.length > 0 && (
                 <span
-                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${isDark ? 'bg-white/[0.05] text-zinc-400 ring-1 ring-inset ring-white/[0.06]' : 'bg-gray-50 text-gray-600'
+                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[0.765rem] font-semibold ${isDark ? 'bg-white/[0.05] text-zinc-400 ring-1 ring-inset ring-white/[0.06]' : 'bg-gray-50 text-gray-600'
                     }`}
                 >
                   #{trends.length}
@@ -407,12 +407,12 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
                         >
                           {trend.rank}
                         </span>
-                        <div className="min-w-0 text-left">
+                        <div className="min-w-0 text-start">
                           <p className={`truncate text-sm font-semibold leading-none ${isDark ? 'text-white' : 'text-gray-900'}`}>
                             {trend.label}
                           </p>
                           {trend.subtitle && (
-                            <p className={`truncate text-[11px] mt-1 ${subtitleColor}`}>
+                            <p className={`truncate text-[0.765rem] mt-1 ${subtitleColor}`}>
                               {trend.subtitle}
                             </p>
                           )}
@@ -420,7 +420,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
                         <div className="flex items-center gap-2 justify-self-end">
                           {volumeLabel && (
                             <span
-                              className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${isDark ? 'bg-[var(--color-brand-light)] text-[var(--color-brand)] ring-1 ring-inset ring-[var(--color-brand)]/20' : 'bg-gray-100 text-gray-600'
+                              className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.765rem] font-semibold ${isDark ? 'bg-[var(--color-brand-light)] text-[var(--color-brand)] ring-1 ring-inset ring-[var(--color-brand)]/20' : 'bg-gray-100 text-gray-600'
                                 }`}
                             >
                               <span className="inline-block h-1.5 w-1.5 rounded-full bg-current" />

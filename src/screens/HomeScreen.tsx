@@ -1,3 +1,5 @@
+import ViewTabs from '@/components/ui/ViewTabs';
+import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useLocation } from '@/router';
 import { useTheme } from '../contexts/ThemeContext';
@@ -45,6 +47,7 @@ const mergeFeedPosts = (...postGroups: Array<Array<ApiPost | undefined>>) => {
 };
 
 const HomeScreen: React.FC = () => {
+  const { t } = useTranslation('common');
   const { theme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -212,50 +215,12 @@ const HomeScreen: React.FC = () => {
 
       {(
         <div className="cv-tab-bar cv-tab-bar--top bg-[var(--cv-card-bg-solid)]">
-          <div className="cv-tab-row">
-            {liveEnabled && (
-              <button
-                type="button"
-                onClick={() => { setActiveTab('live'); setShowBottomBar(false); }}
-                style={{ minWidth: 0 }}
-                className={`cv-tab ${activeTab === 'live' ? 'is-active' : ''}`}
-              >
-                <img src={resolvePublicAssetUrl('/icons/live.webp')} alt="" className="h-5 w-5 shrink-0 rounded-full object-cover" />
-                <span className="min-w-0 truncate">Live</span>
-                <span className={`cv-tab-underline ${activeTab === 'live' ? 'is-on' : ''}`} />
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={() => { setActiveTab('flows'); setShowBottomBar(true); }}
-              style={{ minWidth: 0 }}
-              className={`cv-tab ${activeTab === 'flows' ? 'is-active' : ''}`}
-            >
-              <img src={resolvePublicAssetUrl('/icons/flows.webp')} alt="" className="h-5 w-5 shrink-0 rounded-full object-cover" />
-              <span className="min-w-0 truncate">Cool</span>
-                <span className={`cv-tab-underline ${activeTab === 'flows' ? 'is-on' : ''}`} />
-            </button>
-            <button
-              type="button"
-              onClick={() => { setActiveTab('people'); setShowBottomBar(true); }}
-              style={{ minWidth: 0 }}
-              className={`cv-tab ${activeTab === 'people' ? 'is-active' : ''}`}
-            >
-              <Users className="h-5 w-5 shrink-0" />
-              <span className="min-w-0 truncate">Kişiler</span>
-                <span className={`cv-tab-underline ${activeTab === 'people' ? 'is-on' : ''}`} />
-            </button>
-            <button
-              type="button"
-              onClick={() => { setActiveTab('vibes'); setShowBottomBar(false); }}
-              style={{ minWidth: 0 }}
-              className={`cv-tab ${activeTab === 'vibes' ? 'is-active' : ''}`}
-            >
-              <img src={resolvePublicAssetUrl('/icons/vibes.webp')} alt="" className="h-5 w-5 shrink-0 rounded-full object-cover" />
-              <span className="min-w-0 truncate">Vibes</span>
-                <span className={`cv-tab-underline ${activeTab === 'vibes' ? 'is-on' : ''}`} />
-            </button>
-          </div>
+          <ViewTabs items={[
+ ...(liveEnabled ? [{ id: 'live' as const, label: 'Live', icon: <img src={resolvePublicAssetUrl('/icons/live.webp')} alt="" /> }] : []),
+ { id: 'flows' as const, label: 'Cool', icon: <img src={resolvePublicAssetUrl('/icons/flows.webp')} alt="" /> },
+ { id: 'people' as const, label: t('app.people'), icon: <Users /> },
+ { id: 'vibes' as const, label: 'Vibes', icon: <img src={resolvePublicAssetUrl('/icons/vibes.webp')} alt="" /> },
+]} activeId={activeTab} onSelect={id => { setActiveTab(id); setShowBottomBar(id === 'flows' || id === 'people'); }} label={t('app.nav.home')} />
         </div>
       )}
 
@@ -318,7 +283,7 @@ const HomeScreen: React.FC = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 18 }}
               transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-              className={`cv-modal-glass-panel mt-16 flex max-h-[calc(100vh-6rem)] w-full max-w-2xl flex-col overflow-y-auto rounded-[28px] border no-scrollbar md:mt-0 ${theme === 'dark'
+              className={`cv-modal-glass-panel mt-16 flex max-h-[calc(100vh-6rem)] w-full max-w-2xl flex-col overflow-y-auto rounded-[20px] border no-scrollbar md:mt-0 ${theme === 'dark'
                 ? 'text-white'
                 : 'text-slate-950'
                 }`}

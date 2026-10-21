@@ -1,0 +1,54 @@
+{
+  "method": "DOM-only browser assertions against localhost:5173, intercepted API fixtures, no screenshots or listing writes",
+  "results": [
+    {
+      "width": 320,
+      "language": "en",
+      "theme": "light",
+      "cards": 5,
+      "artwork": {
+        "width": 2164,
+        "height": 727
+      },
+      "status": "passed",
+      "checks": "artwork decode; five distinct crops; readable expanding text; contained scroll; keyboard activation and prefilled template"
+    },
+    {
+      "width": 390,
+      "language": "tr",
+      "theme": "dark",
+      "cards": 5,
+      "artwork": {
+        "width": 2164,
+        "height": 727
+      },
+      "status": "passed",
+      "checks": "artwork decode; five distinct crops; readable expanding text; contained scroll; keyboard activation and prefilled template"
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "light",
+      "large": true,
+      "cards": 5,
+      "artwork": {
+        "width": 2164,
+        "height": 727
+      },
+      "status": "passed",
+      "checks": "artwork decode; five distinct crops; readable expanding text; contained scroll; keyboard activation and prefilled template"
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "dark",
+      "cards": 5,
+      "artwork": {
+        "width": 2164,
+        "height": 727
+      },
+      "status": "passed",
+      "checks": "artwork decode; five distinct crops; readable expanding text; contained scroll; keyboard activation and prefilled template"
+    }
+  ]
+}

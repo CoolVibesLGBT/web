@@ -125,7 +125,7 @@ const Footer: React.FC = () => {
 
           {/* Company Links */}
           <div>
-            <h4 className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
+            <h4 className={`text-sm font-semibold normal-case tracking-wider mb-4 ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
             }`}>
               Company
@@ -150,7 +150,7 @@ const Footer: React.FC = () => {
 
           {/* Support Links */}
           <div>
-            <h4 className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
+            <h4 className={`text-sm font-semibold normal-case tracking-wider mb-4 ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
             }`}>
               Support
@@ -175,7 +175,7 @@ const Footer: React.FC = () => {
 
           {/* Resources Links */}
           <div>
-            <h4 className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
+            <h4 className={`text-sm font-semibold normal-case tracking-wider mb-4 ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
             }`}>
               Resources

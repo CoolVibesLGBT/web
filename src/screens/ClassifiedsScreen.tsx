@@ -1,3 +1,5 @@
+import ViewTabs from '@/components/ui/ViewTabs';
+import '@/features/classifieds/classifieds.css';
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import type { UIEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -13,7 +15,6 @@ import {
   GraduationCap,
   PawPrint,
   RefreshCw,
-  ArrowLeft,
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
@@ -225,8 +226,7 @@ export default function ClassifiedsScreen() {
       icon: Home,
       title: t('classifieds.templates.roommate_title', { defaultValue: 'Ev arkadaşı' }),
       description: t('classifieds.templates.roommate_desc', { defaultValue: 'Ev arkadaşları bul, ekonomi paylaşımı yap...' }),
-      surface: 'from-emerald-500 via-teal-500 to-sky-700',
-      glow: 'shadow-emerald-500/20',
+      scenePosition: 0,
     },
     {
       id: 'employers',
@@ -234,8 +234,7 @@ export default function ClassifiedsScreen() {
       title: t('classifieds.templates.employers_title', { defaultValue: 'İş verenler' }),
       description: t('classifieds.templates.employers_desc', { defaultValue: 'Eğer işveren iseniz bu alana eleman arama ilanları bırakabilirsiniz...' }),
       tab: 'hiring' as const,
-      surface: 'from-sky-600 via-indigo-600 to-slate-950',
-      glow: 'shadow-sky-600/20',
+      scenePosition: 25,
     },
     {
       id: 'job_seekers',
@@ -243,24 +242,21 @@ export default function ClassifiedsScreen() {
       title: t('classifieds.templates.job_seekers_title', { defaultValue: 'İş arayanlar' }),
       description: t('classifieds.templates.job_seekers_desc', { defaultValue: 'Eğer iş arıyorsanız bu alana ilan bırakabilirsiniz...' }),
       tab: 'seeking' as const,
-      surface: 'from-fuchsia-500 via-rose-500 to-orange-500',
-      glow: 'shadow-rose-500/20',
+      scenePosition: 50,
     },
     {
       id: 'tutors',
       icon: GraduationCap,
       title: t('classifieds.templates.tutors_title', { defaultValue: 'Ders verenler' }),
       description: t('classifieds.templates.tutors_desc', { defaultValue: 'Herhangi bir branşta ders veriyorsanız buraya ilan bırakabilirsiniz...' }),
-      surface: 'from-amber-400 via-orange-500 to-red-600',
-      glow: 'shadow-orange-500/20',
+      scenePosition: 75,
     },
     {
       id: 'animals',
       icon: PawPrint,
       title: t('classifieds.templates.animals_title', { defaultValue: 'Hayvanlar alemi' }),
       description: t('classifieds.templates.animals_desc', { defaultValue: 'Evcil hayvanlarla ilgili ilanları, bilgi paylaşımlarını buradan yapabilirsiniz...' }),
-      surface: 'from-lime-400 via-emerald-500 to-cyan-600',
-      glow: 'shadow-emerald-500/20',
+      scenePosition: 100,
     },
   ]), [t]);
 
@@ -348,50 +344,22 @@ export default function ClassifiedsScreen() {
       <div className="flex min-h-full flex-col">
         <div className="mx-auto w-full max-w-7xl">
           <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
-            <div className="cv-tab-row">
-              <div className="flex shrink-0 items-center pl-4">
-                <button
-                  type="button"
-                  onClick={() => navigate('/')}
-                  aria-label={t('app.back', { defaultValue: 'Back' })}
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                </button>
-              </div>
-              {classifiedTabs.map((tab) => {
-                const Icon = tab.icon;
-                const active = activeTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => setActiveTab(tab.id)}
-                    style={{ minWidth: 0 }}
-                    className={`cv-tab ${active ? 'is-active' : ''}`}
-                  >
-                    <Icon className="h-5 w-5 shrink-0" />
-                    <span className="min-w-0 truncate">{tab.label}</span>
-                    <span className={`cv-tab-underline ${active ? 'is-on' : ''}`} />
-                  </button>
-                );
-              })}
-            </div>
+            <ViewTabs items={classifiedTabs.map(({ icon: Icon, ...item }) => ({ ...item, icon: <Icon /> }))} activeId={activeTab} onSelect={id => setActiveTab(id)} label={t('app.nav.classifieds')} />
           </div>
         </div>
         <section className="relative z-20 mx-auto w-full max-w-7xl">
 
           <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
             <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
-              <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
+              <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[0.765rem] font-semibold text-[var(--color-brand)]">
                 <ActiveClassifiedTabIcon className="h-3.5 w-3.5 shrink-0" />
                 {activeClassifiedTab.label}
               </span>
-              <span className="flex h-9 shrink-0 items-center rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[13px] font-semibold text-[var(--cv-neutral-2)]">
+              <span className="flex h-9 shrink-0 items-center rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[0.765rem] font-semibold text-[var(--cv-neutral-2)]">
                 {t('classifieds.active_listings', { count: filteredPosts.length })}
               </span>
               {searchQuery && (
-                <span className="flex h-9 min-w-0 shrink-0 items-center gap-1.5 rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[13px] font-semibold text-[var(--cv-neutral-2)]">
+                <span className="flex h-9 min-w-0 shrink-0 items-center gap-1.5 rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[0.765rem] font-semibold text-[var(--cv-neutral-2)]">
                   <Search className="h-3.5 w-3.5 shrink-0" />
                   <span className="max-w-[140px] truncate md:max-w-[220px]">{searchQuery}</span>
                 </span>
@@ -413,12 +381,12 @@ export default function ClassifiedsScreen() {
         <main className="flex-1 w-full px-0 pt-0 pb-4">
           <div className="pt-2 pb-4">
             <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-1 md:px-2">
-              <div className={`text-[10px] font-black uppercase tracking-[0.24em] ${dark ? 'text-zinc-500' : 'text-slate-400'}`}>
+              <div className={`text-[0.765rem] font-semibold normal-case tracking-normal ${dark ? 'text-zinc-500' : 'text-slate-400'}`}>
                 {t('classifieds.templates.title', { defaultValue: 'İlan fikirleri' })}
               </div>
               <div className={`hidden h-px flex-1 sm:ml-4 sm:block ${dark ? 'bg-white/10' : 'bg-slate-200/80'}`} />
             </div>
-            <div className="mx-auto mt-3 flex w-full max-w-7xl snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 no-scrollbar md:px-2">
+            <div className="cv-classified-templates mx-auto mt-3 flex w-full max-w-7xl snap-x snap-mandatory gap-3 overflow-x-auto px-1 no-scrollbar md:px-2">
               {templateCards.map((template) => (
                 <motion.button
                   key={template.id}
@@ -427,27 +395,21 @@ export default function ClassifiedsScreen() {
                   whileHover={{ y: -3 }}
                   whileTap={{ scale: 0.97 }}
                   aria-label={template.title}
-                  className={`group relative h-[172px] w-[122px] shrink-0 snap-start overflow-hidden rounded-[28px] bg-gradient-to-br ${template.surface} p-3 text-left text-white shadow-xl ${template.glow} transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 ${dark ? 'focus-visible:ring-offset-gray-950' : 'focus-visible:ring-offset-white'}`}
+                  className="cv-classified-template"
                 >
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_18%,rgba(255,255,255,0.34),transparent_28%),linear-gradient(to_top,rgba(0,0,0,0.58),transparent_58%)]" />
-                  <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/20 blur-xl transition-transform duration-500 group-hover:scale-125" />
-                  <div className="absolute -bottom-10 left-2 h-24 w-24 rounded-full bg-black/20 blur-2xl" />
-
-                  <div className="relative z-10 flex h-full flex-col">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-white/70 bg-white/20 shadow-lg backdrop-blur-md">
-                      <template.icon className="h-5 w-5" strokeWidth={2.2} />
+                  <span className="cv-classified-template-art" style={{ backgroundPosition: `${template.scenePosition}% center` }} aria-hidden="true" />
+                  <span className="cv-classified-template-shade" aria-hidden="true" />
+                  <div className="cv-classified-template-top" aria-hidden="true">
+                    <span className="cv-classified-template-icon">
+                      <template.icon strokeWidth={2.2} />
                     </span>
-                    <span className="mt-auto flex h-7 w-7 items-center justify-center rounded-full bg-white text-slate-950 shadow-lg transition-transform group-hover:scale-110">
-                      <Plus className="h-4 w-4" strokeWidth={2.4} />
+                    <span className="cv-classified-template-add">
+                      <Plus strokeWidth={2.4} />
                     </span>
-                    <div className="mt-2 min-w-0">
-                      <div className="line-clamp-2 text-[13px] font-black leading-tight tracking-tight">
-                        {template.title}
-                      </div>
-                      <p className="mt-1 line-clamp-2 text-[10px] font-semibold leading-snug text-white/80">
-                        {template.description}
-                      </p>
-                    </div>
+                  </div>
+                  <div className="cv-classified-template-copy">
+                    <span className="cv-classified-template-title">{template.title}</span>
+                    <span className="cv-classified-template-description">{template.description}</span>
                   </div>
                 </motion.button>
               ))}
@@ -630,7 +592,7 @@ export default function ClassifiedsScreen() {
                                 className={`flex items-center justify-between gap-3 px-3 py-2 rounded-lg ${dark ? 'cv-card-surface-muted border border-white/10' : 'bg-white border border-slate-200'}`}
                               >
                                 <div className="min-w-0">
-                                  <div className={`text-[11px] font-semibold ${dark ? 'text-gray-300' : 'text-slate-500'}`}>{item.key}</div>
+                                  <div className={`text-[0.765rem] font-semibold ${dark ? 'text-gray-300' : 'text-slate-500'}`}>{item.key}</div>
                                   <div className={`text-sm font-medium truncate ${dark ? 'text-white' : 'text-slate-900'}`}>{item.value}</div>
                                 </div>
                                 <button

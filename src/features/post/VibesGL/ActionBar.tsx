@@ -146,7 +146,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({ avatarUrl, onLike, onMessa
                                 exit={{ opacity: 0, y: 10, scale: 0.9 }}
                                 transition={{ duration: 0.2, ease: 'easeOut' }}
                             >
-                                <button onClick={() => { createHandler(onBlock, BurstType.BLOCK)(); setShowMoreMenu(false); }} className="w-full flex items-center px-4 py-3 text-left text-sm text-white hover:bg-red-500/50 transition-colors">
+                                <button onClick={() => { createHandler(onBlock, BurstType.BLOCK)(); setShowMoreMenu(false); }} className="w-full flex items-center px-4 py-3 text-start text-sm text-white hover:bg-red-500/50 transition-colors">
                                     <Ban className="w-5 h-5 mr-3 text-yellow-500" />
                                     <span>Block User</span>
                                 </button>
@@ -197,7 +197,7 @@ const BurstOverlay: React.FC<{ overlay: BurstOverlayState }> = ({ overlay }) => 
                     {overlay.confetti.map(({ id, x, y, size, color, rotate, driftX, driftY, duration, delay, shape }: BurstConfetti) => (
                         <motion.span key={id} className={`absolute left-1/2 top-1/2 shadow-[0_0_18px_rgba(255,255,255,0.35)]`} initial={{ opacity: 0, scale: 0.6, x: 0, y: 0, rotate: 0 }} animate={{ opacity: [0, 1, 0.8, 0], scale: [0.6, 1.05, 0.95, 0.6], x: [0, x * 0.6, x + driftX], y: [0, y * 0.6, y + driftY], rotate: [0, rotate * 0.6, rotate * 1.2] }} exit={{ opacity: 0, scale: 0.4, x: x * 1.05, y: y * 1.05 }} transition={{ duration, ease: 'easeInOut', delay, repeat: Infinity, repeatType: 'mirror' }} style={{ width: size, height: size, backgroundColor: color, mixBlendMode: 'screen', borderRadius: shape === 'circle' ? '9999px' : shape === 'square' ? '4px' : undefined, clipPath: shape === 'triangle' ? 'polygon(50% 0%, 0% 100%, 100% 100%)' : undefined }} />
                     ))}
-                    <motion.div className="absolute -bottom-20 text-white text-3xl font-semibold uppercase tracking-[0.4rem]" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} transition={{ duration: 0.4, delay: 0.1 }}>
+                    <motion.div className="absolute -bottom-20 text-white text-3xl font-semibold normal-case tracking-[0.4rem]" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} transition={{ duration: 0.4, delay: 0.1 }}>
                         {overlay.type === BurstType.LIKE && 'LIKED'}
                         {overlay.type === BurstType.BLOCK && 'BLOCKED'}
                     </motion.div>

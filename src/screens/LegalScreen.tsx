@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, Link } from '@/router'
-import { useTheme } from '@/contexts/ThemeContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSEO } from '@/hooks/useSEO'
 import LegalIllustration from '@/features/legal/LegalIllustration'
+import PublicHeader from '@/features/landing/PublicHeader'
 import Brand from '@/features/landing/Brand'
 import { getLanguageTag, normalizeLanguage } from '@/i18n/language'
 import { LEGAL_PAGES, type LegalPage } from '@/features/legal/legalContent'
@@ -23,7 +23,6 @@ const entries = Object.entries(LEGAL_PAGES) as [
 export default function LegalScreen() {
   const { t, i18n } = useTranslation('legal')
   const { t: landing } = useTranslation('landing')
-  const { theme, toggleTheme } = useTheme()
   const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
@@ -82,37 +81,9 @@ export default function LegalScreen() {
       <a className="cv-landing-skip" href="#legal-content">
         {landing('skip')}
       </a>
-      <header className="cv-landing-header">
-        <div className="cv-landing-header-inner">
-          <Brand onClick={() => navigate('/')} />
-          <Link to="/legal" className="cv-legal-header-label">
-            {t('center_title')}
-          </Link>
-          <div className="cv-landing-header-actions">
-            <button
-              className="cv-landing-language"
-              onClick={() => setLanguageOpen(true)}
-              aria-label={landing('language')}
-              aria-haspopup="dialog"
-            >
-              {flag.src && <img src={flag.src} alt="" width={20} height={20} />}
-              <span>{language.toUpperCase()}</span>
-            </button>
-            <button
-              className="cv-legal-theme"
-              onClick={toggleTheme}
-              aria-label={landing(
-                theme === 'dark' ? 'theme_light' : 'theme_dark',
-              )}
-            >
-              {t(theme === 'dark' ? 'theme_light' : 'theme_dark')}
-            </button>
-            <button className="cv-landing-login" onClick={join}>
-              {landing(isAuthenticated ? 'open_app' : 'login')}
-            </button>
-          </div>
-        </div>
-      </header>
+      <PublicHeader onHome={() => navigate('/')} onLogin={join} loginLabel={landing(isAuthenticated ? 'open_app' : 'login')} onLanguage={() => setLanguageOpen(true)} language={language} flag={flag.src} navigation={[
+        { label: t('center_title'), onSelect: () => navigate('/legal') },
+      ]} />
 
       <main id="legal-content" className="cv-legal-main">
         <nav className="cv-legal-breadcrumb" aria-label={t('all_documents')}>
@@ -276,7 +247,10 @@ export default function LegalScreen() {
         isOpen={languageOpen}
         onClose={() => setLanguageOpen(false)}
       />
-      <AuthWizard isOpen={authOpen} onClose={() => setAuthOpen(false)} />
+      <AuthWizard
+        isOpen={authOpen}
+        onClose={() => setAuthOpen(false)}
+      />
     </div>
   )
 }

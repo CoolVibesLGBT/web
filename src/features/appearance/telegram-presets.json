@@ -1,0 +1,524 @@
+{
+  "day": [
+    {
+      "id": 106,
+      "accent_color": 16078723,
+      "message_colors": [
+        14087679,
+        13237758
+      ],
+      "wallpaper": {
+        "intensity": 50,
+        "background_color": 9289963,
+        "second_background_color": 12177898,
+        "third_background_color": 13021679,
+        "fourth_background_color": 15456239
+      }
+    },
+    {
+      "id": 102,
+      "accent_color": 16736169,
+      "message_colors": [
+        16774359
+      ],
+      "wallpaper": {
+        "intensity": 50,
+        "background_color": 15377262,
+        "second_background_color": 15787142,
+        "third_background_color": 15900351,
+        "fourth_background_color": 15253614
+      }
+    },
+    {
+      "id": 104,
+      "accent_color": 5938729,
+      "message_colors": [
+        16775391
+      ],
+      "wallpaper": {
+        "intensity": 50,
+        "background_color": 8372873,
+        "second_background_color": 14996851,
+        "third_background_color": 11523703,
+        "fourth_background_color": 15777914
+      }
+    },
+    {
+      "id": 101,
+      "accent_color": 8282085,
+      "message_colors": [
+        16114431
+      ],
+      "wallpaper": {
+        "intensity": 50,
+        "background_color": 14988010,
+        "second_background_color": 8615618,
+        "third_background_color": 15383001,
+        "fourth_background_color": 11834342
+      }
+    },
+    {
+      "id": 107,
+      "accent_color": 2931181,
+      "message_colors": [
+        11401141,
+        16580491
+      ],
+      "wallpaper": {
+        "intensity": 50,
+        "background_color": 1715738,
+        "second_background_color": 4678204,
+        "third_background_color": 2240036,
+        "fourth_background_color": 3228713
+      }
+    },
+    {
+      "id": 103,
+      "accent_color": 1677682,
+      "message_colors": [
+        16776903
+      ],
+      "wallpaper": {
+        "intensity": 50,
+        "background_color": 14478226,
+        "second_background_color": 9429462,
+        "third_background_color": 6792178,
+        "fourth_background_color": 8771205
+      }
+    },
+    {
+      "id": 105,
+      "accent_color": 14323929,
+      "message_colors": [
+        9764857,
+        13434823
+      ],
+      "wallpaper": {
+        "intensity": 50,
+        "background_color": 16761778,
+        "second_background_color": 14860543,
+        "third_background_color": 16770994
+      }
+    },
+    {
+      "id": 10,
+      "accent_color": 35071,
+      "message_colors": [
+        35071
+      ]
+    },
+    {
+      "id": 11,
+      "accent_color": 49901,
+      "message_colors": [
+        49901
+      ]
+    },
+    {
+      "id": 12,
+      "accent_color": 2732839,
+      "message_colors": [
+        2732839
+      ]
+    },
+    {
+      "id": 13,
+      "accent_color": 15428772,
+      "message_colors": [
+        15428772
+      ]
+    },
+    {
+      "id": 14,
+      "accent_color": 15761920,
+      "message_colors": [
+        15761920
+      ]
+    },
+    {
+      "id": 15,
+      "accent_color": 9728750,
+      "message_colors": [
+        9728750
+      ]
+    },
+    {
+      "id": 16,
+      "accent_color": 13840915,
+      "message_colors": [
+        13840915
+      ]
+    },
+    {
+      "id": 17,
+      "accent_color": 15578112,
+      "message_colors": [
+        15578112
+      ]
+    },
+    {
+      "id": 18,
+      "accent_color": 7177118,
+      "message_colors": [
+        7177118
+      ]
+    }
+  ],
+  "night": [
+    {
+      "id": 102,
+      "accent_color": 45211,
+      "message_colors": [
+        11462982,
+        45211
+      ],
+      "wallpaper": {
+        "dark": true,
+        "intensity": 35,
+        "background_color": 14988010,
+        "second_background_color": 8615618,
+        "third_background_color": 15383001,
+        "fourth_background_color": 11834342
+      }
+    },
+    {
+      "id": 103,
+      "accent_color": 13840915,
+      "message_colors": [
+        16374528,
+        13840915
+      ],
+      "wallpaper": {
+        "dark": true,
+        "intensity": 40,
+        "background_color": 16696470,
+        "second_background_color": 14511289,
+        "third_background_color": 9842623,
+        "fourth_background_color": 5200853
+      }
+    },
+    {
+      "id": 104,
+      "accent_color": 15371501,
+      "message_colors": [
+        15371501,
+        49901
+      ],
+      "wallpaper": {
+        "dark": true,
+        "intensity": 30,
+        "background_color": 9100274,
+        "second_background_color": 8949228,
+        "third_background_color": 14917610,
+        "fourth_background_color": 6790381
+      }
+    },
+    {
+      "id": 10,
+      "accent_color": 4098295,
+      "message_colors": [
+        6256015,
+        4349074
+      ]
+    },
+    {
+      "id": 11,
+      "accent_color": 49901,
+      "message_colors": [
+        5013897,
+        2519948
+      ]
+    },
+    {
+      "id": 12,
+      "accent_color": 2732839,
+      "message_colors": [
+        4548675,
+        2976303
+      ]
+    },
+    {
+      "id": 13,
+      "accent_color": 15428772,
+      "message_colors": [
+        8939384,
+        9131110
+      ]
+    },
+    {
+      "id": 14,
+      "accent_color": 15761920,
+      "message_colors": [
+        9137741,
+        9330470
+      ]
+    },
+    {
+      "id": 15,
+      "accent_color": 9728750,
+      "message_colors": [
+        7367305,
+        6969228
+      ]
+    },
+    {
+      "id": 16,
+      "accent_color": 13840915,
+      "message_colors": [
+        8015945,
+        8140586
+      ]
+    },
+    {
+      "id": 17,
+      "accent_color": 15578112,
+      "message_colors": [
+        9009740,
+        9205030
+      ]
+    }
+  ],
+  "light": [
+    {
+      "id": 101,
+      "accent_color": 35071,
+      "message_colors": [
+        35071,
+        16733172
+      ]
+    },
+    {
+      "id": 102,
+      "accent_color": 45211,
+      "message_colors": [
+        11462982,
+        45211
+      ]
+    },
+    {
+      "id": 103,
+      "accent_color": 13840915,
+      "message_colors": [
+        16374528,
+        13840915
+      ]
+    },
+    {
+      "id": 104,
+      "accent_color": 15371501,
+      "message_colors": [
+        15371501,
+        49901
+      ]
+    },
+    {
+      "id": 10,
+      "accent_color": 35071,
+      "message_colors": [
+        35071
+      ]
+    },
+    {
+      "id": 11,
+      "accent_color": 49901,
+      "message_colors": [
+        49901
+      ]
+    },
+    {
+      "id": 12,
+      "accent_color": 2732839,
+      "message_colors": [
+        2732839
+      ]
+    },
+    {
+      "id": 13,
+      "accent_color": 15428772,
+      "message_colors": [
+        15428772
+      ]
+    },
+    {
+      "id": 14,
+      "accent_color": 15761920,
+      "message_colors": [
+        15761920
+      ]
+    },
+    {
+      "id": 15,
+      "accent_color": 9728750,
+      "message_colors": [
+        9728750
+      ]
+    },
+    {
+      "id": 16,
+      "accent_color": 13840915,
+      "message_colors": [
+        13840915
+      ]
+    },
+    {
+      "id": 17,
+      "accent_color": 15578112,
+      "message_colors": [
+        15578112
+      ]
+    },
+    {
+      "id": 18,
+      "accent_color": 7177118,
+      "message_colors": [
+        7177118
+      ]
+    }
+  ],
+  "tinted": [
+    {
+      "id": 10,
+      "accent_color": 35071,
+      "message_colors": [
+        5339283,
+        2645142
+      ],
+      "wallpaper": {
+        "intensity": 40,
+        "background_color": 1979735,
+        "second_background_color": 1581110,
+        "third_background_color": 1852242,
+        "fourth_background_color": 1451578,
+        "dark": true
+      }
+    },
+    {
+      "id": 11,
+      "accent_color": 49901,
+      "message_colors": [
+        5013897,
+        2519948
+      ],
+      "wallpaper": {
+        "intensity": 40,
+        "background_color": 1979735,
+        "second_background_color": 1382966,
+        "third_background_color": 1852242,
+        "fourth_background_color": 2770241,
+        "dark": true
+      }
+    },
+    {
+      "id": 12,
+      "accent_color": 2732839,
+      "message_colors": [
+        4548675,
+        2976303
+      ],
+      "wallpaper": {
+        "intensity": 40,
+        "background_color": 2967606,
+        "second_background_color": 1518361,
+        "third_background_color": 3556145,
+        "fourth_background_color": 1061425,
+        "dark": true
+      }
+    },
+    {
+      "id": 13,
+      "accent_color": 15428772,
+      "message_colors": [
+        8939384,
+        9131110
+      ],
+      "wallpaper": {
+        "intensity": 40,
+        "background_color": 2886434,
+        "second_background_color": 2687008,
+        "third_background_color": 1444386,
+        "fourth_background_color": 3872820,
+        "dark": true
+      }
+    },
+    {
+      "id": 14,
+      "accent_color": 15761920,
+      "message_colors": [
+        9137741,
+        9330470
+      ],
+      "wallpaper": {
+        "intensity": 40,
+        "background_color": 2892059,
+        "second_background_color": 4466967,
+        "third_background_color": 2234655,
+        "fourth_background_color": 3876628,
+        "dark": true
+      }
+    },
+    {
+      "id": 15,
+      "accent_color": 9728750,
+      "message_colors": [
+        7367305,
+        6969228
+      ],
+      "wallpaper": {
+        "intensity": 40,
+        "background_color": 3808314,
+        "second_background_color": 2365756,
+        "third_background_color": 3747390,
+        "fourth_background_color": 1709618,
+        "dark": true
+      }
+    },
+    {
+      "id": 16,
+      "accent_color": 13840915,
+      "message_colors": [
+        8015945,
+        8140586
+      ],
+      "wallpaper": {
+        "intensity": 40,
+        "background_color": 2892059,
+        "second_background_color": 4469546,
+        "third_background_color": 2234655,
+        "fourth_background_color": 3878198,
+        "dark": true
+      }
+    },
+    {
+      "id": 17,
+      "accent_color": 15578112,
+      "message_colors": [
+        9009740,
+        9205030
+      ],
+      "wallpaper": {
+        "intensity": 40,
+        "background_color": 2893074,
+        "second_background_color": 4535819,
+        "third_background_color": 2235656,
+        "fourth_background_color": 3878675,
+        "dark": true
+      }
+    },
+    {
+      "id": 18,
+      "accent_color": 7177118,
+      "message_colors": [
+        5199195,
+        4739165
+      ],
+      "wallpaper": {
+        "intensity": 40,
+        "background_color": 1845041,
+        "second_background_color": 1711141,
+        "third_background_color": 2568251,
+        "fourth_background_color": 1776417,
+        "dark": true
+      }
+    }
+  ]
+}

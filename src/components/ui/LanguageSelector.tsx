@@ -1,10 +1,10 @@
 // LanguageSelectorModal.tsx
-import React, { useState, useEffect, useRef, memo } from 'react';
-import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, memo } from 'react';
+import { motion } from 'framer-motion';
 import { useApp } from '../../contexts/AppContext';
 import { useTheme } from '../../contexts/ThemeContext';
-import { X, Check, Globe, Search } from 'lucide-react';
+import { Check, Globe, Search } from 'lucide-react';
+import { Sheet } from '@/components/ui/Interface';
 import { setLanguage } from '../../i18n';
 import { resolvePublicAssetUrl } from '../../platform/runtime';
 import { useTranslation } from 'react-i18next';
@@ -115,11 +115,11 @@ const LanguageItem = memo(({ lang, isSelected, onClick, theme }: any) => {
           )}
         </div>
         <div className="flex flex-col">
-          <span className={`text-[13px] font-bold tracking-tight ${theme === 'dark' ? 'text-white/90' : 'text-gray-900'
+          <span className={`text-[0.765rem] font-bold tracking-tight ${theme === 'dark' ? 'text-white/90' : 'text-gray-900'
             }`}>
             {lang.name}
           </span>
-          <span className={`text-[10px] uppercase tracking-wider opacity-40 font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+          <span className={`text-[0.765rem] normal-case tracking-wider opacity-40 font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
             }`}>
             {lang.code}
           </span>
@@ -145,46 +145,8 @@ const LanguageSelectorModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const { data, defaultLanguage, setDefaultLanguage } = useApp();
   const { theme } = useTheme();
   const { t } = useTranslation('common');
-  const [isDesktop, setIsDesktop] = useState(false);
   const [search, setSearch] = useState('');
-  const panelRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const previousFocus = document.activeElement as HTMLElement | null;
-    panelRef.current?.focus();
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
-      if (event.key !== 'Tab') return;
-      const elements = panelRef.current?.querySelectorAll<HTMLElement>('button, input');
-      if (!elements?.length) return;
-      const first = elements[0];
-      const last = elements[elements.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      previousFocus?.focus();
-    };
-  }, [isOpen, onClose]);
-
-  useEffect(() => {
-    if (!isOpen) setSearch('');
-  }, [isOpen]);
-
-  useEffect(() => {
-    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
-    checkDesktop();
-    window.addEventListener('resize', checkDesktop);
-    return () => window.removeEventListener('resize', checkDesktop);
-  }, []);
+  useEffect(() => { if (!isOpen) setSearch(''); }, [isOpen]);
 
   const handleLanguageSelect = (langCode: string) => {
     const locale = normalizeLanguage(langCode);
@@ -205,92 +167,15 @@ const LanguageSelectorModal: React.FC<Props> = ({ isOpen, onClose }) => {
   }));
   const visibleLanguages = languages.filter(({ name, code }) => `${name} ${code}`.toLocaleLowerCase().includes(search.toLocaleLowerCase().trim()));
 
-  const modal = (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-[1200] flex items-end lg:items-center justify-center">
-          {/* Backdrop - Minimalist */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
-            onClick={onClose}
-          />
-
-          {/* Compact Content Panel */}
-          <motion.div
-            ref={panelRef}
-            tabIndex={-1}
-            role="dialog"
-            aria-modal="true"
-            aria-label={t('app.language', { defaultValue: 'Language' })}
-            initial={isDesktop ? { scale: 0.98, opacity: 0 } : { y: '100%' }}
-            animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0 }}
-            exit={isDesktop ? { scale: 0.98, opacity: 0 } : { y: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 400 }}
-            className={`relative w-full lg:max-w-[400px] max-h-[75dvh] flex flex-col overflow-hidden outline-none ${theme === 'dark'
-              ? 'cv-card-surface-solid border-t lg:border border-white/10'
-              : 'bg-white border-t lg:border border-gray-100'
-              } rounded-t-[28px] lg:rounded-[24px] shadow-2xl pointer-events-auto`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Handle - Mobile Only */}
-            <div className="lg:hidden flex justify-center py-2.5">
-              <div className={`w-8 h-1 rounded-full ${theme === 'dark' ? 'bg-white/10' : 'bg-gray-200'}`} />
-            </div>
-
-            {/* Header - Compact */}
-            <div className={`px-5 py-3.5 flex items-center justify-between border-b ${theme === 'dark' ? 'border-gray-800/40' : 'border-gray-50'
-              }`}>
-              <div className="flex items-center gap-2.5">
-                <Globe className={`w-4 h-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
-                <h2 className={`text-[15px] font-medium tracking-tight ${theme === 'dark' ? 'text-white/90' : 'text-gray-900'
-                  }`}>
-                  {t('app.language', { defaultValue: 'Language' })}
-                </h2>
-              </div>
-              <button
-                onClick={onClose}
-                aria-label={t('app.close', { defaultValue: 'Close' })}
-                className={`p-1.5 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-white/5 text-gray-500' : 'hover:bg-gray-50 text-gray-400'
-                  }`}
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <label className={`mx-5 my-3 flex items-center gap-2 rounded-xl border px-3 py-2.5 ${theme === 'dark' ? 'border-white/10 bg-white/[0.03] text-white/50' : 'border-gray-100 bg-gray-50 text-gray-400'}`}>
-              <Search className="h-4 w-4 shrink-0" />
-              <input value={search} onChange={event => setSearch(event.target.value)} aria-label={t('app.search', { defaultValue: 'Search' })} placeholder={t('app.search', { defaultValue: 'Search' })} className="min-w-0 w-full bg-transparent text-[13px] text-[var(--cv-neutral-1)] outline-none" />
-            </label>
-
-            {/* Language Scroll List */}
-            <div className="flex-1 overflow-y-auto scrollbar-hide py-1">
-              <div className={`divide-y ${theme === 'dark' ? 'divide-gray-800/30' : 'divide-gray-50'}`}>
-                {visibleLanguages.map((lang) => (
-                  <LanguageItem
-                    key={lang.code}
-                    lang={lang}
-                    isSelected={defaultLanguage === lang.code}
-                    onClick={handleLanguageSelect}
-                    theme={theme}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Safe Area for Mobile */}
-            <div className="h-6 safe-area-inset-bottom lg:hidden bg-transparent" />
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
-  );
-
-  if (typeof document === 'undefined') return modal;
-
-  return createPortal(modal, document.body);
+  return <Sheet isOpen={isOpen} onClose={onClose} title={t('app.language', { defaultValue: 'Language' })}>
+    <label className="cv-search mb-4">
+      <Search className="h-5 w-5 shrink-0" aria-hidden="true" />
+      <input type="search" value={search} onChange={event => setSearch(event.target.value)} aria-label={t('app.search', { defaultValue: 'Search' })} placeholder={t('app.search', { defaultValue: 'Search' })} />
+    </label>
+    <div className="cv-language-list">
+      {visibleLanguages.map(lang => <LanguageItem key={lang.code} lang={lang} isSelected={defaultLanguage === lang.code} onClick={handleLanguageSelect} theme={theme} />)}
+    </div>
+  </Sheet>;
 };
 
 export default LanguageSelectorModal;

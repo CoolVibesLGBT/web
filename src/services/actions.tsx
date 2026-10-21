@@ -18,6 +18,10 @@ export const Actions = {
   // CHAT
   CMD_CHAT_CREATE: "chat.create", // Chat olustur
   CMD_TYPING: "chat.typing",
+  CMD_EDIT_MESSAGE: "chat.edit_message",
+  CMD_FORWARD_MESSAGES: "chat.forward_messages",
+  CMD_CHAT_SET_MUTED: "chat.set_muted",
+  CMD_CHAT_MESSAGE_READ: "chat.message_read",
   CMD_SEND_MESSAGE: "chat.send_message", // Mesaj gönder
   CMD_MESSAGE_EXPIRED: "chat.message_expired",
   CMD_MESSAGE_OPEN: "chat.message.open",

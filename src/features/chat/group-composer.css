@@ -1,0 +1,56 @@
+/* Sidebar flow adapted from tweb newGroup.tsx / _section.scss / _inputField.scss. */
+.cv-group-composer { display: flex; flex-direction: column; flex: 1; min-height: 0; width: 100%; background: var(--cv-page-bg); color: var(--cv-neutral-1); }
+.cv-group-composer .cv-navigation-bar { display: flex; min-height: 3.3rem; border: 0; padding: .25rem .75rem; background: var(--cv-card-bg-solid); gap: .75rem; }
+.cv-group-composer .cv-navigation-bar h1 { flex: 1; text-align: start; font-size: 1.176rem; font-weight: 500; }
+.cv-group-composer .cv-navigation-actions { margin-inline-start: auto; }
+.cv-group-composer .cv-navigation-leading > button { border-radius: 50%; color: var(--cv-neutral-2); }
+.cv-group-next { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; color: var(--color-brand); background: transparent; }
+.cv-group-next svg { width: 1.412rem; height: 1.412rem; }
+.cv-group-next:hover { background: var(--color-brand-light); }
+.cv-group-next:disabled { opacity: .35; }
+.cv-group-search { display: flex; align-items: center; gap: .75rem; padding: .5rem 1rem; background: var(--cv-card-bg-solid); }
+.cv-group-search > svg { width: 1.412rem; color: var(--cv-neutral-2); }
+.cv-group-search input { min-width: 0; flex: 1; min-height: 44px; border: 0; box-shadow: none; padding: .5rem 0; background: transparent; color: var(--cv-neutral-1); font-size: .941rem; }
+.cv-group-search input:is(:focus,:focus-visible) { outline: none; border: 0; box-shadow: none; }
+.cv-group-chips { display: flex; flex-wrap: wrap; gap: .375rem; padding: .5rem 1rem; max-height: 8rem; overflow: auto; background: var(--cv-card-bg-solid); }
+.cv-group-chips > button { display: flex; align-items: center; gap: .5rem; padding: .25rem .75rem; max-width: 100%; min-height: 44px; background: var(--color-brand-light); color: var(--color-brand); border: 0; border-radius: 1.5rem; font-size: .824rem; }
+.cv-group-chips > button > span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.cv-group-chips svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+.cv-group-details { padding: 1rem; margin: 1rem 1rem 0; background: var(--cv-card-bg-solid); border-radius: 1.412rem; box-shadow: var(--cv-telegram-section-shadow); max-height: 50%; overflow: auto; }
+.cv-group-avatar { display: grid; place-items: center; width: 5.88rem; height: 5.88rem; margin: 0 auto 1rem; border-radius: 50%; background: var(--color-brand-light); color: var(--color-brand); }
+.cv-group-avatar svg { width: 2.82rem; height: 2.82rem; }
+.cv-group-details .cv-form-field { margin: 0 0 1rem; }
+.cv-group-details .cv-form-field:last-of-type { margin: 0; }
+.cv-group-details .cv-form-field > label { font-size: .824rem; font-weight: 400; color: var(--cv-neutral-2); margin-bottom: .375rem; }
+.cv-group-details :is(input,textarea) { width: 100%; min-width: 0; min-height: 44px; background: transparent; color: var(--cv-neutral-1); border: 1px solid var(--cv-card-border); border-radius: .941rem; padding: .75rem; font-size: .941rem; }
+.cv-group-details :is(input,textarea):focus { border-color: var(--color-brand); outline: none; box-shadow: inset 0 0 0 1px var(--color-brand); }
+.cv-group-count { margin: 0; padding: 1rem 1rem .5rem; color: var(--color-brand); font-size: .941rem; font-weight: 500; }
+.cv-group-error, .cv-group-loading { margin: 0; padding: .5rem 1rem; font-size: .824rem; }
+.cv-group-error { color: var(--cv-menu-danger); }
+.cv-group-loading { color: var(--cv-neutral-2); }
+.cv-group-peers { flex: 1; min-height: 6rem; background: var(--cv-card-bg-solid); padding: .25rem .5rem; margin: 0 1rem 1rem; border-radius: 1.412rem; box-shadow: var(--cv-telegram-section-shadow); }
+.cv-group-peers .cv-list-row { min-height: 4rem; padding: .25rem .5rem; border-radius: .941rem; gap: .75rem; }
+.cv-group-peers .cv-list-row::after { display: none; }
+.cv-group-peers .cv-list-icon { width: 2.82rem; height: 2.82rem; background: transparent; }
+.cv-group-peer-avatar { position: relative; display: grid; place-items: center; width: 2.82rem; height: 2.82rem; overflow: hidden; border-radius: 50%; color: white; background: linear-gradient(#5caffa, #408acf); font-size: 1.176rem; }
+.cv-group-peer-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cv-group-peer-toggle { display: block; width: 100%; min-height: 2rem; text-align: start; font-size: .941rem; font-weight: 500; background: transparent; border: 0; padding: 0; overflow-wrap: anywhere; color: var(--cv-neutral-1); }
+.cv-group-peers .cv-list-title { font-size: .941rem; font-weight: 500; overflow-wrap: anywhere; }
+.cv-group-peers .cv-list-description { font-size: .824rem; color: var(--cv-neutral-2); }
+.cv-group-peers .cv-list-row:hover { background: var(--cv-telegram-row-hover); }
+.cv-group-empty { padding: 2rem 1rem; text-align: center; color: var(--cv-neutral-2); }
+.cv-group-composer button:focus-visible { outline: 2px solid var(--color-brand); outline-offset: -2px; }
+
+.cv-group-composer { position: relative; }
+.cv-group-composer .cv-group-corner { position: absolute; z-index: 3; inset-inline-end: 1rem; bottom: max(1rem, env(safe-area-inset-bottom)); width: 3.176rem; height: 3.176rem; border: 0; border-radius: 50%; color: white; background: var(--color-brand); box-shadow: 0 2px 5px rgb(0 0 0 / 20%); }
+.cv-group-corner svg { width: 1.412rem; height: 1.412rem; }
+.cv-group-composer .cv-group-corner:hover { background: var(--color-brand-hovered); }
+.cv-group-composer .cv-group-corner:disabled { opacity: .35; }
+.cv-group-peers { padding-bottom: 4rem; }
+.cv-group-avatar { width: 7.058rem; height: 7.058rem; }
+.cv-group-details .cv-form-field { position: relative; padding-top: .375rem; margin-top: .75rem; }
+.cv-group-details .cv-form-field > label { position: absolute; z-index: 1; inset-inline-start: .75rem; top: -.125rem; padding-inline: .25rem; margin: 0; background: var(--cv-card-bg-solid); font-size: .765rem; color: var(--cv-neutral-2); }
+.cv-group-details .cv-form-field:focus-within > label { color: var(--color-brand); }
+.cv-group-details input { min-height: 3.176rem; }
+.cv-group-details textarea { min-height: 4rem; }
+.cv-group-chips > button { font-size: .941rem; font-weight: 500; }

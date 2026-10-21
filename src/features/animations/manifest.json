@@ -1,0 +1,386 @@
+[
+  {
+    "id": "BusinessHours",
+    "src": "/animations/telegram/assets/BusinessHours.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "BusinessLocation",
+    "src": "/animations/telegram/assets/BusinessLocation.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "Cake",
+    "src": "/animations/telegram/assets/Cake.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "ChatAutomation",
+    "src": "/animations/telegram/assets/ChatAutomation.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "Congratulations",
+    "src": "/animations/telegram/assets/Congratulations.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "Cubigator2",
+    "src": "/animations/telegram/assets/Cubigator2.json",
+    "width": 512,
+    "height": 512,
+    "frames": 90,
+    "fps": 60
+  },
+  {
+    "id": "Diamond",
+    "src": "/animations/telegram/assets/Diamond.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "EmptyFolder",
+    "src": "/animations/telegram/assets/EmptyFolder.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "Folders_1",
+    "src": "/animations/telegram/assets/Folders_1.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "Folders_2",
+    "src": "/animations/telegram/assets/Folders_2.json",
+    "width": 512,
+    "height": 512,
+    "frames": 120,
+    "fps": 60
+  },
+  {
+    "id": "Folders_Shared",
+    "src": "/animations/telegram/assets/Folders_Shared.json",
+    "width": 512,
+    "height": 512,
+    "frames": 91,
+    "fps": 60
+  },
+  {
+    "id": "Gift12",
+    "src": "/animations/telegram/assets/Gift12.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "Gift3",
+    "src": "/animations/telegram/assets/Gift3.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "Gift6",
+    "src": "/animations/telegram/assets/Gift6.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "LoveLetter",
+    "src": "/animations/telegram/assets/LoveLetter.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "Mailbox",
+    "src": "/animations/telegram/assets/Mailbox.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "ReactionGeneric",
+    "src": "/animations/telegram/assets/ReactionGeneric.json",
+    "width": 512,
+    "height": 512,
+    "frames": 89,
+    "fps": 60
+  },
+  {
+    "id": "StarReaction",
+    "src": "/animations/telegram/assets/StarReaction.json",
+    "width": 512,
+    "height": 512,
+    "frames": 125,
+    "fps": 60
+  },
+  {
+    "id": "StarReactionAppear",
+    "src": "/animations/telegram/assets/StarReactionAppear.json",
+    "width": 512,
+    "height": 512,
+    "frames": 43,
+    "fps": 60
+  },
+  {
+    "id": "StarReactionEffect1",
+    "src": "/animations/telegram/assets/StarReactionEffect1.json",
+    "width": 512,
+    "height": 512,
+    "frames": 90,
+    "fps": 60
+  },
+  {
+    "id": "StarReactionEffect2",
+    "src": "/animations/telegram/assets/StarReactionEffect2.json",
+    "width": 512,
+    "height": 512,
+    "frames": 83,
+    "fps": 60
+  },
+  {
+    "id": "StarReactionEffect3",
+    "src": "/animations/telegram/assets/StarReactionEffect3.json",
+    "width": 512,
+    "height": 512,
+    "frames": 85,
+    "fps": 60
+  },
+  {
+    "id": "StarReactionSelect",
+    "src": "/animations/telegram/assets/StarReactionSelect.json",
+    "width": 512,
+    "height": 512,
+    "frames": 121,
+    "fps": 60
+  },
+  {
+    "id": "StatsEmoji",
+    "src": "/animations/telegram/assets/StatsEmoji.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "TwoFactorSetupMonkeyClose",
+    "src": "/animations/telegram/assets/TwoFactorSetupMonkeyClose.json",
+    "width": 512,
+    "height": 512,
+    "frames": 98,
+    "fps": 60
+  },
+  {
+    "id": "TwoFactorSetupMonkeyCloseAndPeek",
+    "src": "/animations/telegram/assets/TwoFactorSetupMonkeyCloseAndPeek.json",
+    "width": 512,
+    "height": 512,
+    "frames": 33,
+    "fps": 60
+  },
+  {
+    "id": "TwoFactorSetupMonkeyCloseAndPeekToIdle",
+    "src": "/animations/telegram/assets/TwoFactorSetupMonkeyCloseAndPeekToIdle.json",
+    "width": 512,
+    "height": 512,
+    "frames": 33,
+    "fps": 60
+  },
+  {
+    "id": "TwoFactorSetupMonkeyIdle",
+    "src": "/animations/telegram/assets/TwoFactorSetupMonkeyIdle.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "TwoFactorSetupMonkeyPeek",
+    "src": "/animations/telegram/assets/TwoFactorSetupMonkeyPeek.json",
+    "width": 512,
+    "height": 512,
+    "frames": 33,
+    "fps": 60
+  },
+  {
+    "id": "TwoFactorSetupMonkeyTracking",
+    "src": "/animations/telegram/assets/TwoFactorSetupMonkeyTracking.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "UtyanBirthday",
+    "src": "/animations/telegram/assets/UtyanBirthday.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "UtyanDisappear",
+    "src": "/animations/telegram/assets/UtyanDisappear.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "UtyanDiscussion",
+    "src": "/animations/telegram/assets/UtyanDiscussion.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "UtyanLinks",
+    "src": "/animations/telegram/assets/UtyanLinks.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "UtyanPasscode",
+    "src": "/animations/telegram/assets/UtyanPasscode.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "UtyanRestricted",
+    "src": "/animations/telegram/assets/UtyanRestricted.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "UtyanSearch",
+    "src": "/animations/telegram/assets/UtyanSearch.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "UtyanStories",
+    "src": "/animations/telegram/assets/UtyanStories.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "collectible_phone",
+    "src": "/animations/telegram/assets/collectible_phone.json",
+    "width": 512,
+    "height": 512,
+    "frames": 59,
+    "fps": 60
+  },
+  {
+    "id": "collectible_username",
+    "src": "/animations/telegram/assets/collectible_username.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "hand_stop",
+    "src": "/animations/telegram/assets/hand_stop.json",
+    "width": 512,
+    "height": 512,
+    "frames": 90,
+    "fps": 60
+  },
+  {
+    "id": "jolly_roger",
+    "src": "/animations/telegram/assets/jolly_roger.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "key",
+    "src": "/animations/telegram/assets/key.json",
+    "width": 512,
+    "height": 512,
+    "frames": 157,
+    "fps": 60
+  },
+  {
+    "id": "large_lastseen",
+    "src": "/animations/telegram/assets/large_lastseen.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "large_readtime",
+    "src": "/animations/telegram/assets/large_readtime.json",
+    "width": 512,
+    "height": 512,
+    "frames": 180,
+    "fps": 60
+  },
+  {
+    "id": "voice_mini",
+    "src": "/animations/telegram/assets/voice_mini.json",
+    "width": 60,
+    "height": 60,
+    "frames": 172,
+    "fps": 60
+  },
+  {
+    "id": "voice_outlined2",
+    "src": "/animations/telegram/assets/voice_outlined2.json",
+    "width": 55,
+    "height": 55,
+    "frames": 84,
+    "fps": 60
+  },
+  {
+    "id": "voip_filled",
+    "src": "/animations/telegram/assets/voip_filled.json",
+    "width": 60,
+    "height": 60,
+    "frames": 404,
+    "fps": 60
+  }
+]

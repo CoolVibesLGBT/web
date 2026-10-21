@@ -182,7 +182,7 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
 
               {/* Top badges */}
               <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between">
-                <span className="flex items-center gap-1 rounded-full bg-black/50 backdrop-blur-md px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-amber-300 border border-amber-400/20">
+                <span className="flex items-center gap-1 rounded-full bg-black/50 backdrop-blur-md px-2 py-0.5 text-[0.765rem] font-semibold normal-case tracking-wider text-amber-300 border border-amber-400/20">
                   <Flame className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />
                   Hot
                 </span>
@@ -190,22 +190,22 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
               </div>
 
               {/* Bottom info */}
-              <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-3 text-left">
+              <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-3 text-start">
                 <div className="flex items-center gap-1 min-w-0">
-                  <p className="truncate text-[13px] font-extrabold text-white leading-tight">
+                  <p className="truncate text-[0.765rem] font-semibold text-white leading-tight">
                     {user.displayname || user.username}
                   </p>
                   <CheckCircle2 className="h-3 w-3 shrink-0 text-[var(--color-brand)] fill-[var(--color-brand)]/20" />
                 </div>
-                <p className="text-[10px] font-semibold text-white/50 truncate">@{user.username}{age !== null ? ` · ${age}` : ''}</p>
+                <p className="text-[0.765rem] font-semibold text-white/50 truncate">@{user.username}{age !== null ? ` · ${age}` : ''}</p>
                 {followers !== undefined && followers > 0 && (
-                  <p className="text-[10px] font-bold text-amber-300/90 mt-0.5">
+                  <p className="text-[0.765rem] font-bold text-amber-300/90 mt-0.5">
                     {formatFollowers(followers)} takipçi
                   </p>
                 )}
 
                 {/* Follow CTA */}
-                <div className="mt-1.5 flex items-center justify-center gap-1 rounded-xl bg-white/[0.12] group-hover:bg-[var(--color-brand)] backdrop-blur-sm py-1.5 text-[10px] font-bold text-white transition-all duration-200 border border-white/10 group-hover:border-[var(--color-brand)]">
+                <div className="mt-1.5 flex items-center justify-center gap-1 rounded-xl bg-white/[0.12] group-hover:bg-[var(--color-brand)] backdrop-blur-sm py-1.5 text-[0.765rem] font-bold text-white transition-all duration-200 border border-white/10 group-hover:border-[var(--color-brand)]">
                   <UserPlus className="h-2.5 w-2.5" />
                   <span>Takip Et</span>
                 </div>
@@ -288,7 +288,7 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
                 className={`absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${!isAuthenticated ? 'blur-md' : ''}`}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-90" />
-              <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-4 text-left">
+              <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-4 text-start">
                 <div className="flex items-center gap-1.5">
                   <p className="truncate text-base font-bold text-white">{user.displayname || user.username}</p>
                   <CheckCircle2 className="h-4 w-4 text-[var(--color-brand)] fill-[var(--color-brand)]/20 shrink-0" />
@@ -318,10 +318,10 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
                 <Sparkles className="h-4 w-4" />
               </span>
               <div>
-                <h4 className={`text-[13px] font-black uppercase tracking-[0.12em] ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h4 className={`text-[0.765rem] font-semibold normal-case tracking-normal ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   {t('app.popular_users_title', { defaultValue: 'Popüler İçerik Üreticileri' })}
                 </h4>
-                <p className="text-[11px] font-medium text-slate-400 dark:text-zinc-500">
+                <p className="text-[0.765rem] font-medium text-slate-400 dark:text-zinc-500">
                   {t('app.popular_users_subtitle', { defaultValue: 'Öne çıkan üreticileri keşfet' })}
                 </p>
               </div>
@@ -329,7 +329,7 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
             <button
               type="button"
               onClick={() => navigate('/nearby')}
-              className="cv-btn-text cv-btn-sm gap-0.5 text-[11px] font-black uppercase tracking-wider"
+              className="cv-btn-text cv-btn-sm gap-0.5 text-[0.765rem] font-semibold normal-case tracking-wider"
             >
               Tümü
               <ChevronRight className="h-3.5 w-3.5" />
@@ -352,7 +352,7 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
       {showHeader && (
         <div className="flex items-start justify-between gap-3 mb-4">
           <div>
-            <p className={`text-[10px] font-semibold uppercase tracking-[0.4em] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+            <p className={`text-[0.765rem] font-semibold normal-case tracking-normal ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
               {t('app.popular_users_badge', { defaultValue: 'Keşfet' })}
             </p>
             <h3 className={`mt-1 text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>

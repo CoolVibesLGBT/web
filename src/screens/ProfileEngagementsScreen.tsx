@@ -624,11 +624,11 @@ const ProfileEngagementsScreen: React.FC = () => {
 
   return (
     <Container>
-      <div className={`mx-auto flex min-h-full w-full max-w-5xl flex-col gap-5 px-1 pb-8 pt-24 md:px-2 md:pt-28 ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
+      <div className={`mx-auto flex min-h-full w-full max-w-5xl flex-col gap-5 px-1 pb-8 pt-4 md:px-2 md:pt-6 ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
         <section className={`shrink-0 rounded-[30px] border px-4 py-4 backdrop-blur-3xl md:px-5 ${theme === 'dark' ? 'cv-card-surface-soft border-white/10' : 'border-white/70 bg-white/75'} shadow-[0_28px_90px_-48px_rgba(15,23,42,0.55)]`}>
           <div className="flex items-center justify-between gap-4">
             <p
-              className={`min-w-0 truncate text-[11px] font-medium opacity-60 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+              className={`min-w-0 truncate text-[0.765rem] font-medium opacity-60 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                 }`}
             >
               {profile?.displayname && profile.displayname !== effectiveUsername

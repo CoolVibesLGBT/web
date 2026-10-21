@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ArrowLeft } from 'lucide-react';
 import { useParams, useNavigate, useLocation } from '@/router';
 import { useTheme } from '../contexts/ThemeContext';
 import Post, { type PostProps, type ApiPost } from '../features/post/Post';
@@ -254,40 +253,6 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
   const panelClassName = theme === 'dark'
     ? 'cv-card-surface-soft border-white/10 text-zinc-300'
     : 'border-white/70 bg-white/75 text-slate-600';
-  const backHeader = (
-    <div className="sticky top-0 z-20 mb-3 flex h-[53px] items-center gap-3 border-b border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-soft)] pl-4 pr-5 backdrop-blur-[12px] md:pr-6">
-      <button
-        type="button"
-        onClick={() => navigate(-1)}
-        aria-label={t('app.back', { defaultValue: 'Back' })}
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
-      >
-        <ArrowLeft className="h-4 w-4" />
-      </button>
-      <h1 className="text-[20px] font-bold leading-tight tracking-tight">
-        {t('post_details.title', { defaultValue: 'Post' })}
-      </h1>
-    </div>
-  );
-  // Check-in detay sayfası Settings ekranındaki gibi tam genişlikte, sticky
-  // bir üst bar kullanıyor (yuvarlak geri butonu + başlık), kayan içerik
-  // bloğunun içindeki sade geri butonu yerine.
-  const checkInHeader = (
-    <div className="sticky top-0 z-20 mb-3 flex h-[53px] items-center gap-3 border-b border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-soft)] pl-4 pr-5 backdrop-blur-[12px] md:pr-6">
-      <button
-        type="button"
-        onClick={() => navigate('/checkin', { replace: true })}
-        aria-label={t('app.back', { defaultValue: 'Back' })}
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
-      >
-        <ArrowLeft className="h-4 w-4" />
-      </button>
-      <h1 className="text-[20px] font-bold leading-tight tracking-tight">
-        {t('app.nav.checkin', { defaultValue: 'Check-In' })}
-      </h1>
-    </div>
-  );
-  const header = isCheckInRoute ? checkInHeader : backHeader;
   const replyPosts = React.useMemo(
     () => (post?.children || []).filter((child) => !isDeletedMarker(child.deleted_at)),
     [post?.children, isDeletedMarker]
@@ -322,7 +287,6 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
     return (
       <div className={pageClassName}>
         <main className={contentClassName}>
-          {header}
           <div className={detailCardClassName}>
             <PostSkeleton theme={theme} />
           </div>
@@ -335,9 +299,8 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
     return (
       <div className={pageClassName}>
         <div className={contentClassName}>
-          {header}
           <div className={`rounded-[30px] border p-10 text-center backdrop-blur-3xl ${panelClassName}`}>
-            <p className="text-sm font-black">{t('post_details.deleted')}</p>
+            <p className="text-sm font-semibold">{t('post_details.deleted')}</p>
           </div>
         </div>
       </div>
@@ -348,9 +311,8 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
     return (
       <div className={pageClassName}>
         <div className={contentClassName}>
-          {header}
           <div className={`rounded-[30px] border p-10 text-center backdrop-blur-3xl ${panelClassName}`}>
-            <p className="text-sm font-black text-red-500">{error || t('post_details.errors.not_found')}</p>
+            <p className="text-sm font-semibold text-red-500">{error || t('post_details.errors.not_found')}</p>
           </div>
         </div>
       </div>
@@ -365,7 +327,6 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
         >{serializeJsonLd(postJsonLd)}</script>
       )}
       <main className={contentClassName}>
-        {header}
         <div className="space-y-6">
           <div className={detailCardClassName}>
             <Post

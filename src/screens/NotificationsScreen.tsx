@@ -1,3 +1,4 @@
+import ViewTabs from '@/components/ui/ViewTabs';
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useNavigate } from '@/router';
@@ -15,7 +16,6 @@ import {
   Eye,
   Users,
   AlertCircle,
-  ArrowLeft,
 } from 'lucide-react';
 import { api } from '../services/api';
 import { useAtom } from 'jotai';
@@ -92,8 +92,6 @@ const NotificationsScreen: React.FC = () => {
               : notifications.filter(n =>
                 ['profile_visit', 'friend_request', 'event_reminder', 'system_alert', 'referral'].includes(n.type)
               );
-  const activeTabMeta = notificationTabs.find(tab => tab.id === activeTab) ?? notificationTabs[0];
-  const ActiveTabIcon = activeTabMeta.icon;
 
   const formatTime = (createdAt: string) => {
     const now = new Date();
@@ -200,27 +198,14 @@ const NotificationsScreen: React.FC = () => {
 
   return (
     <div className="skyline-page-scroll w-full bg-[var(--cv-page-bg)] text-[var(--cv-neutral-1)]">
-      <div className="sticky top-0 z-20 flex h-[53px] items-center justify-between gap-3 border-b border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-soft)] pl-4 pr-5 backdrop-blur-[12px] md:pr-6">
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            aria-label={t('app.back', { defaultValue: 'Back' })}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </button>
-          <h1 className="text-[20px] font-bold leading-tight tracking-tight">
-            {t('notifications.title')}
-          </h1>
-        </div>
+      <div className="cv-page-toolbar">
         <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             onClick={markAllAsRead}
             disabled={unreadCount === 0}
             aria-label={t('notifications.mark_all_read')}
-            className="flex h-10 items-center gap-1.5 rounded-[16px] bg-[var(--cv-neutral-1)] px-3.5 text-[13px] font-semibold text-[var(--cv-page-bg)] transition-all hover:bg-[var(--cv-neutral-1-hover)] active:scale-[0.98] disabled:cursor-default disabled:opacity-40"
+            className="flex h-10 items-center gap-1.5 rounded-[16px] bg-[var(--cv-neutral-1)] px-3.5 text-[0.765rem] font-semibold text-[var(--cv-page-bg)] transition-all hover:bg-[var(--cv-neutral-1-hover)] active:scale-[0.98] disabled:cursor-default disabled:opacity-40"
           >
             <CheckCheck className="h-4 w-4 shrink-0" />
             <span className="hidden sm:inline">{t('notifications.mark_all_read')}</span>
@@ -240,49 +225,18 @@ const NotificationsScreen: React.FC = () => {
         {/* Summary */}
         <section className="overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] bg-[var(--cv-card-bg-solid)]">
           <div className="flex items-center justify-between gap-4 p-4">
-            <p className="text-[15px] font-medium leading-tight">{t('notifications.all')}</p>
-            <p className="text-[17px] font-bold leading-none">{notifications.length}</p>
+            <p className="text-[0.882rem] font-medium leading-tight">{t('notifications.all')}</p>
+            <p className="text-[1.0rem] font-bold leading-none">{notifications.length}</p>
           </div>
           {divider}
           <div className="flex items-center justify-between gap-4 p-4">
-            <p className="text-[15px] font-medium leading-tight">{t('notifications.unread')}</p>
-            <p className={`text-[17px] font-bold leading-none ${unreadCount > 0 ? 'text-[var(--color-brand)]' : ''}`}>{unreadCount}</p>
+            <p className="text-[0.882rem] font-medium leading-tight">{t('notifications.unread')}</p>
+            <p className={`text-[1.0rem] font-bold leading-none ${unreadCount > 0 ? 'text-[var(--color-brand)]' : ''}`}>{unreadCount}</p>
           </div>
         </section>
 
         {/* Filter chips */}
-        <div
-          role="tablist"
-          aria-label={t('notifications.title')}
-          className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 no-scrollbar"
-        >
-          {notificationTabs.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[13px] font-semibold transition-colors ${isActive
-                  ? 'bg-[var(--color-brand)] text-white'
-                  : 'bg-[var(--cv-surface-3)] text-[var(--cv-neutral-2)] hover:bg-[var(--cv-surface-3-hover)]'
-                  }`}
-              >
-                <Icon className="h-3.5 w-3.5 shrink-0" />
-                {tab.label}
-                {tab.count > 0 && (
-                  <span className={`flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full px-1 text-[10px] font-bold ${isActive ? 'bg-white/25 text-white' : 'bg-[var(--cv-neutral-1)] text-[var(--cv-page-bg)]'
-                    }`}>
-                    {tab.count}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
+        <ViewTabs items={notificationTabs.map(({ icon: Icon, ...item }) => ({ ...item, icon: <Icon /> }))} activeId={activeTab} onSelect={id => setActiveTab(id as typeof activeTab)} label={t('notifications.title')} />
 
         <main className="min-h-0">
           <AnimatePresence mode="wait">
@@ -296,8 +250,8 @@ const NotificationsScreen: React.FC = () => {
                 <div className="mb-5 flex h-[36px] w-[36px] items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
                   <Bell className="h-[18px] w-[18px]" strokeWidth={2} />
                 </div>
-                <h3 className="text-[15px] font-semibold">{emptyTitle}</h3>
-                <p className={`mt-1 max-w-[320px] text-[13px] leading-snug ${secTextColor}`}>
+                <h3 className="text-[0.882rem] font-semibold">{emptyTitle}</h3>
+                <p className={`mt-1 max-w-[320px] text-[0.765rem] leading-snug ${secTextColor}`}>
                   {emptyMessage}
                 </p>
               </motion.div>

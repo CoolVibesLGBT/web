@@ -207,7 +207,7 @@ const VibesGL: React.FC = () => {
                                 <Loader2 className="w-12 h-12 text-white/20 animate-spin" />
                                 <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 text-white animate-pulse" />
                             </div>
-                            <p className="mt-6 text-[15px] font-bold tracking-widest uppercase opacity-80">Loading Vibes</p>
+                            <p className="mt-6 text-[0.882rem] font-bold tracking-widest normal-case opacity-80">Loading Vibes</p>
                         </div>
                     </motion.div>
                 )}
@@ -215,11 +215,11 @@ const VibesGL: React.FC = () => {
 
             {!isLoading && vibes.length === 0 && (
                 <div className="absolute inset-0 z-40 flex flex-col items-center justify-center text-white bg-black">
-                    <div className="w-20 h-20 bg-gray-900/50 rounded-[32px] flex items-center justify-center mb-6">
+                    <div className="w-20 h-20 bg-gray-900/50 rounded-[20px] flex items-center justify-center mb-6">
                         <Sparkles className="w-10 h-10 text-gray-700" />
                     </div>
                     <h2 className="text-xl font-bold tracking-tight">No Vibes Found</h2>
-                    <p className="text-gray-500 mt-2 text-[14px]">Check back later for new discoveries.</p>
+                    <p className="text-gray-500 mt-2 text-[0.824rem]">Check back later for new discoveries.</p>
                 </div>
             )}
 

@@ -2067,7 +2067,7 @@ const Post: React.FC<PostProps> = ({
           </div>
           <div className="flex items-center gap-2" data-no-post-click="true" onClick={(e) => e.stopPropagation()}>
             <span
-              className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-[11px] font-bold tabular-nums ${theme === 'dark'
+              className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-[0.765rem] font-bold tabular-nums ${theme === 'dark'
                 ? 'border-white/10 bg-white/[0.045] text-zinc-400'
                 : 'border-slate-200/70 bg-slate-50/80 text-slate-500'
                 }`}
@@ -2146,7 +2146,7 @@ const Post: React.FC<PostProps> = ({
                       onMouseDown={(e) => e.stopPropagation()}
                       onPointerDown={(e) => e.stopPropagation()}
                       disabled={isDeleting}
-                      className={`w-full px-4 py-3 flex items-center gap-3 text-left transition-colors duration-200 first:rounded-t-xl ${theme === 'dark'
+                      className={`w-full px-4 py-3 flex items-center gap-3 text-start transition-colors duration-200 first:rounded-t-xl ${theme === 'dark'
                         ? 'hover:bg-gray-800 text-red-400 hover:text-red-300'
                         : 'hover:bg-gray-50 text-red-600 hover:text-red-700'
                         } ${isDeleting ? 'opacity-50 cursor-wait' : ''}`}
@@ -2170,7 +2170,7 @@ const Post: React.FC<PostProps> = ({
                         onClick={(e) => e.stopPropagation()}
                         onMouseDown={(e) => e.stopPropagation()}
                         onPointerDown={(e) => e.stopPropagation()}
-                        className={`w-full px-4 py-3 flex items-center gap-3 text-left transition-colors duration-200 cursor-pointer ${user && user.id === post.author_id ? 'rounded-b-xl' : 'rounded-xl'
+                        className={`w-full px-4 py-3 flex items-center gap-3 text-start transition-colors duration-200 cursor-pointer ${user && user.id === post.author_id ? 'rounded-b-xl' : 'rounded-xl'
                           } ${theme === 'dark'
                             ? 'hover:bg-gray-800 text-gray-300 hover:text-white'
                             : 'hover:bg-gray-50 text-gray-700 hover:text-gray-900'
@@ -2541,7 +2541,7 @@ const Post: React.FC<PostProps> = ({
                               {getLocalizedContent(poll.question, defaultLanguage)}                    </h4>
                           </div>
                           <div className="flex items-center gap-1.5 flex-shrink-0">
-                            <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium flex items-center gap-1 ${kindInfo.color === 'blue'
+                            <span className={`text-[0.765rem] px-2 py-0.5 rounded-full font-medium flex items-center gap-1 ${kindInfo.color === 'blue'
                               ? theme === 'dark'
                                 ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
                                 : 'bg-blue-50 text-blue-600 border border-blue-200/50'
@@ -2561,7 +2561,7 @@ const Post: React.FC<PostProps> = ({
                               {kindInfo.label}
                             </span>
                             {isMultipleChoice && (
-                              <span className={`text-[10px] font-medium ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'
+                              <span className={`text-[0.765rem] font-medium ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'
                                 }`}>
                                 Up to {maxSelectable}
                               </span>
@@ -2682,7 +2682,7 @@ const Post: React.FC<PostProps> = ({
                                 <div className="flex justify-between items-center mb-2.5">
                                   <div className="flex items-center gap-2.5 flex-1 min-w-0 pr-10">
                                     {pollKind === 'ranked' && rankPosition && (
-                                      <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${theme === 'dark'
+                                      <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[0.765rem] font-bold flex-shrink-0 ${theme === 'dark'
                                         ? 'bg-white/20 text-white border border-white/30'
                                         : 'bg-gray-900/10 text-gray-900 border border-gray-200/50'
                                         }`}>
@@ -2751,7 +2751,7 @@ const Post: React.FC<PostProps> = ({
                                             return (
                                               <div
                                                 key={voter.id}
-                                                className={`w-5 h-5 rounded-full border overflow-hidden flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${theme === 'dark'
+                                                className={`w-5 h-5 rounded-full border overflow-hidden flex items-center justify-center text-[0.765rem] font-bold flex-shrink-0 ${theme === 'dark'
                                                   ? 'border-gray-900 bg-gray-900/50 text-white ring-1 ring-gray-900'
                                                   : 'border-gray-200/50 bg-white text-gray-900 ring-1 ring-gray-200/50'
                                                   }`}
@@ -2780,7 +2780,7 @@ const Post: React.FC<PostProps> = ({
                                             );
                                           })}
                                           {voters.length > 5 && (
-                                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[10px] font-bold ml-1 ${theme === 'dark'
+                                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[0.765rem] font-bold ml-1 ${theme === 'dark'
                                               ? 'border-gray-900 bg-gray-900/50 text-white/80 ring-1 ring-gray-900'
                                               : 'border-gray-200/50 bg-white text-gray-600 ring-1 ring-gray-200/50'
                                               }`}>
@@ -2909,7 +2909,7 @@ const Post: React.FC<PostProps> = ({
                         }`}>
                         Event
                       </h3>
-                      <p className={`text-[10px] sm:text-xs font-medium tracking-wide truncate ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'
+                      <p className={`text-[0.765rem] sm:text-xs font-medium tracking-wide truncate ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'
                         }`}>
                         Plan with community
                       </p>
@@ -3276,10 +3276,10 @@ const Post: React.FC<PostProps> = ({
                   key={`${item.key ?? 'meta'}-${idx}`}
                   className={`flex items-center justify-between gap-3 py-1.5 ${idx < classifiedMetadata.length - 1 ? (theme === 'dark' ? 'border-b border-white/5' : 'border-b border-slate-200') : ''}`}
                 >
-                  <span className={`text-[10px] font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-slate-500'}`}>
+                  <span className={`text-[0.765rem] font-semibold normal-case tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-slate-500'}`}>
                     {item.key || '-'}
                   </span>
-                  <span className={`text-sm font-medium text-right ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                  <span className={`text-sm font-medium text-end ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                     {item.value || '-'}
                   </span>
                 </div>
@@ -3526,7 +3526,7 @@ const Post: React.FC<PostProps> = ({
                   >
                     <HandCoins className={`w-5 h-5 ${hasTipped ? 'fill-current' : ''}`} />
                     <span
-                      className={`text-[11px] mt-0.5 font-medium ${hasTipped
+                      className={`text-[0.765rem] mt-0.5 font-medium ${hasTipped
                         ? theme === 'dark'
                           ? 'text-red-200'
                           : 'text-red-700'
@@ -3584,7 +3584,7 @@ const Post: React.FC<PostProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 18 }}
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className={`cv-modal-glass-panel flex max-h-[calc(100dvh-7rem)] w-full max-w-2xl flex-col overflow-y-auto rounded-[28px] border no-scrollbar ${
+            className={`cv-modal-glass-panel flex max-h-[calc(100dvh-7rem)] w-full max-w-2xl flex-col overflow-y-auto rounded-[20px] border no-scrollbar ${
               theme === 'dark'
                 ? 'text-white'
                 : 'text-slate-950'

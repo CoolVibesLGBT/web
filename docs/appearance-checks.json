@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM-only Playwright with intercepted API fixtures; no screenshots or live writes",
+  "checks": [
+    {
+      "width": 320,
+      "language": "en",
+      "theme": "light",
+      "status": "passed",
+      "checks": "settings navigation, nine themes/patterns, four bases/49 accents, preview isolation, text size, persistence, wallpaper color, no overflow/page errors"
+    },
+    {
+      "width": 390,
+      "language": "tr",
+      "theme": "dark",
+      "status": "passed",
+      "checks": "settings navigation, nine themes/patterns, four bases/49 accents, preview isolation, text size, persistence, wallpaper color, no overflow/page errors"
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "status": "passed",
+      "checks": "settings navigation, nine themes/patterns, four bases/49 accents, preview isolation, text size, persistence, wallpaper color, no overflow/page errors"
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "status": "passed",
+      "checks": "settings navigation, nine themes/patterns, four bases/49 accents, preview isolation, text size, persistence, wallpaper color, no overflow/page errors"
+    }
+  ],
+  "gradientReference": {
+    "imagesCompared": 264,
+    "result": "Byte-for-byte match to the supplied tweb 50x50 renderer across all source palettes and eight phases"
+  },
+  "localization": "All appearance labels are present in all 21 common locales.",
+  "limits": "Preview settings only; actual chats retain their current appearance. No real-device or screenshot comparison.",
+  "backgroundControls": {
+    "result": "passed",
+    "checks": [
+      "All nine original SVGs decode",
+      "Add/remove gradient stops",
+      "45-degree rotation",
+      "Pattern intensity",
+      "12 solid-color choices",
+      "Photo upload",
+      "IndexedDB persistence across reload",
+      "Blur",
+      "Reset"
+    ],
+    "scope": "390px English; intercepted API fixture"
+  },
+  "productionBuild": "yarn build passed; two existing map lint warnings. Full TypeScript check retains existing editor/map errors; no errors in the appearance files."
+}

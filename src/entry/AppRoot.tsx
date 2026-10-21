@@ -1,9 +1,13 @@
 import React, { Suspense, useEffect } from 'react'
 import App from '@/App'
+import ChunkErrorBoundary from '@/components/ui/ChunkErrorBoundary'
 import Providers from './Providers'
+import { MotionConfig } from 'framer-motion'
+import { InterfaceViewport } from '@/components/ui/Interface'
 import SplashScreen from '@/components/ui/SplashScreen'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { applicationName } from '@/appSettings'
+import RippleEffects from '@/components/ui/RippleEffects'
 
 const normalizePath = (path: string) => {
   if (!path) return '/'
@@ -41,11 +45,17 @@ const AppRoot = () => {
   }
 
   return (
+    <ChunkErrorBoundary>
     <Providers>
+      <InterfaceViewport />
+      <RippleEffects />
+      <MotionConfig reducedMotion="user">
       <Suspense fallback={null}>
         <App />
       </Suspense>
+      </MotionConfig>
     </Providers>
+    </ChunkErrorBoundary>
   )
 }
 

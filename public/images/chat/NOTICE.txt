@@ -1,0 +1,6 @@
+Telegram Web K reference: https://github.com/morethanwords/tweb
+Bundled pattern.svg, theme preset data and adapted gradient/color algorithms originate from tweb, GPL-3.0.
+Local reference supplied by the user: tweb-master.
+The upstream license is included as LICENSE-telegram.txt.
+
+The eight public color-theme bundles and their original SVG wallpaper patterns are included for the local appearance preview. No account, authentication or access-hash data is included.

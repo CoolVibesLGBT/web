@@ -1,0 +1,47 @@
+.cv-message-actions { position: fixed; z-index: 1000; width: max-content; min-width: 13rem; max-width: calc(100vw - 16px); padding: .25rem; border: 0; border-radius: 16px; color: var(--cv-neutral-1); background: var(--cv-menu-background); backdrop-filter: blur(50px); box-shadow: 0 0 10px rgb(0 0 0 / 15%); overflow-y: auto; max-height: calc(100dvh - 24px); }
+.cv-message-actions button { display: flex; align-items: center; gap: 1.25rem; width: 100%; min-height: 44px; padding: .25rem .75rem; border: 0; border-radius: 12px; text-align: start; font-size: .824rem; line-height: 1.2857; font-weight: 500; color: inherit; background: transparent; }
+.cv-message-actions:is(:focus, :focus-visible) { outline: none; }
+.cv-message-actions button svg { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; color: inherit; }
+.cv-message-actions button:hover, .cv-message-actions button:active { background: var(--cv-menu-hover); }
+.cv-message-actions button[data-danger='true'] { margin-top: .25rem; color: var(--cv-menu-danger); }
+.cv-message-actions button[data-danger='true']:hover { background: color-mix(in srgb, var(--cv-menu-danger) 8%, transparent); }
+.cv-message-actions button[data-danger='true'] svg { color: inherit; }
+.cv-chat-message-selectable { align-items: center; gap: .75rem; border-radius: 8px; }
+.cv-chat-message-selectable[data-selected='true'] { background: color-mix(in srgb, var(--color-brand) 18%, transparent); }
+.cv-chat-selection-check { display: grid; place-items: center; width: 1.5rem; height: 1.5rem; flex: 0 0 auto; border: 2px solid white; border-radius: 50%; background: rgb(0 0 0 / 12%); color: transparent; margin-inline-start: .375rem; }
+.cv-chat-message-selectable[data-selected='true'] .cv-chat-selection-check { background: var(--color-brand); border-color: var(--color-brand); color: white; }
+.cv-chat-selection-check svg { width: 1rem; height: 1rem; }
+.cv-chat-message-selectable[role='checkbox'] { cursor: pointer; min-height: 44px; }
+.cv-telegram-chat .cv-chat-message-selectable[role='checkbox'] .cv-chat-bubble { max-width: min(34rem, calc(100% - 3.25rem)); }
+.cv-chat-message-selectable[data-side='outgoing'] .cv-chat-selection-check { margin-inline-end: auto; }
+.cv-chat-selection-bar { display: flex; align-items: center; gap: .25rem; min-height: 3rem; padding: .25rem; border-radius: 24px; background: var(--cv-card-bg-solid); color: var(--cv-neutral-1); box-shadow: 0 1px 8px 1px rgb(0 0 0 / 12%); }
+.cv-chat-selection-bar > span { flex: 1; text-align: center; font-size: .941rem; font-weight: 600; }
+.cv-chat-selection-bar button, .cv-chat-compose-helper > button { display: grid; place-items: center; width: 44px; height: 44px; flex: 0 0 auto; border-radius: 50%; color: var(--cv-neutral-2); }
+.cv-chat-selection-bar button svg { width: 1.5rem; height: 1.5rem; }
+.cv-chat-selection-bar button[data-danger='true'] { color: var(--cv-critical); }
+.cv-chat-selection-bar button:disabled { opacity: .35; }
+.cv-switch.cv-chat-setting-switch[data-checked='true'] { background: var(--color-brand); }
+.cv-switch.cv-chat-setting-switch[data-checked='true']:hover { background: var(--color-brand-hovered); }
+[dir='rtl'] .cv-switch.cv-chat-setting-switch[data-checked='true'] .cv-switch-thumb { transform: translateX(-20px); }
+.cv-chat-composer[data-selecting='true'] > :not(.cv-chat-selection-bar) { display: none !important; }
+.cv-chat-compose-plate { flex: 1; min-width: 0; background: var(--cv-card-bg-solid); border: 0; border-radius: 24px; box-shadow: 0 1px 8px 1px rgb(0 0 0 / 12%); overflow: hidden; }
+.cv-chat-compose-plate .cv-chat-compose-field, .cv-chat-compose-plate .cv-chat-compose-field:focus-within { background: transparent; box-shadow: none; border: 0; outline: none; }
+.cv-chat-compose-helper { display: flex; align-items: center; gap: .25rem; min-height: 3rem; padding: .25rem .25rem 0; background: transparent; border: 0; color: var(--color-brand); }
+.cv-chat-helper-icon { display: grid; place-items: center; width: max(44px, 2.5rem); height: 44px; flex: 0 0 auto; }
+.cv-chat-helper-icon svg { width: 1.5rem; height: 1.5rem; }
+.cv-chat-compose-helper > div { flex: 1; min-width: 0; border-inline-start: 3px solid currentColor; padding: .25rem .5rem; background: color-mix(in srgb, var(--color-brand) 8%, transparent); border-radius: 8px; }
+.cv-chat-compose-helper > button { color: var(--color-brand); }
+.cv-chat-compose-helper strong, .cv-chat-compose-helper p { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .824rem; line-height: 1.35; margin: 0; }
+.cv-chat-compose-helper p { color: var(--cv-neutral-2); }
+.cv-chat-bubble .cv-chat-reply { display: block; width: 100%; max-width: 100%; min-height: 44px; margin-block: .125rem .25rem; padding: .25rem .5rem; text-align: start; border-inline-start: 2px solid currentColor; border-radius: 4px; background: color-mix(in srgb, currentColor 6%, transparent); color: inherit; overflow: hidden; }
+.cv-chat-reply strong, .cv-chat-reply span { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .824rem; line-height: 1.35; }
+.cv-chat-pinned { position: relative; z-index: 2; display: flex; align-items: center; gap: .75rem; min-height: 3rem; padding: .25rem 1rem; background: var(--cv-card-bg-solid); color: var(--color-brand); text-align: start; }
+.cv-chat-pinned > svg { width: 1.25rem; height: 1.25rem; flex: 0 0 auto; }
+.cv-chat-pinned > span { display: flex; flex-direction: column; min-width: 0; border-inline-start: 2px solid currentColor; padding-inline-start: .5rem; }
+.cv-chat-pinned strong, .cv-chat-pinned small { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: .824rem; }
+.cv-chat-pinned small { color: var(--cv-neutral-2); }
+.cv-chat-action-error { z-index: 3; display: flex; align-items: center; gap: .5rem; padding: .5rem 1rem; color: var(--cv-critical); background: var(--cv-card-bg-solid); }
+.cv-chat-action-error button { margin-inline-start: auto; width: 44px; min-height: 44px; }
+.cv-forward-search { width: 100%; min-height: 44px; padding: .5rem 1rem; border: 0; border-radius: 16px; background: var(--cv-surface-2); color: var(--cv-neutral-1); margin-block-end: .5rem; }
+@media (prefers-reduced-motion: no-preference) { .cv-message-actions { animation: cv-message-menu-in .2s cubic-bezier(.4,0,.2,1); transform-origin: top center; } .cv-message-actions button { transition: transform .1s cubic-bezier(.4,0,.2,1); } .cv-message-actions button:active { transform: scale(.96); } @keyframes cv-message-menu-in { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: scale(1); } } }
+@media (prefers-reduced-transparency: reduce) { .cv-message-actions { background: var(--cv-card-bg-solid); backdrop-filter: none; } }

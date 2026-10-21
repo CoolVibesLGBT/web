@@ -1,8 +1,8 @@
+import ViewTabs from '@/components/ui/ViewTabs';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   AlertCircle,
-  ArrowLeft,
   ArrowUpRight,
   Calendar,
   Loader2,
@@ -338,17 +338,17 @@ const SearchScreen: React.FC = () => {
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-start gap-3">
-            <h3 className={`min-w-0 flex-1 truncate text-[15px] font-bold ${textColor}`}>{title}</h3>
+            <h3 className={`min-w-0 flex-1 truncate text-[0.882rem] font-bold ${textColor}`}>{title}</h3>
             <ArrowUpRight className={`h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${secondaryTextColor}`} />
           </div>
-          {startTime && <p className="mt-1 text-[12px] font-bold text-fuchsia-500">{formatDate(startTime, i18n.language)}</p>}
+          {startTime && <p className="mt-1 text-[0.765rem] font-bold text-fuchsia-500">{formatDate(startTime, i18n.language)}</p>}
           {locationText && (
-            <p className={`mt-1 flex items-center gap-1 truncate text-[12px] ${secondaryTextColor}`}>
+            <p className={`mt-1 flex items-center gap-1 truncate text-[0.765rem] ${secondaryTextColor}`}>
               <MapPin className="h-3.5 w-3.5 shrink-0" />
               {locationText}
             </p>
           )}
-          {description && <p className={`mt-2 line-clamp-2 text-[13px] ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{description}</p>}
+          {description && <p className={`mt-2 line-clamp-2 text-[0.765rem] ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{description}</p>}
         </div>
       </article>
     );
@@ -407,14 +407,14 @@ const SearchScreen: React.FC = () => {
     if (!filter || count === 0) return null;
     return (
       <div className="flex items-center justify-between gap-2 px-1 pb-2 pt-1">
-        <span className={`text-[11px] font-black uppercase tracking-[0.16em] ${secondaryTextColor}`}>
+        <span className={`text-[0.765rem] font-semibold normal-case tracking-normal ${secondaryTextColor}`}>
           {filter.label} · {count}
         </span>
         {showAll && (
           <button
             type="button"
             onClick={() => setActiveFilter(filterId)}
-            className="flex shrink-0 items-center gap-0.5 text-[12px] font-bold text-[var(--color-brand)] transition-opacity hover:opacity-80"
+            className="flex shrink-0 items-center gap-0.5 text-[0.765rem] font-bold text-[var(--color-brand)] transition-opacity hover:opacity-80"
           >
             {t('search.show_all', { defaultValue: 'Show all' })}
             <ArrowUpRight className="h-3.5 w-3.5" />
@@ -543,8 +543,8 @@ const SearchScreen: React.FC = () => {
           <div className={`flex h-16 w-16 items-center justify-center rounded-[22px] ${isDark ? 'cv-card-surface-muted' : 'bg-gray-50'}`}>
             <Search className={`h-8 w-8 ${isDark ? 'text-gray-600' : 'text-gray-300'}`} strokeWidth={1.5} />
           </div>
-          <h2 className={`mt-5 text-[17px] font-bold ${textColor}`}>{t('search.start_title', { defaultValue: 'Find your community' })}</h2>
-          <p className={`mt-2 max-w-sm text-[14px] leading-relaxed ${secondaryTextColor}`}>
+          <h2 className={`mt-5 text-[1.0rem] font-bold ${textColor}`}>{t('search.start_title', { defaultValue: 'Find your community' })}</h2>
+          <p className={`mt-2 max-w-sm text-[0.824rem] leading-relaxed ${secondaryTextColor}`}>
             {t('search.start_subtitle', { defaultValue: 'Enter at least two characters to search people, events, posts and places.' })}
           </p>
         </div>
@@ -563,8 +563,8 @@ const SearchScreen: React.FC = () => {
             <div className={`flex h-16 w-16 items-center justify-center rounded-[22px] ${isDark ? 'cv-card-surface-muted' : 'bg-gray-50'}`}>
               <Search className={`h-8 w-8 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} strokeWidth={1.5} />
             </div>
-            <h2 className={`mt-5 text-[17px] font-bold ${textColor}`}>{t('search.no_results', { defaultValue: 'No results found' })}</h2>
-            <p className={`mt-2 max-w-sm text-[14px] leading-relaxed ${secondaryTextColor}`}>
+            <h2 className={`mt-5 text-[1.0rem] font-bold ${textColor}`}>{t('search.no_results', { defaultValue: 'No results found' })}</h2>
+            <p className={`mt-2 max-w-sm text-[0.824rem] leading-relaxed ${secondaryTextColor}`}>
               {t('search.no_results_subtitle', { defaultValue: 'Try another search term or choose a different category.' })}
             </p>
           </motion.div>
@@ -590,36 +590,7 @@ const SearchScreen: React.FC = () => {
           <div className="pointer-events-auto z-50 mx-auto w-full max-w-7xl">
             <section className="relative">
               <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
-                <div className="cv-tab-row">
-                  <div className="flex shrink-0 items-center pl-4">
-                    <button
-                      type="button"
-                      onClick={() => navigate('/')}
-                      aria-label={t('app.back', { defaultValue: 'Back' })}
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
-                    >
-                      <ArrowLeft className="h-4 w-4" />
-                    </button>
-                  </div>
-                  {filters.map((filter) => {
-                    const Icon = filter.icon;
-                    const isActive = activeFilter === filter.id;
-                    return (
-                      <button
-                        key={filter.id}
-                        type="button"
-                        onClick={() => setActiveFilter(filter.id)}
-                        style={{ minWidth: 0 }}
-                        className={`cv-tab ${isActive ? 'is-active' : ''}`}
-                        title={filter.label}
-                      >
-                        <Icon className="h-5 w-5 shrink-0" />
-                        <span className="hidden min-w-0 truncate text-[13px] sm:inline">{filter.label}</span>
-                        <span className={`cv-tab-underline ${isActive ? 'is-on' : ''}`} />
-                      </button>
-                    );
-                  })}
-                </div>
+                <ViewTabs items={filters.map(({ icon: Icon, ...item }) => ({ ...item, icon: <Icon /> }))} activeId={activeFilter} onSelect={id => setActiveFilter(id)} label={t('app.nav.search')} />
               </div>
 
               <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
@@ -636,7 +607,7 @@ const SearchScreen: React.FC = () => {
                     onChange={(event) => setSearchQuery(event.target.value)}
                     placeholder={t('search.placeholder', { defaultValue: 'Search people, posts, events or places...' })}
                     aria-label={t('search.placeholder', { defaultValue: 'Search people, posts, events or places...' })}
-                    className="min-w-0 flex-1 bg-transparent text-[13px] font-semibold text-[var(--cv-neutral-1)] outline-none placeholder:text-[var(--cv-neutral-2)] placeholder:opacity-60"
+                    className="min-w-0 flex-1 bg-transparent text-[0.765rem] font-semibold text-[var(--cv-neutral-1)] outline-none placeholder:text-[var(--cv-neutral-2)] placeholder:opacity-60"
                   />
                   {isSearching ? (
                     <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-[var(--cv-neutral-2)]" />
@@ -651,7 +622,7 @@ const SearchScreen: React.FC = () => {
                     </button>
                   ) : null}
                 </form>
-                <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
+                <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[0.765rem] font-semibold text-[var(--color-brand)]">
                   <Search className="h-3.5 w-3.5 shrink-0" />
                   {items.length}
                 </span>

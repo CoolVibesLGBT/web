@@ -104,18 +104,18 @@ const BroadcastCard = React.memo(({
         </AnimatePresence>
         <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
         <div className="absolute top-3 left-3 flex items-center gap-2">
-          <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/90 text-white text-[10px] font-bold tracking-wide px-2 py-0.5 shadow">
+          <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/90 text-white text-[0.765rem] font-bold tracking-wide px-2 py-0.5 shadow">
             <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
             LIVE
           </span>
         </div>
         <div className="absolute top-3 right-3">
-          <span className="inline-flex items-center gap-1 rounded-full bg-black/60 text-white text-[10px] font-semibold px-2 py-0.5">
+          <span className="inline-flex items-center gap-1 rounded-full bg-black/60 text-white text-[0.765rem] font-semibold px-2 py-0.5">
             <Users className="w-3 h-3" />
             {viewers}
           </span>
         </div>
-        <div className="absolute inset-x-2 bottom-2 flex items-center justify-between gap-2 rounded-full bg-black/55 px-2.5 py-1.5 text-[11px] text-white/85 backdrop-blur">
+        <div className="absolute inset-x-2 bottom-2 flex items-center justify-between gap-2 rounded-full bg-black/55 px-2.5 py-1.5 text-[0.765rem] text-white/85 backdrop-blur">
           <span className="truncate font-semibold">{name}</span>
           {startedLabel && <span className="shrink-0 text-white/70">{startedLabel}</span>}
         </div>
@@ -1731,8 +1731,8 @@ export const LiveTab: React.FC<{ theme: 'dark' | 'light'; headerVariant?: 'tab' 
           <Video className="w-5 h-5" />
         </div>
         <div>
-          <h2 className="text-[15px] font-semibold">{t('live.title', { defaultValue: 'Live Now' })}</h2>
-          <p className={`text-[12px] ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+          <h2 className="text-[0.882rem] font-semibold">{t('live.title', { defaultValue: 'Live Now' })}</h2>
+          <p className={`text-[0.765rem] ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
             {t('live.subtitle', { defaultValue: 'Explore ongoing broadcasts' })}
           </p>
         </div>
@@ -1825,7 +1825,7 @@ export const LiveTab: React.FC<{ theme: 'dark' | 'light'; headerVariant?: 'tab' 
   };
 
   const rootClassName = headerVariant === 'page'
-    ? `skyline-page-scroll mx-auto w-full max-w-7xl px-1 pb-8 pt-24 md:px-2 md:pt-28 ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`
+    ? `skyline-page-scroll mx-auto w-full max-w-7xl px-1 pb-8 pt-4 md:px-2 md:pt-6 ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`
     : `px-4 py-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`;
 
   return (
@@ -1963,7 +1963,7 @@ export const LiveTab: React.FC<{ theme: 'dark' | 'light'; headerVariant?: 'tab' 
               </div>
 
               <div className="space-y-4">
-                <label className={`text-[11px] flex flex-col gap-1 ${theme === 'dark' ? 'text-white/70' : 'text-gray-500'}`}>
+                <label className={`text-[0.765rem] flex flex-col gap-1 ${theme === 'dark' ? 'text-white/70' : 'text-gray-500'}`}>
                   {t('live.create.description_label', { defaultValue: 'Yayın açıklaması' })}
                   <input
                     value={createDescription}
@@ -2029,7 +2029,7 @@ export const LiveTab: React.FC<{ theme: 'dark' | 'light'; headerVariant?: 'tab' 
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <label className={`text-[11px] flex flex-col gap-1 ${theme === 'dark' ? 'text-white/70' : 'text-gray-500'}`}>
+                  <label className={`text-[0.765rem] flex flex-col gap-1 ${theme === 'dark' ? 'text-white/70' : 'text-gray-500'}`}>
                     {t('live.viewer.device_camera', { defaultValue: 'Kamera' })}
                     <select
                       value={selectedCamId}
@@ -2053,7 +2053,7 @@ export const LiveTab: React.FC<{ theme: 'dark' | 'light'; headerVariant?: 'tab' 
                       )}
                     </select>
                   </label>
-                  <label className={`text-[11px] flex flex-col gap-1 ${theme === 'dark' ? 'text-white/70' : 'text-gray-500'}`}>
+                  <label className={`text-[0.765rem] flex flex-col gap-1 ${theme === 'dark' ? 'text-white/70' : 'text-gray-500'}`}>
                     {t('live.viewer.device_microphone', { defaultValue: 'Mikrofon' })}
                     <select
                       value={selectedMicId}
@@ -2173,7 +2173,7 @@ export const LiveTab: React.FC<{ theme: 'dark' | 'light'; headerVariant?: 'tab' 
                     >
                       <div className="text-white pointer-events-none">
                         <div className="flex items-center gap-2">
-                          <span className="inline-flex items-center gap-1 rounded-full bg-rose-500 text-white text-[10px] font-bold tracking-wide px-2 py-0.5 shadow">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-rose-500 text-white text-[0.765rem] font-bold tracking-wide px-2 py-0.5 shadow">
                             <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
                             LIVE
                           </span>
@@ -2189,7 +2189,7 @@ export const LiveTab: React.FC<{ theme: 'dark' | 'light'; headerVariant?: 'tab' 
                         <p className="mt-1 text-xs text-white/70 flex flex-wrap items-center gap-2">
                           <span className="truncate max-w-[220px] sm:max-w-[300px]">@{broadcasterName}</span>
                           {viewerCountry && (
-                            <span className="inline-flex items-center rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase">
+                            <span className="inline-flex items-center rounded-full bg-white/10 px-2 py-0.5 text-[0.765rem] font-semibold normal-case">
                               {viewerCountry}
                             </span>
                           )}
@@ -2276,7 +2276,7 @@ export const LiveTab: React.FC<{ theme: 'dark' | 'light'; headerVariant?: 'tab' 
                         </button>
                         <button
                           onClick={toggleViewerFit}
-                          className="h-10 px-3 rounded-full text-[11px] font-semibold transition-all bg-white/10 text-white hover:bg-white/20"
+                          className="h-10 px-3 rounded-full text-[0.765rem] font-semibold transition-all bg-white/10 text-white hover:bg-white/20"
                           title={viewerFit === 'cover'
                             ? t('live.viewer.fit_contain', { defaultValue: 'Fit' })
                             : t('live.viewer.fit_cover', { defaultValue: 'Fill' })}
@@ -2410,7 +2410,7 @@ export const LiveTab: React.FC<{ theme: 'dark' | 'light'; headerVariant?: 'tab' 
                           </div>
 
                           <div className="grid gap-3 sm:grid-cols-2">
-                            <label className="text-[11px] flex flex-col gap-1 text-white/70">
+                            <label className="text-[0.765rem] flex flex-col gap-1 text-white/70">
                               {t('live.viewer.device_camera', { defaultValue: 'Kamera' })}
                               <select
                                 value={selectedCamId}
@@ -2431,7 +2431,7 @@ export const LiveTab: React.FC<{ theme: 'dark' | 'light'; headerVariant?: 'tab' 
                                 )}
                               </select>
                             </label>
-                            <label className="text-[11px] flex flex-col gap-1 text-white/70">
+                            <label className="text-[0.765rem] flex flex-col gap-1 text-white/70">
                               {t('live.viewer.device_microphone', { defaultValue: 'Mikrofon' })}
                               <select
                                 value={selectedMicId}
@@ -2586,7 +2586,7 @@ function RemoteParticipantTile({
         onClick?.(event);
         onSelect?.(user);
       }}
-      className={`relative ${sizeClasses} ${shapeClasses} overflow-hidden bg-black/45 text-left transition-transform ${onSelect ? 'cursor-pointer hover:scale-[1.01]' : 'cursor-default'}`}
+      className={`relative ${sizeClasses} ${shapeClasses} overflow-hidden bg-black/45 text-start transition-transform ${onSelect ? 'cursor-pointer hover:scale-[1.01]' : 'cursor-default'}`}
     >
       <div ref={containerRef} className="absolute inset-0" />
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/45 via-transparent to-transparent" />
@@ -2616,7 +2616,7 @@ function RemoteParticipantTile({
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="absolute bottom-1.5 left-1.5 rounded-md bg-black/55 px-1.5 py-0.5 text-[10px] text-white/90">
+      <div className="absolute bottom-1.5 left-1.5 rounded-md bg-black/55 px-1.5 py-0.5 text-[0.765rem] text-white/90">
         {label}
       </div>
     </div>
@@ -2677,7 +2677,7 @@ function LocalParticipantTile({
           Camera off
         </div>
       )}
-      <div className="absolute bottom-1.5 left-1.5 rounded-md bg-emerald-500/80 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+      <div className="absolute bottom-1.5 left-1.5 rounded-md bg-emerald-500/80 px-1.5 py-0.5 text-[0.765rem] font-semibold text-white">
         {label}
       </div>
     </div>

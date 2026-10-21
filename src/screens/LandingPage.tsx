@@ -5,26 +5,21 @@ import {
   ArrowRight,
   Check,
   ChevronDown,
-  Globe2,
   Heart,
   MapPin,
-  Menu,
   MessageCircle,
-  Moon,
   ShieldCheck,
   Sparkles,
-  Sun,
   Users,
-  X,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { useTheme } from '@/contexts/ThemeContext'
 import { useNavigate } from '@/router'
 import { useSEO } from '@/hooks/useSEO'
 import LanguageSelector, {
   getLanguageFlagDisplay,
 } from '@/components/ui/LanguageSelector'
 import AuthWizard from '@/features/auth/AuthWizard'
+import PublicHeader from '@/features/landing/PublicHeader'
 import Brand from '@/features/landing/Brand'
 import ProductPreview from '@/features/landing/ProductPreview'
 import CharacterPortrait from '@/features/landing/CharacterPortrait'
@@ -74,12 +69,10 @@ const portraits = [0, 1, 2, 3, 4, 5]
 
 export default function LandingPage() {
   const { t, i18n } = useTranslation('landing')
-  const { theme, toggleTheme } = useTheme()
   const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
   const pageRef = useRef<HTMLDivElement>(null)
   const [authOpen, setAuthOpen] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
   const [languageOpen, setLanguageOpen] = useState(false)
   const languageCode = normalizeLanguage(i18n.language)
   const languageFlag = getLanguageFlagDisplay(undefined, languageCode)
@@ -95,7 +88,6 @@ export default function LandingPage() {
   })
 
   const scrollTo = (id: string) => {
-    setMenuOpen(false)
     pageRef.current?.querySelector<HTMLElement>(`#${id}`)?.scrollIntoView({
       behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
         ? 'instant'
@@ -111,7 +103,6 @@ export default function LandingPage() {
         : 'smooth',
     })
   const join = () => {
-    setMenuOpen(false)
     if (isAuthenticated) navigate('/pride')
     else setAuthOpen(true)
   }
@@ -126,58 +117,11 @@ export default function LandingPage() {
       <a className="cv-landing-skip" href="#landing-main">
         {t('skip')}
       </a>
-      <header className="cv-landing-header">
-        <div className="cv-landing-header-inner">
-          <Brand onClick={scrollHome} />
-          <nav
-            className={`cv-landing-nav${menuOpen ? ' is-open' : ''}`}
-            aria-label={t('main_nav')}
-          >
-            <button onClick={() => scrollTo('kesfet')}>
-              {t('nav_discover')}
-            </button>
-            <button onClick={() => scrollTo('guvenlik')}>
-              {t('nav_safety')}
-            </button>
-            <button onClick={() => scrollTo('sorular')}>{t('nav_faq')}</button>
-          </nav>
-          <div className="cv-landing-header-actions">
-            <button
-              className="cv-landing-language"
-              onClick={() => setLanguageOpen(true)}
-              aria-label={t('language')}
-              aria-haspopup="dialog"
-            >
-              {languageFlag.src ? (
-                <img src={languageFlag.src} alt="" width={20} height={20} />
-              ) : (
-                <Globe2 size={17} />
-              )}
-              <span>{languageCode.toUpperCase()}</span>
-              <ChevronDown size={12} />
-            </button>
-            <button
-              className="cv-landing-theme"
-              onClick={toggleTheme}
-              aria-label={t(theme === 'dark' ? 'theme_light' : 'theme_dark')}
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-            <button className="cv-landing-login" onClick={join}>
-              {t(isAuthenticated ? 'open_app' : 'login')}
-              <ArrowRight size={15} />
-            </button>
-            <button
-              className="cv-landing-mobile-menu"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label={t(menuOpen ? 'close_menu' : 'open_menu')}
-              aria-expanded={menuOpen}
-            >
-              {menuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          </div>
-        </div>
-      </header>
+      <PublicHeader onHome={scrollHome} onLogin={join} loginLabel={t(isAuthenticated ? 'open_app' : 'login')} onLanguage={() => setLanguageOpen(true)} language={languageCode} flag={languageFlag.src} navigation={[
+        { label: t('nav_discover'), onSelect: () => scrollTo('kesfet') },
+        { label: t('nav_safety'), onSelect: () => scrollTo('guvenlik') },
+        { label: t('nav_faq'), onSelect: () => scrollTo('sorular') },
+      ]} />
 
       <main id="landing-main">
         <section className="cv-landing-hero" aria-labelledby="landing-title">
@@ -464,7 +408,10 @@ export default function LandingPage() {
         isOpen={languageOpen}
         onClose={() => setLanguageOpen(false)}
       />
-      <AuthWizard isOpen={authOpen} onClose={() => setAuthOpen(false)} />
+      <AuthWizard
+        isOpen={authOpen}
+        onClose={() => setAuthOpen(false)}
+      />
     </div>
   )
 }

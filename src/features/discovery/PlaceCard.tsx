@@ -44,7 +44,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, selected, onClick, classNa
             {tags.map((tag: any) => (
               <span
                 key={tag.tag || tag}
-                className="min-w-0 shrink truncate rounded-full bg-white/85 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-slate-700 shadow-lg backdrop-blur-md"
+                className="min-w-0 shrink truncate rounded-full bg-white/85 px-2.5 py-1 text-[0.765rem] font-semibold normal-case tracking-normal text-slate-700 shadow-lg backdrop-blur-md"
               >
                 #{tag.tag || tag}
               </span>
@@ -52,7 +52,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, selected, onClick, classNa
           </div>
         )}
         {locationString && (
-          <div className="absolute bottom-3 left-3 flex max-w-[calc(100%-1.5rem)] items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white backdrop-blur-md">
+          <div className="absolute bottom-3 left-3 flex max-w-[calc(100%-1.5rem)] items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 text-[0.765rem] font-bold normal-case tracking-normal text-white backdrop-blur-md">
             <MapPin className="h-3.5 w-3.5 shrink-0" />
             <span className="truncate">{locationString}</span>
           </div>

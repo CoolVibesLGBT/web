@@ -1,3 +1,4 @@
+import { normalizeLanguage } from '@/i18n/language';
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { api } from "../services/api";
 import i18n from "../i18n";
@@ -116,7 +117,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     const handleLanguageChange = (lng: string) => {
-      setDefaultLanguage(lng);
+      setDefaultLanguage(normalizeLanguage(lng));
     };
 
     i18n.on('languageChanged', handleLanguageChange);
@@ -128,7 +129,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const storedLang = localStorage.getItem('lang');
+    const savedLanguage = localStorage.getItem('lang');
+    const storedLang = savedLanguage ? normalizeLanguage(savedLanguage) : null;
     if (storedLang && storedLang !== defaultLanguage) {
       setDefaultLanguage(storedLang);
     }

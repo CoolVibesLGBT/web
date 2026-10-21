@@ -1,0 +1,42 @@
+[
+  {
+    "id": "2969c58902da43a5",
+    "kind": "sticker",
+    "emoji": "👋",
+    "url": "/animations/telegram/stickers/2969c58902da43a5.tgs",
+    "width": 512,
+    "height": 512,
+    "name": "1_HEY_OUT",
+    "pack": "Greetings"
+  },
+  {
+    "id": "f135b4e5fc476568",
+    "kind": "sticker",
+    "emoji": "👋",
+    "url": "/animations/telegram/stickers/f135b4e5fc476568.tgs",
+    "width": 512,
+    "height": 512,
+    "name": "09-hello 512",
+    "pack": "Greetings"
+  },
+  {
+    "id": "505b5ae14b0e1be1",
+    "kind": "sticker",
+    "emoji": "👋",
+    "url": "/animations/telegram/stickers/505b5ae14b0e1be1.tgs",
+    "width": 512,
+    "height": 512,
+    "name": "Композиция 1",
+    "pack": "Greetings"
+  },
+  {
+    "id": "a26dcf6f9088a66d",
+    "kind": "sticker",
+    "emoji": "👋",
+    "url": "/animations/telegram/stickers/a26dcf6f9088a66d.tgs",
+    "width": 512,
+    "height": 512,
+    "name": "Привет копия",
+    "pack": "Greetings"
+  }
+]

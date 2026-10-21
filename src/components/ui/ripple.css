@@ -1,0 +1,27 @@
+/* tweb/scss/partials/_ripple.scss and base.scss, adapted to shared web controls. */
+.cv-ripple {
+  --ripple-duration: .7s;
+  --ripple-start-scale: 0;
+  --ripple-end-scale: 2;
+  position: absolute; inset: 0; z-index: 2; display: block;
+  overflow: hidden; border-radius: inherit; pointer-events: none;
+  -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+}
+.cv-ripple-circle {
+  position: absolute; display: block; border-radius: 50%; pointer-events: none;
+  background: currentColor; opacity: .12; transform: scale(0);
+  animation: cv-ripple-effect var(--ripple-duration) forwards;
+  transition: opacity calc(var(--ripple-duration) / 2);
+}
+.cv-ripple-circle.hiding { opacity: 0; }
+@keyframes cv-ripple-effect {
+  from { transform: scale(var(--ripple-start-scale)); }
+  to { transform: scale(var(--ripple-end-scale)); }
+}
+@media (max-width: 1023px) {
+  .cv-ripple { --ripple-duration: .4s; --ripple-start-scale: .27; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-ripple { display: none; }
+  .cv-ripple-circle { animation: none; transition: none; }
+}

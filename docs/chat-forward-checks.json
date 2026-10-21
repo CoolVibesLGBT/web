@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-21",
+  "method": "Playwright DOM only; HTTP fixtures, sockets blocked; separate isolated PostgreSQL integration test",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "ui": {
+        "width": 304,
+        "radius": "40px",
+        "headerHeight": 56,
+        "bodyPadding": "0px",
+        "topPeers": 2
+      },
+      "requests": 4,
+      "checks": [
+        "source popup 420px/80%, 40px radius, 56px header",
+        "recent peers and search",
+        "Escape cancels",
+        "single target composer preview before sending",
+        "media attribution and history reload",
+        "multi target chips, text + sticker batch and comment",
+        "partial failure retries only failed targets"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "status": "passed",
+      "ui": {
+        "width": 374,
+        "radius": "40px",
+        "headerHeight": 56,
+        "bodyPadding": "0px",
+        "topPeers": 2
+      },
+      "requests": 5,
+      "checks": [
+        "source popup 420px/80%, 40px radius, 56px header",
+        "recent peers and search",
+        "Escape cancels",
+        "single target composer preview before sending",
+        "media attribution and history reload",
+        "multi target chips, text + sticker batch and comment",
+        "partial failure retries only failed targets"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "status": "passed",
+      "ui": {
+        "width": 420,
+        "radius": "60px",
+        "headerHeight": 84,
+        "bodyPadding": "0px",
+        "topPeers": 2
+      },
+      "requests": 4,
+      "checks": [
+        "source popup 420px/80%, 40px radius, 56px header",
+        "recent peers and search",
+        "Escape cancels",
+        "single target composer preview before sending",
+        "media attribution and history reload",
+        "multi target chips, text + sticker batch and comment",
+        "partial failure retries only failed targets"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "status": "passed",
+      "ui": {
+        "width": 420,
+        "radius": "40px",
+        "headerHeight": 56,
+        "bodyPadding": "0px",
+        "topPeers": 2
+      },
+      "requests": 4,
+      "checks": [
+        "source popup 420px/80%, 40px radius, 56px header",
+        "recent peers and search",
+        "Escape cancels",
+        "single target composer preview before sending",
+        "media attribution and history reload",
+        "multi target chips, text + sticker batch and comment",
+        "partial failure retries only failed targets"
+      ]
+    }
+  ]
+}

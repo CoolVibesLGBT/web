@@ -27,7 +27,7 @@ import { normalizeLanguage } from './language';
 
 const fallbackLng = 'en';
 
-const landingResources = import.meta.glob<Record<string, string>>('../locales/*/{landing,legal}.json', { eager: true, import: 'default' });
+const landingResources = import.meta.glob<Record<string, string>>('../locales/*/{landing,legal,auth}.json', { eager: true, import: 'default' });
 
 export const resolvePreferredLanguage = () => {
   if (typeof window === 'undefined') {
@@ -72,7 +72,7 @@ i18n
     },
     lng,
     fallbackLng,
-    ns: ['common', 'landing', 'legal'],
+    ns: ['common', 'landing', 'legal', 'auth'],
     defaultNS: 'common',
     interpolation: { escapeValue: false },
     returnEmptyString: false,

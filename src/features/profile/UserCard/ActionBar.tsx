@@ -1,4 +1,4 @@
-import { Heart, HeartOff, MessageCircleHeart, ShieldBan } from "lucide-react";
+import { Heart, HeartOff, MessageCircleHeart, ShieldBan } from "@/components/ui/illustratedIcons";
 import { useEffect, useState } from "react";
 import { BlockIcon, DislikeIcon, LikeIcon } from "./icons";
 
@@ -20,7 +20,7 @@ interface ActionBarProps {
 
 export type BurstType = 'like' | 'dislike' | 'block';
 
-type BurstIconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>;
+type BurstIconComponent = import('@/components/ui/IllustratedIcon').IllustratedIconComponent;
 
 interface OverlayParticle {
   id: string;

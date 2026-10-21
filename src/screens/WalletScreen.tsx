@@ -1,3 +1,4 @@
+import ViewTabs from '@/components/ui/ViewTabs';
 import React, { useState, useEffect, useRef } from 'react';
 import {
   ArrowLeft,
@@ -719,23 +720,10 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                   inline transform on its element even at rest, which breaks
                   position:sticky on descendants (the tab bar needs to stick). */}
               <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
-                <div className="cv-tab-row">
-                  {[
+                <ViewTabs items={[
                     { id: 'overview', label: t('wallet.overview') || 'Overview' },
                     { id: 'history', label: t('wallet.history') || 'History' },
-                  ].map((tab) => (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      onClick={() => setActiveTab(tab.id as 'overview' | 'history')}
-                      style={{ minWidth: 0 }}
-                      className={`cv-tab ${activeTab === tab.id ? 'is-active' : ''}`}
-                    >
-                      <span className="min-w-0 truncate">{tab.label}</span>
-                      <span className={`cv-tab-underline ${activeTab === tab.id ? 'is-on' : ''}`} />
-                    </button>
-                  ))}
-                </div>
+                  ]} activeId={activeTab} onSelect={id => setActiveTab(id as 'overview' | 'history')} label={t('wallet.title')} />
               </div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -895,7 +883,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                         )}
                                       </div>
                                     </div>
-                                    <div className="text-right flex-shrink-0">
+                                    <div className="text-end flex-shrink-0">
                                       <p className={`text-sm font-semibold ${transaction.type === 'deposit'
                                         ? theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600'
                                         : theme === 'dark' ? 'text-orange-400' : 'text-orange-600'
@@ -1052,7 +1040,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                             onClick={() => {
                               setShowPaymentMethodDropdown(!showPaymentMethodDropdown);
                             }}
-                            className={`w-full px-3 py-2.5 text-sm rounded-xl border transition-all duration-200 focus:outline-none focus:ring-1 font-medium text-left flex items-center justify-between ${theme === 'dark'
+                            className={`w-full px-3 py-2.5 text-sm rounded-xl border transition-all duration-200 focus:outline-none focus:ring-1 font-medium text-start flex items-center justify-between ${theme === 'dark'
                               ? 'bg-gray-900/50 border-gray-800 text-white focus:border-gray-700 focus:ring-gray-800/50 hover:border-gray-700'
                               : 'bg-white border-gray-300 text-gray-900 focus:border-gray-400 focus:ring-gray-300/40 hover:border-gray-400'
                               }`}
@@ -1311,7 +1299,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                               onClick={() => {
                                 setShowIbanDropdown(!showIbanDropdown);
                               }}
-                              className={`w-full px-3 py-2.5 text-sm rounded-xl border transition-all duration-200 focus:outline-none focus:ring-1 font-medium text-left flex items-center justify-between ${theme === 'dark'
+                              className={`w-full px-3 py-2.5 text-sm rounded-xl border transition-all duration-200 focus:outline-none focus:ring-1 font-medium text-start flex items-center justify-between ${theme === 'dark'
                                 ? 'bg-gray-900/50 border-gray-800 text-white focus:border-gray-700 focus:ring-gray-800/50 hover:border-gray-700'
                                 : 'bg-white border-gray-300 text-gray-900 focus:border-gray-400 focus:ring-gray-300/40 hover:border-gray-400'
                                 }`}
@@ -1440,7 +1428,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                             </div>
                                             <div className="flex flex-col items-center gap-0.5 px-1">
                                               <span className="text-xs font-bold leading-tight text-center line-clamp-2">{iban.bank_short_name}</span>
-                                              <span className={`text-[10px] font-semibold ${isSelected
+                                              <span className={`text-[0.765rem] font-semibold ${isSelected
                                                 ? theme === 'dark' ? 'text-black/80' : 'text-white/80'
                                                 : theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
                                                 }`}>
@@ -1483,7 +1471,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                               onClick={() => {
                                 setShowDepositDropdown(!showDepositDropdown);
                               }}
-                              className={`w-full px-3 py-2.5 text-sm rounded-xl border transition-all duration-200 focus:outline-none focus:ring-1 font-medium text-left flex items-center justify-between ${theme === 'dark'
+                              className={`w-full px-3 py-2.5 text-sm rounded-xl border transition-all duration-200 focus:outline-none focus:ring-1 font-medium text-start flex items-center justify-between ${theme === 'dark'
                                 ? 'bg-gray-900/50 border-gray-800 text-white focus:border-gray-700 focus:ring-gray-800/50 hover:border-gray-700'
                                 : 'bg-white border-gray-300 text-gray-900 focus:border-gray-400 focus:ring-gray-300/40 hover:border-gray-400'
                                 }`}
@@ -1716,7 +1704,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                             onClick={() => {
                               setShowPackageDropdown(!showPackageDropdown);
                             }}
-                            className={`w-full px-3 py-2.5 text-sm rounded-xl border transition-all duration-200 focus:outline-none focus:ring-1 font-medium text-left flex items-center justify-between ${theme === 'dark'
+                            className={`w-full px-3 py-2.5 text-sm rounded-xl border transition-all duration-200 focus:outline-none focus:ring-1 font-medium text-start flex items-center justify-between ${theme === 'dark'
                               ? 'bg-gray-900/50 border-gray-800 text-white focus:border-gray-700 focus:ring-gray-800/50 hover:border-gray-700'
                               : 'bg-white border-gray-300 text-gray-900 focus:border-gray-400 focus:ring-gray-300/40 hover:border-gray-400'
                               }`}
@@ -1840,8 +1828,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                             )}
                                           </div>
                                           <div className="flex flex-col items-center gap-0.5 px-1">
-                                            <span className="text-[10px] font-bold leading-tight text-center line-clamp-2">{pkgName}</span>
-                                            <span className={`text-[10px] font-semibold ${isSelected
+                                            <span className="text-[0.765rem] font-bold leading-tight text-center line-clamp-2">{pkgName}</span>
+                                            <span className={`text-[0.765rem] font-semibold ${isSelected
                                               ? theme === 'dark' ? 'text-black/80' : 'text-white/80'
                                               : theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
                                               }`}>
@@ -1886,7 +1874,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                 }
                               }}
                               disabled={depositPaymentMethod !== 'google_pay' || !selectedPackage}
-                              className={`w-full px-3 py-2.5 text-sm rounded-xl border transition-all duration-200 focus:outline-none focus:ring-1 font-medium text-left flex items-center justify-between ${depositPaymentMethod !== 'google_pay' || !selectedPackage
+                              className={`w-full px-3 py-2.5 text-sm rounded-xl border transition-all duration-200 focus:outline-none focus:ring-1 font-medium text-start flex items-center justify-between ${depositPaymentMethod !== 'google_pay' || !selectedPackage
                                 ? 'opacity-50 cursor-not-allowed'
                                 : ''
                                 } ${theme === 'dark'
@@ -2021,7 +2009,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                             </div>
                                             <div className="flex flex-col items-center gap-0.5 px-1">
                                               <span className="text-xs font-bold leading-tight text-center line-clamp-2">{googlePayDetail.provider?.name || googlePayDetail.name || 'Provider'}</span>
-                                              <span className={`text-[10px] font-semibold ${isSelected
+                                              <span className={`text-[0.765rem] font-semibold ${isSelected
                                                 ? theme === 'dark' ? 'text-black/80' : 'text-white/80'
                                                 : theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
                                                 }`}>
@@ -2231,7 +2219,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                   fgColor={theme === 'dark' ? '#ffffff' : '#0f172a'}
                                 />
                               </div>
-                              <p className={`text-[11px] text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                              <p className={`text-[0.765rem] text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                                 {t('wallet.qr_code_note') || 'Show this code to send crypto quickly.'}
                               </p>
                             </div>
@@ -2398,7 +2386,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                   includeMargin
                                 />
                               </div>
-                              <p className={`text-[11px] text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                              <p className={`text-[0.765rem] text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                                 {t('wallet.qr_code_note') || 'Show this code to send crypto quickly.'}
                               </p>
                             </div>

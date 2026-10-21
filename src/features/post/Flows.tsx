@@ -497,7 +497,7 @@ export const CoolVibesPostCard = React.memo(({
         onClick={handleOpen}
       >
         <div className="flex items-center justify-between" onClick={e => e.stopPropagation()}>
-          <button className="flex items-center gap-3 min-w-0 text-left" onClick={handleProfile}>
+          <button className="flex items-center gap-3 min-w-0 text-start" onClick={handleProfile}>
             <div className={`cv-avatar ${getAvatarColorClass(username)}`}>
               {avatarUrl ? (
                 <img src={avatarUrl} className="w-full h-full rounded-full object-cover" alt={displayName} />
@@ -515,7 +515,7 @@ export const CoolVibesPostCard = React.memo(({
           </button>
           <div className="flex shrink-0 items-center gap-1.5">
             <span
-              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-slate-200/70 bg-slate-50/80 px-2.5 text-[10px] font-bold tabular-nums text-slate-500 dark:border-white/10 dark:bg-white/[0.045] dark:text-zinc-400"
+              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-slate-200/70 bg-slate-50/80 px-2.5 text-[0.765rem] font-bold tabular-nums text-slate-500 dark:border-white/10 dark:bg-white/[0.045] dark:text-zinc-400"
               title={t('post_feed.views', { count: displayedViews })}
               aria-label={t('post_feed.views', { count: displayedViews })}
             >
@@ -541,7 +541,7 @@ export const CoolVibesPostCard = React.memo(({
 
         {media.url && (
           <div className="pt-3">
-            <div className={`relative rounded-[28px] overflow-hidden bg-slate-50 dark:bg-black group/media ${media.isVideo ? 'aspect-video' : 'aspect-auto'}`}>
+            <div className={`relative rounded-[20px] overflow-hidden bg-slate-50 dark:bg-black group/media ${media.isVideo ? 'aspect-video' : 'aspect-auto'}`}>
               {media.isVideo ? (
                 <video
                   src={media.url}
@@ -630,7 +630,7 @@ export const CoolVibesPostCard = React.memo(({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 18 }}
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className={`cv-modal-glass-panel flex max-h-[calc(100dvh-7rem)] w-full max-w-2xl flex-col overflow-y-auto rounded-[28px] border no-scrollbar ${
+            className={`cv-modal-glass-panel flex max-h-[calc(100dvh-7rem)] w-full max-w-2xl flex-col overflow-y-auto rounded-[20px] border no-scrollbar ${
               theme === 'dark'
                 ? 'text-white'
                 : 'text-slate-950'

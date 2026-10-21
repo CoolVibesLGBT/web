@@ -266,7 +266,7 @@ const YouTubePicker: React.FC<YouTubePickerProps> = ({ onVideoSelect, onClose, i
             onClick={() => handleVideoSelect(video)}
             whileHover={!isProcessing ? { scale: 1.02 } : {}}
             whileTap={!isProcessing ? { scale: 0.97 } : {}}
-            className={`rounded-2xl border overflow-hidden text-left transition-all duration-150 ${
+            className={`rounded-2xl border overflow-hidden text-start transition-all duration-150 ${
               theme === 'dark'
                 ? 'border-gray-900 bg-gray-900/40 hover:border-white/30'
                 : 'border-gray-200 bg-white hover:border-gray-400'
@@ -289,7 +289,7 @@ const YouTubePicker: React.FC<YouTubePickerProps> = ({ onVideoSelect, onClose, i
                 {video.channelTitle}
               </p>
               {video.publishedAt && (
-                <p className="text-[11px] text-gray-500">
+                <p className="text-[0.765rem] text-gray-500">
                   {new Date(video.publishedAt).toLocaleDateString()}
                 </p>
               )}

@@ -1,0 +1,26 @@
+/* tweb clearHistory.ts → confirmationPopup.ts → popups/peer.tsx.
+   _peer.scss, _popup.scss and themeController's primary/danger colors. */
+.cv-sheet.cv-chat-confirm { --tg-confirm-unit: .9411764706rem; width: min(400px, calc(100vw - 32px)); max-width: none; min-width: min(312px, calc(100vw - 32px)); padding: calc(var(--tg-confirm-unit) * .75) calc(var(--tg-confirm-unit) * .5); margin: auto; border: 0; border-radius: calc(var(--tg-confirm-unit) * 2.5); box-shadow: none; color: var(--cv-neutral-1); background: var(--cv-card-bg-solid); overflow: hidden; }
+.cv-chat-confirm::backdrop { background: rgb(0 0 0 / 30%); }
+.cv-chat-confirm > .cv-sheet-header { position: static; min-height: calc(var(--tg-confirm-unit) * 2.5); padding: 0 var(--tg-confirm-unit); border: 0; margin: 0; background: transparent; }
+.cv-chat-confirm > .cv-sheet-header h2 { font-size: calc(var(--tg-confirm-unit) * 1.25); line-height: 1.3; font-weight: 500; letter-spacing: 0; }
+.cv-chat-confirm > .cv-sheet-body { padding: calc(var(--tg-confirm-unit) * .625) var(--tg-confirm-unit) calc(var(--tg-confirm-unit) * .5); font-size: var(--tg-confirm-unit); line-height: 1.5; color: var(--cv-neutral-1); }
+.cv-chat-confirm .cv-sheet-body > p { margin: 0; overflow-wrap: anywhere; }
+.cv-chat-confirm .cv-sheet-body > p.cv-confirm-peer { margin-block-start: calc(var(--tg-confirm-unit) * .25); }
+.cv-chat-confirm strong { font-weight: 500; }
+.cv-chat-confirm .cv-list-row { min-height: 44px; margin-block-start: calc(var(--tg-confirm-unit) * .75); padding: calc(var(--tg-confirm-unit) * .375) 0; border: 0; background: transparent; color: inherit; }
+.cv-chat-confirm .cv-list-row::after { display: none; }
+.cv-chat-confirm .cv-list-title { font-size: var(--tg-confirm-unit); font-weight: 400; }
+.cv-chat-confirm > .cv-sheet-actions { display: flex; flex-direction: row; justify-content: flex-end; flex-wrap: wrap; gap: calc(var(--tg-confirm-unit) * .625); padding: 0 calc(var(--tg-confirm-unit) * .5); border: 0; background: transparent; }
+.cv-chat-confirm .cv-sheet-actions > button { flex: 0 1 auto; max-width: 100%; min-height: 44px; padding: 0 var(--tg-confirm-unit); border: 0; border-radius: var(--tg-confirm-unit); background: transparent; font-size: var(--tg-confirm-unit); font-weight: 500; line-height: 1.3; text-align: center; color: var(--color-brand); }
+.cv-chat-confirm .cv-sheet-actions > .cv-confirm-danger { color: var(--cv-menu-danger); }
+.cv-chat-confirm .cv-confirm-cancel:hover { background: color-mix(in srgb, var(--color-brand) 8%, transparent); }
+.cv-chat-confirm .cv-confirm-danger:hover { background: color-mix(in srgb, var(--cv-menu-danger) 8%, transparent); }
+.cv-chat-confirm button:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
+.cv-chat-confirm button:disabled { opacity: .5; }
+.cv-chat-confirm [role='alert'] { color: var(--cv-menu-danger); margin-block-start: .5rem; }
+
+.cv-chat-confirm .cv-confirm-avatar { display: grid; place-items: center; flex: 0 0 calc(var(--tg-confirm-unit) * 2); width: calc(var(--tg-confirm-unit) * 2); height: calc(var(--tg-confirm-unit) * 2); border-radius: 50%; color: white; background: var(--color-brand); overflow: hidden; font-size: var(--tg-confirm-unit); }
+.cv-chat-confirm .cv-confirm-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.cv-chat-confirm > .cv-sheet-header { gap: var(--tg-confirm-unit); }
+.cv-chat-confirm .cv-sheet-actions > button { text-transform: uppercase; }

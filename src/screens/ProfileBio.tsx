@@ -11,7 +11,7 @@ import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
-import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical';
+import { $createParagraphNode, $createTextNode, $getRoot, $isDecoratorNode, $isElementNode, type LexicalNode, type ParagraphNode } from 'lexical';
 
 import ToolbarPlugin from '../features/editor/Lexical/plugins/ToolbarPlugin';
 import AutoLinkPlugin from '../features/editor/Lexical/plugins/AutoLinkPlugin';
@@ -22,6 +22,24 @@ import BioNodes from '../features/editor/Lexical/nodes/BioNodes';
 import { ToolbarContext } from '../contexts/ToolbarContext';
 
 type ThemeMode = 'dark' | 'light';
+
+function $appendBioNodes(nodes: LexicalNode[]) {
+  const root = $getRoot();
+  let paragraph: ParagraphNode | null = null;
+
+  for (const node of nodes) {
+    if (($isElementNode(node) || $isDecoratorNode(node)) && !node.isInline()) {
+      root.append(node);
+      paragraph = null;
+    } else {
+      if (!paragraph) {
+        paragraph = $createParagraphNode();
+        root.append(paragraph);
+      }
+      paragraph.append(node);
+    }
+  }
+}
 
 type BioEditorConfig = {
   namespace: string;
@@ -161,7 +179,7 @@ const BioDraftEditor = React.memo(({
 
           const nodes = $generateNodesFromDOM(editor as any, doc);
           if (nodes.length > 0) {
-            root.append(...nodes);
+            $appendBioNodes(nodes);
             return;
           }
 
@@ -272,7 +290,7 @@ const BioPreviewEditor = React.memo(({ content }: { content: string }) => {
 
           const nodes = $generateNodesFromDOM(editor as any, doc);
           if (nodes.length > 0) {
-            root.append(...nodes);
+            $appendBioNodes(nodes);
             return;
           }
 

@@ -1,0 +1,690 @@
+[
+  {
+    "id": "OdiX5W17EmeBL4Us",
+    "emoticon": "🐥",
+    "variants": {
+      "day": {
+        "accent_color": 2601329,
+        "message_colors": [
+          14874076,
+          15528630,
+          15529661,
+          14546626
+        ],
+        "outbox_accent_color": 4960357,
+        "wallpaper": {
+          "colors": [
+            8895909,
+            12180867,
+            14014604,
+            10864773
+          ],
+          "intensity": 42,
+          "rotation": 0,
+          "pattern": true,
+          "source": "/images/chat/theme-OdiX5W17EmeBL4Us.svg"
+        }
+      },
+      "light": {
+        "accent_color": 4632699,
+        "message_colors": [
+          10797662,
+          7123805,
+          4895406,
+          7191685
+        ],
+        "wallpaper": {
+          "colors": [
+            16777215,
+            0
+          ],
+          "intensity": 0,
+          "rotation": 180,
+          "pattern": false
+        }
+      },
+      "night": {
+        "accent_color": 8703589,
+        "message_colors": [
+          7508026,
+          5082961,
+          3507817,
+          5935172
+        ],
+        "wallpaper": {
+          "colors": [
+            2440488,
+            10854263,
+            2965046,
+            8164449
+          ],
+          "intensity": -58,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-OdiX5W17EmeBL4Us.svg"
+        }
+      },
+      "tinted": {
+        "accent_color": 8703589,
+        "message_colors": [
+          5933641,
+          8162633,
+          5342546,
+          3833699
+        ],
+        "wallpaper": {
+          "colors": [
+            2187083,
+            10983275,
+            4477977,
+            6794061
+          ],
+          "intensity": -58,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-OdiX5W17EmeBL4Us.svg"
+        }
+      }
+    }
+  },
+  {
+    "id": "FUtC4daANprHzpNE",
+    "emoticon": "⛄",
+    "variants": {
+      "day": {
+        "accent_color": 3903419,
+        "message_colors": [
+          15005439,
+          15924476,
+          15268603,
+          15200505
+        ],
+        "outbox_accent_color": 3903419,
+        "wallpaper": {
+          "colors": [
+            8497648,
+            10408948,
+            11460306,
+            12633324
+          ],
+          "intensity": 41,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-FUtC4daANprHzpNE.svg"
+        }
+      },
+      "light": {
+        "accent_color": 5546445,
+        "message_colors": [
+          6009820,
+          6408377,
+          5883080,
+          6263513
+        ],
+        "wallpaper": {
+          "colors": [
+            16777215,
+            0
+          ],
+          "intensity": 0,
+          "rotation": 180,
+          "pattern": false
+        }
+      },
+      "night": {
+        "accent_color": 5019631,
+        "message_colors": [
+          6008500,
+          4818324,
+          5080241,
+          4940703
+        ],
+        "wallpaper": {
+          "colors": [
+            6466222,
+            2503489,
+            8427911,
+            2304827
+          ],
+          "intensity": -57,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-FUtC4daANprHzpNE.svg"
+        }
+      },
+      "tinted": {
+        "accent_color": 5019631,
+        "message_colors": [
+          4156319,
+          5744567,
+          5022110,
+          4227505
+        ],
+        "wallpaper": {
+          "colors": [
+            4884883,
+            2701417,
+            3515572,
+            2508614
+          ],
+          "intensity": -51,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-FUtC4daANprHzpNE.svg"
+        }
+      }
+    }
+  },
+  {
+    "id": "HWyC5JgYOmydc1CH",
+    "emoticon": "💎",
+    "variants": {
+      "day": {
+        "accent_color": 12081361,
+        "message_colors": [
+          3256801
+        ],
+        "wallpaper": {
+          "colors": [
+            9944811,
+            11659754,
+            13021679,
+            15710172
+          ],
+          "intensity": 50,
+          "rotation": 0,
+          "pattern": true,
+          "source": "/images/chat/theme-HWyC5JgYOmydc1CH.svg"
+        }
+      },
+      "light": {
+        "accent_color": 9729480,
+        "message_colors": [
+          10645722,
+          6790118,
+          6144475,
+          6390759
+        ],
+        "wallpaper": {
+          "colors": [
+            16777215,
+            0
+          ],
+          "intensity": 0,
+          "rotation": 180,
+          "pattern": false
+        }
+      },
+      "night": {
+        "accent_color": 14252784,
+        "message_colors": [
+          5594785,
+          5986212,
+          4807073,
+          3508640
+        ],
+        "wallpaper": {
+          "colors": [
+            2172493,
+            6784419,
+            1648459,
+            11171002
+          ],
+          "intensity": -58,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-HWyC5JgYOmydc1CH.svg"
+        }
+      },
+      "tinted": {
+        "accent_color": 12346072,
+        "message_colors": [
+          4942250,
+          5724084,
+          3700650,
+          3186357
+        ],
+        "wallpaper": {
+          "colors": [
+            2499660,
+            5013388,
+            1713474,
+            8149410
+          ],
+          "intensity": -59,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-HWyC5JgYOmydc1CH.svg"
+        }
+      }
+    }
+  },
+  {
+    "id": "ZtE0ghOnKM11pfzD",
+    "emoticon": "👨‍🏫",
+    "variants": {
+      "day": {
+        "accent_color": 2143654,
+        "message_colors": [
+          14219237,
+          16055267
+        ],
+        "outbox_accent_color": 4828778,
+        "wallpaper": {
+          "colors": [
+            13755285,
+            9556684,
+            7780582,
+            9557658
+          ],
+          "intensity": 50,
+          "rotation": 0,
+          "pattern": true,
+          "source": "/images/chat/theme-ZtE0ghOnKM11pfzD.svg"
+        }
+      },
+      "light": {
+        "accent_color": 2992064,
+        "message_colors": [
+          3845568,
+          6014105,
+          7780470,
+          6864568
+        ],
+        "wallpaper": {
+          "colors": [
+            16777215,
+            0
+          ],
+          "intensity": 0,
+          "rotation": 180,
+          "pattern": false
+        }
+      },
+      "night": {
+        "accent_color": 8767203,
+        "message_colors": [
+          4294269,
+          6131304,
+          4752499,
+          4553868
+        ],
+        "wallpaper": {
+          "colors": [
+            7184290,
+            3034425,
+            6716244,
+            1721151
+          ],
+          "intensity": -61,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-ZtE0ghOnKM11pfzD.svg"
+        }
+      },
+      "tinted": {
+        "accent_color": 4762842,
+        "message_colors": [
+          2456432,
+          5935478,
+          4686966,
+          5208213
+        ],
+        "wallpaper": {
+          "colors": [
+            5018786,
+            3362425,
+            6851682,
+            935234
+          ],
+          "intensity": -58,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-ZtE0ghOnKM11pfzD.svg"
+        }
+      }
+    }
+  },
+  {
+    "id": "glhuaQsVnm5Ui6H0",
+    "emoticon": "🌷",
+    "variants": {
+      "day": {
+        "accent_color": 13914243,
+        "message_colors": [
+          16446423,
+          16509907,
+          16771544
+        ],
+        "outbox_accent_color": 16032342,
+        "wallpaper": {
+          "colors": [
+            15511182,
+            15254915,
+            15442113,
+            13087211
+          ],
+          "intensity": 50,
+          "rotation": 0,
+          "pattern": true,
+          "source": "/images/chat/theme-glhuaQsVnm5Ui6H0.svg"
+        }
+      },
+      "light": {
+        "accent_color": 13397635,
+        "message_colors": [
+          13394337,
+          14846032,
+          14131773,
+          14576991
+        ],
+        "wallpaper": {
+          "colors": [
+            16777215,
+            0
+          ],
+          "intensity": 0,
+          "rotation": 180,
+          "pattern": false
+        }
+      },
+      "night": {
+        "accent_color": 15428494,
+        "message_colors": [
+          14321210,
+          12213066,
+          12211057,
+          10506622
+        ],
+        "wallpaper": {
+          "colors": [
+            12622837,
+            5515835,
+            15052663,
+            5845028
+          ],
+          "intensity": -58,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-glhuaQsVnm5Ui6H0.svg"
+        }
+      },
+      "tinted": {
+        "accent_color": 15430045,
+        "message_colors": [
+          13664311,
+          13196879,
+          11490956,
+          11355747
+        ],
+        "wallpaper": {
+          "colors": [
+            11369461,
+            6041153,
+            14056009,
+            6048886
+          ],
+          "intensity": -54,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-glhuaQsVnm5Ui6H0.svg"
+        }
+      }
+    }
+  },
+  {
+    "id": "fzyYZ89JqdFc8P1o",
+    "emoticon": "💜",
+    "variants": {
+      "day": {
+        "accent_color": 9461452,
+        "message_colors": [
+          12999050
+        ],
+        "wallpaper": {
+          "colors": [
+            15308995,
+            15312086,
+            12034025,
+            15511668
+          ],
+          "intensity": 57,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-fzyYZ89JqdFc8P1o.svg"
+        }
+      },
+      "light": {
+        "accent_color": 10512582,
+        "message_colors": [
+          10189778,
+          13727685,
+          15042887,
+          14839707
+        ],
+        "wallpaper": {
+          "colors": [
+            16777215,
+            0
+          ],
+          "intensity": 0,
+          "rotation": 180,
+          "pattern": false
+        }
+      },
+      "night": {
+        "accent_color": 11630812,
+        "message_colors": [
+          11163283,
+          10901614,
+          9065618,
+          6048139
+        ],
+        "wallpaper": {
+          "colors": [
+            8222680,
+            4008280,
+            10976357,
+            7028568
+          ],
+          "intensity": -59,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-fzyYZ89JqdFc8P1o.svg"
+        }
+      },
+      "tinted": {
+        "accent_color": 9599956,
+        "message_colors": [
+          11689081,
+          10701443,
+          8541356,
+          7362230
+        ],
+        "wallpaper": {
+          "colors": [
+            7302835,
+            4406654,
+            10381645,
+            6041944
+          ],
+          "intensity": -67,
+          "rotation": 45,
+          "pattern": true,
+          "source": "/images/chat/theme-fzyYZ89JqdFc8P1o.svg"
+        }
+      }
+    }
+  },
+  {
+    "id": "mwUbCd6C1Jx6SGmb",
+    "emoticon": "🎄",
+    "variants": {
+      "day": {
+        "accent_color": 2726959,
+        "message_colors": [
+          16775881,
+          16641979
+        ],
+        "outbox_accent_color": 16104009,
+        "wallpaper": {
+          "colors": [
+            15310167,
+            15651185,
+            15637864,
+            14733438
+          ],
+          "intensity": 64,
+          "rotation": 0,
+          "pattern": true,
+          "source": "/images/chat/theme-mwUbCd6C1Jx6SGmb.svg"
+        }
+      },
+      "light": {
+        "accent_color": 4563819,
+        "message_colors": [
+          14131012,
+          14267955,
+          14125378,
+          14906175
+        ],
+        "wallpaper": {
+          "colors": [
+            16777215,
+            0
+          ],
+          "intensity": 0,
+          "rotation": 180,
+          "pattern": false
+        }
+      },
+      "night": {
+        "accent_color": 8238429,
+        "message_colors": [
+          11098153,
+          12554548,
+          10640159,
+          10900797
+        ],
+        "wallpaper": {
+          "colors": [
+            7178314,
+            5187344,
+            10714432,
+            3953221
+          ],
+          "intensity": -60,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-mwUbCd6C1Jx6SGmb.svg"
+        }
+      },
+      "tinted": {
+        "accent_color": 8247383,
+        "message_colors": [
+          13460052,
+          13531962,
+          12820016,
+          13461573
+        ],
+        "wallpaper": {
+          "colors": [
+            5849645,
+            10780989,
+            6044457,
+            9080644
+          ],
+          "intensity": -61,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-mwUbCd6C1Jx6SGmb.svg"
+        }
+      }
+    }
+  },
+  {
+    "id": "nmt7Q0OtB9ZaoTYM",
+    "emoticon": "🎮",
+    "variants": {
+      "day": {
+        "accent_color": 5667299,
+        "message_colors": [
+          16774101,
+          16776669
+        ],
+        "wallpaper": {
+          "colors": [
+            4247006,
+            11306733,
+            15303896,
+            15717209
+          ],
+          "intensity": 52,
+          "rotation": 0,
+          "pattern": true,
+          "source": "/images/chat/theme-nmt7Q0OtB9ZaoTYM.svg"
+        }
+      },
+      "light": {
+        "accent_color": 6389973,
+        "message_colors": [
+          3910367,
+          9789919,
+          14640266,
+          14651439
+        ],
+        "wallpaper": {
+          "colors": [
+            16777215,
+            0
+          ],
+          "intensity": 0,
+          "rotation": 180,
+          "pattern": false
+        }
+      },
+      "night": {
+        "accent_color": 6515951,
+        "message_colors": [
+          5156291,
+          7031235,
+          14966966,
+          14844213
+        ],
+        "wallpaper": {
+          "colors": [
+            7314621,
+            1980258,
+            9272509,
+            5649495
+          ],
+          "intensity": -59,
+          "rotation": 180,
+          "pattern": true,
+          "source": "/images/chat/theme-nmt7Q0OtB9ZaoTYM.svg"
+        }
+      },
+      "tinted": {
+        "accent_color": 6515694,
+        "message_colors": [
+          5221827,
+          7031235,
+          14901430,
+          14910004
+        ],
+        "wallpaper": {
+          "colors": [
+            3644604,
+            1326682,
+            8352459,
+            5124939
+          ],
+          "intensity": -74,
+          "rotation": 0,
+          "pattern": true,
+          "source": "/images/chat/theme-nmt7Q0OtB9ZaoTYM.svg"
+        }
+      }
+    }
+  }
+]

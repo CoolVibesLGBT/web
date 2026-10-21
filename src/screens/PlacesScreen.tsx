@@ -1,5 +1,6 @@
+import ViewTabs from '@/components/ui/ViewTabs';
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { MapPin, Loader, RefreshCw, Grid, Map as MapIcon, X, Search, ArrowLeft } from 'lucide-react';
+import { MapPin, Loader, RefreshCw, Grid, Map as MapIcon, X, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 import { api } from '../services/api';
@@ -458,18 +459,18 @@ const PlacesScreen: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`elite-bubble relative z-20 flex flex-col items-center justify-between gap-4 rounded-[28px] p-3.5 pointer-events-auto sm:flex-row md:p-4 ${theme === 'dark' ? 'cv-card-surface-soft border-white/10' : 'border-white/70 bg-white/80'
+            className={`elite-bubble relative z-20 flex flex-col items-center justify-between gap-4 rounded-[20px] p-3.5 pointer-events-auto sm:flex-row md:p-4 ${theme === 'dark' ? 'cv-card-surface-soft border-white/10' : 'border-white/70 bg-white/80'
               }`}
           >
             <div className="flex items-center gap-3">
               <div className="sky-glow flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white">
                 <MapPin className="w-5 h-5" />
               </div>
-              <div className="text-left">
-                <p className={`text-sm font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
+              <div className="text-start">
+                <p className={`text-sm font-semibold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
                   {t('places.location_banner_title', { defaultValue: 'Konum keşfi' })}
                 </p>
-                <p className={`mt-0.5 text-[11px] font-semibold leading-snug ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-500'}`}>
+                <p className={`mt-0.5 text-[0.765rem] font-semibold leading-snug ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-500'}`}>
                   {t('places.location_banner_description', {
                     defaultValue: 'Yakınındaki mekanlar için konum izni ver. Şimdilik İstanbul sonuçları gösteriliyor.'
                   })}
@@ -479,7 +480,7 @@ const PlacesScreen: React.FC = () => {
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <button
                 onClick={handleInitialFetch}
-                className="sky-glow flex-1 whitespace-nowrap rounded-full px-4 py-2.5 text-xs font-black text-white transition-all active:scale-95 sm:flex-none"
+                className="sky-glow flex-1 whitespace-nowrap rounded-full px-4 py-2.5 text-xs font-semibold text-white transition-all active:scale-95 sm:flex-none"
               >
                 {t('places.allow_location', { defaultValue: 'Konum Aç' })}
               </button>
@@ -545,46 +546,19 @@ const PlacesScreen: React.FC = () => {
             {/* ── View Mode Bar ──────────────────────────────────────────────── */}
             <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
               {/* View switcher */}
-              <div className="cv-tab-row">
-                <div className="flex shrink-0 items-center pl-4">
-                  <button
-                    type="button"
-                    onClick={() => navigate('/')}
-                    aria-label={t('app.back', { defaultValue: 'Back' })}
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                  </button>
-                </div>
-                {(['grid', 'map'] as const).map((mode) => {
-                  const isActive = viewMode === mode;
-                  const Icon = mode === 'grid' ? Grid : MapIcon;
-                  const label = mode === 'grid' ? t('nearby.view_grid') : t('nearby.view_map');
-                  return (
-                    <button
-                      key={mode}
-                      type="button"
-                      onClick={() => setViewMode(mode)}
-                      style={{ minWidth: 0 }}
-                      className={`cv-tab ${isActive ? 'is-active' : ''}`}
-                      title={label}
-                    >
-                      <Icon className="h-5 w-5 shrink-0" />
-                      <span className="min-w-0 truncate">{label}</span>
-                      <span className={`cv-tab-underline ${isActive ? 'is-on' : ''}`} />
-                    </button>
-                  );
-                })}
-              </div>
+              <ViewTabs items={[
+ { id: 'grid', label: t('nearby.view_grid'), icon: <Grid /> },
+ { id: 'map', label: t('nearby.view_map'), icon: <MapIcon /> },
+]} activeId={viewMode} onSelect={id => setViewMode(id as 'grid' | 'map')} label={t('app.nav.places')} />
             </div>
 
             <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
-              <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
+              <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[0.765rem] font-semibold text-[var(--color-brand)]">
                 <MapPin className="h-3.5 w-3.5 shrink-0" />
                 {filteredPlaces.length}
               </span>
               {searchQuery && (
-                <span className="flex h-9 min-w-0 shrink-0 items-center gap-1.5 rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[13px] font-semibold text-[var(--cv-neutral-2)]">
+                <span className="flex h-9 min-w-0 shrink-0 items-center gap-1.5 rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[0.765rem] font-semibold text-[var(--cv-neutral-2)]">
                   <Search className="h-3.5 w-3.5 shrink-0" />
                   <span className="max-w-[140px] truncate md:max-w-[200px]">{searchQuery}</span>
                 </span>
@@ -611,7 +585,7 @@ const PlacesScreen: React.FC = () => {
                         type="button"
                         onClick={() => setSelectedCategory(cat)}
                         aria-pressed={isSelected}
-                        className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2 text-[13px] font-semibold transition-colors ${isSelected
+                        className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2 text-[0.765rem] font-semibold transition-colors ${isSelected
                           ? 'bg-[var(--color-brand)] text-white'
                           : 'bg-[var(--cv-surface-3)] text-[var(--cv-neutral-2)] hover:bg-[var(--cv-surface-3-hover)]'
                           }`}

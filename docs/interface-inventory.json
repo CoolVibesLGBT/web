@@ -1,0 +1,3295 @@
+{
+  "generatedBy": "yarn node scripts/audit-interface.mjs",
+  "sources": [
+    {
+      "file": "src/components/ui/ChunkErrorBoundary.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [
+        41
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/ConfirmationModal.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [
+        "Sheet"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/Container.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/Footer.tsx",
+      "states": [],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 243
+        }
+      ],
+      "headings": [
+        79
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/HeaderTabGroup.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/HoneycombMenu.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/IllustratedIcon.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/Interface.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [
+        28,
+        43,
+        117
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/LanguageSelector.tsx",
+      "states": [
+        {
+          "name": "[flagFailed, setFlagFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[search, setSearch]",
+          "type": null,
+          "initial": "''"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 173
+        }
+      ],
+      "headings": [],
+      "dialogs": [
+        "Sheet"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/PwaInstallPrompt.tsx",
+      "states": [
+        {
+          "name": "[deferredPrompt, setDeferredPrompt]",
+          "type": "BeforeInstallPromptEvent | null",
+          "initial": "null"
+        },
+        {
+          "name": "[snoozedUntil, setSnoozedUntil]",
+          "type": null,
+          "initial": "readInstallSnoozeUntil"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        199
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/ReportButton.tsx",
+      "states": [
+        {
+          "name": "[showReportModal, setShowReportModal]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[selectedReportKind, setSelectedReportKind]",
+          "type": "any",
+          "initial": "null"
+        },
+        {
+          "name": "[reportDescription, setReportDescription]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[isReporting, setIsReporting]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isReportKindPickerOpen, setIsReportKindPickerOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[reportKindSearchQuery, setReportKindSearchQuery]",
+          "type": null,
+          "initial": "''"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 322
+        },
+        {
+          "tag": "textarea",
+          "line": 435
+        }
+      ],
+      "headings": [
+        244
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/RouteLoader.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/ShareButton.tsx",
+      "states": [
+        {
+          "name": "[showShareModal, setShowShareModal]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[copied, setCopied]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isMobile, setIsMobile]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        351
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/SplashScreen.tsx",
+      "states": [
+        {
+          "name": "[show, setShow]",
+          "type": null,
+          "initial": "true"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/Switch.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/TipButton.tsx",
+      "states": [
+        {
+          "name": "[showTipModal, setShowTipModal]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[selectedAmount, setSelectedAmount]",
+          "type": "number | null",
+          "initial": "null"
+        },
+        {
+          "name": "[customAmount, setCustomAmount]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[customMode, setCustomMode]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isProcessing, setIsProcessing]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isSuccess, setIsSuccess]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[successAmount, setSuccessAmount]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[isMobile, setIsMobile]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showTipCelebration, setShowTipCelebration]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[tipParticles, setTipParticles]",
+          "type": "TipParticle[]",
+          "initial": "() => createTipParticles()"
+        },
+        {
+          "name": "[tipConfetti, setTipConfetti]",
+          "type": "TipConfetti[]",
+          "initial": "() => createTipConfetti()"
+        },
+        {
+          "name": "[tipStreaks, setTipStreaks]",
+          "type": "TipStreak[]",
+          "initial": "() => createTipStreaks()"
+        },
+        {
+          "name": "[tipOverlayKey, setTipOverlayKey]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[tipError, setTipError]",
+          "type": "{ message: string; code?: string } | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 693
+        }
+      ],
+      "headings": [
+        531
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/components/ui/ViewTabs.tsx",
+      "states": [
+        {
+          "name": "[menuOpen, setMenuOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[size, setSize]",
+          "type": "{ width: number; widths: number[]; more: number }",
+          "initial": "{ width: 0, widths: [], more: 88 }"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [
+        "Sheet"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/appearance/ChatWallpaper.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "scope": "/settings/appearance theme gallery",
+        "evidence": "docs/theme-picker-regressions.json",
+        "outcome": "36 color canvases, original patterns, source dimensions, keyboard/RTL and responsive checks passed.",
+        "limits": "DOM/canvas fixture only; no screenshots or live chat application."
+      }
+    },
+    {
+      "file": "src/features/appearance/TelegramThemePicker.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "scope": "/settings/appearance theme gallery",
+        "evidence": "docs/theme-picker-regressions.json",
+        "outcome": "36 color canvases, original patterns, source dimensions, keyboard/RTL and responsive checks passed.",
+        "limits": "DOM/canvas fixture only; no screenshots or live chat application."
+      }
+    },
+    {
+      "file": "src/features/auth/AuthIllustration.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/auth/AuthWizard.tsx",
+      "states": [
+        {
+          "name": "[currentStep, setCurrentStep]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[authMode, setAuthMode]",
+          "type": "'login' | 'register' | null",
+          "initial": "null"
+        },
+        {
+          "name": "[error, setError]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[recaptchaToken, setRecaptchaToken]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[isLanguageSelectorOpen, setIsLanguageSelectorOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[languageFlagFailed, setLanguageFlagFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[notificationPermission, setNotificationPermission]",
+          "type": "NotificationPermission | null",
+          "initial": "null"
+        },
+        {
+          "name": "[formData, setFormData]",
+          "type": "{\n    name: string;\n    nickname: string;\n    password: string;\n    confirmPassword: string;\n    birthDate: string;\n    day: string;\n    month: string;\n    year: string;\n    referralCode: string;\n  }",
+          "initial": "{\n    name: '',\n    nickname: '',\n    password: '',\n    confirmPassword: '',\n    birthDate: '',\n    day: '',\n    month: '',\n    year: '',\n    referralCode: ''\n  }"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "FormField",
+          "line": 388
+        },
+        {
+          "tag": "input",
+          "line": 389
+        },
+        {
+          "tag": "FormField",
+          "line": 391
+        },
+        {
+          "tag": "input",
+          "line": 392
+        },
+        {
+          "tag": "FormField",
+          "line": 399
+        },
+        {
+          "tag": "input",
+          "line": 400
+        },
+        {
+          "tag": "FormField",
+          "line": 402
+        },
+        {
+          "tag": "input",
+          "line": 403
+        },
+        {
+          "tag": "FormField",
+          "line": 405
+        },
+        {
+          "tag": "input",
+          "line": 406
+        },
+        {
+          "tag": "FormField",
+          "line": 408
+        },
+        {
+          "tag": "input",
+          "line": 409
+        }
+      ],
+      "headings": [
+        348,
+        373,
+        553
+      ],
+      "dialogs": [
+        "LanguageSelectorModal",
+        "Sheet"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/BubbleView/index.tsx",
+      "states": [
+        {
+          "name": "[isMoving, setIsMoving]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[, setIsGiftSelectorOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[liked, setLiked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[disliked, setDisliked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[blocked, setIsBlocked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[activeUser, setActiveUser]",
+          "type": "BubbleUser | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/CreatePost.tsx",
+      "states": [
+        {
+          "name": "[activeEditor, setActiveEditor]",
+          "type": null,
+          "initial": "editor"
+        },
+        {
+          "name": "[, setIsLinkEditMode]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[_postText, _setPostText]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[editorContent, setEditorContent]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[hasEditorContent, setHasEditorContent]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[editorInstance, setEditorInstance]",
+          "type": "unknown",
+          "initial": "null"
+        },
+        {
+          "name": "[selectedImages, setSelectedImages]",
+          "type": "File[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[selectedVideos, setSelectedVideos]",
+          "type": "File[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[uploadProgress, setUploadProgress]",
+          "type": "number | null",
+          "initial": "null"
+        },
+        {
+          "name": "[_isExpanded, setIsExpanded]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[audience]",
+          "type": "'public' | 'community' | 'private'",
+          "initial": "'public'"
+        },
+        {
+          "name": "[polls, setPolls]",
+          "type": "PollDraft[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[isPollActive, setIsPollActive]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isEventActive, setIsEventActive]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[eventTitle, setEventTitle]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[eventDescription, setEventDescription]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[eventDate, setEventDate]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[eventTime, setEventTime]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[eventKind, setEventKind]",
+          "type": "string",
+          "initial": "''"
+        },
+        {
+          "name": "[eventCapacity, setEventCapacity]",
+          "type": "string",
+          "initial": "''"
+        },
+        {
+          "name": "[eventIsPaid, setEventIsPaid]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[eventPrice, setEventPrice]",
+          "type": "string",
+          "initial": "''"
+        },
+        {
+          "name": "[eventCurrency, setEventCurrency]",
+          "type": "string",
+          "initial": "''"
+        },
+        {
+          "name": "[eventIsOnline, setEventIsOnline]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[eventOnlineURL, setEventOnlineURL]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[isEventKindPickerOpen, setIsEventKindPickerOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[eventKindSearchQuery, setEventKindSearchQuery]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[isSubmitting, setIsSubmitting]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[, setCharCount]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[location, setLocation]",
+          "type": "{ address: string; lat: number; lng: number } | null",
+          "initial": "null"
+        },
+        {
+          "name": "[locationQuery, setLocationQuery]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[locationResults, setLocationResults]",
+          "type": "NominatimPlace[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[isLocationSearching, setIsLocationSearching]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[locationSearchError, setLocationSearchError]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[nearbyPlaces, setNearbyPlaces]",
+          "type": "NominatimPlace[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[isNearbyLoading, setIsNearbyLoading]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[nearbyError, setNearbyError]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[pickerPreviewCoords, setPickerPreviewCoords]",
+          "type": "{ lat: number; lng: number } | null",
+          "initial": "null"
+        },
+        {
+          "name": "[pickerPreviewLabel, setPickerPreviewLabel]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[isPreviewLocating, setIsPreviewLocating]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[didRequestPreview, setDidRequestPreview]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[pollErrors, setPollErrors]",
+          "type": "Record<string, string>",
+          "initial": "{}"
+        },
+        {
+          "name": "[isEmojiPickerOpen, setIsEmojiPickerOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isStickerPickerOpen, setIsStickerPickerOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isLocationPickerOpen, setIsLocationPickerOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isGifPickerOpen, setIsGifPickerOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isYouTubePickerOpen, setIsYouTubePickerOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isGettingLocation, setIsGettingLocation]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isFullScreen, setIsFullScreen]",
+          "type": null,
+          "initial": "fullScreen"
+        },
+        {
+          "name": "[leaflet, setLeaflet]",
+          "type": "typeof import('leaflet') | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 1922
+        },
+        {
+          "tag": "input",
+          "line": 1997
+        },
+        {
+          "tag": "input",
+          "line": 2033
+        },
+        {
+          "tag": "input",
+          "line": 2429
+        },
+        {
+          "tag": "textarea",
+          "line": 2460
+        },
+        {
+          "tag": "input",
+          "line": 2558
+        },
+        {
+          "tag": "input",
+          "line": 2620
+        },
+        {
+          "tag": "input",
+          "line": 2650
+        },
+        {
+          "tag": "input",
+          "line": 2685
+        },
+        {
+          "tag": "input",
+          "line": 2716
+        },
+        {
+          "tag": "input",
+          "line": 2726
+        },
+        {
+          "tag": "input",
+          "line": 2758
+        },
+        {
+          "tag": "input",
+          "line": 2938
+        },
+        {
+          "tag": "input",
+          "line": 3138
+        },
+        {
+          "tag": "input",
+          "line": 3139
+        }
+      ],
+      "headings": [
+        1617,
+        1762,
+        1873,
+        2402
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/EmojiPicker.tsx",
+      "states": [
+        {
+          "name": "[searchQuery, setSearchQuery]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[selectedCategory, setSelectedCategory]",
+          "type": "string",
+          "initial": "'Smileys & Emotion'"
+        },
+        {
+          "name": "[frequentlyUsed, setFrequentlyUsed]",
+          "type": "string[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[hoveredEmoji, setHoveredEmoji]",
+          "type": "{ name: string; emoji: string } | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 400
+        },
+        {
+          "tag": "input",
+          "line": 607
+        }
+      ],
+      "headings": [
+        437,
+        518
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/Flows.tsx",
+      "states": [
+        {
+          "name": "[liked, setLiked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[saved, setSaved]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showReply, setShowReply]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[replyCountOffset, setReplyCountOffset]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[displayedViews, setDisplayedViews]",
+          "type": null,
+          "initial": "views"
+        },
+        {
+          "name": "[scrollElement, setScrollElement]",
+          "type": "HTMLDivElement | null",
+          "initial": "null"
+        },
+        {
+          "name": "[isRefreshing, setIsRefreshing]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        1071
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/GifPicker.tsx",
+      "states": [
+        {
+          "name": "[selectedCategory, setSelectedCategory]",
+          "type": "string",
+          "initial": "'trending'"
+        },
+        {
+          "name": "[searchQuery, setSearchQuery]",
+          "type": "string",
+          "initial": "''"
+        },
+        {
+          "name": "[gifs, setGifs]",
+          "type": "GifItem[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[isLoading, setIsLoading]",
+          "type": "boolean",
+          "initial": "false"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 354
+        }
+      ],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/GiftSelector.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [
+        120
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/LiveStreams.tsx",
+      "states": [
+        {
+          "name": "[allReels, setAllReels]",
+          "type": "Reel[]",
+          "initial": "initialReels || []"
+        },
+        {
+          "name": "[currentIndex, setCurrentIndex]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[likedReels, setLikedReels]",
+          "type": "Set<string>",
+          "initial": "new Set()"
+        },
+        {
+          "name": "[savedReels, setSavedReels]",
+          "type": "Set<string>",
+          "initial": "new Set()"
+        },
+        {
+          "name": "[isPlaying, setIsPlaying]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[isMuted, setIsMuted]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[tabHeaderHeight, setTabHeaderHeight]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[isMobile, setIsMobile]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isLoading, setIsLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[cursor, setCursor]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[hasMore, setHasMore]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[isVideoBuffering, setIsVideoBuffering]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[containerHeight, setContainerHeight]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[calculatedTopOffset, setCalculatedTopOffset]",
+          "type": null,
+          "initial": "0"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/Post.tsx",
+      "states": [
+        {
+          "name": "[post, setPost]",
+          "type": "ApiPost",
+          "initial": "postProp"
+        },
+        {
+          "name": "[isLiked, setIsLiked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isDisliked, setIsDisliked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isBanana, setIsBanana]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isBookmarked, setIsBookmarked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[selectedPollChoices, setSelectedPollChoices]",
+          "type": "Record<string, string[]>",
+          "initial": "{}"
+        },
+        {
+          "name": "[isPollRefreshing, setIsPollRefreshing]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[eventStatus, setEventStatus]",
+          "type": "EventRSVPStatus | null",
+          "initial": "null"
+        },
+        {
+          "name": "[isEventRSVPUpdating, setIsEventRSVPUpdating]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[eventRSVPError, setEventRSVPError]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[showReply, setShowReply]",
+          "type": null,
+          "initial": "defaultShowReply"
+        },
+        {
+          "name": "[children, setChildren]",
+          "type": "ApiPost[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[loadingChildren, setLoadingChildren]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isGalleryOpen, setIsGalleryOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[selectedImageIndex, setSelectedImageIndex]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[loadedImages, setLoadedImages]",
+          "type": "Set<string>",
+          "initial": "new Set()"
+        },
+        {
+          "name": "[pressingChoiceId, setPressingChoiceId]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[authorAvatarFailed, setAuthorAvatarFailed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isLiking, setIsLiking]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isDisliking, setIsDisliking]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isBananaing, setIsBananaing]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isBookmarking, setIsBookmarking]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isMenuOpen, setIsMenuOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isDeleting, setIsDeleting]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showDeleteModal, setShowDeleteModal]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[deleteError, setDeleteError]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[hasTipped, setHasTipped]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[tipCountDisplay, setTipCountDisplay]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[tipAmountDisplay, setTipAmountDisplay]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[viewCountDisplay, setViewCountDisplay]",
+          "type": null,
+          "initial": "() => {\n    const initialCount = Number(postProp.engagements?.counts?.view_count ?? 0);\n    return Number.isFinite(initialCount) ? Math.max(0, initialCount) : 0;\n  }"
+        },
+        {
+          "name": "[isMapVisible, setIsMapVisible]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isEventMapVisible, setIsEventMapVisible]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[leaflet, setLeaflet]",
+          "type": "typeof import('leaflet') | null",
+          "initial": "null"
+        },
+        {
+          "name": "[touchStart, setTouchStart]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[touchEnd, setTouchEnd]",
+          "type": null,
+          "initial": "0"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        2908,
+        3913
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/PostReply.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/QuickMessages.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [
+        90
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/StickerPicker.tsx",
+      "states": [
+        {
+          "name": "[selectedCategory, setSelectedCategory]",
+          "type": "string",
+          "initial": "'cats'"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/Stories.tsx",
+      "states": [
+        {
+          "name": "[selectedStory, setSelectedStory]",
+          "type": "number | string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[showAddStoryModal, setShowAddStoryModal]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[selectedImage, setSelectedImage]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[selectedFile, setSelectedFile]",
+          "type": "File | null",
+          "initial": "null"
+        },
+        {
+          "name": "[isVideo, setIsVideo]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isUploading, setIsUploading]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[uploadError, setUploadError]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[likedStories, setLikedStories]",
+          "type": "Set<string>",
+          "initial": "() => new Set()"
+        },
+        {
+          "name": "[storyText, setStoryText]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[storyFontId, setStoryFontId]",
+          "type": null,
+          "initial": "STORY_FONT_OPTIONS[0].id"
+        },
+        {
+          "name": "[storyTextColor, setStoryTextColor]",
+          "type": null,
+          "initial": "STORY_TEXT_COLORS[0]"
+        },
+        {
+          "name": "[storyBackgroundId, setStoryBackgroundId]",
+          "type": null,
+          "initial": "STORY_BACKGROUNDS[0].id"
+        },
+        {
+          "name": "[storyTextSize, setStoryTextSize]",
+          "type": null,
+          "initial": "42"
+        },
+        {
+          "name": "[storyTextPosition, setStoryTextPosition]",
+          "type": null,
+          "initial": "50"
+        },
+        {
+          "name": "[storyTextAlign, setStoryTextAlign]",
+          "type": "StoryTextAlign",
+          "initial": "'center'"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 806
+        },
+        {
+          "tag": "textarea",
+          "line": 1132
+        },
+        {
+          "tag": "input",
+          "line": 1150
+        },
+        {
+          "tag": "input",
+          "line": 1191
+        },
+        {
+          "tag": "input",
+          "line": 1219
+        }
+      ],
+      "headings": [
+        1094
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/Vibes.tsx",
+      "states": [
+        {
+          "name": "[currentIndex, setCurrentIndex]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[likedReels, setLikedReels]",
+          "type": "Set<string>",
+          "initial": "new Set()"
+        },
+        {
+          "name": "[savedReels, setSavedReels]",
+          "type": "Set<string>",
+          "initial": "new Set()"
+        },
+        {
+          "name": "[isPlaying, setIsPlaying]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[isMuted, setIsMuted]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[tabHeaderHeight, setTabHeaderHeight]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[isMobile, setIsMobile]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isVideoBuffering, setIsVideoBuffering]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[containerHeight, setContainerHeight]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[calculatedTopOffset, setCalculatedTopOffset]",
+          "type": null,
+          "initial": "0"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/VibesGL/ActionBar.tsx",
+      "states": [
+        {
+          "name": "[overlay, setOverlay]",
+          "type": "BurstOverlayState | null",
+          "initial": "null"
+        },
+        {
+          "name": "[isOverlayReady, setIsOverlayReady]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/VibesGL/Icons.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/VibesGL/VibeItem.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [
+        114
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/VibesGL/VibesGL.tsx",
+      "states": [
+        {
+          "name": "[activeIndex, setActiveIndex]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[isMuted, setIsMuted]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isMediaLoading, setIsMediaLoading]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        221
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/post/YouTubePicker.tsx",
+      "states": [
+        {
+          "name": "[selectedCategory, setSelectedCategory]",
+          "type": "string",
+          "initial": "'lgbt'"
+        },
+        {
+          "name": "[searchQuery, setSearchQuery]",
+          "type": "string",
+          "initial": "''"
+        },
+        {
+          "name": "[videos, setVideos]",
+          "type": "YouTubeVideo[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[isLoading, setIsLoading]",
+          "type": "boolean",
+          "initial": "false"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 351
+        }
+      ],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/profile/ProfileWizard.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/profile/UserCard/ActionBar.tsx",
+      "states": [
+        {
+          "name": "[animation, setAnimation]",
+          "type": "{ type: BurstType; key: number } | null",
+          "initial": "null"
+        },
+        {
+          "name": "[particles, setParticles]",
+          "type": "Particle[]",
+          "initial": "[]"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/profile/UserCard/GiftSelector.tsx",
+      "states": [
+        {
+          "name": "[selectedGift, setSelectedGift]",
+          "type": "GiftItem | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        53
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/profile/UserCard/icons.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/profile/UserCard/index.tsx",
+      "states": [
+        {
+          "name": "[isGiftSelectorOpen, setIsGiftSelectorOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isQuickMessageSelectorOpen, setIsQuickMessageSelectorOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[liked, setLiked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[disliked, setDisliked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[blocked, setIsBlocked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[overlay, setOverlay]",
+          "type": "BurstOverlayState | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/AppearanceScreen.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "scope": "/settings/appearance and /settings/appearance/background",
+        "change": "Settings preview: nine original theme cards, four variants plus system, 49 accents, wallpaper and text controls. Saved draft only; no global application.",
+        "evidence": "docs/appearance-checks.json",
+        "outcome": "Settings navigation, cards, variants, persistence, preview isolation and responsive DOM checks passed.",
+        "limits": "Fixture-only; no screenshots, real devices or actual chat theme application.",
+        "colorRegression": "docs/theme-picker-regressions.json"
+      }
+    },
+    {
+      "file": "src/screens/CheckInScreen.tsx",
+      "states": [
+        {
+          "name": "[selectedTags, setSelectedTags]",
+          "type": "string[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[userLocation, setUserLocation]",
+          "type": "[number, number]",
+          "initial": "[41.0082, 28.9784]"
+        },
+        {
+          "name": "[isModalOpen, setIsModalOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[checkInViewMode, setCheckInViewMode]",
+          "type": "'map' | 'list'",
+          "initial": "'list'"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        467
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/ClassifiedDetailScreen.tsx",
+      "states": [
+        {
+          "name": "[post, setPost]",
+          "type": "any | null",
+          "initial": "null"
+        },
+        {
+          "name": "[isLoading, setIsLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/ClassifiedsScreen.tsx",
+      "states": [
+        {
+          "name": "[activeTab, setActiveTab]",
+          "type": "ClassifiedsTab",
+          "initial": "'hiring'"
+        },
+        {
+          "name": "[isAddingTopic, setIsAddingTopic]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[searchQuery, setSearchQuery]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[postKind, setPostKind]",
+          "type": "JobPostKind",
+          "initial": "JOB_KIND.offer"
+        },
+        {
+          "name": "[listingTitle, setListingTitle]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[metadataKeyInput, setMetadataKeyInput]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[metadataValueInput, setMetadataValueInput]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[metadataItems, setMetadataItems]",
+          "type": "Array<{ key: string; value: string }>",
+          "initial": "[]"
+        },
+        {
+          "name": "[isMetadataEnabled, setIsMetadataEnabled]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[posts, setPosts]",
+          "type": "any[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[isLoading, setIsLoading]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isLoadingMore, setIsLoadingMore]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[cursor, setCursor]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[hasMore, setHasMore]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 532
+        },
+        {
+          "tag": "input",
+          "line": 562
+        },
+        {
+          "tag": "input",
+          "line": 571
+        }
+      ],
+      "headings": [
+        490
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "scope": "Five template cards at top of /classifieds",
+        "evidence": "docs/classifieds-layout-checks.json",
+        "outcome": "Original illustrated background loads; distinct crops, wrapping labels and keyboard create prefill pass.",
+        "limits": "Fixture-only, no live listing creation or screenshots."
+      }
+    },
+    {
+      "file": "src/screens/HomeScreen.tsx",
+      "states": [
+        {
+          "name": "[activeTab, setActiveTab]",
+          "type": null,
+          "initial": "'flows'"
+        },
+        {
+          "name": "[isCreatePostOpen, setIsCreatePostOpen]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/LandingPage.tsx",
+      "states": [
+        {
+          "name": "[authOpen, setAuthOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[languageOpen, setLanguageOpen]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        143,
+        201,
+        228,
+        288,
+        335,
+        362
+      ],
+      "dialogs": [
+        "AuthWizard"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/LegalScreen.tsx",
+      "states": [
+        {
+          "name": "[languageOpen, setLanguageOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[authOpen, setAuthOpen]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        100,
+        110,
+        159,
+        197,
+        222
+      ],
+      "dialogs": [
+        "AuthWizard"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/LiveScreen.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/LiveTab.tsx",
+      "states": [
+        {
+          "name": "[premiumGateContext, setPremiumGateContext]",
+          "type": "'join' | 'create' | null",
+          "initial": "null"
+        },
+        {
+          "name": "[activeBroadcast, setActiveBroadcast]",
+          "type": "BroadcastItem | null",
+          "initial": "null"
+        },
+        {
+          "name": "[isViewerOpen, setIsViewerOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[viewerStatus, setViewerStatus]",
+          "type": "'idle' | 'joining' | 'waiting' | 'playing' | 'error'",
+          "initial": "'idle'"
+        },
+        {
+          "name": "[viewerError, setViewerError]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[viewerRole, setViewerRole]",
+          "type": "'audience' | 'host'",
+          "initial": "'audience'"
+        },
+        {
+          "name": "[isPublishing, setIsPublishing]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isMicEnabled, setIsMicEnabled]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isCamEnabled, setIsCamEnabled]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[hasLocalAudio, setHasLocalAudio]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[hasLocalVideo, setHasLocalVideo]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isFullscreen, setIsFullscreen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showViewerControls, setShowViewerControls]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[remoteUsers, setRemoteUsers]",
+          "type": "IAgoraRTCRemoteUser[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[primaryRemoteUid, setPrimaryRemoteUid]",
+          "type": "string | number | null",
+          "initial": "null"
+        },
+        {
+          "name": "[joinFlow, setJoinFlow]",
+          "type": "'idle' | 'setup' | 'requesting' | 'waiting'",
+          "initial": "'idle'"
+        },
+        {
+          "name": "[joinError, setJoinError]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[createFlow, setCreateFlow]",
+          "type": "'idle' | 'setup' | 'creating'",
+          "initial": "'idle'"
+        },
+        {
+          "name": "[createError, setCreateError]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[createDescription, setCreateDescription]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[autoLikeEnabled, setAutoLikeEnabled]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[streamClientId, setStreamClientId]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[joinMicOn, setJoinMicOn]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[joinCamOn, setJoinCamOn]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[isViewerMuted, setIsViewerMuted]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[viewerFit, setViewerFit]",
+          "type": "'cover' | 'contain'",
+          "initial": "'contain'"
+        },
+        {
+          "name": "[participantNonce, setParticipantNonce]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[switchPulseUid, setSwitchPulseUid]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[availableMics, setAvailableMics]",
+          "type": "MediaDeviceInfo[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[availableCams, setAvailableCams]",
+          "type": "MediaDeviceInfo[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[selectedMicId, setSelectedMicId]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[selectedCamId, setSelectedCamId]",
+          "type": null,
+          "initial": "''"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 1968
+        },
+        {
+          "tag": "select",
+          "line": 2034
+        },
+        {
+          "tag": "select",
+          "line": 2058
+        },
+        {
+          "tag": "select",
+          "line": 2415
+        },
+        {
+          "tag": "select",
+          "line": 2436
+        }
+      ],
+      "headings": [
+        1734,
+        1887
+      ],
+      "dialogs": [
+        "PremiumGateModal"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/MatchScreen.tsx",
+      "states": [
+        {
+          "name": "[profiles, setProfiles]",
+          "type": "Profile[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[isLoading, setIsLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[currentIndex, setCurrentIndex]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[currentImageIndex, setCurrentImageIndex]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[matchPercentage]",
+          "type": null,
+          "initial": "96"
+        },
+        {
+          "name": "[exitingProfileId, setExitingProfileId]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[exitDirection, setExitDirection]",
+          "type": "'left' | 'right' | null",
+          "initial": "null"
+        },
+        {
+          "name": "[showProfileModal, setShowProfileModal]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showMatchAnimation, setShowMatchAnimation]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[matchedProfile, setMatchedProfile]",
+          "type": "Profile | null",
+          "initial": "null"
+        },
+        {
+          "name": "[likedProfiles, setLikedProfiles]",
+          "type": "Profile[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[isLoadingLiked, setIsLoadingLiked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[hasLoadedLiked, setHasLoadedLiked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[passedProfiles, setPassedProfiles]",
+          "type": "Profile[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[isLoadingPassed, setIsLoadingPassed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[hasLoadedPassed, setHasLoadedPassed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[matchedProfiles, setMatchedProfiles]",
+          "type": "Profile[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[isLoadingMatches, setIsLoadingMatches]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[hasLoadedMatches, setHasLoadedMatches]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[expandedMatches, setExpandedMatches]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[expandedLiked, setExpandedLiked]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[expandedPassed, setExpandedPassed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[historyTab, setHistoryTab]",
+          "type": "MatchHistoryTab",
+          "initial": "'match_now'"
+        },
+        {
+          "name": "[processedProfiles, setProcessedProfiles]",
+          "type": "Set<string>",
+          "initial": "new Set()"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        709,
+        801,
+        1186
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/MessagesScreen.tsx",
+      "states": [
+        {
+          "name": "[isPressed, setIsPressed]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[previewUrl, setPreviewUrl]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[activeFilter, setActiveFilter]",
+          "type": "'all' | 'unread' | 'groups' | 'unencrypted'",
+          "initial": "'all'"
+        },
+        {
+          "name": "[message, setMessage]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[messageExpirySeconds, setMessageExpirySeconds]",
+          "type": "MessageExpirySeconds",
+          "initial": "0"
+        },
+        {
+          "name": "[viewOnceEnabled, setViewOnceEnabled]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[countdownNow, setCountdownNow]",
+          "type": null,
+          "initial": "() => Date.now()"
+        },
+        {
+          "name": "[activeMedia, setActiveMedia]",
+          "type": "{ messageId: string; attachmentId: string } | null",
+          "initial": "null"
+        },
+        {
+          "name": "[viewOnceSession, setViewOnceSession]",
+          "type": "ViewOnceSession | null",
+          "initial": "null"
+        },
+        {
+          "name": "[openingMessageIds, setOpeningMessageIds]",
+          "type": "Set<string>",
+          "initial": "() => new Set()"
+        },
+        {
+          "name": "[viewOnceOpenErrorIds, setViewOnceOpenErrorIds]",
+          "type": "Set<string>",
+          "initial": "() => new Set()"
+        },
+        {
+          "name": "[otherUserTyping, setOtherUserTyping]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showSidebar, setShowSidebar]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showEmojiPicker, setShowEmojiPicker]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[selectedImages, setSelectedImages]",
+          "type": "File[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[selectedVideos, setSelectedVideos]",
+          "type": "File[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[isMobile, setIsMobile]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[inputHeight, setInputHeight]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[headerHeight, setHeaderHeight]",
+          "type": null,
+          "initial": "0"
+        },
+        {
+          "name": "[selectedMessageId, setSelectedMessageId]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[messageMenuPosition, setMessageMenuPosition]",
+          "type": "{ x: number; y: number } | null",
+          "initial": "null"
+        },
+        {
+          "name": "[resolvedMessageMenuPosition, setResolvedMessageMenuPosition]",
+          "type": "{ x: number; y: number } | null",
+          "initial": "null"
+        },
+        {
+          "name": "[showChatMenu, setShowChatMenu]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[openChatItemMenu, setOpenChatItemMenu]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[showProfile, setShowProfile]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 2653
+        },
+        {
+          "tag": "select",
+          "line": 3415
+        },
+        {
+          "tag": "input",
+          "line": 3468
+        },
+        {
+          "tag": "input",
+          "line": 3476
+        },
+        {
+          "tag": "input",
+          "line": 3484
+        },
+        {
+          "tag": "input",
+          "line": 3542
+        }
+      ],
+      "headings": [
+        2612,
+        2751,
+        2948,
+        3611
+      ],
+      "dialogs": [
+        "AuthWizard"
+      ],
+      "virtualized": true,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/NearbyScreen.tsx",
+      "states": [
+        {
+          "name": "[viewMode, setNearbyViewMode]",
+          "type": "NearbyViewMode",
+          "initial": "() => {\n    if (typeof window === 'undefined') {\n      return 'grid';\n    }\n    const savedMode = window.localStorage.getItem(NEARBY_VIEW_MODE_STORAGE_KEY);\n    return isNearbyViewMode(savedMode) ? savedMode : 'grid';\n  }"
+        },
+        {
+          "name": "[isRefreshing, setIsRefreshing]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[hasRequestedNearby, setHasRequestedNearby]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[loadingUsers, setLoadingUsers]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[loadingMore, setLoadingMore]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[MapComponent, setMapComponent]",
+          "type": "MapComponentType | null",
+          "initial": "null"
+        },
+        {
+          "name": "[premiumBlockedMode, setPremiumBlockedMode]",
+          "type": "'bubble' | null",
+          "initial": "null"
+        },
+        {
+          "name": "[selectedUser, setSelectedUser]",
+          "type": "any",
+          "initial": "null"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        544,
+        586,
+        782,
+        867
+      ],
+      "dialogs": [
+        "PremiumGateModal"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/NotificationsScreen.tsx",
+      "states": [
+        {
+          "name": "[activeTab, setActiveTab]",
+          "type": "'all' | 'messages' | 'matches' | 'likes' | 'follows' | 'gifts' | 'other'",
+          "initial": "'all'"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        253
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/PlaceDetailsScreen.tsx",
+      "states": [
+        {
+          "name": "[place, setPlace]",
+          "type": "Place | null",
+          "initial": "state?.place || null"
+        },
+        {
+          "name": "[loading, setLoading]",
+          "type": "boolean",
+          "initial": "!place"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        176,
+        217,
+        263,
+        311
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/PlacesScreen.tsx",
+      "states": [
+        {
+          "name": "[searchQuery, setSearchQuery]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[selectedCategory, setSelectedCategory]",
+          "type": null,
+          "initial": "'all'"
+        },
+        {
+          "name": "[viewMode, setViewMode]",
+          "type": "'grid' | 'map'",
+          "initial": "'grid'"
+        },
+        {
+          "name": "[places, setPlaces]",
+          "type": "Place[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[cursor, setCursor]",
+          "type": "CursorType",
+          "initial": "null"
+        },
+        {
+          "name": "[loadingInitial, setLoadingInitial]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[loadingMore, setLoadingMore]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[location, setLocation]",
+          "type": "{ latitude: number; longitude: number } | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        434,
+        502
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/PostDetails.tsx",
+      "states": [
+        {
+          "name": "[post, setPost]",
+          "type": "ApiPost | null",
+          "initial": "null"
+        },
+        {
+          "name": "[loading, setLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[isDeleted, setIsDeleted]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/PremiumScreen.tsx",
+      "states": [
+        {
+          "name": "[billingCycle, setBillingCycle]",
+          "type": "BillingCycle",
+          "initial": "'yearly'"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        103
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/ProfileBio.tsx",
+      "runtimeVerification": {
+        "scope": "/profile and /profile?edit=1 biography preview and editor",
+        "change": "Wrap imported text and inline nodes in paragraphs before appending them to the Lexical root.",
+        "evidence": "DOM-only Playwright checks against localhost:5173 with intercepted API fixtures: plain text, inline HTML and mixed blocks at 390/768/1280px; edit/save at 390px with English, Turkish, Arabic/RTL, dark appearance and 24px root text.",
+        "outcome": "Biography renders without Lexical errors; edited content reaches the fixture save request; no document horizontal overflow.",
+        "limits": "No screenshots, simulator, real device or live profile writes. Other profile subflows remain unverified."
+      },
+      "states": [
+        {
+          "name": "[activeEditor, setActiveEditor]",
+          "type": null,
+          "initial": "editor"
+        },
+        {
+          "name": "[, setIsLinkEditMode]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/ProfileEngagementsScreen.tsx",
+      "states": [
+        {
+          "name": "[showAuthWizard, setShowAuthWizard]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[profile, setProfile]",
+          "type": "ProfileSummary | null",
+          "initial": "navigationState?.profileSummary ?? null"
+        },
+        {
+          "name": "[loadingProfile, setLoadingProfile]",
+          "type": "boolean",
+          "initial": "!navigationState?.profileSummary"
+        },
+        {
+          "name": "[engagements, setEngagements]",
+          "type": "EngagementUser[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[loadingEngagements, setLoadingEngagements]",
+          "type": "boolean",
+          "initial": "false"
+        },
+        {
+          "name": "[cursor, setCursor]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        662,
+        814
+      ],
+      "dialogs": [
+        "AuthWizard"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/ProfileScreen.tsx",
+      "states": [
+        {
+          "name": "[selectedDate, setSelectedDate]",
+          "type": null,
+          "initial": "initialParsed"
+        },
+        {
+          "name": "[viewMode, setViewMode]",
+          "type": "'day' | 'month' | 'year'",
+          "initial": "'day'"
+        },
+        {
+          "name": "[currentYear, setCurrentYear]",
+          "type": null,
+          "initial": "() =>\n    Math.min(Math.max(initialParsed.year || defaultYear, minYear), maxYear)"
+        },
+        {
+          "name": "[currentMonth, setCurrentMonth]",
+          "type": null,
+          "initial": "() =>\n    initialParsed.month ? initialParsed.month - 1 : today.getMonth()"
+        },
+        {
+          "name": "[decadeStart, setDecadeStart]",
+          "type": null,
+          "initial": "() =>\n    Math.floor((initialParsed.year || defaultYear) / 20) * 20"
+        },
+        {
+          "name": "[status, setStatus]",
+          "type": "string",
+          "initial": "''"
+        },
+        {
+          "name": "[isDetecting, setIsDetecting]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[user, setUser]",
+          "type": "ProfileUser | null",
+          "initial": "null"
+        },
+        {
+          "name": "[posts, setPosts]",
+          "type": "ProfilePost[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[medias, setMedias]",
+          "type": "Media[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[loading, setLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[postsLoading, setPostsLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[mediasLoading, setMediasLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[activeTab, setActiveTab]",
+          "type": "'profile' | 'posts' | 'replies' | 'media' | 'likes'",
+          "initial": "'profile'"
+        },
+        {
+          "name": "[isFollowing, setIsFollowing]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isFollowPending, setIsFollowPending]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showAuthWizard, setShowAuthWizard]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isEditMode, setIsEditMode]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isSaving, setIsSaving]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[editFormData, setEditFormData]",
+          "type": "Partial<ProfileUser>",
+          "initial": "{}"
+        },
+        {
+          "name": "[profileImagePreview, setProfileImagePreview]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[coverImagePreview, setCoverImagePreview]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[uploadingProfileImage, setUploadingProfileImage]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[uploadingCoverImage, setUploadingCoverImage]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[selectedField, setSelectedField]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[updatingAttributes, setUpdatingAttributes]",
+          "type": "Record<string, boolean>",
+          "initial": "{}"
+        },
+        {
+          "name": "[editTab, setEditTab]",
+          "type": "'profile' | 'attributes' | 'interests' | 'fantasies'",
+          "initial": "'profile'"
+        },
+        {
+          "name": "[selectedInterestCategory, setSelectedInterestCategory]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[updatingInterests, setUpdatingInterests]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[selectedFantasyCategory, setSelectedFantasyCategory]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[updatingFantasies, setUpdatingFantasies]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[passwordForm, setPasswordForm]",
+          "type": null,
+          "initial": "{\n    currentPassword: '',\n    newPassword: '',\n    confirmNewPassword: '',\n  }"
+        },
+        {
+          "name": "[passwordVisibility, setPasswordVisibility]",
+          "type": null,
+          "initial": "{\n    current: false,\n    new: false,\n    confirm: false,\n  }"
+        },
+        {
+          "name": "[isUpdatingPassword, setIsUpdatingPassword]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[passwordMessage, setPasswordMessage]",
+          "type": "{ type: 'success' | 'error'; text: string } | null",
+          "initial": "null"
+        },
+        {
+          "name": "[isPasswordSectionOpen, setIsPasswordSectionOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isBirthdateSectionOpen, setIsBirthdateSectionOpen]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 4119
+        },
+        {
+          "tag": "input",
+          "line": 4167
+        },
+        {
+          "tag": "input",
+          "line": 4306
+        },
+        {
+          "tag": "input",
+          "line": 4328
+        },
+        {
+          "tag": "input",
+          "line": 4344
+        },
+        {
+          "tag": "input",
+          "line": 4459
+        },
+        {
+          "tag": "input",
+          "line": 4579
+        },
+        {
+          "tag": "input",
+          "line": 4606
+        },
+        {
+          "tag": "input",
+          "line": 4633
+        }
+      ],
+      "headings": [
+        4217,
+        4411,
+        4527,
+        4701,
+        5029,
+        5231,
+        5524,
+        5681,
+        5704,
+        5737,
+        5886,
+        5929,
+        5984,
+        6032,
+        6077,
+        6178,
+        6250,
+        6307
+      ],
+      "dialogs": [
+        "AuthWizard"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "scope": "Profile header, tabs, metrics sheet, biography edit",
+        "evidence": "docs/profile-layout-checks.json",
+        "outcome": "No duplicate top gap, name overlap or horizontal overflow in tested fixtures; navigation, sheet and edit interactions passed.",
+        "limits": "No live profile writes or screenshots."
+      }
+    },
+    {
+      "file": "src/screens/ReferralHandler.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/ReferralsScreen.tsx",
+      "states": [
+        {
+          "name": "[copied, setCopied]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/SearchScreen.tsx",
+      "states": [
+        {
+          "name": "[searchQuery, setSearchQuery]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[activeFilter, setActiveFilter]",
+          "type": "SearchFilter",
+          "initial": "'all'"
+        },
+        {
+          "name": "[response, setResponse]",
+          "type": "GlobalSearchResponse",
+          "initial": "EMPTY_RESPONSE"
+        },
+        {
+          "name": "[isSearching, setIsSearching]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[retryNonce, setRetryNonce]",
+          "type": null,
+          "initial": "0"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 602
+        }
+      ],
+      "headings": [
+        341,
+        527,
+        546,
+        566
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/SettingsScreen.tsx",
+      "states": [
+        {
+          "name": "[isLangModalOpen, setIsLangModalOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isLogoutModalOpen, setIsLogoutModalOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isDeleteModalOpen, setIsDeleteModalOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[searchQuery, setSearchQuery]",
+          "type": null,
+          "initial": "''"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 282
+        }
+      ],
+      "headings": [],
+      "dialogs": [
+        "LanguageSelectorModal",
+        "ConfirmationModal"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "runtimeVerification": {
+        "scope": "Appearance settings entry",
+        "evidence": "docs/appearance-checks.json",
+        "outcome": "Entry navigates to Appearance in EN/TR/AR.",
+        "limits": "Other settings flows not reverified."
+      }
+    },
+    {
+      "file": "src/screens/TestPage.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/screens/WalletScreen.tsx",
+      "states": [
+        {
+          "name": "[activeTab, setActiveTab]",
+          "type": "'overview' | 'history'",
+          "initial": "'overview'"
+        },
+        {
+          "name": "[depositCurrency, setDepositCurrency]",
+          "type": "CryptoCurrency",
+          "initial": "'SOL'"
+        },
+        {
+          "name": "[withdrawCurrency, setWithdrawCurrency]",
+          "type": "CryptoCurrency",
+          "initial": "'LGBT'"
+        },
+        {
+          "name": "[showDepositModal, setShowDepositModal]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showWithdrawModal, setShowWithdrawModal]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showDepositDropdown, setShowDepositDropdown]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showWithdrawDropdown, setShowWithdrawDropdown]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showPaymentMethodDropdown, setShowPaymentMethodDropdown]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showPackageDropdown, setShowPackageDropdown]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showIbanDropdown, setShowIbanDropdown]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showGooglePayProviderDropdown, setShowGooglePayProviderDropdown]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[withdrawAmount, setWithdrawAmount]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[withdrawAddress, setWithdrawAddress]",
+          "type": null,
+          "initial": "''"
+        },
+        {
+          "name": "[isProcessing, setIsProcessing]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[copiedAddress, setCopiedAddress]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[selectedPackage, setSelectedPackage]",
+          "type": "Package | null",
+          "initial": "null"
+        },
+        {
+          "name": "[depositPaymentMethod, setDepositPaymentMethod]",
+          "type": "'iban' | 'crypto' | 'google_pay'",
+          "initial": "'google_pay'"
+        },
+        {
+          "name": "[selectedGooglePayProvider, setSelectedGooglePayProvider]",
+          "type": "GooglePayDetail | null",
+          "initial": "null"
+        },
+        {
+          "name": "[googlePayAmount, setGooglePayAmount]",
+          "type": "string",
+          "initial": "''"
+        },
+        {
+          "name": "[googlePayReady, setGooglePayReady]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isGooglePayProcessing, setIsGooglePayProcessing]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isGooglePayLoading, setIsGooglePayLoading]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[depositStep, setDepositStep]",
+          "type": "'payment_method' | 'package' | 'payment_screen' | 'success' | 'error'",
+          "initial": "'payment_method'"
+        },
+        {
+          "name": "[paymentMethods, setPaymentMethods]",
+          "type": "PaymentMethodsResponse | null",
+          "initial": "null"
+        },
+        {
+          "name": "[selectedIban, setSelectedIban]",
+          "type": "IBANDetail | null",
+          "initial": "null"
+        },
+        {
+          "name": "[transactions]",
+          "type": "Transaction[]",
+          "initial": "[\n    {\n      id: '1',\n      type: 'deposit',\n      currency: 'LGBT',\n      amount: '1000',\n      amountUSD: '-',\n      status: 'completed',\n      timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),\n      txHash: 'https://coolvibes.lgbt'\n    },\n  ]"
+        }
+      ],
+      "fields": [
+        {
+          "tag": "input",
+          "line": 2877
+        },
+        {
+          "tag": "input",
+          "line": 2934
+        }
+      ],
+      "headings": [
+        758,
+        964,
+        2667,
+        2747,
+        2828
+      ],
+      "dialogs": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    }
+  ],
+  "assets": {
+    "illustratedIcons": 524,
+    "missingIcons": [],
+    "authAssets": [
+      "login-bear.avif",
+      "register-bear.avif"
+    ],
+    "systemIcons": "Existing lucide-react vector icons; brand illustrations remain in navigation and domain content.",
+    "font": "System font stack; no proprietary font downloads."
+  }
+}

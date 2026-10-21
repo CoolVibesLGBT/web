@@ -584,13 +584,13 @@ const TipButton: React.FC<TipButtonProps> = ({
                                     @{recipientUsername}
                                   </p>
                                 )}
-                                <p className={`text-[11px] ${theme === 'dark' ? 'text-gray-500' : 'text-slate-400'}`}>
+                                <p className={`text-[0.765rem] ${theme === 'dark' ? 'text-gray-500' : 'text-slate-400'}`}>
                                   Recipient
                                 </p>
                               </div>
                             </div>
-                            <div className="text-right">
-                              <p className={`text-[10px] uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-slate-500'}`}>
+                            <div className="text-end">
+                              <p className={`text-[0.765rem] normal-case tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-slate-500'}`}>
                                 Balance
                               </p>
                               <p className={`text-lg font-semibold tabular-nums ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
@@ -605,7 +605,7 @@ const TipButton: React.FC<TipButtonProps> = ({
                           : 'border-slate-200 bg-white'}`}>
                           <div className="flex items-center justify-between">
                             <div>
-                              <p className={`text-[10px] uppercase tracking-wider font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-slate-600'}`}>
+                              <p className={`text-[0.765rem] normal-case tracking-wider font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-slate-600'}`}>
                                 Amount
                               </p>
                               <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-slate-500'}`}>
@@ -627,7 +627,7 @@ const TipButton: React.FC<TipButtonProps> = ({
                                   onClick={() => handleAmountSelect(tip.amount)}
                                   whileTap={{ scale: 0.96 }}
                                   whileHover={{ scale: 1.01 }}
-                                  className={`relative cursor-pointer w-full h-14 rounded-2xl flex flex-col items-center justify-center gap-1 text-[12px] font-semibold tabular-nums transition-all duration-200 border ${isSelected
+                                  className={`relative cursor-pointer w-full h-14 rounded-2xl flex flex-col items-center justify-center gap-1 text-[0.765rem] font-semibold tabular-nums transition-all duration-200 border ${isSelected
                                     ? theme === 'dark'
                                       ? 'bg-white text-gray-900 border-white/20'
                                       : 'bg-slate-900 text-white border-slate-900'
@@ -651,7 +651,7 @@ const TipButton: React.FC<TipButtonProps> = ({
                               onClick={handleCustomCardSelect}
                               whileTap={{ scale: 0.96 }}
                               whileHover={{ scale: 1.01 }}
-                              className={`relative cursor-pointer w-full h-14 rounded-2xl flex flex-col items-center justify-center gap-1 text-[12px] font-semibold tabular-nums transition-all duration-200 border ${customMode
+                              className={`relative cursor-pointer w-full h-14 rounded-2xl flex flex-col items-center justify-center gap-1 text-[0.765rem] font-semibold tabular-nums transition-all duration-200 border ${customMode
                                 ? theme === 'dark'
                                   ? 'bg-white text-gray-900 border-white/20'
                                   : 'bg-slate-900 text-white border-slate-900'
@@ -683,7 +683,7 @@ const TipButton: React.FC<TipButtonProps> = ({
                                   ? 'border-white/10 bg-white/5'
                                   : 'border-slate-200 bg-slate-50'}`}
                               >
-                                <label className={`block text-[10px] font-semibold uppercase tracking-wider mb-1.5 ${theme === 'dark' ? 'text-gray-300' : 'text-slate-600'}`}>
+                                <label className={`block text-[0.765rem] font-semibold normal-case tracking-wider mb-1.5 ${theme === 'dark' ? 'text-gray-300' : 'text-slate-600'}`}>
                                   Custom Amount
                                 </label>
                                 <div className="relative group">
@@ -718,7 +718,7 @@ const TipButton: React.FC<TipButtonProps> = ({
                                       key={ratio}
                                       type="button"
                                       onClick={() => handleCustomRatioSelect(ratio)}
-                                      className={`flex-1 px-2 py-1 rounded-full text-[11px] font-semibold transition-colors ${theme === 'dark'
+                                      className={`flex-1 px-2 py-1 rounded-full text-[0.765rem] font-semibold transition-colors ${theme === 'dark'
                                         ? 'bg-white/5 text-gray-300 hover:bg-white/10'
                                         : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'}`}
                                     >
@@ -739,14 +739,14 @@ const TipButton: React.FC<TipButtonProps> = ({
                               <AlertTriangle className="w-3.5 h-3.5" />
                             </div>
                             <div className="min-w-0">
-                              <p className={`text-[11px] font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-rose-100' : 'text-rose-700'}`}>
+                              <p className={`text-[0.765rem] font-semibold normal-case tracking-wider ${theme === 'dark' ? 'text-rose-100' : 'text-rose-700'}`}>
                                 Tip failed
                               </p>
                               <p className={`${theme === 'dark' ? 'text-rose-200/90' : 'text-rose-600'}`}>
                                 {tipError.message}
                               </p>
                               {tipError.code && (
-                                <span className={`mt-1 inline-flex text-[10px] uppercase tracking-wider ${theme === 'dark' ? 'text-rose-200/80' : 'text-rose-500'}`}>
+                                <span className={`mt-1 inline-flex text-[0.765rem] normal-case tracking-wider ${theme === 'dark' ? 'text-rose-200/80' : 'text-rose-500'}`}>
                                   {tipError.code}
                                 </span>
                               )}
@@ -767,10 +767,10 @@ const TipButton: React.FC<TipButtonProps> = ({
                               <div className="flex items-center gap-2 min-w-0">
                                 <X className={`w-4 h-4 ${theme === 'dark' ? 'text-rose-300' : 'text-rose-600'}`} />
                                 <div className="min-w-0">
-                                  <p className={`text-[11px] font-semibold ${theme === 'dark' ? 'text-rose-200' : 'text-rose-700'}`}>
+                                  <p className={`text-[0.765rem] font-semibold ${theme === 'dark' ? 'text-rose-200' : 'text-rose-700'}`}>
                                     Insufficient balance
                                   </p>
-                                  <p className={`text-[11px] ${theme === 'dark' ? 'text-rose-200/80' : 'text-rose-600'}`}>
+                                  <p className={`text-[0.765rem] ${theme === 'dark' ? 'text-rose-200/80' : 'text-rose-600'}`}>
                                     Need {'$' + Math.max(0, finalAmount - userBalance).toFixed(2)} more
                                   </p>
                                 </div>
@@ -782,7 +782,7 @@ const TipButton: React.FC<TipButtonProps> = ({
                                 }}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className={`px-3 py-1.5 rounded-full font-semibold text-[10px] uppercase tracking-wider transition-all duration-200 flex items-center gap-1.5 ${theme === 'dark'
+                                className={`px-3 py-1.5 rounded-full font-semibold text-[0.765rem] normal-case tracking-wider transition-all duration-200 flex items-center gap-1.5 ${theme === 'dark'
                                   ? 'bg-white/10 text-white hover:bg-white/20'
                                   : 'bg-slate-900 text-white hover:bg-slate-800'}`}
                               >

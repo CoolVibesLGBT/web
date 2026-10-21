@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-21",
+  "method": "Playwright DOM / HTTP fixtures, sockets blocked; source properties checked without screenshots",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "base": "day",
+      "status": "passed",
+      "styles": {
+        "background": "rgb(255, 255, 255)",
+        "expectedBackground": "rgb(255, 255, 255)",
+        "shadow": "none",
+        "border": "0px",
+        "radius": "40px",
+        "headerBorder": "0px",
+        "titleFont": "20px",
+        "titleWeight": "500",
+        "dangerColor": "rgb(223, 63, 64)",
+        "expectedDanger": "rgb(223, 63, 64)"
+      },
+      "checks": [
+        "two-step sidebar, no navigation",
+        "debounced public user lookup and switches",
+        "back preserves selection",
+        "create failure retains form; retry",
+        "group title, public IDs and description sent",
+        "created group opens and survives reload",
+        "theme-correct clear-history confirmation, cancel without mutation"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "base": "night",
+      "status": "passed",
+      "styles": {
+        "background": "rgb(33, 33, 33)",
+        "expectedBackground": "rgb(33, 33, 33)",
+        "shadow": "none",
+        "border": "0px",
+        "radius": "40px",
+        "headerBorder": "0px",
+        "titleFont": "20px",
+        "titleWeight": "500",
+        "dangerColor": "rgb(255, 89, 90)",
+        "expectedDanger": "rgb(255, 89, 90)"
+      },
+      "checks": [
+        "two-step sidebar, no navigation",
+        "debounced public user lookup and switches",
+        "back preserves selection",
+        "create failure retains form; retry",
+        "group title, public IDs and description sent",
+        "created group opens and survives reload",
+        "theme-correct clear-history confirmation, cancel without mutation"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "base": "tinted",
+      "status": "passed",
+      "styles": {
+        "background": "rgb(26, 43, 64)",
+        "expectedBackground": "rgb(26, 43, 64)",
+        "shadow": "none",
+        "border": "0px",
+        "radius": "60px",
+        "headerBorder": "0px",
+        "titleFont": "30px",
+        "titleWeight": "500",
+        "dangerColor": "rgb(255, 89, 90)",
+        "expectedDanger": "rgb(255, 89, 90)"
+      },
+      "checks": [
+        "two-step sidebar, no navigation",
+        "debounced public user lookup and switches",
+        "back preserves selection",
+        "create failure retains form; retry",
+        "group title, public IDs and description sent",
+        "created group opens and survives reload",
+        "theme-correct clear-history confirmation, cancel without mutation"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "base": "light",
+      "status": "passed",
+      "styles": {
+        "background": "rgb(255, 255, 255)",
+        "expectedBackground": "rgb(255, 255, 255)",
+        "shadow": "none",
+        "border": "0px",
+        "radius": "40px",
+        "headerBorder": "0px",
+        "titleFont": "20px",
+        "titleWeight": "500",
+        "dangerColor": "rgb(223, 63, 64)",
+        "expectedDanger": "rgb(223, 63, 64)"
+      },
+      "checks": [
+        "two-step sidebar, no navigation",
+        "debounced public user lookup and switches",
+        "back preserves selection",
+        "create failure retains form; retry",
+        "group title, public IDs and description sent",
+        "created group opens and survives reload",
+        "theme-correct clear-history confirmation, cancel without mutation"
+      ]
+    }
+  ]
+}

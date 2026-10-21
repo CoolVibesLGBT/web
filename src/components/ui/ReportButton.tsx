@@ -1,10 +1,11 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Flag, AlertTriangle, Loader2, Search, X } from 'lucide-react';
+import { Flag, AlertTriangle, Loader2, Search, X } from '@/components/ui/illustratedIcons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useApp } from '../../contexts/AppContext';
 import { api } from '../../services/api';
+import IllustratedIcon from '@/components/ui/IllustratedIcon';
 
 export type ReportableType = 'post' | 'user';
 
@@ -268,12 +269,13 @@ const ReportButton: React.FC<ReportButtonProps> = ({
                       }}
                       onMouseDown={(e) => e.stopPropagation()}
                       onPointerDown={(e) => e.stopPropagation()}
-                      className={`w-full px-4 sm:px-5 py-4 sm:py-4.5 text-base sm:text-lg rounded-xl sm:rounded-2xl border-2 transition-all duration-300 focus:outline-none focus:ring-2 backdrop-blur-xl font-medium text-left flex items-center justify-between gap-3 ${
+                      className={`w-full px-4 sm:px-5 py-4 sm:py-4.5 text-base sm:text-lg rounded-xl sm:rounded-2xl border-2 transition-all duration-300 focus:outline-none focus:ring-2 backdrop-blur-xl font-medium text-start flex items-center justify-between gap-3 ${
                         theme === 'dark'
                           ? 'bg-gray-900/30 border-gray-900 text-white focus:border-gray-900 focus:ring-gray-900/30 hover:border-gray-900'
                           : 'bg-gray-50 border-gray-300/60 text-gray-900 focus:border-gray-400 focus:ring-gray-300/40 hover:border-gray-400'
                       }`}
                     >
+                      <IllustratedIcon name={selectedReportKind ? `report-${selectedReportKind.key}` : 'system-flag'} className="mr-2 h-9 w-9" />
                       <span className={`min-w-0 flex-1 truncate ${selectedReportKind ? '' : 'opacity-60'}`}>
                         {selectedReportKind
                           ? getLocalizedText(selectedReportKind.name)
@@ -359,7 +361,7 @@ const ReportButton: React.FC<ReportButtonProps> = ({
                                   }}
                                   onMouseDown={(e) => e.stopPropagation()}
                                   onPointerDown={(e) => e.stopPropagation()}
-                                  className={`w-full px-3 py-2.5 rounded-lg text-sm text-left transition-all duration-300 mb-1.5 ${
+                                  className={`w-full px-3 py-2.5 rounded-lg text-sm text-start transition-all duration-300 mb-1.5 ${
                                     selectedReportKind?.key === kind.key
                                       ? theme === 'dark'
                                         ? 'bg-white text-black shadow-lg'
@@ -371,7 +373,7 @@ const ReportButton: React.FC<ReportButtonProps> = ({
                                   whileHover={{ scale: 1.005 }}
                                   transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
                                 >
-                                  <div className="font-semibold">{getLocalizedText(kind.name)}</div>
+                                  <div className="flex items-center gap-3"><IllustratedIcon name={`report-${kind.key}`} className="h-11 w-11" /><span className="font-semibold">{getLocalizedText(kind.name)}</span></div>
                                   {getLocalizedText(kind.description) && (
                                     <div className={`text-xs mt-0.5 ${
                                       selectedReportKind?.key === kind.key

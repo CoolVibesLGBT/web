@@ -1,3 +1,4 @@
+import ViewTabs from '@/components/ui/ViewTabs';
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, animate } from 'framer-motion';
 import {
@@ -26,7 +27,6 @@ import {
     List,
     Map as MapIcon,
     RefreshCw,
-    ArrowLeft,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useNavigate, useLocation } from '@/router';
@@ -152,7 +152,7 @@ function HoneycombItem({ tag, pos, isSelected, hasSelection, onToggle, dark, def
             }`}
             strokeWidth={1.8}
         />
-                <span className={`text-[10px] font-black uppercase tracking-tight text-center px-1 leading-none transition-colors duration-250 ${isSelected ? 'text-white' : dark ? 'text-gray-300' : 'text-gray-600'}`}>
+                <span className={`text-[0.765rem] font-semibold normal-case tracking-tight text-center px-1 leading-none transition-colors duration-250 ${isSelected ? 'text-white' : dark ? 'text-gray-300' : 'text-gray-600'}`}>
                     {getLocalizedContent(tag.name, defaultLanguage) as any}
                 </span>
             </div>
@@ -354,49 +354,20 @@ export default function CheckInScreen() {
                 <div className="pointer-events-auto z-50 mx-auto w-full max-w-7xl">
                     <section className="relative">
                         <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
-                            <div className="cv-tab-row">
-                                <div className="flex shrink-0 items-center pl-4">
-                                    <button
-                                        type="button"
-                                        onClick={() => navigate('/')}
-                                        aria-label={t('app.back', { defaultValue: 'Back' })}
-                                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
-                                    >
-                                        <ArrowLeft className="h-4 w-4" />
-                                    </button>
-                                </div>
-                                {(
+                            <ViewTabs items={(
                                     [
                                         { id: 'map' as const, icon: MapIcon, label: t('nearby.view_map') },
                                         { id: 'list' as const, icon: List, label: t('nearby.view_list', { defaultValue: 'List' }) },
                                     ]
-                                ).map((tab) => {
-                                    const Icon = tab.icon;
-                                    const active = isMapView ? tab.id === 'map' : tab.id === 'list';
-                                    return (
-                                        <button
-                                            key={tab.id}
-                                            type="button"
-                                            onClick={() => setCheckInViewMode(tab.id)}
-                                            style={{ minWidth: 0 }}
-                                            className={`cv-tab ${active ? 'is-active' : ''}`}
-                                            title={typeof tab.label === 'string' ? tab.label : tab.id}
-                                        >
-                                            <Icon className="h-5 w-5 shrink-0" />
-                                            <span className="min-w-0 truncate">{tab.label}</span>
-                                            <span className={`cv-tab-underline ${active ? 'is-on' : ''}`} />
-                                        </button>
-                                    );
-                                })}
-                            </div>
+                                ).map(({ icon: Icon, ...item }) => ({ ...item, icon: <Icon /> }))} activeId={checkInViewMode} onSelect={id => setCheckInViewMode(id)} label={t('app.nav.checkin')} />
                         </div>
                         <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
                             <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
-                                <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
+                                <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[0.765rem] font-semibold text-[var(--color-brand)]">
                                     <MapPin className="h-3.5 w-3.5 shrink-0" />
                                     {isMapView ? t('nearby.view_map') : t('nearby.view_list', { defaultValue: 'List' })}
                                 </span>
-                                <span className="flex h-9 shrink-0 items-center rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[13px] font-semibold text-[var(--cv-neutral-2)]">
+                                <span className="flex h-9 shrink-0 items-center rounded-full bg-[var(--cv-surface-3)] px-3.5 text-[0.765rem] font-semibold text-[var(--cv-neutral-2)]">
                                     {posts.length}
                                 </span>
                             </div>
@@ -441,14 +412,14 @@ export default function CheckInScreen() {
                             </div>
                         ) : error ? (
                             <div className={`mx-auto max-w-xl rounded-[30px] border p-10 text-center backdrop-blur-3xl ${panelClassName}`}>
-                                <p className="text-sm font-black text-red-500">{error}</p>
+                                <p className="text-sm font-semibold text-red-500">{error}</p>
                             </div>
                         ) : posts.length === 0 ? (
                             <div className={`mx-auto flex min-h-[340px] max-w-xl flex-col items-center justify-center rounded-[30px] border p-10 text-center backdrop-blur-3xl ${panelClassName}`}>
                                 <div className="sky-glow mb-5 flex h-14 w-14 items-center justify-center rounded-full text-white">
                                     <MapPin className="h-7 w-7" />
                                 </div>
-                                <p className={`text-sm font-black ${dark ? 'text-zinc-300' : 'text-slate-600'}`}>{t('nearby.no_matches_found')}</p>
+                                <p className={`text-sm font-semibold ${dark ? 'text-zinc-300' : 'text-slate-600'}`}>{t('nearby.no_matches_found')}</p>
                             </div>
                         ) : (
                             <div className="flex flex-col">
@@ -489,15 +460,15 @@ export default function CheckInScreen() {
                                             <MapPin className="h-5 w-5" />
                                         </div>
                                         <div className="min-w-0">
-                                            <p className="truncate text-[9px] font-black uppercase tracking-[0.3em] text-[var(--color-brand)]">
+                                            <p className="truncate text-[0.765rem] font-semibold normal-case tracking-normal text-[var(--color-brand)]">
                                                 {t('app.nav.checkin', { defaultValue: 'Check-in' })}
                                             </p>
                                             <div className="mt-0.5 flex items-center gap-2">
-                                                <h2 className="truncate text-base font-black leading-none tracking-tight md:text-lg">
+                                                <h2 className="truncate text-base font-semibold leading-none tracking-tight md:text-lg">
                                                     Durumunu seç
                                                 </h2>
                                                 {selectedTags.length > 0 && (
-                                                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-black ${dark ? 'bg-white/[0.08] text-zinc-300' : 'bg-slate-100 text-slate-500'}`}>
+                                                    <span className={`rounded-full px-2 py-0.5 text-[0.765rem] font-semibold ${dark ? 'bg-white/[0.08] text-zinc-300' : 'bg-slate-100 text-slate-500'}`}>
                                                         {selectedTags.length}
                                                     </span>
                                                 )}
@@ -546,13 +517,13 @@ export default function CheckInScreen() {
                                 </motion.div>
 
                                 {/* Hint label */}
-                                <div className={`absolute bottom-3 left-1/2 -translate-x-1/2 text-[9px] font-bold uppercase tracking-[0.18em] px-3 py-1 rounded-full pointer-events-none ${dark ? 'text-gray-600 bg-gray-900/60' : 'text-gray-400 bg-gray-100/80'}`}>
+                                <div className={`absolute bottom-3 left-1/2 -translate-x-1/2 text-[0.765rem] font-bold normal-case tracking-normal px-3 py-1 rounded-full pointer-events-none ${dark ? 'text-gray-600 bg-gray-900/60' : 'text-gray-400 bg-gray-100/80'}`}>
                                     Sürükle &amp; Seç
                                 </div>
                             </div>
 
                             {/* Bottom panel */}
-                            <div className={`mx-3 mb-[calc(env(safe-area-inset-bottom)+0.75rem)] max-h-[48vh] shrink-0 overflow-y-auto rounded-[28px] border p-3 backdrop-blur-3xl no-scrollbar md:mx-auto md:w-full md:max-w-3xl ${panelClassName}`}>
+                            <div className={`mx-3 mb-[calc(env(safe-area-inset-bottom)+0.75rem)] max-h-[48vh] shrink-0 overflow-y-auto rounded-[20px] border p-3 backdrop-blur-3xl no-scrollbar md:mx-auto md:w-full md:max-w-3xl ${panelClassName}`}>
 
                                 {/* Selected tags row */}
                                 <AnimatePresence>
@@ -573,7 +544,7 @@ export default function CheckInScreen() {
                                                                 onClick={() => toggleTag(t)}
                                                                 className={`flex items-center gap-1.5 px-2 py-1 rounded-xl ${dark ? 'bg-white/10 text-white' : 'bg-black/10 text-gray-800'}`}
                                                             >
-                                                                <span className="text-[10px] font-bold">{t}</span>
+                                                                <span className="text-[0.765rem] font-bold">{t}</span>
                                                                 <X className="w-2 h-2 opacity-60" />
                                                             </button>
                                                         );
@@ -587,7 +558,7 @@ export default function CheckInScreen() {
                                                             className="flex items-center gap-1.5 rounded-xl px-2 py-1"
                                                         >
                                                             <Icon className="w-3 h-3" strokeWidth={2} />
-                                                            <span className="text-[10px] font-bold">{getLocalizedContent(tag.name, defaultLanguage) as any}</span>
+                                                            <span className="text-[0.765rem] font-bold">{getLocalizedContent(tag.name, defaultLanguage) as any}</span>
                                                             <X className="w-2 h-2 opacity-60" />
                                                         </button>
                                                     );

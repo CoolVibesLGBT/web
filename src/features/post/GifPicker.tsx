@@ -287,7 +287,7 @@ const GifPicker: React.FC<GifPickerProps> = ({ onGifSelect, onClose, isProcessin
               loading="lazy"
             />
             {gif.description && (
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1 text-[10px] text-white text-left truncate">
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1 text-[0.765rem] text-white text-start truncate">
                 {gif.description}
               </div>
             )}

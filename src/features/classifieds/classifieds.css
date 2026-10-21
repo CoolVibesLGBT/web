@@ -1,0 +1,63 @@
+.cv-classified-templates { padding-block: .4rem; }
+.cv-classified-template {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex: 0 0 10rem;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 14rem;
+  gap: 1.5rem;
+  overflow: hidden;
+  padding: .85rem;
+  border: 2px solid #281638;
+  border-radius: 14px;
+  background: #281638;
+  color: #fff;
+  text-align: start;
+  scroll-snap-align: start;
+  box-shadow: 0 3px 0 #281638;
+}
+.cv-classified-template-art,
+.cv-classified-template-shade {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+}
+.cv-classified-template-art {
+  background-image: url('/images/classifieds/tentacle-street-v1.webp');
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+}
+.cv-classified-template-shade {
+  background: linear-gradient(180deg, rgb(26 12 40 / 4%) 0%, rgb(26 12 40 / 8%) 25%, rgb(26 12 40 / 88%) 55%, #1a0c28 100%);
+}
+.cv-classified-template-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; }
+.cv-classified-template-icon,
+.cv-classified-template-add {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #281638;
+  background: #fff1b7;
+  color: #281638;
+  box-shadow: 2px 2px 0 #281638;
+}
+.cv-classified-template-icon { width: 2.5rem; height: 2.5rem; border-radius: 10px; }
+.cv-classified-template-add { width: 1.65rem; height: 1.65rem; border-radius: 50%; }
+.cv-classified-template-icon svg { width: 1.25rem; height: 1.25rem; }
+.cv-classified-template-add svg { width: .9rem; height: .9rem; }
+.cv-classified-template-copy {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  min-width: 0;
+  margin: auto -.85rem -.85rem;
+  padding: .75rem .85rem;
+  border-top: 1px solid rgb(242 232 250 / 14%);
+  background: rgb(26 12 40 / 92%);
+}
+.cv-classified-template-title { font-size: 1rem; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+.cv-classified-template-description { font-size: .765rem; font-weight: 400; line-height: 1.4; color: #f2e8fa; overflow-wrap: anywhere; }

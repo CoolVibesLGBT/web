@@ -18,7 +18,7 @@ import {
     ShieldCheck,
     Lightbulb,
     Search,
-    ArrowLeft,
+    Palette,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
@@ -32,6 +32,7 @@ import { getSafeImageURLEx } from '../helpers/helpers';
 import ConfirmationModal from '../components/ui/ConfirmationModal';
 import LanguageSelectorModal from '../components/ui/LanguageSelector';
 import Switch from '../components/ui/Switch';
+import { GroupedSection, ListRow } from '@/components/ui/Interface';
 import type { SettingName } from '../appSettings';
 
 interface IOSRowDef {
@@ -113,8 +114,14 @@ export default function SettingsScreen() {
         {
             key: 'appearance',
             title: t('settings.appearance', { defaultValue: 'Appearance' }),
-            footer: t('settings.appearance_footer', { defaultValue: 'Dark Mode follows a darker palette across the whole app.' }),
             rows: [
+                {
+                    key: 'appearance-options',
+                    icon: Palette,
+                    label: t('appearance.title'),
+                    subtitle: t('appearance.color_theme'),
+                    onClick: () => navigate('/settings/appearance'),
+                },
                 {
                     key: 'dark-mode',
                     icon: isDark ? Moon : Sun,
@@ -264,9 +271,7 @@ export default function SettingsScreen() {
 
     const pageBg = 'bg-[var(--cv-page-bg)]';
     const groupBg = 'bg-[var(--cv-card-bg-solid)]';
-    const labelColor = (danger?: boolean) => danger ? 'text-[var(--color-brand)]' : 'text-[var(--cv-neutral-1)]';
     const secondaryColor = 'text-[var(--cv-neutral-2)]';
-    const separatorColor = 'bg-[var(--cv-inner-border)]';
     const chevronColor = 'text-[var(--cv-neutral-3)]';
     const rowHover = 'hover:bg-[var(--cv-surface-2-hover)]';
 
@@ -277,19 +282,6 @@ export default function SettingsScreen() {
 
     return (
         <div className={`skyline-page-scroll w-full ${pageBg} text-[var(--cv-neutral-1)]`}>
-            <div className="sticky top-0 z-20 flex h-[53px] items-center gap-3 border-b border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-soft)] pl-4 pr-5 backdrop-blur-[12px] md:pr-6">
-                <button
-                    type="button"
-                    onClick={() => navigate(-1)}
-                    aria-label={t('app.back', { defaultValue: 'Back' })}
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
-                >
-                    <ArrowLeft className="h-4 w-4" />
-                </button>
-                <h1 className="text-[20px] font-bold leading-tight tracking-tight">
-                    {t('settings.title', { defaultValue: 'Settings' })}
-                </h1>
-            </div>
             <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col px-4 pb-10 pt-4 md:px-6">
                 {/* iOS search field */}
                 <div className={`mt-3 flex h-9 items-center gap-2 rounded-[10px] px-2.5 ${isDark ? 'bg-white/10' : 'bg-black/[0.06]'}`}>
@@ -299,14 +291,14 @@ export default function SettingsScreen() {
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder={t('app.search_placeholder', { defaultValue: 'Ara' })}
                         aria-label={t('app.search_placeholder', { defaultValue: 'Ara' })}
-                        className="w-full bg-transparent text-[17px] outline-none placeholder:text-[var(--cv-neutral-3)]"
+                        className="w-full bg-transparent text-[1.0rem] outline-none placeholder:text-[var(--cv-neutral-3)]"
                     />
                     {searchQuery && (
                         <button
                             type="button"
                             onClick={() => setSearchQuery('')}
                             aria-label={t('search.clear', { defaultValue: 'Clear search' })}
-                            className={`text-[15px] font-medium ${secondaryColor}`}
+                            className={`text-[0.882rem] font-medium ${secondaryColor}`}
                         >
                             ×
                         </button>
@@ -319,20 +311,20 @@ export default function SettingsScreen() {
                         <button
                             type="button"
                             onClick={handleOpenProfile}
-                            className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-all duration-150 active:opacity-60 ${rowHover}`}
+                            className={`flex w-full items-center gap-3 px-4 py-3 text-start transition-all duration-150 active:opacity-60 ${rowHover}`}
                         >
                             {avatarUrl ? (
                                 <img src={avatarUrl} alt="" className="h-[58px] w-[58px] shrink-0 rounded-full object-cover" />
                             ) : (
-                                <span className="flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-full bg-brand text-[24px] font-semibold text-white">
+                                <span className="flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-full bg-brand text-[1.412rem] font-semibold text-white">
                                     {(displayName || '?').charAt(0).toUpperCase()}
                                 </span>
                             )}
                             <span className="min-w-0 flex-1">
-                                <span className={`block truncate text-[20px] leading-tight ${isDark ? 'text-white' : 'text-black'}`}>
+                                <span className={`block truncate text-[1.176rem] leading-tight ${isDark ? 'text-white' : 'text-black'}`}>
                                     {displayName}
                                 </span>
-                                <span className={`mt-0.5 block truncate text-[13px] ${secondaryColor}`}>
+                                <span className={`mt-0.5 block truncate text-[0.765rem] ${secondaryColor}`}>
                                     {user?.username ? `@${user.username}` : t('settings.profile_subtitle', { defaultValue: 'CoolVibes Account' })}
                                 </span>
                             </span>
@@ -343,95 +335,17 @@ export default function SettingsScreen() {
 
                 {/* iOS grouped sections */}
                 <div className="mt-5 flex flex-col gap-5">
-                    {visibleGroups.map((group) => {
-                        const isButtonOnlyGroup = group.rows.length === 1 && group.rows[0].centered && group.rows[0].danger;
-                        return (
-                        <section key={group.key}>
-                            {group.title && (
-                                <h2 className={`px-4 pb-1.5 text-[13px] font-normal ${secondaryColor}`}>
-                                    {group.title}
-                                </h2>
-                            )}
-                            <div className={isButtonOnlyGroup ? '' : `overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] ${groupBg}`}>
-                                {group.rows.map((row, index) => {
-                                    const RowIcon = row.icon;
-                                    const isLast = index === group.rows.length - 1;
-                                    const hasSwitch = !!row.toggleKey || !!row.onSwitch;
-                                    const switchChecked = row.toggleKey ? !!settings[row.toggleKey] : !!row.switchOn;
-                                    const doSwitch = () => {
-                                        if (row.toggleKey) handleToggle(row.toggleKey);
-                                        else row.onSwitch?.();
-                                    };
-                                    const content = (
-                                        <>
-                                            {!row.centered && (
-                                                <span className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
-                                                    <RowIcon size={17} strokeWidth={2.2} />
-                                                </span>
-                                            )}
-                                            <span className={`min-w-0 flex-1 ${row.centered
-                                                ? `text-center text-[17px] font-semibold ${row.key === 'delete-account' ? 'text-white' : 'text-[var(--color-brand)]'}`
-                                                : labelColor(row.danger)
-                                                }`}>
-                                                {!row.centered && (
-                                                    <>
-                                                        <span className="block truncate text-[17px] leading-snug">{row.label}</span>
-                                                        {row.subtitle && (
-                                                            <span className={`block truncate text-[13px] ${secondaryColor}`}>
-                                                                {row.subtitle}
-                                                            </span>
-                                                        )}
-                                                    </>
-                                                )}
-                                                {row.centered && row.label}
-                                            </span>
-                                            {hasSwitch && (
-                                                <Switch checked={switchChecked} onChange={doSwitch} aria-label={row.label} />
-                                            )}
-                                            {row.value && !hasSwitch && (
-                                                <span className={`shrink-0 text-[17px] ${secondaryColor}`}>{row.value}</span>
-                                            )}
-                                            {row.onClick && !hasSwitch && !row.centered && (
-                                                <ChevronRight size={20} className={`shrink-0 ${chevronColor}`} />
-                                            )}
-                                        </>
-                                    );
-                                    const rowClasses = row.centered && row.danger
-                                        ? `flex w-full items-center justify-center gap-2 rounded-[16px] px-4 py-3 min-h-[44px] transition-all duration-150 active:scale-[0.98] active:opacity-90 ${row.key === 'delete-account'
-                                            ? 'bg-[var(--color-brand)] hover:bg-[var(--color-brand-hovered)]'
-                                            : 'bg-[var(--color-brand-light-solid)] hover:brightness-95'
-                                        }`
-                                        : `flex w-full items-center gap-3 px-4 py-2 min-h-[52px] text-left transition-all duration-150 active:opacity-60 ${rowHover}`;
-                                    return (
-                                        <div key={row.key}>
-                                            {hasSwitch || row.onClick ? (
-                                                hasSwitch ? (
-                                                    <div onClick={doSwitch} className={`${rowClasses} cursor-pointer`}>
-                                                        {content}
-                                                    </div>
-                                                ) : (
-                                                    <button type="button" onClick={row.onClick} className={rowClasses}>
-                                                        {content}
-                                                    </button>
-                                                )
-                                            ) : (
-                                                <div className={rowClasses}>{content}</div>
-                                            )}
-                                            {!isLast && <div className={`h-px w-full ${separatorColor}`} />}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                            {group.footer && (
-                                <p className={`px-4 pt-1.5 text-[13px] leading-snug ${secondaryColor}`}>
-                                    {group.footer}
-                                </p>
-                            )}
-                        </section>
-                        );
-                    })}
+                    {visibleGroups.map(group => <GroupedSection key={group.key} title={group.title} footer={group.footer}>
+                        {group.rows.map(row => {
+                            const RowIcon = row.icon;
+                            const checked = row.toggleKey ? !!settings[row.toggleKey] : !!row.switchOn;
+                            const hasSwitch = !!row.toggleKey || !!row.onSwitch;
+                            const toggle = () => row.toggleKey ? handleToggle(row.toggleKey) : row.onSwitch?.();
+                            return <ListRow key={row.key} icon={!row.centered ? <RowIcon /> : undefined} title={row.label} description={row.subtitle} value={row.value} destructive={row.danger} onClick={hasSwitch ? undefined : row.onClick} accessory={hasSwitch ? <Switch checked={checked} onChange={toggle} aria-label={row.label} /> : undefined} />;
+                        })}
+                    </GroupedSection>)}
                     {normalizedQuery && visibleGroups.length === 0 && (
-                        <p className={`px-4 py-8 text-center text-[15px] ${secondaryColor}`}>
+                        <p className={`px-4 py-8 text-center text-[0.882rem] ${secondaryColor}`}>
                             {t('search.no_results', { defaultValue: 'No results found.' })}
                         </p>
                     )}

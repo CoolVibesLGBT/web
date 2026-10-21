@@ -1,0 +1,156 @@
+{
+  "method": "DOM-only Playwright assertions against localhost:5173 with intercepted API fixtures; no screenshots or live writes",
+  "results": [
+    {
+      "width": 320,
+      "language": "en",
+      "theme": "light",
+      "cover": false,
+      "long": false,
+      "status": "passed",
+      "headerTop": 57,
+      "profileTop": 57,
+      "headerHeight": 553.4375,
+      "nameHeight": 54.640625,
+      "dir": "ltr",
+      "checks": "no top gap/overflow/overlap, sheet metrics/Escape/focus, sticky tabs"
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "cover": true,
+      "long": false,
+      "status": "passed",
+      "headerTop": 57,
+      "profileTop": 57,
+      "headerHeight": 597.46875,
+      "nameHeight": 59.75,
+      "dir": "ltr",
+      "checks": "no top gap/overflow/overlap, sheet metrics/Escape/focus, sticky tabs"
+    },
+    {
+      "width": 430,
+      "language": "tr",
+      "theme": "light",
+      "cover": false,
+      "long": true,
+      "status": "passed",
+      "headerTop": 57,
+      "profileTop": 57,
+      "headerHeight": 582.765625,
+      "nameHeight": 181.71875,
+      "dir": "ltr",
+      "checks": "no top gap/overflow/overlap, sheet metrics/Escape/focus, sticky tabs"
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "cover": true,
+      "long": true,
+      "large": true,
+      "status": "passed",
+      "headerTop": 60,
+      "profileTop": 60,
+      "headerHeight": 866.765625,
+      "nameHeight": 140.078125,
+      "dir": "rtl",
+      "checks": "no top gap/overflow/overlap, sheet metrics/Escape/focus, sticky tabs"
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "cover": true,
+      "long": false,
+      "status": "passed",
+      "headerTop": 57,
+      "profileTop": 57,
+      "headerHeight": 581.96875,
+      "nameHeight": 59.75,
+      "dir": "ltr",
+      "checks": "no top gap/overflow/overlap, sheet metrics/Escape/focus, sticky tabs"
+    },
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "dark",
+      "cover": true,
+      "long": true,
+      "large": true,
+      "status": "passed",
+      "headerTop": 60,
+      "profileTop": 60,
+      "headerHeight": 1314.9375,
+      "nameHeight": 284.796875,
+      "dir": "ltr",
+      "checks": "no top gap/overflow/overlap, sheet metrics/Escape/focus, sticky tabs"
+    },
+    {
+      "width": 390,
+      "language": "ar",
+      "theme": "light",
+      "cover": false,
+      "long": true,
+      "large": true,
+      "status": "passed",
+      "headerTop": 60,
+      "profileTop": 60,
+      "headerHeight": 948.453125,
+      "nameHeight": 199.109375,
+      "dir": "rtl",
+      "checks": "no top gap/overflow/overlap, sheet metrics/Escape/focus, sticky tabs"
+    },
+    {
+      "width": 1440,
+      "language": "tr",
+      "theme": "dark",
+      "cover": false,
+      "long": true,
+      "status": "passed",
+      "headerTop": 57,
+      "profileTop": 57,
+      "headerHeight": 456.328125,
+      "nameHeight": 127.0625,
+      "dir": "ltr",
+      "checks": "no top gap/overflow/overlap, sheet metrics/Escape/focus, sticky tabs"
+    },
+    {
+      "width": 820,
+      "language": "en",
+      "theme": "light",
+      "cover": false,
+      "long": false,
+      "status": "passed",
+      "headerTop": 57,
+      "profileTop": 57,
+      "headerHeight": 360.890625,
+      "nameHeight": 59.75,
+      "dir": "ltr",
+      "checks": "no top gap/overflow/overlap, sheet metrics/Escape/focus, sticky tabs"
+    },
+    {
+      "check": "external profile privacy",
+      "privacy": "public",
+      "status": "passed"
+    },
+    {
+      "check": "external profile privacy",
+      "privacy": "private",
+      "status": "passed"
+    },
+    {
+      "check": "guest privacy and media blur",
+      "status": "passed"
+    },
+    {
+      "check": "name position stable during delayed cover loading and tab change; Posts fetch; stats Following navigation and Back; edit/bio save with fixture API; zero edit top gap",
+      "status": "passed"
+    },
+    {
+      "check": "premium gate retained for restricted metric routes",
+      "status": "passed"
+    }
+  ]
+}

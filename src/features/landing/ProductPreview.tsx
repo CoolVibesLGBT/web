@@ -8,7 +8,7 @@ import {
   Send,
   SlidersHorizontal,
   Users,
-} from 'lucide-react'
+} from '@/components/ui/illustratedIcons'
 import CharacterPortrait from './CharacterPortrait'
 
 const portraits = Array.from({ length: 6 }, (_, index) => index)

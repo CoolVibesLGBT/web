@@ -1,5 +1,6 @@
+import ViewTabs from '@/components/ui/ViewTabs';
 import { useState, useEffect, useRef, useCallback, useMemo, type CSSProperties } from 'react';
-import { Users, Grid, List, Square, RefreshCw, X, Map as MapIcon, Bubbles, Lock, ArrowLeft } from 'lucide-react';
+import { Users, Grid, List, Square, RefreshCw, X, Map as MapIcon, Bubbles } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { UserCard } from '../features/profile/UserCard';
@@ -540,7 +541,7 @@ const NearbyScreen: React.FC = () => {
           <div className={statusIconClassName}>
             <RefreshCw className="h-7 w-7 animate-spin" />
           </div>
-          <h3 className={`text-lg font-black ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
+          <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
             {t('nearby.loading_users')}
           </h3>
           <p className="mt-2 text-sm font-bold">
@@ -557,11 +558,11 @@ const NearbyScreen: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className={statusPanelClassName}
         >
-          <p className="text-sm font-black text-red-500">{error}</p>
+          <p className="text-sm font-semibold text-red-500">{error}</p>
           <button
             type="button"
             onClick={handleRefresh}
-            className={`mt-5 inline-flex h-10 items-center justify-center rounded-full px-5 text-[10px] font-black uppercase tracking-[0.14em] transition-all ${theme === 'dark'
+            className={`mt-5 inline-flex h-10 items-center justify-center rounded-full px-5 text-[0.765rem] font-semibold normal-case tracking-normal transition-all ${theme === 'dark'
               ? 'bg-white text-slate-950 hover:bg-zinc-200'
               : 'bg-slate-950 text-white hover:bg-slate-800'
               }`}
@@ -582,13 +583,13 @@ const NearbyScreen: React.FC = () => {
           <div className={statusIconClassName}>
             <Users className="h-7 w-7" />
           </div>
-          <h3 className={`text-lg font-black ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
+          <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
             {t('nearby.no_matches_found')}
           </h3>
           <button
             type="button"
             onClick={handleRefresh}
-            className={`mt-5 inline-flex h-10 items-center justify-center rounded-full px-5 text-[10px] font-black uppercase tracking-[0.14em] transition-all ${theme === 'dark'
+            className={`mt-5 inline-flex h-10 items-center justify-center rounded-full px-5 text-[0.765rem] font-semibold normal-case tracking-normal transition-all ${theme === 'dark'
               ? 'bg-white text-slate-950 hover:bg-zinc-200'
               : 'bg-slate-950 text-white hover:bg-slate-800'
               }`}
@@ -647,18 +648,7 @@ const NearbyScreen: React.FC = () => {
         <div className={`pointer-events-auto z-50 mx-auto w-full ${isImmersiveView ? 'max-w-5xl' : 'max-w-7xl'}`}>
           <section className="relative">
             <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
-              <div className="cv-tab-row">
-                <div className="flex shrink-0 items-center pl-4">
-                  <button
-                    type="button"
-                    onClick={() => navigate('/')}
-                    aria-label={t('app.back', { defaultValue: 'Back' })}
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                  </button>
-                </div>
-                {(
+              <ViewTabs items={(
                   [
                     { id: 'bubble' as const, icon: Bubbles, label: t('nearby.view_bubble'), locked: isPremiumRequired },
                     { id: 'grid' as const, icon: Grid, label: t('nearby.view_grid') },
@@ -666,30 +656,11 @@ const NearbyScreen: React.FC = () => {
                     { id: 'card' as const, icon: Square, label: t('nearby.view_card') },
                     { id: 'map' as const, icon: MapIcon, label: t('nearby.view_map') },
                   ]
-                ).map((tab) => {
-                  const Icon = tab.icon;
-                  const active = viewMode === tab.id;
-                  return (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      onClick={() => handleChangeViewMode(tab.id)}
-                      style={{ minWidth: 0 }}
-                      className={`cv-tab ${active ? 'is-active' : ''}`}
-                      title={typeof tab.label === 'string' ? tab.label : tab.id}
-                    >
-                      <Icon className="h-5 w-5 shrink-0" />
-                      <span className="hidden min-w-0 truncate text-[13px] sm:inline">{tab.label}</span>
-                      {tab.locked && <Lock className="h-3 w-3" />}
-                      <span className={`cv-tab-underline ${active ? 'is-on' : ''}`} />
-                    </button>
-                  );
-                })}
-              </div>
+                ).map(({ icon: Icon, ...item }) => ({ ...item, icon: <Icon /> }))} activeId={viewMode} onSelect={id => handleChangeViewMode(id)} label={t('app.nav.nearby')} />
             </div>
             <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
               <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
-                <span className="flex h-9 shrink-0 items-center rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
+                <span className="flex h-9 shrink-0 items-center rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[0.765rem] font-semibold text-[var(--color-brand)]">
                   {t('nearby.people_nearby', { count: state.nearbyUsers.length })}
                 </span>
               </div>

@@ -91,7 +91,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
       }}
       role="button"
       tabIndex={0}
-      className={`group relative flex w-full cursor-pointer items-center gap-3 px-4 py-3 min-h-[64px] text-left transition-colors duration-150 hover:bg-[var(--cv-surface-2-hover)] active:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/60 ${
+      className={`group relative flex w-full cursor-pointer items-center gap-3 px-4 py-3 min-h-[64px] text-start transition-colors duration-150 hover:bg-[var(--cv-surface-2-hover)] active:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/60 ${
         notification.is_read ? '' : 'bg-[var(--color-brand-light)]'
       }`}
     >
@@ -113,7 +113,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
               className="h-full w-full object-cover"
             />
           ) : (
-            <span className={`text-[8px] font-black uppercase ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
+            <span className={`text-[0.765rem] font-semibold normal-case ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
               {(notification.sender?.displayname || notification.sender?.username || '?').slice(0, 1)}
             </span>
           )}
@@ -122,7 +122,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
 
       <div className="min-w-0 flex-1">
         <div className="flex min-w-0 items-center gap-2">
-          <span className={`truncate text-[15px] font-semibold leading-tight ${isDark ? 'text-white' : 'text-slate-950'}`}>
+          <span className={`truncate text-[0.882rem] font-semibold leading-tight ${isDark ? 'text-white' : 'text-slate-950'}`}>
             {notification.sender?.displayname || notification.sender?.username}
           </span>
           {!notification.is_read && (
@@ -130,11 +130,11 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           )}
         </div>
 
-        <p className={`mt-0.5 line-clamp-2 text-[13px] leading-relaxed ${isDark ? 'text-zinc-400' : 'text-slate-500'}`}>
+        <p className={`mt-0.5 line-clamp-2 text-[0.765rem] leading-relaxed ${isDark ? 'text-zinc-400' : 'text-slate-500'}`}>
           {notification.message}
         </p>
       </div>
-      <span className={`shrink-0 self-start pt-0.5 text-[11px] font-medium ${isDark ? 'text-zinc-500' : 'text-slate-400'}`}>
+      <span className={`shrink-0 self-start pt-0.5 text-[0.765rem] font-medium ${isDark ? 'text-zinc-500' : 'text-slate-400'}`}>
         {formatTime(notification.created_at)}
       </span>
     </motion.div>

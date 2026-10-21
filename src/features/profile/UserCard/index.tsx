@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from '@/router';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Heart, HeartOff, MapPin, MessageCircleHeart, ShieldBan } from 'lucide-react';
+import { Heart, HeartOff, MapPin, MessageCircleHeart, ShieldBan } from '@/components/ui/illustratedIcons';
 import { useTheme } from '../../../contexts/ThemeContext';
 import GiftSelector from './GiftSelector';
 import QuickMessages from '../../post/QuickMessages';
@@ -73,7 +73,7 @@ const CompactView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blo
       onClick={handleProfileClick}
     >
       <div className="relative aspect-square overflow-hidden">
-        <span className={`absolute inset-0 flex items-center justify-center text-2xl font-black ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-400'}`}>
+        <span className={`absolute inset-0 flex items-center justify-center text-2xl font-semibold ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-400'}`}>
           {(user.displayname || user.name || 'A').charAt(0).toUpperCase()}
         </span>
         <img src={avatarURL} alt="" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = 'none'; }} className="absolute inset-0 h-full w-full object-cover object-top" />
@@ -84,14 +84,14 @@ const CompactView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blo
 
       <div className={`px-2.5 py-2 border-b ${theme === 'dark' ? 'border-white/10' : 'border-gray-100'
         }`}>
-        <p className={`font-semibold text-[13px] truncate leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+        <p className={`font-semibold text-[0.765rem] truncate leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
           }`}>
           {user.displayname || user.name || 'Anonymous'}
           {userAge && <span className={`ml-1 font-normal text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
             }`}>{userAge}</span>}
         </p>
         {location && (
-          <p className={`text-[11px] truncate flex items-center gap-0.5 mt-0.5 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
+          <p className={`text-[0.765rem] truncate flex items-center gap-0.5 mt-0.5 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
             }`}>
             <MapPin size={9} />{location}
           </p>
@@ -128,7 +128,7 @@ const ListView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blocke
     onClick={handleProfileClick}
   >
     <div className="relative w-[72px] h-[72px] shrink-0 overflow-hidden">
-      <span className={`absolute inset-0 flex items-center justify-center text-xl font-black ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-400'}`}>
+      <span className={`absolute inset-0 flex items-center justify-center text-xl font-semibold ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-400'}`}>
         {(user.displayname || user.name || 'A').charAt(0).toUpperCase()}
       </span>
       <img src={avatarURL} alt="" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = 'none'; }} className="absolute inset-0 h-full w-full object-cover object-top" />
@@ -147,7 +147,7 @@ const ListView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blocke
         {user.isOnline && <div className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />}
       </div>
       {location && (
-        <p className={`text-[11px] truncate flex items-center gap-1 mt-0.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+        <p className={`text-[0.765rem] truncate flex items-center gap-1 mt-0.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
           }`}>
           <MapPin size={9} />
           {location}
@@ -200,14 +200,14 @@ const CardView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blocke
       onClick={handleProfileClick}
     >
       <div className="relative aspect-[3/4] overflow-hidden">
-        <span className={`absolute inset-0 flex items-center justify-center text-4xl font-black ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-400'}`}>
+        <span className={`absolute inset-0 flex items-center justify-center text-4xl font-semibold ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-400'}`}>
           {(user.displayname || user.name || 'A').charAt(0).toUpperCase()}
         </span>
         <img src={avatarURL} alt="" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = 'none'; }} className="absolute inset-0 h-full w-full object-cover object-top" />
         {user.isOnline && (
           <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 border border-white/20">
             <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-            <span className="text-white text-[10px] font-medium">Online</span>
+            <span className="text-white text-[0.765rem] font-medium">Online</span>
           </div>
         )}
       </div>
@@ -221,7 +221,7 @@ const CardView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blocke
             }`}>{userAge}</span>}
         </p>
         {location && (
-          <p className={`text-[11px] truncate flex items-center gap-1 mt-0.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+          <p className={`text-[0.765rem] truncate flex items-center gap-1 mt-0.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
             }`}>
             <MapPin size={10} />{location}
           </p>
@@ -597,7 +597,7 @@ export const UserCard = React.memo(function UserCard({ user, viewMode = 'card' }
                 ))}
 
                 <motion.div
-                  className="absolute -bottom-20 text-white text-3xl font-semibold uppercase tracking-[0.4rem]"
+                  className="absolute -bottom-20 text-white text-3xl font-semibold normal-case tracking-[0.4rem]"
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 40 }}

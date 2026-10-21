@@ -1,3 +1,20 @@
+import ViewTabs from '@/components/ui/ViewTabs';
+import ChatWallpaper from '@/features/appearance/ChatWallpaper';
+import '@/features/chat/telegram-chat.css';
+import TelegramChatListRow from '@/features/chat/TelegramChatListRow';
+import ChatPeerHeader from '@/features/chat/ChatPeerHeader';
+import TelegramIcon from '@/features/chat/TelegramIcon';
+import AttachmentMenu from '@/features/chat/AttachmentMenu';
+import MessageActionsMenu, { type MessageAction } from '@/features/chat/MessageActionsMenu';
+import FloatingContextMenu from '@/features/chat/FloatingContextMenu';
+import ForwardPicker from '@/features/chat/ForwardPicker';
+import GroupComposer, { type CreatedGroup } from '@/features/chat/GroupComposer';
+import '@/features/chat/chat-confirm.css';
+import { Sheet, ListRow } from '@/components/ui/Interface';
+import Switch from '@/components/ui/Switch';
+import EmptyConversation from '@/features/chat/EmptyConversation';
+import LottieAnimation from '@/features/animations/LottieAnimation';
+import { normalizeEmoticon, type ChatEmoticon, type EmoticonSelection } from '@/features/emoticons/types';
 import React, { useState, useRef, useEffect, useCallback, useLayoutEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,20 +29,13 @@ import { Actions } from '../services/actions';
 import {
   MessageCircle,
   Search,
-  Send,
   MoreVertical,
-  Smile,
   Paperclip,
-  Check,
+  Lock,
   CheckCheck,
   ArrowLeft,
   X,
   Settings,
-  PlusSquare,
-  Lock,
-  Trash2,
-  ChevronDown,
-  ChevronUp,
   RefreshCw,
   Image,
   Video,
@@ -37,7 +47,7 @@ import {
 import { useSocket } from '../contexts/SocketContext';
 import { getSafeImageURLEx } from '../helpers/helpers';
 import { useTranslation } from 'react-i18next';
-import { Virtuoso } from 'react-virtuoso';
+import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 import { useAtom } from 'jotai';
 import { chatStateAtom, initialChatState, type Attachment, type ChatItem, type ChatMessage } from '@/state/chat';
 import ChatMediaViewer from '@/features/chat/ChatMediaViewer';
@@ -46,6 +56,8 @@ import {
   resolveChatMediaItems,
 } from '@/features/chat/chatMedia';
 import type { ResolvedChatMedia } from '@/features/chat/chatMedia';
+
+const EmoticonPicker = React.lazy(() => import('@/features/emoticons/EmoticonPicker'));
 
 type MessageExpirySeconds = 0 | 10 | 60 | 3600 | 86400 | 604800;
 
@@ -60,6 +72,9 @@ const MESSAGE_EXPIRY_LABEL_KEYS: Record<MessageExpirySeconds, string> = {
 };
 
 interface BackendChatMessage {
+  forwarded_from?: { name: string; date: string };
+  parent?: BackendChatMessage | null;
+  emoticon?: unknown;
   id?: string;
   public_id?: string | number;
   author_id?: string;
@@ -233,6 +248,9 @@ const normalizeChatMessage = (
 
   return {
     id: String(rawId),
+    forwardedFrom: !contentHidden && message.forwarded_from?.name ? message.forwarded_from : undefined,
+    reply: message.parent?.id && !getBooleanValue(message.parent.content_hidden) && !getBooleanValue(message.parent.view_once) ? { id: message.parent.id, text: getMessageText(message.parent), sender: String(message.parent.author_id) === String(currentUserId) ? 'me' : 'other' } : undefined,
+    emoticon: contentHidden ? undefined : normalizeEmoticon(message.emoticon ?? message.extras?.emoticon),
     text: contentHidden && sender === 'other'
       ? ''
       : getMessageText(message, options.fallbackText),
@@ -268,8 +286,20 @@ const getAttachmentSignature = (message: ChatMessage): string => (
   (message.attachments || []).map((attachment) => attachment.file.mime_type || '').join('|')
 );
 
+function sameMessageGroup(first?: ChatMessage, second?: ChatMessage) {
+  if (!first || !second || first.sender !== second.sender || first.emoticon || second.emoticon || first.viewOnce || second.viewOnce) return false;
+  const a = Date.parse(first.createdAt || ''), b = Date.parse(second.createdAt || '');
+  return Number.isFinite(a) && Number.isFinite(b) && Math.abs(b - a) < 300_000 && new Date(a).toDateString() === new Date(b).toDateString();
+}
+
 interface MessageItemProps {
+  selected?: boolean;
+  selectionMode?: boolean;
+  onSelect?: (id: string, range?: boolean) => void;
+  onReplyOpen?: (id: string) => void;
   msg: ChatMessage;
+  groupFirst?: boolean;
+  groupLast?: boolean;
   theme: 'dark' | 'light';
   nowMs: number;
   onContextMenu: (point: { clientX: number; clientY: number }, id: string) => void;
@@ -378,7 +408,7 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
       >
         <StateIcon className={`h-6 w-6 ${state === 'opening' ? 'animate-spin' : ''}`} />
         {(state === 'unopened' || state === 'sent') && (
-          <span className={`absolute -bottom-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full border px-1 text-[10px] font-black shadow-sm ${isMe
+          <span className={`absolute -bottom-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full border px-1 text-[0.765rem] font-semibold shadow-sm ${isMe
             ? 'border-brand bg-white text-brand-hovered'
             : theme === 'dark'
               ? 'border-zinc-900 bg-brand text-zinc-950'
@@ -389,15 +419,15 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
         )}
       </span>
 
-      <span className="relative min-w-0 flex-1 text-left">
-        <span className={`mb-1 block text-[10px] font-bold uppercase tracking-[0.16em] ${state === 'error'
+      <span className="relative min-w-0 flex-1 text-start">
+        <span className={`mb-1 block text-[0.765rem] font-bold normal-case tracking-normal ${state === 'error'
           ? isMe ? 'text-rose-100/80' : theme === 'dark' ? 'text-rose-300/80' : 'text-rose-600'
           : secondaryTextClass
           }`}>
           {statusLabel}
         </span>
         <span className="block text-sm font-bold leading-tight">{title}</span>
-        <span className={`mt-1 block text-[11px] font-medium leading-snug ${secondaryTextClass}`}>
+        <span className={`mt-1 block text-[0.765rem] font-medium leading-snug ${secondaryTextClass}`}>
           {description}
         </span>
       </span>
@@ -454,7 +484,13 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
 };
 
 const MessageItem: React.FC<MessageItemProps> = ({
+  selected = false,
+  selectionMode = false,
+  onSelect,
+  onReplyOpen,
   msg,
+  groupFirst = true,
+  groupLast = true,
   theme,
   nowMs,
   onContextMenu,
@@ -463,8 +499,8 @@ const MessageItem: React.FC<MessageItemProps> = ({
   isMessageOpening,
   hasViewOnceOpenError,
 }) => {
-  const [isPressed, setIsPressed] = React.useState(false);
   const longPressTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  React.useEffect(() => () => { if (longPressTimer.current) clearTimeout(longPressTimer.current); }, []);
   const isMe = msg.sender === 'me';
   const isHiddenDisappearing = Boolean(
     msg.isDisappearing && msg.contentHidden && !isMe && !msg.viewOnce,
@@ -488,24 +524,31 @@ const MessageItem: React.FC<MessageItemProps> = ({
     })();
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    setIsPressed(true);
     const touch = e.touches[0];
     const clientX = touch.clientX;
     const clientY = touch.clientY;
     longPressTimer.current = setTimeout(() => {
-      setIsPressed(false);
       onContextMenu({ clientX, clientY }, msg.id);
     }, 400); // 400ms for slightly snappier opening
   };
 
   const cancelLongPress = () => {
-    setIsPressed(false);
     if (longPressTimer.current) clearTimeout(longPressTimer.current);
   };
 
   return (
     <div
-      className={`flex ${isMe ? 'justify-end' : 'justify-start'} group relative`}
+      id={`cv-message-${msg.id}`}
+      data-message-id={msg.id}
+      data-side={isMe ? 'outgoing' : 'incoming'}
+      data-selected={selected}
+      role={selectionMode ? 'checkbox' : undefined}
+      aria-checked={selectionMode ? selected : undefined}
+      aria-label={selectionMode ? `${t('chat_actions.select')}: ${msg.text || msg.emoticon?.emoji || t('messages.media')}` : undefined}
+      tabIndex={selectionMode ? 0 : undefined}
+      onClickCapture={event => { if (selectionMode) { event.preventDefault(); event.stopPropagation(); onSelect?.(msg.id, event.shiftKey); } }}
+      onKeyDown={event => { if (selectionMode && [' ', 'Enter'].includes(event.key)) { event.preventDefault(); onSelect?.(msg.id, event.shiftKey); } }}
+      className={`cv-chat-message-selectable flex ${isMe ? 'justify-end' : 'justify-start'} group relative`}
       onTouchStart={handleTouchStart}
       onTouchEnd={cancelLongPress}
       onTouchMove={cancelLongPress}
@@ -513,28 +556,23 @@ const MessageItem: React.FC<MessageItemProps> = ({
         e.preventDefault();
         onContextMenu({ clientX: e.clientX, clientY: e.clientY }, msg.id);
       }}
-      onMouseDown={() => setIsPressed(true)}
-      onMouseUp={() => setIsPressed(false)}
-      onMouseLeave={() => setIsPressed(false)}
     >
+      {selectionMode && <span className="cv-chat-selection-check" aria-hidden="true"><TelegramIcon name="check" /></span>}
       {/* Message Bubble */}
-      <motion.div
-        animate={{ scale: isPressed ? 0.96 : 1, opacity: isPressed ? 0.9 : 1 }}
-        transition={{ duration: 0.15, ease: 'easeOut' }}
-        style={{
-          transformOrigin: isMe ? 'right center' : 'left center',
-          borderRadius: isMe
-            ? '18px 18px 4px 18px'
-            : '18px 18px 18px 4px',
-        }}
-        className={`${msg.viewOnce
-          ? 'max-w-[88%] px-2.5 py-2 sm:max-w-sm'
-          : 'max-w-[78%] px-4 py-2.5 sm:max-w-xs md:max-w-sm'
-          } shadow-[0_18px_45px_-24px_rgba(15,23,42,0.35)] relative border backdrop-blur-2xl ${theme === 'dark'
-          ? isMe ? 'bg-brand/95 text-white border-brand/20 shadow-brand-hovered/30' : 'bg-zinc-900/80 text-zinc-100 border-white/10'
-          : isMe ? 'bg-brand-hovered text-white border-brand/40 shadow-brand/20' : 'bg-white/[0.85] text-slate-900 border-[var(--cv-inner-border)]'
-          }`}
+      <div
+        data-side={isMe ? 'outgoing' : 'incoming'}
+        data-kind={msg.emoticon?.kind}
+        data-group-first={groupFirst}
+        data-group-last={groupLast}
+        data-has-text={!!msg.text}
+        data-has-timer={msg.isDisappearing || undefined}
+        className="cv-chat-bubble"
       >
+        {groupLast && <svg className="cv-message-tail" width="11" height="20" viewBox="0 0 11 20" aria-hidden="true"><g transform="translate(9 -14)" fillRule="evenodd"><path d="M-6 16h6v17c-.193-2.84-.876-5.767-2.05-8.782-.904-2.325-2.446-4.485-4.625-6.48A1 1 0 01-6 16z" transform="matrix(1 0 0 -1 0 49)" /></g></svg>}
+        {!isHiddenDisappearing && msg.forwardedFrom && <div className="cv-chat-forwarded"><span>{t('chat_actions.forwarded_message')}</span><strong><bdi>{msg.forwardedFrom.name}</bdi></strong></div>}
+        {!isHiddenDisappearing && msg.reply && <button type="button" className="cv-chat-reply" onClick={() => onReplyOpen?.(msg.reply!.id)}><strong>{t('chat_actions.reply')}</strong><span>{msg.reply.text || t('messages.media')}</span></button>}
+        {!isHiddenDisappearing && msg.emoticon?.kind === 'sticker' && <LottieAnimation src={msg.emoticon.url} size={180} />}
+        {!isHiddenDisappearing && msg.emoticon?.kind === 'gif' && <img className="cv-message-gif" src={msg.emoticon.url} alt={t('emoticons.gifs')} />}
         {msg.viewOnce && (
           <div className="mb-2">
             <ViewOnceMessageCard
@@ -590,14 +628,14 @@ const MessageItem: React.FC<MessageItemProps> = ({
 
         {/* Media Files */}
         {!msg.viewOnce && !isHiddenDisappearing && msg.attachments && msg.attachments.length > 0 && (
-          <div className={`mb-2 flex max-w-[240px] flex-wrap gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
+          <div data-count={msg.attachments.length} className={`cv-chat-media-grid mb-2 flex max-w-[240px] flex-wrap gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
             {msg.attachments.map((attachment, idx) => {
               const file = attachment.file;
               const media = resolveChatMedia(attachment);
               const isImage = media?.kind === 'image';
               const isVideo = media?.kind === 'video';
               const thumbSizeClass = msg.attachments?.length === 1 && !msg.text ? 'h-[108px] w-[108px]' : 'h-[72px] w-[72px]';
-              const thumbClass = `${thumbSizeClass} group/media relative shrink-0 overflow-hidden rounded-full border shadow-[0_16px_40px_-22px_rgba(15,23,42,0.65)] transition-transform duration-200 hover:scale-[1.03] ${isMe ? 'border-white/35 bg-white/18' : theme === 'dark' ? 'border-white/12 bg-white/8' : 'border-[var(--cv-inner-border)] bg-slate-100/80'}`;
+              const thumbClass = `cv-chat-media-thumb ${thumbSizeClass} group/media relative shrink-0 overflow-hidden rounded-full border shadow-[0_16px_40px_-22px_rgba(15,23,42,0.65)] transition-transform duration-200 hover:scale-[1.03] ${isMe ? 'border-white/35 bg-white/18' : theme === 'dark' ? 'border-white/12 bg-white/8' : 'border-[var(--cv-inner-border)] bg-slate-100/80'}`;
 
               return (
                 <React.Fragment key={attachment.id || idx}>
@@ -667,16 +705,17 @@ const MessageItem: React.FC<MessageItemProps> = ({
 
         {/* Text Content */}
         {!isHiddenDisappearing && msg.text && (
-          <div className="text-sm leading-relaxed mb-1 whitespace-pre-wrap break-words">
+          <div className="cv-chat-message-text text-sm leading-relaxed mb-1 whitespace-pre-wrap break-words">
             {msg.text}
+            {!msg.isDisappearing && <span className="cv-message-time-space" aria-hidden="true" />}
           </div>
         )}
 
         {/* Time and Status */}
-        <div className={`flex items-center ${isMe ? 'justify-end' : ''} mt-1 gap-1`}>
+        <div className={`cv-chat-time flex items-center ${isMe ? 'justify-end' : ''} mt-1 gap-1`}>
           {countdown !== null && (
             <span
-              className={`mr-1 inline-flex items-center gap-1 text-[10px] font-semibold ${isMe ? 'text-white/80' : theme === 'dark' ? 'text-amber-300' : 'text-amber-700'}`}
+              className={`mr-1 inline-flex items-center gap-1 text-[0.765rem] font-semibold ${isMe ? 'text-white/80' : theme === 'dark' ? 'text-amber-300' : 'text-amber-700'}`}
               title={t('messages.disappearing_message')}
             >
               <Timer className="h-3 w-3" />
@@ -685,20 +724,20 @@ const MessageItem: React.FC<MessageItemProps> = ({
           )}
           {isMe && msg.isDisappearing && !msg.openedAt && !msg.viewOnce && (
             <span
-              className="mr-1 inline-flex items-center gap-1 text-[10px] font-semibold text-white/80"
+              className="mr-1 inline-flex items-center gap-1 text-[0.765rem] font-semibold text-white/80"
               title={t('messages.waiting_to_open')}
             >
               <Timer className="h-3 w-3" />
               {t('messages.waiting_to_open')}
             </span>
           )}
-          <span className={`text-[10px] ${isMe
+          <span className={`text-[0.765rem] ${isMe
             ? 'text-white/70'
             : theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'
             }`}>{msg.time}</span>
           {isMe && <CheckCheck className="w-3 h-3 text-white/70" />}
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
@@ -813,6 +852,13 @@ const MessagesScreen: React.FC = () => {
   }, [setChatState]);
   const [activeFilter, setActiveFilter] = useState<'all' | 'unread' | 'groups' | 'unencrypted'>('all');
   const [message, setMessage] = useState('');
+  const messageInputRef = useRef<HTMLTextAreaElement>(null);
+  useLayoutEffect(() => {
+    const input = messageInputRef.current;
+    if (!input) return;
+    input.style.height = 'auto';
+    input.style.height = `${Math.min(input.scrollHeight, 170)}px`;
+  }, [message, selectedChat]);
   const [messageExpirySeconds, setMessageExpirySeconds] = useState<MessageExpirySeconds>(0);
   const [viewOnceEnabled, setViewOnceEnabled] = useState(false);
   const [countdownNow, setCountdownNow] = useState(() => Date.now());
@@ -823,22 +869,51 @@ const MessagesScreen: React.FC = () => {
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiButtonRef = useRef<HTMLButtonElement>(null);
+  const [showComposerOptions, setShowComposerOptions] = useState(false);
+  const attachmentButtonRef = useRef<HTMLButtonElement>(null);
+  const [chatSearch, setChatSearch] = useState('');
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [selectedVideos, setSelectedVideos] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const viewOnceImageInputRef = useRef<HTMLInputElement>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [inputHeight, setInputHeight] = useState(0);
-  const [headerHeight, setHeaderHeight] = useState(0);
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
   const [messageMenuPosition, setMessageMenuPosition] = useState<{ x: number; y: number } | null>(null);
   const [resolvedMessageMenuPosition, setResolvedMessageMenuPosition] = useState<{ x: number; y: number } | null>(null);
   const messageMenuRef = useRef<HTMLDivElement>(null);
+  const messageListRef = useRef<VirtuosoHandle>(null);
+  const [selectedMessages, setSelectedMessages] = useState<Set<string>>(() => new Set());
+  const lastSelectionRef = useRef<string | null>(null);
+  const [replyTo, setReplyTo] = useState<ChatMessage | null>(null);
+  const [editingMessage, setEditingMessage] = useState<ChatMessage | null>(null);
+  const [actionError, setActionError] = useState(false);
+  const [deleteRequest, setDeleteRequest] = useState<ChatMessage[]>([]);
+  const [deleteForAll, setDeleteForAll] = useState(false);
+  const [actionBusy, setActionBusy] = useState(false);
+  const [creatingGroup, setCreatingGroup] = useState(false);
+  const [forwardMessages, setForwardMessages] = useState<ChatMessage[]>([]);
+  const [pendingForward, setPendingForward] = useState<{ sourceChatId: string; messages: ChatMessage[]; targetChatId: string } | null>(null);
+  const [forwardSourceId, setForwardSourceId] = useState<string | null>(null);
+  const forwardingBusyRef = useRef(false);
+  useEffect(() => {
+    setSelectedMessages(new Set()); setReplyTo(null); setEditingMessage(null);
+    setSelectedMessageId(null); setMessageMenuPosition(null); setActionError(false);
+    setShowEmojiPicker(false); setShowComposerOptions(false); setShowProfile(false);
+  }, [selectedChat]);
+  useEffect(() => {
+    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') { setSelectedMessages(new Set()); setReplyTo(null); setEditingMessage(null); } };
+    document.addEventListener('keydown', escape);
+    return () => document.removeEventListener('keydown', escape);
+  }, []);
   const [showChatMenu, setShowChatMenu] = useState(false);
   const [openChatItemMenu, setOpenChatItemMenu] = useState<string | null>(null);
+  const [chatItemMenuPoint, setChatItemMenuPoint] = useState({ x: 0, y: 0 });
+  const [chatRequest, setChatRequest] = useState<{ chat: ChatItem; kind: 'delete' | 'clear' } | null>(null);
+  const [chatRequestForAll, setChatRequestForAll] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { socket } = useSocket();
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -980,6 +1055,8 @@ const MessagesScreen: React.FC = () => {
           const updatedChat = {
             ...chat,
             lastMessageId: messageId,
+            lastMessageOutgoing: isFromCurrentUser,
+            lastMessageRead: false,
             lastMessage: messageTextForList,
             lastTime: messageTimeForList,
             unread: unreadCount,
@@ -1021,6 +1098,16 @@ const MessagesScreen: React.FC = () => {
           expired_at?: string;
         };
         const action = typedData?.action;
+
+        if (action === Actions.CMD_EDIT_MESSAGE) {
+          const edited = getOpenedMessage(typedData.message || typedData.data);
+          if (edited?.id) {
+            const normalized = normalizeChatMessage(edited, String(user.id));
+            setMessages(previous => previous.map(message => message.id === normalized.id ? normalized : message));
+            void refreshChatsRef.current?.();
+          }
+          return;
+        }
 
         if (action === Actions.CMD_MESSAGE_OPENED) {
           const openedMessage = getOpenedMessage(messageData);
@@ -1102,7 +1189,7 @@ const MessagesScreen: React.FC = () => {
             ? t('messages.view_once_photo')
             : newMessage.isDisappearing && newMessage.contentHidden
               ? t('messages.hidden_disappearing_message')
-              : newMessage.text || (newMessage.attachments?.some(
+              : newMessage.emoticon ? newMessage.emoticon.kind === 'gif' ? t('emoticons.gifs') : `${t('emoticons.stickers')} ${newMessage.emoticon.emoji || ''}` : newMessage.text || (newMessage.attachments?.some(
                 (attachment) => attachment.file.mime_type?.startsWith('image/'),
               ) ? t('messages.photo') : t('messages.media'));
 
@@ -1302,78 +1389,6 @@ const MessagesScreen: React.FC = () => {
     };
   }, []);
 
-  // Calculate header height
-  useEffect(() => {
-    if (isMobile && headerRef.current && selectedChat) {
-      const updateHeaderHeight = () => {
-        if (headerRef.current) {
-          // Include main app header height (56px on mobile)
-          const mainHeaderHeight = 56;
-          const chatHeaderHeight = headerRef.current.offsetHeight;
-          setHeaderHeight(mainHeaderHeight + chatHeaderHeight);
-        }
-      };
-      // Use requestAnimationFrame for accurate measurement
-      requestAnimationFrame(() => {
-        updateHeaderHeight();
-      });
-      window.addEventListener('resize', updateHeaderHeight);
-      const observer = new MutationObserver(() => {
-        requestAnimationFrame(updateHeaderHeight);
-      });
-      if (headerRef.current) {
-        observer.observe(headerRef.current, {
-          childList: true,
-          subtree: true,
-          attributes: true,
-          attributeFilter: ['style', 'class']
-        });
-      }
-      return () => {
-        window.removeEventListener('resize', updateHeaderHeight);
-        observer.disconnect();
-      };
-    } else if (!isMobile || !selectedChat) {
-      setHeaderHeight(0);
-    }
-  }, [isMobile, selectedChat]);
-
-  // Calculate input height for mobile padding
-  useEffect(() => {
-    if (isMobile && inputContainerRef.current && selectedChat) {
-      const updateHeight = () => {
-        if (inputContainerRef.current) {
-          // Get the actual height including padding
-          const inputContainerHeight = inputContainerRef.current.offsetHeight;
-          setInputHeight(inputContainerHeight);
-        }
-      };
-      // Use requestAnimationFrame for accurate measurement
-      requestAnimationFrame(() => {
-        updateHeight();
-      });
-      window.addEventListener('resize', updateHeight);
-      // Use MutationObserver to watch for height changes (emoji picker, file preview)
-      const observer = new MutationObserver(() => {
-        requestAnimationFrame(updateHeight);
-      });
-      if (inputContainerRef.current) {
-        observer.observe(inputContainerRef.current, {
-          childList: true,
-          subtree: true,
-          attributes: true,
-          attributeFilter: ['style', 'class']
-        });
-      }
-      return () => {
-        window.removeEventListener('resize', updateHeight);
-        observer.disconnect();
-      };
-    } else if (!isMobile || !selectedChat) {
-      setInputHeight(0);
-    }
-  }, [isMobile, selectedChat, selectedImages, selectedVideos, showEmojiPicker]);
-
   React.useEffect(() => {
     if (!selectedChat && isMobile) {
       setShowSidebar(true);
@@ -1486,31 +1501,21 @@ const MessagesScreen: React.FC = () => {
           );
 
           const otherUser = otherParticipant?.user;
-          const displayName = otherUser?.displayname || otherUser?.username || 'Unknown';
-          const username = otherUser?.username || '';
-          const avatar = getSafeImageURLEx(otherUser?.public_id, otherUser?.avatar, "thumbnail");
+          const isGroup = chat.type === 'group';
+          const displayName = isGroup ? getMessageText({ content: chat.title }, t('messages.groups')) : otherUser?.displayname || otherUser?.username || 'Unknown';
+          const username = isGroup ? '' : otherUser?.username || '';
+          const avatar = isGroup ? chat.avatar?.file?.url || null : getSafeImageURLEx(otherUser?.public_id, otherUser?.avatar, "thumbnail");
           const avatarLetter = displayName.charAt(0).toUpperCase();
 
-          // Format last message time
-          let lastTime = 'now';
+          // Telegram-style compact time; use the application's active language.
+          let lastTime = '';
           if (chat.last_message?.created_at) {
-            const messageDate = new Date(chat.last_message.created_at);
-            const now = new Date();
-            const diffMs = now.getTime() - messageDate.getTime();
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-
-            if (diffMins < 1) {
-              lastTime = 'now';
-            } else if (diffMins < 60) {
-              lastTime = `${diffMins} dk`;
-            } else if (diffHours < 24) {
-              lastTime = `${diffHours} sa`;
-            } else if (diffDays < 7) {
-              lastTime = `${diffDays} g`;
-            } else {
-              lastTime = messageDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+            const date = new Date(chat.last_message.created_at);
+            const now = new Date(), locale = document.documentElement.lang || undefined;
+            if (Number.isFinite(date.getTime())) {
+              lastTime = date.toDateString() === now.toDateString()
+                ? date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
+                : date.toLocaleDateString(locale, { day: 'numeric', month: 'short' });
             }
           }
 
@@ -1534,6 +1539,7 @@ const MessagesScreen: React.FC = () => {
                 '';
             }
           }
+          if (!lastMessageText && chat.last_message?.emoticon) lastMessageText = chat.last_message.emoticon.kind === 'gif' ? t('emoticons.gifs') : `${t('emoticons.stickers')} ${chat.last_message.emoticon.emoji || ''}`;
           if (!lastMessageText && Array.isArray(chat.last_message?.attachments)) {
             lastMessageText = chat.last_message.attachments.some(
               (attachment: Attachment) => attachment.file?.mime_type?.startsWith('image/'),
@@ -1541,20 +1547,28 @@ const MessagesScreen: React.FC = () => {
           }
 
           return {
-            id: otherUser?.id || chat.id, // Use user ID for display, fallback to chat ID
+            id: isGroup ? chat.id : otherUser?.id || chat.id,
+            type: chat.type,
+            participantCount: chat.participants?.length,
             chatId: chat.id, // Real chat ID from backend (UUID)
             name: displayName,
             username: username,
             emojis: '',
             avatar: avatar,
             avatarLetter: avatar ? null : avatarLetter,
+            muted: !!chat.is_muted,
+            canManage: String(chat.creator_id) === String(user.id),
+            pinnedMessageId: chat.pinned_msg_id || null,
+            pinnedMessageText: chat.pinned_msg ? getMessageText(chat.pinned_msg) : '',
             lastMessageId: chat.last_message?.id || null,
+            lastMessageOutgoing: String(chat.last_message?.author_id) === String(user.id),
+            lastMessageRead: !!otherParticipant?.last_read_at && Date.parse(otherParticipant.last_read_at) >= Date.parse(chat.last_message?.created_at || ''),
             lastMessage: lastMessageText,
             lastTime: lastTime,
             unread: currentUserParticipant?.unread_count || 0,
             online: false, // TODO: Get online status from backend if available
             verified: false, // TODO: Get verified status from backend if available
-            encrypted: chat.type !== 'private', // Assume group/channel chats are encrypted
+            encrypted: chat.encrypted === true,
           };
         });
 
@@ -1678,9 +1692,12 @@ const MessagesScreen: React.FC = () => {
     selectedChatRef.current = selectedChat;
   }, [selectedChat]);
 
-  const emojis = ['😊', '😂', '❤️', '👍', '🎉', '🔥', '💯', '✨', '🏳️‍🌈', '💪', '😍', '🤔', '😭', '😡', '🤗', '👏', '🙏', '💖', '💕', '💔', '😎', '🤩', '😴', '🤯', '🥳', '😇', '🤠', '👻', '🤖', '👽', '👾'];
 
-  const selectedPrivateChat = chatsList.find(chat => chat.id === selectedChat);
+
+  const activePeerRef = useRef<ChatItem | null>(null);
+  const listedPrivateChat = chatsList.find(chat => chat.id === selectedChat);
+  useLayoutEffect(() => { if (listedPrivateChat) activePeerRef.current = listedPrivateChat; }, [listedPrivateChat]);
+  const selectedPrivateChat = listedPrivateChat || (activePeerRef.current?.id === selectedChat ? activePeerRef.current : undefined);
 
   // Messages state - Backend format: attachments array
 
@@ -1801,29 +1818,9 @@ const MessagesScreen: React.FC = () => {
     }
   };
 
-  // Handle message deletion
-  const handleDeleteMessage = async (messageId: string, forAll: boolean) => {
-    const currentChat = chatsList.find(chat => chat.id === selectedChat);
-    if (!currentChat?.chatId) return;
-
-    try {
-      if (forAll) {
-        await api.deleteMessageForAll(currentChat.chatId, messageId);
-      } else {
-        await api.deleteMessageForMe(currentChat.chatId, messageId);
-      }
-      setMessages(prev => prev.filter(msg => msg.id !== messageId));
-      setActiveMedia((current) => current?.messageId === messageId ? null : current);
-      setViewOnceSession((current) => current?.messageId === messageId ? null : current);
-    } catch (error) {
-      console.error('Error deleting message:', error);
-    }
-    setSelectedMessageId(null);
-    setMessageMenuPosition(null);
-  };
-
   // Handle message context menu (long press / right click)
   const handleMessageContextMenu = (point: { clientX: number; clientY: number }, messageId: string) => {
+    if (selectedMessages.size > 0) { toggleMessageSelection(messageId); return; }
     setSelectedMessageId(messageId);
     setResolvedMessageMenuPosition(null);
     const x = Number.isFinite(point.clientX) ? point.clientX : window.innerWidth / 2;
@@ -1897,7 +1894,7 @@ const MessagesScreen: React.FC = () => {
         closeMessageContextMenu();
       }
     };
-    const handleScroll = () => closeMessageContextMenu();
+    const handleScroll = (event: Event) => { if (event.target instanceof Node && messageMenuRef.current?.contains(event.target)) return; closeMessageContextMenu(); };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') closeMessageContextMenu();
     };
@@ -1919,7 +1916,8 @@ const MessagesScreen: React.FC = () => {
 
   React.useEffect(() => {
     if (resolvedMessageMenuPosition) {
-      messageMenuRef.current?.focus({ preventScroll: true });
+      const timer = window.setTimeout(() => messageMenuRef.current?.focus({ preventScroll: true }), 0);
+      return () => window.clearTimeout(timer);
     }
   }, [resolvedMessageMenuPosition]);
 
@@ -1940,10 +1938,11 @@ const MessagesScreen: React.FC = () => {
       }
       setChatsList(prev => prev.filter(c => c.id !== chatId));
     } catch (error) {
-      console.error('Error deleting chat:', error);
+      console.error('Error deleting chat:', error); setActionError(true); return false;
     }
     setOpenChatItemMenu(null);
     setShowChatMenu(false);
+    return true;
   };
 
   // Clear chat history
@@ -1962,10 +1961,11 @@ const MessagesScreen: React.FC = () => {
         setMessages([]);
       }
     } catch (error) {
-      console.error('Error clearing chat history:', error);
+      console.error('Error clearing chat history:', error); setActionError(true); return false;
     }
     setShowChatMenu(false);
     setOpenChatItemMenu(null);
+    return true;
   };
 
   // Close chat menu on outside click
@@ -1978,17 +1978,6 @@ const MessagesScreen: React.FC = () => {
       return () => document.removeEventListener('click', handleClickOutside);
     }
   }, [showChatMenu]);
-
-  // Close chat item menu on outside click
-  React.useEffect(() => {
-    const handleClickOutside = () => {
-      setOpenChatItemMenu(null);
-    };
-    if (openChatItemMenu) {
-      document.addEventListener('click', handleClickOutside);
-      return () => document.removeEventListener('click', handleClickOutside);
-    }
-  }, [openChatItemMenu]);
 
   const handleMessageOpen = useCallback(async (messageId: string) => {
     if (messageOpenRequestsRef.current.has(messageId)) return;
@@ -2127,12 +2116,37 @@ const MessagesScreen: React.FC = () => {
     }
   }, [chatsList, fetchMessages, messages, selectedChat, setMessages, user?.id]);
 
-  const handleSendMessage = async () => {
-    const totalMedia = selectedImages.length + selectedVideos.length;
-    if (!selectedChat || (!message.trim() && totalMedia === 0)) {
+  const handleSendMessage = async (emoticon?: ChatEmoticon) => {
+    if (pendingForward && !emoticon) {
+      const target = chatsList.find(chat => chat.id === selectedChat && chat.chatId === pendingForward.targetChatId);
+      if (!target || forwardingBusyRef.current) return;
+      forwardingBusyRef.current = true; setActionBusy(true); setActionError(false);
+      try {
+        await transferMessages(pendingForward.sourceChatId, pendingForward.messages, target, message.trim());
+        setPendingForward(null); setMessage('');
+      } catch { setActionError(true); }
+      finally { forwardingBusyRef.current = false; setActionBusy(false); }
       return;
     }
-    if (viewOnceEnabled && !hasValidViewOncePhoto) {
+    const totalMedia = selectedImages.length + selectedVideos.length;
+    if (!selectedChat || (!message.trim() && totalMedia === 0 && !emoticon)) {
+      return;
+    }
+    if (editingMessage && !emoticon) {
+      const currentChat = chatsList.find(chat => chat.id === selectedChat);
+      if (!currentChat?.chatId || actionBusy) return;
+      setActionBusy(true);
+      try {
+        const response = await api.call(Actions.CMD_EDIT_MESSAGE, { method: 'POST', body: { chat_id: currentChat.chatId, message_id: editingMessage.id, content: message.trim() } }) as { message?: BackendChatMessage };
+        if (!response?.message) throw new Error('Missing edited message');
+        const edited = normalizeChatMessage(response.message, String(user?.id));
+        setMessages(previous => previous.map(item => item.id === edited.id ? edited : item));
+        setMessage(''); setEditingMessage(null); void refreshChatsRef.current?.();
+      } catch { setActionError(true); }
+      finally { setActionBusy(false); }
+      return;
+    }
+    if (!emoticon && viewOnceEnabled && !hasValidViewOncePhoto) {
       viewOnceImageInputRef.current?.click();
       return;
     }
@@ -2171,12 +2185,13 @@ const MessagesScreen: React.FC = () => {
     }
 
 
-    const messageText = message.trim();
+    const replySnapshot = replyTo;
+    const messageText = emoticon ? '' : message.trim();
     // Store files before clearing state
-    const imagesToSend = [...selectedImages];
-    const videosToSend = [...selectedVideos];
-    const allFiles = [...selectedImages, ...selectedVideos];
-    const viewOnceForSend = viewOnceEnabled
+    const imagesToSend = emoticon ? [] : [...selectedImages];
+    const videosToSend = emoticon ? [] : [...selectedVideos];
+    const allFiles = [...imagesToSend, ...videosToSend];
+    const viewOnceForSend = !emoticon && viewOnceEnabled
       && imagesToSend.length === 1
       && videosToSend.length === 0;
     const optimisticCreatedAt = new Date();
@@ -2216,6 +2231,8 @@ const MessagesScreen: React.FC = () => {
     // Optimistically update UI
     const newMessage: ChatMessage = {
       id: tempMessageId,
+      emoticon,
+      reply: replySnapshot ? { id: replySnapshot.id, text: replySnapshot.text, sender: replySnapshot.sender } : undefined,
       text: messageText,
       time: optimisticCreatedAt.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
       sender: 'me' as const,
@@ -2237,6 +2254,7 @@ const MessagesScreen: React.FC = () => {
     // Add message to UI immediately
     setMessages(prev => [...prev, newMessage]);
     setMessage('');
+    setReplyTo(null);
     setSelectedImages([]);
     setSelectedVideos([]);
     setViewOnceEnabled(false);
@@ -2263,6 +2281,8 @@ const MessagesScreen: React.FC = () => {
       const response = await api.sendMessage({
         chat_id: realChatId, // Use real chat ID from backend
         content: messageText,
+        reply_to: replySnapshot?.id,
+        extras: emoticon ? { emoticon } : undefined,
         images: imagesToSend.length > 0 ? imagesToSend : undefined,
         videos: videosToSend.length > 0 ? videosToSend : undefined,
         expires_in_seconds: messageExpirySeconds,
@@ -2286,6 +2306,8 @@ const MessagesScreen: React.FC = () => {
         const resolvedChatMessage: ChatMessage = {
           ...newMessage,
           ...normalizedMessage,
+          emoticon: normalizedMessage.emoticon ?? newMessage.emoticon,
+          reply: normalizedMessage.reply ?? newMessage.reply,
           attachments: normalizedMessage.viewOnce || viewOnceForSend
             ? undefined
             : normalizedMessage.attachments || newMessage.attachments,
@@ -2352,7 +2374,7 @@ const MessagesScreen: React.FC = () => {
     }
   };
 
-  const handleTyping = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTyping = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setMessage(value);
 
@@ -2400,9 +2422,10 @@ const MessagesScreen: React.FC = () => {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // Handle Enter key to send message
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+      e.preventDefault();
       handleSendMessage();
       return;
     }
@@ -2448,6 +2471,7 @@ const MessagesScreen: React.FC = () => {
   };
 
   const handleChatSelect = (chatId: string) => {
+    setPendingForward(null);
     setActiveMedia(null);
     setViewOnceSession(null);
     setSelectedImages([]);
@@ -2487,10 +2511,164 @@ const MessagesScreen: React.FC = () => {
     setOtherUserTyping(false);
   };
 
-  const handleEmojiClick = (emoji: string) => {
-    setMessage(prev => prev + emoji);
+  const handleEmoticonSelect = (selection: EmoticonSelection) => {
+    if (selection.kind === 'emoji') {
+      const input = messageInputRef.current;
+      const start = input?.selectionStart ?? message.length, end = input?.selectionEnd ?? message.length;
+      setMessage(message.slice(0, start) + selection.emoji + message.slice(end));
+      requestAnimationFrame(() => { input?.focus({ preventScroll: true }); input?.setSelectionRange(start + selection.emoji.length, start + selection.emoji.length); });
+      return;
+    }
+    setViewOnceEnabled(false);
     setShowEmojiPicker(false);
+    void handleSendMessage(selection);
   };
+
+  const handleEmoticonBackspace = () => {
+    const input = messageInputRef.current;
+    const start = input?.selectionStart ?? message.length, end = input?.selectionEnd ?? message.length;
+    const before = message.slice(0, start);
+    const Segmenter = (Intl as typeof Intl & { Segmenter?: new (locale?: string, options?: { granularity: 'grapheme' }) => { segment: (text: string) => Iterable<{ index: number }> } }).Segmenter;
+    const segments = Segmenter ? Array.from(new Segmenter(undefined, { granularity: 'grapheme' }).segment(before)) : Array.from(before).map((_, index, points) => ({ index: points.slice(0, index).join('').length }));
+    const cut = start === end ? segments[segments.length - 1]?.index ?? 0 : start;
+    setMessage(message.slice(0, cut) + message.slice(end));
+    requestAnimationFrame(() => { input?.focus({ preventScroll: true }); input?.setSelectionRange(cut, cut); });
+  };
+
+  function toggleMessageSelection(id: string, range = false) {
+    setShowEmojiPicker(false); setShowComposerOptions(false); closeMessageContextMenu();
+    setSelectedMessages(previous => {
+      const next = new Set(previous);
+      if (range && lastSelectionRef.current) {
+        const first = messages.findIndex(item => item.id === lastSelectionRef.current), last = messages.findIndex(item => item.id === id);
+        if (first >= 0 && last >= 0) messages.slice(Math.min(first, last), Math.max(first, last) + 1).forEach(item => { if (next.size < 100) next.add(item.id); });
+      } else if (next.has(id)) next.delete(id); else if (next.size < 100) next.add(id);
+      return next;
+    });
+    lastSelectionRef.current = id;
+  }
+  function scrollToMessage(id: string) {
+    const index = messages.findIndex(item => item.id === id);
+    if (index >= 0) messageListRef.current?.scrollToIndex({ index, align: 'center', behavior: 'smooth' });
+  }
+  async function copyMessages(items: ChatMessage[]) {
+    closeMessageContextMenu();
+    try { await navigator.clipboard.writeText(items.map(item => item.text).filter(Boolean).join('\n')); }
+    catch { setActionError(true); }
+  }
+  const canForwardMessage = (item: ChatMessage) => !item.viewOnce && !item.isDisappearing && !item.contentHidden && !!(item.text || item.emoticon || item.attachments?.length);
+  async function pinMessage(item: ChatMessage) {
+    closeMessageContextMenu();
+    if (!selectedPrivateChat?.chatId) return;
+    const pinned = selectedPrivateChat.pinnedMessageId === item.id;
+    try {
+      await api.call(pinned ? Actions.CMD_UNPIN_MESSAGE : Actions.CMD_PIN_MESSAGE, { method: 'POST', body: { chat_id: selectedPrivateChat.chatId, message_id: item.id } });
+      setChatsList(previous => previous.map(chat => chat.id === selectedChat ? { ...chat, pinnedMessageId: pinned ? null : item.id, pinnedMessageText: pinned ? '' : item.text } : chat));
+    } catch { setActionError(true); }
+  }
+  async function confirmDeleteMessages() {
+    if (!selectedPrivateChat?.chatId || actionBusy) return;
+    setActionBusy(true);
+    const failed: ChatMessage[] = [];
+    for (const item of deleteRequest) {
+      try {
+        if (deleteForAll) await api.deleteMessageForAll(selectedPrivateChat.chatId, item.id); else await api.deleteMessageForMe(selectedPrivateChat.chatId, item.id);
+        setMessages(previous => previous.filter(message => message.id !== item.id));
+        setSelectedMessages(previous => { const next = new Set(previous); next.delete(item.id); return next; });
+      } catch { failed.push(item); }
+    }
+    setDeleteRequest(failed); if (failed.length) setActionError(true);
+    setActionBusy(false); void refreshChatsRef.current?.();
+  }
+  function openCreatedGroup(chat: CreatedGroup, title: string) {
+    const item: ChatItem = { id: chat.id, chatId: chat.id, type: 'group', name: title, username: '', emojis: '', avatar: null, avatarLetter: title.charAt(0).toLocaleUpperCase(), lastMessage: '', lastTime: '', unread: 0, online: false, verified: false, encrypted: false, canManage: true, participantCount: chat.participants?.length };
+    setChatsList(previous => [item, ...previous.filter(existing => existing.chatId !== chat.id)]);
+    setCreatingGroup(false); setPendingForward(null); setSelectedChat(item.id); setShowSidebar(false); setShowProfile(false);
+    void refreshChatsRef.current?.();
+  }
+  function openForward(items: ChatMessage[]) {
+    if (!selectedPrivateChat?.chatId || !items.length || !items.every(canForwardMessage)) return;
+    setForwardSourceId(selectedPrivateChat.chatId);
+    setForwardMessages(items);
+    closeMessageContextMenu();
+  }
+  function stageForward(chat: ChatItem) {
+    if (!forwardSourceId || !chat.chatId) return;
+    const draft = { sourceChatId: forwardSourceId, messages: forwardMessages, targetChatId: chat.chatId };
+    handleChatSelect(chat.id);
+    setPendingForward(draft);
+    setForwardMessages([]);
+    setSelectedMessages(new Set());
+    setReplyTo(null); setEditingMessage(null); setMessage('');
+  }
+  async function transferMessages(sourceId: string, items: ChatMessage[], target: ChatItem, comment = '') {
+    if (!target.chatId) throw new Error('Missing forwarding destination');
+    const response = await api.forwardMessages(sourceId, target.chatId, items.map(item => item.id), comment) as { messages?: BackendChatMessage[] };
+    if (!Array.isArray(response.messages) || response.messages.length !== items.length + (comment ? 1 : 0) || response.messages.some(item => !item.id)) throw new Error('Invalid forwarding response');
+    if (target.id === selectedChatRef.current) {
+      const received = response.messages.map(item => normalizeChatMessage(item, String(user?.id)));
+      setMessages(previous => [...previous, ...received.filter(item => !previous.some(existing => existing.id === item.id))]);
+    }
+    void refreshChatsRef.current?.();
+  }
+  async function forwardToMany(targets: ChatItem[], comment: string): Promise<ChatItem[]> {
+    if (!forwardSourceId || forwardingBusyRef.current) return targets;
+    forwardingBusyRef.current = true; setActionBusy(true);
+    const remaining: ChatItem[] = [];
+    try {
+      for (const target of targets) {
+        try { await transferMessages(forwardSourceId, forwardMessages, target, comment); }
+        catch { remaining.push(target); }
+      }
+      if (!remaining.length) setSelectedMessages(new Set());
+      return remaining;
+    } finally { forwardingBusyRef.current = false; setActionBusy(false); }
+  }
+  const selectedMessageItems = messages.filter(item => selectedMessages.has(item.id));
+  const contextMessage = messages.find(item => item.id === selectedMessageId);
+  const messageActions: MessageAction[] = contextMessage ? [
+    ...(!contextMessage.viewOnce && !contextMessage.isDisappearing ? [{ id: 'reply', label: t('chat_actions.reply'), icon: 'reply' as const, run: () => { setPendingForward(null); setReplyTo(contextMessage); setEditingMessage(null); closeMessageContextMenu(); messageInputRef.current?.focus(); } }] : []),
+    ...(contextMessage.text && !contextMessage.contentHidden ? [{ id: 'copy', label: t('chat_actions.copy'), icon: 'copy' as const, run: () => void copyMessages([contextMessage]) }] : []),
+    ...(contextMessage.sender === 'me' && contextMessage.text && !contextMessage.viewOnce && !contextMessage.isDisappearing && !contextMessage.emoticon ? [{ id: 'edit', label: t('chat_actions.edit'), icon: 'edit' as const, run: () => { setPendingForward(null); setEditingMessage(contextMessage); setReplyTo(null); setMessage(contextMessage.text); closeMessageContextMenu(); messageInputRef.current?.focus(); } }] : []),
+    ...(canForwardMessage(contextMessage) ? [{ id: 'forward', label: t('chat_actions.forward'), icon: 'forward' as const, run: () => openForward([contextMessage]) }] : []),
+    ...(!contextMessage.viewOnce && !contextMessage.isDisappearing ? [{ id: 'pin', label: t(selectedPrivateChat?.pinnedMessageId === contextMessage.id ? 'chat_actions.unpin' : 'chat_actions.pin'), icon: 'pin' as const, run: () => void pinMessage(contextMessage) }] : []),
+    { id: 'select', label: t('chat_actions.select'), icon: 'select', run: () => toggleMessageSelection(contextMessage.id) },
+    { id: 'delete', label: t('messages.delete_message'), icon: 'delete', danger: true, run: () => { setDeleteRequest([contextMessage]); setDeleteForAll(false); closeMessageContextMenu(); } },
+  ] : [];
+
+  function openListMenu(id: string, point: { x: number; y: number }) {
+    closeMessageContextMenu(); setOpenChatItemMenu(id); setChatItemMenuPoint(point);
+  }
+  async function markDialogRead(chat: ChatItem) {
+    setOpenChatItemMenu(null);
+    if (!chat.chatId || !chat.lastMessageId) return;
+    try {
+      await api.call(Actions.CMD_CHAT_MESSAGE_READ, { method: 'POST', body: { chat_id: chat.chatId, 'message_ids[]': [chat.lastMessageId] } });
+      setChatsList(previous => previous.map(item => item.id === chat.id ? { ...item, unread: 0 } : item));
+    } catch { setActionError(true); }
+  }
+  async function toggleDialogMuted(chat: ChatItem) {
+    setOpenChatItemMenu(null);
+    if (!chat.chatId) return;
+    try {
+      await api.call(Actions.CMD_CHAT_SET_MUTED, { method: 'POST', body: { chat_id: chat.chatId, muted: !chat.muted } });
+      setChatsList(previous => previous.map(item => item.id === chat.id ? { ...item, muted: !chat.muted } : item));
+    } catch { setActionError(true); }
+  }
+  async function confirmChatRequest() {
+    if (!chatRequest || actionBusy) return;
+    setActionBusy(true);
+    const result = chatRequest.kind === 'delete' ? await handleDeleteChat(chatRequest.chat.id, chatRequestForAll) : await handleClearChatHistory(chatRequest.chat.id, chatRequestForAll);
+    if (result === true) setChatRequest(null);
+    setActionBusy(false);
+  }
+  const contextDialog = chatsList.find(item => item.id === openChatItemMenu);
+  const dialogActions: MessageAction[] = contextDialog ? [
+    ...(contextDialog.unread > 0 && contextDialog.lastMessageId ? [{ id: 'read', label: t('chat_actions.mark_read'), icon: 'readchats' as const, run: () => void markDialogRead(contextDialog) }] : []),
+    { id: 'mute', label: t(contextDialog.muted ? 'chat_actions.unmute' : 'chat_actions.mute'), icon: contextDialog.muted ? 'unmute' : 'mute', run: () => void toggleDialogMuted(contextDialog) },
+    { id: 'clear', label: t('chat_actions.clear_history'), icon: 'delete', run: () => { setOpenChatItemMenu(null); setChatRequestForAll(false); setActionError(false); setChatRequest({ chat: contextDialog, kind: 'clear' }); } },
+    { id: 'delete', label: t('messages.delete_chat'), icon: 'delete', danger: true, run: () => { setOpenChatItemMenu(null); setChatRequestForAll(false); setActionError(false); setChatRequest({ chat: contextDialog, kind: 'delete' }); } },
+  ] : [];
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -2583,8 +2761,8 @@ const MessagesScreen: React.FC = () => {
   }
 
   return (
-    <div className="h-full w-full overflow-hidden">
-      <div className="mx-auto flex h-full min-h-0 w-full max-w-7xl flex-row overflow-hidden">
+    <div className="cv-telegram-chat h-full w-full overflow-hidden">
+      <div className="cv-chat-layout mx-auto flex h-full min-h-0 w-full flex-row overflow-hidden">
         <div
           className={`flex flex-row h-full w-full flex-1 min-h-0 overflow-hidden ${theme === 'dark'
             ? 'cv-card-surface-soft'
@@ -2593,24 +2771,16 @@ const MessagesScreen: React.FC = () => {
           style={{ flex: '1 1 auto', minHeight: 0, display: 'flex', flexDirection: 'row' }}
         >
           {/* Sidebar - Responsive Design */}
-          <div className={`absolute lg:relative inset-0 z-40 lg:z-auto w-full lg:w-[360px] lg:flex-shrink-0 border-r flex flex-col h-full overflow-hidden ${theme === 'dark' ? 'cv-card-surface-solid border-white/10' : 'border-[var(--cv-inner-border)] bg-white'
+          <div className={`cv-chat-sidebar absolute lg:relative inset-0 z-40 lg:z-auto w-full lg:w-[360px] lg:flex-shrink-0 border-r flex flex-col h-full overflow-hidden ${theme === 'dark' ? 'cv-card-surface-solid border-white/10' : 'border-[var(--cv-inner-border)] bg-white'
             } ${showSidebar ? 'flex' : 'hidden lg:flex'}`}>
-            <div className={`flex-shrink-0 z-50 border-b px-3 py-3 ${theme === 'dark'
+            {creatingGroup ? <GroupComposer chats={chatsList} viewerId={String(user?.id)} viewerName={user?.displayname || user?.username || ''} onClose={() => setCreatingGroup(false)} onCreated={openCreatedGroup} /> : <>
+            <div className={`cv-chat-sidebar-header flex-shrink-0 z-50 border-b px-3 py-3 ${theme === 'dark'
               ? 'cv-card-surface-soft border-white/10'
               : 'border-[var(--cv-inner-border)] bg-white'
               }`}>
               <div className="flex items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-3">
-                  <div className="sky-glow flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white">
-                    <MessageCircle className="h-5 w-5" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-[9px] font-black uppercase tracking-[0.28em] text-brand-hovered">
-                      {t('messages.chat')}
-                    </p>
-                    <h1 className={`mt-0.5 truncate text-lg font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-slate-950'
-                      }`}>{chatsList.length}</h1>
-                  </div>
+                  <h1 className="cv-chat-sidebar-title">{t('app.nav.messages')}</h1>
                 </div>
                 <div className="flex flex-shrink-0 items-center gap-1">
                 <motion.button
@@ -2625,6 +2795,8 @@ const MessagesScreen: React.FC = () => {
                     <RefreshCw className={`h-4 w-4 ${isLoadingChats ? 'animate-spin' : ''}`} />
                 </motion.button>
                 <motion.button
+                  onClick={() => navigate('/settings/appearance')}
+                  aria-label={t('appearance.title')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                     className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${theme === 'dark' ? 'bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-white' : 'bg-white/80 text-slate-600 hover:bg-brand hover:text-slate-950'
@@ -2633,18 +2805,20 @@ const MessagesScreen: React.FC = () => {
                     <Settings className="h-4 w-4" />
                 </motion.button>
                 <motion.button
+                  onClick={() => { setCreatingGroup(true); setShowSidebar(true); }}
+                  aria-label={t('chat_actions.new_group')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                     className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${theme === 'dark' ? 'bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-white' : 'bg-white/80 text-slate-600 hover:bg-brand hover:text-slate-950'
                     }`}
                 >
-                    <PlusSquare className="h-4 w-4" />
+                    <TelegramIcon name="newgroup" className="h-4 w-4" />
                 </motion.button>
                 </div>
               </div>
             </div>
 
-            <div className="p-3 sm:p-4 flex-shrink-0">
+            <div className="cv-chat-search-area p-3 sm:p-4 flex-shrink-0">
               {/* Search */}
               <div className="relative mb-3 sm:mb-4 z-20">
                 <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 z-10 ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'
@@ -2652,6 +2826,9 @@ const MessagesScreen: React.FC = () => {
                 <input
                   type="text"
                   placeholder={t('messages.search')}
+                  aria-label={t('messages.search')}
+                  value={chatSearch}
+                  onChange={event => setChatSearch(event.target.value)}
                   className={`relative w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-full border text-sm z-10 outline-none transition-all focus:ring-2 ${theme === 'dark'
                     ? 'bg-white/[0.08] border-white/10 text-white placeholder-zinc-500 focus:ring-brand/20'
                     : 'bg-white/[0.85] border-[var(--cv-inner-border)] text-slate-900 placeholder-slate-500 focus:ring-brand/20'
@@ -2660,31 +2837,15 @@ const MessagesScreen: React.FC = () => {
               </div>
 
               {/* Filter Tabs */}
-              <div className="cv-tab-bar -mx-1 !h-12">
-                <div className="cv-tab-row overflow-x-auto no-scrollbar">
-                  {(
+              <div className="cv-tab-bar -mx-1">
+                <ViewTabs items={(
                     [
                       { id: 'all' as const, label: t('messages.all') },
                       { id: 'unread' as const, label: t('messages.unread') },
                       { id: 'groups' as const, label: t('messages.groups') },
                       { id: 'unencrypted' as const, label: t('messages.unencrypted') },
                     ]
-                  ).map((tab) => {
-                    const isActive = activeFilter === tab.id;
-                    return (
-                      <button
-                        key={tab.id}
-                        type="button"
-                        onClick={() => setActiveFilter(tab.id)}
-                        style={{ minWidth: 0, flex: 'none' }}
-                        className={`cv-tab !h-12 !text-[13px] ${isActive ? 'is-active' : ''}`}
-                      >
-                        <span className="min-w-0 truncate px-2">{tab.label}</span>
-                        <span className={`cv-tab-underline ${isActive ? 'is-on' : ''}`} />
-                      </button>
-                    );
-                  })}
-                </div>
+                  )} activeId={activeFilter} onSelect={id => setActiveFilter(id)} label={t('app.nav.messages')} />
               </div>
             </div>
 
@@ -2707,9 +2868,11 @@ const MessagesScreen: React.FC = () => {
                   ))}
                 </div>
               ) : chatsList.filter((chat: ChatItem) => {
+                if (chatSearch && !`${chat.name} ${chat.username}`.toLocaleLowerCase().includes(chatSearch.toLocaleLowerCase())) return false;
                 if (activeFilter === 'all') return true;
                 if (activeFilter === 'unread') return chat.unread > 0;
                 if (activeFilter === 'unencrypted') return !chat.encrypted;
+                  if (activeFilter === 'groups') return chat.type === 'group';
                 return true;
               }).length === 0 ? (
                 <div className={`flex items-center justify-center h-full text-center p-8 ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-500'}`}>
@@ -2717,187 +2880,31 @@ const MessagesScreen: React.FC = () => {
                 </div>
               ) : (() => {
                 const visibleChats = chatsList.filter((chat: ChatItem) => {
+                  if (chatSearch && !`${chat.name} ${chat.username}`.toLocaleLowerCase().includes(chatSearch.toLocaleLowerCase())) return false;
                   if (activeFilter === 'all') return true;
                   if (activeFilter === 'unread') return chat.unread > 0;
                   if (activeFilter === 'unencrypted') return !chat.encrypted;
+                  if (activeFilter === 'groups') return chat.type === 'group';
                   return true;
                 });
-                return visibleChats.map((chat: ChatItem, chatIndex: number) => (
-              <React.Fragment key={chat.id}>
-                <div
-                  className={`group/item p-3 sm:p-4 cursor-pointer transition-colors relative ${selectedChat === chat.id
-                      ? 'bg-[var(--color-brand-light-solid)]'
-                      : theme === 'dark'
-                        ? 'hover:bg-white/[0.05]'
-                        : 'hover:bg-[var(--cv-surface-2-hover)]'
-                    }`}
-                  onClick={() => handleChatSelect(chat.id)}
-                >
-                  <div className="flex items-center space-x-2 sm:space-x-3">
-                    <div className="relative h-12 w-12 shrink-0 sm:h-14 sm:w-14">
-                      <div className={`flex h-full w-full items-center justify-center rounded-full text-lg font-bold ${theme === 'dark' ? 'bg-zinc-900 text-white border border-white/10' : 'bg-slate-950 text-white'
-                        }`}>
-                        {chat.avatarLetter || chat.name.charAt(0).toUpperCase()}
-                      </div>
-                      {chat.avatar && (
-                        <img
-                          src={chat.avatar}
-                          alt=""
-                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                          className="absolute inset-0 h-full w-full rounded-full object-cover"
-                        />
-                      )}
-                      {!chat.encrypted && (
-                        <Lock className={`absolute -bottom-1 left-0 w-3 h-3 ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'
-                          }`} />
-                      )}
-                      {chat.online && (
-                        <div className={`absolute -bottom-1 -right-1 w-3 h-3 border-2 rounded-full ${theme === 'dark' ? 'bg-brand border-zinc-950' : 'bg-brand border-white'
-                          }`}></div>
-                      )}
-                      {chat.verified && (
-                        <Check className={`absolute -top-1 -right-1 w-4 h-4 ${theme === 'dark' ? 'text-brand' : 'text-brand-hovered'
-                          }`} />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center min-w-0 flex-1">
-                          <h3 className={`font-semibold truncate text-sm sm:text-base ${theme === 'dark' ? 'text-white' : 'text-slate-950'
-                            }`}>{chat.name}</h3>
-                          {chat.emojis && (
-                            <span className="ml-1 text-xs sm:text-sm">{chat.emojis}</span>
-                          )}
-                        </div>
-                        <div className="flex items-center space-x-1 flex-shrink-0 ml-2">
-                          <span className={`text-xs ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-500'
-                            }`}>{chat.lastTime}</span>
-                          {chat.unread === 0 && (
-                            <CheckCheck className={`w-3 h-3 ${theme === 'dark' ? 'text-brand' : 'text-brand-hovered'
-                              }`} />
-                          )}
-                        </div>
-                      </div>
-                      <div className="mt-1">
-                        {selectedChat === chat.id && otherUserTyping ? (
-                          <p className={`text-xs sm:text-sm truncate text-green-500 font-medium`}>
-                            {t('messages.typing')}
-                          </p>
-                        ) : (
-                          (chat.lastMessage || '').split('\n').slice(0, 2).map((line: string, idx: number) => (
-                            <p key={idx} className={`text-xs sm:text-sm truncate ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-600'
-                              }`}>{line}</p>
-                          ))
-                        )}
-                      </div>
-                      {chat.unread > 0 && (
-                        <div className="flex justify-end mt-1 sm:mt-2">
-                          <span className={`text-white text-xs px-2 py-1 rounded-full ${theme === 'dark' ? 'bg-brand text-zinc-950' : 'bg-brand-hovered text-white'
-                            }`}>
-                            {chat.unread}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  {/* More Menu Button */}
-                  <div className="absolute top-2 right-2">
-                    <motion.button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setOpenChatItemMenu(openChatItemMenu === chat.id ? null : chat.id);
-                      }}
-                      className={`p-1.5 rounded-full transition-colors ${theme === 'dark'
-                        ? 'hover:bg-white/10 text-zinc-400'
-                        : 'hover:bg-[var(--cv-surface-3)] text-slate-500'
-                        }`}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      <MoreVertical className="w-4 h-4" />
-                    </motion.button>
-                    <AnimatePresence>
-                      {openChatItemMenu === chat.id && (
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.95, y: -5 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.95, y: -5 }}
-                          transition={{ duration: 0.15 }}
-                          className={`absolute right-0 top-full mt-1 rounded-2xl shadow-2xl border z-50 p-1 backdrop-blur-2xl ${theme === 'dark'
-                            ? 'bg-zinc-900/[0.92] border-white/10'
-                            : 'bg-white/[0.92] border-[var(--cv-inner-border)]'
-                            }`}
-                          style={{ minWidth: '140px' }}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <button
-                            onClick={() => handleClearChatHistory(chat.id, false)}
-                            className={`w-full px-3 py-2.5 text-left text-sm flex items-center gap-2.5 rounded-lg transition-colors ${theme === 'dark'
-                              ? 'text-gray-200 hover:bg-white/10'
-                              : 'text-gray-700 hover:bg-black/5'
-                              }`}
-                          >
-                            <RefreshCw className="w-4 h-4 opacity-70" />
-                            Clear History for Me
-                          </button>
-                          <button
-                            onClick={() => handleClearChatHistory(chat.id, true)}
-                            className={`w-full px-3 py-2.5 text-left text-sm flex items-center gap-2.5 rounded-lg transition-colors ${theme === 'dark'
-                              ? 'text-gray-200 hover:bg-white/10'
-                              : 'text-gray-700 hover:bg-black/5'
-                              }`}
-                          >
-                            <RefreshCw className="w-4 h-4 opacity-70" />
-                            Clear History for All
-                          </button>
-                          <div className={`my-1 h-px ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
-                          <button
-                            onClick={() => handleDeleteChat(chat.id, false)}
-                            className={`w-full px-3 py-2.5 text-left text-sm flex items-center gap-2.5 rounded-lg transition-colors ${theme === 'dark'
-                              ? 'text-gray-200 hover:bg-white/10'
-                              : 'text-gray-700 hover:bg-black/5'
-                              }`}
-                          >
-                            <Trash2 className="w-4 h-4 opacity-70" />
-                            Delete for Me
-                          </button>
-                          <button
-                            onClick={() => handleDeleteChat(chat.id, true)}
-                            className={`w-full px-3 py-2.5 text-left text-sm flex items-center gap-2.5 rounded-lg transition-colors ${theme === 'dark'
-                              ? 'text-red-400 hover:bg-red-500/10'
-                              : 'text-red-600 hover:bg-red-50'
-                              }`}
-                          >
-                            <Trash2 className="w-4 h-4 opacity-70" />
-                            Delete for All
-                          </button>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </div>
-                {chatIndex < visibleChats.length - 1 && (
-                  <div className={`h-px ${theme === 'dark' ? 'bg-white/[0.06]' : 'bg-[var(--cv-inner-border)]'}`} />
-                )}
+                return <Virtuoso style={{ height: '100%' }} data={visibleChats} computeItemKey={(_, chat) => chat.id} itemContent={(_, chat) => (
+              <React.Fragment>
+                <TelegramChatListRow chat={chat} selected={selectedChat === chat.id} typing={selectedChat === chat.id && otherUserTyping} onSelect={() => handleChatSelect(chat.id)} onMenu={point => openListMenu(chat.id, point)}>
+                  <div className="cv-chat-row-actions"><button type="button" aria-label={`${chat.name}: ${t('app.nav.more')}`} aria-expanded={openChatItemMenu === chat.id} onClick={event => { event.stopPropagation(); const box = event.currentTarget.getBoundingClientRect(); openListMenu(chat.id, { x: box.left, y: box.bottom }); }}><MoreVertical /></button></div>
+                </TelegramChatListRow>
               </React.Fragment>
-                ));
+                )} />;
               })()}
             </div>
+            </>}
           </div>
 
           {/* Chat Area */}
-          <AnimatePresence mode="wait">
+          <>
             {selectedChat ? (
-              <motion.div
+              <div
                 key={`chat-view-${selectedChat}`}
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{
-                  duration: 0.2,
-                  ease: 'easeOut'
-                }}
-                className="flex-1 flex flex-col min-h-0 min-w-0 relative z-10 h-full"
+                className="cv-chat-thread flex-1 flex flex-col min-h-0 min-w-0 relative z-10 h-full"
                 style={{
                   flex: '1 1 auto',
                   minHeight: 0,
@@ -2907,10 +2914,11 @@ const MessagesScreen: React.FC = () => {
 
                 }}
               >
+                <ChatWallpaper />
                 {/* Chat Header */}
                 <div
                   ref={headerRef}
-                  className={`flex-shrink-0 z-30 p-3 sm:p-4 border-b ${theme === 'dark'
+                  className={`cv-chat-topbar flex-shrink-0 z-30 p-3 sm:p-4 border-b ${theme === 'dark'
                     ? 'cv-card-surface-soft border-white/10'
                     : 'border-[var(--cv-inner-border)] bg-white'
                     }`}
@@ -2930,181 +2938,23 @@ const MessagesScreen: React.FC = () => {
                         }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
+                        aria-label={t('app.back')}
                         className={`lg:hidden p-2 rounded-full flex-shrink-0 mr-1 transition-colors ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-brand'}`}
                       >
                         <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`} />
                       </motion.button>
 
-                      {selectedPrivateChat ? (
-                        <motion.button
-                          onClick={() => {
-                            setShowProfile(!showProfile);
-                          }}
-                          whileTap={{ scale: 0.95 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                          className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1 cursor-pointer"
-                        >
-                          <div className="relative h-10 w-10 shrink-0">
-                            <div className={`flex h-full w-full items-center justify-center rounded-full text-base font-bold ${theme === 'dark' ? 'bg-zinc-900 text-white border border-white/10' : 'bg-slate-950 text-white'
-                              }`}>
-                              {selectedPrivateChat.avatarLetter || selectedPrivateChat.name.charAt(0).toUpperCase()}
-                            </div>
-                            {selectedPrivateChat.avatar && (
-                              <img
-                                src={selectedPrivateChat.avatar}
-                                alt=""
-                                onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                                className="absolute inset-0 h-full w-full rounded-full object-cover"
-                              />
-                            )}
-                          </div>
-                          <div className="min-w-0 flex-1 text-left">
-                            <div className="flex items-center gap-1">
-                              <h2 className={`font-semibold truncate text-base ${theme === 'dark' ? 'text-white' : 'text-slate-950'
-                                }`}>{selectedPrivateChat.name}</h2>
-                              {selectedPrivateChat.emojis && (
-                                <span className="text-base">{selectedPrivateChat.emojis}</span>
-                              )}
-                              {selectedPrivateChat.verified && (
-                                <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${theme === 'dark' ? 'bg-brand' : 'bg-brand-hovered'
-                                  }`}>
-                                  <Check className={`w-2.5 h-2.5 ${theme === 'dark' ? 'text-zinc-950' : 'text-white'
-                                    }`} />
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-1.5 mt-0.5">
-                              <p className={`text-sm truncate ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'
-                                }`}>@{selectedPrivateChat.username || selectedPrivateChat.name.toLowerCase()}</p>
-                              {otherUserTyping && (
-                                <span className="text-xs font-medium text-green-500 flex-shrink-0">
-                                  {t('messages.typing')}
-                                </span>
-
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 flex-shrink-0">
-
-                            <motion.div
-                              animate={{ rotate: showProfile ? 180 : 0 }}
-                              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                              className="flex-shrink-0"
-                            >
-                              {showProfile ? (
-                                <ChevronUp className={`w-5 h-5 ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'
-                                  }`} />
-                              ) : (
-                                <ChevronDown className={`w-5 h-5 ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'
-                                  }`} />
-                              )}
-                            </motion.div>
-                          </div>
-                        </motion.button>
-                      ) : null}
+                      {selectedPrivateChat && <ChatPeerHeader key={`${selectedPrivateChat.id}:${selectedPrivateChat.avatar || ''}`} chat={selectedPrivateChat} typing={otherUserTyping} expanded={showProfile} onClick={() => { setShowProfile(value => !value); setShowChatMenu(false); setShowEmojiPicker(false); setShowComposerOptions(false); }} />}
                     </div>
-                    {/* Chat Actions Menu */}
-                    <div className="relative flex flex-row gap-2 flex-shrink-0">
-                      <motion.button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRefreshMessages();
-                        }}
-                        whileTap={{ scale: 0.95 }}
-                        disabled={isRefreshingMessages || isLoadingMessages}
-                        className={`p-2 rounded-full transition-colors ${theme === 'dark'
-                          ? 'hover:bg-white/10 text-zinc-400'
-                          : 'hover:bg-[var(--cv-surface-3)] text-slate-500'
-                          } disabled:opacity-50`}
-                      >
-                        <RefreshCw
-                          className={`w-5 h-5 ${isRefreshingMessages ? 'animate-spin' : ''
-                            }`}
-                        />
-                      </motion.button>
-                      <motion.button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowChatMenu(!showChatMenu);
-                        }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-brand'
-                          }`}
-                      >
-                        <MoreVertical className={`w-5 h-5 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`} />
-                      </motion.button>
-                      {showChatMenu && (
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                          transition={{ duration: 0.2, ease: "easeOut" }}
-                          className={`absolute right-0 top-full mt-2 z-50 min-w-[200px] rounded-2xl shadow-2xl border backdrop-blur-2xl overflow-hidden ${theme === 'dark'
-                            ? 'bg-zinc-900/[0.92] border-white/10'
-                            : 'bg-white/[0.92] border-[var(--cv-inner-border)]'
-                            }`}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="p-1">
-                            {selectedChat && (
-                              <>
-                                <button
-                                  onClick={() => handleClearChatHistory(selectedChat, false)}
-                                  className={`w-full px-3 py-2.5 text-left text-sm flex items-center gap-2.5 rounded-lg transition-colors ${theme === 'dark'
-                                    ? 'text-gray-200 hover:bg-white/10'
-                                    : 'text-gray-700 hover:bg-black/5'
-                                    }`}
-                                >
-                                  <RefreshCw className="w-4 h-4 opacity-70" />
-                                  Clear History for Me
-                                </button>
-                                <button
-                                  onClick={() => handleClearChatHistory(selectedChat, true)}
-                                  className={`w-full px-3 py-2.5 text-left text-sm flex items-center gap-2.5 rounded-lg transition-colors ${theme === 'dark'
-                                    ? 'text-gray-200 hover:bg-white/10'
-                                    : 'text-gray-700 hover:bg-black/5'
-                                    }`}
-                                >
-                                  <RefreshCw className="w-4 h-4 opacity-70" />
-                                  Clear History for All
-                                </button>
-                              </>
-                            )}
-
-                            <div className={`my-1 h-px ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
-
-                            {selectedChat && (
-                              <>
-                                <button
-                                  onClick={() => handleDeleteChat(selectedChat, false)}
-                                  className={`w-full px-3 py-2.5 text-left text-sm flex items-center gap-2.5 rounded-lg transition-colors ${theme === 'dark'
-                                    ? 'text-gray-200 hover:bg-white/10'
-                                    : 'text-gray-700 hover:bg-black/5'
-                                    }`}
-                                >
-                                  <Trash2 className="w-4 h-4 opacity-70" />
-                                  Delete Chat for Me
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteChat(selectedChat, true)}
-                                  className={`w-full px-3 py-2.5 text-left text-sm flex items-center gap-2.5 rounded-lg transition-colors ${theme === 'dark'
-                                    ? 'text-red-400 hover:bg-red-500/10'
-                                    : 'text-red-600 hover:bg-red-50'
-                                    }`}
-                                >
-                                  <Trash2 className="w-4 h-4 opacity-70" />
-                                  Delete Chat for All
-                                </button>
-                              </>
-                            )}
-                          </div>
-                        </motion.div>
-                      )}
+                    <div className="cv-chat-header-actions">
+                      <button type="button" aria-label={t('chat_actions.refresh')} disabled={isRefreshingMessages || isLoadingMessages} onClick={handleRefreshMessages}><RefreshCw className={isRefreshingMessages ? 'animate-spin' : ''} /></button>
+                      <button type="button" aria-label={t('app.nav.more')} aria-expanded={openChatItemMenu === selectedChat} onClick={event => { if (selectedChat) { const box = event.currentTarget.getBoundingClientRect(); openListMenu(selectedChat, { x: box.left, y: box.bottom }); } }}><MoreVertical /></button>
                     </div>
                   </div>
                 </div>
 
+                {actionError && <div className="cv-chat-action-error" role="alert">{t('chat_actions.action_failed')}<button type="button" aria-label={t('app.close')} onClick={() => setActionError(false)}><X /></button></div>}
+                {selectedPrivateChat?.pinnedMessageId && <button type="button" className="cv-chat-pinned" onClick={() => scrollToMessage(selectedPrivateChat.pinnedMessageId!)}><TelegramIcon name="pin" /><span><strong>{t('chat_actions.pin')}</strong><small>{selectedPrivateChat.pinnedMessageText || t('messages.media')}</small></span></button>}
                 {/* Messages or Profile */}
                 <AnimatePresence mode="wait">
                   {showProfile && selectedPrivateChat ? (
@@ -3140,7 +2990,7 @@ const MessagesScreen: React.FC = () => {
                         ease: [0.4, 0, 0.2, 1]
                       }}
                       ref={null/*messagesContainerRef*/}
-                      className={`flex-1 flex flex-col p-3 sm:p-4 no-scrollbar min-h-0 overflow-hidden ${theme === 'dark'
+                      className={`cv-chat-wallpaper-host flex-1 flex flex-col p-3 sm:p-4 no-scrollbar min-h-0 overflow-hidden ${theme === 'dark'
                         ? 'cv-card-surface-muted'
                         : 'bg-[var(--cv-page-bg)]'
                         }`}
@@ -3150,13 +3000,10 @@ const MessagesScreen: React.FC = () => {
                         minHeight: 0,
                         overflowY: 'auto',
                         paddingBottom: otherUserTyping ? '0' : undefined,
-                        ...(isMobile && selectedChat && headerHeight > 0 && inputHeight > 0 ? {
-                          maxHeight: `calc(100% - ${inputHeight}px${otherUserTyping ? ' - 60px' : ''})`,
-                          height: `calc(100% - ${inputHeight}px${otherUserTyping ? ' - 60px' : ''})`,
-                        } : {})
+
                       }}
                     >
-                      <div className="flex-1 flex flex-col w-full max-w-4xl mx-auto min-h-0">
+                      <div className="cv-chat-messages flex-1 flex flex-col w-full max-w-4xl mx-auto min-h-0">
                         {isLoadingMessages ? (
                           <div className="flex flex-col gap-4 px-2 py-4 max-w-4xl mx-auto">
                             {/* Skeleton bubbles — alternating sides like a real conversation */}
@@ -3187,13 +3034,13 @@ const MessagesScreen: React.FC = () => {
                           </div>
                         ) : (
                           <div className="flex-1 min-h-0"> {/* Container for Virtuoso */}
-                            <Virtuoso
+                            {messages.length === 0 ? <EmptyConversation key={selectedChat} onGreeting={sticker => void handleSendMessage(sticker)} /> : <Virtuoso ref={messageListRef}
                               style={{ height: '100%' }}
                               data={messages}
                               initialTopMostItemIndex={messages.length - 1}
                               followOutput="auto"
                               itemContent={(index, msg) => (
-                                <div className="pb-3">
+                                <div className="cv-chat-message-row pb-3">
                                   {index === 0 && (
                                     <div className="flex justify-center my-6">
                                       <div className={`px-3 py-1 rounded-full border backdrop-blur-xl ${theme === 'dark' ? 'bg-white/[0.08] border-white/10' : 'bg-white/80 border-[var(--cv-inner-border)]'}`}>
@@ -3206,6 +3053,12 @@ const MessagesScreen: React.FC = () => {
                                   <MessageItem
                                     key={msg.id}
                                     msg={msg}
+                                    selected={selectedMessages.has(msg.id)}
+                                    selectionMode={selectedMessages.size > 0}
+                                    onSelect={toggleMessageSelection}
+                                    onReplyOpen={scrollToMessage}
+                                    groupFirst={!sameMessageGroup(messages[index - 1], msg)}
+                                    groupLast={!sameMessageGroup(msg, messages[index + 1])}
                                     theme={theme}
                                     nowMs={countdownNow}
                                     onContextMenu={handleMessageContextMenu}
@@ -3216,19 +3069,8 @@ const MessagesScreen: React.FC = () => {
                                   />
                                 </div>
                               )}
-                              components={{
-                                EmptyPlaceholder: () => (
-                                  <div className="flex items-center justify-center py-12">
-                                    <div className="text-center">
-                                      <MessageCircle className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-zinc-600' : 'text-brand'}`} />
-                                      <p className={`text-sm ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'}`}>
-                                        {t('messages.no_messages_yet')}
-                                      </p>
-                                    </div>
-                                  </div>
-                                )
-                              }}
-                            />
+
+                            />}
                           </div>
                         )}
 
@@ -3236,75 +3078,7 @@ const MessagesScreen: React.FC = () => {
                         {typeof document !== 'undefined' && createPortal(
                           <AnimatePresence>
                           {selectedMessageId && messageMenuPosition && (
-                          <motion.div
-                            ref={messageMenuRef}
-                            role="menu"
-                            aria-label={t('messages.message_actions', { defaultValue: 'Message actions' })}
-                            tabIndex={-1}
-                            initial={{ opacity: 0, scale: 0.94 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.94 }}
-                            transition={{ duration: 0.15, ease: 'easeOut' }}
-                            className={`message-context-menu fixed z-[1000] min-w-[180px] overflow-hidden rounded-xl shadow-2xl
-                              ${theme === 'dark'
-                                ? 'bg-zinc-900/95 border border-white/10 backdrop-blur-2xl'
-                                : 'bg-white/95 border border-[var(--cv-inner-border)] backdrop-blur-2xl'}`
-                            }
-                            style={{
-                              left: resolvedMessageMenuPosition?.x ?? 0,
-                              top: resolvedMessageMenuPosition?.y ?? 0,
-                              visibility: resolvedMessageMenuPosition ? 'visible' : 'hidden',
-                              transformOrigin: 'top center',
-                            }}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <div className="p-1.5">
-                              <button
-                                role="menuitem"
-                                onClick={() => handleDeleteMessage(selectedMessageId, false)}
-                                className={`w-full px-3 py-2.5 text-left text-sm flex items-center gap-3 rounded-lg transition-colors ${theme === 'dark'
-                                  ? 'text-gray-200 hover:bg-white/10'
-                                  : 'text-gray-700 hover:bg-black/5'
-                                  }`}
-                              >
-                                <Trash2 className="w-4 h-4 opacity-70" />
-                                <span className="font-medium">Delete for Me</span>
-                              </button>
-
-                              {messages.find(m => m.id === selectedMessageId)?.sender === 'me' && (
-                                <>
-                                  <div className={`my-1 h-px mx-1 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/5'}`} />
-                                  <button
-                                    role="menuitem"
-                                    onClick={() => handleDeleteMessage(selectedMessageId, true)}
-                                    className={`w-full px-3 py-2.5 text-left text-sm flex items-center gap-3 rounded-lg transition-colors ${theme === 'dark'
-                                      ? 'text-red-400 hover:bg-red-500/10'
-                                      : 'text-red-600 hover:bg-red-50'
-                                      }`}
-                                  >
-                                    <Trash2 className="w-4 h-4 opacity-70" />
-                                    <span className="font-medium">Delete for All</span>
-                                  </button>
-                                </>
-                              )}
-
-                              <div className={`my-1 h-px mx-1 ${theme === 'dark' ? 'bg-white/10' : 'bg-black/5'}`} />
-
-                              <button
-                                role="menuitem"
-                                onClick={() => {
-                                  closeMessageContextMenu();
-                                }}
-                                className={`w-full px-3 py-2.5 text-left text-sm flex items-center gap-3 rounded-lg transition-colors ${theme === 'dark'
-                                  ? 'text-gray-400 hover:bg-white/10'
-                                  : 'text-gray-500 hover:bg-black/5'
-                                  }`}
-                              >
-                                <X className="w-4 h-4 opacity-70" />
-                                <span className="font-medium">Cancel</span>
-                              </button>
-                            </div>
-                          </motion.div>
+                          <MessageActionsMenu ref={messageMenuRef} position={resolvedMessageMenuPosition} label={t('chat_actions.menu')} actions={messageActions} />
                           )}
                           </AnimatePresence>,
                           document.body
@@ -3351,7 +3125,9 @@ const MessagesScreen: React.FC = () => {
                 {!showProfile && (
                   <div
                     ref={inputContainerRef}
-                    className={`relative flex-shrink-0 border-t w-full p-3 transition-all duration-300 sm:p-4 ${theme === 'dark'
+                    data-selecting={selectedMessages.size > 0}
+                    onKeyDown={event => { if (event.key === 'Escape') { setShowComposerOptions(false); setShowEmojiPicker(false); } }}
+                    className={`cv-chat-composer relative flex-shrink-0 border-t w-full p-3 transition-all duration-300 sm:p-4 ${theme === 'dark'
                         ? 'cv-card-surface-soft border-white/10'
                         : 'border-[var(--cv-inner-border)] bg-white'
                       }`}
@@ -3364,85 +3140,15 @@ const MessagesScreen: React.FC = () => {
                       flexDirection: 'column'
                     }}
                   >
-                    <div className="mb-2 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-between">
-                      <button
-                        type="button"
-                        role="switch"
-                        aria-checked={viewOnceEnabled}
-                        aria-label={`${t('messages.view_once_label')}. ${t(viewOnceEnabled && !hasValidViewOncePhoto
-                          ? 'messages.view_once_requires_single_photo'
-                          : 'messages.view_once_description')}`}
-                        title={t(viewOnceEnabled && !hasValidViewOncePhoto
-                          ? 'messages.view_once_requires_single_photo'
-                          : 'messages.view_once_description')}
-                        onClick={handleViewOnceToggle}
-                        className={`group flex h-10 min-w-0 w-full items-center justify-between gap-2 rounded-xl border px-2.5 text-xs font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:w-auto ${viewOnceEnabled
-                          ? theme === 'dark'
-                            ? 'border-brand/30 bg-brand/12 text-brand'
-                            : 'border-brand bg-brand text-white'
-                          : theme === 'dark'
-                            ? 'border-white/10 bg-white/[0.045] text-zinc-300 hover:bg-white/[0.075]'
-                            : 'border-slate-200/80 bg-white/80 text-slate-600 hover:bg-white'
-                          }`}
-                      >
-                        <span className="flex min-w-0 items-center gap-2">
-                          <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg transition-colors ${viewOnceEnabled
-                            ? theme === 'dark' ? 'bg-brand/15 text-brand' : 'bg-brand text-white'
-                            : theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-500'
-                            }`}>
-                            <Eye className="h-3.5 w-3.5" aria-hidden="true" />
-                          </span>
-                          <span className="truncate text-left leading-none">{t('messages.view_once_label')}</span>
-                        </span>
-                        <span
-                          aria-hidden="true"
-                          className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition-colors duration-200 ${viewOnceEnabled
-                            ? 'bg-brand shadow-inner shadow-brand-hovered/15'
-                            : theme === 'dark' ? 'bg-white/15' : 'bg-slate-300'
-                            }`}
-                        >
-                          <span className={`block h-4 w-4 rounded-full bg-white shadow-[0_1px_3px_rgba(15,23,42,0.35)] transition-transform duration-200 ease-out ${viewOnceEnabled
-                            ? 'translate-x-4'
-                            : 'translate-x-0'
-                            }`} />
-                        </span>
-                      </button>
+                    {selectedMessages.size > 0 && <div className="cv-chat-selection-bar">
+                      <button type="button" aria-label={t('app.cancel')} onClick={() => setSelectedMessages(new Set())}><X /></button>
+                      <span>{t('chat_actions.selected', { count: selectedMessages.size })}</span>
+                      <button type="button" aria-label={t('chat_actions.copy')} disabled={!selectedMessageItems.some(item => item.text)} onClick={() => void copyMessages(selectedMessageItems)}><TelegramIcon name="copy" /></button>
+                      <button type="button" aria-label={t('chat_actions.forward')} disabled={!selectedMessageItems.every(canForwardMessage)} onClick={() => openForward(selectedMessageItems)}><TelegramIcon name="forward" /></button>
+                      <button type="button" data-danger="true" aria-label={t('messages.delete_message')} onClick={() => { setDeleteRequest(selectedMessageItems); setDeleteForAll(false); }}><TelegramIcon name="delete" /></button>
+                    </div>}
 
-                      <label
-                        title={t('messages.message_expiry_description')}
-                        className={`flex h-10 min-w-0 w-full items-center gap-2 rounded-xl border px-2.5 text-xs font-semibold transition-colors duration-200 sm:w-auto ${messageExpirySeconds > 0
-                          ? theme === 'dark'
-                            ? 'border-amber-300/25 bg-amber-400/10 text-amber-200'
-                            : 'border-amber-200 bg-amber-50 text-amber-800'
-                          : theme === 'dark'
-                            ? 'border-white/10 bg-white/[0.045] text-zinc-300'
-                            : 'border-slate-200/80 bg-white/80 text-slate-600'
-                          }`}
-                      >
-                        <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg ${messageExpirySeconds > 0
-                          ? theme === 'dark' ? 'bg-amber-300/15 text-amber-200' : 'bg-amber-100 text-amber-700'
-                          : theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-500'
-                          }`}>
-                          <Timer className="h-3.5 w-3.5" />
-                        </span>
-                        <span className="sr-only">{t('messages.message_expiry')}</span>
-                        <span className="relative flex min-w-0 flex-1 items-center sm:flex-none">
-                          <select
-                            value={messageExpirySeconds}
-                            onChange={(event) => setMessageExpirySeconds(Number(event.target.value) as MessageExpirySeconds)}
-                            aria-label={t('messages.message_expiry')}
-                            className="min-w-0 w-full cursor-pointer appearance-none truncate bg-transparent pr-5 text-xs font-semibold leading-none outline-none sm:w-[10.5rem]"
-                          >
-                            {MESSAGE_EXPIRY_OPTIONS.map((seconds) => (
-                              <option key={seconds} value={seconds} className="text-slate-950">
-                                {t(MESSAGE_EXPIRY_LABEL_KEYS[seconds])}
-                              </option>
-                            ))}
-                          </select>
-                          <ChevronDown className="pointer-events-none absolute right-0 h-3.5 w-3.5 opacity-60" aria-hidden="true" />
-                        </span>
-                      </label>
-                    </div>
+                    {showComposerOptions && <AttachmentMenu anchor={attachmentButtonRef.current?.closest<HTMLElement>('.cv-chat-compose-plate') || null} onClose={() => setShowComposerOptions(false)} onPhoto={() => fileInputRef.current?.click()} onVideo={() => videoInputRef.current?.click()} viewOnce={viewOnceEnabled} onViewOnce={handleViewOnceToggle} expiry={messageExpirySeconds} onExpiry={value => setMessageExpirySeconds(value as MessageExpirySeconds)} expiryOptions={MESSAGE_EXPIRY_OPTIONS} expiryLabel={value => t(MESSAGE_EXPIRY_LABEL_KEYS[value as MessageExpirySeconds])} />}
 
                     {/* Selected Media Preview */}
                     {(() => {
@@ -3504,106 +3210,39 @@ const MessagesScreen: React.FC = () => {
                         onChange={handleVideoUpload}
                         className="hidden"
                       />
-                      <div
-                        className={`flex w-full items-center gap-2 rounded-full border transition-all ${theme === 'dark'
-                          ? 'bg-white/[0.08] border-white/10 focus-within:border-brand/[0.35] focus-within:ring-2 focus-within:ring-brand/20'
-                          : 'bg-[var(--cv-surface-2)] border-[var(--cv-inner-border)] focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/15'
-                          } px-3 py-2 sm:py-2.5`}
-                      >
-                        <div className="flex items-center space-x-1">
-                          {/* Image Upload Button */}
-                          <motion.button
-                            onClick={() => fileInputRef.current?.click()}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            className={`p-1.5 rounded-full transition-all duration-200 ${selectedImages.length > 0
-                              ? theme === 'dark'
-                                ? 'bg-blue-500/15 text-blue-400'
-                                : 'bg-blue-50 text-blue-600'
-                              : theme === 'dark'
-                                ? 'hover:bg-white/10 text-zinc-400'
-                                : 'hover:bg-brand text-slate-600'
-                              }`}
-                          >
-                            <Image className="w-4 h-4" />
-                          </motion.button>
-                          {/* Video Upload Button */}
-                          <motion.button
-                            onClick={() => videoInputRef.current?.click()}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            className={`p-1.5 rounded-full transition-all duration-200 ${selectedVideos.length > 0
-                              ? theme === 'dark'
-                                ? 'bg-purple-500/15 text-purple-400'
-                                : 'bg-purple-50 text-purple-600'
-                              : theme === 'dark'
-                                ? 'hover:bg-white/10 text-zinc-400'
-                                : 'hover:bg-brand text-slate-600'
-                              }`}
-                          >
-                            <Video className="w-4 h-4" />
-                          </motion.button>
-                          {/* Emoji Picker Button */}
-                          <motion.button
-                            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            className={`p-1.5 rounded-full ${theme === 'dark' ? 'hover:bg-white/10 text-zinc-400' : 'hover:bg-brand text-slate-600'
-                              }`}
-                          >
-                            <Smile className="w-4 h-4" />
-                          </motion.button>
-                        </div>
-                        <input
-                          type="text"
+                      <div className="cv-chat-compose-plate">
+                        {(replyTo || editingMessage || pendingForward) && <div className="cv-chat-compose-helper" data-forwarding={!!pendingForward || undefined}>
+                          <span className="cv-chat-helper-icon"><TelegramIcon name={pendingForward ? 'forward' : editingMessage ? 'edit' : 'reply'} /></span>
+                          <div><strong>{pendingForward ? t('chat_actions.forwarded_message') : editingMessage ? t('chat_actions.editing') : t('chat_actions.reply_to', { name: replyTo?.sender === 'me' ? user?.displayname || user?.username : selectedPrivateChat?.name })}</strong><p>{pendingForward ? `${t('chat_actions.selected', { count: pendingForward.messages.length })} · ${pendingForward.messages[0]?.text || pendingForward.messages[0]?.emoticon?.emoji || t('messages.media')}` : (editingMessage || replyTo)?.text || (editingMessage || replyTo)?.emoticon?.emoji || t('messages.media')}</p></div>
+                          <button type="button" aria-label={t('app.cancel')} onClick={() => { setPendingForward(null); setReplyTo(null); if (editingMessage) setMessage(''); setEditingMessage(null); }}><X /></button>
+                        </div>}
+                      <div className="cv-chat-compose-field">
+                        <button ref={attachmentButtonRef} type="button" aria-label={t('messages.composer_options')} aria-expanded={showComposerOptions} aria-controls="chat-composer-options" onClick={() => { setShowComposerOptions(value => !value); setShowEmojiPicker(false); }} className="cv-chat-attach" disabled={!!pendingForward}>
+                          <TelegramIcon name="attach" />
+                        </button>
+                        <textarea
+                          ref={messageInputRef}
+                          rows={1}
                           value={message}
                           onChange={handleTyping}
-                          onKeyPress={handleKeyPress}
+                          onKeyDown={handleKeyPress}
+                          aria-label={t('messages.send_message_placeholder')}
                           placeholder={t('messages.send_message_placeholder')}
-                          className={`flex-1 bg-transparent border-0 text-sm focus:outline-none ${theme === 'dark' ? 'text-white placeholder-zinc-500' : 'text-slate-900 placeholder-slate-500'
-                            }`}
                         />
-                        <motion.button
-                          onClick={handleSendMessage}
-                          disabled={!message.trim() && selectedImages.length === 0 && selectedVideos.length === 0}
-                          whileTap={{ scale: 0.95 }}
-                          className={`flex-shrink-0 p-2 rounded-full transition-all ${(message.trim() || selectedImages.length > 0 || selectedVideos.length > 0)
-                            ? theme === 'dark'
-                              ? 'bg-brand text-zinc-950 hover:bg-brand shadow-[0_10px_24px_-14px_rgba(255,55,199,0.9)]'
-                              : 'bg-brand-hovered text-white hover:bg-brand-hovered shadow-[0_10px_24px_-14px_rgba(229,0,165,0.9)]'
-                            : theme === 'dark'
-                              ? 'bg-white/10 text-zinc-500 cursor-not-allowed'
-                              : 'bg-slate-200 text-slate-500 cursor-not-allowed'
-                            }`}
-                        >
-                          <Send className="w-4 h-4" />
-                        </motion.button>
+                        <button type="button" className="cv-chat-emoji-toggle" data-ripple="off" aria-label={t('messages.emoji')} ref={emojiButtonRef} aria-expanded={showEmojiPicker} onClick={() => { setShowEmojiPicker(value => !value); setShowComposerOptions(false); }}>
+                          <TelegramIcon name={showEmojiPicker ? 'keyboard' : 'smile'} />
+                        </button>
+                        <button type="button" className="cv-chat-send" aria-label={t(editingMessage ? 'chat_actions.save' : 'messages.send')} onClick={() => void handleSendMessage()} disabled={actionBusy || (!pendingForward && !message.trim() && selectedImages.length === 0 && selectedVideos.length === 0)}>
+                          <TelegramIcon name={editingMessage ? 'check' : 'logo'} />
+                        </button>
+                      </div>
                       </div>
                     </div>
 
-                    {/* Emoji Picker */}
-                    {showEmojiPicker && (
-                      <div className={`mt-2 p-3 rounded-2xl border backdrop-blur-2xl ${theme === 'dark' ? 'bg-zinc-900/[0.92] border-white/10' : 'bg-white/[0.92] border-[var(--cv-inner-border)]'
-                        }`}>
-                        <div className="grid grid-cols-8 gap-2">
-                          {emojis.map((emoji, index) => (
-                            <motion.button
-                              key={index}
-                              onClick={() => handleEmojiClick(emoji)}
-                              whileHover={{ scale: 1.2 }}
-                              whileTap={{ scale: 0.9 }}
-                              className={`p-2 text-lg rounded-full ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-brand'
-                                }`}
-                            >
-                              {emoji}
-                            </motion.button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+                    {showEmojiPicker && <React.Suspense fallback={null}><EmoticonPicker isOpen={showEmojiPicker} presentation="popover" anchor={emojiButtonRef.current?.closest<HTMLElement>('.cv-chat-compose-plate')} onBackspace={handleEmoticonBackspace} canBackspace={!!message} onClose={() => setShowEmojiPicker(false)} onSelect={handleEmoticonSelect} /></React.Suspense>}
                   </div>
                 )}
-              </motion.div>
+              </div>
             ) : (
               <motion.div
                 key="chat-list-placeholder"
@@ -3617,9 +3256,10 @@ const MessagesScreen: React.FC = () => {
                 className="flex-1 flex flex-col h-full w-full relative z-10 overflow-hidden"
               >
                 {!isMobile ? (
-                  <div className={`flex-1 flex items-center justify-center ${theme === 'dark' ? 'cv-card-surface-muted' : 'bg-[var(--cv-page-bg)]'
+                  <div className={`cv-chat-empty flex-1 flex items-center justify-center ${theme === 'dark' ? 'cv-card-surface-muted' : 'bg-[var(--cv-page-bg)]'
                     }`}>
-                    <div className="text-center px-4">
+                    <ChatWallpaper />
+                    <div className="cv-chat-empty-label text-center px-4">
                       <span className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
                         <MessageCircle className="h-7 w-7" strokeWidth={2} />
                       </span>
@@ -3632,9 +3272,21 @@ const MessagesScreen: React.FC = () => {
                 ) : null}
               </motion.div>
             )}
-          </AnimatePresence>
+          </>
         </div>
       </div>
+      {contextDialog && <FloatingContextMenu point={chatItemMenuPoint} label={`${contextDialog.name}: ${t('chat_actions.menu')}`} actions={dialogActions} onClose={() => setOpenChatItemMenu(null)} />}
+      <Sheet isOpen={!!chatRequest} onClose={() => { if (!actionBusy) setChatRequest(null); }} className="cv-chat-confirm popup-peer" leading={chatRequest && <span className="cv-confirm-avatar">{chatRequest.chat.avatar ? <img src={chatRequest.chat.avatar} alt="" /> : chatRequest.chat.name.charAt(0).toLocaleUpperCase()}</span>} hideCloseButton title={t(chatRequest?.kind === 'clear' ? 'chat_actions.clear_history' : 'messages.delete_chat')} variant="alert" actions={<><button type="button" className="cv-confirm-cancel" disabled={actionBusy} onClick={() => setChatRequest(null)}>{t('app.cancel')}</button><button type="button" className="cv-confirm-danger" disabled={actionBusy} onClick={() => void confirmChatRequest()}>{t(chatRequest?.kind === 'clear' ? 'chat_actions.clear_history' : 'messages.delete_chat')}</button></>}>
+        <p>{t(chatRequest?.kind === 'clear' ? 'chat_actions.clear_confirm' : 'chat_actions.delete_chat_confirm')}</p><p className="cv-confirm-peer"><strong><bdi>{chatRequest?.chat.name}</bdi></strong></p>
+        {chatRequest?.chat.canManage && <ListRow title={t('chat_actions.delete_for_all')} accessory={<Switch className="cv-chat-setting-switch" checked={chatRequestForAll} onChange={setChatRequestForAll} disabled={actionBusy} aria-label={t('chat_actions.delete_for_all')} />} />}
+        {actionError && <p role="alert">{t('chat_actions.action_failed')}</p>}
+      </Sheet>
+      <Sheet isOpen={deleteRequest.length > 0} onClose={() => { if (!actionBusy) setDeleteRequest([]); }} title={t('messages.delete_message')} className="cv-chat-confirm popup-peer" hideCloseButton variant="alert" actions={<><button type="button" className="cv-confirm-cancel" disabled={actionBusy} onClick={() => setDeleteRequest([])}>{t('app.cancel')}</button><button type="button" className="cv-confirm-danger" disabled={actionBusy} onClick={() => void confirmDeleteMessages()}>{t(deleteForAll ? 'chat_actions.delete_for_all' : 'chat_actions.delete_for_me')}</button></>}>
+        <p>{t('chat_actions.delete_confirm')}</p><p>{t('chat_actions.selected', { count: deleteRequest.length })}</p>
+        {deleteRequest.every(item => item.sender === 'me') && <ListRow title={t('chat_actions.delete_for_all')} accessory={<Switch className="cv-chat-setting-switch" checked={deleteForAll} onChange={setDeleteForAll} disabled={actionBusy} aria-label={t('chat_actions.delete_for_all')} />} />}
+        {actionError && <p role="alert">{t('chat_actions.action_failed')}</p>}
+      </Sheet>
+      {forwardMessages.length > 0 && <ForwardPicker chats={chatsList} messages={forwardMessages} onClose={() => { if (!forwardingBusyRef.current) setForwardMessages([]); }} onOpenChat={stageForward} onSend={forwardToMany} />}
       {displayedViewerKey && displayedViewerItems.length > 0 && displayedViewerIndex >= 0 && (
         <ChatMediaViewer
           key={displayedViewerKey}

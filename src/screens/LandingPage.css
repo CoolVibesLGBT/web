@@ -13,12 +13,8 @@
   overscroll-behavior: contain;
   background: var(--landing-bg);
   color: var(--landing-text);
-  font-family:
-    'Basel Grotesk',
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-  font-weight: 485;
+  font-family: var(--font-sans);
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   user-select: text;
   scroll-padding-top: 85px;
@@ -46,7 +42,7 @@
 }
 .cv-landing h1,
 .cv-landing h2 {
-  font-weight: 485;
+  font-weight: 600;
 }
 .cv-landing button {
   font: inherit;
@@ -109,8 +105,8 @@
   border: 0;
   background: none;
   color: var(--landing-text);
-  font-size: 28px !important;
-  font-weight: 535 !important;
+  font-size: 1.647rem !important;
+  font-weight: 600 !important;
   letter-spacing: -1.4px;
   white-space: nowrap;
 }
@@ -146,7 +142,7 @@
   border: 0;
   background: none;
   color: var(--landing-muted);
-  font-size: 13px;
+  font-size: 0.765rem;
 }
 .cv-landing-nav button:hover {
   color: var(--landing-pink);
@@ -165,7 +161,7 @@
   border-radius: 50px;
   background: var(--landing-bg);
   color: var(--landing-muted);
-  font-size: 10px !important;
+  font-size: 0.765rem !important;
 }
 .cv-landing-language img {
   width: 19px;
@@ -205,8 +201,8 @@
   padding: 13px 20px;
   color: var(--landing-pink);
   background: var(--landing-pink-soft);
-  font-size: 12px !important;
-  font-weight: 535 !important;
+  font-size: 0.765rem !important;
+  font-weight: 600 !important;
   white-space: nowrap;
 }
 .cv-landing-login:hover {
@@ -282,7 +278,7 @@
   background: #ffffff08;
   padding: 9px 12px;
   color: #ffeff9dd;
-  font-size: 11px;
+  font-size: 0.765rem;
 }
 .cv-landing-hero h1 {
   font-size: clamp(54px, 5vw, 76px);
@@ -295,7 +291,7 @@
   color: #ffa2df;
 }
 .cv-landing-hero-description {
-  font-size: 16px;
+  font-size: 0.941rem;
   line-height: 1.85;
   color: #fff0f9d6;
   margin-top: 24px !important;
@@ -310,8 +306,8 @@
   padding: 17px 26px;
   border: 0;
   border-radius: 50px;
-  font-size: 14px !important;
-  font-weight: 535 !important;
+  font-size: 0.824rem !important;
+  font-weight: 600 !important;
 }
 .cv-landing-button-primary {
   color: white;
@@ -332,7 +328,7 @@
   gap: 8px;
   margin-top: 21px !important;
   color: #fff1f9b8;
-  font-size: 10px;
+  font-size: 0.765rem;
 }
 .cv-landing-hero-note svg {
   color: #ffc1e9;
@@ -342,7 +338,7 @@
   padding: 2px 4px;
   border: 1px solid #ffffff40;
   border-radius: 5px;
-  font-size: 9px;
+  font-size: 0.765rem;
   margin-inline-start: 3px;
 }
 .cv-landing-hero-bottom {
@@ -352,7 +348,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 10px;
+  font-size: 0.765rem;
   color: #fff3fae0;
 }
 .cv-landing-hero-bottom button {
@@ -361,7 +357,7 @@
   gap: 12px;
   border: 0;
   background: none;
-  font-size: 11px;
+  font-size: 0.765rem;
 }
 .cv-landing-hero-bottom > span {
   display: inline-flex;
@@ -393,7 +389,7 @@
   border: 0;
   border-inline-end: 1px solid var(--landing-line);
   padding: 15px 10px;
-  font-size: 12px;
+  font-size: 0.765rem;
 }
 .cv-landing-explore-bar button:last-child {
   border: 0;
@@ -413,7 +409,7 @@
   align-items: center;
   gap: 8px;
   color: var(--landing-pink);
-  font-size: 12px;
+  font-size: 0.765rem;
   margin-bottom: 21px !important;
 }
 .cv-landing-introduction {
@@ -427,7 +423,7 @@
 .cv-landing-introduction h2,
 .cv-landing-section-copy h2,
 .cv-landing-faq h2 {
-  font-size: 42px;
+  font-size: 2.471rem;
   line-height: 1.15;
   letter-spacing: -1.8px;
   text-wrap: balance;
@@ -437,7 +433,7 @@
   color: var(--landing-muted);
 }
 .cv-landing-introduction > p {
-  font-size: 14px;
+  font-size: 0.824rem;
   line-height: 1.85;
   color: var(--landing-muted);
   padding-bottom: 3px;
@@ -461,16 +457,16 @@
   min-width: 0;
 }
 .cv-landing-section-copy h2 {
-  font-size: 38px;
+  font-size: 2.235rem;
 }
 .cv-landing-section-lead {
-  font-size: 15px;
+  font-size: 0.882rem;
   line-height: 1.8;
   color: var(--landing-muted);
   margin-top: 23px !important;
 }
 .cv-landing-section-detail {
-  font-size: 13px;
+  font-size: 0.765rem;
   line-height: 1.9;
   color: var(--landing-muted);
   margin-top: 14px !important;
@@ -482,7 +478,7 @@
   list-style: none;
   padding: 0;
   margin: 25px 0 0;
-  font-size: 12px;
+  font-size: 0.765rem;
   line-height: 1.6;
 }
 .cv-landing-section-points li {
@@ -505,8 +501,8 @@
   background: var(--landing-pink-soft);
   color: var(--landing-pink);
   margin-top: 28px;
-  font-size: 12px !important;
-  font-weight: 535 !important;
+  font-size: 0.765rem !important;
+  font-weight: 600 !important;
 }
 .cv-landing-text-link:hover {
   background: color-mix(in srgb, var(--landing-pink) 15%, var(--landing-bg));
@@ -540,7 +536,7 @@
   gap: 6px;
   bottom: 15px;
   inset-inline-start: 15px;
-  font-size: 10px;
+  font-size: 0.765rem;
   border: 1px solid #ffffff55;
   padding: 8px 11px;
   border-radius: 50px;
@@ -551,7 +547,7 @@
 .cv-landing-city-label > span {
   opacity: 0.65;
   margin-inline-start: 3px;
-  font-size: 9px;
+  font-size: 0.765rem;
 }
 .has-demo .cv-landing-section-visual {
   padding-bottom: 190px;
@@ -569,7 +565,7 @@
   box-shadow: 0 12px 45px #3e1f4b12;
 }
 .cv-landing-safety .cv-landing-section-copy h2 {
-  font-size: 35px;
+  font-size: 2.059rem;
 }
 .cv-landing-faq {
   display: grid;
@@ -580,7 +576,7 @@
 }
 .cv-landing-faq > div > p:last-child {
   color: var(--landing-muted);
-  font-size: 14px;
+  font-size: 0.824rem;
   margin-top: 20px;
 }
 .cv-landing-faq-list details {
@@ -594,7 +590,7 @@
   padding: 22px 0;
   cursor: pointer;
   list-style: none;
-  font-size: 15px;
+  font-size: 0.882rem;
 }
 .cv-landing-faq-list summary::-webkit-details-marker {
   display: none;
@@ -611,7 +607,7 @@
   transform: rotate(180deg);
 }
 .cv-landing-faq-list details > p {
-  font-size: 13px;
+  font-size: 0.765rem;
   line-height: 1.9;
   color: var(--landing-muted);
   padding: 0 20px 22px 0;
@@ -648,7 +644,7 @@
 .cv-landing-final .cv-landing-kicker {
   justify-content: center;
   color: var(--landing-muted);
-  font-size: 12px;
+  font-size: 0.765rem;
 }
 .cv-landing-final h2 {
   font-size: clamp(40px, 7vw, 80px);
@@ -661,7 +657,7 @@
 .cv-landing-final > p:not(.cv-landing-kicker) {
   margin-top: 18px;
   color: var(--landing-muted);
-  font-size: 15px;
+  font-size: 0.882rem;
 }
 .cv-landing-final .cv-landing-button {
   margin-top: 28px;
@@ -669,7 +665,7 @@
 .cv-landing-final small {
   display: block;
   margin-top: 18px;
-  font-size: 10px;
+  font-size: 0.765rem;
   color: var(--landing-muted);
 }
 .cv-landing-footer {
@@ -684,12 +680,12 @@
   padding-bottom: 32px;
 }
 .cv-landing-footer .cv-landing-brand {
-  font-size: 24px !important;
+  font-size: 1.412rem !important;
 }
 .cv-landing-footer-main > div > p {
   color: var(--landing-muted);
   margin-top: 8px;
-  font-size: 11px;
+  font-size: 0.765rem;
 }
 .cv-landing-footer nav {
   display: flex;
@@ -701,7 +697,7 @@
   border: 0;
   background: none;
   color: var(--landing-muted);
-  font-size: 11px;
+  font-size: 0.765rem;
 }
 .cv-landing-footer nav button:hover {
   color: var(--landing-pink);
@@ -713,7 +709,7 @@
   background: none;
   border: 0;
   color: var(--landing-pink);
-  font-size: 11px !important;
+  font-size: 0.765rem !important;
 }
 .cv-landing-footer-bottom {
   display: flex;
@@ -723,7 +719,7 @@
   border-top: 1px solid var(--landing-line);
   padding-top: 20px;
   color: var(--landing-muted);
-  font-size: 10px;
+  font-size: 0.765rem;
 }
 .cv-landing-footer-bottom > span:last-child {
   display: inline-flex;
@@ -759,13 +755,13 @@
     gap: 15px;
   }
   .cv-landing-header .cv-landing-brand {
-    font-size: 25px !important;
+    font-size: 1.471rem !important;
   }
   .cv-landing-nav {
     gap: 17px;
   }
   .cv-landing-nav button {
-    font-size: 11px;
+    font-size: 0.765rem;
   }
   .cv-landing-header-actions {
     gap: 7px;
@@ -786,10 +782,10 @@
     max-width: 490px;
   }
   .cv-landing-hero h1 {
-    font-size: 60px;
+    font-size: 3.529rem;
   }
   .cv-landing-hero-description {
-    font-size: 14px;
+    font-size: 0.824rem;
     max-width: 380px;
   }
   .cv-landing-hero-bottom {
@@ -800,14 +796,14 @@
     padding-block: 65px;
   }
   .cv-landing-section-copy h2 {
-    font-size: 33px;
+    font-size: 1.941rem;
   }
   .cv-landing-introduction h2,
   .cv-landing-faq h2 {
-    font-size: 37px;
+    font-size: 2.176rem;
   }
   .cv-landing-safety .cv-landing-section-copy h2 {
-    font-size: 31px;
+    font-size: 1.824rem;
   }
   .cv-landing-product-demo {
     inset-inline-end: -5px;
@@ -832,7 +828,7 @@
     gap: 10px;
   }
   .cv-landing-header .cv-landing-brand {
-    font-size: 24px !important;
+    font-size: 1.412rem !important;
   }
   .cv-landing-header-actions {
     gap: 6px;
@@ -850,7 +846,7 @@
   }
   .cv-landing-login {
     padding: 10px 12px;
-    font-size: 11px !important;
+    font-size: 0.765rem !important;
   }
   .cv-landing-login > svg {
     display: none;
@@ -876,7 +872,7 @@
     box-shadow: 0 12px 20px #35163708;
   }
   .cv-landing-nav.is-open button {
-    font-size: 14px;
+    font-size: 0.824rem;
   }
   .cv-landing-hero {
     min-height: 790px;
@@ -901,7 +897,7 @@
     max-width: 500px;
   }
   .cv-landing-eyebrow {
-    font-size: 9px;
+    font-size: 0.765rem;
     padding: 8px 10px;
   }
   .cv-landing-hero h1 {
@@ -909,36 +905,36 @@
     margin-top: 23px;
   }
   .cv-landing-hero-description {
-    font-size: 13px;
+    font-size: 0.765rem;
     margin-top: 21px !important;
     max-width: 360px;
   }
   .cv-landing-button {
     padding: 16px 23px;
-    font-size: 13px !important;
+    font-size: 0.765rem !important;
     gap: 21px;
   }
   .cv-landing-hero .cv-landing-button {
     margin-top: 23px;
   }
   .cv-landing-hero-note {
-    font-size: 8px;
+    font-size: 0.765rem;
     gap: 6px;
     margin-top: 19px !important;
   }
   .cv-landing-hero-note > span {
-    font-size: 7px;
+    font-size: 0.765rem;
   }
   .cv-landing-hero-bottom {
     bottom: 20px;
     inset-inline: 24px;
   }
   .cv-landing-hero-bottom button {
-    font-size: 9px;
+    font-size: 0.765rem;
     gap: 8px;
   }
   .cv-landing-hero-bottom > span {
-    font-size: 9px;
+    font-size: 0.765rem;
     padding: 7px 9px;
   }
   .cv-landing-explore-bar > div {
@@ -948,7 +944,7 @@
   }
   .cv-landing-explore-bar button {
     justify-content: flex-start;
-    font-size: 10px;
+    font-size: 0.765rem;
     gap: 7px;
     padding: 12px 10px;
   }
@@ -966,14 +962,14 @@
   }
   .cv-landing-introduction h2,
   .cv-landing-faq h2 {
-    font-size: 34px;
+    font-size: 2.0rem;
     letter-spacing: -1.4px;
   }
   .cv-landing-introduction > p {
-    font-size: 13px;
+    font-size: 0.765rem;
   }
   .cv-landing-kicker {
-    font-size: 11px;
+    font-size: 0.765rem;
     margin-bottom: 18px !important;
   }
   .cv-landing-product-section,
@@ -988,18 +984,18 @@
     order: 0;
   }
   .cv-landing-section-copy h2 {
-    font-size: 34px;
+    font-size: 2.0rem;
     letter-spacing: -1.35px;
   }
   .cv-landing-section-lead {
-    font-size: 14px;
+    font-size: 0.824rem;
     margin-top: 20px !important;
   }
   .cv-landing-section-detail {
-    font-size: 13px;
+    font-size: 0.765rem;
   }
   .cv-landing-section-points {
-    font-size: 12px;
+    font-size: 0.765rem;
     gap: 11px;
     margin-top: 22px;
   }
@@ -1012,7 +1008,7 @@
   .cv-landing-city-label {
     bottom: 12px;
     inset-inline-start: 12px;
-    font-size: 9px;
+    font-size: 0.765rem;
   }
   .has-demo .cv-landing-section-visual {
     padding-bottom: 0;
@@ -1030,7 +1026,7 @@
     top: 12px;
   }
   .cv-landing-safety .cv-landing-section-copy h2 {
-    font-size: 31px;
+    font-size: 1.824rem;
   }
   .cv-landing-faq {
     grid-template-columns: 1fr;
@@ -1039,17 +1035,17 @@
     padding-bottom: 55px;
   }
   .cv-landing-faq-list summary {
-    font-size: 14px;
+    font-size: 0.824rem;
     padding-block: 21px;
   }
   .cv-landing-final {
     padding: 55px 22px 65px;
   }
   .cv-landing-final .cv-landing-kicker {
-    font-size: 10px;
+    font-size: 0.765rem;
   }
   .cv-landing-final small {
-    font-size: 9px;
+    font-size: 0.765rem;
   }
   .cv-landing-footer {
     padding-top: 30px;
@@ -1065,13 +1061,13 @@
     gap: 14px 18px;
   }
   .cv-landing-footer nav button {
-    font-size: 10px;
+    font-size: 0.765rem;
   }
   .cv-landing-footer-bottom {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-    font-size: 9px;
+    font-size: 0.765rem;
   }
 }
 @media (max-width: 390px) {
@@ -1080,7 +1076,7 @@
     gap: 8px;
   }
   .cv-landing-header .cv-landing-brand {
-    font-size: 21px !important;
+    font-size: 1.235rem !important;
     gap: 4px;
   }
   .cv-landing-mark {
@@ -1107,28 +1103,28 @@
     padding: 43px 20px 325px;
   }
   .cv-landing-hero h1 {
-    font-size: 40px;
+    font-size: 2.353rem;
   }
   .cv-landing-hero-description {
-    font-size: 12px;
+    font-size: 0.765rem;
   }
   .cv-landing-hero-note {
-    font-size: 7px;
+    font-size: 0.765rem;
   }
   .cv-landing-section-copy h2 {
-    font-size: 30px;
+    font-size: 1.765rem;
   }
   .cv-landing-introduction h2 {
-    font-size: 31px;
+    font-size: 1.824rem;
   }
   .cv-landing-safety .cv-landing-section-copy h2 {
-    font-size: 29px;
+    font-size: 1.706rem;
   }
   .cv-landing-product-demo {
     width: calc(100% - 12px);
   }
   .cv-landing-preview-tabs button {
-    font-size: 10px !important;
+    font-size: 0.765rem !important;
     gap: 4px !important;
   }
 }
@@ -1171,7 +1167,7 @@
   padding: 11px 4px;
   border: 0;
   border-radius: 13px;
-  font-size: 12px;
+  font-size: 0.765rem;
   color: var(--landing-muted);
   background: transparent;
 }
@@ -1188,7 +1184,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 12px;
+  font-size: 0.765rem;
   margin-bottom: 12px;
 }
 .cv-landing-preview-heading svg {
@@ -1230,10 +1226,10 @@
   left: 10px;
   z-index: 1;
   color: #fff;
-  font-size: 12px;
+  font-size: 0.765rem;
 }
 .cv-landing-mini-profile small {
-  font-size: 9px;
+  font-size: 0.765rem;
   display: flex;
   align-items: center;
   gap: 3px;
@@ -1252,7 +1248,7 @@
   border: 0;
   border-radius: 12px;
   padding: 13px 8px;
-  font-size: 12px !important;
+  font-size: 0.765rem !important;
 }
 .cv-landing-preview-action:hover {
   background: color-mix(in srgb, var(--landing-pink) 16%, var(--landing-bg));
@@ -1262,7 +1258,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  font-size: 9px;
+  font-size: 0.765rem;
   color: var(--landing-muted);
   padding: 7px 0 4px;
 }
@@ -1290,11 +1286,11 @@
   padding-top: 5px;
 }
 .cv-landing-match-copy strong {
-  font-weight: 535;
-  font-size: 18px;
+  font-weight: 600;
+  font-size: 1.059rem;
 }
 .cv-landing-match-copy p {
-  font-size: 12px;
+  font-size: 0.765rem;
   color: var(--landing-muted);
   margin-top: 6px;
   line-height: 1.5;
@@ -1303,7 +1299,7 @@
   display: block;
   margin-top: 7px;
   color: var(--landing-pink);
-  font-size: 9px;
+  font-size: 0.765rem;
 }
 .cv-landing-match-actions {
   display: flex;
@@ -1331,7 +1327,7 @@
 .cv-landing-demo-feedback {
   grid-column: span 2;
   text-align: center;
-  font-size: 11px;
+  font-size: 0.765rem;
   color: var(--landing-muted);
   margin-top: 10px;
 }
@@ -1342,7 +1338,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  font-size: 0.765rem;
   margin-bottom: 12px;
 }
 .cv-landing-chat-person .cv-landing-character {
@@ -1354,7 +1350,7 @@
 .cv-landing-chat-person small {
   display: block;
   color: var(--landing-muted);
-  font-size: 9px;
+  font-size: 0.765rem;
   margin-top: 2px;
 }
 .cv-landing-chat-person > svg {
@@ -1366,7 +1362,7 @@
   background: var(--landing-soft);
   border-radius: 10px 10px 10px 3px;
   padding: 9px 11px;
-  font-size: 10px;
+  font-size: 0.765rem;
   margin-top: 7px !important;
 }
 .cv-landing-chat-bubble.is-own {
@@ -1385,7 +1381,7 @@
   background: transparent;
   border: 1px solid var(--landing-line);
   border-radius: 11px;
-  font-size: 10px !important;
+  font-size: 0.765rem !important;
   color: var(--landing-muted);
 }
 .cv-landing-chat-input svg {
@@ -1422,7 +1418,7 @@
   backdrop-filter: blur(16px);
 }
 .cv-landing-explore-bar button {
-  font-size: 13px;
+  font-size: 0.765rem;
 }
 .cv-landing-product-sections.cv-landing-container {
   width: 100%;
@@ -1451,15 +1447,15 @@
   letter-spacing: -0.04em;
 }
 .cv-landing-section-lead {
-  font-size: 16px;
+  font-size: 0.941rem;
   line-height: 1.85;
 }
 .cv-landing-section-detail {
-  font-size: 14px;
+  font-size: 0.824rem;
   line-height: 1.85;
 }
 .cv-landing-section-points {
-  font-size: 13px;
+  font-size: 0.765rem;
   gap: 13px;
 }
 .cv-landing-section-visual {
@@ -1481,10 +1477,10 @@
   top: 24px;
   inset-inline-start: 24px;
   padding: 10px 14px;
-  font-size: 12px;
+  font-size: 0.765rem;
 }
 .cv-landing-city-label > span {
-  font-size: 10px;
+  font-size: 0.765rem;
   margin-inline-start: 7px;
 }
 .has-demo .cv-landing-section-visual {
@@ -1514,16 +1510,16 @@
     padding: 60px 36px;
   }
   .cv-landing-section-copy h2 {
-    font-size: 34px;
+    font-size: 2.0rem;
   }
   .cv-landing-section-lead {
-    font-size: 14px;
+    font-size: 0.824rem;
   }
   .cv-landing-section-detail {
-    font-size: 13px;
+    font-size: 0.765rem;
   }
   .cv-landing-section-points {
-    font-size: 12px;
+    font-size: 0.765rem;
   }
   .cv-landing-product-demo {
     width: 310px;
@@ -1545,7 +1541,7 @@
   .cv-landing-explore-bar button {
     flex: 0 0 auto;
     padding: 12px 16px;
-    font-size: 10px;
+    font-size: 0.765rem;
   }
   .cv-landing-explore-bar button:nth-child(even) {
     border-inline-end: 1px solid var(--landing-line);
@@ -1565,13 +1561,13 @@
     padding: 47px 24px 35px;
   }
   .cv-landing-section-copy h2 {
-    font-size: 35px;
+    font-size: 2.059rem;
   }
   .cv-landing-section-lead {
-    font-size: 14px;
+    font-size: 0.824rem;
   }
   .cv-landing-section-detail {
-    font-size: 13px;
+    font-size: 0.765rem;
   }
   .cv-landing-section-visual {
     min-height: 0;
@@ -1586,7 +1582,7 @@
   .cv-landing-city-label {
     top: 15px;
     inset-inline-start: 15px;
-    font-size: 10px;
+    font-size: 0.765rem;
   }
   .has-demo .cv-landing-section-visual {
     padding-bottom: 32px;
@@ -1599,7 +1595,7 @@
     margin: -20px auto 0;
   }
   .cv-landing-safety .cv-landing-section-copy h2 {
-    font-size: 31px;
+    font-size: 1.824rem;
   }
   .cv-landing-faq {
     padding-top: 55px;
@@ -1610,9 +1606,9 @@
     padding-inline: 22px;
   }
   .cv-landing-section-copy h2 {
-    font-size: 31px;
+    font-size: 1.824rem;
   }
   .cv-landing-safety .cv-landing-section-copy h2 {
-    font-size: 29px;
+    font-size: 1.706rem;
   }
 }

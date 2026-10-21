@@ -100,7 +100,7 @@ const PremiumScreen: React.FC = () => {
               <Crown className="h-4 w-4" />
               {t('premium.badge', { defaultValue: 'Premium' })}
             </div>
-            <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl">
+            <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
               {t('premium.title', { defaultValue: 'Upgrade to CoolVibes Premium' })}
             </h1>
             <p className={`mt-3 max-w-2xl text-sm sm:text-base ${dark ? 'text-white/75' : 'text-black/70'}`}>
@@ -169,7 +169,7 @@ const PremiumScreen: React.FC = () => {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-sm font-semibold">{activePlan.badge}</p>
-                  <p className="mt-2 text-3xl font-black leading-none">
+                  <p className="mt-2 text-3xl font-semibold leading-none">
                     {activePlan.price}
                     <span className={`ml-1 text-sm font-medium ${dark ? 'text-white/70' : 'text-black/65'}`}>
                       {activePlan.cadence}
@@ -177,7 +177,7 @@ const PremiumScreen: React.FC = () => {
                   </p>
                 </div>
                 {activePlan.save && (
-                  <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${dark ? 'bg-emerald-400/15 text-emerald-200' : 'bg-emerald-500/10 text-emerald-700'}`}>
+                  <span className={`rounded-full px-2.5 py-1 text-[0.765rem] font-semibold ${dark ? 'bg-emerald-400/15 text-emerald-200' : 'bg-emerald-500/10 text-emerald-700'}`}>
                     {activePlan.save}
                   </span>
                 )}
@@ -218,7 +218,7 @@ const PremiumScreen: React.FC = () => {
               {t('premium.manage', { defaultValue: 'Manage plan later' })}
             </button>
 
-            <div className={`mt-4 flex items-start gap-2 rounded-xl border p-3 text-[11px] leading-relaxed ${dark ? 'cv-card-surface-muted border-white/10 text-white/70' : 'border-black/10 bg-white text-black/65'}`}>
+            <div className={`mt-4 flex items-start gap-2 rounded-xl border p-3 text-[0.765rem] leading-relaxed ${dark ? 'cv-card-surface-muted border-white/10 text-white/70' : 'border-black/10 bg-white text-black/65'}`}>
               <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0" />
               <p>
                 {t('premium.note', {

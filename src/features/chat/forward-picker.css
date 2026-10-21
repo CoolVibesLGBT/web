@@ -1,0 +1,83 @@
+/* tweb _forward.scss: 420px / 80%; _popup.scss: 40px radius / 56px header.
+   Native dialog retains focus containment, inert background and Escape. */
+.cv-sheet.cv-forward-picker { max-width: none; --tg-forward-unit: .9411764706rem; font-size: var(--tg-forward-unit); width: min(420px, calc(100vw - 60px)); height: min(80dvh, calc(var(--tg-forward-unit) * 50)); max-height: calc(var(--cv-viewport-height, 100dvh) - 24px); margin: auto; border-radius: calc(var(--tg-forward-unit) * 2.5); background: var(--cv-page-bg); color: var(--cv-neutral-1); border: 0; box-shadow: none; overflow: hidden; }
+.cv-forward-picker::backdrop { background: rgb(0 0 0 / 30%); }
+.cv-forward-picker > .cv-sheet-header { position: relative; height: calc(var(--tg-forward-unit) * 3.5); min-height: calc(var(--tg-forward-unit) * 3.5); padding: 0 var(--tg-forward-unit); gap: calc(var(--tg-forward-unit) * 1); justify-content: flex-start; border: 0; background: var(--cv-page-bg); }
+.cv-forward-picker > .cv-sheet-header h2 { flex: 1; min-width: 0; font-size: calc(var(--tg-forward-unit) * 1.25); font-weight: 500; line-height: 1.3; letter-spacing: 0; }
+.cv-forward-picker > .cv-sheet-header > .cv-icon-button { order: -1; border-radius: 50%; width: 44px; height: 44px; color: var(--cv-neutral-2); margin-inline-start: calc(var(--tg-forward-unit) * -.5); }
+.cv-forward-select-toggle { display: grid; place-items: center; flex: 0 0 44px; width: 44px; height: 44px; border: 0; border-radius: 50%; color: var(--cv-neutral-2); background: transparent; }
+.cv-forward-select-toggle:hover { background: var(--cv-telegram-row-hover); }
+.cv-forward-select-toggle svg { width: calc(var(--tg-forward-unit) * 1.5); height: calc(var(--tg-forward-unit) * 1.5); }
+.cv-forward-picker > .cv-sheet-body { display: flex; flex: 1; min-height: 0; padding: 0; overflow: hidden; }
+.cv-forward-selector { width: 100%; min-width: 0; display: flex; flex: 1; flex-direction: column; min-height: 0; }
+.cv-forward-search-section { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: calc(var(--tg-forward-unit) * .5625); min-height: calc(var(--tg-forward-unit) * 3); max-height: calc(var(--tg-forward-unit) * 8.25); padding: calc(var(--tg-forward-unit) * .5625) calc(var(--tg-forward-unit) * 1); overflow-y: auto; background: var(--cv-card-bg-solid); margin: 0 var(--tg-forward-unit) var(--tg-forward-unit); border-radius: calc(var(--tg-forward-unit) * 1.5); box-shadow: var(--cv-telegram-section-shadow); z-index: 1; }
+.cv-forward-search-label { display: flex; align-items: center; gap: calc(var(--tg-forward-unit) * .5); min-width: calc(var(--tg-forward-unit) * 7); flex: 1; color: var(--cv-neutral-2); }
+.cv-forward-search-label > svg { width: calc(var(--tg-forward-unit) * 1.375); flex-shrink: 0; }
+.cv-forward-picker .cv-forward-search { appearance: none; flex: 1; min-width: 0; width: 100%; height: calc(var(--tg-forward-unit) * 2.25); min-height: calc(var(--tg-forward-unit) * 2.25); margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--cv-neutral-1); font: inherit; line-height: 1.3; }
+.cv-forward-picker .cv-forward-search:is(:focus,:focus-visible) { border: 0; outline: none; box-shadow: none; }
+.cv-forward-picker .cv-forward-search::placeholder { color: var(--cv-neutral-2); opacity: 1; }
+.cv-forward-top-peers { flex: 0 0 auto; display: flex; gap: 0; padding: 0; margin: 0 var(--tg-forward-unit) var(--tg-forward-unit); background: var(--cv-card-bg-solid); border-radius: calc(var(--tg-forward-unit) * 1.5); box-shadow: var(--cv-telegram-section-shadow); overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; }
+.cv-forward-top-peer { display: flex; flex: 0 0 calc(var(--tg-forward-unit) * 4.875); flex-direction: column; align-items: center; gap: calc(var(--tg-forward-unit) * .375); justify-content: center; min-height: calc(var(--tg-forward-unit) * 6.125); width: calc(var(--tg-forward-unit) * 4.875); min-width: 44px; padding: calc(var(--tg-forward-unit) * .25); border-radius: var(--tg-forward-unit); background: transparent; border: 0; color: var(--cv-neutral-1); font: inherit; font-size: calc(var(--tg-forward-unit) * .75); line-height: 1.25; }
+.cv-forward-top-peer > span:last-child { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cv-forward-top-peer:hover { background: var(--cv-telegram-row-hover); }
+.cv-forward-peer-avatar { position: relative; display: grid; place-items: center; width: calc(var(--tg-forward-unit) * 3.375); height: calc(var(--tg-forward-unit) * 3.375); border-radius: 50%; color: white; overflow: hidden; flex-shrink: 0; font-size: calc(var(--tg-forward-unit) * 1.375); }
+.cv-forward-peer-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cv-forward-top-peer[aria-pressed='true'] .cv-forward-peer-avatar { outline: 2px solid var(--color-brand); outline-offset: 2px; }
+.cv-forward-picker .cv-forward-destinations { min-height: calc(var(--tg-forward-unit) * 6); flex: 1; background: var(--cv-card-bg-solid); padding: calc(var(--tg-forward-unit) * .5); margin: 0 var(--tg-forward-unit) var(--tg-forward-unit); border-radius: calc(var(--tg-forward-unit) * 1.5); box-shadow: var(--cv-telegram-section-shadow); overflow: hidden; }
+.cv-forward-recipient { position: relative; }
+.cv-forward-recipient .cv-chat-row { border-radius: var(--tg-forward-unit); background: transparent; }
+.cv-forward-recipient .cv-chat-row-main { min-height: calc(var(--tg-forward-unit) * 4); padding: calc(var(--tg-forward-unit) * .5); gap: calc(var(--tg-forward-unit) * 1); border-radius: inherit; }
+.cv-forward-recipient[data-multiselect='true'] .cv-chat-row-main { padding-inline-end: calc(var(--tg-forward-unit) * 3); }
+.cv-forward-recipient .cv-dialog-avatar { width: calc(var(--tg-forward-unit) * 3); height: calc(var(--tg-forward-unit) * 3); flex-basis: calc(var(--tg-forward-unit) * 3); }
+.cv-forward-recipient .cv-dialog-title { font-size: var(--tg-forward-unit); font-weight: 500; }
+.cv-forward-recipient .cv-dialog-preview { font-size: calc(var(--tg-forward-unit) * .875); color: var(--cv-neutral-2); }
+.cv-forward-recipient .cv-chat-row.is-active { color: var(--cv-neutral-1); background: var(--cv-telegram-row-hover); }
+.cv-forward-recipient .cv-chat-row.is-active .cv-dialog-preview { color: var(--cv-neutral-2); }
+.cv-forward-selection-mark { pointer-events: none; position: absolute; inset-inline-end: calc(var(--tg-forward-unit) * 1.125); top: 50%; transform: translateY(-50%); width: calc(var(--tg-forward-unit) * 1.25); height: calc(var(--tg-forward-unit) * 1.25); border: 2px solid var(--cv-neutral-2); border-radius: 50%; display: grid; place-items: center; color: white; }
+.cv-forward-selection-mark svg { width: calc(var(--tg-forward-unit) * 1); height: calc(var(--tg-forward-unit) * 1); }
+.cv-forward-recipient[data-selected='true'] .cv-forward-selection-mark { background: var(--color-brand); border-color: var(--color-brand); }
+.cv-forward-chip { display: flex; align-items: center; gap: calc(var(--tg-forward-unit) * .5); height: calc(var(--tg-forward-unit) * 2.25); min-height: 44px; max-width: 100%; padding: calc(var(--tg-forward-unit) * .125) calc(var(--tg-forward-unit) * .5) calc(var(--tg-forward-unit) * .125) calc(var(--tg-forward-unit) * .125); background: var(--color-brand-light); color: var(--color-brand); border: 0; border-radius: calc(var(--tg-forward-unit) * 1.5); font-size: calc(var(--tg-forward-unit) * .875); font-weight: 500; }
+.cv-forward-chip > span:not(.cv-forward-peer-avatar) { max-width: calc(var(--tg-forward-unit) * 9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cv-forward-chip .cv-forward-peer-avatar { width: calc(var(--tg-forward-unit) * 1.875); height: calc(var(--tg-forward-unit) * 1.875); font-size: calc(var(--tg-forward-unit) * .875); }
+.cv-forward-chip > svg { width: calc(var(--tg-forward-unit) * 1); flex-shrink: 0; }
+.cv-forward-picker > .cv-sheet-actions { border: 0; padding: calc(var(--tg-forward-unit) * .75) calc(var(--tg-forward-unit) * 1) calc(var(--tg-forward-unit) * 1); background: var(--cv-page-bg); }
+.cv-forward-comment { display: flex; align-items: flex-end; gap: calc(var(--tg-forward-unit) * .25); width: 100%; padding: calc(var(--tg-forward-unit) * .25); min-height: calc(var(--tg-forward-unit) * 3); border-radius: calc(var(--tg-forward-unit) * 1.5); background: var(--cv-card-bg-solid); box-shadow: 0 -1px 4px 1px rgb(0 0 0 / 5%); }
+.cv-forward-comment textarea { flex: 1; width: 0; resize: none; min-height: 44px; max-height: calc(var(--tg-forward-unit) * 8); padding: calc(var(--tg-forward-unit) * .625) calc(var(--tg-forward-unit) * .75); border: 0; background: transparent; color: var(--cv-neutral-1); font: inherit; line-height: 1.4; }
+.cv-forward-comment textarea:is(:focus,:focus-visible) { outline: none; box-shadow: none; border: 0; }
+.cv-forward-picker .cv-forward-send { display: grid; place-items: center; flex: 0 0 44px; min-width: 44px; width: 44px; height: 44px; min-height: 44px; border-radius: 50%; border: 0; background: var(--color-brand); color: white; padding: calc(var(--tg-forward-unit) * .625); }
+.cv-forward-picker .cv-forward-send svg { width: calc(var(--tg-forward-unit) * 1.375); height: calc(var(--tg-forward-unit) * 1.375); }
+.cv-forward-picker button:disabled { opacity: .5; }
+.cv-forward-picker button:focus-visible { outline: 2px solid var(--color-brand); outline-offset: -2px; }
+.cv-forward-picker button:active { opacity: .8; }
+.cv-forward-empty { display: flex; flex-direction: column; align-items: center; padding: calc(var(--tg-forward-unit) * 3) calc(var(--tg-forward-unit) * 1); color: var(--cv-neutral-2); text-align: center; }
+.cv-forward-empty > svg { width: calc(var(--tg-forward-unit) * 3); height: calc(var(--tg-forward-unit) * 3); opacity: .5; }
+.cv-forward-announcement { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.cv-forward-picker .cv-forward-error { color: var(--cv-menu-danger); margin: 0; padding: calc(var(--tg-forward-unit) * .75) calc(var(--tg-forward-unit) * 1); font-size: calc(var(--tg-forward-unit) * .875); background: var(--cv-card-bg-solid); }
+@media (prefers-reduced-motion: no-preference) {
+ .cv-forward-picker[open] { animation: cv-forward-enter .15s cubic-bezier(.4, 0, .2, 1); }
+ @keyframes cv-forward-enter { from { opacity: 0; translate: 0 calc(var(--tg-forward-unit) * 3); } to { opacity: 1; translate: 0 0; } }
+}
+@media (max-width: 480px) { .cv-sheet.cv-forward-picker { width: calc(100vw - 16px); margin: auto; border-radius: calc(var(--tg-forward-unit) * 2.5); max-height: calc(var(--cv-viewport-height, 100dvh) - 16px); } }
+
+/* Override the main chat list's blue active row in the peer selector. */
+.cv-forward-picker .cv-forward-recipient .cv-chat-row[data-selected] { --dialog-text: var(--cv-neutral-1); --dialog-secondary: var(--cv-neutral-2); color: var(--cv-neutral-1); background: transparent !important; margin: 0; min-height: calc(var(--tg-forward-unit) * 4); border-radius: var(--tg-forward-unit); }
+.cv-forward-picker .cv-forward-recipient .cv-chat-row-main { grid-template-columns: calc(var(--tg-forward-unit) * 3) minmax(0, 1fr); border-radius: inherit; box-shadow: none; border: 0; color: var(--cv-neutral-1); }
+.cv-forward-picker .cv-forward-recipient .cv-dialog-title { color: var(--cv-neutral-1); }
+.cv-forward-picker .cv-forward-recipient .cv-dialog-preview { color: var(--cv-neutral-2); }
+@media (hover: hover) { .cv-forward-picker .cv-forward-recipient .cv-chat-row[data-selected]:hover { background: var(--cv-telegram-row-hover) !important; } }
+.cv-forward-picker .cv-forward-recipient .cv-chat-row:focus-within { background: var(--cv-telegram-row-hover) !important; }
+
+/* _searchGroup.scss pins the avatar 12px from the top and title 12px from the bottom.
+   Keep each peer's entire 78×98 tile clickable so its hover has no inset gaps. */
+.cv-forward-picker .cv-forward-top-peer { position: relative; height: calc(var(--tg-forward-unit) * 6.125); padding: 0; gap: 0; justify-content: flex-end; overflow: hidden; }
+.cv-forward-picker .cv-forward-top-peer > .cv-forward-peer-avatar { position: absolute; top: calc(var(--tg-forward-unit) * .75); left: 50%; transform: translateX(-50%); width: calc(var(--tg-forward-unit) * 3.375); height: calc(var(--tg-forward-unit) * 3.375); }
+.cv-forward-picker .cv-forward-top-peer > span:last-child { position: absolute; bottom: calc(var(--tg-forward-unit) * .75); inset-inline: calc(var(--tg-forward-unit) * .25); max-width: calc(var(--tg-forward-unit) * 4.0625); margin-inline: auto; line-height: calc(var(--tg-forward-unit) * 1.25); text-align: center; }
+
+.cv-forward-picker .cv-forward-select-toggle svg { width: calc(var(--tg-forward-unit) * 1.5); height: calc(var(--tg-forward-unit) * 1.5); }
+.cv-forward-picker .cv-forward-search-label > svg { width: calc(var(--tg-forward-unit) * 1.375); height: calc(var(--tg-forward-unit) * 1.375); }
+.cv-forward-picker .cv-forward-send svg { width: calc(var(--tg-forward-unit) * 1.375); height: calc(var(--tg-forward-unit) * 1.375); }
+.cv-forward-picker .cv-forward-chip > svg { width: var(--tg-forward-unit); height: var(--tg-forward-unit); }
+.cv-forward-picker .cv-forward-selection-mark { width: calc(var(--tg-forward-unit) * 1.25); height: calc(var(--tg-forward-unit) * 1.25); }
+.cv-forward-picker .cv-forward-selection-mark svg { width: var(--tg-forward-unit); height: var(--tg-forward-unit); }
+
+.cv-forward-picker > .cv-sheet-header > .cv-icon-button svg { width: calc(var(--tg-forward-unit) * 1.5); height: calc(var(--tg-forward-unit) * 1.5); }

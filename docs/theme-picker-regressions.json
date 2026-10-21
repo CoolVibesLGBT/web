@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/canvas pixel inspection with intercepted API fixtures; no screenshots or live chat writes",
+  "bug": "All eight cloud Day wallpapers carried optional second_background_color=0. The import treated it as black rather than Telegram’s absent-stop sentinel, producing monochrome gradients. Earlier checks counted cards/patterns but missed the Day canvas pixels.",
+  "fix": "Match getWallPaperColors zero-stop semantics; retain Day accents/bubbles and use each theme’s own illustrated Classic wallpaper for its blank Day wallpaper. Preserve explicit user wallpaper overrides. Port gallery anatomy/geometry, selection border and keyboard scrolling from tweb chatThemesPicker.tsx and _themes.scss.",
+  "references": [
+    "tweb-master/src/helpers/color.ts:getWallPaperColors",
+    "tweb-master/src/components/chatThemesPicker.tsx",
+    "tweb-master/src/scss/partials/_themes.scss",
+    "tweb-master/src/components/sidebarLeft/tabs/background.tsx:addWallPaper"
+  ],
+  "automated": "node scripts/check-appearance-colors.mjs: 36 colored previews; nine distinct original SVGs per mode; correct absent-color sentinels; explicit custom monochrome wallpapers preserved.",
+  "browserChecks": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "checks": "36 colored canvases, nine SVG patterns, Telegram dimensions, foreground layers, horizontal keyboard scroll/RTL, single toolbar tab stop, preview isolation, no overflow/errors"
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "status": "passed",
+      "checks": "36 colored canvases, nine SVG patterns, Telegram dimensions, foreground layers, horizontal keyboard scroll/RTL, single toolbar tab stop, preview isolation, no overflow/errors"
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "light",
+      "large": true,
+      "status": "passed",
+      "checks": "36 colored canvases, nine SVG patterns, Telegram dimensions, foreground layers, horizontal keyboard scroll/RTL, single toolbar tab stop, preview isolation, no overflow/errors"
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "status": "passed",
+      "checks": "36 colored canvases, nine SVG patterns, Telegram dimensions, foreground layers, horizontal keyboard scroll/RTL, single toolbar tab stop, preview isolation, no overflow/errors"
+    }
+  ],
+  "limits": "Canvas samples and DOM geometry, not screenshot comparison. Day’s blank cloud wallpaper deliberately falls back to the same theme’s Classic artwork. Actual chats remain unchanged."
+}

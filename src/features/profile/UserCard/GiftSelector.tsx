@@ -1,12 +1,12 @@
+import IllustratedIcon from '@/components/ui/IllustratedIcon';
 
 import React, { useState } from 'react';
 
-import { X } from 'lucide-react';
+import { X } from '@/components/ui/illustratedIcons';
 
 interface GiftItem {
   id: number;
   name: string;
-  emoji: string;
   price: number;
 }
 
@@ -18,14 +18,14 @@ interface GiftSelectorProps {
 }
 
 const gifts: GiftItem[] = [
-  { id: 1, name: 'Rose', emoji: '🌹', price: 10 },
-  { id: 2, name: 'Lollipop', emoji: '🍭', price: 20 },
-  { id: 3, name: 'Diamond', emoji: '💎', price: 1000 },
-  { id: 4, name: 'Teddy Bear', emoji: '🧸', price: 150 },
-  { id: 5, name: 'Heart', emoji: '❤️', price: 50 },
-  { id: 6, name: 'Ring', emoji: '💍', price: 500 },
-  { id: 7, name: 'Unicorn', emoji: '🦄', price: 750 },
-  { id: 8, name: 'Rocket', emoji: '🚀', price: 2000 },
+  { id: 1, name: 'Rose', price: 10 },
+  { id: 2, name: 'Lollipop', price: 20 },
+  { id: 3, name: 'Diamond', price: 1000 },
+  { id: 4, name: 'Teddy Bear', price: 150 },
+  { id: 5, name: 'Heart', price: 50 },
+  { id: 6, name: 'Ring', price: 500 },
+  { id: 7, name: 'Unicorn', price: 750 },
+  { id: 8, name: 'Rocket', price: 2000 },
 ];
 
 const GiftSelector: React.FC<GiftSelectorProps> = ({ isOpen, onClose, onSelectGift, userName }) => {
@@ -68,7 +68,7 @@ const GiftSelector: React.FC<GiftSelectorProps> = ({ isOpen, onClose, onSelectGi
                     : 'bg-gray-800 hover:bg-gray-700'
                 }`}
               >
-                <span className="text-4xl">{gift.emoji}</span>
+                <IllustratedIcon name={`gift-${gift.name.toLowerCase().replace(/\s+/g, '-')}`} className="h-14 w-14" />
                 <span className="mt-2 text-sm font-medium">{gift.name}</span>
                 <span className="text-xs text-yellow-400">{gift.price} coins</span>
               </button>

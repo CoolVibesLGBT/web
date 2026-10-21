@@ -1,0 +1,62 @@
+/* Supplied tweb _emojiDropdown.scss: opaque 23.875rem × 26.25rem panel,
+   1.25rem corners, no outline, 49px category/footer rails and inset search. */
+.cv-emoticon-picker { display: flex; flex-direction: column; height: min(26.25rem, 72dvh); min-height: 0; color: var(--cv-neutral-1); background: var(--cv-card-bg-solid); overflow: hidden; }
+.cv-emoticon-search { position: relative; display: flex; flex: 0 0 auto; align-items: center; gap: .75rem; margin: .5rem .5rem .25rem; padding-inline: 1rem .1875rem; min-height: max(44px, 2.375rem); border: 0; border-radius: 16px; background: color-mix(in srgb, var(--cv-neutral-1) 6%, transparent); }
+.cv-emoticon-search > svg { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; color: var(--cv-neutral-2); }
+.cv-emoticon-search input { flex: 1; min-width: 0; min-height: 44px; padding: 0; color: var(--cv-neutral-1); background: transparent; border: 0; border-radius: inherit; outline: none; box-shadow: none; font-size: .941rem; }
+.cv-emoticon-search input::placeholder { color: var(--cv-neutral-2); opacity: 1; }
+.cv-emoticon-search input:is(:focus, :focus-visible) { outline: none; border: 0; box-shadow: none; }
+.cv-emoticon-search:focus-within { outline: none; border: 0; box-shadow: none; }
+.cv-emoticon-search button { flex: 0 0 auto; width: 44px; height: 44px; color: var(--cv-neutral-2); border-radius: 50%; }
+.cv-emoticon-search button svg { width: 1.25rem; height: 1.25rem; }
+.cv-emoticon-categories, .cv-emoticon-recent, .cv-emoticon-suggestions { display: flex; flex: 0 0 auto; gap: .25rem; overflow-x: auto; scrollbar-width: none; }
+.cv-emoticon-categories { height: max(44px, 3.0625rem); align-items: center; padding-inline: .3125rem; border-bottom: 1px solid var(--cv-inner-border); }
+.cv-emoticon-categories button { display: grid; place-items: center; flex: 0 0 auto; width: 44px; height: 44px; padding: .5rem; color: var(--cv-neutral-2); border: 0; border-radius: 50%; }
+.cv-emoticon-categories button svg { width: 1.5rem; height: 1.5rem; }
+.cv-emoticon-categories button[aria-pressed='true'] { color: var(--cv-neutral-1); background: color-mix(in srgb, var(--cv-neutral-1) 6%, transparent); }
+.cv-emoticon-recent { padding: .25rem .5rem; }
+.cv-emoticon-recent button { min-width: 56px; height: 56px; font-size: 1.75rem; border-radius: .5rem; }
+.cv-emoticon-recent img { width: 56px; height: 56px; object-fit: cover; border-radius: .5rem; }
+.cv-emoticon-suggestions { padding: .25rem .5rem; border-bottom: 1px solid var(--cv-inner-border); }
+.cv-emoticon-suggestions button { min-width: 72px; height: 72px; border-radius: .5rem; }
+.cv-emoticon-results { position: relative; flex: 1; min-height: 0; }
+.cv-emoticon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(44px, 2.625rem), 1fr)); column-gap: 4px; padding: .25rem .5rem; }
+.cv-emoticon-stickers .cv-emoticon-grid { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 4px; padding-inline: 3px; }
+.cv-emoticon-gifs .cv-emoticon-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; padding: 4px 3px 3px; }
+.cv-emoticon-cell { min-width: 0; }
+.cv-emoji-item { width: 100%; min-height: max(44px, 2.625rem); padding: .25rem; line-height: 1; font-size: 2.125rem; border-radius: 12px; }
+.cv-sticker-item { width: 100%; min-height: 72px; display: grid; place-items: center; border-radius: 12px; }
+.cv-emoji-item, .cv-sticker-item { touch-action: pan-y; user-select: none; -webkit-touch-callout: none; }
+.cv-emoji-item[data-pressed='true'], .cv-sticker-item[data-pressed='true'] { background: color-mix(in srgb, var(--cv-neutral-1) 10%, transparent); }
+.cv-emoticon-press-preview { position: absolute; inset: 0 0 3.0625rem; z-index: 2; display: grid; place-items: center; pointer-events: none; background: color-mix(in srgb, var(--cv-card-bg-solid) 92%, transparent); }
+.cv-native-popover.cv-emoji-tone-picker { border-radius: 24px; padding: 4px; box-shadow: 0 0 10px rgb(0 0 0 / 15%); }
+.cv-emoji-tone-options { display: flex; justify-content: space-between; gap: 2px; }
+.cv-emoji-tone-options button { flex: 1; min-width: 44px; height: 44px; padding: 0; font-size: 1.625rem; border-radius: 50%; }
+.cv-emoji-tone-options button:first-child { border-inline-end: 1px solid var(--cv-inner-border); border-radius: 0; }
+.cv-emoji-tone-options button[aria-pressed='true'], .cv-emoji-tone-options button:hover { background: color-mix(in srgb, var(--cv-neutral-1) 6%, transparent); }
+.cv-gif-item { width: 100%; height: 7.5rem; overflow: hidden; border-radius: .5rem; }
+.cv-gif-item img { width: 100%; height: 100%; object-fit: cover; }
+.cv-emoji-item:hover, .cv-sticker-item:hover { background: color-mix(in srgb, var(--cv-neutral-1) 6%, transparent); }
+.cv-emoticon-feedback { display: grid; place-items: center; gap: .5rem; padding: 1rem; text-align: center; }
+.cv-emoticon-feedback button { color: var(--color-brand); min-height: 44px; }
+.cv-emoticon-loading { position: absolute; bottom: .5rem; inset-inline: 0; text-align: center; pointer-events: none; font-size: .882rem; }
+.cv-emoticon-toolbar { display: flex; flex: 0 0 auto; align-items: center; min-height: max(44px, 3.0625rem); padding-inline: .5rem; border-top: 1px solid var(--cv-inner-border); }
+.cv-emoticon-toolbar > button, .cv-emoticon-toolbar-spacer { display: grid; place-items: center; flex: 0 0 44px; width: 44px; height: 44px; color: var(--cv-neutral-2); border-radius: 50%; }
+.cv-emoticon-toolbar > button svg { width: 1.5rem; height: 1.5rem; }
+.cv-emoticon-toolbar > button:disabled { opacity: .4; }
+.cv-emoticon-toolbar .cv-adaptive-tabs { flex: 1; width: auto; gap: 0; }
+.cv-emoticon-toolbar .cv-adaptive-visible { justify-content: center; }
+.cv-emoticon-toolbar .cv-adaptive-tab { flex: 0 0 auto; padding: 0; width: 44px; min-width: 44px; height: 44px; min-height: 44px; margin-inline: .375rem; border-radius: 50%; color: var(--cv-neutral-2); background: transparent; box-shadow: none; }
+.cv-emoticon-toolbar .cv-adaptive-tab[aria-selected='true'] { color: var(--color-brand); background: transparent; }
+.cv-emoticon-toolbar .cv-adaptive-tab::after { display: none; }
+.cv-emoticon-toolbar .cv-adaptive-icon, .cv-emoticon-toolbar .cv-adaptive-icon svg { width: 1.5rem; height: 1.5rem; }
+.cv-emoticon-toolbar .cv-adaptive-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.cv-native-popover { position: fixed; inset: auto; margin: 0; padding: 0; max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); border: 0; border-radius: 1.25rem; background: var(--cv-card-bg-solid); color: var(--cv-neutral-1); box-shadow: 0 5px 10px 5px rgb(16 35 47 / 14%); overflow: hidden; }
+.cv-native-popover .cv-emoticon-picker { height: var(--picker-height, min(26.25rem, 65dvh)); }
+@media (prefers-reduced-motion: no-preference) {
+  .cv-emoji-item, .cv-sticker-item { transition: transform .1s ease, background-color .1s ease; }
+  .cv-emoji-item[data-pressed='true'], .cv-sticker-item[data-pressed='true'] { transform: scale(.94); }
+  .cv-native-popover:popover-open { animation: cv-emoticon-open .2s cubic-bezier(.42,0,.58,1); transform-origin: bottom right; }
+  [dir='rtl'] .cv-native-popover:popover-open { transform-origin: bottom left; }
+  @keyframes cv-emoticon-open { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: scale(1); } }
+}

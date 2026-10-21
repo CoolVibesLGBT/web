@@ -1,0 +1,83 @@
+{
+  "method": "Browser DOM assertions; no screenshots or simulator",
+  "results": [
+    {
+      "check": "offline render",
+      "path": "/",
+      "passed": true
+    },
+    {
+      "check": "offline render",
+      "path": "/landing",
+      "passed": true
+    },
+    {
+      "check": "offline render",
+      "path": "/legal",
+      "passed": true
+    },
+    {
+      "check": "offline render",
+      "path": "/legal/terms",
+      "passed": true
+    },
+    {
+      "check": "offline render",
+      "path": "/legal/privacy",
+      "passed": true
+    },
+    {
+      "check": "registration flow with fixture captcha/API",
+      "passed": true
+    },
+    {
+      "check": "adaptive tabs",
+      "width": 320,
+      "lang": "tr",
+      "count": 12,
+      "large": false,
+      "passed": true
+    },
+    {
+      "check": "adaptive tabs",
+      "width": 390,
+      "lang": "en",
+      "count": 7,
+      "large": false,
+      "passed": true
+    },
+    {
+      "check": "adaptive tabs",
+      "width": 820,
+      "lang": "ar",
+      "count": 12,
+      "large": true,
+      "passed": true
+    },
+    {
+      "check": "adaptive tabs",
+      "width": 1440,
+      "lang": "en",
+      "count": 4,
+      "large": false,
+      "passed": true
+    },
+    {
+      "check": "render boundary",
+      "passed": true
+    }
+  ],
+  "liveServices": {
+    "apiInitialSync": {
+      "port": 4001,
+      "httpStatus": 200,
+      "languages": 21
+    },
+    "socketHandshake": {
+      "port": 4002,
+      "httpStatus": 200,
+      "validEngineIOHandshake": true
+    },
+    "realAccountCreated": false
+  }
+}

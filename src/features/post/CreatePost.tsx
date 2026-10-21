@@ -191,7 +191,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [selectedVideos, setSelectedVideos] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
-  const [_isExpanded, _setIsExpanded] = useState(false);
+  const [_isExpanded, setIsExpanded] = useState(false);
   const [audience] = useState<'public' | 'community' | 'private'>('public');
   const [polls, setPolls] = useState<PollDraft[]>([]);
   const [isPollActive, setIsPollActive] = useState(false);
@@ -753,7 +753,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
       setSelectedImages([]);
       setSelectedVideos([]);
       setUploadProgress(null);
-      _setIsExpanded(false);
+      setIsExpanded(false);
       setIsPollActive(false);
       setIsEventActive(false);
       setEventTitle('');
@@ -1635,7 +1635,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                   {audienceOptions.find(opt => opt.value === audience)?.icon &&
                     React.createElement(audienceOptions.find(opt => opt.value === audience)!.icon, { className: "w-3 h-3 sm:w-3.5 sm:h-3.5" })
                   }
-                  <span className="text-[10px] sm:text-xs font-medium">{audienceOptions.find(opt => opt.value === audience)?.label}</span>
+                  <span className="text-[0.765rem] sm:text-xs font-medium">{audienceOptions.find(opt => opt.value === audience)?.label}</span>
                 </motion.button>
 
                 {/* Full Screen Toggle Button - Compact */}
@@ -1763,7 +1763,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                 }`}>
                                 {selectedImages.length + selectedVideos.length} {tp('media', 'Media')}
                               </h3>
-                              <p className={`text-[10px] sm:text-xs font-medium tracking-wide truncate ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'
+                              <p className={`text-[0.765rem] sm:text-xs font-medium tracking-wide truncate ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'
                                 }`}>
                                 {selectedImages.length > 0 && `${selectedImages.length} ${selectedImages.length > 1 ? tp('images', 'images') : tp('image', 'image')}`}
                                 {selectedImages.length > 0 && selectedVideos.length > 0 && ' · '}
@@ -1776,7 +1776,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                               setSelectedImages([]);
                               setSelectedVideos([]);
                             }}
-                            className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-semibold transition-all duration-300 backdrop-blur-xl flex-shrink-0 ${theme === 'dark'
+                            className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[0.765rem] sm:text-xs font-semibold transition-all duration-300 backdrop-blur-xl flex-shrink-0 ${theme === 'dark'
                               ? 'bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/40'
                               : 'bg-red-50 text-red-600 border border-red-200/50 hover:bg-red-100 hover:border-red-300'
                               }`}
@@ -1820,7 +1820,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                         <Video className="w-4 h-4 text-white" />
                                       </div>
                                       <div className="absolute inset-x-0 bottom-0 p-1.5 bg-gradient-to-t from-black/70 to-transparent z-10 flex flex-col justify-end">
-                                        <p className="text-[10px] font-semibold text-white/90 line-clamp-1">{media.file.name}</p>
+                                        <p className="text-[0.765rem] font-semibold text-white/90 line-clamp-1">{media.file.name}</p>
                                       </div>
                                     </div>
                                   )}
@@ -1874,7 +1874,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                     }`}>
                                     {polls.length > 1 ? tp('polls', 'Polls') : tp('poll', 'Poll')}
                                   </h3>
-                                  <p className={`text-[10px] sm:text-xs font-medium tracking-wide truncate ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'
+                                  <p className={`text-[0.765rem] sm:text-xs font-medium tracking-wide truncate ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'
                                     }`}>
                                     {polls.length} {polls.length > 1 ? tp('questions', 'questions') : tp('question', 'question')}
                                   </p>
@@ -2403,7 +2403,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                     }`}>
                                     {tp('event_title', 'Event')}
                                   </h3>
-                                  <p className={`text-[10px] sm:text-xs font-medium tracking-wide truncate ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'
+                                  <p className={`text-[0.765rem] sm:text-xs font-medium tracking-wide truncate ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'
                                     }`}>
                                     {tp('event_subtitle', 'Plan with community')}
                                   </p>
@@ -2503,7 +2503,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                   }
                                 }}
                                 data-poll-error="event-kind"
-                                className={`w-full px-4 sm:px-5 py-4 sm:py-4.5 text-base sm:text-lg rounded-xl sm:rounded-2xl border-2 transition-all duration-300 focus:outline-none focus:ring-2 backdrop-blur-xl font-medium text-left flex items-center justify-between ${pollErrors['event-kind']
+                                className={`w-full px-4 sm:px-5 py-4 sm:py-4.5 text-base sm:text-lg rounded-xl sm:rounded-2xl border-2 transition-all duration-300 focus:outline-none focus:ring-2 backdrop-blur-xl font-medium text-start flex items-center justify-between ${pollErrors['event-kind']
                                   ? theme === 'dark'
                                     ? 'bg-gray-900/30 border-red-500/60 text-white focus:border-red-500 focus:ring-red-500/30'
                                     : 'bg-gray-50 border-red-500/60 text-gray-900 focus:border-red-500 focus:ring-red-500/30'
@@ -2593,7 +2593,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                                 });
                                               }
                                             }}
-                                            className={`w-full px-3 py-2.5 rounded-lg text-sm text-left transition-all duration-200 mb-1.5 ${eventKind === kind.value
+                                            className={`w-full px-3 py-2.5 rounded-lg text-sm text-start transition-all duration-200 mb-1.5 ${eventKind === kind.value
                                               ? theme === 'dark'
                                                 ? 'bg-white text-black shadow-lg'
                                                 : 'bg-black text-white shadow-lg'
@@ -2912,7 +2912,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                     <MapPin className="w-4 h-4" />
                                   </div>
                                   <div className="min-w-0">
-                                    <p className={`text-[10px] font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'}`}>
+                                    <p className={`text-[0.765rem] font-semibold normal-case tracking-wider ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'}`}>
                                       {tp('location_preview_label', 'Map preview')}
                                     </p>
                                     <p className="text-sm font-semibold truncate">
@@ -2968,7 +2968,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${theme === 'dark' ? 'bg-blue-500/20 text-blue-300' : 'bg-blue-100 text-blue-600'}`}>
                                   <Navigation className="w-4 h-4" />
                                 </div>
-                                <div className="text-left">
+                                <div className="text-start">
                                   <div className="text-sm font-semibold">{tp('location_current', 'Current Location')}</div>
                                   <div className={`text-xs font-medium ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'}`}>
                                     {tp('location_current_hint', 'Use your device GPS')}
@@ -2980,7 +2980,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                           </div>
 
                           <div className="mt-4 flex items-center justify-between">
-                            <p className={`text-[11px] font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'}`}>
+                            <p className={`text-[0.765rem] font-semibold normal-case tracking-wider ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'}`}>
                               {hasLocationQuery
                                 ? tp('location_results', 'Search results')
                                 : tp('location_nearby', 'Nearby places')}
@@ -3034,7 +3034,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                 <button
                                   key={place.key}
                                   onClick={() => handleLocationPick(place.address, place.lat, place.lng)}
-                                  className={`w-full text-left flex items-start gap-3 p-3 rounded-xl border transition-all ${theme === 'dark'
+                                  className={`w-full text-start flex items-start gap-3 p-3 rounded-xl border transition-all ${theme === 'dark'
                                     ? 'cv-card-surface-muted border-white/10 hover:bg-white/[0.06]'
                                     : 'border-gray-200 bg-white hover:bg-gray-50'
                                     }`}
@@ -3165,7 +3165,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                       style={{ width: `${uploadProgress}%` }}
                     />
                   </div>
-                  <div className={`mt-1 text-[10px] font-semibold ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>
+                  <div className={`mt-1 text-[0.765rem] font-semibold ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>
                     {uploadProgress < 100
                       ? tp('uploading', 'Uploading {{progress}}%', { progress: uploadProgress })
                       : tp('uploaded', 'Uploaded')}

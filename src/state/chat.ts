@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import type { ChatEmoticon } from '@/features/emoticons/types';
 
 export interface Attachment {
   id: string;
@@ -34,6 +35,12 @@ export interface Attachment {
 }
 
 export interface ChatItem {
+  type?: string;
+  participantCount?: number;
+  muted?: boolean;
+  canManage?: boolean;
+  pinnedMessageId?: string | null;
+  pinnedMessageText?: string;
   id: string;
   chatId: string | null;
   name: string;
@@ -43,6 +50,8 @@ export interface ChatItem {
   avatarLetter: string | null;
   lastMessage: string;
   lastMessageId?: string | null;
+  lastMessageOutgoing?: boolean;
+  lastMessageRead?: boolean;
   lastTime: string;
   unread: number;
   online: boolean;
@@ -51,6 +60,9 @@ export interface ChatItem {
 }
 
 export interface ChatMessage {
+  forwardedFrom?: { name: string; date: string };
+  reply?: { id: string; text: string; sender: 'me' | 'other' };
+  emoticon?: ChatEmoticon;
   id: string;
   text: string;
   time: string;

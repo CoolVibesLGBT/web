@@ -417,7 +417,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
                           </div>
                           
                           {/* Platform name */}
-                          <span className={`text-[10px] sm:text-[11px] font-medium text-center leading-tight transition-colors duration-200 ${
+                          <span className={`text-[0.765rem] sm:text-[0.765rem] font-medium text-center leading-tight transition-colors duration-200 ${
                             theme === 'dark' 
                               ? 'text-gray-400 group-hover:text-gray-300' 
                               : 'text-gray-600 group-hover:text-gray-700'

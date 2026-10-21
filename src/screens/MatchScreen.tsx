@@ -1,7 +1,8 @@
+import ViewTabs from '@/components/ui/ViewTabs';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import type { PanInfo } from 'framer-motion';
-import { Heart, X, Star, MapPin, Camera, Shield, Sparkles, MessageCircle, Ghost, RefreshCw, Info, ArrowLeft } from 'lucide-react';
+import { Heart, X, Star, MapPin, Camera, Shield, Sparkles, MessageCircle, Ghost, RefreshCw, Info } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -507,7 +508,7 @@ const MatchScreen: React.FC = () => {
               `.elite-bubble` class'ını diğer kullanım yerlerini etkilememek için
               global değiştirmedik). */}
           <div
-            className="relative flex w-full max-w-xl flex-col items-center justify-center overflow-hidden rounded-[36px] border px-8 py-14 text-center shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] backdrop-blur-3xl"
+            className="relative flex w-full max-w-xl flex-col items-center justify-center overflow-hidden rounded-[20px] border px-8 py-14 text-center shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] backdrop-blur-3xl"
             style={{
               background: isDark ? 'rgba(22, 24, 29, 0.78)' : '#ffffff',
               borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(15, 23, 42, 0.08)',
@@ -520,7 +521,7 @@ const MatchScreen: React.FC = () => {
               {t('match.no_profiles') || 'No profiles to show right now. Come back soon!'}
             </p>
             <button
-              className="flex items-center gap-2 rounded-full bg-[var(--color-brand)] px-6 py-3 text-sm font-black text-white shadow-lg transition-all hover:scale-105 hover:bg-[var(--color-brand-hovered)] active:scale-95"
+              className="flex items-center gap-2 rounded-full bg-[var(--color-brand)] px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-[var(--color-brand-hovered)] active:scale-95"
               onClick={() => fetchMatchNowProfiles(100)}
               disabled={isLoading}
             >
@@ -552,7 +553,7 @@ const MatchScreen: React.FC = () => {
               transition={{ duration: 0.3 }}
             >
               <div
-                className="elite-card relative h-full overflow-hidden rounded-[32px] p-0 shadow-xl"
+                className="elite-card relative h-full overflow-hidden rounded-[20px] p-0 shadow-xl"
               >
                 <div className="absolute inset-0 w-full h-full">
                   <img
@@ -619,13 +620,13 @@ const MatchScreen: React.FC = () => {
                 style={{ x, y }}
               >
               <div
-                className="elite-card relative h-full overflow-hidden rounded-[32px] p-0 shadow-2xl"
+                className="elite-card relative h-full overflow-hidden rounded-[20px] p-0 shadow-2xl"
               >
                 {/* Image Section - Full Height */}
                 <div className="absolute inset-0 w-full h-full z-0">
                   {/* Image Container */}
                   <div
-                    className="relative h-full cursor-pointer overflow-hidden rounded-[32px]"
+                    className="relative h-full cursor-pointer overflow-hidden rounded-[20px]"
                     onClick={handleImageClick}
                   >
                     <AnimatePresence mode="wait">
@@ -675,7 +676,7 @@ const MatchScreen: React.FC = () => {
                         transition={{ delay: 0.2, type: "spring", stiffness: 300, damping: 20 }}
                       >
                         <Camera className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
-                        <span className="text-[10px] sm:text-xs font-semibold text-white tracking-wide">
+                        <span className="text-[0.765rem] sm:text-xs font-semibold text-white tracking-wide">
                           {currentImageIndex + 1}/{currentProfile.images.length}
                         </span>
                       </motion.div>
@@ -687,7 +688,7 @@ const MatchScreen: React.FC = () => {
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 20 }}
                       >
-                        <span className="text-[10px] sm:text-xs font-bold tracking-wider">
+                        <span className="text-[0.765rem] sm:text-xs font-bold tracking-wider">
                           {matchPercentage}% {t('match.match') || 'MATCH'}
                         </span>
                       </motion.div>
@@ -729,14 +730,14 @@ const MatchScreen: React.FC = () => {
                               <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80 flex-shrink-0" strokeWidth={2.5} />
                               <span className="truncate text-xs font-bold text-white/90 drop-shadow-lg sm:text-sm">{currentProfile.location}</span>
                             </div>
-                            <span className="text-[10px] sm:text-xs font-semibold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full backdrop-blur-xl bg-white/20 text-white border border-white/20 whitespace-nowrap">
+                            <span className="text-[0.765rem] sm:text-xs font-semibold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full backdrop-blur-xl bg-white/20 text-white border border-white/20 whitespace-nowrap">
                               {currentProfile.distance}
                             </span>
                           </div>
                           {currentProfile.lastActive && (
                             <div className="flex items-center gap-1.5 mb-1.5">
                               <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-400 animate-pulse shadow-lg shadow-green-400/50" />
-                              <span className="text-[10px] sm:text-xs font-medium text-white/85 tracking-wide drop-shadow-lg">
+                              <span className="text-[0.765rem] sm:text-xs font-medium text-white/85 tracking-wide drop-shadow-lg">
                                 {t('match.active') || 'Active'} {currentProfile.lastActive}
                               </span>
                             </div>
@@ -758,7 +759,7 @@ const MatchScreen: React.FC = () => {
                         transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 20 }}
                       >
                         <Info className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" strokeWidth={2.5} />
-                        <span className="text-[11px] sm:text-xs font-semibold text-white tracking-tight">{t('match.view_profile') || 'View Profile'}</span>
+                        <span className="text-[0.765rem] sm:text-xs font-semibold text-white tracking-tight">{t('match.view_profile') || 'View Profile'}</span>
                       </motion.button>
                     </motion.div>
                   </div>
@@ -771,7 +772,7 @@ const MatchScreen: React.FC = () => {
                       {/* Backdrop inside card */}
                       <motion.div
                         key={`backdrop-${currentProfile.id}`}
-                        className="absolute inset-0 z-30 bg-black/50 rounded-[28px] sm:rounded-[32px]"
+                        className="absolute inset-0 z-30 bg-black/50 rounded-[20px] sm:rounded-[20px]"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -797,7 +798,7 @@ const MatchScreen: React.FC = () => {
 
                         {/* Header */}
                         <div className="flex items-center justify-between border-b border-slate-100 px-4 pb-4 dark:border-white/10 sm:px-6">
-                          <h2 className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                          <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-slate-950'}`}>
                             {currentProfile.displayname || currentProfile.name}
                           </h2>
                           <motion.button
@@ -1127,43 +1128,14 @@ const MatchScreen: React.FC = () => {
     return (
       <section className="relative">
         <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
-          <div className="cv-tab-row">
-            <div className="flex shrink-0 items-center pl-4">
-              <button
-                type="button"
-                onClick={() => navigate('/')}
-                aria-label={t('app.back', { defaultValue: 'Back' })}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-all hover:bg-[var(--color-brand-hovered)]"
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </button>
-            </div>
-            {tabs.map((tab) => {
-              const active = historyTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setHistoryTab(tab.id)}
-                  style={{ minWidth: 0 }}
-                  className={`cv-tab ${active ? 'is-active' : ''}`}
-                >
-                  <span className="min-w-0 truncate text-[13px]">{tab.label}</span>
-                  <span className={`flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1 text-[10px] font-black ${isDark ? 'bg-white/10 text-zinc-300' : 'bg-slate-950/[0.06] text-slate-600'}`}>
-                    {tab.count}
-                  </span>
-                  <span className={`cv-tab-underline ${active ? 'is-on' : ''}`} />
-                </button>
-              );
-            })}
-          </div>
+          <ViewTabs items={tabs} activeId={historyTab} onSelect={id => setHistoryTab(id)} label={t('app.nav.matches')} />
         </div>
         <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
           <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
             {/* Aktif sekme adı ve sayısı zaten üstteki tab bar'da (rozetiyle
                 birlikte) gösteriliyor — burada tekrar etmek yerine, Nearby/
                 Places/Check-in'deki ikinci satırla tutarlı tek bir özet rozeti. */}
-            <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[13px] font-semibold text-[var(--color-brand)]">
+            <span className="flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-brand-light-solid)] px-3.5 text-[0.765rem] font-semibold text-[var(--color-brand)]">
               <ActiveIcon className="h-3.5 w-3.5 shrink-0" fill={ActiveIcon === Heart || ActiveIcon === Star ? 'currentColor' : 'none'} />
               {t('match.result_count', { count: activeTab.count, defaultValue: '{{count}} profil' })}
             </span>
@@ -1211,11 +1183,11 @@ const MatchScreen: React.FC = () => {
             <Icon className="h-4 w-4" fill={variant === 'passed' ? 'none' : 'currentColor'} strokeWidth={2.5} />
           </div>
           <div className="absolute inset-x-0 bottom-0 p-3">
-            <h3 className="truncate text-sm font-black tracking-tight text-white">
+            <h3 className="truncate text-sm font-semibold tracking-tight text-white">
               {profile.name}{profile.age ? `, ${profile.age}` : ''}
             </h3>
             {profile.location && (
-              <div className="mt-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white/75">
+              <div className="mt-1 flex items-center gap-1.5 text-[0.765rem] font-bold normal-case tracking-normal text-white/75">
                 <MapPin className="h-3 w-3 shrink-0" />
                 <span className="truncate">{profile.location}</span>
               </div>
@@ -1251,14 +1223,14 @@ const MatchScreen: React.FC = () => {
           className="w-full"
         >
           {isLoadingMatches && matchedProfiles.length === 0 ? (
-            <div className="elite-bubble rounded-[28px] px-6 py-10 text-center">
+            <div className="elite-bubble rounded-[20px] px-6 py-10 text-center">
               <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-b-2 border-slate-950 dark:border-white"></div>
               <p className={`text-xs font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
                 {t('match.loading') || 'Loading...'}
               </p>
             </div>
           ) : matchedProfiles.length === 0 ? (
-            <div className="elite-bubble rounded-[28px] px-6 py-10 text-center">
+            <div className="elite-bubble rounded-[20px] px-6 py-10 text-center">
               <Sparkles className={`mx-auto mb-3 h-8 w-8 ${isDark ? 'text-zinc-600' : 'text-slate-400'}`} />
               <p className={`text-xs font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
                 {t('match.no_matches') || 'No matches'}
@@ -1273,7 +1245,7 @@ const MatchScreen: React.FC = () => {
               </div>
               {matchedProfiles.length > 6 && (
                 <motion.button
-                  className="elite-floating w-full py-3 text-sm font-black transition-all"
+                  className="elite-floating w-full py-3 text-sm font-semibold transition-all"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setExpandedMatches(!expandedMatches)}
@@ -1301,14 +1273,14 @@ const MatchScreen: React.FC = () => {
           className="w-full"
         >
           {isLoadingLiked && likedProfiles.length === 0 ? (
-            <div className="elite-bubble rounded-[28px] px-6 py-10 text-center">
+            <div className="elite-bubble rounded-[20px] px-6 py-10 text-center">
               <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-b-2 border-slate-950 dark:border-white"></div>
               <p className={`text-xs font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
                 {t('match.loading') || 'Loading...'}
               </p>
             </div>
           ) : likedProfiles.length === 0 ? (
-            <div className="elite-bubble rounded-[28px] px-6 py-10 text-center">
+            <div className="elite-bubble rounded-[20px] px-6 py-10 text-center">
               <Heart className={`mx-auto mb-3 h-8 w-8 ${isDark ? 'text-zinc-600' : 'text-slate-400'}`} />
               <p className={`text-xs font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
                 {t('match.no_profiles_liked') || 'No likes'}
@@ -1323,7 +1295,7 @@ const MatchScreen: React.FC = () => {
               </div>
               {likedProfiles.length > 6 && (
                 <motion.button
-                  className="elite-floating w-full py-3 text-sm font-black transition-all"
+                  className="elite-floating w-full py-3 text-sm font-semibold transition-all"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setExpandedLiked(!expandedLiked)}
@@ -1350,14 +1322,14 @@ const MatchScreen: React.FC = () => {
         className="w-full"
       >
         {isLoadingPassed && passedProfiles.length === 0 ? (
-          <div className="elite-bubble rounded-[28px] px-6 py-10 text-center">
+          <div className="elite-bubble rounded-[20px] px-6 py-10 text-center">
             <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-b-2 border-slate-950 dark:border-white"></div>
             <p className={`text-xs font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
               {t('match.loading') || 'Loading...'}
             </p>
           </div>
         ) : passedProfiles.length === 0 ? (
-          <div className="elite-bubble rounded-[28px] px-6 py-10 text-center">
+          <div className="elite-bubble rounded-[20px] px-6 py-10 text-center">
             <Ghost className={`mx-auto mb-3 h-8 w-8 ${isDark ? 'text-zinc-600' : 'text-slate-400'}`} />
             <p className={`text-xs font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
               {t('match.no_profiles_passed') || 'No passes'}
@@ -1372,7 +1344,7 @@ const MatchScreen: React.FC = () => {
             </div>
             {passedProfiles.length > 6 && (
               <motion.button
-                className="elite-floating w-full py-3 text-sm font-black transition-all"
+                className="elite-floating w-full py-3 text-sm font-semibold transition-all"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setExpandedPassed(!expandedPassed)}
@@ -1395,7 +1367,7 @@ const MatchScreen: React.FC = () => {
         <div className="mx-auto flex min-h-full w-full max-w-7xl flex-col gap-2 px-1 pb-8 md:px-2">
           {renderMatchHeader()}
           <div className="flex min-h-[430px] items-center justify-center px-4">
-            <div className="elite-bubble rounded-[32px] px-10 py-12 text-center">
+            <div className="elite-bubble rounded-[20px] px-10 py-12 text-center">
               <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-slate-950 dark:border-white"></div>
               <p className={`text-sm font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
                 {t('match.loading_profiles') || 'Loading profiles...'}

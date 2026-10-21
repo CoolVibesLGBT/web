@@ -2,6 +2,7 @@ import js from '@eslint/js';
 import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import tseslint from 'typescript-eslint';
+import jsxNoUndef from './scripts/eslint-jsx-no-undef.mjs';
 
 export default tseslint.config(
   {
@@ -22,9 +23,11 @@ export default tseslint.config(
     },
     plugins: {
       'react-hooks': reactHooks,
+      'interface': { rules: { 'jsx-no-undef': jsxNoUndef } },
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      'interface/jsx-no-undef': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
       // Turn off react-hooks rules that cause many warnings in this codebase
       'react-hooks/exhaustive-deps': 'off',

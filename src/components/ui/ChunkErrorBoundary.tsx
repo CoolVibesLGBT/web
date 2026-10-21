@@ -1,107 +1,51 @@
-import React from 'react';
+import React from 'react'
+import i18n from '@/i18n'
 
-interface State {
-  hasError: boolean;
-  reloading: boolean;
-}
+interface State { hasError: boolean; reloading: boolean; chunkError: boolean }
+const isChunkError = (error: Error) => error?.name === 'ChunkLoadError' || [
+  'Failed to fetch dynamically imported module', 'Loading chunk', 'Loading CSS chunk', 'Importing a module script failed',
+].some(message => error?.message?.includes(message))
 
-/**
- * ChunkErrorBoundary
- *
- * Catches dynamic import / chunk-load failures that happen when a new
- * production build is deployed while a user still has the old version
- * open in their browser. In that case:
- *
- *   1. A new build ships with new hashed chunk filenames.
- *   2. The open tab still references the old chunk hash → 404.
- *   3. The server responds with HTML instead of JS.
- *   4. The browser rejects it because MIME type is "text/html", not JS.
- *
- * When this boundary catches such an error it automatically triggers a
- * hard-reload so the browser fetches the latest HTML and chunks, and everything
- * works again. A "Reload" button is shown as a fallback in case the
- * automatic reload itself fails.
- */
-class ChunkErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  State
-> {
-  static SESSION_KEY = 'chunk_reload_attempted';
-  static SHOULD_AUTO_RELOAD = import.meta.env.PROD;
-
-  constructor(props: { children: React.ReactNode }) {
-    super(props);
-    this.state = { hasError: false, reloading: false };
-  }
+/** Recover stale deployment chunks once; contain other render errors without a blank app. */
+class ChunkErrorBoundary extends React.Component<{ children: React.ReactNode }, State> {
+  static SESSION_KEY = 'chunk_reload_attempted'
+  state: State = { hasError: false, reloading: false, chunkError: false }
 
   static getDerivedStateFromError(error: Error): State {
-    const isChunkError =
-      error?.name === 'ChunkLoadError' ||
-      error?.message?.includes('Failed to fetch dynamically imported module') ||
-      error?.message?.includes('Loading chunk') ||
-      error?.message?.includes('Loading CSS chunk') ||
-      error?.message?.includes('Importing a module script failed');
-
-    if (isChunkError) {
-      return { hasError: true, reloading: false };
-    }
-    // For non-chunk errors rethrow (don't swallow them here)
-    throw error;
+    return { hasError: true, reloading: false, chunkError: isChunkError(error) }
   }
 
   componentDidCatch(error: Error) {
-    const isChunkError =
-      error?.name === 'ChunkLoadError' ||
-      error?.message?.includes('Failed to fetch dynamically imported module') ||
-      error?.message?.includes('Loading chunk') ||
-      error?.message?.includes('Loading CSS chunk') ||
-      error?.message?.includes('Importing a module script failed');
-
-    if (!isChunkError) return;
-
-    // Guard against infinite reload loops: only auto-reload once per session
-    const alreadyAttempted = sessionStorage.getItem(ChunkErrorBoundary.SESSION_KEY);
-    if (!alreadyAttempted && ChunkErrorBoundary.SHOULD_AUTO_RELOAD) {
-      sessionStorage.setItem(ChunkErrorBoundary.SESSION_KEY, '1');
-      this.setState({ reloading: true });
-      // Hard-reload fetches the latest HTML and new hashed chunks
-      window.location.reload();
-    }
+    if (!isChunkError(error) || !import.meta.env.PROD) return
+    try {
+      if (sessionStorage.getItem(ChunkErrorBoundary.SESSION_KEY)) return
+      sessionStorage.setItem(ChunkErrorBoundary.SESSION_KEY, '1')
+    } catch { return }
+    this.setState({ reloading: true })
+    window.location.reload()
   }
 
-  handleManualReload = () => {
-    sessionStorage.removeItem(ChunkErrorBoundary.SESSION_KEY);
-    this.setState({ reloading: true });
-    window.location.reload();
-  };
+  retry = () => {
+    if (!this.state.chunkError) {
+      this.setState({ hasError: false, reloading: false, chunkError: false })
+      return
+    }
+    try { sessionStorage.removeItem(ChunkErrorBoundary.SESSION_KEY) } catch { /* Storage can be disabled. */ }
+    this.setState({ reloading: true })
+    window.location.reload()
+  }
 
   render() {
-    if (!this.state.hasError) {
-      return this.props.children;
-    }
-
-    return (
-      <div className="h-full w-full flex flex-col items-center justify-center gap-4 p-8 text-center bg-[var(--background-color)] text-[var(--text-color)]">
-        {this.state.reloading ? (
-          <>
-            <div className="w-8 h-8 rounded-full border-2 border-current border-t-transparent animate-spin opacity-60" />
-            <p className="text-sm opacity-60">Updating…</p>
-          </>
-        ) : (
-          <>
-            <p className="text-base font-semibold">A new version is available.</p>
-            <p className="text-sm opacity-60">Please reload to continue.</p>
-            <button
-              onClick={this.handleManualReload}
-              className="mt-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-white text-black hover:bg-gray-100 dark:bg-white dark:text-black transition-all"
-            >
-              Reload
-            </button>
-          </>
-        )}
+    if (!this.state.hasError) return this.props.children
+    return <div role="alert" className="flex h-full min-h-64 w-full flex-col items-center justify-center gap-4 bg-[var(--cv-page-bg)] p-6 text-center text-[var(--cv-neutral-1)]">
+      <h1 className="text-xl font-semibold">{i18n.t('app.screen_error_title')}</h1>
+      <p className="max-w-md text-base text-[var(--cv-neutral-2)]">{i18n.t('app.screen_error_message')}</p>
+      <div className="flex flex-wrap justify-center gap-3">
+        <button type="button" onClick={this.retry} disabled={this.state.reloading} className="cv-btn">{i18n.t('app.trending_retry')}</button>
+        <a href="/" className="cv-btn cv-btn-secondary">{i18n.t('app.nav.home')}</a>
       </div>
-    );
+    </div>
   }
 }
 
-export default ChunkErrorBoundary;
+export default ChunkErrorBoundary

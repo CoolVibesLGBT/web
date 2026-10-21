@@ -1,8 +1,11 @@
+import ViewTabs from '@/components/ui/ViewTabs';
+import { GroupedSection, ListRow, Sheet } from '@/components/ui/Interface';
+import ProfileHeader from '@/features/profile/ProfileHeader';
 import React, { useState, useEffect, useRef, type CSSProperties } from 'react';
 import { useSEO } from '../hooks/useSEO';
 import { useParams, useNavigate, useLocation } from '@/router';
 import type { TravelData } from '../interfaces/user';
-import { Calendar, MapPin, Link, Heart, Baby, Cigarette, Wine, Ruler, PawPrint, Church, GraduationCap, Eye, EyeOff, Lock, Palette, Accessibility, Paintbrush, RulerDimensionLine, Vegan, PersonStanding, Sparkles, Drama, Banana, Save, Camera, Image as ImageIcon, ChevronRight, Check, HeartHandshake, FileText, MessageCircle, Panda, Ghost, Rainbow, Transgender, Rabbit, ChevronLeft, ChevronDown, LocateFixed, UserCircle, Clock, Smile, HeartPulse, Bubbles, Leaf, Fingerprint, Wallet, Users, UserPlus, ThumbsUp, ThumbsDown, Shield, type LucideIcon } from 'lucide-react';
+import { Calendar, MapPin, Link, Heart, Baby, Cigarette, Wine, Ruler, PawPrint, Church, GraduationCap, Eye, EyeOff, Lock, Palette, Accessibility, Paintbrush, RulerDimensionLine, Vegan, PersonStanding, Sparkles, Drama, Banana, Save, Camera, Image as ImageIcon, ChevronRight, Check, HeartHandshake, FileText, MessageCircle, Panda, Ghost, Rainbow, Transgender, Rabbit, ChevronLeft, ChevronDown, LocateFixed, UserCircle, Clock, Smile, HeartPulse, Bubbles, Leaf, Fingerprint, Wallet, Users, UserPlus, ThumbsUp, ThumbsDown, Shield, type IllustratedIconComponent } from '@/components/ui/illustratedIcons';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useApp, type InitialData } from '../contexts/AppContext';
@@ -14,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import AuthWizard from '../features/auth/AuthWizard';
 import { getSafeImageURL, getSafeImageURLEx, htmlToPlainText, serializeJsonLd } from '../helpers/helpers';
 import { SITE_URL } from '@/seo/seoConfig';
+import IllustratedIcon from '@/components/ui/IllustratedIcon';
 import { usePremiumAccess } from '@/hooks/usePremiumAccess';
 import { useDwellView } from '@/hooks/useDwellView';
 import { ProfileBioEditor, ProfileBioPreview } from './ProfileBio';
@@ -215,7 +219,7 @@ type ProfileEngagementItem = {
   id: string;
   label: string;
   value: number;
-  icon: LucideIcon;
+  icon: IllustratedIconComponent;
   onClick: () => void;
   visible: boolean;
   disabled?: boolean;
@@ -1379,6 +1383,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const skipFollowSyncRef = useRef(false);
   const [isFollowPending, setIsFollowPending] = useState(false);
   const [showAuthWizard, setShowAuthWizard] = useState(false);
+  const [showProfileStats, setShowProfileStats] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const isEditRoute = React.useMemo(() => {
     if (inline || isEmbed) {
@@ -4065,10 +4070,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           type="application/ld+json"
         >{serializeJsonLd(profileJsonLd)}</script>
       )}
-      <div ref={profileViewRef} className={inline || isEmbed ? 'w-full' : 'mx-auto w-full pb-8 pt-[72px]'}>
+      <div ref={profileViewRef} className="cv-profile-shell">
         {isEditMode ? (
           // Edit Profile View
-          <main className={`flex-1 w-full min-w-0 overflow-hidden rounded-[36px] ${theme === 'dark' ? 'cv-card-surface-soft' : 'bg-white/70'}`}>
+          <main className={`flex-1 w-full min-w-0 overflow-hidden rounded-[20px] ${theme === 'dark' ? 'cv-card-surface-soft' : 'bg-white/70'}`}>
             <div className="min-h-[520px]">
               <div className="max-w-4xl mx-auto">
                 <motion.div
@@ -4083,7 +4088,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                       {t('profile.cover_image')}
                     </label>
                     <div className="relative">
-                      <div className={`w-full h-48 rounded-[28px] overflow-hidden border ${theme === 'dark' ? 'bg-white/[0.06] border-white/10' : 'bg-white/70 border-[var(--cv-inner-border)]'}`}>
+                      <div className={`w-full h-48 rounded-[20px] overflow-hidden border ${theme === 'dark' ? 'bg-white/[0.06] border-white/10' : 'bg-white/70 border-[var(--cv-inner-border)]'}`}>
                         {(coverImagePreview || getCoverImageUrl()) ? (
                           <img
                             src={coverImagePreview || getCoverImageUrl() || ''}
@@ -4180,25 +4185,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
                   {/* Edit Tabs */}
                   <div className="cv-tab-bar -mx-1">
-                    <div className="cv-tab-row">
-                      {[
+                    <ViewTabs items={[
                         { id: 'profile', label: t('profile.profile_info') || 'Profile Info' },
                         { id: 'attributes', label: t('profile.attributes') },
                         { id: 'interests', label: t('profile.interests') },
                         { id: 'fantasies', label: t('profile.fantasies') },
-                      ].map((tab) => (
-                        <button
-                          key={tab.id}
-                          type="button"
-                          onClick={() => setEditTab(tab.id as 'profile' | 'attributes' | 'interests' | 'fantasies')}
-                          style={{ minWidth: 0 }}
-                          className={`cv-tab !text-[15px] ${editTab === tab.id ? 'is-active' : ''}`}
-                        >
-                          <span className="min-w-0 truncate">{tab.label}</span>
-                          <span className={`cv-tab-underline ${editTab === tab.id ? 'is-on' : ''}`} />
-                        </button>
-                      ))}
-                    </div>
+                      ]} activeId={editTab} onSelect={id => setEditTab(id as 'profile' | 'attributes' | 'interests' | 'fantasies')} label={t('profile.edit_profile')} />
                   </div>
 
                   {/* Tab Content */}
@@ -4222,7 +4214,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             >
                               <div className="flex items-start justify-between gap-4">
                                 <div className="min-w-0">
-                                  <p className={`text-[11px] font-bold uppercase tracking-[0.14em] ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                                  <p className={`text-[0.765rem] font-bold normal-case tracking-normal ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                                     {t('profile.wizard_badge', { defaultValue: 'Profile Wizard' })}
                                   </p>
                                   <h3 className={`mt-1 text-lg font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
@@ -4277,7 +4269,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                     key={step.id}
                                     type="button"
                                     onClick={() => handleOpenWizardStep(step.id)}
-                                    className={`w-full rounded-xl border px-3 py-2.5 text-left flex items-start justify-between gap-3 transition-all ${theme === 'dark'
+                                    className={`w-full rounded-xl border px-3 py-2.5 text-start flex items-start justify-between gap-3 transition-all ${theme === 'dark'
                                       ? 'cv-card-surface-muted border-white/10 hover:bg-white/[0.06]'
                                       : 'border-gray-200 bg-white hover:bg-gray-50'
                                       }`}
@@ -4291,7 +4283,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                           ? 'bg-white/10 text-white'
                                           : 'bg-gray-900 text-white'
                                         }`}>
-                                        {step.done ? <Check className="w-3 h-3" /> : <span className="text-[10px] font-bold">{profileWizardSteps.findIndex((item) => item.id === step.id) + 1}</span>}
+                                        {step.done ? <Check className="w-3 h-3" /> : <span className="text-[0.765rem] font-bold">{profileWizardSteps.findIndex((item) => item.id === step.id) + 1}</span>}
                                       </div>
                                       <div className="min-w-0">
                                         <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
@@ -4416,7 +4408,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             <button
                               type="button"
                               onClick={() => setIsBirthdateSectionOpen((prev) => !prev)}
-                              className="w-full flex items-start justify-between gap-4 text-left"
+                              className="w-full flex items-start justify-between gap-4 text-start"
                             >
                               <div>
                                 <h3 className={`text-base font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
@@ -4525,7 +4517,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                               <button
                                 type="button"
                                 onClick={() => setIsPasswordSectionOpen((prev) => !prev)}
-                                className="w-full flex items-start justify-between gap-4 text-left"
+                                className="w-full flex items-start justify-between gap-4 text-start"
                               >
                                 <div className="flex items-start gap-3">
                                   <div
@@ -4710,7 +4702,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                           <div className={`pt-6 pb-4 ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}`}>
                             <div className="flex items-center justify-between mb-2">
                               <h3 className={`text-xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                {t('profile.attributes')}
+                                <span className="inline-flex items-center gap-2"><IllustratedIcon name="system-user" className="h-10 w-10" />{t('profile.attributes')}</span>
                               </h3>
                               {USER_ATTRIBUTES.length > 0 && (
                                 <span className={`text-xs font-semibold px-3 py-1.5 rounded-full ${theme === 'dark'
@@ -4856,7 +4848,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                           : 'bg-gray-100 text-gray-700'
                                           }`}
                                         >
-                                          <item.icon className="w-5 h-5" />
+                                          <IllustratedIcon name={`attribute-${item.field}`} className="h-10 w-10" />
                                         </div>
                                         <div className="flex-1 min-w-0">
                                           <div className="flex items-center gap-2.5 mb-1.5">
@@ -4962,7 +4954,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                                       disabled={isLoading}
                                                       whileHover={{ scale: 1.02 }}
                                                       whileTap={{ scale: 0.98 }}
-                                                      className={`text-left rounded-xl p-3.5 transition-all duration-200 relative ${isLoading ? 'opacity-50 cursor-wait' : 'cursor-pointer'} ${isSelected
+                                                      className={`text-start rounded-xl p-3.5 transition-all duration-200 relative ${isLoading ? 'opacity-50 cursor-wait' : 'cursor-pointer'} ${isSelected
                                                         ? theme === 'dark'
                                                           ? 'bg-gradient-to-r from-white/[0.12] to-white/[0.06] border-2 border-white/25'
                                                           : 'bg-gradient-to-r from-gray-50 to-white border-2 border-gray-400'
@@ -5038,7 +5030,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                           <div className={`pt-6 pb-4 ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}`}>
                             <div className="flex items-center justify-between mb-2">
                               <h3 className={`text-xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                {t('profile.interests')}
+                                <span className="inline-flex items-center gap-2"><IllustratedIcon name="interest-category-lifestyle" className="h-10 w-10" />{t('profile.interests')}</span>
                               </h3>
                               {interestCategories.length > 0 && (
                                 <span className={`text-xs font-semibold px-3 py-1.5 rounded-full ${theme === 'dark'
@@ -5095,7 +5087,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                         <div className="flex-1 min-w-0">
                                           <div className="flex items-center gap-2.5 mb-1.5">
                                             <h4 className={`text-base font-semibold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                              {category.name}
+                                              <span className="inline-flex items-center gap-2"><IllustratedIcon name={category.id} className="h-9 w-9" />{category.name}</span>
                                             </h4>
                                             {hasSelections && (
                                               <motion.span
@@ -5120,8 +5112,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                                     : 'bg-gray-100 text-gray-700'
                                                     }`}
                                                 >
-                                                  {item.emoji && <span>{item.emoji}</span>}
-                                                  {item.name}
+                                                  <IllustratedIcon name={item.id} fallback="system-heart" className="inline-block h-7 w-7 align-middle" />
+                                                  <span className="inline-flex items-center gap-1"><IllustratedIcon name={item.id} className="h-6 w-6" />{item.name}</span>
                                                 </span>
                                               ))}
                                               {selectedItems.length > 3 && (
@@ -5164,7 +5156,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                                       disabled={updatingInterests}
                                                       whileHover={{ scale: 1.02 }}
                                                       whileTap={{ scale: 0.98 }}
-                                                      className={`text-left rounded-xl p-3.5 transition-all duration-200 relative ${updatingInterests ? 'opacity-50 cursor-wait' : 'cursor-pointer'} ${isSelected
+                                                      className={`text-start rounded-xl p-3.5 transition-all duration-200 relative ${updatingInterests ? 'opacity-50 cursor-wait' : 'cursor-pointer'} ${isSelected
                                                         ? theme === 'dark'
                                                           ? 'bg-gradient-to-r from-white/[0.12] to-white/[0.06] border-2 border-white/25'
                                                           : 'bg-gradient-to-r from-gray-50 to-white border-2 border-gray-400'
@@ -5180,8 +5172,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                                               ? theme === 'dark' ? 'text-white' : 'text-gray-900'
                                                               : theme === 'dark' ? 'text-gray-200' : 'text-gray-900'
                                                               }`}>
-                                                              {item.emoji && <span className="mr-1.5">{item.emoji}</span>}
-                                                              {item.name}
+                                                              <span className="inline-flex items-center gap-2"><IllustratedIcon name={item.id} className="h-8 w-8" />{item.name}</span>
                                                             </h5>
                                                           </div>
                                                         </div>
@@ -5241,7 +5232,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                           <div className={`pt-6 pb-4 ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}`}>
                             <div className="flex items-center justify-between mb-2">
                               <h3 className={`text-xl font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                {t('profile.fantasies')}
+                                <span className="inline-flex items-center gap-2"><IllustratedIcon name="fantasy-category-amusement" className="h-10 w-10" />{t('profile.fantasies')}</span>
                               </h3>
                               {fantasyCategories.length > 0 && (
                                 <span className={`text-xs font-semibold px-3 py-1.5 rounded-full ${theme === 'dark'
@@ -5298,7 +5289,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                         <div className="flex-1 min-w-0">
                                           <div className="flex items-center gap-2.5 mb-1.5">
                                             <h4 className={`text-base font-semibold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                              {category.name}
+                                              <span className="inline-flex items-center gap-2"><IllustratedIcon name={category.id} className="h-9 w-9" />{category.name}</span>
                                             </h4>
                                             {hasSelections && (
                                               <motion.span
@@ -5323,7 +5314,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                                     : 'bg-gray-100 text-gray-700'
                                                     }`}
                                                 >
-                                                  {item.name}
+                                                  <span className="inline-flex items-center gap-1"><IllustratedIcon name={item.id} className="h-6 w-6" />{item.name}</span>
                                                 </span>
                                               ))}
                                               {selectedItems.length > 3 && (
@@ -5366,7 +5357,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                                       disabled={updatingFantasies}
                                                       whileHover={{ scale: 1.02 }}
                                                       whileTap={{ scale: 0.98 }}
-                                                      className={`text-left rounded-xl p-3.5 transition-all duration-200 relative ${updatingFantasies ? 'opacity-50 cursor-wait' : 'cursor-pointer'} ${isSelected
+                                                      className={`text-start rounded-xl p-3.5 transition-all duration-200 relative ${updatingFantasies ? 'opacity-50 cursor-wait' : 'cursor-pointer'} ${isSelected
                                                         ? theme === 'dark'
                                                           ? 'bg-gradient-to-r from-white/[0.12] to-white/[0.06] border-2 border-white/25'
                                                           : 'bg-gradient-to-r from-gray-50 to-white border-2 border-gray-400'
@@ -5382,7 +5373,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                                               ? theme === 'dark' ? 'text-white' : 'text-gray-900'
                                                               : theme === 'dark' ? 'text-gray-200' : 'text-gray-900'
                                                               }`}>
-                                                              {item.name}
+                                                              <span className="inline-flex items-center gap-2"><IllustratedIcon name={item.id} className="h-8 w-8" />{item.name}</span>
                                                             </h5>
                                                           </div>
                                                           {item.description && (
@@ -5497,206 +5488,97 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           </main>
         ) : (
           // Profile View
-          <main className={`relative flex-1 w-full min-w-0 overflow-hidden ${theme === 'dark' ? 'bg-[#090909]' : 'bg-white'}`}>
-
-            <section className="relative overflow-hidden">
-              <div className={`relative h-[220px] overflow-hidden sm:h-[260px] ${theme === 'dark' ? 'bg-zinc-950' : 'bg-slate-100'}`}>
-                {getCoverImageUrl() ? (
-                  <img
-                    src={getCoverImageUrl() || ''}
-                    alt="Cover"
-                    className={`h-full w-full object-cover ${!isAuthenticated ? 'blur-xl' : ''}`}
-                  />
-                ) : (
-                  <div className={`h-full w-full ${theme === 'dark' ? 'bg-gradient-to-br from-zinc-900 via-zinc-950 to-black' : 'bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300'}`} />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/[0.08] via-transparent to-black/[0.28]" />
-              </div>
-
-              <div className="relative px-4 pb-5 sm:px-6 lg:px-8">
-                <div className={`border-b py-5 ${theme === 'dark' ? 'border-white/10' : 'border-slate-200/80'}`}>
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                    <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end">
-                      <div className={`relative z-10 -mt-16 h-28 w-28 shrink-0 overflow-hidden rounded-full border-4 sm:-mt-20 sm:h-32 sm:w-32 ${theme === 'dark' ? 'border-[#090909] bg-zinc-900' : 'border-white bg-slate-100'}`}>
-                        {getProfileImageUrl() ? (
-                          <img
-                            src={getProfileImageUrl() || ''}
-                            alt={user.displayname || user.username}
-                            className={`h-full w-full object-cover ${!isAuthenticated ? 'blur-xl' : ''}`}
-                          />
-                        ) : (
-                          <div className={`flex h-full w-full items-center justify-center ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-500' : 'bg-slate-100 text-slate-400'}`}>
-                            <UserCircle className="h-14 w-14" />
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="min-w-0 pb-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h2 className={`min-w-0 text-2xl font-black leading-tight tracking-normal sm:text-3xl ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
-                            {user.displayname || user.username}
-                          </h2>
-                        </div>
-                        <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-500'}`}>
-                          @{user.username}
-                        </p>
-                      </div>
-                    </div>
-
-                    {isOwnProfile ? (
-                      <div className="flex flex-wrap gap-2 lg:justify-end">
-                        <button
-                          onClick={() => navigate('/wallet')}
-                          className="cv-row-interactive inline-flex h-10 items-center gap-2 rounded-full border border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-muted)] px-4 text-sm font-bold text-slate-800 dark:text-white"
-                        >
-                          <Wallet className="h-4 w-4" />
-                          <span>{t('wallet.title') || 'Wallet'}</span>
-                        </button>
-                        <button
-                          onClick={() => navigate('/messages')}
-                          className="cv-row-interactive inline-flex h-10 items-center gap-2 rounded-full border border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-muted)] px-4 text-sm font-bold text-slate-800 dark:text-white"
-                        >
-                          <MessageCircle className="h-4 w-4" />
-                          <span>{t('app.nav.messages', { defaultValue: 'Chat' })}</span>
-                        </button>
-                        <button
-                          onClick={openProfileEditMode}
-                          className={`cv-pressable inline-flex h-10 items-center rounded-full px-5 text-sm font-black ${theme === 'dark' ? 'bg-white text-black' : 'bg-slate-950 text-white'}`}
-                        >
-                          {t('profile.edit_profile_button')}
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="flex flex-wrap gap-2 lg:justify-end">
-                        <button
-                          onClick={handleFollowClick}
-                          disabled={isFollowPending}
-                          className={`inline-flex h-10 items-center rounded-full px-5 text-sm font-black ${isFollowing
-                            ? 'cv-row-interactive border border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-muted)] text-slate-800 dark:text-white'
-                            : `cv-pressable ${theme === 'dark' ? 'bg-white text-black' : 'bg-slate-950 text-white'}`
-                            } ${isFollowPending ? 'cursor-not-allowed opacity-60 pointer-events-none' : ''}`}
-                        >
-                          {isFollowing ? t('profile.following') : t('profile.follow')}
-                        </button>
-                        <button
-                          onClick={() => handleSendMessage(user)}
-                          disabled={!canViewSensitiveProfileSections}
-                          className={`cv-row-interactive inline-flex h-10 items-center gap-2 rounded-full border border-[var(--cv-inner-border)] bg-[var(--cv-card-bg-muted)] px-4 text-sm font-bold text-slate-800 dark:text-white ${!canViewSensitiveProfileSections ? 'cursor-not-allowed opacity-50 pointer-events-none' : ''}`}
-                        >
-                          <MessageCircle className="h-4 w-4" />
-                          <span>{t('profile.send_message', { defaultValue: 'Send Message' })}</span>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  {canViewSensitiveProfileSections && profileBioText && (
-                    <div className="mt-4 max-w-3xl">
-                      <ProfileBioPreview theme={theme} content={profileBioText} />
-                    </div>
-                  )}
-
-                  <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-                    {canViewSensitiveProfileSections && getLocationDisplay(user.location) && (
-                      <div className={`inline-flex items-center gap-1.5 font-semibold ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-600'}`}>
-                        <MapPin className="h-4 w-4" />
-                        <span>{getLocationDisplay(user.location)}</span>
-                      </div>
-                    )}
-                    {canViewSensitiveProfileSections && user.website && (
-                      <div className={`inline-flex items-center gap-1.5 font-semibold ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-600'}`}>
-                        <Link className="h-4 w-4" />
-                        <a href={user.website} className="hover:underline" target="_blank" rel="noopener noreferrer">
-                          {user.website.replace(/^https?:\/\//, '')}
-                        </a>
-                      </div>
-                    )}
-                    {!canViewSensitiveProfileSections && (
-                      <div className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-bold ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-300' : 'bg-slate-100 text-slate-700'}`}>
-                        {t('profile.privacy_limited_badge', { defaultValue: 'Limited by privacy settings' })}
-                      </div>
-                    )}
-                    <div className={`inline-flex items-center gap-1.5 font-semibold ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-600'}`}>
-                      <Calendar className="h-4 w-4" />
-                      <span>{formatJoinDate(user.created_at)}</span>
-                    </div>
-                  </div>
+          <main className="cv-profile-view">
+            <ProfileHeader
+              displayName={user.displayname || user.username}
+              username={user.username}
+              avatarUrl={getProfileImageUrl()}
+              coverUrl={getCoverImageUrl()}
+              blurMedia={!isAuthenticated}
+              actions={isOwnProfile ? (
+                <>
+                  <button type="button" onClick={openProfileEditMode} className="cv-profile-action cv-profile-action-primary">
+                    {t('profile.edit_profile_button')}
+                  </button>
+                  <button type="button" onClick={() => navigate('/wallet')} className="cv-profile-action">
+                    <Wallet aria-hidden="true" />
+                    <span>{t('wallet.title')}</span>
+                  </button>
+                  <button type="button" onClick={() => navigate('/messages')} className="cv-profile-action">
+                    <MessageCircle aria-hidden="true" />
+                    <span>{t('app.nav.messages')}</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={handleFollowClick}
+                    disabled={isFollowPending}
+                    aria-busy={isFollowPending}
+                    className={`cv-profile-action${isFollowing ? '' : ' cv-profile-action-primary'}`}
+                  >
+                    {isFollowing ? t('profile.following') : t('profile.follow')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSendMessage(user)}
+                    disabled={!canViewSensitiveProfileSections}
+                    className={`cv-profile-action${isFollowing ? ' cv-profile-action-primary' : ''}`}
+                  >
+                    <MessageCircle aria-hidden="true" />
+                    <span>{t('profile.send_message', { defaultValue: 'Send Message' })}</span>
+                  </button>
+                </>
+              )}
+            >
+              {canViewSensitiveProfileSections && profileBioText && (
+                <div className="cv-profile-bio">
+                  <ProfileBioPreview theme={theme} content={profileBioText} />
                 </div>
+              )}
+              <div className="cv-profile-metadata">
+                {canViewSensitiveProfileSections && getLocationDisplay(user.location) && (
+                  <div><MapPin aria-hidden="true" /><span>{getLocationDisplay(user.location)}</span></div>
+                )}
+                {canViewSensitiveProfileSections && user.website && (
+                  <a href={user.website} target="_blank" rel="noopener noreferrer">
+                    <Link aria-hidden="true" /><span>{user.website.replace(/^https?:\/\//, '')}</span>
+                  </a>
+                )}
+                {!canViewSensitiveProfileSections && (
+                  <div><Lock aria-hidden="true" /><span>{t('profile.privacy_limited_badge', { defaultValue: 'Limited by privacy settings' })}</span></div>
+                )}
+                <div><Calendar aria-hidden="true" /><span>{formatJoinDate(user.created_at)}</span></div>
               </div>
-            </section>
-
-            <div className="px-4 sm:px-6 lg:px-8">
-
-              {/* Stats */}
-              <div className="mb-5 -mx-4 flex gap-4 overflow-x-auto px-4 pb-1 no-scrollbar sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-                {visibleEngagementItems
-                  .map((item) => {
-                    const isLocked = Boolean(item.requiresPremium && shouldLockPremiumEngagements);
-                    const ItemIcon = item.icon;
-                    return (
-                      <button
-                        key={item.id}
-                        type="button"
-                        onClick={() => {
-                          if (item.disabled) {
-                            return;
-                          }
-                          if (isLocked) {
-                            navigate('/premium');
-                            return;
-                          }
-                          item.onClick();
-                        }}
-                        disabled={item.disabled}
-                        className={`group flex w-[76px] shrink-0 flex-col items-center gap-2 text-center ${item.disabled ? 'cursor-default opacity-70' : ''}`}
-                      >
-                        <span className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)] transition-transform group-active:scale-95">
-                          <ItemIcon className="h-6 w-6" strokeWidth={2} />
-                          {isLocked && (
-                            <span className={`absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full border-2 ${theme === 'dark' ? 'border-[#090909] bg-zinc-800 text-zinc-400' : 'border-white bg-slate-200 text-slate-500'}`}>
-                              <Lock className="h-2.5 w-2.5" />
-                            </span>
-                          )}
-                        </span>
-                        <span className={`block text-[15px] font-bold leading-none tabular-nums ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
-                          {item.value.toLocaleString()}
-                        </span>
-                        <span className={`line-clamp-2 block text-[11px] font-medium leading-tight ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-500'}`}>
-                          {item.label}
-                        </span>
-                      </button>
-                    );
-                  })}
+              <div className="cv-profile-connections">
+                {visibleEngagementItems.filter(item => item.id === 'followers' || item.id === 'followings').map(item => (
+                  <button type="button" key={item.id} disabled={item.disabled} onClick={item.onClick} className="cv-profile-connection">
+                    <strong>{item.value.toLocaleString()}</strong><span>{item.label}</span>
+                  </button>
+                ))}
+                {visibleEngagementItems.some(item => item.id !== 'followers' && item.id !== 'followings') && (
+                  <button type="button" className="cv-profile-stats-trigger" onClick={() => setShowProfileStats(true)} aria-haspopup="dialog">
+                    <span>{t('match.stats')}</span><ChevronRight aria-hidden="true" />
+                  </button>
+                )}
               </div>
-            </div>
+            </ProfileHeader>
 
             {/* Tabs - Sticky */}
             {canViewActivityTabs && (
-              <div className="cv-tab-bar -mx-1 !sticky">
-                <div className="cv-tab-row">
-                  {[
+              <div className="cv-profile-tabs">
+                <ViewTabs items={[
                     { id: 'profile', label: t('profile.profile_tab') },
                     { id: 'posts', label: t('profile.posts_tab') },
                     { id: 'replies', label: t('profile.replies_tab') },
                     { id: 'media', label: t('profile.media_tab') },
                     { id: 'likes', label: t('profile.likes_tab') },
-                  ].map((tab) => (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      onClick={() => setActiveTab(tab.id as 'profile' | 'posts' | 'replies' | 'media' | 'likes')}
-                      style={{ minWidth: 0 }}
-                      className={`cv-tab ${activeTab === tab.id ? 'is-active' : ''}`}
-                    >
-                      <span className="min-w-0 truncate text-[13px]">{tab.label}</span>
-                      <span className={`cv-tab-underline ${activeTab === tab.id ? 'is-on' : ''}`} />
-                    </button>
-                  ))}
-                </div>
+                  ]} activeId={activeTab} onSelect={id => setActiveTab(id as 'profile' | 'posts' | 'replies' | 'media' | 'likes')} label={t('app.nav.profile')} />
               </div>
             )}
 
-            <div className="w-full min-h-[520px]">
+            <div className="w-full min-w-0">
               {!isAuthenticated ? (
                 <div className="flex flex-col items-center justify-center py-20 px-4 text-center space-y-6">
                   <div className={`w-20 h-20 rounded-full flex items-center justify-center border ${theme === 'dark' ? 'bg-white/[0.06] border-white/10' : 'bg-white/70 border-[var(--cv-inner-border)]'}`}>
@@ -5755,18 +5637,18 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                 <>
                   {/* Profile */}
                   {activeTab === 'profile' && (
-                    <div className="px-4 py-6 sm:px-6 space-y-10">
+                    <div className="cv-profile-details">
                       {/* Attributes Section */}
                       <div className="w-full" style={profileSectionRenderStyle}>
                         <div className="flex items-center justify-between mb-4">
-                          <h2 className={`text-[22px] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
-                            {t('profile.attributes')}
+                          <h2 className={`text-[1.294rem] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
+                            <span className="inline-flex items-center gap-2"><IllustratedIcon name="system-user" className="h-10 w-10" />{t('profile.attributes')}</span>
                           </h2>
-                          <span className={`text-[13px] font-semibold ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
+                          <span className={`text-[0.765rem] font-semibold ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
                             {filledAttributeCount} / {USER_ATTRIBUTES.length}
                           </span>
                         </div>
-                        <div className={`rounded-[28px] overflow-hidden border ${theme === 'dark'
+                        <div className={`rounded-[20px] overflow-hidden border ${theme === 'dark'
                           ? 'bg-zinc-900/[0.55] border-white/10'
                           : 'bg-white/[0.62] border-[var(--cv-inner-border)]'
                           }`}>
@@ -5861,18 +5743,19 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             return (
                               <div
                                 key={item.field}
-                                className={`cv-row-interactive group ${isMultipleSelection ? 'flex-col items-start' : 'flex items-center justify-between'} px-4 py-3 ${!isLast ? `border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}` : ''
+                                data-multiple={isMultipleSelection || undefined}
+                                className={`cv-profile-attribute cv-row-interactive group ${isMultipleSelection ? 'flex-col items-start' : 'flex items-center justify-between'} px-4 py-3 ${!isLast ? `border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}` : ''
                                   }`}
                               >
                                 <div className="flex items-center gap-3 min-w-0 flex-1 w-full">
-                                  <div className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
-                                    <item.icon className="h-[18px] w-[18px]" strokeWidth={2} />
+                                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
+                                    <IllustratedIcon name={`attribute-${item.field}`} className="h-10 w-10" />
                                   </div>
-                                  <span className={`text-[15px] font-medium tracking-[-0.011em] ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                                  <span className={`text-[0.882rem] font-medium tracking-[-0.011em] ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                                     {item.label}
                                   </span>
                                 </div>
-                                <div className={`flex items-center gap-2 ${isMultipleSelection ? 'w-full mt-2 ml-11' : 'flex-shrink-0'}`}>
+                                <div className="cv-profile-attribute-value flex items-center gap-2">
                                   {!hasValue && (
                                     <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${theme === 'dark' ? 'bg-yellow-400/80' : 'bg-yellow-500/80'}`} />
                                   )}
@@ -5881,7 +5764,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                       {selectedOptions.map((opt) => (
                                         <span
                                           key={opt.id}
-                                          className={`inline-flex items-center px-2.5 py-1 text-[12px] font-medium tracking-[-0.006em] rounded-full ${theme === 'dark'
+                                          className={`inline-flex items-center px-2.5 py-1 text-[0.765rem] font-medium tracking-[-0.006em] rounded-full ${theme === 'dark'
                                             ? 'bg-white/[0.08] text-gray-300'
                                             : 'bg-black/[0.04] text-gray-700'
                                             }`}
@@ -5891,7 +5774,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                       ))}
                                     </div>
                                   ) : (
-                                    <span className={`text-[13px] font-medium tracking-[-0.006em] ${isMultipleSelection ? 'break-words' : 'whitespace-nowrap'} ${hasValue
+                                    <span className={`text-[0.765rem] font-medium tracking-[-0.006em] ${isMultipleSelection ? 'break-words' : 'whitespace-nowrap'} ${hasValue
                                       ? (theme === 'dark' ? 'text-gray-400' : 'text-gray-500')
                                       : (theme === 'dark' ? 'text-yellow-400/90' : 'text-yellow-600/90')
                                       }`}>
@@ -5908,8 +5791,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                       {/* Fantasies Section */}
                       <div style={profileSectionRenderStyle}>
                         <div className="flex items-center justify-between mb-4">
-                          <h2 className={`text-[22px] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
-                            {t('profile.fantasies')}
+                          <h2 className={`text-[1.294rem] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
+                            <span className="inline-flex items-center gap-2"><IllustratedIcon name="fantasy-category-amusement" className="h-10 w-10" />{t('profile.fantasies')}</span>
                           </h2>
                           {(() => {
                             // Count fantasies from preferences_flags or fallback to old structure
@@ -5921,7 +5804,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             const displayCount = totalCount > 0 ? totalCount : fallbackCount;
                             if (displayCount > 0) {
                               return (
-                                <span className={`text-[13px] font-semibold ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
+                                <span className={`text-[0.765rem] font-semibold ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
                                   {displayCount}
                                 </span>
                               );
@@ -5951,20 +5834,20 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                         }`}
                                     >
                                       <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
-                                        <h3 className={`text-[11px] font-bold uppercase tracking-[0.08em] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
-                                          {categoryName}
+                                        <h3 className={`text-[0.765rem] font-bold normal-case tracking-[0.08em] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
+                                          <span className="inline-flex items-center gap-2"><IllustratedIcon name={categorySlug} className="h-8 w-8" />{categoryName}</span>
                                         </h3>
                                       </div>
                                       <div className="p-3.5 flex flex-wrap gap-2">
                                         {categoryFantasies.map((fantasy) => (
                                           <span
                                             key={fantasy.id}
-                                            className={`px-4 py-2 text-[14px] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
+                                            className={`px-4 py-2 text-[0.824rem] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
                                               ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
                                               : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
                                               }`}
                                           >
-                                            {fantasy.name}
+                                            <span className="inline-flex items-center gap-2"><IllustratedIcon name={fantasy.id} className="h-7 w-7" />{fantasy.name}</span>
                                           </span>
                                         ))}
                                       </div>
@@ -6006,8 +5889,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                         }`}
                                     >
                                       <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
-                                        <h3 className={`text-[11px] font-bold uppercase tracking-[0.08em] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
-                                          {categoryName}
+                                        <h3 className={`text-[0.765rem] font-bold normal-case tracking-[0.08em] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
+                                          <span className="inline-flex items-center gap-2"><IllustratedIcon name={categorySlug} className="h-8 w-8" />{categoryName}</span>
                                         </h3>
                                       </div>
                                       <div className="p-3.5 flex flex-wrap gap-2">
@@ -6019,12 +5902,12 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                           return (
                                             <span
                                               key={f.id || f.fantasy_id}
-                                              className={`px-4 py-2 text-[14px] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
+                                              className={`px-4 py-2 text-[0.824rem] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
                                                 ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
                                                 : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
                                                 }`}
                                             >
-                                              {label}
+                                              <span className="inline-flex items-center gap-2"><IllustratedIcon name={f.fantasy_id || f.fantasy?.label?.en || f.id} className="h-7 w-7" />{label}</span>
                                             </span>
                                           );
                                         })}
@@ -6045,7 +5928,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                               <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${theme === 'dark' ? 'bg-white/[0.08]' : 'bg-black/[0.04]'}`}>
                                 <Sparkles className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
                               </div>
-                              <p className={`text-[15px] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_fantasies_added')}</p>
+                              <p className={`text-[0.882rem] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_fantasies_added')}</p>
                             </div>
                           );
                         })()}
@@ -6054,8 +5937,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                       {/* Interests Section */}
                       <div style={profileSectionRenderStyle}>
                         <div className="flex items-center justify-between mb-4">
-                          <h2 className={`text-[22px] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
-                            {t('profile.interests')}
+                          <h2 className={`text-[1.294rem] font-bold tracking-[-0.022em] leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
+                            <span className="inline-flex items-center gap-2"><IllustratedIcon name="interest-category-lifestyle" className="h-10 w-10" />{t('profile.interests')}</span>
                           </h2>
                           {(() => {
                             // Count interests from preferences_flags or fallback to old structure
@@ -6069,7 +5952,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             const displayCount = totalCount > 0 ? totalCount : fallbackCount;
                             if (displayCount > 0) {
                               return (
-                                <span className={`text-[13px] font-semibold ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
+                                <span className={`text-[0.765rem] font-semibold ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
                                   {displayCount}
                                 </span>
                               );
@@ -6099,20 +5982,20 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                         }`}
                                     >
                                       <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
-                                        <h3 className={`text-[11px] font-bold uppercase tracking-[0.08em] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
-                                          {categoryName}
+                                        <h3 className={`text-[0.765rem] font-bold normal-case tracking-[0.08em] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
+                                          <span className="inline-flex items-center gap-2"><IllustratedIcon name={categoryId} className="h-8 w-8" />{categoryName}</span>
                                         </h3>
                                       </div>
                                       <div className="p-3.5 flex flex-wrap gap-2">
                                         {categoryInterests.map((item) => (
                                           <span
                                             key={item.id}
-                                            className={`inline-flex items-center gap-1.5 px-4 py-2 text-[14px] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
+                                            className={`inline-flex items-center gap-1.5 px-4 py-2 text-[0.824rem] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
                                               ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
                                               : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
                                               }`}
                                           >
-                                            {item.emoji && <span className="text-[15px] leading-none">{item.emoji}</span>}
+                                            <IllustratedIcon name={item.id} fallback="system-heart" className="inline-block h-7 w-7 align-middle" />
                                             <span>{item.name}</span>
                                           </span>
                                         ))}
@@ -6200,20 +6083,20 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                                         }`}
                                     >
                                       <div className={`px-4 py-2.5 border-b ${theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.04]'}`}>
-                                        <h3 className={`text-[11px] font-bold uppercase tracking-[0.08em] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
-                                          {categoryName}
+                                        <h3 className={`text-[0.765rem] font-bold normal-case tracking-[0.08em] ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-400'}`}>
+                                          <span className="inline-flex items-center gap-2"><IllustratedIcon name={categoryId} className="h-8 w-8" />{categoryName}</span>
                                         </h3>
                                       </div>
                                       <div className="p-3.5 flex flex-wrap gap-2">
                                         {categoryInterests.map((item) => (
                                           <span
                                             key={item.id}
-                                            className={`inline-flex items-center gap-1.5 px-4 py-2 text-[14px] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
+                                            className={`inline-flex items-center gap-1.5 px-4 py-2 text-[0.824rem] font-medium tracking-[-0.006em] rounded-full transition-all duration-200 cursor-default ${theme === 'dark'
                                               ? 'bg-white/[0.08] text-gray-200 hover:bg-white/[0.12] active:scale-[0.98]'
                                               : 'bg-black/[0.04] text-gray-800 hover:bg-black/[0.06] active:scale-[0.98]'
                                               }`}
                                           >
-                                            {item.emoji && <span className="text-[15px] leading-none">{item.emoji}</span>}
+                                            <IllustratedIcon name={item.id} fallback="system-heart" className="inline-block h-7 w-7 align-middle" />
                                             <span>{item.name}</span>
                                           </span>
                                         ))}
@@ -6234,7 +6117,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                               <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${theme === 'dark' ? 'bg-white/[0.08]' : 'bg-black/[0.04]'}`}>
                                 <Heart className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
                               </div>
-                              <p className={`text-[15px] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_interests_added')}</p>
+                              <p className={`text-[0.882rem] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{t('profile.no_interests_added')}</p>
                             </div>
                           );
                         })()}
@@ -6370,6 +6253,28 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
           </main>
         )}
       </div>
+      <Sheet isOpen={showProfileStats} onClose={() => setShowProfileStats(false)} title={t('match.stats')}>
+        <GroupedSection>
+          {visibleEngagementItems.map(item => {
+            const ItemIcon = item.icon;
+            const isLocked = Boolean(item.requiresPremium && shouldLockPremiumEngagements);
+            return (
+              <ListRow
+                key={item.id}
+                icon={<ItemIcon aria-hidden="true" />}
+                title={item.label}
+                value={item.value.toLocaleString()}
+                accessory={isLocked ? <Lock className="cv-list-disclosure" aria-label={t('premium.title')} /> : undefined}
+                onClick={item.disabled ? undefined : () => {
+                  setShowProfileStats(false);
+                  if (isLocked) navigate('/premium');
+                  else item.onClick();
+                }}
+              />
+            );
+          })}
+        </GroupedSection>
+      </Sheet>
       <AuthWizard
         isOpen={showAuthWizard}
         onClose={() => setShowAuthWizard(false)}
