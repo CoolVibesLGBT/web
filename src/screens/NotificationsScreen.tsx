@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
@@ -186,8 +187,6 @@ const NotificationsScreen: React.FC = () => {
     else if (notification.sender?.username) navigate(`/${notification.sender.username}`);
   };
 
-  const isDark = theme === 'dark';
-  const secTextColor = isDark ? 'text-zinc-400' : 'text-slate-500';
   const divider = <div className="h-px w-full bg-[var(--cv-inner-border)]" />;
   const emptyTitle = t(`notifications.no_${activeTab}`, {
     defaultValue: activeTab === 'all' ? t('notifications.no_notifications') : t('notifications.no_other'),
@@ -241,20 +240,7 @@ const NotificationsScreen: React.FC = () => {
         <main className="min-h-0">
           <AnimatePresence mode="wait">
             {filteredNotifications.length === 0 ? (
-              <motion.div
-                key="empty"
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex min-h-[320px] flex-col items-center justify-center rounded-[12px] border border-[var(--cv-card-border)] bg-[var(--cv-card-bg-solid)] px-8 py-16 text-center"
-              >
-                <div className="mb-5 flex h-[36px] w-[36px] items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
-                  <Bell className="h-[18px] w-[18px]" strokeWidth={2} />
-                </div>
-                <h3 className="text-[0.882rem] font-semibold">{emptyTitle}</h3>
-                <p className={`mt-1 max-w-[320px] text-[0.765rem] leading-snug ${secTextColor}`}>
-                  {emptyMessage}
-                </p>
-              </motion.div>
+              <AnimatedEmptyState title={emptyTitle} description={emptyMessage} />
             ) : (
               <motion.div
                 key={activeTab}

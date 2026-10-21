@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
 import SearchField from '@/components/ui/SearchField';
 import ChatWallpaper from '@/features/appearance/ChatWallpaper';
@@ -32,7 +33,6 @@ import ProfileScreen from './ProfileScreen';
 import { api } from '../services/api';
 import { Actions } from '../services/actions';
 import {
-  MessageCircle,
   MoreVertical,
   Paperclip,
   Lock,
@@ -2662,7 +2662,11 @@ const MessagesScreen: React.FC = () => {
     if (!Array.isArray(response.messages) || response.messages.length !== items.length + (comment ? 1 : 0) || response.messages.some(item => !item.id)) throw new Error('Invalid forwarding response');
     if (target.id === selectedChatRef.current) {
       const received = response.messages.map(item => normalizeChatMessage(item, String(user?.id)));
+      initialScrollRef.current = true;
       setMessages(previous => [...previous, ...received.filter(item => !previous.some(existing => existing.id === item.id))]);
+      requestAnimationFrame(() => {
+        if (initialScrollRef.current && selectedChatRef.current === target.id) messageListRef.current?.scrollTo({top: Number.MAX_SAFE_INTEGER, behavior: 'auto'});
+      });
     }
     void refreshChatsRef.current?.();
   }
@@ -2920,9 +2924,7 @@ const MessagesScreen: React.FC = () => {
                   if (activeFilter === 'groups') return chat.type === 'group';
                 return true;
               }).length === 0 ? (
-                <div className={`flex items-center justify-center h-full text-center p-8 ${theme === 'dark' ? 'text-zinc-500' : 'text-slate-500'}`}>
-                  {t('messages.no_chats_found')}
-                </div>
+                <AnimatedEmptyState compact title={t('messages.no_chats_found')} />
               ) : (() => {
                 const visibleChats = chatsList.filter((chat: ChatItem) => {
                   if (chatSearch && !`${chat.name} ${chat.username}`.toLocaleLowerCase().includes(chatSearch.trim().replace(/^@/, '').toLocaleLowerCase())) return false;
@@ -3313,15 +3315,7 @@ const MessagesScreen: React.FC = () => {
                     }`}>
                     <ChatWallpaper />
                 <ClipboardFeedback status={clipboard.status} />
-                    <div className="cv-chat-empty-label text-center px-4">
-                      <span className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
-                        <MessageCircle className="h-7 w-7" strokeWidth={2} />
-                      </span>
-                      <h2 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-slate-950'
-                        }`}>{t('messages.select_conversation')}</h2>
-                      <p className={`${theme === 'dark' ? 'text-zinc-400' : 'text-slate-600'
-                        }`}>{t('messages.select_conversation_subtitle')}</p>
-                    </div>
+                    <div className="cv-chat-empty-label"><AnimatedEmptyState title={t('messages.select_conversation')} description={t('messages.select_conversation_subtitle')} /></div>
                   </div>
                 ) : null}
               </motion.div>

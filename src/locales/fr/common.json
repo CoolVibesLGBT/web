@@ -262,7 +262,8 @@
     "search": "Rechercher",
     "screen_error_title": "Impossible de charger cet écran",
     "screen_error_message": "Une erreur est survenue. Réessaie ou retourne à la page d’accueil.",
-    "people": "Personnes"
+    "people": "Personnes",
+    "back": "Retour"
   },
   "months": {
     "january": "Janvier",
@@ -863,5 +864,24 @@
     "no_referrals": "Aucun parrainage pour le moment",
     "no_referrals_desc": "Partagez votre lien pour inviter vos premiers amis.",
     "share": "Partager"
+  },
+  "discovery": {
+    "like": "J’aime",
+    "dislike": "Je n’aime pas",
+    "block": "Bloquer",
+    "online": "En ligne",
+    "loading_vibes": "Chargement des Vibes…",
+    "empty_vibes": "Pas encore de Vibes",
+    "empty_vibes_description": "Reviens plus tard pour découvrir de nouvelles publications.",
+    "vibes_error": "Impossible de charger les Vibes. Réessaie.",
+    "media_error": "Impossible de charger cette photo ou cette vidéo.",
+    "empty_people": "Personne dans cette liste pour le moment."
+  },
+  "search": {
+    "no_results": "Aucun résultat",
+    "no_results_subtitle": "Essaie un autre terme ou une autre catégorie."
+  },
+  "live": {
+    "empty": "Aucun direct pour le moment."
   }
 }

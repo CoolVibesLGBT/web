@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-21",
+  "method": "Browser DOM, original TGS canvas and intercepted API/media checks; no screenshots or real mutations",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "checks": [
+        "grid/list/card target geometry and wrapping",
+        "list exposes all four actions; compact/card secondary menu",
+        "search input has no focus ring; no sidebar search",
+        "fixed refresh geometry during request at desktop",
+        "four Match empty states decode original TGS stickers",
+        "empty Vibes does not loop; API and media failures recover; valid image loads"
+      ],
+      "vibeCalls": 4
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "status": "passed",
+      "checks": [
+        "grid/list/card target geometry and wrapping",
+        "list exposes all four actions; compact/card secondary menu",
+        "search input has no focus ring; no sidebar search",
+        "fixed refresh geometry during request at desktop",
+        "four Match empty states decode original TGS stickers",
+        "empty Vibes does not loop; API and media failures recover; valid image loads"
+      ],
+      "vibeCalls": 4
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "status": "passed",
+      "checks": [
+        "grid/list/card target geometry and wrapping",
+        "list exposes all four actions; compact/card secondary menu",
+        "search input has no focus ring; no sidebar search",
+        "fixed refresh geometry during request at desktop",
+        "four Match empty states decode original TGS stickers",
+        "empty Vibes does not loop; API and media failures recover; valid image loads"
+      ],
+      "vibeCalls": 4
+    },
+    {
+      "width": 1440,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "checks": [
+        "grid/list/card target geometry and wrapping",
+        "list exposes all four actions; compact/card secondary menu",
+        "search input has no focus ring; no sidebar search",
+        "fixed refresh geometry during request at desktop",
+        "four Match empty states decode original TGS stickers",
+        "empty Vibes does not loop; API and media failures recover; valid image loads"
+      ],
+      "vibeCalls": 4
+    }
+  ]
+}

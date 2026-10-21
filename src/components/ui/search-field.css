@@ -1,7 +1,7 @@
 /* tweb _inputSearch.scss geometry, with one border on the shared container. */
 .cv-search-field { display: flex; align-items: center; min-width: 0; min-height: max(44px, 2.824rem); gap: .706rem; padding-inline: .824rem .235rem; border: 1px solid transparent; border-radius: 1.412rem; background: var(--cv-surface-2); color: var(--cv-neutral-2); }
 .cv-search-field:hover { border-color: var(--cv-inner-border); }
-.cv-search-field:focus-within { border-color: var(--color-brand); color: var(--color-brand); }
+.cv-search-field:focus-within { border-color: transparent; color: var(--cv-neutral-2); }
 .cv-search-field > svg { flex: 0 0 1.412rem; width: 1.412rem; height: 1.412rem; }
 .cv-search-field > input.cv-search-field-input { flex: 1; width: 0; min-width: 0; height: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--cv-neutral-1); font-size: .941rem; line-height: 1.375; appearance: none; outline: none; box-shadow: none; }
 .cv-search-field > input.cv-search-field-input:is(:focus,:focus-visible) { outline: none; box-shadow: none; border: 0; }

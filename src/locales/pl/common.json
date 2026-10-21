@@ -262,7 +262,8 @@
     "search": "Szukaj",
     "screen_error_title": "Nie udało się załadować tego ekranu",
     "screen_error_message": "Wystąpił błąd. Spróbuj ponownie lub wróć na stronę główną.",
-    "people": "Osoby"
+    "people": "Osoby",
+    "back": "Wróć"
   },
   "months": {
     "january": "Styczeń",
@@ -897,5 +898,24 @@
     "no_referrals": "Brak poleceń",
     "no_referrals_desc": "Udostępnij link, aby zaprosić pierwszych znajomych.",
     "share": "Udostępnij"
+  },
+  "discovery": {
+    "like": "Lubię to",
+    "dislike": "Nie lubię",
+    "block": "Zablokuj",
+    "online": "Online",
+    "loading_vibes": "Ładowanie Vibes…",
+    "empty_vibes": "Brak Vibes",
+    "empty_vibes_description": "Wróć później, aby odkryć nowe wpisy.",
+    "vibes_error": "Nie udało się wczytać Vibes. Spróbuj ponownie.",
+    "media_error": "Nie udało się wczytać tego zdjęcia lub filmu.",
+    "empty_people": "Na tej liście jeszcze nikogo nie ma."
+  },
+  "search": {
+    "no_results": "Brak wyników",
+    "no_results_subtitle": "Spróbuj innego hasła lub kategorii."
+  },
+  "live": {
+    "empty": "Obecnie nie ma transmisji na żywo."
   }
 }

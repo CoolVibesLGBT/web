@@ -2,25 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from '@/router';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Heart, HeartOff, MapPin, MessageCircleHeart, ShieldBan } from '@/components/ui/illustratedIcons';
-import { useTheme } from '../../../contexts/ThemeContext';
+import { Heart } from '@/components/ui/illustratedIcons';
 import GiftSelector from './GiftSelector';
 import QuickMessages from '../../post/QuickMessages';
 import { calculateAge, getSafeImageURLEx } from '../../../helpers/helpers';
 import { api } from '../../../services/api';
 import { burstConfig, type BurstOverlayState } from './ActionBar';
 
-interface User {
-  id: string;
-  public_id: string | number;
-  username: string;
-  displayname?: string;
-  name?: string;
-  avatar?: string | { file?: { url?: string } } | null;
-  date_of_birth?: string;
-  location?: string | { display?: string };
-  isOnline?: boolean;
-}
+import UserCardView, { type User, type UserCardViewProps } from './UserCardView';
 
 interface UserCardProps {
   user: User;
@@ -39,218 +28,7 @@ const getLocation = (user: User): string => {
   return '';
 };
 
-interface SubViewProps {
-  user: User;
-  theme: string;
-  liked: boolean;
-  disliked: boolean;
-  blocked: boolean;
-  handleSendMessage: (user: User) => void;
-  handleSendLike: (user: User) => void;
-  handleSendDislike: (user: User) => void;
-  handleBlock: (user: User) => void;
-  handleProfileClick: () => void;
-  avatarURL: string;
-  userAge: string;
-  location: string;
-}
-
-const CompactView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blocked, handleSendMessage, handleSendLike, handleSendDislike, handleBlock, handleProfileClick, avatarURL, userAge, location }) => {
-  const inlineBtns = [
-    { label: 'Message', icon: <MessageCircleHeart size={15} />, active: false, activeClass: '', onClick: () => handleSendMessage(user) },
-    { label: 'Like', icon: <Heart size={15} className={liked ? 'fill-red-500' : ''} />, active: liked, activeClass: 'text-red-500', onClick: () => { handleSendLike(user); } },
-    { label: 'Dislike', icon: <HeartOff size={15} />, active: disliked, activeClass: 'text-orange-500', onClick: () => { handleSendDislike(user); } },
-    { label: 'Block', icon: <ShieldBan size={15} />, active: blocked, activeClass: 'text-blue-500', onClick: () => { handleBlock(user); } },
-  ];
-  const ghostBtn = theme === 'dark'
-    ? 'text-gray-500 hover:text-white hover:bg-white/5'
-    : 'text-gray-400 hover:text-gray-800 hover:bg-black/5';
-
-  return (
-    <div
-      className={`rounded-xl overflow-hidden cursor-pointer border transition-colors ${theme === 'dark' ? 'cv-card-surface-solid border-white/10' : 'bg-white border-gray-100'
-        }`}
-      onClick={handleProfileClick}
-    >
-      <div className="relative aspect-square overflow-hidden">
-        <span className={`absolute inset-0 flex items-center justify-center text-2xl font-semibold ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-400'}`}>
-          {(user.displayname || user.name || 'A').charAt(0).toUpperCase()}
-        </span>
-        <img src={avatarURL} alt="" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = 'none'; }} className="absolute inset-0 h-full w-full object-cover object-top" />
-        {user.isOnline && (
-          <div className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-green-500 border border-white" />
-        )}
-      </div>
-
-      <div className={`px-2.5 py-2 border-b ${theme === 'dark' ? 'border-white/10' : 'border-gray-100'
-        }`}>
-        <p className={`font-semibold text-[0.765rem] truncate leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-          }`}>
-          {user.displayname || user.name || 'Anonymous'}
-          {userAge && <span className={`ml-1 font-normal text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-            }`}>{userAge}</span>}
-        </p>
-        {location && (
-          <p className={`text-[0.765rem] truncate flex items-center gap-0.5 mt-0.5 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
-            }`}>
-            <MapPin size={9} />{location}
-          </p>
-        )}
-      </div>
-
-      <div
-        className="flex items-center"
-        onClick={e => e.stopPropagation()}
-      >
-        {inlineBtns.map(btn => (
-          <button
-            key={btn.label}
-            aria-label={btn.label}
-            onClick={btn.onClick}
-            className={`flex-1 h-10 flex items-center justify-center transition-colors border-r last:border-r-0 ${theme === 'dark' ? 'border-white/10' : 'border-gray-100'
-              } ${btn.active ? btn.activeClass : ghostBtn
-              }`}
-          >
-            {btn.icon}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const ListView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blocked, handleSendMessage, handleSendLike, handleSendDislike, handleBlock, handleProfileClick, avatarURL, userAge, location }) => (
-  <div
-    className={`flex items-center h-[72px] rounded-xl overflow-hidden cursor-pointer border transition-colors ${theme === 'dark'
-      ? 'cv-card-surface-solid border-white/10 hover:bg-white/[0.04]'
-      : 'bg-white border-gray-100 hover:bg-gray-50'
-      }`}
-    onClick={handleProfileClick}
-  >
-    <div className="relative w-[72px] h-[72px] shrink-0 overflow-hidden">
-      <span className={`absolute inset-0 flex items-center justify-center text-xl font-semibold ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-400'}`}>
-        {(user.displayname || user.name || 'A').charAt(0).toUpperCase()}
-      </span>
-      <img src={avatarURL} alt="" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = 'none'; }} className="absolute inset-0 h-full w-full object-cover object-top" />
-    </div>
-
-    <div className="flex-1 flex flex-col justify-center px-3 min-w-0 overflow-hidden">
-      <div className="flex items-center gap-1.5">
-        <p className={`font-semibold text-sm truncate leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-          }`}>
-          {user.displayname || user.name || 'Anonymous'}
-        </p>
-        {userAge && (
-          <span className={`text-xs shrink-0 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-            }`}>{userAge}</span>
-        )}
-        {user.isOnline && <div className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />}
-      </div>
-      {location && (
-        <p className={`text-[0.765rem] truncate flex items-center gap-1 mt-0.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-          }`}>
-          <MapPin size={9} />
-          {location}
-        </p>
-      )}
-    </div>
-
-    <div
-      className={`shrink-0 flex items-center border-l ${theme === 'dark' ? 'border-white/10' : 'border-gray-100'
-        }`}
-      onClick={e => e.stopPropagation()}
-    >
-      {[
-        { label: 'Message', icon: <MessageCircleHeart size={16} />, active: false, onClick: () => handleSendMessage(user), activeClass: '' },
-        { label: 'Like', icon: <Heart size={16} className={liked ? 'fill-red-500' : ''} />, active: liked, onClick: () => { handleSendLike(user); }, activeClass: 'text-red-500' },
-        { label: 'Dislike', icon: <HeartOff size={16} />, active: disliked, onClick: () => { handleSendDislike(user); }, activeClass: 'text-orange-500' },
-        { label: 'Block', icon: <ShieldBan size={16} />, active: blocked, onClick: () => { handleBlock(user); }, activeClass: 'text-blue-500' },
-      ].map(btn => (
-        <button
-          key={btn.label}
-          aria-label={btn.label}
-          onClick={btn.onClick}
-          className={`w-10 h-[72px] flex items-center justify-center transition-colors ${btn.active ? btn.activeClass : theme === 'dark'
-            ? 'text-gray-500 hover:text-white hover:bg-white/5'
-            : 'text-gray-400 hover:text-gray-800 hover:bg-gray-50'
-            }`}
-        >
-          {btn.icon}
-        </button>
-      ))}
-    </div>
-  </div>
-);
-
-const CardView: React.FC<SubViewProps> = ({ user, theme, liked, disliked, blocked, handleSendMessage, handleSendLike, handleSendDislike, handleBlock, handleProfileClick, avatarURL, userAge, location }) => {
-  const inlineBtns = [
-    { label: 'Message', icon: <MessageCircleHeart size={17} />, active: false, activeClass: '', onClick: () => handleSendMessage(user) },
-    { label: 'Like', icon: <Heart size={17} className={liked ? 'fill-red-500' : ''} />, active: liked, activeClass: 'text-red-500', onClick: () => { handleSendLike(user); } },
-    { label: 'Dislike', icon: <HeartOff size={17} />, active: disliked, activeClass: 'text-orange-500', onClick: () => { handleSendDislike(user); } },
-    { label: 'Block', icon: <ShieldBan size={17} />, active: blocked, activeClass: 'text-blue-500', onClick: () => { handleBlock(user); } },
-  ];
-  const ghostBtn = theme === 'dark'
-    ? 'text-gray-500 hover:text-white hover:bg-white/5'
-    : 'text-gray-400 hover:text-gray-800 hover:bg-black/5';
-
-  return (
-    <div
-      className={`rounded-xl overflow-hidden cursor-pointer border transition-colors ${theme === 'dark' ? 'cv-card-surface-solid border-white/10' : 'bg-white border-gray-100'
-        }`}
-      onClick={handleProfileClick}
-    >
-      <div className="relative aspect-[3/4] overflow-hidden">
-        <span className={`absolute inset-0 flex items-center justify-center text-4xl font-semibold ${theme === 'dark' ? 'bg-white/[0.06] text-zinc-400' : 'bg-slate-100 text-slate-400'}`}>
-          {(user.displayname || user.name || 'A').charAt(0).toUpperCase()}
-        </span>
-        <img src={avatarURL} alt="" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = 'none'; }} className="absolute inset-0 h-full w-full object-cover object-top" />
-        {user.isOnline && (
-          <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 border border-white/20">
-            <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-            <span className="text-white text-[0.765rem] font-medium">Online</span>
-          </div>
-        )}
-      </div>
-
-      <div className={`px-3 py-2.5 border-b ${theme === 'dark' ? 'border-white/10' : 'border-gray-100'
-        }`}>
-        <p className={`font-bold text-sm truncate leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-          }`}>
-          {user.displayname || user.name || 'Anonymous'}
-          {userAge && <span className={`ml-1.5 font-normal ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-            }`}>{userAge}</span>}
-        </p>
-        {location && (
-          <p className={`text-[0.765rem] truncate flex items-center gap-1 mt-0.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-            }`}>
-            <MapPin size={10} />{location}
-          </p>
-        )}
-      </div>
-
-      <div
-        className="flex items-center"
-        onClick={e => e.stopPropagation()}
-      >
-        {inlineBtns.map(btn => (
-          <button
-            key={btn.label}
-            aria-label={btn.label}
-            onClick={btn.onClick}
-            className={`flex-1 h-11 flex items-center justify-center transition-colors border-r last:border-r-0 ${theme === 'dark' ? 'border-white/10' : 'border-gray-100'
-              } ${btn.active ? btn.activeClass : ghostBtn
-              }`}
-          >
-            {btn.icon}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
 export const UserCard = React.memo(function UserCard({ user, viewMode = 'card' }: UserCardProps) {
-  const { theme } = useTheme();
   const navigate = useNavigate();
   const [isGiftSelectorOpen, setIsGiftSelectorOpen] = useState(false);
   const [isQuickMessageSelectorOpen, setIsQuickMessageSelectorOpen] = useState(false);
@@ -361,16 +139,16 @@ export const UserCard = React.memo(function UserCard({ user, viewMode = 'card' }
   }, [overlay]);
 
   const locationValue = getLocation(user);
-  const avatarURLValue = getSafeImageURLEx(user.public_id.toString(), (user.avatar as any), "large") || "";
+  const avatarURLValue = getSafeImageURLEx(String(user.public_id ?? user.id), (user.avatar as any), "large") || "";
   let userAgeValue = calculateAge(user.date_of_birth as string);
   userAgeValue = userAgeValue === "-" ? "" : userAgeValue;
 
   const portalRoot = typeof document !== 'undefined' ? document.body : null;
 
   const renderView = () => {
-    const props: SubViewProps = {
+    const props: UserCardViewProps = {
       user,
-      theme,
+      viewMode,
       liked,
       disliked,
       blocked,
@@ -384,14 +162,7 @@ export const UserCard = React.memo(function UserCard({ user, viewMode = 'card' }
       location: locationValue
     };
 
-    switch (viewMode) {
-      case 'compact':
-        return <CompactView {...props} />;
-      case 'list':
-        return <ListView {...props} />;
-      default:
-        return <CardView {...props} />;
-    }
+    return <UserCardView {...props} />;
   };
 
   return (

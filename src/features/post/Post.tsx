@@ -1,3 +1,4 @@
+import './post-card.css';
 import React, { useState, useEffect, useCallback, useMemo, useRef, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { MessageCircle, Share, Bookmark, MapPin, Calendar, X, ChevronLeft, ChevronRight, CircleCheck, CheckSquare, ListOrdered, Scale, BarChart3, Loader2, ExternalLink, Sparkles, Globe, Users, HandCoins, Heart, HeartOff, Banana, MoreVertical, Trash2, Flag, Home, Car, Building2, Wallet, Zap, MessageSquare, Banknote, Droplet, Feather, Dumbbell, FlaskRound, Clock, Moon, Coffee, Smile, ShieldCheck, Hand, Eye } from 'lucide-react';
@@ -646,7 +647,7 @@ const Post: React.FC<PostProps> = ({
   // Memoize post ID and key engagement data to prevent unnecessary updates
   const postIdRef = useRef<string>(postProp.public_id);
   const userIdRef = useRef<string | undefined>(user?.id);
-  const engagementsRef = useRef<unknown>(postProp.engagements);
+  const engagementsRef = useRef<unknown>(undefined);
   const postEngagementsRef = useRef<unknown>(postProp.engagements);
   const childrenRef = useRef<ApiPost[] | undefined>(postProp.children);
   const postPropRef = useRef<ApiPost>(postProp);
@@ -1944,7 +1945,8 @@ const Post: React.FC<PostProps> = ({
     <>
       <motion.div
         ref={postViewRef}
-        className={`
+        data-post-id={post.public_id}
+        className={`cv-post
   overflow-hidden border-b transition-colors duration-300 ease-out
   ${theme === "dark"
             ? `border-white/10 ${isPostClickable ? 'hover:bg-white/[0.035]' : ''}`
@@ -1999,8 +2001,8 @@ const Post: React.FC<PostProps> = ({
         transition={{ duration: 0.15 }}
       >
         {/* Post Header */}
-        <div className="px-2 py-2 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+        <div className="cv-post-header">
+          <div className="cv-post-identity">
             <button
               data-no-post-click="true"
               onClick={(e) => {
@@ -2010,7 +2012,7 @@ const Post: React.FC<PostProps> = ({
               onMouseDown={(e) => e.stopPropagation()}
               onPointerDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
-              className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-200 overflow-hidden border ${theme === 'dark'
+              className={`cv-post-author-avatar w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-200 overflow-hidden border ${theme === 'dark'
                 ? 'bg-gray-900/30 hover:bg-gray-900/50 border-gray-900'
                 : 'bg-white hover:bg-gray-100 border-gray-200/50'
                 }`}
@@ -2031,7 +2033,7 @@ const Post: React.FC<PostProps> = ({
               )}
             </button>
             <div>
-              <div className="flex items-center space-x-2">
+              <div className="cv-post-author-meta">
                 <button
                   data-no-post-click="true"
                   onClick={(e) => {
@@ -2065,7 +2067,7 @@ const Post: React.FC<PostProps> = ({
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2" data-no-post-click="true" onClick={(e) => e.stopPropagation()}>
+          <div className="cv-post-header-actions" data-no-post-click="true" onClick={(e) => e.stopPropagation()}>
             <span
               className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-[0.765rem] font-bold tabular-nums ${theme === 'dark'
                 ? 'border-white/10 bg-white/[0.045] text-zinc-400'
@@ -3389,11 +3391,11 @@ const Post: React.FC<PostProps> = ({
 
         {/* Engagement Bar */}
         <div
-          className="px-4 py-2 flex items-center justify-between"
+          className="cv-post-actions"
           data-no-post-click="true"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex items-center space-x-2 -ml-2">
+          <div className="cv-post-action-items">
             <motion.button
               data-no-post-click="true"
               aria-label="Like post"
@@ -3716,7 +3718,7 @@ const Post: React.FC<PostProps> = ({
       )}
 
       {/* Image Gallery Modal */}
-      {isGalleryOpen && galleryImageAttachments.length > 0 && (() => {
+      {isGalleryOpen && galleryImageAttachments.length > 0 && typeof document !== 'undefined' && createPortal((() => {
 
         const currentAttachment = galleryImageAttachments[selectedImageIndex];
         const currentImage = getAttachmentUrl(currentAttachment, ['large', 'medium', 'small', 'original']);
@@ -3740,7 +3742,7 @@ const Post: React.FC<PostProps> = ({
             }}
 
 
-            className={`fixed inset-0 z-50 flex items-center justify-center `}
+            className="cv-post-gallery fixed inset-0 z-50 flex items-center justify-center"
             onClick={closeGallery}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -3766,7 +3768,7 @@ const Post: React.FC<PostProps> = ({
               )}
               <div className="flex-1 flex justify-end">
                 <motion.button
-                  aria-label="Close gallery"
+                  aria-label={t('app.close')}
                   onClick={(e) => {
                     e.stopPropagation();
                     closeGallery();
@@ -3873,10 +3875,10 @@ const Post: React.FC<PostProps> = ({
             </div>
           </motion.div>
         );
-      })()}
+      })(), document.body)}
 
       {/* Delete Confirmation Modal */}
-      <AnimatePresence>
+      {typeof document !== 'undefined' && createPortal(<AnimatePresence>
         {showDeleteModal && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -3984,89 +3986,14 @@ const Post: React.FC<PostProps> = ({
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>, document.body)}
 
     </>
   );
 };
 
-// Memoize Post component to prevent unnecessary re-renders
-// Only re-render if post ID, user ID, or engagement counts actually change
-const MemoizedPost = React.memo(Post, (prevProps, nextProps) => {
-  // If post ID changed, always re-render
-  if (prevProps.post.public_id !== nextProps.post.public_id) {
-    return false;
-  }
-
-  // If other props changed, re-render
-  if (
-    prevProps.showChildren !== nextProps.showChildren ||
-    prevProps.defaultShowReply !== nextProps.defaultShowReply ||
-    prevProps.loadChildren !== nextProps.loadChildren
-  ) {
-    return false;
-  }
-
-  // Check if engagement counts changed (important for UI updates)
-  const prevCounts = prevProps.post.engagements?.counts;
-  const nextCounts = nextProps.post.engagements?.counts;
-
-  if (prevCounts && nextCounts) {
-    if (
-      prevCounts.like_received_count !== nextCounts.like_received_count ||
-      prevCounts.dislike_received_count !== nextCounts.dislike_received_count ||
-      prevCounts.banana_count !== nextCounts.banana_count ||
-      prevCounts.banana_received_count !== nextCounts.banana_received_count ||
-      prevCounts.comment_count !== nextCounts.comment_count ||
-      prevCounts.bookmark_count !== nextCounts.bookmark_count ||
-      prevCounts.view_count !== nextCounts.view_count ||
-      prevCounts.tip_count !== nextCounts.tip_count ||
-      prevCounts.tip_amount !== nextCounts.tip_amount
-    ) {
-      return false;
-    }
-  } else if (prevCounts !== nextCounts) {
-    return false;
-  }
-
-  // Check if poll vote counts changed
-  if (prevProps.post.poll && nextProps.post.poll) {
-    if (prevProps.post.poll.length !== nextProps.post.poll.length) {
-      return false;
-    }
-
-    for (let i = 0; i < prevProps.post.poll.length; i++) {
-      const prevPoll = prevProps.post.poll[i];
-      const nextPoll = nextProps.post.poll[i];
-
-      if (prevPoll.id !== nextPoll.id) {
-        return false;
-      }
-
-      if (prevPoll.choices && nextPoll.choices) {
-        if (prevPoll.choices.length !== nextPoll.choices.length) {
-          return false;
-        }
-
-        for (let j = 0; j < prevPoll.choices.length; j++) {
-          if (prevPoll.choices[j].vote_count !== nextPoll.choices[j].vote_count) {
-            return false;
-          }
-        }
-      }
-    }
-  } else if (prevProps.post.poll !== nextProps.post.poll) {
-    return false;
-  }
-
-  // Check if children changed
-  if (prevProps.post.children?.length !== nextProps.post.children?.length) {
-    return false;
-  }
-
-  // If nothing important changed, skip re-render
-  return true;
-});
+// Preserve memoization without suppressing changed media, event, poll or action props.
+const MemoizedPost = React.memo(Post);
 
 MemoizedPost.displayName = 'Post';
 

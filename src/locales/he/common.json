@@ -262,7 +262,8 @@
     "search": "חיפוש",
     "screen_error_title": "לא ניתן לטעון את המסך הזה",
     "screen_error_message": "אירעה שגיאה. אפשר לנסות שוב או לחזור לדף הבית.",
-    "people": "אנשים"
+    "people": "אנשים",
+    "back": "חזרה"
   },
   "months": {
     "january": "ינואר",
@@ -863,5 +864,24 @@
     "no_referrals": "אין עדיין הפניות",
     "no_referrals_desc": "שתפו את הקישור כדי להזמין את החברים הראשונים.",
     "share": "שיתוף"
+  },
+  "discovery": {
+    "like": "אהבתי",
+    "dislike": "לא אהבתי",
+    "block": "חסימה",
+    "online": "מחובר",
+    "loading_vibes": "טוען Vibes…",
+    "empty_vibes": "עדיין אין Vibes",
+    "empty_vibes_description": "חזרו מאוחר יותר כדי לגלות פרסומים חדשים.",
+    "vibes_error": "לא ניתן לטעון את Vibes. נסו שוב.",
+    "media_error": "לא ניתן לטעון את התמונה או הסרטון.",
+    "empty_people": "עדיין אין אף אחד ברשימה הזו."
+  },
+  "search": {
+    "no_results": "לא נמצאו תוצאות",
+    "no_results_subtitle": "נסו מונח חיפוש או קטגוריה אחרים."
+  },
+  "live": {
+    "empty": "אין שידורים חיים כרגע."
   }
 }

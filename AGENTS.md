@@ -72,4 +72,12 @@ This standard supersedes older visual references to pixel matching the sibling U
 
 ### Runtime regression checks
 
+The user's 2026-10-22 override removes visual focus rings from every interface object, including tabs and inputs. Keep native focus, keyboard operation, labels and selection state; do not reintroduce outlines or focus ring shadows. Shared `telegram-foundation.css` enforces this preference.
+
+The same override requires cards without outer borders. Use shared surface colors and spacing to separate cards; do not add outlined card frames. Field borders and internal row separators are separate control patterns.
+
+Cool feed post cards also have square outer corners. Feed and detail posts use the same `Post` renderer and real API actions. Every loaded empty collection uses `AnimatedEmptyState` with existing packaged animated stickers, localized text and any existing action. Use its compact mode in constrained panels; keep loading, errors, permissions, inline missing field values and the interactive message greeting behavior meaningful. Profile engagement lists keep the profile identity and Back/navigation header visible while scrolling.
+
+Do not show automatic splash/loading modals or enforce a minimum splash delay. Session and route loading stay in the content area through `RouteLoader`. `/splash` is an explicit preview route only. Post gallery and confirmation overlays must render outside feed containment so that they are not clipped by cards.
+
 `yarn build` runs ESLint before bundling. The local `interface/jsx-no-undef` rule rejects missing JSX imports such as an undeclared `<Brand />`. Run `node scripts/check-interface-regressions.mjs` for that regression and tab-fit invariants. Render failures are contained by the route/root error boundaries; never replace an authentication/server failure with a false success.

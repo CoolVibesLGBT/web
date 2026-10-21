@@ -35,6 +35,7 @@ button.cv-list-row:not(:disabled):active, .cv-list-hover:not(:disabled):active {
 .cv-sheet:not(.cv-forward-picker):not(.cv-chat-confirm):not(.cv-avatar-editor):not(.cv-panel-sheet):not(.cv-auth-dialog) { width: min(calc(var(--tg-unit) * 26.25), calc(100vw - 24px)); max-width: none; height: fit-content; margin: auto; padding: calc(var(--tg-unit) * .5); border: 0; border-radius: var(--cv-popup-radius); background: var(--cv-popup-background); box-shadow: var(--cv-popup-shadow); }
 .cv-sheet-header { border: 0; padding: calc(var(--tg-unit) * .5) var(--tg-unit); background: var(--cv-popup-background); }
 .cv-sheet-header h2 { font-size: calc(var(--tg-unit) * 1.25); font-weight: 500; line-height: 1.3; }
+.cv-sheet-header h2, .cv-navigation-bar h1 { min-width: 0; overflow-wrap: anywhere; }
 .cv-sheet-body { padding: calc(var(--tg-unit) * .5) var(--tg-unit) var(--tg-unit); }
 .cv-sheet-actions { border: 0; padding: calc(var(--tg-unit) * .5) var(--tg-unit); }
 .cv-sheet::backdrop { background: rgb(0 0 0 / 30%); }
@@ -44,3 +45,9 @@ button.cv-list-row:not(:disabled):active, .cv-list-hover:not(:disabled):active {
 @media (prefers-reduced-motion: reduce) { .cv-btn, .elite-btn { transition: none; } }
 
 .cv-interface-screen :is(.font-black,.font-extrabold,.font-bold,.font-semibold) { font-weight: 500; }
+
+/* User preference: retain native focus behavior without visual focus rings. */
+*:is(:focus, :focus-visible, :focus-within) { outline: none !important; box-shadow: none !important; --tw-ring-shadow: 0 0 #0000 !important; --tw-ring-offset-shadow: 0 0 #0000 !important; }
+.elite-card, .elite-card-static, .elite-bubble, .cv-panel-card { border: 0; }
+.cv-route-loading { position: relative; display: grid; place-items: center; width: 100%; min-height: 8rem; padding: 2rem 1rem; }
+.cv-route-loading progress { width: min(10rem, 100%); height: 3px; accent-color: var(--color-brand); }

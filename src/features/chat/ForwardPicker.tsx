@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ChatAvatarImage from './ChatAvatarImage';
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -62,7 +63,7 @@ export default function ForwardPicker({ chats, messages, onClose, onOpenChat, on
       {!query && recent.length > 0 && <div className="cv-forward-top-peers popup-forward-top-peers scrollable scrollable-x" aria-label={t('chat_actions.forward_to')}>{recent.map(chat => <button key={chat.chatId} type="button" className="cv-forward-top-peer" aria-label={chat.name} aria-pressed={multiSelect ? selected.some(item => item.chatId === chat.chatId) : undefined} disabled={busy} onClick={() => pick(chat)}><PeerAvatar chat={chat} /><span><bdi>{chat.name.split(/\s+/)[0]}</bdi></span></button>)}</div>}
       {failed && <p className="cv-forward-error" role="alert">{t('chat_actions.action_failed')}</p>}
       <div className="cv-forward-destinations selector-list-section-container">
-        <Virtuoso data={filtered} computeItemKey={(_, chat) => chat.chatId!} components={{ EmptyPlaceholder: () => <div className="cv-forward-empty"><TelegramIcon name="search" /><p>{t('chat_actions.no_chats')}</p></div> }} itemContent={(_, chat) => {
+        <Virtuoso data={filtered} computeItemKey={(_, chat) => chat.chatId!} components={{ EmptyPlaceholder: () => <AnimatedEmptyState compact title={t('chat_actions.no_chats')} /> }} itemContent={(_, chat) => {
           const isSelected = selected.some(item => item.chatId === chat.chatId);
           return <div className="cv-forward-recipient" data-selected={isSelected} data-multiselect={multiSelect}>
             <TelegramChatListRow ripple={false} selection={multiSelect} chat={{ ...chat, lastMessage: chat.type === 'group' ? t('messages.groups') : chat.username ? `@${chat.username}` : t('messages.user'), lastTime: '', unread: 0, lastMessageOutgoing: false, encrypted: false }} selected={isSelected} typing={false} onSelect={() => pick(chat)} onMenu={() => {}}>{multiSelect && <span className="cv-forward-selection-mark" aria-hidden="true">{isSelected && <TelegramIcon name="check" />}</span>}</TelegramChatListRow>

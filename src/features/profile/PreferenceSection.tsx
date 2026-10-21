@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import { useId, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Virtuoso } from 'react-virtuoso';
@@ -62,6 +63,6 @@ export default function PreferenceSection({ title, kind, categories, options, se
     </div>;
    })}
    {limit && visible.length > limit && <button type="button" className="cv-preference-more" aria-expanded={all} onClick={() => setAll(value => !value)}>{t(all ? 'match.show_less' : 'match.view_all')}{!all && <span>{number(visible.length)}</span>}</button>}
-  </GroupedSection> : <p className="cv-preference-empty">{emptyLabel}</p>}
+  </GroupedSection> : kind === 'attributes' ? <p className="cv-preference-empty">{emptyLabel}</p> : <AnimatedEmptyState compact title={emptyLabel} />}
  </section>;
 }

@@ -2,6 +2,113 @@
   "generatedBy": "yarn node scripts/audit-interface.mjs",
   "sources": [
     {
+      "file": "src/App.tsx",
+      "states": [
+        {
+          "name": "[activeScreen, setActiveScreen]",
+          "type": null,
+          "initial": "'pride'"
+        },
+        {
+          "name": "[isMobileMenuOpen, setIsMobileMenuOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isAuthWizardOpen, setIsAuthWizardOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isLanguageSelectorOpen, setIsLanguageSelectorOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isRailProfileMenuOpen, setIsRailProfileMenuOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[showInstallBanner, setShowInstallBanner]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isLogoutModalOpen, setIsLogoutModalOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isNearbyImmersiveView, setIsNearbyImmersiveView]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isPlacesImmersiveView, setIsPlacesImmersiveView]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[isCheckInImmersiveView, setIsCheckInImmersiveView]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        171
+      ],
+      "dialogs": [
+        "AuthWizard",
+        "Sheet",
+        "ConfirmationModal"
+      ],
+      "sharedComponents": [
+        "RouteLoader",
+        "Sheet",
+        "GroupedSection",
+        "ListRow"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "RouteLoader",
+          "Sheet",
+          "GroupedSection",
+          "ListRow"
+        ],
+        "correction": "Removed automatic splash, minimum delay and right sidebar search; detail outer gutters removed.",
+        "status": "fixture-passed",
+        "evidence": [
+          "empty-state-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/components/ui/AnimatedEmptyState.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [
+        24
+      ],
+      "dialogs": [],
+      "sharedComponents": [],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
+    },
+    {
       "file": "src/components/ui/ChunkErrorBoundary.tsx",
       "states": [],
       "fields": [],
@@ -9,6 +116,7 @@
         41
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -20,6 +128,9 @@
       "dialogs": [
         "Sheet"
       ],
+      "sharedComponents": [
+        "Sheet"
+      ],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -29,6 +140,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -40,6 +152,9 @@
         8
       ],
       "dialogs": [
+        "Sheet"
+      ],
+      "sharedComponents": [
         "Sheet"
       ],
       "virtualized": false,
@@ -68,6 +183,7 @@
         79
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -77,6 +193,9 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "ViewTabs"
+      ],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -86,6 +205,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -95,6 +215,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -108,6 +229,7 @@
         123
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -135,6 +257,9 @@
       "dialogs": [
         "Sheet"
       ],
+      "sharedComponents": [
+        "Sheet"
+      ],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -144,6 +269,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -166,6 +292,7 @@
         199
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -217,6 +344,7 @@
         244
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -226,6 +354,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -244,8 +373,19 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [],
+        "correction": "Localized, inline relative progress; no fullscreen/loading dialog.",
+        "status": "fixture-passed",
+        "evidence": [
+          "empty-state-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/components/ui/SearchField.tsx",
@@ -258,6 +398,7 @@
       ],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -295,6 +436,7 @@
         351
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -310,6 +452,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -319,6 +462,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -416,6 +560,7 @@
         531
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -438,6 +583,11 @@
       "dialogs": [
         "Sheet"
       ],
+      "sharedComponents": [
+        "Sheet",
+        "GroupedSection",
+        "ListRow"
+      ],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -452,6 +602,16 @@
       }
     },
     {
+      "file": "src/entry/AppRoot.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [],
+      "dialogs": [],
+      "sharedComponents": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
       "file": "src/features/appearance/AppearanceRange.tsx",
       "states": [],
       "fields": [
@@ -462,6 +622,7 @@
       ],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -471,6 +632,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -486,6 +648,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -501,6 +664,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -557,60 +721,62 @@
       "fields": [
         {
           "tag": "FormField",
-          "line": 388
+          "line": 364
         },
         {
           "tag": "input",
-          "line": 389
+          "line": 365
         },
         {
           "tag": "FormField",
-          "line": 391
+          "line": 367
         },
         {
           "tag": "input",
-          "line": 392
+          "line": 368
         },
         {
           "tag": "FormField",
-          "line": 399
+          "line": 375
         },
         {
           "tag": "input",
-          "line": 400
+          "line": 376
         },
         {
           "tag": "FormField",
-          "line": 402
+          "line": 378
         },
         {
           "tag": "input",
-          "line": 403
+          "line": 379
         },
         {
           "tag": "FormField",
-          "line": 405
+          "line": 381
         },
         {
           "tag": "input",
-          "line": 406
+          "line": 382
         },
         {
           "tag": "FormField",
-          "line": 408
+          "line": 384
         },
         {
           "tag": "input",
-          "line": 409
+          "line": 385
         }
       ],
       "headings": [
-        348,
-        373,
-        553
+        476
       ],
       "dialogs": [
         "LanguageSelectorModal",
+        "Sheet"
+      ],
+      "sharedComponents": [
+        "FormField",
         "Sheet"
       ],
       "virtualized": false,
@@ -620,6 +786,19 @@
         "evidence": "docs/auth-artwork-checks.json",
         "outcome": "Original AVIF images decode, both cards and Back work, actions remain reachable without horizontal overflow at 320/390/820/1440px in Turkish/English/Arabic, light/dark and enlarged text cases.",
         "limits": "DOM and image decoding checks only; no screenshot or simulator, APIs blocked and no account created."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "FormField",
+          "Sheet"
+        ],
+        "correction": "Original artwork, two choice cards, shared dialog header and persistent reachable footer.",
+        "status": "fixture-passed",
+        "evidence": [
+          "auth-artwork-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -634,6 +813,9 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "Switch"
+      ],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -658,6 +840,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -678,6 +861,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -693,6 +877,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -702,6 +887,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -717,6 +903,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -732,6 +919,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -772,16 +960,20 @@
       "fields": [
         {
           "tag": "textarea",
-          "line": 55
+          "line": 56
         },
         {
           "tag": "input",
-          "line": 60
+          "line": 61
         }
       ],
       "headings": [],
       "dialogs": [
         "Sheet"
+      ],
+      "sharedComponents": [
+        "Sheet",
+        "AnimatedEmptyState"
       ],
       "virtualized": true,
       "visualVerification": "pending",
@@ -793,6 +985,19 @@
           "chat-forward-checks.json"
         ],
         "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "Sheet",
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "fixture-passed",
+        "evidence": [
+          "chat-forward-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -862,6 +1067,9 @@
       ],
       "headings": [],
       "dialogs": [
+        "Sheet"
+      ],
+      "sharedComponents": [
         "Sheet"
       ],
       "virtualized": false,
@@ -959,34 +1167,41 @@
       "fields": [
         {
           "tag": "FormField",
-          "line": 106
+          "line": 107
         },
         {
           "tag": "input",
-          "line": 106
+          "line": 107
         },
         {
           "tag": "FormField",
-          "line": 107
+          "line": 108
         },
         {
           "tag": "textarea",
-          "line": 107
+          "line": 108
         },
         {
           "tag": "FormField",
-          "line": 109
+          "line": 110
         },
         {
           "tag": "input",
-          "line": 109
+          "line": 110
         }
       ],
       "headings": [
-        99,
-        118
+        100
       ],
       "dialogs": [],
+      "sharedComponents": [
+        "NavigationBar",
+        "SearchField",
+        "FormField",
+        "ListRow",
+        "Switch",
+        "AnimatedEmptyState"
+      ],
       "virtualized": true,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -999,6 +1214,24 @@
           "group-row-interaction-checks.json"
         ],
         "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "NavigationBar",
+          "SearchField",
+          "FormField",
+          "ListRow",
+          "Switch",
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "fixture-passed",
+        "evidence": [
+          "group-member-checks.json",
+          "chat-group-avatar-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -1118,6 +1351,14 @@
       "dialogs": [
         "Sheet"
       ],
+      "sharedComponents": [
+        "NavigationBar",
+        "FormField",
+        "ListRow",
+        "Switch",
+        "GroupedSection",
+        "Sheet"
+      ],
       "virtualized": true,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -1137,6 +1378,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -1146,6 +1388,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -1155,8 +1398,113 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/discovery/PlaceCard.tsx",
+      "states": [],
+      "fields": [],
+      "headings": [
+        62
+      ],
+      "dialogs": [],
+      "sharedComponents": [],
+      "virtualized": false,
+      "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/discovery/PopularUsersPanel.tsx",
+      "states": [
+        {
+          "name": "[users, setUsers]",
+          "type": "PopularUser[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[isLoading, setIsLoading]",
+          "type": null,
+          "initial": "true"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        356
+      ],
+      "dialogs": [],
+      "sharedComponents": [
+        "AnimatedEmptyState"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
+    },
+    {
+      "file": "src/features/discovery/TrendsPanel.tsx",
+      "states": [
+        {
+          "name": "[trends, setTrends]",
+          "type": "NormalizedTrend[]",
+          "initial": "[]"
+        },
+        {
+          "name": "[loading, setLoading]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[error, setError]",
+          "type": "string | null",
+          "initial": "null"
+        },
+        {
+          "name": "[lastUpdated, setLastUpdated]",
+          "type": "Date | null",
+          "initial": "null"
+        },
+        {
+          "name": "[isExpanded, setIsExpanded]",
+          "type": null,
+          "initial": "false"
+        }
+      ],
+      "fields": [],
+      "headings": [
+        289
+      ],
+      "dialogs": [],
+      "sharedComponents": [
+        "AnimatedEmptyState"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState"
+        ],
+        "correction": "Fixed-size refresh control with stable icon, duplicate request guard and shared empty state.",
+        "status": "fixture-passed",
+        "evidence": [
+          "discovery-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/features/emoticons/EmoticonPicker.tsx",
@@ -1255,11 +1603,16 @@
       "fields": [
         {
           "tag": "input",
-          "line": 121
+          "line": 122
         }
       ],
       "headings": [],
       "dialogs": [
+        "Sheet"
+      ],
+      "sharedComponents": [
+        "AnimatedEmptyState",
+        "ViewTabs",
         "Sheet"
       ],
       "virtualized": true,
@@ -1274,6 +1627,20 @@
           "chat-compose-checks.json"
         ],
         "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState",
+          "ViewTabs",
+          "Sheet"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "fixture-passed",
+        "evidence": [
+          "chat-sticker-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -1288,6 +1655,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -1297,6 +1665,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -1321,6 +1690,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -1340,6 +1710,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -1389,6 +1760,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -1649,74 +2021,87 @@
       "fields": [
         {
           "tag": "input",
-          "line": 1922
+          "line": 1923
         },
         {
           "tag": "input",
-          "line": 1997
+          "line": 1998
         },
         {
           "tag": "input",
-          "line": 2033
+          "line": 2034
         },
         {
           "tag": "input",
-          "line": 2429
+          "line": 2430
         },
         {
           "tag": "textarea",
-          "line": 2460
+          "line": 2461
         },
         {
           "tag": "input",
-          "line": 2558
+          "line": 2559
         },
         {
           "tag": "input",
-          "line": 2620
+          "line": 2621
         },
         {
           "tag": "input",
-          "line": 2650
+          "line": 2651
         },
         {
           "tag": "input",
-          "line": 2685
+          "line": 2686
         },
         {
           "tag": "input",
-          "line": 2716
+          "line": 2717
         },
         {
           "tag": "input",
-          "line": 2726
+          "line": 2727
         },
         {
           "tag": "input",
-          "line": 2758
+          "line": 2759
         },
         {
           "tag": "input",
-          "line": 2938
+          "line": 2939
         },
         {
           "tag": "input",
-          "line": 3138
+          "line": 3135
         },
         {
           "tag": "input",
-          "line": 3139
+          "line": 3136
         }
       ],
       "headings": [
-        1617,
-        1762,
-        1873,
-        2402
+        1618,
+        1763,
+        1874,
+        2403
       ],
       "dialogs": [],
+      "sharedComponents": [
+        "AnimatedEmptyState"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/features/post/EmojiPicker.tsx",
@@ -1757,37 +2142,13 @@
         518
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
     {
       "file": "src/features/post/Flows.tsx",
       "states": [
-        {
-          "name": "[liked, setLiked]",
-          "type": null,
-          "initial": "false"
-        },
-        {
-          "name": "[saved, setSaved]",
-          "type": null,
-          "initial": "false"
-        },
-        {
-          "name": "[showReply, setShowReply]",
-          "type": null,
-          "initial": "false"
-        },
-        {
-          "name": "[replyCountOffset, setReplyCountOffset]",
-          "type": null,
-          "initial": "0"
-        },
-        {
-          "name": "[displayedViews, setDisplayedViews]",
-          "type": null,
-          "initial": "views"
-        },
         {
           "name": "[scrollElement, setScrollElement]",
           "type": "HTMLDivElement | null",
@@ -1801,11 +2162,30 @@
       ],
       "fields": [],
       "headings": [
-        1071
+        801
       ],
       "dialogs": [],
+      "sharedComponents": [
+        "CoolVibesPostCard",
+        "Post",
+        "AnimatedEmptyState"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "CoolVibesPostCard",
+          "Post",
+          "AnimatedEmptyState"
+        ],
+        "correction": "Same Post renderer as detail, real actions, square borderless feed surface and shared empty state.",
+        "status": "fixture-passed",
+        "evidence": [
+          "post-parity-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/features/post/GifPicker.tsx",
@@ -1839,13 +2219,26 @@
       "fields": [
         {
           "tag": "input",
-          "line": 354
+          "line": 347
         }
       ],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "AnimatedEmptyState"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/features/post/GiftSelector.tsx",
@@ -1855,6 +2248,7 @@
         120
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -1935,6 +2329,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -2119,12 +2514,27 @@
       ],
       "fields": [],
       "headings": [
-        2908,
-        3913
+        2910,
+        3915
       ],
       "dialogs": [],
+      "sharedComponents": [
+        "Post"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "Post"
+        ],
+        "correction": "Shared real API actions, responsive controls, current props, gallery and confirmation portals.",
+        "status": "fixture-passed",
+        "evidence": [
+          "post-parity-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/features/post/PostReply.tsx",
@@ -2132,6 +2542,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -2143,6 +2554,7 @@
         90
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -2158,8 +2570,21 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "AnimatedEmptyState"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/features/post/Stories.tsx",
@@ -2266,6 +2691,7 @@
         1094
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -2326,6 +2752,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -2346,6 +2773,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -2355,6 +2783,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -2366,6 +2795,7 @@
         114
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -2383,18 +2813,31 @@
           "initial": "false"
         },
         {
-          "name": "[isMediaLoading, setIsMediaLoading]",
+          "name": "[mediaState, setMediaState]",
           "type": null,
-          "initial": "false"
+          "initial": "{ loading: false, failed: false }"
         }
       ],
       "fields": [],
-      "headings": [
-        221
-      ],
+      "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "AnimatedEmptyState"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState"
+        ],
+        "correction": "Single initial fetch, bounded request/media readiness, explicit error/retry and empty sticker.",
+        "status": "fixture-passed",
+        "evidence": [
+          "discovery-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/features/post/YouTubePicker.tsx",
@@ -2428,13 +2871,26 @@
       "fields": [
         {
           "tag": "input",
-          "line": 351
+          "line": 344
         }
       ],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "AnimatedEmptyState"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/features/profile/FriendsPanel.tsx",
@@ -2473,6 +2929,11 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "ViewTabs",
+        "AnimatedEmptyState",
+        "ListRow"
+      ],
       "virtualized": true,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -2483,6 +2944,21 @@
           "profile-tab-checks.json"
         ],
         "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "ViewTabs",
+          "AnimatedEmptyState",
+          "ListRow"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "fixture-passed",
+        "evidence": [
+          "empty-state-checks.json",
+          "profile-tab-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -2560,6 +3036,13 @@
         "PhotoUploadSheet",
         "Sheet"
       ],
+      "sharedComponents": [
+        "ViewTabs",
+        "ListRow",
+        "Switch",
+        "AnimatedEmptyState",
+        "Sheet"
+      ],
       "virtualized": true,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -2571,6 +3054,23 @@
           "profile-social-checks.json"
         ],
         "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "ViewTabs",
+          "ListRow",
+          "Switch",
+          "AnimatedEmptyState",
+          "Sheet"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "fixture-passed",
+        "evidence": [
+          "empty-state-checks.json",
+          "private-photo-ui-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -2615,12 +3115,17 @@
       "fields": [
         {
           "tag": "input",
-          "line": 41
+          "line": 42
         }
       ],
       "headings": [],
       "dialogs": [
         "Sheet"
+      ],
+      "sharedComponents": [
+        "Sheet",
+        "ListRow",
+        "AnimatedEmptyState"
       ],
       "virtualized": false,
       "visualVerification": "pending",
@@ -2632,6 +3137,20 @@
           "private-photo-ui-checks.json"
         ],
         "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "Sheet",
+          "ListRow",
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "fixture-passed",
+        "evidence": [
+          "private-photo-ui-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -2655,9 +3174,13 @@
       ],
       "fields": [],
       "headings": [
-        49
+        50
       ],
       "dialogs": [],
+      "sharedComponents": [
+        "GroupedSection",
+        "AnimatedEmptyState"
+      ],
       "virtualized": true,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -2668,6 +3191,17 @@
           "profile-catalog-checks.json"
         ],
         "limits": "Only states recorded in the linked fixtures; no real-device or pixel-identity claim."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "GroupedSection",
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -2678,6 +3212,7 @@
         31
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -2749,6 +3284,12 @@
       "dialogs": [
         "Sheet"
       ],
+      "sharedComponents": [
+        "GroupedSection",
+        "ListRow",
+        "Switch",
+        "Sheet"
+      ],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -2767,6 +3308,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -2787,6 +3329,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -2804,8 +3347,46 @@
         53
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
+    },
+    {
+      "file": "src/features/profile/UserCard/UserCardView.tsx",
+      "states": [
+        {
+          "name": "[menuOpen, setMenuOpen]",
+          "type": null,
+          "initial": "false"
+        },
+        {
+          "name": "[failedAvatar, setFailedAvatar]",
+          "type": null,
+          "initial": "''"
+        }
+      ],
+      "fields": [],
+      "headings": [],
+      "dialogs": [
+        "Sheet"
+      ],
+      "sharedComponents": [
+        "Sheet"
+      ],
+      "virtualized": false,
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "Sheet"
+        ],
+        "correction": "Responsive shared people card; all four direct actions in list; compact/card secondary action sheet.",
+        "status": "fixture-passed",
+        "evidence": [
+          "discovery-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/features/profile/UserCard/icons.tsx",
@@ -2813,6 +3394,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -2853,8 +3435,23 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "UserCardView"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "UserCardView"
+        ],
+        "correction": "Responsive shared discovery controls and layout.",
+        "status": "fixture-passed",
+        "evidence": [
+          "discovery-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/AppearanceScreen.tsx",
@@ -2886,6 +3483,12 @@
       ],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "GroupedSection",
+        "ListRow",
+        "ViewTabs",
+        "Switch"
+      ],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -2924,11 +3527,28 @@
       ],
       "fields": [],
       "headings": [
-        467
+        463
       ],
       "dialogs": [],
+      "sharedComponents": [
+        "ViewTabs",
+        "AnimatedEmptyState",
+        "Post"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "ViewTabs",
+          "AnimatedEmptyState",
+          "Post"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/ClassifiedDetailScreen.tsx",
@@ -2952,8 +3572,23 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "AnimatedEmptyState",
+        "Post"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState",
+          "Post"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/ClassifiedsScreen.tsx",
@@ -3037,21 +3672,26 @@
       "fields": [
         {
           "tag": "input",
-          "line": 522
+          "line": 517
         },
         {
           "tag": "input",
-          "line": 552
+          "line": 547
         },
         {
           "tag": "input",
-          "line": 561
+          "line": 556
         }
       ],
       "headings": [
-        480
+        475
       ],
       "dialogs": [],
+      "sharedComponents": [
+        "ViewTabs",
+        "CoolVibesPostCard",
+        "AnimatedEmptyState"
+      ],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -3059,6 +3699,18 @@
         "evidence": "docs/classifieds-layout-checks.json",
         "outcome": "Original illustrated background loads; distinct crops, wrapping labels and keyboard create prefill pass.",
         "limits": "Fixture-only, no live listing creation or screenshots."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "ViewTabs",
+          "CoolVibesPostCard",
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -3098,6 +3750,9 @@
       "dialogs": [
         "AuthWizard"
       ],
+      "sharedComponents": [
+        "NavigationBar"
+      ],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -3118,6 +3773,9 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "ViewTabs"
+      ],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -3147,6 +3805,7 @@
       "dialogs": [
         "AuthWizard"
       ],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -3175,6 +3834,7 @@
       "dialogs": [
         "AuthWizard"
       ],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -3184,6 +3844,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -3354,34 +4015,48 @@
       "fields": [
         {
           "tag": "input",
-          "line": 1968
+          "line": 1961
         },
         {
           "tag": "select",
-          "line": 2034
+          "line": 2027
         },
         {
           "tag": "select",
-          "line": 2058
+          "line": 2051
         },
         {
           "tag": "select",
-          "line": 2415
+          "line": 2408
         },
         {
           "tag": "select",
-          "line": 2436
+          "line": 2429
         }
       ],
       "headings": [
-        1734,
-        1887
+        1735
       ],
       "dialogs": [
         "PremiumGateModal"
       ],
+      "sharedComponents": [
+        "AnimatedEmptyState"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "fixture-passed",
+        "evidence": [
+          "empty-state-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/MatchScreen.tsx",
@@ -3509,13 +4184,30 @@
       ],
       "fields": [],
       "headings": [
-        709,
-        801,
-        1186
+        686,
+        778,
+        1163
       ],
       "dialogs": [],
+      "sharedComponents": [
+        "AnimatedEmptyState",
+        "ViewTabs"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState",
+          "ViewTabs"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "fixture-passed",
+        "evidence": [
+          "discovery-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/MessagesScreen.tsx",
@@ -3719,28 +4411,35 @@
       "fields": [
         {
           "tag": "input",
-          "line": 3242
+          "line": 3244
         },
         {
           "tag": "input",
-          "line": 3250
+          "line": 3252
         },
         {
           "tag": "input",
-          "line": 3258
+          "line": 3260
         },
         {
           "tag": "textarea",
-          "line": 3276
+          "line": 3278
         }
       ],
       "headings": [
-        2843,
-        3320
+        2847
       ],
       "dialogs": [
         "AuthWizard",
         "Sheet"
+      ],
+      "sharedComponents": [
+        "SearchField",
+        "ViewTabs",
+        "AnimatedEmptyState",
+        "Sheet",
+        "ListRow",
+        "Switch"
       ],
       "virtualized": true,
       "visualVerification": "pending",
@@ -3755,6 +4454,23 @@
           "chat-action-checks.json"
         ],
         "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "SearchField",
+          "ViewTabs",
+          "AnimatedEmptyState",
+          "Sheet",
+          "ListRow",
+          "Switch"
+        ],
+        "correction": "Shared empty chat/list states; forwarded messages anchor to current conversation bottom.",
+        "status": "fixture-passed",
+        "evidence": [
+          "chat-forward-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -3808,16 +4524,34 @@
       ],
       "fields": [],
       "headings": [
-        544,
-        586,
-        782,
-        867
+        545,
+        778,
+        863
       ],
       "dialogs": [
         "PremiumGateModal"
       ],
+      "sharedComponents": [
+        "AnimatedEmptyState",
+        "ViewTabs",
+        "UserCard"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState",
+          "ViewTabs",
+          "UserCard"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "fixture-passed",
+        "evidence": [
+          "discovery-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/NotificationsScreen.tsx",
@@ -3829,12 +4563,27 @@
         }
       ],
       "fields": [],
-      "headings": [
-        253
-      ],
+      "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "ViewTabs",
+        "AnimatedEmptyState"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "ViewTabs",
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "fixture-passed",
+        "evidence": [
+          "empty-state-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/PlaceDetailsScreen.tsx",
@@ -3863,6 +4612,7 @@
         311
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -3917,12 +4667,26 @@
       ],
       "fields": [],
       "headings": [
-        434,
-        502
+        435
       ],
       "dialogs": [],
+      "sharedComponents": [
+        "AnimatedEmptyState",
+        "ViewTabs"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "AnimatedEmptyState",
+          "ViewTabs"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/PostDetails.tsx",
@@ -3951,8 +4715,23 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "Post"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "Post"
+        ],
+        "correction": "Full-width detail surface without left/right outer gutters.",
+        "status": "fixture-passed",
+        "evidence": [
+          "post-parity-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/PremiumScreen.tsx",
@@ -3968,6 +4747,7 @@
         103
       ],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -3988,6 +4768,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -4039,14 +4820,33 @@
       ],
       "fields": [],
       "headings": [
-        662,
-        814
+        632,
+        642
       ],
       "dialogs": [
         "AuthWizard"
       ],
+      "sharedComponents": [
+        "NavigationBar",
+        "AnimatedEmptyState",
+        "ListRow"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "NavigationBar",
+          "AnimatedEmptyState",
+          "ListRow"
+        ],
+        "correction": "Sticky profile identity above Back/navigation, shared ListRow and animated empty state.",
+        "status": "fixture-passed",
+        "evidence": [
+          "empty-state-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/ProfileScreen.tsx",
@@ -4255,56 +5055,62 @@
       "fields": [
         {
           "tag": "input",
-          "line": 4225
+          "line": 4256
         },
         {
           "tag": "input",
-          "line": 4273
+          "line": 4304
         },
         {
           "tag": "input",
-          "line": 4412
+          "line": 4443
         },
         {
           "tag": "input",
-          "line": 4434
+          "line": 4465
         },
         {
           "tag": "input",
-          "line": 4450
+          "line": 4481
         },
         {
           "tag": "input",
-          "line": 4565
+          "line": 4596
         },
         {
           "tag": "input",
-          "line": 4685
+          "line": 4716
         },
         {
           "tag": "input",
-          "line": 4712
+          "line": 4743
         },
         {
           "tag": "input",
-          "line": 4739
+          "line": 4770
         }
       ],
       "headings": [
-        4323,
-        4517,
-        4633,
-        4807,
-        5135,
-        5337,
-        5692,
-        5719,
-        5786,
-        5843
+        4354,
+        4548,
+        4664,
+        4838,
+        5166,
+        5368,
+        5723,
+        5750
       ],
       "dialogs": [
         "AuthWizard",
         "Sheet"
+      ],
+      "sharedComponents": [
+        "ViewTabs",
+        "AnimatedEmptyState",
+        "Post",
+        "Sheet",
+        "GroupedSection",
+        "ListRow"
       ],
       "virtualized": false,
       "visualVerification": "pending",
@@ -4319,6 +5125,24 @@
           "profile-catalog-checks.json"
         ],
         "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "ViewTabs",
+          "AnimatedEmptyState",
+          "Post",
+          "Sheet",
+          "GroupedSection",
+          "ListRow"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "fixture-passed",
+        "evidence": [
+          "empty-state-checks.json",
+          "profile-tab-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -4327,6 +5151,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -4342,6 +5167,11 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [
+        "GroupedSection",
+        "ListRow",
+        "AnimatedEmptyState"
+      ],
       "virtualized": true,
       "visualVerification": "pending",
       "runtimeVerification": {
@@ -4352,6 +5182,18 @@
           "theme-list-checks.json"
         ],
         "limits": "Only the states recorded in these artifacts; no live GIF/provider, real-device or pixel-identity claim. Unvisited profile edit/domain/gated states remain unverified."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "GroupedSection",
+          "ListRow",
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -4391,18 +5233,38 @@
       "fields": [
         {
           "tag": "input",
-          "line": 602
+          "line": 586
         }
       ],
       "headings": [
-        341,
-        527,
-        546,
-        566
+        342,
+        528,
+        547
       ],
       "dialogs": [],
+      "sharedComponents": [
+        "UserCard",
+        "CoolVibesPostCard",
+        "AnimatedEmptyState",
+        "ViewTabs"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "UserCard",
+          "CoolVibesPostCard",
+          "AnimatedEmptyState",
+          "ViewTabs"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "fixture-passed",
+        "evidence": [
+          "discovery-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     },
     {
       "file": "src/screens/SettingsScreen.tsx",
@@ -4429,10 +5291,20 @@
         }
       ],
       "fields": [],
-      "headings": [],
+      "headings": [
+        290
+      ],
       "dialogs": [
         "LanguageSelectorModal",
         "ConfirmationModal"
+      ],
+      "sharedComponents": [
+        "NavigationBar",
+        "SearchField",
+        "GroupedSection",
+        "ListRow",
+        "Switch",
+        "AnimatedEmptyState"
       ],
       "virtualized": false,
       "visualVerification": "pending",
@@ -4441,6 +5313,23 @@
         "evidence": "docs/appearance-checks.json",
         "outcome": "Entry navigates to Appearance in EN/TR/AR.",
         "limits": "Other settings flows not reverified."
+      },
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "NavigationBar",
+          "SearchField",
+          "GroupedSection",
+          "ListRow",
+          "Switch",
+          "AnimatedEmptyState"
+        ],
+        "correction": "Sticky NavigationBar and SearchField, compact account row and shared empty result.",
+        "status": "fixture-passed",
+        "evidence": [
+          "empty-state-checks.json"
+        ],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
       }
     },
     {
@@ -4449,6 +5338,7 @@
       "fields": [],
       "headings": [],
       "dialogs": [],
+      "sharedComponents": [],
       "virtualized": false,
       "visualVerification": "pending"
     },
@@ -4589,23 +5479,38 @@
       "fields": [
         {
           "tag": "input",
-          "line": 2877
+          "line": 2869
         },
         {
           "tag": "input",
-          "line": 2934
+          "line": 2926
         }
       ],
       "headings": [
         758,
-        964,
-        2667,
-        2747,
-        2828
+        956,
+        2659,
+        2739,
+        2820
       ],
       "dialogs": [],
+      "sharedComponents": [
+        "ViewTabs",
+        "AnimatedEmptyState"
+      ],
       "virtualized": false,
-      "visualVerification": "pending"
+      "visualVerification": "pending",
+      "uiUpdate": {
+        "date": "2026-10-22",
+        "components": [
+          "ViewTabs",
+          "AnimatedEmptyState"
+        ],
+        "correction": "Shared animated empty collection state; existing data, actions and permissions retained.",
+        "status": "source-migrated; runtime-unverified",
+        "evidence": [],
+        "limits": "Only states explicitly recorded in the evidence; no screenshots, simulator, real account mutations or complete visual verification. Other loaded/error/gated states remain unverified."
+      }
     }
   ],
   "assets": {

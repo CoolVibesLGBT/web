@@ -262,7 +262,8 @@
     "search": "搜索",
     "screen_error_title": "无法加载此页面",
     "screen_error_message": "出现了问题。请重试或返回首页。",
-    "people": "用户"
+    "people": "用户",
+    "back": "返回"
   },
   "months": {
     "january": "一月",
@@ -863,5 +864,24 @@
     "no_referrals": "暂无推荐",
     "no_referrals_desc": "分享链接，邀请第一位好友。",
     "share": "分享"
+  },
+  "discovery": {
+    "like": "喜欢",
+    "dislike": "不喜欢",
+    "block": "屏蔽",
+    "online": "在线",
+    "loading_vibes": "正在加载 Vibes…",
+    "empty_vibes": "暂无 Vibes",
+    "empty_vibes_description": "稍后回来发现新动态。",
+    "vibes_error": "无法加载 Vibes，请重试。",
+    "media_error": "无法加载此照片或视频。",
+    "empty_people": "此列表中还没有人。"
+  },
+  "search": {
+    "no_results": "未找到结果",
+    "no_results_subtitle": "请尝试其他搜索词或类别。"
+  },
+  "live": {
+    "empty": "目前没有直播。"
   }
 }

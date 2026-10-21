@@ -1,0 +1,10 @@
+.cv-animated-empty { display: flex; min-width: 0; min-height: 16rem; flex-direction: column; align-items: center; justify-content: center; gap: .824rem; padding: 1.882rem .941rem; text-align: center; }
+.cv-animated-empty-art { display: grid; place-items: center; width: 144px; height: 144px; max-width: 100%; }
+.cv-animated-empty h3 { max-width: 30ch; margin: 0; color: var(--cv-neutral-1); font-size: 1.059rem; font-weight: 500; line-height: 1.4; overflow-wrap: anywhere; }
+.cv-animated-empty p { max-width: 42ch; margin: 0; color: var(--cv-neutral-2); font-size: .882rem; line-height: 1.5; }
+.cv-animated-empty-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: .706rem; margin-top: .353rem; }
+.cv-animated-empty[data-compact] { min-height: 0; gap: .588rem; padding: 1.176rem .706rem; }
+.cv-animated-empty[data-compact] .cv-animated-empty-art { width: 80px; height: 80px; }
+.cv-animated-empty[data-compact] h3 { font-size: .941rem; }
+.cv-animated-empty[data-inverse] h3 { color: #fff; }
+.cv-animated-empty[data-inverse] p { color: rgb(255 255 255 / 65%); }

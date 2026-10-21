@@ -275,7 +275,8 @@
     "search": "Search",
     "screen_error_title": "This screen could not load",
     "screen_error_message": "Something went wrong. Try again or return to the home page.",
-    "people": "People"
+    "people": "People",
+    "back": "Back"
   },
   "months": {
     "january": "January",
@@ -1062,5 +1063,21 @@
     "no_referrals": "No referrals yet",
     "no_referrals_desc": "Share your link to invite your first friends.",
     "share": "Share"
+  },
+  "discovery": {
+    "like": "Like",
+    "dislike": "Dislike",
+    "block": "Block",
+    "online": "Online",
+    "loading_vibes": "Loading Vibes…",
+    "empty_vibes": "No Vibes yet",
+    "empty_vibes_description": "Come back later to discover new posts.",
+    "vibes_error": "Vibes could not be loaded. Please try again.",
+    "media_error": "This photo or video could not be loaded.",
+    "empty_people": "No one in this list yet."
+  },
+  "search": {
+    "no_results": "No results found",
+    "no_results_subtitle": "Try another search term or category."
   }
 }

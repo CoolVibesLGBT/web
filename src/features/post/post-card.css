@@ -1,0 +1,22 @@
+.cv-post { container-type: inline-size; min-width: 0; }
+.cv-feed-post { min-width: 0; overflow: hidden; border: 0; border-radius: 0; background: var(--cv-card-bg-solid); }
+.cv-feed-post > .cv-post { border-bottom: 0; }
+.cv-post-detail-content, .cv-post-detail-card { width: 100%; max-width: none; margin-inline: 0; padding-inline: 0; border: 0; border-radius: 0; }
+.cv-post-header { display: flex; align-items: start; justify-content: space-between; gap: .706rem; padding: .706rem; }
+.cv-post-identity { display: flex; flex: 1; align-items: start; gap: .588rem; min-width: 0; }
+.cv-post-author-avatar { flex-shrink: 0; }
+.cv-post-identity > div { flex: 1; min-width: 0; }
+.cv-post-author-meta { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: .353rem; row-gap: .118rem; min-width: 0; }
+.cv-post-author-meta button { max-width: 100%; text-align: start; overflow-wrap: anywhere; }
+.cv-post-header-actions { display: flex; flex-shrink: 0; align-items: center; gap: .118rem; }
+.cv-post-header-actions button { display: inline-grid; place-items: center; min-width: 44px; min-height: 44px; padding: .588rem; }
+.cv-post-header-actions > span { border: 0; background: transparent; padding-inline: .235rem; }
+.cv-post-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; gap: .235rem; padding: .471rem .706rem; border-top: 1px solid var(--cv-inner-border); }
+.cv-post-action-items { display: contents; }
+.cv-post-actions > button, .cv-post-action-items > button, .cv-post-action-items > div { min-width: 0; width: 100%; }
+.cv-post-actions button { min-height: 48px; height: auto; width: 100%; padding: .471rem .235rem; gap: .118rem; border: 0; border-radius: .706rem; background-color: transparent; }
+.cv-post-actions button > svg { width: 1.176rem; height: 1.176rem; flex-shrink: 0; }
+.cv-post-actions button > span { max-width: 100%; margin: 0; font-size: .765rem; line-height: 1.4; overflow-wrap: anywhere; }
+.cv-post-actions button[aria-pressed='true'] { background: var(--cv-list-hover); }
+@container (min-width: 24rem) { .cv-post-actions { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+@container (max-width: 24rem) { .cv-post-header { flex-wrap: wrap; } .cv-post-identity { flex-basis: 100%; } .cv-post-header-actions { margin-inline-start: auto; } }

@@ -1,8 +1,9 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import { useMemo, useState } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 import { useNavigate } from '@/router';
 import { useTranslation } from 'react-i18next';
-import { Check, Copy, Share, Users, Link, Gift, Sparkles } from 'lucide-react';
+import { Check, Copy, Share, Users, Link, Gift } from 'lucide-react';
 import { GroupedSection, ListRow } from '@/components/ui/Interface';
 import { useAuth } from '@/contexts/AuthContext';
 import useClipboard from '@/hooks/useClipboard';
@@ -63,7 +64,7 @@ export default function ReferralsScreen() {
      const avatar = getSafeImageURLEx(item.engager?.public_id, item.engager?.avatar || undefined, 'thumbnail');
      const date = item.created_at ? new Date(item.created_at) : null;
      return <ListRow icon={<span className="cv-referrals-avatar">{avatar ? <img src={avatar} alt="" /> : (username || '?').charAt(0)}</span>} title={<bdi>{username || t('messages.user')}</bdi>} description={date && Number.isFinite(date.getTime()) ? date.toLocaleDateString(i18n.language) : undefined} value={`${number(item.details?.amount || 0)} ${DEFAULT_TOKEN_SYMBOL}`} onClick={username ? () => navigate(`/${encodeURIComponent(username)}`) : undefined} />;
-    }} /></div> : <div className="cv-referrals-empty"><Sparkles /><p>{t('referrals.no_referrals')}</p><span>{t('referrals.no_referrals_desc')}</span></div>}
+    }} /></div> : <AnimatedEmptyState title={t('referrals.no_referrals')} description={t('referrals.no_referrals_desc')} />}
    </GroupedSection>
   </div>
   <ClipboardFeedback status={clipboard.status} link />

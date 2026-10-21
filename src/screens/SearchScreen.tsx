@@ -1,6 +1,7 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   AlertCircle,
   ArrowUpRight,
@@ -355,7 +356,7 @@ const SearchScreen: React.FC = () => {
   };
 
   const renderPeopleGrid = (people: SearchItem[]) => (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+    <div className="cv-people-grid">
       {people.map((item) => (
         <UserCard
           key={item.id}
@@ -436,7 +437,7 @@ const SearchScreen: React.FC = () => {
     }
     if (activeFilter === 'people') {
       return (
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        <div className="cv-people-grid">
           {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
@@ -552,24 +553,7 @@ const SearchScreen: React.FC = () => {
     }
 
     if (!isSearching && items.length === 0) {
-      return (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key="empty"
-            initial={{ opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col items-center justify-center px-8 py-24 text-center"
-          >
-            <div className={`flex h-16 w-16 items-center justify-center rounded-[22px] ${isDark ? 'cv-card-surface-muted' : 'bg-gray-50'}`}>
-              <Search className={`h-8 w-8 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} strokeWidth={1.5} />
-            </div>
-            <h2 className={`mt-5 text-[1.0rem] font-bold ${textColor}`}>{t('search.no_results', { defaultValue: 'No results found' })}</h2>
-            <p className={`mt-2 max-w-sm text-[0.824rem] leading-relaxed ${secondaryTextColor}`}>
-              {t('search.no_results_subtitle', { defaultValue: 'Try another search term or choose a different category.' })}
-            </p>
-          </motion.div>
-        </AnimatePresence>
-      );
+      return <AnimatedEmptyState title={t('search.no_results')} description={t('search.no_results_subtitle')} />;
     }
 
     if (items.length === 0) return null;
@@ -596,7 +580,7 @@ const SearchScreen: React.FC = () => {
               <div className="flex min-h-[44px] items-center gap-2 px-1 pb-3 pt-3 md:px-2">
                 <form
                   onSubmit={submitSearch}
-                  className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-full bg-[var(--cv-surface-3)] px-3.5"
+                  className="cv-global-search flex min-w-0 flex-1 items-center gap-2 rounded-full bg-[var(--cv-surface-3)] px-3.5"
                 >
                   <Search className="h-3.5 w-3.5 shrink-0 text-[var(--cv-neutral-2)]" />
                   <input

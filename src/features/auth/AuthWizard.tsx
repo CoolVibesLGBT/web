@@ -412,18 +412,12 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
       case 'captcha':
         return (
           <div className="space-y-6">
-            <div className="text-center">
-              <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-indigo-900/30' : 'bg-indigo-100'}`}>
-                <Shield className={`w-8 h-8 ${theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600'}`} />
-              </div>
-              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                {t('captcha_instructions', { defaultValue: 'Please verify that you are not a robot' })}
-              </p>
-            </div>
+            <p className="cv-auth-captcha-description">{t('captcha_instructions')}</p>
             <div className="flex justify-center">
               <ReCAPTCHA
                 ref={recaptchaRef}
                 sitekey={RECAPTCHA_SITE_KEY}
+                size="compact"
                 hl={getLanguageTag(i18n.language)}
                 onChange={(token) => {
                   setRecaptchaToken(token);
@@ -464,7 +458,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
           <ArrowLeft aria-hidden="true" /><span>{t('back')}</span>
         </button>
       )}
-      <button type="button" onClick={handleNext} disabled={!canProceed() || isPending} className="cv-auth-submit">
+      <button type="button" onClick={handleNext} disabled={!canProceed() || isPending} aria-busy={isPending} className="cv-auth-submit">
         {isPending ? (
           <><span className="cv-auth-spinner" aria-hidden="true" /><span>{authMode === 'login' ? t('signing_in') : t('creating_account')}</span></>
         ) : (

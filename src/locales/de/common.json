@@ -262,7 +262,8 @@
     "search": "Suchen",
     "screen_error_title": "Dieser Bildschirm konnte nicht geladen werden",
     "screen_error_message": "Ein Fehler ist aufgetreten. Versuche es erneut oder kehre zur Startseite zurück.",
-    "people": "Personen"
+    "people": "Personen",
+    "back": "Zurück"
   },
   "months": {
     "january": "Januar",
@@ -863,5 +864,24 @@
     "no_referrals": "Noch keine Empfehlungen",
     "no_referrals_desc": "Teile deinen Link und lade deine ersten Freunde ein.",
     "share": "Teilen"
+  },
+  "discovery": {
+    "like": "Gefällt mir",
+    "dislike": "Gefällt mir nicht",
+    "block": "Blockieren",
+    "online": "Online",
+    "loading_vibes": "Vibes werden geladen…",
+    "empty_vibes": "Noch keine Vibes",
+    "empty_vibes_description": "Schau später wieder vorbei, um neue Beiträge zu entdecken.",
+    "vibes_error": "Vibes konnten nicht geladen werden. Bitte versuche es erneut.",
+    "media_error": "Dieses Foto oder Video konnte nicht geladen werden.",
+    "empty_people": "Noch niemand in dieser Liste."
+  },
+  "search": {
+    "no_results": "Keine Ergebnisse gefunden",
+    "no_results_subtitle": "Versuche einen anderen Suchbegriff oder eine andere Kategorie."
+  },
+  "live": {
+    "empty": "Zurzeit keine Liveübertragungen."
   }
 }

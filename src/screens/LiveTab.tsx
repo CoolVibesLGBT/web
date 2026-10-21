@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { getSafeImageURLEx } from '../helpers/helpers';
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 const AGORA_APP_ID = "c52085782b1c476e835a38b9c000208f";
 const LIVE_ACCENTS = [
   'from-emerald-500/30 via-teal-500/20 to-cyan-500/10',
@@ -1882,15 +1883,7 @@ export const LiveTab: React.FC<{ theme: 'dark' | 'light'; headerVariant?: 'tab' 
           ))}
         </div>
       ) : liveItems.length === 0 ? (
-        <div className="py-16 text-center">
-          <Video className={`mx-auto mb-4 h-12 w-12 ${theme === 'dark' ? 'text-gray-700' : 'text-gray-300'}`} />
-          <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-            {t('live.empty_title', { defaultValue: 'No live streams found' })}
-          </h3>
-          <p className={`mt-1 text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-            {t('live.empty_subtitle', { defaultValue: 'Try refreshing or start your own live broadcast.' })}
-          </p>
-        </div>
+        <AnimatedEmptyState title={t('live.empty')} />
       ) : (
         <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
           <AnimatePresence>

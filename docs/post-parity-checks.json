@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM and intercepted post APIs; no screenshots, live posts or account mutations",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "checks": [
+        "Cool and detail use same renderer, poll/options and multi-attachment data",
+        "six responsive real API actions",
+        "saved initial engagement and bookmark persist to detail; failure rolls back",
+        "reply opens without card navigation",
+        "no card border/radius or focus ring"
+      ],
+      "calls": [
+        "post.like",
+        "post.like",
+        "post.bookmark",
+        "post.dislike",
+        "post.banana"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "status": "passed",
+      "checks": [
+        "Cool and detail use same renderer, poll/options and multi-attachment data",
+        "six responsive real API actions",
+        "saved initial engagement and bookmark persist to detail; failure rolls back",
+        "reply opens without card navigation",
+        "no card border/radius or focus ring"
+      ],
+      "calls": [
+        "post.like",
+        "post.like",
+        "post.bookmark",
+        "post.dislike",
+        "post.banana"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "status": "passed",
+      "checks": [
+        "Cool and detail use same renderer, poll/options and multi-attachment data",
+        "six responsive real API actions",
+        "saved initial engagement and bookmark persist to detail; failure rolls back",
+        "reply opens without card navigation",
+        "no card border/radius or focus ring"
+      ],
+      "calls": [
+        "post.like",
+        "post.like",
+        "post.bookmark",
+        "post.dislike",
+        "post.banana"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "checks": [
+        "Cool and detail use same renderer, poll/options and multi-attachment data",
+        "six responsive real API actions",
+        "saved initial engagement and bookmark persist to detail; failure rolls back",
+        "reply opens without card navigation",
+        "no card border/radius or focus ring"
+      ],
+      "calls": [
+        "post.like",
+        "post.like",
+        "post.bookmark",
+        "post.dislike",
+        "post.banana"
+      ]
+    }
+  ]
+}

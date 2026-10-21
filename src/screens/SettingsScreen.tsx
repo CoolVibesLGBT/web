@@ -1,3 +1,5 @@
+import './settings.css';
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import { useState, useCallback, useMemo } from 'react';
 import SearchField from '@/components/ui/SearchField';
 import { useSEO } from '../hooks/useSEO';
@@ -32,7 +34,7 @@ import { getSafeImageURLEx } from '../helpers/helpers';
 import ConfirmationModal from '../components/ui/ConfirmationModal';
 import LanguageSelectorModal from '../components/ui/LanguageSelector';
 import Switch from '../components/ui/Switch';
-import { GroupedSection, ListRow } from '@/components/ui/Interface';
+import { GroupedSection, ListRow, NavigationBar, usePageBack } from '@/components/ui/Interface';
 import type { SettingName } from '../appSettings';
 
 interface IOSRowDef {
@@ -62,6 +64,7 @@ export default function SettingsScreen() {
     const { settings, setOption } = useSettings();
     const { logout, user } = useAuth();
     const navigate = useNavigate();
+    const goBack = usePageBack();
 
     const [isLangModalOpen, setIsLangModalOpen] = useState(false);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -281,13 +284,16 @@ export default function SettingsScreen() {
       || '';
 
     return (
-        <div className={`skyline-page-scroll w-full ${pageBg} text-[var(--cv-neutral-1)]`}>
+        <div className={`cv-settings-page skyline-page-scroll w-full ${pageBg} text-[var(--cv-neutral-1)]`}>
             <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col px-4 pb-10 pt-4 md:px-6">
-                <SearchField className="mt-3" value={searchQuery} onChange={setSearchQuery} label={t('app.search_placeholder', { defaultValue: 'Ara' })} />
+                <div className="cv-settings-top">
+                    <NavigationBar title={t('app.nav.settings')} onBack={goBack} />
+                    <SearchField value={searchQuery} onChange={setSearchQuery} label={t('app.search_placeholder', { defaultValue: 'Ara' })} />
+                </div>
 
                 {/* iOS Apple-Account style profile cell */}
                 {!normalizedQuery && (
-                    <div className={`mt-5 overflow-hidden rounded-[12px] border border-[var(--cv-card-border)] ${groupBg}`}>
+                    <div className={`cv-settings-account mt-5 overflow-hidden rounded-[12px] ${groupBg}`}>
                         <button
                             type="button"
                             onClick={handleOpenProfile}
@@ -325,9 +331,7 @@ export default function SettingsScreen() {
                         })}
                     </GroupedSection>)}
                     {normalizedQuery && visibleGroups.length === 0 && (
-                        <p className={`px-4 py-8 text-center text-[0.882rem] ${secondaryColor}`}>
-                            {t('search.no_results', { defaultValue: 'No results found.' })}
-                        </p>
+                        <AnimatedEmptyState compact title={t('search.no_results')} />
                     )}
                 </div>
             </div>

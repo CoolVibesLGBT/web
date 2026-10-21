@@ -262,7 +262,8 @@
     "search": "Cari",
     "screen_error_title": "Layar ini tidak dapat dimuat",
     "screen_error_message": "Terjadi kesalahan. Coba lagi atau kembali ke beranda.",
-    "people": "Orang"
+    "people": "Orang",
+    "back": "Kembali"
   },
   "months": {
     "january": "Januari",
@@ -863,5 +864,24 @@
     "no_referrals": "Belum ada rujukan",
     "no_referrals_desc": "Bagikan tautan untuk mengundang teman pertama Anda.",
     "share": "Bagikan"
+  },
+  "discovery": {
+    "like": "Suka",
+    "dislike": "Tidak suka",
+    "block": "Blokir",
+    "online": "Online",
+    "loading_vibes": "Memuat Vibes…",
+    "empty_vibes": "Belum ada Vibes",
+    "empty_vibes_description": "Kembali lagi nanti untuk menemukan postingan baru.",
+    "vibes_error": "Vibes tidak dapat dimuat. Coba lagi.",
+    "media_error": "Foto atau video ini tidak dapat dimuat.",
+    "empty_people": "Belum ada siapa pun di daftar ini."
+  },
+  "search": {
+    "no_results": "Tidak ada hasil",
+    "no_results_subtitle": "Coba kata pencarian atau kategori lain."
+  },
+  "live": {
+    "empty": "Belum ada siaran langsung saat ini."
   }
 }

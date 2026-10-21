@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { MapPin, Loader, RefreshCw, Grid, Map as MapIcon, X, Search } from 'lucide-react';
@@ -497,15 +498,7 @@ const PlacesScreen: React.FC = () => {
         )}
 
         {filteredPlaces.length === 0 && !loadingInitial ? (
-          <div className="py-16 text-center relative z-10">
-            <MapPin className={`mx-auto w-12 h-12 mb-4 ${theme === 'dark' ? 'text-gray-700' : 'text-gray-300'}`} />
-            <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-              {t('places.no_places_found_title') || 'No places found'}
-            </h3>
-            <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-              {t('places.no_places_found_subtitle') || 'Try adjusting your search or filters.'}
-            </p>
-          </div>
+          <AnimatedEmptyState title={t('places.no_places_found_title')} description={t('places.no_places_found_subtitle')} />
         ) : (
           viewMode === 'grid' && renderGrid()
         )}

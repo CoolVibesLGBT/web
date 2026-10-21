@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
 import '@/features/classifieds/classifieds.css';
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
@@ -444,15 +445,9 @@ export default function ClassifiedsScreen() {
               )}
             </div>
           ) : (
-            <div className="py-24 text-center">
-              <Search className={`w-10 h-10 mx-auto mb-4 ${dark ? 'text-gray-800' : 'text-slate-200'}`} />
-              <p className={`text-xs font-semibold ${dark ? 'text-gray-500' : 'text-slate-400'}`}>
-                {t('classifieds.no_results')}
-              </p>
-              <button onClick={() => setSearchQuery('')} className="mt-3 text-xs font-semibold text-indigo-500 hover:underline">
-                {t('classifieds.clear_search')}
-              </button>
-            </div>
+            <AnimatedEmptyState title={t('classifieds.no_results')}>
+              <button type="button" onClick={() => setSearchQuery('')} className="cv-btn">{t('classifieds.clear_search')}</button>
+            </AnimatedEmptyState>
           )}
         </main>
       </div>

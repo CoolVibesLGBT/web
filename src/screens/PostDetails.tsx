@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams, useNavigate, useLocation } from '@/router';
+import { useParams, useNavigate } from '@/router';
 import { useTheme } from '../contexts/ThemeContext';
 import Post, { type PostProps, type ApiPost } from '../features/post/Post';
 import { api } from '../services/api';
@@ -22,9 +22,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
   const { t } = useTranslation('common');
   const { postId, username } = useParams<{ postId: string; username?: string }>();
   const navigate = useNavigate();
-  const location = useLocation();
   const { theme } = useTheme();
-  const isCheckInRoute = location.pathname.startsWith('/checkin/');
   const [post, setPost] = useState<ApiPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -244,12 +242,8 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
   }, [postId, processingAttachmentCount, handlePostUpdate, resolveFetchedPost, isProcessingAttachment]);
 
   const pageClassName = 'skyline-page-scroll w-full';
-  // Check-in detay liste ile birebir aynı genişlikte: kenar boşluksuz, Post
-  // kendi iç ritmini korur (liste görünümünde de sarmalayıcı yok).
-  const contentClassName = isCheckInRoute
-    ? 'mx-auto w-full max-w-[760px] pb-8'
-    : 'mx-auto w-full max-w-[760px] px-1 pb-8 md:px-2';
-  const detailCardClassName = isCheckInRoute ? 'overflow-hidden' : 'cv-item overflow-hidden';
+  const contentClassName = 'cv-post-detail-content w-full min-w-0 pb-8';
+  const detailCardClassName = 'cv-post-detail-card overflow-hidden';
   const panelClassName = theme === 'dark'
     ? 'cv-card-surface-soft border-white/10 text-zinc-300'
     : 'border-white/70 bg-white/75 text-slate-600';

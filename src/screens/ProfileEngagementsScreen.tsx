@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from '@/router';
 import { RefreshCw, Users, UserPlus, Lock, ShieldBan, UserX, Heart, ThumbsDown, Eye } from 'lucide-react';
@@ -8,6 +9,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { useApp } from '../contexts/AppContext';
 import { useTranslation } from 'react-i18next';
 import Container from '../components/ui/Container';
+import { NavigationBar, ListRow } from '@/components/ui/Interface';
+import './profile-engagements.css';
 import { api } from '../services/api';
 import { getSafeImageURLEx, htmlToPlainText } from '../helpers/helpers';
 import AuthWizard from '../features/auth/AuthWizard';
@@ -120,7 +123,7 @@ const ProfileEngagementsScreen: React.FC = () => {
   const effectiveUsername = username || fallbackUsername;
 
   const navigationState = location.state as
-    | { profileSummary?: ProfileSummary }
+    | { profileSummary?: ProfileSummary; returnTo?: string }
     | undefined;
 
   const [profile, setProfile] = useState<ProfileSummary | null>(
@@ -614,43 +617,20 @@ const ProfileEngagementsScreen: React.FC = () => {
     );
   };
 
-  const badgeLabel = engagementMeta?.badge ?? '';
-  const noResultsLabel = engagementMeta?.emptyTitle ?? '';
-  const noResultsDescription = engagementMeta?.emptyDescription ?? '';
-  const EmptyIcon = engagementMeta?.icon ?? Users;
+  const noResultsLabel = t('discovery.empty_people');
 
   const loadingLabel = t('profile.loading', { defaultValue: 'Loading...' });
-  const viewProfileLabel = t('profile.view', { defaultValue: 'View' });
 
   return (
-    <Container>
+    <Container className="cv-engagement-page">
       <div className={`mx-auto flex min-h-full w-full max-w-5xl flex-col gap-5 px-1 pb-8 pt-4 md:px-2 md:pt-6 ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
-        <section className={`shrink-0 rounded-[30px] border px-4 py-4 backdrop-blur-3xl md:px-5 ${theme === 'dark' ? 'cv-card-surface-soft border-white/10' : 'border-white/70 bg-white/75'} shadow-[0_28px_90px_-48px_rgba(15,23,42,0.55)]`}>
-          <div className="flex items-center justify-between gap-4">
-            <p
-              className={`min-w-0 truncate text-[0.765rem] font-medium opacity-60 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                }`}
-            >
-              {profile?.displayname && profile.displayname !== effectiveUsername
-                ? `${profile.displayname} · @${effectiveUsername}`
-                : `@${effectiveUsername}`}
-            </p>
-          <button
-            type="button"
-            onClick={handleRefresh}
-            disabled={loadingEngagements}
-            className={`p-2.5 -mr-2 rounded-full transition-all active:scale-90 flex-shrink-0 ${theme === 'dark'
-              ? 'hover:bg-white/10 text-gray-400 hover:text-white'
-              : 'hover:bg-gray-100 text-gray-500 hover:text-gray-900'
-              } ${loadingEngagements ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            <RefreshCw
-              className={`w-5 h-5 transition-transform ${loadingEngagements ? 'animate-spin' : ''
-                }`}
-            />
+        <div className="cv-engagement-context">
+          <button type="button" className="cv-engagement-profile" onClick={() => navigate(navigationState?.returnTo || `/${effectiveUsername}`, {replace:true})} aria-label={`${t('app.view_profile')}: ${profile?.displayname || effectiveUsername}`}>
+            <span className="cv-engagement-avatar">{(profile?.displayname || effectiveUsername).charAt(0).toUpperCase()}{profile && <img src={getSafeImageURLEx(profile.public_id, profile.avatar, 'icon') ?? undefined} alt="" onError={event => { event.currentTarget.style.display = 'none'; }} />}</span>
+            <span><strong>{profile?.displayname || effectiveUsername}</strong><span dir="auto">@{effectiveUsername}</span></span>
           </button>
-          </div>
-        </section>
+          <NavigationBar title={engagementMeta?.title || t('profile.profile_tab')} onBack={() => navigate(navigationState?.returnTo || `/${effectiveUsername}`, {replace:true})} actions={<button type="button" className="cv-icon-button" aria-label={t('nearby.refresh')} onClick={handleRefresh} disabled={loadingEngagements}><RefreshCw className={loadingEngagements ? 'animate-spin' : ''} /></button>} />
+        </div>
 
         <div className="space-y-5">
           {!isAuthenticated ? (
@@ -726,163 +706,13 @@ const ProfileEngagementsScreen: React.FC = () => {
             </div>
           ) : (
             <>
-              {profile && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className={`rounded-2xl px-4 py-3.5 flex items-center gap-3 ${theme === 'dark'
-                    ? 'cv-card-surface-solid border border-white/10'
-                    : 'bg-white border border-gray-200/50'
-                    }`}
-                >
-                  <div className="relative">
-                    <img
-                      src={getSafeImageURLEx(profile.public_id, profile.avatar ?? undefined, 'icon') ?? undefined}
-                      alt={profile.displayname || profile.username}
-                      className={`w-14 h-14 rounded-full object-cover ring-2 ring-offset-2 ring-offset-transparent ${theme === 'dark' ? 'ring-white/10' : 'ring-gray-200/50'
-                        }`}
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p
-                      className={`text-sm font-bold truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-                        }`}
-                    >
-                      {profile.displayname || profile.username}
-                    </p>
-                    <p
-                      className={`text-xs mt-0.5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                        }`}
-                    >
-                      @{profile.username}
-                    </p>
-                  </div>
-                  <span
-                    className={`text-xs font-semibold px-3 py-1.5 rounded-full ${theme === 'dark'
-                      ? 'cv-card-surface-muted text-white border border-white/10'
-                      : 'bg-gray-100 text-gray-900 border border-gray-200/50'
-                      }`}
-                  >
-                    {badgeLabel}
-                  </span>
-                </motion.div>
-              )}
-
               {loadingEngagements && engagements.length === 0 ? (
-                <div className="flex items-center justify-center py-24">
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex flex-col items-center gap-4"
-                  >
-                    <div
-                      className={`w-12 h-12 border-4 rounded-full animate-spin ${theme === 'dark'
-                        ? 'border-white/10 border-t-white'
-                        : 'border-gray-200 border-t-gray-700'
-                        }`}
-                    />
-                    <p
-                      className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                        }`}
-                    >
-                      {loadingLabel}
-                    </p>
-                  </motion.div>
-                </div>
+                <p role="status" className="py-8 text-center">{loadingLabel}</p>
               ) : engagements.length === 0 ? (
-                <div className="flex items-center justify-center py-24">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, ease: 'easeOut' }}
-                    className="flex flex-col items-center gap-4 max-w-sm mx-auto px-4"
-                  >
-                    <div
-                      className={`w-20 h-20 rounded-full flex items-center justify-center ${theme === 'dark'
-                        ? 'cv-card-surface-muted border border-white/10'
-                        : 'bg-gray-100 border border-gray-200/50'
-                        }`}
-                    >
-                    <EmptyIcon
-                      className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                        }`}
-                    />
-                    </div>
-                    <div className="text-center space-y-1">
-                      <h3
-                        className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-                          }`}
-                      >
-                        {noResultsLabel}
-                      </h3>
-                      <p
-                        className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-500'
-                          }`}
-                      >
-                        {noResultsDescription}
-                      </p>
-                    </div>
-                  </motion.div>
-                </div>
+                <AnimatedEmptyState title={noResultsLabel} />
               ) : (
-                <div className="space-y-2">
-                  {engagements.map((engagementUser, index) => (
-                    <motion.div
-                      key={engagementUser.id}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.03 }}
-                      className={`group flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-200 ${theme === 'dark'
-                        ? 'cv-card-surface-solid border border-white/10 hover:bg-[var(--cv-list-hover)] hover:border-white/15'
-                        : 'bg-white border border-gray-200/50 hover:bg-[var(--cv-list-hover)] hover:border-gray-300'
-                        }`}
-                    >
-                      <div className="relative flex-shrink-0">
-                        <img
-                          src={renderAvatar(engagementUser) ?? undefined}
-                          alt={engagementUser.displayname || engagementUser.username}
-                          className={`w-14 h-14 rounded-full object-cover ring-2 ring-offset-2 ring-offset-transparent transition-all duration-200 group-hover:ring-opacity-50 ${theme === 'dark' ? 'ring-white/10' : 'ring-gray-200/50'
-                            }`}
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p
-                          className={`text-sm font-bold truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-                            }`}
-                        >
-                          {engagementUser.displayname || engagementUser.username}
-                        </p>
-                        <p
-                          className={`text-xs mt-0.5 truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                            }`}
-                        >
-                          @{engagementUser.username}
-                        </p>
-                        {engagementUser.bio && (
-                          <div
-                            className={`text-xs mt-1.5 line-clamp-2 leading-relaxed ${theme === 'dark'
-                              ? 'text-gray-400'
-                              : 'text-gray-600'
-                              }`}
-                          >
-                            {htmlToPlainText(engagementUser.bio)}
-                          </div>
-                        )}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => navigate(`/${engagementUser.username}`)}
-                        className={`px-4 py-2 text-xs font-semibold rounded-full transition-all duration-200 flex-shrink-0 ${theme === 'dark'
-                          ? 'bg-white text-black hover:bg-gray-200 hover:scale-105 active:scale-95'
-                          : 'bg-gray-900 text-white hover:bg-gray-800 hover:scale-105 active:scale-95'
-                          }`}
-                      >
-                        {viewProfileLabel}
-                      </button>
-                    </motion.div>
-                  ))}
+                <div className="cv-engagement-list">
+                  {engagements.map(engagementUser => <ListRow key={engagementUser.id} icon={<span className="cv-engagement-row-avatar">{(engagementUser.displayname || engagementUser.username).charAt(0)}<img src={renderAvatar(engagementUser) ?? undefined} alt="" onError={event => { event.currentTarget.style.display = 'none'; }} /></span>} title={<bdi>{engagementUser.displayname || engagementUser.username}</bdi>} description={<><bdi>@{engagementUser.username}</bdi>{engagementUser.bio && <span>{htmlToPlainText(engagementUser.bio)}</span>}</>} onClick={() => navigate(`/${engagementUser.username}`)} />)}
                 </div>
               )}
 

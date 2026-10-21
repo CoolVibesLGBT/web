@@ -1,3 +1,5 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
+import { useTranslation } from 'react-i18next';
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Images } from 'lucide-react';
@@ -59,6 +61,7 @@ const stickerCategories = [
 ];
 
 const StickerPicker: React.FC<StickerPickerProps> = ({ onStickerSelect, onClose, isProcessing = false }) => {
+  const { t } = useTranslation('common');
   const { theme } = useTheme();
   const [selectedCategory, setSelectedCategory] = useState<string>('cats');
 
@@ -135,15 +138,7 @@ const StickerPicker: React.FC<StickerPickerProps> = ({ onStickerSelect, onClose,
 
       <div className="mt-5">
         {filteredStickers.length === 0 ? (
-          <div
-            className={`w-full rounded-2xl border p-5 text-center text-sm font-medium ${
-              theme === 'dark'
-                ? 'border-gray-900 bg-gray-900/30 text-gray-400'
-                : 'border-gray-200 bg-gray-50 text-gray-500'
-            }`}
-          >
-            No stickers found
-          </div>
+          <AnimatedEmptyState compact title={t('search.no_results')} />
         ) : (
           <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 sm:gap-4">
             {filteredStickers.map((sticker) => (

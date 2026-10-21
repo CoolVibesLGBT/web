@@ -1,4 +1,6 @@
 import ViewTabs from '@/components/ui/ViewTabs';
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
+import '@/features/profile/UserCard/user-card.css';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import type { PanInfo } from 'framer-motion';
@@ -500,36 +502,11 @@ const MatchScreen: React.FC = () => {
       className="w-full"
     >
       {profiles.length === 0 ? (
-        <div className="flex min-h-[430px] items-center justify-center px-1 py-6">
-          {/* `.elite-bubble`'ın varsayılan arkaplanı/border'ı (rgba(255,255,255,.78) +
-              neredeyse beyaz border) light temada sayfanın beyaza yakın
-              arkaplanıyla karışıp kartı görünmez kılıyordu — burada görünür bir
-              kontrast garanti etmek için inline override veriyoruz (paylaşılan
-              `.elite-bubble` class'ını diğer kullanım yerlerini etkilememek için
-              global değiştirmedik). */}
-          <div
-            className="relative flex w-full max-w-xl flex-col items-center justify-center overflow-hidden rounded-[20px] border px-8 py-14 text-center shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] backdrop-blur-3xl"
-            style={{
-              background: isDark ? 'rgba(22, 24, 29, 0.78)' : '#ffffff',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(15, 23, 42, 0.08)',
-            }}
-          >
-            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-brand)] text-white">
-              <Heart className="h-8 w-8" fill="currentColor" />
-            </div>
-            <p className={`mb-6 max-w-sm text-base font-bold leading-relaxed ${isDark ? 'text-zinc-300' : 'text-slate-600'}`}>
-              {t('match.no_profiles') || 'No profiles to show right now. Come back soon!'}
-            </p>
-            <button
-              className="flex items-center gap-2 rounded-full bg-[var(--color-brand)] px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-[var(--color-brand-hovered)] active:scale-95"
-              onClick={() => fetchMatchNowProfiles(100)}
-              disabled={isLoading}
-            >
-              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-              <span>{t('match.refresh') || 'Refresh'}</span>
-            </button>
-          </div>
-        </div>
+        <AnimatedEmptyState title={t('match.no_profiles')} kind="discover">
+          <button type="button" className="cv-btn cv-btn-primary" onClick={() => fetchMatchNowProfiles(100)} disabled={isLoading}>
+            <RefreshCw className={isLoading ? 'animate-spin' : ''} />{t('match.refresh')}
+          </button>
+        </AnimatedEmptyState>
       ) : (
         <>
       <motion.div
@@ -1172,7 +1149,7 @@ const MatchScreen: React.FC = () => {
         animate={{ opacity: faded ? 0.7 : 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="cv-card-surface-muted relative h-full overflow-hidden rounded-[26px] bg-slate-100">
+        <div className="cv-card-surface-muted relative h-full overflow-hidden rounded-2xl bg-slate-100">
           <img
             src={getSafeImageURLEx(profile.public_id, null, "cover") || undefined}
             alt={profile.name}
@@ -1182,8 +1159,8 @@ const MatchScreen: React.FC = () => {
           <div className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-xl">
             <Icon className="h-4 w-4" fill={variant === 'passed' ? 'none' : 'currentColor'} strokeWidth={2.5} />
           </div>
-          <div className="absolute inset-x-0 bottom-0 p-3">
-            <h3 className="truncate text-sm font-semibold tracking-tight text-white">
+          <div className={`absolute inset-x-0 bottom-0 p-4 ${variant === 'matched' ? 'pe-16' : ''}`}>
+            <h3 className="break-words text-base font-medium leading-snug text-white">
               {profile.name}{profile.age ? `, ${profile.age}` : ''}
             </h3>
             {profile.location && (
@@ -1195,7 +1172,8 @@ const MatchScreen: React.FC = () => {
           </div>
           {variant === 'matched' && (
             <motion.button
-              className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-xl"
+              aria-label={t('match.send_message')}
+              className="absolute bottom-3 end-3 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-xl"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={(e) => {
@@ -1230,15 +1208,10 @@ const MatchScreen: React.FC = () => {
               </p>
             </div>
           ) : matchedProfiles.length === 0 ? (
-            <div className="elite-bubble rounded-[20px] px-6 py-10 text-center">
-              <Sparkles className={`mx-auto mb-3 h-8 w-8 ${isDark ? 'text-zinc-600' : 'text-slate-400'}`} />
-              <p className={`text-xs font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
-                {t('match.no_matches') || 'No matches'}
-              </p>
-            </div>
+            <AnimatedEmptyState title={t('match.no_matches')} kind="matches" />
           ) : (
             <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              <div className="cv-people-grid">
                 {(expandedMatches ? matchedProfiles : matchedProfiles.slice(0, 6)).map((profile) => (
                   renderHistoryProfileCard(profile, 'matched')
                 ))}
@@ -1280,15 +1253,10 @@ const MatchScreen: React.FC = () => {
               </p>
             </div>
           ) : likedProfiles.length === 0 ? (
-            <div className="elite-bubble rounded-[20px] px-6 py-10 text-center">
-              <Heart className={`mx-auto mb-3 h-8 w-8 ${isDark ? 'text-zinc-600' : 'text-slate-400'}`} />
-              <p className={`text-xs font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
-                {t('match.no_profiles_liked') || 'No likes'}
-              </p>
-            </div>
+            <AnimatedEmptyState title={t('match.no_profiles_liked')} kind="liked" />
           ) : (
             <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              <div className="cv-people-grid">
                 {(expandedLiked ? likedProfiles : likedProfiles.slice(0, 6)).map((profile) => (
                   renderHistoryProfileCard(profile, 'liked')
                 ))}
@@ -1329,15 +1297,10 @@ const MatchScreen: React.FC = () => {
             </p>
           </div>
         ) : passedProfiles.length === 0 ? (
-          <div className="elite-bubble rounded-[20px] px-6 py-10 text-center">
-            <Ghost className={`mx-auto mb-3 h-8 w-8 ${isDark ? 'text-zinc-600' : 'text-slate-400'}`} />
-            <p className={`text-xs font-bold ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
-              {t('match.no_profiles_passed') || 'No passes'}
-            </p>
-          </div>
+            <AnimatedEmptyState title={t('match.no_profiles_passed')} kind="passed" />
         ) : (
           <div className="space-y-3">
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="cv-people-grid">
               {(expandedPassed ? passedProfiles : passedProfiles.slice(0, 6)).map((profile) => (
                 renderHistoryProfileCard(profile, 'passed')
               ))}

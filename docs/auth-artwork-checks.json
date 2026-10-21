@@ -7,7 +7,7 @@
       "theme": "light",
       "largeText": false,
       "passed": true,
-      "checks": "Original AVIF decoding, both cards, form artwork, Back, reachable action, no horizontal overflow or render errors"
+      "checks": "Original AVIF decoding, 560px modal with zero padding, both cards, form artwork, validation, mocked registration failure, Back, persistent footer at 440px height, Escape/focus restoration, no horizontal overflow or render errors"
     },
     {
       "width": 390,
@@ -15,7 +15,7 @@
       "theme": "dark",
       "largeText": false,
       "passed": true,
-      "checks": "Original AVIF decoding, both cards, form artwork, Back, reachable action, no horizontal overflow or render errors"
+      "checks": "Original AVIF decoding, 560px modal with zero padding, both cards, form artwork, validation, mocked registration failure, Back, persistent footer at 440px height, Escape/focus restoration, no horizontal overflow or render errors"
     },
     {
       "width": 820,
@@ -23,7 +23,7 @@
       "theme": "dark",
       "largeText": true,
       "passed": true,
-      "checks": "Original AVIF decoding, both cards, form artwork, Back, reachable action, no horizontal overflow or render errors"
+      "checks": "Original AVIF decoding, 560px modal with zero padding, both cards, form artwork, validation, mocked registration failure, Back, persistent footer at 440px height, Escape/focus restoration, no horizontal overflow or render errors"
     },
     {
       "width": 1440,
@@ -31,7 +31,7 @@
       "theme": "light",
       "largeText": false,
       "passed": true,
-      "checks": "Original AVIF decoding, both cards, form artwork, Back, reachable action, no horizontal overflow or render errors"
+      "checks": "Original AVIF decoding, 560px modal with zero padding, both cards, form artwork, validation, mocked registration failure, Back, persistent footer at 440px height, Escape/focus restoration, no horizontal overflow or render errors"
     }
   ]
 }

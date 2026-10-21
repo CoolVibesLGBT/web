@@ -262,7 +262,8 @@
     "search": "搜尋",
     "screen_error_title": "無法載入此畫面",
     "screen_error_message": "發生錯誤，請重試或返回首頁。",
-    "people": "用戶"
+    "people": "用戶",
+    "back": "返回"
   },
   "months": {
     "january": "一月",
@@ -863,5 +864,24 @@
     "no_referrals": "暫時沒有推薦",
     "no_referrals_desc": "分享連結，邀請第一位朋友。",
     "share": "分享"
+  },
+  "discovery": {
+    "like": "喜歡",
+    "dislike": "不喜歡",
+    "block": "封鎖",
+    "online": "在線",
+    "loading_vibes": "正在載入 Vibes…",
+    "empty_vibes": "暫無 Vibes",
+    "empty_vibes_description": "稍後回來探索新動態。",
+    "vibes_error": "無法載入 Vibes，請重試。",
+    "media_error": "無法載入此相片或影片。",
+    "empty_people": "此清單中還沒有人。"
+  },
+  "search": {
+    "no_results": "找不到結果",
+    "no_results_subtitle": "請嘗試其他搜尋字詞或類別。"
+  },
+  "live": {
+    "empty": "目前沒有直播。"
   }
 }

@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from '@/router';
 import { useTheme } from '../contexts/ThemeContext';
@@ -74,9 +75,7 @@ export default function ClassifiedDetailScreen() {
                     </>
                 ) : error ? (
                     <>
-                        <div className={`rounded-[30px] border p-10 text-center backdrop-blur-3xl ${panelClassName}`}>
-                            <p className="text-sm font-semibold text-red-500">{error}</p>
-                        </div>
+                        <AnimatedEmptyState title={t('classifieds.no_results')} />
                     </>
                 ) : post ? (
                     <>

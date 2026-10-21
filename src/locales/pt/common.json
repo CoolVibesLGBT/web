@@ -262,7 +262,8 @@
     "search": "Pesquisar",
     "screen_error_title": "Não foi possível carregar esta tela",
     "screen_error_message": "Ocorreu um erro. Tente novamente ou volte ao início.",
-    "people": "Pessoas"
+    "people": "Pessoas",
+    "back": "Voltar"
   },
   "months": {
     "january": "Janeiro",
@@ -863,5 +864,24 @@
     "no_referrals": "Ainda não há convites",
     "no_referrals_desc": "Partilhe o seu link para convidar os primeiros amigos.",
     "share": "Partilhar"
+  },
+  "discovery": {
+    "like": "Curtir",
+    "dislike": "Não curtir",
+    "block": "Bloquear",
+    "online": "Online",
+    "loading_vibes": "Carregando Vibes…",
+    "empty_vibes": "Ainda não há Vibes",
+    "empty_vibes_description": "Volte mais tarde para descobrir novas publicações.",
+    "vibes_error": "Não foi possível carregar os Vibes. Tente novamente.",
+    "media_error": "Não foi possível carregar esta foto ou este vídeo.",
+    "empty_people": "Ainda não há ninguém nesta lista."
+  },
+  "search": {
+    "no_results": "Nenhum resultado encontrado",
+    "no_results_subtitle": "Tente outro termo de pesquisa ou categoria."
+  },
+  "live": {
+    "empty": "Nenhuma transmissão ao vivo no momento."
   }
 }

@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-21",
+  "method": "DOM/original TGS rendering with intercepted APIs; no screenshots or real account writes",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "checks": [
+        "four profile activity tabs use original animated empty component",
+        "friends and private photos empty states",
+        "followers/following/likes loaded empty states retain identity and Back",
+        "profile card/header stay visible on populated list scroll",
+        "settings title/back/search and empty search; sticky top; delayed session uses inline progress without automatic splash or modal",
+        "Live, Cool and notifications share animated empty component"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "status": "passed",
+      "checks": [
+        "four profile activity tabs use original animated empty component",
+        "friends and private photos empty states",
+        "followers/following/likes loaded empty states retain identity and Back",
+        "profile card/header stay visible on populated list scroll",
+        "settings title/back/search and empty search; sticky top; delayed session uses inline progress without automatic splash or modal",
+        "Live, Cool and notifications share animated empty component"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "status": "passed",
+      "checks": [
+        "four profile activity tabs use original animated empty component",
+        "friends and private photos empty states",
+        "followers/following/likes loaded empty states retain identity and Back",
+        "profile card/header stay visible on populated list scroll",
+        "settings title/back/search and empty search; sticky top; delayed session uses inline progress without automatic splash or modal",
+        "Live, Cool and notifications share animated empty component"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "checks": [
+        "four profile activity tabs use original animated empty component",
+        "friends and private photos empty states",
+        "followers/following/likes loaded empty states retain identity and Back",
+        "profile card/header stay visible on populated list scroll",
+        "settings title/back/search and empty search; sticky top; delayed session uses inline progress without automatic splash or modal",
+        "Live, Cool and notifications share animated empty component"
+      ]
+    }
+  ]
+}

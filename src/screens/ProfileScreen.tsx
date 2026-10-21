@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
 import { GroupedSection, ListRow, Sheet } from '@/components/ui/Interface';
 import TelegramIcon from '@/features/chat/TelegramIcon';
@@ -11,7 +12,7 @@ import React, { useState, useEffect, useRef, type CSSProperties } from 'react';
 import { useSEO } from '../hooks/useSEO';
 import { useParams, useNavigate, useLocation } from '@/router';
 import type { TravelData } from '../interfaces/user';
-import { Heart, Baby, Cigarette, Wine, Ruler, PawPrint, Church, GraduationCap, Eye, EyeOff, Lock, Palette, Accessibility, Paintbrush, RulerDimensionLine, Vegan, PersonStanding, Sparkles, Drama, Banana, Save, Camera, Image as ImageIcon, ChevronRight, Check, HeartHandshake, FileText, MessageCircle, Panda, Ghost, Rainbow, Transgender, Rabbit, ChevronLeft, ChevronDown, LocateFixed, UserCircle, Clock, Smile, HeartPulse, Bubbles, Leaf, Fingerprint, Users, UserPlus, ThumbsUp, ThumbsDown, Shield, type IllustratedIconComponent } from '@/components/ui/illustratedIcons';
+import { Heart, Baby, Cigarette, Wine, Ruler, PawPrint, Church, GraduationCap, Eye, EyeOff, Lock, Palette, Accessibility, Paintbrush, RulerDimensionLine, Vegan, PersonStanding, Sparkles, Drama, Banana, Save, Camera, Image as ImageIcon, ChevronRight, Check, HeartHandshake, Panda, Ghost, Rainbow, Transgender, Rabbit, ChevronLeft, ChevronDown, LocateFixed, UserCircle, Clock, Smile, HeartPulse, Bubbles, Leaf, Fingerprint, Users, UserPlus, ThumbsUp, ThumbsDown, Shield, type IllustratedIconComponent } from '@/components/ui/illustratedIcons';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useApp, type InitialData } from '../contexts/AppContext';
@@ -3812,6 +3813,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
     navigate(`/${user.username}/${type}`, {
       state: {
+        returnTo: `${location.pathname}${location.search || ''}`,
         profileSummary: {
           id: user.id,
           public_id: user.public_id,
@@ -5798,30 +5800,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             </div>
                           </div>
                         ) : medias.length === 0 ? (
-                          <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.3 }}
-                            className="flex items-center justify-center py-20"
-                          >
-                            <div className="flex flex-col items-center gap-4 max-w-sm mx-auto px-4">
-                              <div className={`w-20 h-20 rounded-full flex items-center justify-center ${theme === 'dark'
-                                ? 'bg-gray-900/30 border border-gray-900'
-                                : 'bg-white border border-gray-200/50'
-                                }`}>
-                                <ImageIcon className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                              </div>
-                              <div className="text-center">
-                                <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                                  {t('profile.no_media_yet')}
-                                </h3>
-                                <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
-                                  {isOwnProfile && t('profile.media_appear_here')}
-                                  {!isOwnProfile && `@${user.username} ${t('profile.no_media_from_user')}`}
-                                </p>
-                              </div>
-                            </div>
-                          </motion.div>
+                          <AnimatedEmptyState title={t('profile.no_media_yet')} description={isOwnProfile ? t('profile.media_appear_here') : `@${user.username} ${t('profile.no_media_from_user')}`} />
                         ) : (
                           <div className="p-4">
                             <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-2 sm:gap-3">
@@ -5847,44 +5826,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                             </div>
                           </div>
                         ) : posts.length === 0 ? (
-                          <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.3 }}
-                            className="flex items-center justify-center py-20"
-                          >
-                            <div className="flex flex-col items-center gap-4 max-w-sm mx-auto px-4">
-                              <div className={`w-20 h-20 rounded-full flex items-center justify-center ${theme === 'dark'
-                                ? 'bg-gradient-to-br from-gray-900/95 to-gray-900/60 border border-white/[0.06]'
-                                : 'bg-gradient-to-br from-gray-50 to-white border border-black/[0.06]'
-                                }`}>
-                                {activeTab === 'posts' && (
-                                  <FileText className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                                )}
-                                {activeTab === 'replies' && (
-                                  <MessageCircle className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                                )}
-                                {activeTab === 'likes' && (
-                                  <Heart className={`w-10 h-10 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                                )}
-                              </div>
-                              <div className="text-center">
-                                <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                                  {activeTab === 'posts' && t('profile.no_posts_yet')}
-                                  {activeTab === 'replies' && t('profile.no_replies_yet')}
-                                  {activeTab === 'likes' && t('profile.no_likes_yet')}
-                                </h3>
-                                <p className={`text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
-                                  {activeTab === 'posts' && isOwnProfile && t('profile.share_thoughts')}
-                                  {activeTab === 'posts' && !isOwnProfile && `@${user.username} ${t('profile.no_posts_from_user')}`}
-                                  {activeTab === 'replies' && isOwnProfile && t('profile.replies_appear_here')}
-                                  {activeTab === 'replies' && !isOwnProfile && `@${user.username} ${t('profile.no_replies_from_user')}`}
-                                  {activeTab === 'likes' && isOwnProfile && t('profile.likes_appear_here')}
-                                  {activeTab === 'likes' && !isOwnProfile && `@${user.username} ${t('profile.no_likes_from_user')}`}
-                                </p>
-                              </div>
-                            </div>
-                          </motion.div>
+                          <AnimatedEmptyState title={t(activeTab === 'posts' ? 'profile.no_posts_yet' : activeTab === 'replies' ? 'profile.no_replies_yet' : 'profile.no_likes_yet')} description={isOwnProfile ? t(activeTab === 'posts' ? 'profile.share_thoughts' : activeTab === 'replies' ? 'profile.replies_appear_here' : 'profile.likes_appear_here') : `@${user.username} ${t(activeTab === 'posts' ? 'profile.no_posts_from_user' : activeTab === 'replies' ? 'profile.no_replies_from_user' : 'profile.no_likes_from_user')}`} />
                         ) : (
                           posts.map((post) => (
                             <div

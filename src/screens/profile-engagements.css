@@ -1,0 +1,16 @@
+.cv-engagement-page > div { padding-top: 0; }
+.cv-engagement-context { position: sticky; top: 0; z-index: 30; flex-shrink: 0; margin-inline: -.235rem; background: var(--cv-card-bg-solid); }
+.cv-engagement-profile { display: flex; align-items: center; gap: .824rem; width: 100%; min-width: 0; padding: .941rem; border: 0; border-radius: 0; background: transparent; color: var(--cv-neutral-1); text-align: start; }
+.cv-engagement-profile:hover { background: var(--cv-list-hover); }
+.cv-engagement-avatar { position: relative; display: grid; place-items: center; width: 3.294rem; height: 3.294rem; flex-shrink: 0; overflow: hidden; border-radius: 50%; background: var(--cv-surface-2); color: var(--cv-neutral-2); font-size: 1.412rem; }
+.cv-engagement-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cv-engagement-profile > span:last-child { display: flex; flex-direction: column; gap: .235rem; min-width: 0; }
+.cv-engagement-profile strong { font-size: 1.059rem; line-height: 1.4; font-weight: 500; overflow-wrap: anywhere; }
+.cv-engagement-profile > span:last-child > span { font-size: .882rem; line-height: 1.4; color: var(--cv-neutral-2); overflow-wrap: anywhere; }
+.cv-engagement-context .cv-navigation-bar { padding-inline: .471rem; }
+.cv-engagement-page .space-y-2 > div { border: 0; }
+.cv-engagement-list { background: var(--cv-card-bg-solid); }
+.cv-engagement-list .cv-list-icon { width: 48px; height: 48px; }
+.cv-engagement-row-avatar { position: relative; display: grid; place-items: center; width: 48px; height: 48px; overflow: hidden; border-radius: 50%; background: var(--cv-surface-2); }
+.cv-engagement-row-avatar > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cv-engagement-list .cv-list-description > span { display: block; }

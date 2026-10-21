@@ -1,3 +1,5 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
+import { useTranslation } from 'react-i18next';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, X, AlertCircle, Film } from 'lucide-react';
@@ -45,6 +47,7 @@ const TENOR_BASE_URL = 'https://tenor.googleapis.com/v2';
 const API_KEY = TENOR_API_KEY
 
 const GifPicker: React.FC<GifPickerProps> = ({ onGifSelect, onClose, isProcessing = false }) => {
+  const { t } = useTranslation('common');
   const { theme } = useTheme();
   const [selectedCategory, setSelectedCategory] = useState<string>('trending');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -251,17 +254,7 @@ const GifPicker: React.FC<GifPickerProps> = ({ onGifSelect, onClose, isProcessin
     }
 
     if (gifs.length === 0) {
-      return (
-        <div
-          className={`w-full rounded-2xl border p-5 text-center text-sm font-medium ${
-            theme === 'dark'
-              ? 'border-gray-900 bg-gray-900/30 text-gray-400'
-              : 'border-gray-200 bg-gray-50 text-gray-500'
-          }`}
-        >
-          No GIFs found for your search. Try a different query.
-        </div>
-      );
+      return <AnimatedEmptyState compact title={t('search.no_results')} />;
     }
 
     return (

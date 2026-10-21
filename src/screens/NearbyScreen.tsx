@@ -1,6 +1,7 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
 import { useState, useEffect, useRef, useCallback, useMemo, type CSSProperties } from 'react';
-import { Users, Grid, List, Square, RefreshCw, X, Map as MapIcon, Bubbles } from 'lucide-react';
+import { Grid, List, Square, RefreshCw, X, Map as MapIcon, Bubbles } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { UserCard } from '../features/profile/UserCard';
@@ -580,12 +581,7 @@ const NearbyScreen: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className={statusPanelClassName}
         >
-          <div className={statusIconClassName}>
-            <Users className="h-7 w-7" />
-          </div>
-          <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-950'}`}>
-            {t('nearby.no_matches_found')}
-          </h3>
+          <AnimatedEmptyState title={t('nearby.no_matches_found')} />
           <button
             type="button"
             onClick={handleRefresh}
@@ -696,12 +692,12 @@ const NearbyScreen: React.FC = () => {
               ) : (
               <div className='w-full flex-col py-2'>
                 {viewMode === 'grid' && (
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                  <div className="cv-people-grid">
                     {nearbyRenderItems.map((item, index: number) => (
                       item.kind === 'ad' ? (
                         <div
                           key={`nearby-grid-${item.id}`}
-                          className="col-span-2 sm:col-span-5"
+                          className="cv-people-ad"
                           style={nearbyGridItemStyle}
                         >
                           <FeatureAdCard theme={theme} placement="nearby" />
@@ -719,7 +715,7 @@ const NearbyScreen: React.FC = () => {
                 )}
 
                 {viewMode === 'list' && (
-                  <div className="space-y-3">
+                  <div className="cv-people-list">
                     {nearbyRenderItems.map((item, index: number) => (
                       item.kind === 'ad' ? (
                         <div
@@ -741,12 +737,12 @@ const NearbyScreen: React.FC = () => {
                 )}
 
                 {viewMode === 'card' && (
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-2">
+                  <div className="cv-people-grid" data-layout="card">
                     {nearbyRenderItems.map((item, index: number) => (
                       item.kind === 'ad' ? (
                         <div
                           key={`nearby-card-${item.id}`}
-                          className="md:col-span-4"
+                          className="cv-people-ad"
                           style={nearbyCardItemStyle}
                         >
                           <FeatureAdCard theme={theme} placement="nearby" />

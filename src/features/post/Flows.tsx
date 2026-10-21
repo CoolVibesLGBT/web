@@ -1,23 +1,16 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import React, { useState, useEffect, useLayoutEffect, useCallback, useRef, useMemo, type CSSProperties } from 'react';
-import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { useTheme } from '../../contexts/ThemeContext';
-import { useAuth } from '../../contexts/AuthContext';
-import { PostLexicalContent } from './Post';
+import Post from './Post';
 import type { ApiPost as PostComponentApiPost } from './Post';
-import PostReply from './PostReply';
-import ReportButton from '@/components/ui/ReportButton';
 import { api } from '../../services/api';
-import { RefreshCw, AlertCircle, Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Zap, PlayCircle, Eye } from 'lucide-react';
+import { RefreshCw, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { flowsStateAtom } from '@/state/flows';
 import FeatureAdCard from '@/components/ads/FeatureAdCard';
-import ShareButton from '@/components/ui/ShareButton';
 import { isFeatureEnabled } from '@/config/featureFlags';
-import { getLocalizedContent, getSafeImageURL, getSafeImageURLEx } from '@/helpers/helpers';
-import { useDwellView } from '@/hooks/useDwellView';
-import { resolveAppUrl } from '@/platform/runtime';
 import {
   filterDeletedPosts,
   getTimelineCursor,
@@ -311,46 +304,6 @@ const flowCardRenderStyle: CSSProperties = {
   containIntrinsicSize: '1px 680px',
 };
 
-const getNumericPostValue = (post: ApiPost, keys: string[]) => {
-  const source = post as Record<string, unknown>;
-  const counts = post.engagements?.counts as Record<string, unknown> | undefined;
-
-  for (const key of keys) {
-    const value = counts?.[key] ?? source[key];
-    if (typeof value === 'number' && Number.isFinite(value)) return value;
-    if (typeof value === 'string') {
-      const parsed = Number(value);
-      if (Number.isFinite(parsed)) return parsed;
-    }
-  }
-  return 0;
-};
-
-const getPrimaryMedia = (post: ApiPost) => {
-  const attachments = Array.isArray(post.attachments) ? post.attachments : [];
-  const media = attachments.find((attachment) => {
-    const mimeType = attachment?.file?.mime_type || '';
-    return mimeType.startsWith('image/') || mimeType.startsWith('video/');
-  });
-
-  if (!media) {
-    return { url: null as string | null, isVideo: false };
-  }
-
-  const url =
-    getSafeImageURL(media, 'large') ||
-    getSafeImageURL(media, 'medium') ||
-    getSafeImageURL(media, 'small') ||
-    getSafeImageURL(media, 'original') ||
-    media.file?.url ||
-    null;
-
-  return {
-    url,
-    isVideo: Boolean(media.file?.mime_type?.startsWith('video/')),
-  };
-};
-
 const YOUTUBE_URL_PATTERN = /(?:youtube(?:-nocookie)?\.com\/(?:watch\?[^\s#]*v=|embed\/|shorts\/|live\/)|youtu\.be\/)/i;
 const VIDEO_POST_KINDS = new Set(['video', 'youtube', 'youtube_video', 'youtube-video']);
 
@@ -416,244 +369,21 @@ export const isWideMediaPost = (post: ApiPost): boolean => {
   return containsWideEmbedContent(post.content);
 };
 
-const getAvatarColorClass = (seed: string) => {
-  let hash = 0;
-  for (let i = 0; i < seed.length; i += 1) {
-    hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
-  }
-  return `cv-av-${(hash % 10) + 1}`;
-};
-
-export const CoolVibesPostCard = React.memo(({
-  post,
-  onPostClick,
-  onProfileClick,
-}: {
-  post: ApiPost
-  onPostClick: (postId: string, username: string) => void
-  onProfileClick: (username: string) => void
-}) => {
-  const { t, i18n } = useTranslation('common');
-  const { theme } = useTheme();
-  const { user } = useAuth();
-  const [liked, setLiked] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [showReply, setShowReply] = useState(false);
-  const [replyCountOffset, setReplyCountOffset] = useState(0);
-  const author = post.author;
-  const media = getPrimaryMedia(post);
-  const avatarUrl = getSafeImageURLEx(author?.public_id, author?.avatar, 'icon');
-  const localizedContent = getLocalizedContent(post.content, i18n.language || author?.default_language || 'en') || '';
-  const hasContent = typeof localizedContent === 'string'
-    ? localizedContent.trim().length > 0
-    : Boolean(localizedContent);
-  const likes = getNumericPostValue(post, ['like_received_count', 'likes_count', 'like_count', 'likes']);
-  const comments = getNumericPostValue(post, ['comment_count', 'comments_count', 'replies_count', 'comments']);
-  const shares = getNumericPostValue(post, ['share_count', 'shares_count', 'shares']);
-  const bookmarks = getNumericPostValue(post, ['bookmark_count', 'bookmarks_count', 'saved_count', 'saves_count', 'bookmarks']);
-  const views = getNumericPostValue(post, ['view_count', 'views_count', 'views']);
-  const [displayedViews, setDisplayedViews] = useState(views);
-  const displayName = author?.displayname || author?.username || 'User';
-  const username = author?.username || 'user';
-  const postViewRef = useDwellView<HTMLElement>({
-    key: user && post.public_id ? `post:${user.id}:${post.public_id}` : null,
-    enabled: Boolean(
-      user &&
-      post.public_id &&
-      String(user.id) !== String(post.author?.id || post.author_id)
-    ),
-    onDwell: async () => {
-      const result = await api.handlePostView(post.public_id);
-      if (result.counted) {
-        setDisplayedViews((current) => Math.max(current, views) + 1);
-      }
-    },
-  });
-
-  useEffect(() => {
-    setDisplayedViews(views);
-  }, [post.id, post.public_id, views]);
-
-  const formattedViews = useMemo(() => new Intl.NumberFormat(i18n.language || 'en', {
-    notation: 'compact',
-    maximumFractionDigits: 1,
-  }).format(displayedViews), [displayedViews, i18n.language]);
-
-  const handleOpen = () => {
-    onPostClick(post.public_id || post.id, username);
-  };
-
-  const handleProfile = (event: React.MouseEvent) => {
-    event.stopPropagation();
-    onProfileClick(username);
-  };
-
-  return (
-    <>
-      <article
-        ref={postViewRef}
-        style={flowCardRenderStyle}
-        className="cv-item group cursor-pointer"
-        onClick={handleOpen}
-      >
-        <div className="flex items-center justify-between" onClick={e => e.stopPropagation()}>
-          <button className="flex items-center gap-3 min-w-0 text-start" onClick={handleProfile}>
-            <div className={`cv-avatar ${getAvatarColorClass(username)}`}>
-              {avatarUrl ? (
-                <img src={avatarUrl} className="w-full h-full rounded-full object-cover" alt={displayName} />
-              ) : (
-                displayName.charAt(0).toUpperCase()
-              )}
-            </div>
-            <div className="min-w-0">
-              <div className="cv-post-top">
-                <span className="cv-post-name truncate">{displayName}</span>
-                {(author as any)?.is_verified && <Zap className="w-3.5 h-3.5 text-brand fill-current shrink-0" />}
-                <span className="cv-post-handle truncate">@{username}</span>
-              </div>
-            </div>
-          </button>
-          <div className="flex shrink-0 items-center gap-1.5">
-            <span
-              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-slate-200/70 bg-slate-50/80 px-2.5 text-[0.765rem] font-bold tabular-nums text-slate-500 dark:border-white/10 dark:bg-white/[0.045] dark:text-zinc-400"
-              title={t('post_feed.views', { count: displayedViews })}
-              aria-label={t('post_feed.views', { count: displayedViews })}
-            >
-              <Eye className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>{formattedViews}</span>
-            </span>
-            <ReportButton
-              type="post"
-              id={post.public_id || post.id}
-              className="shrink-0"
-              trigger={
-                <button
-                  type="button"
-                  className="rounded-full p-1.5 text-slate-300 transition-colors hover:bg-brand-light hover:text-brand"
-                  aria-label="Report post"
-                >
-                  <MoreHorizontal className="w-4 h-4" />
-                </button>
-              }
-            />
-          </div>
-        </div>
-
-        {media.url && (
-          <div className="pt-3">
-            <div className={`relative rounded-[20px] overflow-hidden bg-slate-50 dark:bg-black group/media ${media.isVideo ? 'aspect-video' : 'aspect-auto'}`}>
-              {media.isVideo ? (
-                <video
-                  src={media.url}
-                  controls
-                  playsInline
-                  preload="metadata"
-                  className="h-full w-full bg-black object-contain"
-                  onClick={(event) => event.stopPropagation()}
-                />
-              ) : (
-                <img
-                  src={media.url}
-                  className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-110"
-                  alt=""
-                />
-              )}
-              {media.isVideo && (
-                <div className="pointer-events-none absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full bg-black/55 text-white">
-                  <PlayCircle className="w-4 h-4" />
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        <div className="pt-3">
-          {hasContent && (
-            <PostLexicalContent
-              content={localizedContent}
-              theme={theme === 'dark' ? 'dark' : 'light'}
-              className="relative skyline-card-lexical mb-4"
-              contentEditableClassName="editor-input lexical-editor pointer-events-none py-0 px-0"
-              placeholder={null}
-            />
-          )}
-
-          <div className="cv-acts" onClick={e => e.stopPropagation()}>
-            <button
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-                setShowReply(true);
-              }}
-              className="cv-act"
-            >
-              <MessageCircle className="cv-act-ico" />
-              <span className="cv-act-num">{comments + replyCountOffset}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setLiked(!liked)}
-              className={`cv-act is-red ${liked ? 'is-active' : ''}`}
-            >
-              <Heart className={`cv-act-ico ${liked ? 'fill-current' : ''}`} />
-              <span className="cv-act-num">{likes + (liked ? 1 : 0)}</span>
-            </button>
-            <ShareButton
-              url={resolveAppUrl(`/${username}/status/${post.public_id || post.id}`)}
-              title={displayName ? `${displayName}'s post` : 'Post'}
-              trigger={
-                <button type="button" className="cv-act is-green" aria-label="Share post">
-                  <Share2 className="cv-act-ico" />
-                  <span className="cv-act-num">{shares}</span>
-                </button>
-              }
-            />
-            <button
-              type="button"
-              onClick={() => setSaved(!saved)}
-              className={`cv-act is-amber ${saved ? 'is-active is-amber' : ''}`}
-            >
-              <Bookmark className={`cv-act-ico ${saved ? 'fill-current' : ''}`} />
-              <span className="cv-act-num">{bookmarks + (saved ? 1 : 0)}</span>
-            </button>
-          </div>
-        </div>
-      </article>
-
-      {showReply && typeof window !== 'undefined' && createPortal(
-        <div
-          className="cv-modal-glass-backdrop fixed inset-0 z-[900] flex items-start justify-center overflow-y-auto p-3 pt-20 md:items-center md:p-6 md:pt-6"
-          onClick={() => setShowReply(false)}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 18 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 18 }}
-            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className={`cv-modal-glass-panel flex max-h-[calc(100dvh-7rem)] w-full max-w-2xl flex-col overflow-y-auto rounded-[20px] border no-scrollbar ${
-              theme === 'dark'
-                ? 'text-white'
-                : 'text-slate-950'
-            }`}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <PostReply
-              isOpen={true}
-              onClose={() => setShowReply(false)}
-              parentPostId={`${post.public_id || post.id}`}
-              onReply={() => {
-                setShowReply(false);
-                setReplyCountOffset((count) => count + 1);
-              }}
-            />
-          </motion.div>
-        </div>,
-        document.body
-      )}
-    </>
-  );
+/** Feed and detail use the same post renderer, permissions and API actions. */
+export const CoolVibesPostCard = React.memo(({ post, onPostClick, onProfileClick }: MemoizedPostItemProps) => {
+  const setFeedState = useSetAtom(flowsStateAtom);
+  const handleUpdate = useCallback((updatedPost: ApiPost) => {
+    setFeedState(previous => ({
+      ...previous,
+      items: updatedPost.deleted_at
+        ? previous.items.filter(item => item.public_id !== updatedPost.public_id)
+        : previous.items.map(item => item.public_id === updatedPost.public_id ? updatedPost : item),
+    }));
+  }, [setFeedState]);
+  return <div className="cv-feed-post" style={flowCardRenderStyle}>
+    <Post post={post} onPostClick={onPostClick} onProfileClick={onProfileClick} onUpdatePost={handleUpdate} showChildren={false} loadChildren={false} defaultShowReply={false} />
+  </div>;
 });
-
 CoolVibesPostCard.displayName = 'CoolVibesPostCard';
 
 const injectFlowAds = (posts: ApiPost[], enabled: boolean, interval = 6): FeedRowItem[] => {
@@ -1099,9 +829,7 @@ const Flows: React.FC<FlowsProps> = ({ onPostClick, onProfileClick, scrollParent
             </div>
           </motion.div>
         ) : posts.length === 0 ? (
-          <div className={`elite-bubble mx-1 p-10 text-center font-semibold ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'}`}>
-            {t('post_feed.empty')}
-          </div>
+          <AnimatedEmptyState title={t('post_feed.empty')} />
         ) : (
           <>
             <div className="flex flex-col">

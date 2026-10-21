@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from '@/router';
@@ -253,10 +254,7 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
 
     if (users.length === 0) {
       return (
-        <div className={`rounded-2xl border p-5 text-center ${isDark ? 'cv-card-surface-solid border-white/10 text-gray-400' : 'border-gray-200 bg-white text-gray-500'}`}>
-          <Users className="mx-auto mb-3 h-6 w-6" />
-          <p className="text-sm font-medium">{t('app.popular_users_empty', { defaultValue: 'Henüz kullanıcı bulunamadı' })}</p>
-        </div>
+        <AnimatedEmptyState compact title={t('app.popular_users_empty')} />
       );
     }
 

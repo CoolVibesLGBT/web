@@ -1,4 +1,6 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import React from 'react';
+import { RefreshCw as RefreshIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, RefreshCw, ExternalLink, Search, Loader2, ArrowUpRight } from '@/components/ui/illustratedIcons';
 import { useTranslation } from 'react-i18next';
@@ -192,7 +194,10 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
   const [lastUpdated, setLastUpdated] = React.useState<Date | null>(null);
   const [isExpanded, setIsExpanded] = React.useState(false);
 
+  const fetchingRef = React.useRef(false);
   const fetchTrends = React.useCallback(async () => {
+    if (fetchingRef.current) return;
+    fetchingRef.current = true;
     setLoading(true);
     setError(null);
     try {
@@ -234,6 +239,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
       console.error('Failed to fetch trends', err);
       setError(err?.response?.data?.message || err?.message || 'Error loading trends');
     } finally {
+      fetchingRef.current = false;
       setLoading(false);
     }
   }, [limit]);
@@ -276,7 +282,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
       transition={{ duration: 0.25, ease: 'easeOut' }}
       className={`overflow-hidden rounded-3xl ${cardBackground}`}
     >
-      <div className="p-5 pb-4 flex items-start justify-between gap-4">
+      <div className="cv-trends-header">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <TrendingUp className={`h-5 w-5 ${isDark ? 'text-[var(--color-brand)]' : 'text-sky-600'}`} />
@@ -312,13 +318,12 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
         <button
           type="button"
           onClick={fetchTrends}
-          className={`rounded-full p-2 transition-colors ${isDark
-            ? 'text-zinc-400 hover:bg-white/[0.07] hover:text-white'
-            : 'hover:bg-gray-100 text-gray-600'
-            }`}
+          className="cv-trends-refresh"
+          disabled={loading}
+          aria-busy={loading}
           aria-label={t('app.trending_refresh')}
         >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+          <RefreshIcon aria-hidden="true" className={loading ? 'animate-spin' : ''} />
         </button>
       </div>
 
@@ -472,12 +477,7 @@ const TrendsPanel: React.FC<TrendsPanelProps> = ({ limit = 20, onTrendSelect }) 
             )}
 
             {!loading && trends.length === 0 && (
-              <div
-                className={`rounded-2xl border p-6 text-center text-sm ${isDark ? 'cv-card-surface-muted border-white/[0.06] text-zinc-400' : 'border-transparent bg-gray-100/60 text-gray-500'
-                  }`}
-              >
-                {t('app.trending_empty')}
-              </div>
+              <AnimatedEmptyState compact title={t('app.trending_empty')} />
             )}
 
             {loading && trends.length > 0 && (

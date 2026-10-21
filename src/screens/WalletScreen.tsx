@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
 import React, { useState, useEffect, useRef } from 'react';
 import {
@@ -8,7 +9,6 @@ import {
   Copy,
   Check,
   ExternalLink,
-  Clock,
   TrendingUp,
   TrendingDown,
   X,
@@ -900,15 +900,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                             ))}
                           </div>
                         ) : (
-                          <div className={`py-16 text-center rounded-2xl ${theme === 'dark'
-                            ? 'bg-gradient-to-br from-gray-900/90 to-gray-800/50 border border-gray-800/60'
-                            : 'bg-white border border-gray-200/90'
-                            }`}>
-                            <Clock className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                            <p className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                              {t('wallet.no_transactions') || 'No transactions yet'}
-                            </p>
-                          </div>
+                          <AnimatedEmptyState title={t('wallet.no_transactions')} />
                         )}
                       </motion.div>
                     )}

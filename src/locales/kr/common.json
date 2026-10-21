@@ -262,7 +262,8 @@
     "search": "검색",
     "screen_error_title": "화면을 불러올 수 없어요",
     "screen_error_message": "문제가 발생했어요. 다시 시도하거나 홈으로 돌아가 주세요.",
-    "people": "사람들"
+    "people": "사람들",
+    "back": "돌아가기"
   },
   "months": {
     "january": "1월",
@@ -897,5 +898,24 @@
     "no_referrals": "아직 추천이 없습니다",
     "no_referrals_desc": "링크를 공유하여 첫 친구를 초대하세요.",
     "share": "공유"
+  },
+  "discovery": {
+    "like": "좋아요",
+    "dislike": "싫어요",
+    "block": "차단",
+    "online": "온라인",
+    "loading_vibes": "Vibes 불러오는 중…",
+    "empty_vibes": "아직 Vibes가 없습니다",
+    "empty_vibes_description": "새 게시물을 보려면 나중에 다시 방문하세요.",
+    "vibes_error": "Vibes를 불러오지 못했습니다. 다시 시도하세요.",
+    "media_error": "이 사진 또는 동영상을 불러오지 못했습니다.",
+    "empty_people": "이 목록에는 아직 아무도 없습니다."
+  },
+  "search": {
+    "no_results": "검색 결과가 없습니다",
+    "no_results_subtitle": "다른 검색어나 카테고리를 시도하세요."
+  },
+  "live": {
+    "empty": "현재 라이브 방송이 없습니다."
   }
 }

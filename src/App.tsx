@@ -38,7 +38,7 @@ import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext';
 import { useSettings } from './contexts/SettingsContext';
 import AuthWizard from './features/auth/AuthWizard';
-import { MapPin, Heart, MessageCircle, User, Users, Sun, Moon, MoreHorizontal, Bell, LogOut, HandFist, Briefcase, Navigation, Settings as SettingsIcon, Globe, Video, Search, Sparkles, Home, Plus, Menu, ArrowLeft } from 'lucide-react';
+import { MapPin, Heart, MessageCircle, User, Users, Sun, Moon, MoreHorizontal, Bell, LogOut, HandFist, Briefcase, Navigation, Settings as SettingsIcon, Globe, Video, Sparkles, Home, Plus, Menu, ArrowLeft } from 'lucide-react';
 import { AppHeader, AppTabBar, GroupedSection, ListRow, Sheet } from '@/components/ui/Interface';
 import LanguageSelector from './components/ui/LanguageSelector';
 import { resolvePreferredLanguage } from './i18n';
@@ -96,7 +96,6 @@ const RESERVED_SINGLE_SEGMENT_ROUTES = new Set([
 
 const RIGHT_SIDEBAR_HIDDEN_PATHS_BASE = ['/messages', '/landing', '/premium'];
 
-let bootSplashSeen = false;
 
 const PROTECTED_SINGLE_SEGMENT_ROUTES = new Set([
   'checkin',
@@ -237,8 +236,6 @@ function AppContent() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthWizardOpen, setIsAuthWizardOpen] = useState(false);
   const [isLanguageSelectorOpen, setIsLanguageSelectorOpen] = useState(false);
-  const [bootSeen, setBootSeen] = useState(() => bootSplashSeen);
-  const [splashMinDone, setSplashMinDone] = useState(() => bootSplashSeen);
   const [isRailProfileMenuOpen, setIsRailProfileMenuOpen] = useState(false);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -428,6 +425,8 @@ function AppContent() {
   const routeElement = React.useMemo(() => {
     const path = normalizedPath;
 
+    if (!isAuthReady && path !== '/landing' && !path.startsWith('/legal') && path !== '/splash') return <RouteLoader />;
+
     // Public routes
     if (path === '/splash') return <SplashScreen autoDismiss={false} animate={true} />;
     if (path === '/landing' || (path === '/' && !isAuthenticated)) return <LandingPage />;
@@ -584,7 +583,7 @@ function AppContent() {
     }
 
     return <HomeScreen />;
-  }, [isAuthenticated, liveEnabled, normalizedPath, premiumMembershipEnabled]);
+  }, [isAuthReady, isAuthenticated, liveEnabled, normalizedPath, premiumMembershipEnabled]);
 
   // Update activeScreen based on current URL
   React.useEffect(() => {
@@ -639,21 +638,6 @@ function AppContent() {
 
     previousCanInstallRef.current = canInstall;
   }, [canInstall]);
-
-  React.useEffect(() => {
-    if (bootSeen) return;
-    const timer = window.setTimeout(() => {
-      setSplashMinDone(true);
-    }, 800);
-    return () => window.clearTimeout(timer);
-  }, [bootSeen]);
-
-  React.useEffect(() => {
-    if (!bootSeen && splashMinDone && isAuthReady) {
-      bootSplashSeen = true;
-      setBootSeen(true);
-    }
-  }, [bootSeen, splashMinDone, isAuthReady]);
 
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -849,7 +833,6 @@ function AppContent() {
   const isLandingRoute = normalizedPath === '/landing' || (normalizedPath === '/' && !isAuthenticated);
   const isLegalRoute = normalizedPath === '/legal' || normalizedPath.startsWith('/legal/');
   const isPublicPage = isLandingRoute || isLegalRoute;
-  const shouldShowBootSplash = !isPublicPage && !bootSeen && (!isAuthReady || !splashMinDone);
   const isPostDetailRoute = /^\/[^/]+\/status\/[^/]+$/.test(normalizedPath) || /^\/status\/[^/]+$/.test(normalizedPath);
   const singleSegment = normalizedPath.match(/^\/([^/]+)$/)?.[1] || null;
   const isProfileShellRoute = normalizedPath === '/profile' || Boolean(singleSegment && !RESERVED_SINGLE_SEGMENT_ROUTES.has(singleSegment));
@@ -1003,7 +986,6 @@ function AppContent() {
     <div data-tab-bar={showDock ? 'true' : 'false'} className={`cv-app-shell overflow-hidden text-slate-950 transition-colors duration-700 dark:text-white ${
       isHomePerformanceRoute ? 'cv-home-performance' : ''
     }`}>
-      {shouldShowBootSplash && <SplashScreen autoDismiss={false} animate={true} />}
       {showShellHud && <AppHeader
         title={isContextBackRoute ? shellBackTitle : sidebarNavItems.find(item => item.id === activeScreen)?.label || contextRouteTitle || DEFAULT_APP_NAME}
         leading={<button type="button" className="cv-icon-button" onClick={isContextBackRoute ? handleShellBack : openNavigationMenu} aria-label={isContextBackRoute ? shellBackLabel : t('app.sidebar.primary')}>
@@ -1018,9 +1000,7 @@ function AppContent() {
       />}
       {/* Main application columns */}
       <div
-        className={`cv-shell-columns max-h-[100dvh] w-full flex mx-auto min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide gap-0 ${isPublicPage ? '' : 'max-w-[1265px] px-4 md:px-6'} ${
-          shouldShowBootSplash ? 'pointer-events-none' : ''
-        }`}
+        className={`cv-shell-columns max-h-[100dvh] w-full flex mx-auto min-h-[100dvh] overflow-y-hidden overflow-x-hidden scrollbar-hide gap-0 ${isPublicPage ? '' : isPostDetailRoute ? 'max-w-[1265px] px-0 xl:px-6' : 'max-w-[1265px] px-4 md:px-6'}`}
       >
 
           {/* Left Rail — persistent primary navigation (desktop) */}
@@ -1153,7 +1133,7 @@ function AppContent() {
           {/* Right Sidebar - Fixed */}
           {/* Hide right sidebar on messages and notifications routes for better UX */}
           {showRightRail && (
-            <aside className="relative z-10 hidden w-[350px] shrink-0 pt-4 xl:block">
+            <aside className="cv-right-sidebar relative z-10 hidden w-[350px] shrink-0 pt-4 xl:block">
               {!hideImmersiveRailContent && (
               <div className="sticky top-0 flex flex-col h-full w-[350px] py-2 pl-3 overflow-hidden">
                 {showSidebarInstallCard && (
@@ -1163,27 +1143,6 @@ function AppContent() {
                 )}
 
                 <div className="h-full overflow-y-auto no-scrollbar pr-1">
-                  <form
-                    className="mb-4"
-                    onSubmit={(event) => {
-                      event.preventDefault();
-                      const query = new FormData(event.currentTarget).get('q');
-                      if (typeof query === 'string' && query.trim()) {
-                        navigate(`/search?q=${encodeURIComponent(query.trim())}`);
-                      } else {
-                        navigate('/search');
-                      }
-                    }}
-                  >
-                    <label className="cv-search">
-                      <Search className="h-[18px] w-[18px] shrink-0" />
-                      <input
-                        name="q"
-                        type="text"
-                        placeholder={t('app.search_placeholder', { defaultValue: 'Ara' })}
-                      />
-                    </label>
-                  </form>
                   <TrendsPanel limit={10} onTrendSelect={handleTrendSelect} />
                 </div>
               </div>

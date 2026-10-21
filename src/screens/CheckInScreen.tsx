@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, animate } from 'framer-motion';
@@ -415,12 +416,7 @@ export default function CheckInScreen() {
                                 <p className="text-sm font-semibold text-red-500">{error}</p>
                             </div>
                         ) : posts.length === 0 ? (
-                            <div className={`mx-auto flex min-h-[340px] max-w-xl flex-col items-center justify-center rounded-[30px] border p-10 text-center backdrop-blur-3xl ${panelClassName}`}>
-                                <div className="sky-glow mb-5 flex h-14 w-14 items-center justify-center rounded-full text-white">
-                                    <MapPin className="h-7 w-7" />
-                                </div>
-                                <p className={`text-sm font-semibold ${dark ? 'text-zinc-300' : 'text-slate-600'}`}>{t('nearby.no_matches_found')}</p>
-                            </div>
+                            <AnimatedEmptyState title={t('nearby.no_matches_found')} />
                         ) : (
                             <div className="flex flex-col">
                                 {posts.map(p => (

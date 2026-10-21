@@ -262,7 +262,8 @@
     "search": "検索",
     "screen_error_title": "この画面を読み込めませんでした",
     "screen_error_message": "問題が発生しました。再試行するか、ホームに戻ってください。",
-    "people": "ユーザー"
+    "people": "ユーザー",
+    "back": "戻る"
   },
   "months": {
     "january": "1月",
@@ -863,5 +864,24 @@
     "no_referrals": "紹介はまだありません",
     "no_referrals_desc": "リンクを共有して最初の友だちを招待しましょう。",
     "share": "共有"
+  },
+  "discovery": {
+    "like": "いいね",
+    "dislike": "好みではない",
+    "block": "ブロック",
+    "online": "オンライン",
+    "loading_vibes": "Vibesを読み込み中…",
+    "empty_vibes": "Vibesはまだありません",
+    "empty_vibes_description": "新しい投稿を見つけるため、後でもう一度ご覧ください。",
+    "vibes_error": "Vibesを読み込めませんでした。もう一度お試しください。",
+    "media_error": "この写真または動画を読み込めませんでした。",
+    "empty_people": "このリストにはまだ誰もいません。"
+  },
+  "search": {
+    "no_results": "結果が見つかりませんでした",
+    "no_results_subtitle": "別の検索語やカテゴリーをお試しください。"
+  },
+  "live": {
+    "empty": "現在ライブ配信はありません。"
   }
 }

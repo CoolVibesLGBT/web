@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import {
   Image,
@@ -3018,15 +3019,11 @@ const CreatePost: React.FC<CreatePostProps> = ({
                             )}
 
                             {!hasLocationQuery && !nearbyError && !isNearbyLoading && nearbyPlaces.length === 0 && (
-                              <div className={`text-xs rounded-xl px-3 py-2 ${theme === 'dark' ? 'cv-card-surface-muted text-white/50' : 'text-gray-500 bg-gray-50'}`}>
-                                {tp('location_nearby_empty', 'No nearby places found')}
-                              </div>
+                              <AnimatedEmptyState compact title={tp('location_nearby_empty', 'No nearby places found')} />
                             )}
 
                             {hasLocationQuery && !locationSearchError && !isLocationSearching && locationResults.length === 0 && (
-                              <div className={`text-xs rounded-xl px-3 py-2 ${theme === 'dark' ? 'cv-card-surface-muted text-white/50' : 'text-gray-500 bg-gray-50'}`}>
-                                {tp('location_search_empty', 'No places found')}
-                              </div>
+                              <AnimatedEmptyState compact title={tp('location_search_empty', 'No places found')} />
                             )}
 
                             {displayedPlaces.map((place) => {

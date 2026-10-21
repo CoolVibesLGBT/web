@@ -262,7 +262,8 @@
     "search": "بحث",
     "screen_error_title": "تعذّر تحميل هذه الشاشة",
     "screen_error_message": "حدث خطأ. حاول مجددًا أو عُد إلى الصفحة الرئيسية.",
-    "people": "الأشخاص"
+    "people": "الأشخاص",
+    "back": "العودة"
   },
   "months": {
     "january": "يناير",
@@ -863,5 +864,24 @@
     "no_referrals": "لا توجد إحالات بعد",
     "no_referrals_desc": "شارك رابطك لدعوة أصدقائك الأوائل.",
     "share": "مشاركة"
+  },
+  "discovery": {
+    "like": "إعجاب",
+    "dislike": "عدم الإعجاب",
+    "block": "حظر",
+    "online": "متصل",
+    "loading_vibes": "جارٍ تحميل Vibes…",
+    "empty_vibes": "لا توجد Vibes بعد",
+    "empty_vibes_description": "عد لاحقًا لاكتشاف منشورات جديدة.",
+    "vibes_error": "تعذر تحميل Vibes. حاول مرة أخرى.",
+    "media_error": "تعذر تحميل هذه الصورة أو الفيديو.",
+    "empty_people": "لا يوجد أحد في هذه القائمة بعد."
+  },
+  "search": {
+    "no_results": "لم يتم العثور على نتائج",
+    "no_results_subtitle": "جرّب عبارة بحث أو فئة أخرى."
+  },
+  "live": {
+    "empty": "لا يوجد بث مباشر حاليًا."
   }
 }

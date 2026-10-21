@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { createProgram, createShader } from '../helpers/webgl';
-import type { Vibe } from '../types';
+import type { VibeItem as Vibe } from '@/state/vibes';
 
 const VERTEX_SHADER_SOURCE = `
     attribute vec4 a_position;
@@ -76,7 +76,7 @@ interface WebGLReelsOptions {
     vibes: Vibe[];
     onActiveIndexChange: (index: number) => void;
     isMuted: boolean;
-    onActiveMediaLoadingChange?: (isLoading: boolean) => void;
+    onActiveMediaLoadingChange?: (isLoading: boolean, failed?: boolean) => void;
 }
 
 interface MediaItem {
@@ -84,6 +84,8 @@ interface MediaItem {
     texture: WebGLTexture;
     element: HTMLImageElement | HTMLVideoElement;
     isReady: boolean;
+    failed?: boolean;
+    startedAt: number;
     isVideo: boolean;
     resolution: [number, number];
 }
@@ -116,7 +118,7 @@ export function useWebGLCoverflow({ canvasRef, vibes, onActiveIndexChange, isMut
         }
 
         const gl = canvas.getContext('webgl', { antialias: true, premultipliedAlpha: false });
-        if (!gl) { console.error("WebGL not supported"); return; }
+        if (!gl) { onActiveMediaLoadingChange?.(false, true); return; }
         glRef.current = gl;
 
         const vertexShader = createShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER_SOURCE);
@@ -173,7 +175,7 @@ export function useWebGLCoverflow({ canvasRef, vibes, onActiveIndexChange, isMut
 
                 const isVideo = vibe.mediaType === 'video';
                 let element: HTMLImageElement | HTMLVideoElement;
-                const mediaItem: MediaItem = { vibe, texture, element: null!, isReady: false, isVideo, resolution: [1, 1] };
+                const mediaItem: MediaItem = { vibe, texture, element: null!, isReady: false, startedAt: performance.now(), isVideo, resolution: [1, 1] };
 
                 if (isVideo) {
                     element = document.createElement('video');
@@ -201,14 +203,15 @@ export function useWebGLCoverflow({ canvasRef, vibes, onActiveIndexChange, isMut
                         if (vid.videoWidth > 0) {
                             mediaItem.resolution = [vid.videoWidth, vid.videoHeight];
                             mediaItem.isReady = true;
+                        mediaItem.failed = false;
                         }
                     }, { once: true });
 
                     (element as HTMLVideoElement).load();
                 } else {
                     element = new Image();
-                    element.src = vibe.mediaUrl;
                     element.crossOrigin = 'anonymous';
+                    element.src = vibe.mediaUrl;
                     element.onload = () => {
                         if (!glRef.current) return;
                         const glCtx = glRef.current;
@@ -217,9 +220,11 @@ export function useWebGLCoverflow({ canvasRef, vibes, onActiveIndexChange, isMut
                         glCtx.bindTexture(glCtx.TEXTURE_2D, mediaItem.texture);
                         glCtx.texImage2D(glCtx.TEXTURE_2D, 0, glCtx.RGBA, glCtx.RGBA, glCtx.UNSIGNED_BYTE, img);
                         mediaItem.isReady = true;
+                        mediaItem.failed = false;
                     };
                 }
 
+                element.addEventListener('error', () => { mediaItem.failed = true; }, { once: true });
                 mediaItem.element = element;
                 return mediaItem;
             });
@@ -248,7 +253,7 @@ export function useWebGLCoverflow({ canvasRef, vibes, onActiveIndexChange, isMut
             const isVideo = vibe.mediaType === 'video';
             let element: HTMLImageElement | HTMLVideoElement;
 
-            const mediaItem: MediaItem = { vibe, texture, element: null!, isReady: false, isVideo, resolution: [1, 1] };
+            const mediaItem: MediaItem = { vibe, texture, element: null!, isReady: false, startedAt: performance.now(), isVideo, resolution: [1, 1] };
 
             if (isVideo) {
                 element = document.createElement('video');
@@ -276,14 +281,15 @@ export function useWebGLCoverflow({ canvasRef, vibes, onActiveIndexChange, isMut
                     if (vid.videoWidth > 0) {
                         mediaItem.resolution = [vid.videoWidth, vid.videoHeight];
                         mediaItem.isReady = true;
+                        mediaItem.failed = false;
                     }
                 }, { once: true });
 
                 (element as HTMLVideoElement).load();
             } else {
                 element = new Image();
-                element.src = vibe.mediaUrl;
                 element.crossOrigin = 'anonymous';
+                element.src = vibe.mediaUrl;
                 element.onload = () => {
                     if (!glRef.current) return;
                     const glCtx = glRef.current;
@@ -293,9 +299,11 @@ export function useWebGLCoverflow({ canvasRef, vibes, onActiveIndexChange, isMut
                     glCtx.bindTexture(glCtx.TEXTURE_2D, mediaItem.texture);
                     glCtx.texImage2D(glCtx.TEXTURE_2D, 0, glCtx.RGBA, glCtx.RGBA, glCtx.UNSIGNED_BYTE, img);
                     mediaItem.isReady = true;
+                    mediaItem.failed = false;
                 };
             }
 
+            element.addEventListener('error', () => { mediaItem.failed = true; }, { once: true });
             mediaItem.element = element;
             return mediaItem;
         });
@@ -351,6 +359,7 @@ export function useWebGLCoverflow({ canvasRef, vibes, onActiveIndexChange, isMut
         let lastActiveIndex = -1;
         let lastTime = 0;
         let lastReportedLoading = false;
+        let lastReportedFailure = false;
 
         const render = (time: number) => {
             animationFrameRef.current = requestAnimationFrame(render);
@@ -382,9 +391,12 @@ export function useWebGLCoverflow({ canvasRef, vibes, onActiveIndexChange, isMut
             const activeItem = mediaItemsRef.current[activeIndex];
 
             if (onActiveMediaLoadingChange && activeItem) {
-                const isLoading = !activeItem.isReady;
-                if (isLoading !== lastReportedLoading || lastActiveIndex === -1) {
-                    onActiveMediaLoadingChange(isLoading);
+                if (!activeItem.isReady && performance.now() - activeItem.startedAt > 15000) activeItem.failed = true;
+                const failed = Boolean(activeItem.failed);
+                const isLoading = !activeItem.isReady && !failed;
+                if (isLoading !== lastReportedLoading || failed !== lastReportedFailure || activeIndex !== lastActiveIndex) {
+                    onActiveMediaLoadingChange(isLoading, failed);
+                    lastReportedFailure = failed;
                     lastReportedLoading = isLoading;
                 }
             }

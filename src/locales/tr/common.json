@@ -275,7 +275,8 @@
     "search": "Ara",
     "screen_error_title": "Ekran yüklenemedi",
     "screen_error_message": "Bir sorun oluştu. Yeniden deneyebilir veya ana sayfaya dönebilirsin.",
-    "people": "Kişiler"
+    "people": "Kişiler",
+    "back": "Geri"
   },
   "months": {
     "january": "Ocak",
@@ -1062,5 +1063,21 @@
     "no_referrals": "Henüz referans yok",
     "no_referrals_desc": "İlk arkadaşlarını davet etmek için bağlantını paylaş.",
     "share": "Paylaş"
+  },
+  "discovery": {
+    "like": "Beğen",
+    "dislike": "Beğenme",
+    "block": "Engelle",
+    "online": "Çevrimiçi",
+    "loading_vibes": "Vibes yükleniyor…",
+    "empty_vibes": "Henüz Vibes yok",
+    "empty_vibes_description": "Yeni paylaşımları keşfetmek için daha sonra tekrar bak.",
+    "vibes_error": "Vibes yüklenemedi. Lütfen tekrar dene.",
+    "media_error": "Bu fotoğraf veya video yüklenemedi.",
+    "empty_people": "Bu listede henüz kimse yok."
+  },
+  "search": {
+    "no_results": "Sonuç bulunamadı",
+    "no_results_subtitle": "Başka bir arama terimi veya kategori dene."
   }
 }

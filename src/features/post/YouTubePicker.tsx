@@ -1,3 +1,5 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
+import { useTranslation } from 'react-i18next';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, X, AlertCircle, Youtube } from 'lucide-react';
@@ -48,6 +50,7 @@ const YOUTUBE_BASE_URL = 'https://www.googleapis.com/youtube/v3';
 const API_KEY = YOUTUBE_API_KEY;
 
 const YouTubePicker: React.FC<YouTubePickerProps> = ({ onVideoSelect, onClose, isProcessing = false }) => {
+  const { t } = useTranslation('common');
   const { theme } = useTheme();
   const [selectedCategory, setSelectedCategory] = useState<string>('lgbt');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -243,17 +246,7 @@ const YouTubePicker: React.FC<YouTubePickerProps> = ({ onVideoSelect, onClose, i
     }
 
     if (videos.length === 0) {
-      return (
-        <div
-          className={`w-full rounded-2xl border p-5 text-center text-sm font-medium ${
-            theme === 'dark'
-              ? 'border-gray-900 bg-gray-900/30 text-gray-400'
-              : 'border-gray-200 bg-gray-50 text-gray-500'
-          }`}
-        >
-          No videos found for your search. Try a different query.
-        </div>
-      );
+      return <AnimatedEmptyState compact title={t('search.no_results')} />;
     }
 
     return (

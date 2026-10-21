@@ -1,3 +1,4 @@
+import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Virtuoso } from 'react-virtuoso';
@@ -115,7 +116,7 @@ export default function GroupComposer({ chats, viewerId, viewerName, onClose, on
     {peers.length > 0 ? <div className="cv-group-peers"><Virtuoso defaultItemHeight={64} customScrollParent={scrollParent || undefined} data={peers} computeItemKey={(_, peer) => peer.id} itemContent={(_, peer) => {
       const icon = <span className="cv-group-peer-avatar"><span>{(peer.displayname || peer.username).charAt(0).toLocaleUpperCase()}</span>{peer.avatar?.file?.url && <img src={peer.avatar.file.url} alt="" onError={event => { event.currentTarget.style.display = 'none'; }} />}</span>;
       return step === 'members' ? <button type="button" role="switch" aria-checked={selected.some(item => item.id === peer.id)} aria-label={peer.displayname || peer.username} data-ripple="on" className="cv-list-row cv-group-peer-row cv-group-peer-toggle" disabled={busy} onClick={() => toggle(peer)}><span className="cv-list-icon">{icon}</span><span className="cv-list-copy"><bdi className="cv-list-title">{peer.displayname || peer.username}</bdi>{peer.username && <bdi className="cv-list-description">@{peer.username}</bdi>}</span><SwitchIndicator checked={selected.some(item => item.id === peer.id)} className="cv-chat-setting-switch" /></button> : <ListRow icon={icon} title={<bdi>{peer.displayname || peer.username}</bdi>} description={peer.username ? <bdi>@{peer.username}</bdi> : undefined} />;
-    }} /></div> : !searching && !contactsLoading && <div className="cv-group-empty"><TelegramIcon name={query.trim() ? 'search' : 'newgroup'} /><h2>{t(query.trim() ? 'chat_actions.no_people' : 'chat_actions.choose_people')}</h2><p>{t('chat_actions.search_people_hint')}</p></div>}
+    }} /></div> : !searching && !contactsLoading && <AnimatedEmptyState compact title={t(query.trim() ? 'chat_actions.no_people' : 'chat_actions.choose_people')} description={t('chat_actions.search_people_hint')} />}
     {step === 'members' && contactsLoading && !searching && <p className="cv-group-loading" role="status">{t('emoticons.loading')}</p>}
     {step === 'members' && !query.trim() && (contactsNext || contactsFailed) && <button type="button" className="cv-group-more" disabled={contactsLoading} onClick={() => void moreContacts()}>{t(contactsFailed ? 'emoticons.retry' : 'app.nav.more')}</button>}
     </div>
