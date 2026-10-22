@@ -1,1 +1,0 @@
-Roboto by Google/Christian Robertson. Font binaries and face definitions copied from the user-supplied tweb-master/public/assets/fonts and src/scss/fonts/_roboto.scss. These original Roboto fonts are licensed under Apache License 2.0. tweb source: GPL-3.0, see /images/chat/LICENSE-telegram.txt.

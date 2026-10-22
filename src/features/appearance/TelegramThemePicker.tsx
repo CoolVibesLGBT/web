@@ -1,5 +1,5 @@
 // React adaptation of tweb/components/chatThemesPicker.tsx and scss/partials/_themes.scss.
-// Original source and GPL-3.0 attribution: public/images/chat/NOTICE.txt.
+// Original source and GPL-3.0 attribution: licenses/THIRD-PARTY-NOTICES.txt.
 import { useEffect, useRef, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import ChatWallpaper from './ChatWallpaper';

@@ -1,4 +1,4 @@
-// Color utilities adapted from Telegram Web K (GPL-3.0). See public/images/chat/NOTICE.txt.
+// Color utilities adapted from Telegram Web K (GPL-3.0). See licenses/THIRD-PARTY-NOTICES.txt.
 const clamp = (value: number, low: number, high: number) => Math.max(low, Math.min(high, value));
 
 

@@ -162,4 +162,4 @@ The files are **ready to import**; this change does not create or publish an ext
 
 Privacy controls, blocking/reporting and sensitive-media visibility are part of the product, but this repository is not evidence of a completed security or accessibility certification. The current HTML includes Google Analytics integration, and external media providers can be used; this README therefore does not claim “no tracking.”
 
-Package metadata declares **ISC**, while no top-level license text is currently present. Confirm the intended project license before redistribution. Bundled fonts, patterns and animation code include their own licenses and notices, distributed with the [font assets](public/fonts/) and [chat artwork](public/images/chat/NOTICE.txt). Preserve third-party attribution.
+Package metadata declares **ISC**, while no top-level license text is currently present. Confirm the intended project license before redistribution. Third-party components retain their respective licenses.

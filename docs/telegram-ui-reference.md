@@ -88,7 +88,7 @@ Live GIF search is unverified. The current core working tree has removed the GIF
 
 `interface-inventory.json` records all discovered screens/subflows. Shared styles apply widely; custom routes still marked pending have not been demonstrated to match Telegram. In particular, fixture checks do not establish pixel identity across all wallet, payment, map, classified, live-stream, registration or gated states. Original Lucide icons still exist outside the adapted chat controls. Native browser dialogs, Arabic fallback fonts and OS file choosers follow platform behavior. Full TypeScript checking still reports existing errors outside the changed flows; production ESLint/Vite build results are tracked separately.
 
-Source attribution: `public/images/chat/NOTICE.txt`, `LICENSE-telegram.txt`, font license and sticker set metadata. Test video is a synthetic FFmpeg test pattern, not Telegram content.
+Source attribution: `licenses/THIRD-PARTY-NOTICES.txt`, `LICENSE-telegram.txt`, font license and sticker set metadata. Test video is a synthetic FFmpeg test pattern, not Telegram content.
 
 
 ## User refinements (2026-10-22)

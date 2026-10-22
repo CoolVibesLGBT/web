@@ -1,0 +1,13 @@
+Third-party source credits
+
+Adapted source and assets from tweb:
+https://github.com/morethanwords/tweb
+License: GPL-3.0. License text: public/images/chat/LICENSE-telegram.txt.
+Includes theme patterns and presets, color/gradient utilities, SVG icon paths,
+Lottie components, font declarations and interaction/layout adaptations.
+
+Roboto: Google / Christian Robertson. Font binaries are licensed under
+Apache License 2.0; the license is distributed with public/fonts/telegram/.
+
+Sticker artwork belongs to its respective set creators. Set attribution is
+retained in src/features/emoticons/sticker-packs.json.
