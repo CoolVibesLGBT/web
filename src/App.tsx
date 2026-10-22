@@ -30,6 +30,7 @@ const PlacesScreen = lazy(() => import('./screens/PlacesScreen'));
 const ReferralsScreen = lazy(() => import('./screens/ReferralsScreen'));
 const ReferralHandler = lazy(() => import('./screens/ReferralHandler'));
 const CheckInScreen = lazy(() => import('./screens/CheckInScreen'));
+const BrandkitScreen = lazy(() => import('./screens/BrandkitScreen'));
 const LegalScreen = lazy(() => import('./screens/LegalScreen'));
 
 import SplashScreen from './components/ui/SplashScreen';
@@ -78,6 +79,7 @@ const RESERVED_SINGLE_SEGMENT_ROUTES = new Set([
   'home',
   'landing',
   'legal',
+  'brandkit',
   'live',
   'match',
   'messages',
@@ -425,7 +427,7 @@ function AppContent() {
   const routeElement = React.useMemo(() => {
     const path = normalizedPath;
 
-    if (!isAuthReady && path !== '/landing' && !path.startsWith('/legal') && path !== '/splash') return <RouteLoader />;
+    if (!isAuthReady && path !== '/landing' && path !== '/brandkit' && !path.startsWith('/legal') && path !== '/splash') return <RouteLoader />;
 
     // Public routes
     if (path === '/splash') return <SplashScreen autoDismiss={false} animate={true} />;
@@ -446,6 +448,7 @@ function AppContent() {
     if (/^\/[^/]+\/(followers|followings|blocking|blocked_by|like_given|like_received|dislike_given|dislike_received|matched|view_received)$/.test(path)) {
       return <ProfileEngagementsScreen />;
     }
+    if (path === '/brandkit') return <BrandkitScreen />;
     if (path === '/legal' || path.startsWith('/legal/')) return <LegalScreen />;
 
     // Protected routes
@@ -832,7 +835,7 @@ function AppContent() {
 
   const isLandingRoute = normalizedPath === '/landing' || (normalizedPath === '/' && !isAuthenticated);
   const isLegalRoute = normalizedPath === '/legal' || normalizedPath.startsWith('/legal/');
-  const isPublicPage = isLandingRoute || isLegalRoute;
+  const isPublicPage = isLandingRoute || isLegalRoute || normalizedPath === '/brandkit';
   const isPostDetailRoute = /^\/[^/]+\/status\/[^/]+$/.test(normalizedPath) || /^\/status\/[^/]+$/.test(normalizedPath);
   const singleSegment = normalizedPath.match(/^\/([^/]+)$/)?.[1] || null;
   const isProfileShellRoute = normalizedPath === '/profile' || Boolean(singleSegment && !RESERVED_SINGLE_SEGMENT_ROUTES.has(singleSegment));

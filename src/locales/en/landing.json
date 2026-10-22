@@ -131,5 +131,21 @@
   "chat_point_3": "Set your own boundaries for contact",
   "chat_image_alt": "Adult gay men of different body types chatting at cafes and messaging on their phones on a rainbow-themed Tel Aviv boulevard.",
   "hero_image_alt": "A rainbow city inspired by the cultural heritage of {{place}}, with lesbian, gay, bisexual, trans and queer adults together",
-  "safety_image_alt": "A quiet Hong Kong courtyard with lesbian couples, trans women and adult gay neighbors of different body types enjoying their own spaces."
+  "safety_image_alt": "A quiet Hong Kong courtyard with lesbian couples, trans women and adult gay neighbors of different body types enjoying their own spaces.",
+  "brandkit": {
+    "title": "Brandkit",
+    "description": "CoolVibes logos, colors and sharing assets.",
+    "download_all": "Download brandkit",
+    "assets": "Brand assets",
+    "logo": "Main logo",
+    "icon": "App icon",
+    "social": "Social cover",
+    "download": "Download",
+    "package": "Includes transparent PNG logos, 9 icon sizes and the social cover.",
+    "colors": "Color palette",
+    "usage": "Using the logo",
+    "spacing": "Leave clear space around the logo.",
+    "preserve": "Keep the original proportions, colors and lettering.",
+    "contrast": "Use a clear background with enough contrast."
+  }
 }

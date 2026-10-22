@@ -131,5 +131,21 @@
   "footer_pride": "Pour la communauté LGBTIQA+, avec amour.",
   "profile_join": "Profil d’exemple de {{name}} ; inscris-toi pour faire connaissance",
   "hero_image_alt": "Une ville arc-en-ciel inspirée du patrimoine culturel de {{place}}, où se retrouvent des adultes lesbiennes, gays, bisexuels, trans et queer",
-  "safety_image_alt": "Une cour paisible de Hong Kong avec des couples lesbiens, des femmes trans et des voisins gay adultes aux silhouettes variées."
+  "safety_image_alt": "Une cour paisible de Hong Kong avec des couples lesbiens, des femmes trans et des voisins gay adultes aux silhouettes variées.",
+  "brandkit": {
+    "title": "Brandkit",
+    "description": "Logos, couleurs et visuels de partage CoolVibes.",
+    "download_all": "Télécharger le kit de marque",
+    "assets": "Ressources de marque",
+    "logo": "Logo principal",
+    "icon": "Icône de l’application",
+    "social": "Visuel de partage",
+    "download": "Télécharger",
+    "package": "Comprend les logos PNG transparents, 9 tailles d’icône et le visuel de partage.",
+    "colors": "Palette de couleurs",
+    "usage": "Utilisation du logo",
+    "spacing": "Laissez de l’espace autour du logo.",
+    "preserve": "Conservez les proportions, couleurs et lettres originales.",
+    "contrast": "Utilisez un fond sobre avec un contraste suffisant."
+  }
 }

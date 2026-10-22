@@ -131,5 +131,21 @@
   "chat_point_3": "Tetapkan batasan kontak Anda sendiri",
   "chat_image_alt": "Laki-laki gay dewasa dengan tipe tubuh berbeda mengobrol di kafe dan mengirim pesan melalui ponsel mereka di bulevar Tel Aviv bertema pelangi.",
   "hero_image_alt": "Kota pelangi yang terinspirasi oleh warisan budaya {{place}}, dengan orang dewasa lesbian, gay, biseksual, trans, dan queer",
-  "safety_image_alt": "Halaman Hong Kong yang tenang dengan pasangan lesbian, wanita trans, dan tetangga gay dewasa dengan tipe tubuh berbeda menikmati ruang mereka sendiri."
+  "safety_image_alt": "Halaman Hong Kong yang tenang dengan pasangan lesbian, wanita trans, dan tetangga gay dewasa dengan tipe tubuh berbeda menikmati ruang mereka sendiri.",
+  "brandkit": {
+    "title": "Brandkit",
+    "description": "Logo, warna, dan gambar berbagi CoolVibes.",
+    "download_all": "Unduh kit merek",
+    "assets": "Aset merek",
+    "logo": "Logo utama",
+    "icon": "Ikon aplikasi",
+    "social": "Sampul sosial",
+    "download": "Unduh",
+    "package": "Berisi logo PNG transparan, 9 ukuran ikon, dan sampul sosial.",
+    "colors": "Palet warna",
+    "usage": "Penggunaan logo",
+    "spacing": "Sisakan ruang kosong di sekitar logo.",
+    "preserve": "Pertahankan proporsi, warna, dan bentuk huruf asli.",
+    "contrast": "Gunakan latar sederhana dengan kontras yang cukup."
+  }
 }

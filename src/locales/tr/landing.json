@@ -131,5 +131,21 @@
   "chat_point_3": "İletişim sınırlarını kendin belirle",
   "chat_image_alt": "Tel Aviv’de gökkuşağı temalı bir bulvarda, kafelerde sohbet eden ve telefonlarından mesajlaşan farklı beden tiplerinde yetişkin gay erkeklerin illüstrasyonu.",
   "hero_image_alt": "{{place}} kültürel mirasından ilham alan, gökkuşağı altında lezbiyen, gey, biseksüel, trans ve queer yetişkinlerin buluştuğu şehir illüstrasyonu",
-  "safety_image_alt": "Hong Kong’da sakin bir avluda kendi alanlarında sohbet eden lezbiyen çiftler, trans kadınlar ve farklı beden tiplerinde yetişkin gay komşuların illüstrasyonu."
+  "safety_image_alt": "Hong Kong’da sakin bir avluda kendi alanlarında sohbet eden lezbiyen çiftler, trans kadınlar ve farklı beden tiplerinde yetişkin gay komşuların illüstrasyonu.",
+  "brandkit": {
+    "title": "Brandkit",
+    "description": "CoolVibes logoları, renkleri ve paylaşım görselleri.",
+    "download_all": "Brandkit’i indir",
+    "assets": "Marka dosyaları",
+    "logo": "Ana logo",
+    "icon": "Uygulama ikonu",
+    "social": "Paylaşım kapağı",
+    "download": "İndir",
+    "package": "Şeffaf PNG logolar, 9 ikon boyutu ve paylaşım kapağı içerir.",
+    "colors": "Renk paleti",
+    "usage": "Logo kullanımı",
+    "spacing": "Logonun çevresinde boşluk bırakın.",
+    "preserve": "Orijinal oranları, renkleri ve harf biçimlerini koruyun.",
+    "contrast": "Yeterli kontrast sağlayan sade bir zemin kullanın."
+  }
 }

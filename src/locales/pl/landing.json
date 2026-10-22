@@ -131,5 +131,21 @@
   "chat_point_3": "Ustaw własne granice kontaktu",
   "chat_image_alt": "Dorośli geje o różnej budowie ciała rozmawiający w kawiarniach i piszący na telefonach na tęczowym bulwarze w Tel Awiwie.",
   "hero_image_alt": "Tęczowe miasto inspirowane dziedzictwem kulturowym {{place}}, w którym żyją razem dorośli lesbijki, geje, osoby biseksualne, trans i queer",
-  "safety_image_alt": "Cichy dziedziniec w Hongkongu z parami lesbijek, transpłciowymi kobietami i dorosłymi sąsiadami gejami o różnych typach budowy ciała, cieszącymi się własną przestrzenią."
+  "safety_image_alt": "Cichy dziedziniec w Hongkongu z parami lesbijek, transpłciowymi kobietami i dorosłymi sąsiadami gejami o różnych typach budowy ciała, cieszącymi się własną przestrzenią.",
+  "brandkit": {
+    "title": "Brandkit",
+    "description": "Logo, kolory i grafiki CoolVibes.",
+    "download_all": "Pobierz pakiet marki",
+    "assets": "Materiały marki",
+    "logo": "Główne logo",
+    "icon": "Ikona aplikacji",
+    "social": "Grafika społecznościowa",
+    "download": "Pobierz",
+    "package": "Zawiera przezroczyste logo PNG, 9 rozmiarów ikony i grafikę społecznościową.",
+    "colors": "Paleta kolorów",
+    "usage": "Używanie logo",
+    "spacing": "Pozostaw wolną przestrzeń wokół logo.",
+    "preserve": "Zachowaj oryginalne proporcje, kolory i kształty liter.",
+    "contrast": "Używaj prostego tła o odpowiednim kontraście."
+  }
 }

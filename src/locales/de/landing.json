@@ -131,5 +131,21 @@
   "footer_pride": "Für die LGBTIQA+ Community, mit Liebe.",
   "profile_join": "Beispielprofil von {{name}}; zum Kennenlernen beitreten",
   "hero_image_alt": "Eine Regenbogenstadt inspiriert vom kulturellen Erbe von {{place}}, mit lesbischen, schwulen, bisexuellen, trans und queeren Erwachsenen",
-  "safety_image_alt": "Ein ruhiger Hof in Hongkong mit lesbischen Paaren, trans Frauen und schwulen Nachbarn verschiedener Körperformen."
+  "safety_image_alt": "Ein ruhiger Hof in Hongkong mit lesbischen Paaren, trans Frauen und schwulen Nachbarn verschiedener Körperformen.",
+  "brandkit": {
+    "title": "Brandkit",
+    "description": "CoolVibes-Logos, Farben und Bilder zum Teilen.",
+    "download_all": "Markenpaket herunterladen",
+    "assets": "Markendateien",
+    "logo": "Hauptlogo",
+    "icon": "App-Symbol",
+    "social": "Social-Media-Titelbild",
+    "download": "Herunterladen",
+    "package": "Enthält transparente PNG-Logos, 9 Symbolgrößen und das Titelbild.",
+    "colors": "Farbpalette",
+    "usage": "Logo verwenden",
+    "spacing": "Lassen Sie Freiraum um das Logo.",
+    "preserve": "Behalten Sie Proportionen, Farben und Schriftformen bei.",
+    "contrast": "Verwenden Sie einen ruhigen Hintergrund mit ausreichend Kontrast."
+  }
 }

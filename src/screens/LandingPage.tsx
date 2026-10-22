@@ -13,7 +13,7 @@ import {
   Users,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { useNavigate } from '@/router'
+import { Link, useNavigate } from '@/router'
 import { useSEO } from '@/hooks/useSEO'
 import LanguageSelector, {
   getLanguageFlagDisplay,
@@ -379,6 +379,7 @@ export default function LandingPage() {
             <p>{t('footer_motto')}</p>
           </div>
           <nav aria-label={t('footer_nav')}>
+            <Link to="/brandkit">{t('brandkit.title')}</Link>
             <button onClick={() => navigate('/legal/terms')}>
               {t('terms')}
             </button>

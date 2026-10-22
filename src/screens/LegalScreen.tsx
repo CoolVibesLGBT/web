@@ -242,6 +242,7 @@ export default function LegalScreen() {
           © {new Date().getFullYear()} {t('copyright')}
         </p>
         <Link to="/">{t('home')}</Link>
+        <Link to="/brandkit">{landing('brandkit.title')}</Link>
       </footer>
       <LanguageSelector
         isOpen={languageOpen}

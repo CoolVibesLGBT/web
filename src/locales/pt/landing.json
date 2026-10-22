@@ -131,5 +131,21 @@
   "chat_point_3": "Defina seus próprios limites de contato",
   "chat_image_alt": "Homens gays adultos de diferentes tipos físicos conversando em cafés e enviando mensagens em seus telefones em uma avenida de Tel Aviv com tema de arco-íris.",
   "hero_image_alt": "Uma cidade arco-íris inspirada na herança cultural de {{place}}, com adultos lésbicas, gays, bissexuais, trans e queer juntos",
-  "safety_image_alt": "Um pátio tranquilo de Hong Kong com casais de lésbicas, mulheres trans e vizinhos gays adultos de diferentes tipos de corpo desfrutando de seus próprios espaços."
+  "safety_image_alt": "Um pátio tranquilo de Hong Kong com casais de lésbicas, mulheres trans e vizinhos gays adultos de diferentes tipos de corpo desfrutando de seus próprios espaços.",
+  "brandkit": {
+    "title": "Brandkit",
+    "description": "Logotipos, cores e imagens de partilha do CoolVibes.",
+    "download_all": "Descarregar kit de marca",
+    "assets": "Recursos da marca",
+    "logo": "Logotipo principal",
+    "icon": "Ícone da aplicação",
+    "social": "Capa para redes sociais",
+    "download": "Descarregar",
+    "package": "Inclui logotipos PNG transparentes, 9 tamanhos de ícone e a capa.",
+    "colors": "Paleta de cores",
+    "usage": "Utilização do logotipo",
+    "spacing": "Deixe espaço livre à volta do logotipo.",
+    "preserve": "Mantenha as proporções, cores e letras originais.",
+    "contrast": "Use um fundo simples com contraste suficiente."
+  }
 }
