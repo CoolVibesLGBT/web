@@ -1,10 +1,12 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Heart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Github } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { DEFAULT_APP_MOTTO, DEFAULT_APP_NAME } from '@/constants/constants';
 
 const Footer: React.FC = () => {
+  const { t } = useTranslation('landing');
   const currentYear = new Date().getFullYear();
   const { theme } = useTheme();
 
@@ -28,6 +30,7 @@ const Footer: React.FC = () => {
       { name: 'Accessibility', href: '/legal/accessibility' },
     ],
     resources: [
+      { name: t('documentation'), href: 'https://docs.coolvibes.lgbt/' },
       { name: 'Events', href: '#' },
       { name: 'Communities', href: '#' },
       { name: 'Professional Network', href: '#' },

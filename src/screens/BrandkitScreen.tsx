@@ -63,7 +63,7 @@ export default function BrandkitScreen() {
         <ul>{['spacing', 'preserve', 'contrast'].map(key => <li key={key}>{t(`brandkit.${key}`)}</li>)}</ul>
       </section>
     </main>
-    <footer className="cv-brandkit-footer"><Brand onClick={() => navigate('/')} /><nav aria-label={t('footer_nav')}><Link to="/legal/terms">{t('terms')}</Link><Link to="/legal/privacy">{t('privacy')}</Link><Link to="/brandkit" aria-current="page">{t('brandkit.title')}</Link></nav><p>© {new Date().getFullYear()} CoolVibes</p></footer>
+    <footer className="cv-brandkit-footer"><Brand onClick={() => navigate('/')} /><nav aria-label={t('footer_nav')}><Link to="/legal/terms">{t('terms')}</Link><Link to="/legal/privacy">{t('privacy')}</Link><a href="https://docs.coolvibes.lgbt/">{t('documentation')}</a><Link to="/brandkit" aria-current="page">{t('brandkit.title')}</Link></nav><p>© {new Date().getFullYear()} CoolVibes</p></footer>
     <LanguageSelector isOpen={languageOpen} onClose={() => setLanguageOpen(false)} />
     <AuthWizard isOpen={authOpen} onClose={() => setAuthOpen(false)} />
   </div>

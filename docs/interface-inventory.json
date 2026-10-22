@@ -5674,5 +5674,16 @@
     ],
     "verification": "16 actual browser captures using fictional local fixtures; explicit documentation screenshot authorization supersedes prior prohibition for these captures only. docs/assets/screenshots/capture-manifest.json. Native-language review, live services, real devices and published GitBook rendering unverified.",
     "browserEvidence": "docs/documentation-locale-checks.json: ne/km at 320/390/820/1440px, dark and enlarged text; selection/persistence, hero and brandkit decode, horizontal containment, auth choices/Escape; all eight passed."
+  },
+  "documentationFooter20261022": {
+    "surfaces": [
+      "landing footer",
+      "legal footer",
+      "brandkit footer",
+      "legacy Footer component"
+    ],
+    "href": "https://docs.coolvibes.lgbt/",
+    "localization": "landing:documentation in all 23 locales",
+    "verification": "Native anchor implementation; composed browser layout and external service unverified."
   }
 }

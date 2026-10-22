@@ -190,3 +190,7 @@ The user explicitly requested screenshots for this documentation work, overridin
 `yarn build` passed (existing lint, asset-resolution and large-bundle warnings remain). Interface regressions, public namespace coverage in 23 locales, documentation links and new-locale interpolation parity passed. Native-speaker review, real-device testing, API-provided translated catalogs, live payments/broadcasts and GitBook-hosted rendering remain unverified. Detailed technical guides remain in English; language pages are localized project overviews, not full translations of every guide.
 
 New-locale browser checks passed in eight cases (ne/km × 320/390/820/1440px): selection through the public language menu, reload persistence, HTML language, corresponding hero decode, horizontal containment, authentication dialog/Escape and brandkit image decode. The 390px cases use dark mode and 820px cases use enlarged text. See `documentation-locale-checks.json`; browser emulation only, no additional screenshots.
+
+### Documentation footer link — 2026-10-22
+
+Landing, legal and brandkit footers, plus the legacy Footer component, now expose a native link to https://docs.coolvibes.lgbt/. The label is translated in all 23 landing dictionaries. Existing footer layout and native same-tab navigation are retained. Composed browser layout and the external documentation service were not verified in this pass.

@@ -379,6 +379,7 @@ export default function LandingPage() {
             <p>{t('footer_motto')}</p>
           </div>
           <nav aria-label={t('footer_nav')}>
+            <a href="https://docs.coolvibes.lgbt/">{t('documentation')}</a>
             <Link to="/brandkit">{t('brandkit.title')}</Link>
             <button onClick={() => navigate('/legal/terms')}>
               {t('terms')}

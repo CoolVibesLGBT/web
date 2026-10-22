@@ -242,6 +242,7 @@ export default function LegalScreen() {
           © {new Date().getFullYear()} {t('copyright')}
         </p>
         <Link to="/">{t('home')}</Link>
+        <a href="https://docs.coolvibes.lgbt/">{landing('documentation')}</a>
         <Link to="/brandkit">{landing('brandkit.title')}</Link>
       </footer>
       <LanguageSelector
