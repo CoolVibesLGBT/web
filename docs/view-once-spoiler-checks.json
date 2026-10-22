@@ -1,0 +1,107 @@
+{
+  "date": "2026-10-23",
+  "method": "DOM/canvas/API fixtures; no screenshots; live service and real devices unverified",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "metrics": {
+        "width": 229.5,
+        "left": 65.5,
+        "right": 295,
+        "blur": "blur(17px)",
+        "previewWidth": 12,
+        "previewHeight": 12,
+        "textVisible": "inset(50%)",
+        "border": "0px"
+      },
+      "status": "passed",
+      "checks": [
+        "original particle shader initializes",
+        "tiny photo preview + blur",
+        "reduced motion pause/resume",
+        "first click reveals inline; second opens modal; repeated modal does not repeat API consumption",
+        "recipient consumed/error hides media",
+        "native 44px+ target and horizontal containment",
+        "photo composer album/removal, once preview, caption and Escape"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "metrics": {
+        "width": 273,
+        "left": 92,
+        "right": 365,
+        "blur": "blur(17px)",
+        "previewWidth": 12,
+        "previewHeight": 12,
+        "textVisible": "inset(50%)",
+        "border": "0px"
+      },
+      "status": "passed",
+      "checks": [
+        "original particle shader initializes",
+        "tiny photo preview + blur",
+        "reduced motion pause/resume",
+        "first click reveals inline; second opens modal; repeated modal does not repeat API consumption",
+        "recipient consumed/error hides media",
+        "native 44px+ target and horizontal containment",
+        "photo composer album/removal, once preview, caption and Escape"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "light",
+      "large": true,
+      "metrics": {
+        "width": 433.5,
+        "left": 33.5,
+        "right": 467,
+        "blur": "blur(25.5px)",
+        "previewWidth": 12,
+        "previewHeight": 12,
+        "textVisible": "inset(50%)",
+        "border": "0px"
+      },
+      "status": "passed",
+      "checks": [
+        "original particle shader initializes",
+        "tiny photo preview + blur",
+        "reduced motion pause/resume",
+        "first click reveals inline; second opens modal; repeated modal does not repeat API consumption",
+        "recipient consumed/error hides media",
+        "native 44px+ target and horizontal containment",
+        "photo composer album/removal, once preview, caption and Escape"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "metrics": {
+        "width": 289,
+        "left": 1004.5,
+        "right": 1293.5,
+        "blur": "blur(17px)",
+        "previewWidth": 12,
+        "previewHeight": 12,
+        "textVisible": "inset(50%)",
+        "border": "0px"
+      },
+      "status": "passed",
+      "checks": [
+        "original particle shader initializes",
+        "tiny photo preview + blur",
+        "reduced motion pause/resume",
+        "first click reveals inline; second opens modal; repeated modal does not repeat API consumption",
+        "recipient consumed/error hides media",
+        "native 44px+ target and horizontal containment",
+        "photo composer album/removal, once preview, caption and Escape"
+      ]
+    }
+  ]
+}

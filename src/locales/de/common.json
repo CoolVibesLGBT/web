@@ -333,6 +333,7 @@
     "view_profile": "Profil ansehen"
   },
   "messages": {
+    "caption": "Beschriftung hinzufügen",
     "chat": "Chat",
     "search": "Suche",
     "all": "Alle",

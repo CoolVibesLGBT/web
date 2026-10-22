@@ -333,6 +333,7 @@
     "view_profile": "查看资料"
   },
   "messages": {
+    "caption": "添加说明",
     "chat": "聊天",
     "search": "搜索",
     "all": "全部",

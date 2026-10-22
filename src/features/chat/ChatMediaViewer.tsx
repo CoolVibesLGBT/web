@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { ChatMediaImage, ChatMediaVideo } from './ProtectedChatMedia';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import TelegramIcon from './TelegramIcon';
 import type { ResolvedChatMedia } from './chatMedia';
 
 interface ChatMediaViewerLabels {
@@ -26,6 +27,7 @@ const ChatMediaViewer: React.FC<ChatMediaViewerProps> = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState(() => Math.max(0, initialIndex));
   const [hasLoadError, setHasLoadError] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const activeItem = items[activeIndex];
@@ -43,13 +45,16 @@ const ChatMediaViewer: React.FC<ChatMediaViewerProps> = ({
     setHasLoadError(false);
   }, [activeItem, onClose]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current;
     const previouslyFocused = document.activeElement as HTMLElement | null;
+    dialog?.showModal();
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     closeButtonRef.current?.focus({ preventScroll: true });
 
     return () => {
+      dialog?.close();
       document.body.style.overflow = previousOverflow;
       previouslyFocused?.focus?.({ preventScroll: true });
     };
@@ -57,7 +62,18 @@ const ChatMediaViewer: React.FC<ChatMediaViewerProps> = ({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === 'Tab') {
+        const controls = Array.from(dialogRef.current?.querySelectorAll<HTMLElement>('button:not(:disabled), video[controls]') ?? []);
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      } else if (event.key === 'Escape') {
         event.preventDefault();
         onClose();
       } else if (event.key === 'ArrowLeft' && canNavigate) {
@@ -76,8 +92,8 @@ const ChatMediaViewer: React.FC<ChatMediaViewerProps> = ({
   if (!activeItem || typeof document === 'undefined') return null;
 
   return createPortal(
-    <div
-      className="fixed inset-0 z-[1200] flex items-center justify-center bg-black/95 p-2 sm:p-5"
+    <dialog ref={dialogRef} className="cv-chat-media-viewer"
+      onCancel={(event) => { event.preventDefault(); onClose(); }}
       role="dialog"
       aria-modal="true"
       aria-label={labels.title}
@@ -85,18 +101,16 @@ const ChatMediaViewer: React.FC<ChatMediaViewerProps> = ({
         if (event.target === event.currentTarget) onClose();
       }}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-3 p-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:p-5">
-        <div className="pointer-events-auto rounded-full bg-black/55 px-3 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-xl">
-          {activeIndex + 1} / {items.length}
-        </div>
+      <div className="cv-media-viewer-header">
+        <div className="cv-media-viewer-title">{labels.title}{canNavigate && <span>{activeIndex + 1} / {items.length}</span>}</div>
         <button
           ref={closeButtonRef}
           type="button"
           onClick={onClose}
           aria-label={labels.close}
-          className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-xl backdrop-blur-xl transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="cv-media-viewer-button"
         >
-          <X className="h-5 w-5" />
+          <TelegramIcon name="close" />
         </button>
       </div>
 
@@ -105,38 +119,40 @@ const ChatMediaViewer: React.FC<ChatMediaViewerProps> = ({
           type="button"
           onClick={() => setActiveIndex((index) => (index - 1 + items.length) % items.length)}
           aria-label={labels.previous}
-          className="absolute left-2 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-xl backdrop-blur-xl transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white sm:left-5"
+          className="cv-media-viewer-button cv-media-viewer-previous"
         >
-          <ChevronLeft className="h-6 w-6" />
+          <TelegramIcon name="arrow_prev" />
         </button>
       )}
 
       <div
-        className="flex h-full w-full items-center justify-center px-10 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-14 sm:px-16 sm:pt-16"
+        className="cv-media-viewer-stage"
         onMouseDown={(event) => event.stopPropagation()}
       >
         {hasLoadError ? (
-          <div className="max-w-sm rounded-2xl border border-white/15 bg-white/10 px-5 py-4 text-center text-sm font-medium text-white/85 backdrop-blur-xl">
+          <div className="cv-media-viewer-error">
             {labels.loadError}
           </div>
         ) : activeItem.kind === 'image' ? (
-          <img
+          <ChatMediaImage
+            unavailable={<div className="cv-media-viewer-error">{labels.loadError}</div>}
             key={activeItem.src}
             src={activeItem.src}
             alt={activeItem.name}
-            className="max-h-full max-w-full select-none object-contain shadow-2xl"
+            className="cv-media-viewer-image"
             draggable={false}
             onError={() => setHasLoadError(true)}
           />
         ) : (
-          <video
+          <ChatMediaVideo
+            unavailable={<div className="cv-media-viewer-error">{labels.loadError}</div>}
             key={activeItem.src}
             src={activeItem.src}
             poster={activeItem.posterSrc}
             controls
             autoPlay
             playsInline
-            className="max-h-full max-w-full bg-black object-contain shadow-2xl"
+            className="cv-media-viewer-video"
             onError={() => setHasLoadError(true)}
           />
         )}
@@ -147,12 +163,12 @@ const ChatMediaViewer: React.FC<ChatMediaViewerProps> = ({
           type="button"
           onClick={() => setActiveIndex((index) => (index + 1) % items.length)}
           aria-label={labels.next}
-          className="absolute right-2 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-xl backdrop-blur-xl transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white sm:right-5"
+          className="cv-media-viewer-button cv-media-viewer-next"
         >
-          <ChevronRight className="h-6 w-6" />
+          <TelegramIcon name="arrow_next" />
         </button>
       )}
-    </div>,
+    </dialog>,
     document.body,
   );
 };

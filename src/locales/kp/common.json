@@ -333,6 +333,7 @@
     "view_profile": "프로필 보기"
   },
   "messages": {
+    "caption": "설명 추가",
     "chat": "채팅",
     "search": "검색",
     "all": "전체",

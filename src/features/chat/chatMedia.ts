@@ -12,9 +12,19 @@ export interface ResolvedChatMedia {
   posterSrc?: string;
   name: string;
   mimeType: string;
+  aspectRatio: number;
 }
 
-type VariantMap = Record<string, { url?: string } | undefined>;
+type VariantMap = Record<string, { url?: string; width?: number; height?: number } | undefined>;
+
+const mediaAspectRatio = (file: Attachment['file'], variants: VariantMap | undefined): number => {
+  const dimensions = [file, ...Object.values(variants || {})];
+  for (const item of dimensions) {
+    if (item?.width && item.height && Number.isFinite(item.width) && Number.isFinite(item.height) && item.width > 0 && item.height > 0) return item.width / item.height;
+  }
+  // Legacy messages lack dimensions. Reserve a stable frame even before fetch/decode.
+  return 4 / 3;
+};
 
 const resolvePath = (path: string | null | undefined): string | null => {
   if (!path) return null;
@@ -59,6 +69,7 @@ export const resolveChatMedia = (attachment: Attachment): ResolvedChatMedia | nu
       ) || src,
       name: file.name || 'Image',
       mimeType,
+      aspectRatio: mediaAspectRatio(file, imageVariants),
     };
   }
 
@@ -80,6 +91,7 @@ export const resolveChatMedia = (attachment: Attachment): ResolvedChatMedia | nu
       posterSrc: posterSrc || undefined,
       name: file.name || 'Video',
       mimeType,
+      aspectRatio: mediaAspectRatio(file, videoVariants),
     };
   }
 

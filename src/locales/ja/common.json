@@ -333,6 +333,7 @@
     "view_profile": "プロフィールを見る"
   },
   "messages": {
+    "caption": "キャプションを追加",
     "chat": "チャット",
     "search": "検索",
     "all": "すべて",

@@ -5685,5 +5685,59 @@
     "href": "https://docs.coolvibes.lgbt/",
     "localization": "landing:documentation in all 23 locales",
     "verification": "Native anchor implementation; composed browser layout and external service unverified."
+  },
+  "chatMedia20261023": {
+    "surfaces": [
+      "message view-once spoiler",
+      "inline reveal",
+      "fullscreen media viewer",
+      "photo/video send dialog"
+    ],
+    "reference": "Local tweb popup, simple-message-input and mediaViewer source geometry; existing theme tokens and original SVG icons.",
+    "behavior": "First activation reveals inline; second opens viewer. Closing viewer preserves active inline session without another open request. Sender previews do not consume recipient view.",
+    "verification": "docs/view-once-spoiler-checks.json: 320/390/820/1440px fixtures, tr/en/ar RTL, dark mode, enlarged text, keyboard, GPU canvas and reduced motion. No screenshots or real-device tests. Live authenticated photo flow and pixel equivalence unverified.",
+    "limitations": "Existing photos without a tiny preview retain fallback. Backend integration test requires TEST_DATABASE_URL; unit tests passed."
+  },
+  "chatMediaUploadLifecycle": {
+    "date": "2026-10-23",
+    "route": "/messages",
+    "states": [
+      "pending upload keeps modal open",
+      "failure retains files and caption",
+      "retry closes only after success"
+    ],
+    "verification": "scripts/telegram-ui/media-upload.mjs: 390px Turkish intercepted API fixture passed; no screenshots. Live upload failure cause remains unverified.",
+    "assets": "Existing packaged icon-128.png fixture"
+  },
+  "protectedChatMedia": {
+    "date": "2026-10-23",
+    "route": "/messages",
+    "implementation": "Authorized fetch for configured API upload URLs in thumbnails and viewer; temporary blob URLs disposed on source change/unmount. Credentials never included in URL.",
+    "evidence": "Both reported original PNGs and landscape_md.webp files exist on local backend disk. Backend intentionally returns 404 for unauthenticated private media.",
+    "verification": "scripts/telegram-ui/protected-chat-media.mjs exercises authenticated thumbnails/originals and repeated modal close/reopen at four widths with tr/en/ar RTL, dark and enlarged text. API fixture; no screenshots. Authenticated live service unverified."
+  },
+  "telegramMessageBubbleLayout": {
+    "date": "2026-10-23",
+    "route": "/messages",
+    "reference": "tweb-master/src/scss/partials/_chatBubble.scss and _chatVariables.scss",
+    "changes": [
+      "56px text minimum and source shadow",
+      "measured timestamp reservation",
+      "420px media cap with 400px single-media height cap",
+      "edge-to-edge album and single photo; overlay time without caption",
+      "removed obsolete circular thumbnail and hover scale classes"
+    ],
+    "verification": "scripts/telegram-ui/protected-chat-media.mjs: 320/390/820/1440 DOM fixtures, tr/en/ar RTL, dark and enlarged text. No screenshots; inaccessible user screenshot prevents visual equivalence claim. Live-service behavior not reverified."
+  },
+  "chatMediaScrollStability": {
+    "date": "2026-10-23",
+    "route": "/messages",
+    "changes": [
+      "Reserve attachment aspect ratio from file/variant dimensions before authenticated fetch",
+      "Stable 4:3 fallback for legacy messages; contain image without cropping",
+      "Absolute media inside reserved frame; album cells remain square",
+      "Virtualized 400px overscan each direction"
+    ],
+    "verification": "scripts/telegram-ui/chat-media-scroll.mjs: 70-message delayed-media fixtures at 390/820/1440px, tr/en/ar RTL, dark and enlarged text. Row height and scroll offset stable through decode and fast wheel reversals. No screenshots; physical touch/momentum performance and live network unverified."
   }
 }

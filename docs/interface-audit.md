@@ -194,3 +194,27 @@ New-locale browser checks passed in eight cases (ne/km × 320/390/820/1440px): s
 ### Documentation footer link — 2026-10-22
 
 Landing, legal and brandkit footers, plus the legacy Footer component, now expose a native link to https://docs.coolvibes.lgbt/. The label is translated in all 23 landing dictionaries. Existing footer layout and native same-tab navigation are retained. Composed browser layout and the external documentation service were not verified in this pass.
+
+### Chat media and view-once interaction — 2026-10-23
+
+Media send uses the source popup shell (420px, 40px corner, no outer border/shadow, 30% backdrop), shared theme surfaces and a caption surface with Send inside it. Caption surface uses the existing section shadow and 24px radius; original SVG icons replace alternate icon outlines. Interactive targets retain the repository's 44px minimum. Fullscreen viewer uses a native modal dialog, unframed media, flat controls and the source 88% black desktop overlay / solid black phone background. No pixel-equivalence claim: supplied screenshots were inaccessible and live visual comparison was not performed.
+
+View-once photos use a tiny JPEG preview (at most 12px per side) under the adapted GPU dust renderer. First activation reveals the original inline in a temporary session; second opens the viewer. Closing the viewer retains that active inline session and does not repeat consumption. Sender previews do not consume recipient views. Transient open failures remain retryable. Older messages without preview metadata retain the fallback background. Local backend was rebuilt/restarted with sender preview handling; targeted unit tests passed, database integration skipped without TEST_DATABASE_URL.
+
+`docs/view-once-spoiler-checks.json` records intercepted API/DOM/canvas fixtures at 320/390/820/1440px with Turkish, English, Arabic/RTL, dark mode, enlarged text, keyboard, reduced motion, album removal and caption cancellation. These are browser emulation checks, not authenticated live-service or real-device verification. No screenshots captured. Build, interface regression and public locale checks passed.
+
+### Media upload lifecycle — 2026-10-23
+
+The message composer now retains selected files and caption until upload succeeds, blocks duplicate sends and dismissal during upload, and displays failures inside the modal for retry. Temporary view-once message IDs cannot trigger an open request. `scripts/telegram-ui/media-upload.mjs` passed at 390px Turkish with intercepted delayed success and failure responses, Escape and retry; lint and interface regression checks passed. Existing four-width view-once fixtures also passed. No screenshots captured. The reported live upload failure and its server-side cause remain unverified.
+
+### Protected chat photo requests — 2026-10-23
+
+The reported PNG originals and landscape_md.webp variants both exist in the local backend upload directory. The Go media handler deliberately returns 404 when private-media authorization is absent; chat thumbnails and viewer previously used unauthenticated image requests. They now use authorized fetches for configured API upload origins, render temporary blob URLs, and revoke those URLs on cleanup. Video sources/posters use the same loader. Public/external, optimistic blob and view-once data sources retain their direct URLs. Four-width DOM/API fixture coverage lives in `scripts/telegram-ui/protected-chat-media.mjs`; authenticated live-service and video playback remain unverified. No screenshots captured.
+
+### Message bubble layout — 2026-10-23
+
+Compared local tweb `_chatBubble.scss` and `_chatVariables.scss`. Applied its 56px text minimum, bubble shadow, 420px/400px attachment bounds and edge-to-edge media structure. Removed obsolete circular thumbnail sizing/hover zoom and reserved measured time/status width in text. Photo-only timestamps overlay media; captions retain inner text spacing. Existing 15px/5px grouping, source SVG tails for text, theme tokens and protected-media authorization remain in use. DOM fixture covers four widths, Turkish/English/Arabic RTL, dark mode and enlarged text. User screenshot inaccessible; no screenshots captured and no pixel-equivalence claim. Live media service unverified this pass.
+
+### Photo scroll stability — 2026-10-23
+
+Corrected the previous bubble layout regression: a protected photo initially rendered no image, so its auto-height row grew after fetch/decode and collapsed again when remounted by virtualization. Attachment frames now reserve a metadata-based aspect ratio (stable 4:3 fallback when absent), with media absolutely contained inside. Album cells remain square. Virtuoso keeps 400px of extra content mounted on either side while retaining virtualization. `scripts/telegram-ui/chat-media-scroll.mjs` passed delayed photo loads and rapid wheel reversals with 70 messages at 390/820/1440px, Turkish/English/Arabic RTL, dark mode and enlarged text. Lint and interface checks passed. No screenshots; physical-device momentum and live network unverified.

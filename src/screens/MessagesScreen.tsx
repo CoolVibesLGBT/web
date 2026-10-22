@@ -1,7 +1,11 @@
+import { ChatMediaImage, ChatMediaVideo } from '@/features/chat/ProtectedChatMedia';
 import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
 import SearchField from '@/components/ui/SearchField';
 import ChatWallpaper from '@/features/appearance/ChatWallpaper';
+import ViewOnceDust from '@/features/chat/ViewOnceDust';
+import MediaSendDialog from '@/features/chat/MediaSendDialog';
+import { createViewOncePreview, readViewOncePreview } from '@/features/chat/viewOncePreview';
 import '@/features/chat/telegram-chat.css';
 import TelegramChatListRow from '@/features/chat/TelegramChatListRow';
 import ChatPeerHeader from '@/features/chat/ChatPeerHeader';
@@ -41,7 +45,6 @@ import {
   X,
   Settings,
   RefreshCw,
-  Image,
   Video,
   Timer,
   Eye,
@@ -94,12 +97,14 @@ interface BackendChatMessage {
   content_hidden?: boolean | number | string;
   client_id?: string;
   view_once?: boolean | number | string;
+  view_once_preview?: string;
   viewed_once?: boolean | number | string;
   attachments?: Attachment[];
   extras?: Record<string, unknown> | null;
 }
 
 interface ViewOnceSession {
+  expanded?: boolean;
   messageId: string;
   items: ResolvedChatMedia[];
 }
@@ -276,6 +281,7 @@ const normalizeChatMessage = (
       ? String(message.client_id ?? message.extras?.client_id)
       : undefined,
     viewOnce,
+    viewOncePreview: viewOnce ? readViewOncePreview(message.view_once_preview) : undefined,
     viewedOnce: getBooleanValue(message.viewed_once ?? message.extras?.viewed_once),
   };
 };
@@ -297,6 +303,8 @@ function sameMessageGroup(first?: ChatMessage, second?: ChatMessage) {
 }
 
 interface MessageItemProps {
+  revealedPhoto?: string;
+  onRevealExpand: () => void;
   onMediaReady?: () => void;
   selected?: boolean;
   selectionMode?: boolean;
@@ -315,6 +323,9 @@ interface MessageItemProps {
 }
 
 interface ViewOnceMessageCardProps {
+  revealedPhoto?: string;
+  onRevealExpand: () => void;
+  preview?: string;
   messageId: string;
   theme: 'dark' | 'light';
   isMe: boolean;
@@ -326,6 +337,9 @@ interface ViewOnceMessageCardProps {
 
 const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
   messageId,
+  revealedPhoto,
+  onRevealExpand,
+  preview,
   theme,
   isMe,
   isViewed,
@@ -335,16 +349,18 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
 }) => {
   const { t } = useTranslation('common');
   const state = hasOpenError
-    ? 'error'
+    ? isViewed ? 'error' : 'retry'
     : isViewed
       ? 'viewed'
-      : isMe
-        ? 'sent'
-        : isOpening
-          ? 'opening'
+      : isOpening
+        ? 'opening'
+        : isMe
+          ? 'sent'
           : 'unopened';
-  const isActionable = state === 'unopened' || state === 'opening';
-  const title = state === 'error'
+  const isActionable = state === 'unopened' || state === 'opening' || state === 'sent' || state === 'retry';
+  const title = state === 'retry'
+    ? t('chat_actions.action_failed')
+    : state === 'error'
     ? t('messages.view_once_unavailable')
     : state === 'viewed'
       ? t('messages.view_once_viewed')
@@ -353,7 +369,9 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
         : state === 'opening'
           ? t('messages.view_once_loading')
           : t('messages.view_once_open');
-  const description = state === 'error'
+  const description = state === 'retry'
+    ? t('messages.view_once_open')
+    : state === 'error'
     ? t('messages.view_once_unavailable_description')
     : state === 'viewed'
       ? t('messages.view_once_viewed_description')
@@ -372,84 +390,33 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
       : state === 'opening'
         ? RefreshCw
         : Eye;
-  const surfaceClass = state === 'error'
-    ? isMe
-      ? 'border-rose-200/30 bg-rose-950/20 text-white'
-      : theme === 'dark'
-        ? 'border-rose-400/20 bg-gradient-to-br from-rose-950/60 via-zinc-900/95 to-zinc-900/95 text-zinc-100'
-        : 'border-rose-200 bg-gradient-to-br from-rose-50 via-white to-white text-slate-900'
-    : isMe
-      ? 'border-white/25 bg-white/[0.13] text-white'
-      : theme === 'dark'
-        ? 'border-white/10 bg-gradient-to-br from-brand/[0.12] via-zinc-900/95 to-zinc-900/95 text-zinc-100'
-        : 'border-brand bg-gradient-to-br from-brand via-white to-white text-slate-900';
-  const iconClass = state === 'error'
-    ? isMe
-      ? 'bg-rose-300/20 text-rose-50 ring-rose-100/25'
-      : theme === 'dark'
-        ? 'bg-rose-400/10 text-rose-300 ring-rose-400/15'
-        : 'bg-rose-100 text-rose-600 ring-rose-200'
-    : isMe
-      ? 'bg-white/20 text-white ring-white/25'
-      : theme === 'dark'
-        ? 'bg-brand/10 text-brand ring-brand/15'
-        : 'bg-brand text-brand-hovered ring-brand';
-  const secondaryTextClass = isMe
-    ? 'text-white/70'
-    : theme === 'dark' ? 'text-zinc-400' : 'text-slate-500';
-
+  const concealed = state === 'unopened' || state === 'sent' || state === 'opening' || state === 'retry';
   const content = (
     <>
-      <span
-        className={`pointer-events-none absolute -right-8 -top-10 h-28 w-28 rounded-full blur-2xl ${state === 'error'
-          ? 'bg-rose-400/15'
-          : 'bg-brand/15'
-          }`}
-        aria-hidden="true"
-      />
-      <span
-        className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ring-1 ring-inset ${iconClass}`}
-        aria-hidden="true"
-      >
-        <StateIcon className={`h-6 w-6 ${state === 'opening' ? 'animate-spin' : ''}`} />
-        {(state === 'unopened' || state === 'sent') && (
-          <span className={`absolute -bottom-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full border px-1 text-[0.765rem] font-semibold shadow-sm ${isMe
-            ? 'border-brand bg-white text-brand-hovered'
-            : theme === 'dark'
-              ? 'border-zinc-900 bg-brand text-zinc-950'
-              : 'border-white bg-brand-hovered text-white'
-            }`}>
-            1
-          </span>
-        )}
+      {concealed && preview && <img src={preview} className="cv-view-once-preview" alt="" aria-hidden="true" draggable={false} />}
+      {concealed && <ViewOnceDust />}
+      <span className="cv-view-once-icon" aria-hidden="true">
+        <StateIcon className={state === 'opening' ? 'animate-spin' : ''} />
+        {concealed && <span className="cv-view-once-count">1</span>}
       </span>
-
-      <span className="relative min-w-0 flex-1 text-start">
-        <span className={`mb-1 block text-[0.765rem] font-bold normal-case tracking-normal ${state === 'error'
-          ? isMe ? 'text-rose-100/80' : theme === 'dark' ? 'text-rose-300/80' : 'text-rose-600'
-          : secondaryTextClass
-          }`}>
-          {statusLabel}
-        </span>
-        <span className="block text-sm font-bold leading-tight">{title}</span>
-        <span className={`mt-1 block text-[0.765rem] font-medium leading-snug ${secondaryTextClass}`}>
-          {description}
-        </span>
+      <span className="cv-view-once-copy">
+        <span className="cv-view-once-status">{statusLabel}</span>
+        <span className="cv-view-once-title">{title}</span>
+        <span className="cv-view-once-description">{description}</span>
       </span>
-
-      {state === 'unopened' && (
-        <span className={`relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${isMe
-          ? 'bg-white/15 text-white'
-          : theme === 'dark' ? 'bg-white/[0.06] text-brand' : 'bg-brand text-brand-hovered'
-          }`} aria-hidden="true">
-          <Eye className="h-4 w-4" />
-        </span>
-      )}
     </>
   );
 
-  const sharedClassName = `relative flex w-[clamp(13.5rem,70vw,17rem)] max-w-full items-center gap-3 overflow-hidden rounded-[20px] border p-3.5 shadow-[0_18px_45px_-28px_rgba(15,23,42,0.6)] ${surfaceClass}`;
+  const sharedClassName = `cv-view-once-card ${concealed ? 'cv-view-once-concealed' : 'cv-view-once-finished'} cv-view-once-${theme}`;
   const accessibleLabel = `${title}. ${description}`;
+
+  if (revealedPhoto) {
+    return <button type="button" className="cv-view-once-revealed" data-view-once-message={messageId} data-view-once-state="revealed"
+      aria-label={t('messages.open_image', { name: t('messages.photo') })}
+      onClick={event => { event.stopPropagation(); onRevealExpand(); }}>
+      <img src={revealedPhoto} alt={t('messages.photo')} draggable={false} />
+    </button>;
+  }
 
   if (isActionable) {
     return (
@@ -464,10 +431,7 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
         aria-busy={isOpening}
         data-view-once-message={messageId}
         data-view-once-state={state}
-        className={`${sharedClassName} transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_50px_-28px_rgba(255,55,199,0.8)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-wait disabled:hover:translate-y-0 ${isMe
-          ? 'focus-visible:ring-offset-brand-hovered'
-          : theme === 'dark' ? 'focus-visible:ring-offset-zinc-950' : 'focus-visible:ring-offset-white'
-          }`}
+        className={sharedClassName}
       >
         {content}
       </button>
@@ -489,6 +453,8 @@ const ViewOnceMessageCard: React.FC<ViewOnceMessageCardProps> = ({
 };
 
 const MessageItem: React.FC<MessageItemProps> = ({
+  revealedPhoto,
+  onRevealExpand,
   selected = false,
   selectionMode = false,
   onSelect,
@@ -506,6 +472,18 @@ const MessageItem: React.FC<MessageItemProps> = ({
   hasViewOnceOpenError,
 }) => {
   const longPressTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const bubbleRef = React.useRef<HTMLDivElement>(null);
+  const timeRef = React.useRef<HTMLDivElement>(null);
+  React.useLayoutEffect(() => {
+    const time = timeRef.current;
+    const bubble = bubbleRef.current;
+    if (!time || !bubble) return;
+    const measure = () => bubble.style.setProperty('--cv-message-time-width', `${time.getBoundingClientRect().width + 8}px`);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(time);
+    return () => observer.disconnect();
+  }, []);
   React.useEffect(() => () => { if (longPressTimer.current) clearTimeout(longPressTimer.current); }, []);
   const isMe = msg.sender === 'me';
   const isHiddenDisappearing = Boolean(
@@ -572,6 +550,8 @@ const MessageItem: React.FC<MessageItemProps> = ({
         data-group-last={groupLast}
         data-has-text={!!msg.text}
         data-has-timer={msg.isDisappearing || undefined}
+        ref={bubbleRef}
+        data-has-media={!msg.viewOnce && !isHiddenDisappearing && !!msg.attachments?.some(attachment => resolveChatMedia(attachment))}
         className="cv-chat-bubble"
         onLoadCapture={onMediaReady}
         onLoadedMetadataCapture={onMediaReady}
@@ -585,9 +565,12 @@ const MessageItem: React.FC<MessageItemProps> = ({
           <div className="mb-2">
             <ViewOnceMessageCard
               messageId={msg.id}
+              revealedPhoto={revealedPhoto}
+              onRevealExpand={onRevealExpand}
+              preview={msg.viewOncePreview}
               theme={theme}
               isMe={isMe}
-              isViewed={Boolean(msg.viewedOnce)}
+              isViewed={!isMe && Boolean(msg.viewedOnce)}
               isOpening={isMessageOpening}
               hasOpenError={hasViewOnceOpenError}
               onOpen={() => onMessageOpen(msg.id)}
@@ -636,14 +619,13 @@ const MessageItem: React.FC<MessageItemProps> = ({
 
         {/* Media Files */}
         {!msg.viewOnce && !isHiddenDisappearing && msg.attachments && msg.attachments.length > 0 && (
-          <div data-count={msg.attachments.length} className={`cv-chat-media-grid mb-2 flex max-w-[240px] flex-wrap gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
+          <div data-count={msg.attachments.length} className="cv-chat-media-grid">
             {msg.attachments.map((attachment, idx) => {
               const file = attachment.file;
               const media = resolveChatMedia(attachment);
               const isImage = media?.kind === 'image';
               const isVideo = media?.kind === 'video';
-              const thumbSizeClass = msg.attachments?.length === 1 && !msg.text ? 'h-[108px] w-[108px]' : 'h-[72px] w-[72px]';
-              const thumbClass = `cv-chat-media-thumb ${thumbSizeClass} group/media relative shrink-0 overflow-hidden rounded-full border shadow-[0_16px_40px_-22px_rgba(15,23,42,0.65)] transition-transform duration-200 hover:scale-[1.03] ${isMe ? 'border-white/35 bg-white/18' : theme === 'dark' ? 'border-white/12 bg-white/8' : 'border-[var(--cv-inner-border)] bg-slate-100/80'}`;
+              const thumbClass = 'cv-chat-media-thumb';
 
               return (
                 <React.Fragment key={attachment.id || idx}>
@@ -651,14 +633,15 @@ const MessageItem: React.FC<MessageItemProps> = ({
                     <button
                       type="button"
                       onClick={() => onMediaOpen(msg.id, media.attachmentId)}
+                      style={{ aspectRatio: media.aspectRatio }}
                       className={thumbClass}
                       title={file.name}
                       aria-label={t('messages.open_image', { name: file.name })}
                     >
-                      <img
+                      <ChatMediaImage
                         src={media.previewSrc}
                         alt={file.name}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover/media:scale-110"
+                        className="cv-chat-photo"
                       />
                       <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-inset ring-white/30" />
                     </button>
@@ -666,18 +649,19 @@ const MessageItem: React.FC<MessageItemProps> = ({
                     <button
                       type="button"
                       onClick={() => onMediaOpen(msg.id, media.attachmentId)}
+                      style={{ aspectRatio: media.aspectRatio }}
                       className={thumbClass}
                       title={file.name}
                       aria-label={t('messages.open_video', { name: file.name })}
                     >
                       {media.posterSrc ? (
-                        <img
+                        <ChatMediaImage
                           src={media.posterSrc}
                           alt=""
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <video
+                        <ChatMediaVideo
                           src={media.src}
                           muted
                           playsInline
@@ -720,7 +704,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
         )}
 
         {/* Time and Status */}
-        <div className={`cv-chat-time flex items-center ${isMe ? 'justify-end' : ''} mt-1 gap-1`}>
+        <div ref={timeRef} className={`cv-chat-time flex items-center ${isMe ? 'justify-end' : ''} mt-1 gap-1`}>
           {countdown !== null && (
             <span
               className={`mr-1 inline-flex items-center gap-1 text-[0.765rem] font-semibold ${isMe ? 'text-white/80' : theme === 'dark' ? 'text-amber-300' : 'text-amber-700'}`}
@@ -749,72 +733,6 @@ const MessageItem: React.FC<MessageItemProps> = ({
     </div>
   );
 };
-
-interface SelectedMediaThumbnailProps {
-  file: File;
-  kind: 'image' | 'video';
-  index: number;
-  theme: 'dark' | 'light';
-  onRemove: (index: number) => void;
-  removeLabel: string;
-}
-
-const SelectedMediaThumbnail: React.FC<SelectedMediaThumbnailProps> = ({
-  file,
-  kind,
-  index,
-  theme,
-  onRemove,
-  removeLabel,
-}) => {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (kind !== 'image') return;
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [file, kind]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: Math.min(index * 0.04, 0.16) }}
-      className="group relative h-[68px] w-[68px] shrink-0 overflow-visible"
-      title={file.name}
-    >
-      <div className={`h-full w-full overflow-hidden rounded-full border shadow-[0_16px_40px_-24px_rgba(15,23,42,0.75)] ${theme === 'dark' ? 'border-white/12 bg-white/10' : 'border-white/85 bg-white/70'}`}>
-        {kind === 'image' && previewUrl ? (
-          <img
-            src={previewUrl}
-            alt={file.name}
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-950 via-slate-800 to-brand-hovered">
-            {kind === 'video' ? <Video className="h-6 w-6 text-white" /> : <Image className="h-6 w-6 text-white" />}
-          </div>
-        )}
-      </div>
-      <motion.button
-        type="button"
-        onClick={() => onRemove(index)}
-        aria-label={removeLabel}
-        className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--cv-inner-border)] bg-slate-950 text-white shadow-lg transition-transform duration-150 hover:scale-105"
-        whileTap={{ scale: 0.9 }}
-      >
-        <X className="h-3.5 w-3.5" />
-      </motion.button>
-      {kind === 'video' && (
-        <span className="absolute bottom-0 right-0 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--cv-inner-border)] bg-white text-slate-950 shadow-md">
-          <Video className="h-3.5 w-3.5" />
-        </span>
-      )}
-    </motion.div>
-  );
-};
-
 
 const MessagesScreen: React.FC = () => {
   const clipboard = useClipboard();
@@ -909,6 +827,7 @@ const MessagesScreen: React.FC = () => {
   const [pendingForward, setPendingForward] = useState<{ sourceChatId: string; messages: ChatMessage[]; targetChatId: string } | null>(null);
   const [forwardSourceId, setForwardSourceId] = useState<string | null>(null);
   const forwardingBusyRef = useRef(false);
+  const sendingMessageRef = useRef(false);
   useEffect(() => {
     setSelectedMessages(new Set()); setReplyTo(null); setEditingMessage(null);
     setSelectedMessageId(null); setMessageMenuPosition(null); setActionError(false);
@@ -935,7 +854,7 @@ const MessagesScreen: React.FC = () => {
 
   const closeMediaViewer = useCallback(() => {
     setActiveMedia(null);
-    setViewOnceSession(null);
+    setViewOnceSession(current => current ? { ...current, expanded: false } : null);
   }, []);
 
   const openMediaViewer = useCallback((messageId: string, attachmentId: string) => {
@@ -1275,6 +1194,7 @@ const MessagesScreen: React.FC = () => {
                     ? {
                       ...chatMessage,
                       ...newMessage,
+                      viewOncePreview: newMessage.viewOncePreview ?? chatMessage.viewOncePreview,
                       text: newMessage.contentHidden && !newMessage.text
                         ? chatMessage.text
                         : newMessage.text,
@@ -2028,7 +1948,7 @@ const MessagesScreen: React.FC = () => {
     const targetMessage = messages.find((chatMessage) => chatMessage.id === messageId);
     const currentChat = chatsList.find((chat) => chat.id === selectedChat);
     const canOpenViewOnce = Boolean(
-      targetMessage?.viewOnce && !targetMessage.viewedOnce && targetMessage.sender === 'other',
+      targetMessage?.viewOnce && (targetMessage.sender === 'me' || !targetMessage.viewedOnce),
     );
     const canOpenDisappearing = Boolean(
       targetMessage?.isDisappearing
@@ -2038,6 +1958,7 @@ const MessagesScreen: React.FC = () => {
     );
     if (
       !targetMessage
+      || messageId.startsWith('temp-')
       || (!canOpenViewOnce && !canOpenDisappearing)
       || isMessageExpired(targetMessage)
       || !currentChat?.chatId
@@ -2075,8 +1996,8 @@ const MessagesScreen: React.FC = () => {
         );
 
         // The secure base64 DTO only lives inside this viewer session.
-        markAsConsumed();
-        if (openedPayload) {
+        if (targetMessage.sender !== 'me') markAsConsumed();
+        if (openedPayload && targetMessage.sender !== 'me') {
           const normalizedOpenedMessage = normalizeChatMessage(openedPayload, String(user.id), {
             fallbackId: messageId,
             fallbackTime: targetMessage.time,
@@ -2136,8 +2057,8 @@ const MessagesScreen: React.FC = () => {
     } catch (error) {
       const status = (error as { response?: { status?: number } })?.response?.status;
       if (targetMessage.viewOnce) {
-        // A lost response can still mean that the server consumed the photo.
-        markAsConsumed();
+        // Only definitive consumption/expiry responses end the recipient's access.
+        if (targetMessage.sender !== 'me' && (status === 409 || status === 410)) markAsConsumed();
         setViewOnceSession((current) => current?.messageId === messageId ? null : current);
         setViewOnceOpenErrorIds((current) => new Set(current).add(messageId));
         console.warn('View-once photo is no longer available', { messageId, status });
@@ -2160,6 +2081,7 @@ const MessagesScreen: React.FC = () => {
   }, [chatsList, fetchMessages, messages, selectedChat, setMessages, user?.id]);
 
   const handleSendMessage = async (emoticon?: ChatEmoticon) => {
+    if (sendingMessageRef.current) return;
     if (!user?.id) return;
     setFailedEmoticon(null); setActionError(false);
     if (pendingForward && !emoticon) {
@@ -2222,8 +2144,7 @@ const MessagesScreen: React.FC = () => {
       const joinMessage = { chat_id: realChatId }
       socket.emit('join', JSON.stringify(joinMessage));
       currentChatRoomRef.current = realChatId;
-      // Small delay to ensure join is processed (though emit is fire-and-forget)
-      await new Promise(resolve => setTimeout(resolve, 100));
+
     }
 
 
@@ -2233,6 +2154,9 @@ const MessagesScreen: React.FC = () => {
     const imagesToSend = emoticon ? [] : [...selectedImages];
     const videosToSend = emoticon ? [] : [...selectedVideos];
     const allFiles = [...imagesToSend, ...videosToSend];
+    sendingMessageRef.current = true;
+    setActionBusy(true);
+    setActionError(false);
     const viewOnceForSend = !emoticon && viewOnceEnabled
       && imagesToSend.length === 1
       && videosToSend.length === 0;
@@ -2299,14 +2223,10 @@ const MessagesScreen: React.FC = () => {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (initialScrollRef.current && selectedChatRef.current === selectedChatAtSend) messageListRef.current?.scrollTo({ top: Number.MAX_SAFE_INTEGER, behavior: 'auto' });
     }));
-    setMessage('');
-    setReplyTo(null);
-    setSelectedImages([]);
-    setSelectedVideos([]);
-    setViewOnceEnabled(false);
-    if (fileInputRef.current) fileInputRef.current.value = '';
-    if (videoInputRef.current) videoInputRef.current.value = '';
-    if (viewOnceImageInputRef.current) viewOnceImageInputRef.current.value = '';
+    if (!allFiles.length) {
+      setMessage('');
+      setReplyTo(null);
+    }
     setShowEmojiPicker(false);
 
     // Clear typing timeout
@@ -2322,13 +2242,20 @@ const MessagesScreen: React.FC = () => {
       typingIndicatorTimeoutRef.current = null;
     }
 
-    // Send message to API
     try {
+      // Only the tiny color preview is persisted; originals stay in the secure media flow.
+      const viewOncePreview = viewOnceForSend ? await createViewOncePreview(imagesToSend[0]) : undefined;
+      if (viewOncePreview) {
+        newMessage.viewOncePreview = viewOncePreview;
+        setMessages(prev => prev.map(item => item.id === tempMessageId ? { ...item, viewOncePreview } : item));
+      }
+
+      // Send message to API
       const response = await api.sendMessage({
         chat_id: realChatId, // Use real chat ID from backend
         content: messageText,
         reply_to: replySnapshot?.id,
-        extras: emoticon ? { emoticon } : undefined,
+        extras: emoticon ? { emoticon } : viewOncePreview ? { view_once_preview: viewOncePreview } : undefined,
         images: imagesToSend.length > 0 ? imagesToSend : undefined,
         videos: videosToSend.length > 0 ? videosToSend : undefined,
         expires_in_seconds: messageExpirySeconds,
@@ -2363,6 +2290,7 @@ const MessagesScreen: React.FC = () => {
           expiresInSeconds: normalizedMessage.expiresInSeconds ?? newMessage.expiresInSeconds,
           isDisappearing: normalizedMessage.isDisappearing || newMessage.isDisappearing,
           viewOnce: normalizedMessage.viewOnce || viewOnceForSend,
+          viewOncePreview: normalizedMessage.viewOncePreview ?? newMessage.viewOncePreview,
         };
 
         setMessages((prev) => {
@@ -2414,6 +2342,13 @@ const MessagesScreen: React.FC = () => {
           }
         });
       }
+      if (allFiles.length) {
+        setMessage('');
+        setReplyTo(null);
+        setSelectedImages([]);
+        setSelectedVideos([]);
+        setViewOnceEnabled(false);
+      }
     } catch (error) {
       console.error('Error sending message:', error);
       if (selectedChatRef.current === selectedChatAtSend) {
@@ -2424,8 +2359,12 @@ const MessagesScreen: React.FC = () => {
           setMessage(current => current || messageText);
           setSelectedImages(current => current.length ? current : imagesToSend);
           setSelectedVideos(current => current.length ? current : videosToSend);
+          setViewOnceEnabled(viewOnceForSend);
         }
       }
+    } finally {
+      sendingMessageRef.current = false;
+      setActionBusy(false);
     }
   };
 
@@ -2800,7 +2739,7 @@ const MessagesScreen: React.FC = () => {
     : -1;
   const displayedViewerItems = viewOnceSession?.items || activeViewerItems;
   const displayedViewerIndex = viewOnceSession ? 0 : activeViewerIndex;
-  const displayedViewerKey = viewOnceSession
+  const displayedViewerKey = viewOnceSession?.expanded
     ? `view-once-${viewOnceSession.messageId}`
     : activeMedia ? `${activeMedia.messageId}-${activeMedia.attachmentId}` : null;
 
@@ -3089,6 +3028,7 @@ const MessagesScreen: React.FC = () => {
                               style={{ height: '100%' }}
                               data={messages}
                               defaultItemHeight={80}
+                              increaseViewportBy={{ top: 400, bottom: 400 }}
                               totalListHeightChanged={() => { if (initialScrollRef.current) requestAnimationFrame(() => { if (initialScrollRef.current && selectedChatRef.current === selectedChat) messageListRef.current?.scrollTo({ top: Number.MAX_SAFE_INTEGER, behavior: 'auto' }); }); }}
                               alignToBottom
                               computeItemKey={(_, item) => item.id}
@@ -3118,6 +3058,8 @@ const MessagesScreen: React.FC = () => {
                                     nowMs={countdownNow}
                                     onContextMenu={handleMessageContextMenu}
                                     onMediaOpen={openMediaViewer}
+                                    revealedPhoto={viewOnceSession?.messageId === msg.id ? viewOnceSession.items[0]?.src : undefined}
+                                    onRevealExpand={() => setViewOnceSession(current => current?.messageId === msg.id ? { ...current, expanded: true } : current)}
                                     onMessageOpen={handleMessageOpen}
                                     isMessageOpening={openingMessageIds.has(msg.id)}
                                     hasViewOnceOpenError={viewOnceOpenErrorIds.has(msg.id)}
@@ -3206,38 +3148,11 @@ const MessagesScreen: React.FC = () => {
                     {showComposerOptions && <AttachmentMenu anchor={attachmentButtonRef.current?.closest<HTMLElement>('.cv-chat-compose-plate') || null} onClose={() => setShowComposerOptions(false)} onPhoto={() => fileInputRef.current?.click()} onVideo={() => videoInputRef.current?.click()} viewOnce={viewOnceEnabled} onViewOnce={handleViewOnceToggle} expiry={messageExpirySeconds} onExpiry={value => setMessageExpirySeconds(value as MessageExpirySeconds)} expiryOptions={MESSAGE_EXPIRY_OPTIONS} expiryLabel={value => t(MESSAGE_EXPIRY_LABEL_KEYS[value as MessageExpirySeconds])} />}
 
                     {/* Selected Media Preview */}
-                    {(() => {
-                      const totalMedia = selectedImages.length + selectedVideos.length;
-                      const allMedia = [
-                        ...selectedImages.map((file, idx) => ({ type: 'image' as const, file, index: idx })),
-                        ...selectedVideos.map((file, idx) => ({ type: 'video' as const, file, index: idx }))
-                      ];
-
-                      if (totalMedia === 0) return null;
-
-                      return (
-                        <motion.div
-                          initial={{ opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="mb-3 -mx-1 overflow-x-auto px-1"
-                        >
-                          <div className="flex items-center gap-2 pb-1">
-                            {allMedia.map((media, idx) => (
-                              <SelectedMediaThumbnail
-                                key={`${media.type}-${media.file.name}-${media.file.lastModified}-${idx}`}
-                                file={media.file}
-                                kind={media.type}
-                                index={media.index}
-                                theme={theme}
-                                onRemove={media.type === 'image' ? removeImage : removeVideo}
-                                removeLabel={t('messages.remove_attachment', { name: media.file.name })}
-                              />
-                            ))}
-                          </div>
-                        </motion.div>
-                      );
-                    })()}
+                    <MediaSendDialog images={selectedImages} videos={selectedVideos} caption={message} viewOnce={viewOnceEnabled} busy={actionBusy} error={actionError}
+                      onCaption={setMessage} onViewOnce={() => setViewOnceEnabled(value => !value)}
+                      onRemoveImage={removeImage} onRemoveVideo={removeVideo} onAdd={() => fileInputRef.current?.click()}
+                      onClose={() => { if (sendingMessageRef.current) return; setSelectedImages([]); setSelectedVideos([]); setViewOnceEnabled(false); if (fileInputRef.current) fileInputRef.current.value = ''; if (videoInputRef.current) videoInputRef.current.value = ''; if (viewOnceImageInputRef.current) viewOnceImageInputRef.current.value = ''; }}
+                      onSend={() => void handleSendMessage()} />
 
                     <div className="flex items-center space-x-2">
                       {/* Hidden File Inputs */}

@@ -9,26 +9,28 @@ export interface Attachment {
     mime_type: string;
     name: string;
     storage_path?: string;
+    width?: number;
+    height?: number;
     variants?: {
       image?: {
-        original?: { url: string };
-        small?: { url: string };
-        medium?: { url: string };
-        large?: { url: string };
-        thumbnail?: { url: string };
-        icon?: { url: string };
+        original?: { url: string; width?: number; height?: number };
+        small?: { url: string; width?: number; height?: number };
+        medium?: { url: string; width?: number; height?: number };
+        large?: { url: string; width?: number; height?: number };
+        thumbnail?: { url: string; width?: number; height?: number };
+        icon?: { url: string; width?: number; height?: number };
       };
       video?: {
-        original?: { url: string };
-        high?: { url: string };
-        small?: { url: string };
-        low?: { url: string };
-        medium?: { url: string };
-        large?: { url: string };
-        thumbnail?: { url: string };
-        icon?: { url: string };
-        preview?: { url: string };
-        poster?: { url: string };
+        original?: { url: string; width?: number; height?: number };
+        high?: { url: string; width?: number; height?: number };
+        small?: { url: string; width?: number; height?: number };
+        low?: { url: string; width?: number; height?: number };
+        medium?: { url: string; width?: number; height?: number };
+        large?: { url: string; width?: number; height?: number };
+        thumbnail?: { url: string; width?: number; height?: number };
+        icon?: { url: string; width?: number; height?: number };
+        preview?: { url: string; width?: number; height?: number };
+        poster?: { url: string; width?: number; height?: number };
       };
     };
   };
@@ -80,6 +82,7 @@ export interface ChatMessage {
   contentHidden?: boolean;
   clientId?: string;
   viewOnce?: boolean;
+  viewOncePreview?: string;
   viewedOnce?: boolean;
 }
 

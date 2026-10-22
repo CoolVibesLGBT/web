@@ -346,6 +346,7 @@
     "view_profile": "View Profile"
   },
   "messages": {
+    "caption": "Add a caption",
     "chat": "Chat",
     "search": "Search",
     "all": "All",

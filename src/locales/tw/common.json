@@ -333,6 +333,7 @@
     "view_profile": "查看個人資料"
   },
   "messages": {
+    "caption": "新增說明",
     "chat": "聊天",
     "search": "搜尋",
     "all": "全部",

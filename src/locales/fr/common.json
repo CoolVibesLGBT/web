@@ -333,6 +333,7 @@
     "view_profile": "Voir le profil"
   },
   "messages": {
+    "caption": "Ajouter une légende",
     "chat": "Chat",
     "search": "Recherche",
     "all": "Tout",

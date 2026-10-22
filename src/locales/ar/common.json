@@ -333,6 +333,7 @@
     "view_profile": "عرض الملف الشخصي"
   },
   "messages": {
+    "caption": "إضافة تعليق",
     "chat": "دردشة",
     "search": "بحث",
     "all": "الكل",

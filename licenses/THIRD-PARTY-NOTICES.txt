@@ -4,7 +4,8 @@ Adapted source and assets from tweb:
 https://github.com/morethanwords/tweb
 License: GPL-3.0. License text: public/images/chat/LICENSE-telegram.txt.
 Includes theme patterns and presets, color/gradient utilities, SVG icon paths,
-Lottie components, font declarations and interaction/layout adaptations.
+Lottie components, font declarations, media spoiler particle renderer/GLSL
+shaders and interaction/layout adaptations.
 
 Roboto: Google / Christian Robertson. Font binaries are licensed under
 Apache License 2.0; the license is distributed with public/fonts/telegram/.
