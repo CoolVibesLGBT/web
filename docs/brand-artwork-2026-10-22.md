@@ -36,3 +36,13 @@ Source and exported assets inspected; PNG alpha and manifest export dimensions c
 ## Final selection
 
 The user explicitly selected **dott-v3** after reviewing the refined V4 proposal. V3 is the active identity: angular turquoise/violet CoolVibes wordmark, CV monogram and community OG cover. All runtime references point to `dott-v3`; `refined-v4` remains an unused draft. V4 was generated using built-in image_gen with a rounded CoolVibes wordmark, connected oo letterform, indigo/violet palette and turquoise i dot; companion CV and minimal OG variants are not active.
+
+## Nepali and Khmer landing heroes
+
+Added `public/images/landing/hero-ne.avif` (Kathmandu) and `hero-km.avif` (Phnom Penh), generated with the built-in image generation tool. Both use the existing illustrated community hero family, not photographs. Direct output inspection and locale-specific browser captures are recorded in the documentation gallery.
+
+Prompt brief, Nepal: wide illustrated Kathmandu/Newar streetscape with Himalayan mountains, an inclusive group of adult queer friends at a cafe on the right, angular cartoon linework and cel shading, warm pink/violet sunset, dark readable space on the left for the existing headline, no baked-in text or logo. Maintain the selected CoolVibes dott-v3 color family.
+
+Prompt brief, Cambodia: wide illustrated Phnom Penh riverfront with Khmer architecture and palms, an inclusive group of adult queer friends at a cafe on the right, warm sunset, pink/violet palette, expressive adventure-cartoon linework, darker left area for the existing headline, no baked-in text or logo. Match the existing localized landing composition.
+
+Final AVIF files are 1536×1024. JPEG documentation exports preserve each locale's artwork. Brand masters and active dott-v3 logo remain the selected identity.

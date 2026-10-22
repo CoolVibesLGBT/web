@@ -35,9 +35,11 @@ export const SUPPORTED_LOCALES = [
   { lang: 'th', hrefLang: 'th-TH', ogLocale: 'th_TH' },
   { lang: 'tw', hrefLang: 'zh-TW', ogLocale: 'zh_TW' },
   { lang: 'zh', hrefLang: 'zh-CN', ogLocale: 'zh_CN' },
+  { lang: 'ne', hrefLang: 'ne-NP', ogLocale: 'ne_NP' },
+  { lang: 'km', hrefLang: 'km-KH', ogLocale: 'km_KH' },
 ]
 
-export const DEFAULT_OG_LOCALE = SUPPORTED_LOCALES[0]?.ogLocale || 'en_US'
+export const DEFAULT_OG_LOCALE = 'en_US'
 
 export const SEO_LANGUAGES = [
   ...SUPPORTED_LOCALES.map(({ hrefLang, lang }) => ({ hrefLang, lang })),

@@ -172,3 +172,21 @@ Brand V2 follow-up: replaced the heart/hands logo with an original purple/turquo
 Brand V3 correction: user rejected the mascot. Active public Brand, manifest/favicon, splash preview, notifications and OG now use CoolVibes lettering / CV monogram in `dott-v3`. The OG mascot is removed. The shared Brand keeps its localized home action and at least 44px height. Build and interface regressions passed; browser composition remains unverified.
 
 Final user selection: **dott-v3** restored across public branding, metadata, manifest, splash preview and notification icon after reviewing the refined V4 proposal. V4 is an unused draft. No new composed-browser verification claimed.
+
+### Brandkit — 2026-10-22
+
+Public `/brandkit` provides selected dott-v3 wordmark, CV icon, OG cover, palette, usage guidance and native individual/ZIP downloads. Landing and legal footers link to it. All 21 landing locales include the new copy. No authentication gate; login still opens AuthWizard. `brandkit-checks.json` records 320/390/820/1440px DOM/image/download checks with tr/en/ar RTL, light/dark, enlarged text, scrolling, keyboard ZIP activation and footer navigation/Back. No screenshots or simulator. Real-device rendering and live authentication remain unverified.
+
+### Istanbul guidelines illustration — 2026-10-22
+
+Replaced `legal-guidelines-3.avif` with a dott-v3-compatible illustration retaining the cafe community and adding Kiz Kulesi, historic city walls, Galata Bridge, Bosphorus bridge, sea and two cats. Mosque/minaret skyline removed. 1254×578 AVIF retains the prior 627:289 display ratio. Generated composition inspected directly; four-width DOM/decode checks recorded in `istanbul-guidelines-checks.json`. No screenshots or simulator. Artistic montage, not geographically literal.
+
+### GitBook documentation and new locales — 2026-10-22
+
+Replaced the obsolete README with the English project entry, 22 translated overviews and seven technical guides. `.gitbook.yaml` and `SUMMARY.md` prepare a single Git Sync space; no external site was published. Each of the 23 locale pages uses its matching hero via JPEG export. Nepali and Khmer now have all four runtime namespaces, language selection/flags, SEO locale entries and Kathmandu/Phnom Penh heroes. The sidebar create-post label now uses the existing translated `create_post.title` key instead of a missing key with a Turkish fallback.
+
+The user explicitly requested screenshots for this documentation work, overriding the older prohibition for these captures only. `scripts/capture-readme.mjs` produces 16 actual application captures with fictional Alex Rivera/Deniz Kaya profiles and intercepted API responses. No real accounts, messages or database records were created. Feed, messages, appearance, mobile profile, brandkit, nine localized landings and ne/km authentication choices are captured; evidence is in `docs/assets/screenshots/capture-manifest.json`. The single-image feed attachment renderer's existing forced portrait ratio was observed; documentation demonstrates the existing two-image grid instead, without changing that unrelated renderer.
+
+`yarn build` passed (existing lint, asset-resolution and large-bundle warnings remain). Interface regressions, public namespace coverage in 23 locales, documentation links and new-locale interpolation parity passed. Native-speaker review, real-device testing, API-provided translated catalogs, live payments/broadcasts and GitBook-hosted rendering remain unverified. Detailed technical guides remain in English; language pages are localized project overviews, not full translations of every guide.
+
+New-locale browser checks passed in eight cases (ne/km × 320/390/820/1440px): selection through the public language menu, reload persistence, HTML language, corresponding hero decode, horizontal containment, authentication dialog/Escape and brandkit image decode. The 390px cases use dark mode and 820px cases use enlarged text. See `documentation-locale-checks.json`; browser emulation only, no additional screenshots.

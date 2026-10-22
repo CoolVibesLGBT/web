@@ -373,6 +373,7 @@ function AppContent() {
     if (routeSeoPath === '/landing' || (routeSeoPath === '/' && !isAuthenticated)) {
       return { ...seo, title: t('seo_title', { ns: 'landing' }), description: t('seo_description', { ns: 'landing' }), canonical: '/' };
     }
+    if (routeSeoPath === '/brandkit') return { ...seo, title: t('brandkit.title', { ns: 'landing' }), description: t('brandkit.description', { ns: 'landing' }) };
     return seo;
   }, [isAuthenticated, routeSeoPath, t]);
   useSEO(routeSeo);
@@ -1041,7 +1042,7 @@ function AppContent() {
                   className="sky-gradient flex h-12 w-full items-center justify-center gap-2 rounded-[12px] font-black text-white shadow-lg shadow-brand/30 transition-transform hover:scale-[1.02] active:scale-95 [outline:none]"
                 >
                   <Plus className="h-5 w-5" />
-                  <span>{t('post.create', { defaultValue: 'Gönder' })}</span>
+                  <span>{t('create_post.title')}</span>
                 </button>
 
                 {/* Profile cell — pinned at the very bottom of the rail */}

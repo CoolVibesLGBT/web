@@ -1,0 +1,546 @@
+{
+  "method": "Playwright DOM/image/download checks; no screenshots; browser emulation, not real devices",
+  "results": [
+    {
+      "width": 320,
+      "lang": "tr",
+      "mode": "light",
+      "direction": "ltr",
+      "overflow": false,
+      "title": "Brandkit | CoolVibes",
+      "images": [
+        {
+          "src": "/images/brand/dott-v3/wordmark.png",
+          "width": 840
+        },
+        {
+          "src": "/images/countries/1x1/tr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/brand/dott-v3/wordmark-master.png",
+          "width": 2172
+        },
+        {
+          "src": "/images/brand/dott-v3/wordmark.png",
+          "width": 840
+        },
+        {
+          "src": "/images/brand/dott-v3/icon-512.png",
+          "width": 512
+        },
+        {
+          "src": "/images/brand/dott-v3/og-1200x630.jpg",
+          "width": 1200
+        },
+        {
+          "src": "/images/brand/dott-v3/wordmark.png",
+          "width": 840
+        },
+        {
+          "src": "/images/countries/1x1/us.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/tr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/de.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/es.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/fr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/arab.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/bd.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/ir.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/il.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/in.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/hk.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/id.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/jp.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/kp.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/kr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/pl.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/br.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/ru.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/th.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/tw.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/cn.svg",
+          "width": 150
+        }
+      ],
+      "targets": [
+        44.09375,
+        44,
+        44,
+        44
+      ],
+      "cards": [
+        "0px",
+        "0px",
+        "0px"
+      ],
+      "download": "passed",
+      "pageErrors": []
+    },
+    {
+      "width": 390,
+      "lang": "en",
+      "mode": "dark",
+      "direction": "ltr",
+      "overflow": false,
+      "title": "Brandkit | CoolVibes",
+      "images": [
+        {
+          "src": "/images/brand/dott-v3/wordmark.png",
+          "width": 840
+        },
+        {
+          "src": "/images/countries/1x1/us.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/brand/dott-v3/wordmark-master.png",
+          "width": 2172
+        },
+        {
+          "src": "/images/brand/dott-v3/wordmark.png",
+          "width": 840
+        },
+        {
+          "src": "/images/brand/dott-v3/icon-512.png",
+          "width": 512
+        },
+        {
+          "src": "/images/brand/dott-v3/og-1200x630.jpg",
+          "width": 1200
+        },
+        {
+          "src": "/images/brand/dott-v3/wordmark.png",
+          "width": 840
+        },
+        {
+          "src": "/images/countries/1x1/us.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/tr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/de.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/es.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/fr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/arab.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/bd.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/ir.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/il.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/in.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/hk.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/id.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/jp.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/kp.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/kr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/pl.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/br.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/ru.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/th.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/tw.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/cn.svg",
+          "width": 150
+        }
+      ],
+      "targets": [
+        44.09375,
+        44,
+        44,
+        44
+      ],
+      "cards": [
+        "0px",
+        "0px",
+        "0px"
+      ],
+      "download": "passed",
+      "pageErrors": []
+    },
+    {
+      "width": 820,
+      "lang": "ar",
+      "mode": "dark",
+      "large": true,
+      "direction": "rtl",
+      "overflow": false,
+      "title": "Brandkit | CoolVibes",
+      "images": [
+        {
+          "src": "/images/brand/dott-v3/wordmark.png",
+          "width": 840
+        },
+        {
+          "src": "/images/countries/1x1/arab.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/brand/dott-v3/wordmark-master.png",
+          "width": 2172
+        },
+        {
+          "src": "/images/brand/dott-v3/wordmark.png",
+          "width": 840
+        },
+        {
+          "src": "/images/brand/dott-v3/icon-512.png",
+          "width": 512
+        },
+        {
+          "src": "/images/brand/dott-v3/og-1200x630.jpg",
+          "width": 1200
+        },
+        {
+          "src": "/images/brand/dott-v3/wordmark.png",
+          "width": 840
+        },
+        {
+          "src": "/images/countries/1x1/us.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/tr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/de.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/es.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/fr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/arab.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/bd.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/ir.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/il.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/in.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/hk.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/id.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/jp.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/kp.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/kr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/pl.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/br.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/ru.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/th.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/tw.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/cn.svg",
+          "width": 150
+        }
+      ],
+      "targets": [
+        66.125,
+        44,
+        44,
+        44
+      ],
+      "cards": [
+        "0px",
+        "0px",
+        "0px"
+      ],
+      "download": "passed",
+      "pageErrors": []
+    },
+    {
+      "width": 1440,
+      "lang": "en",
+      "mode": "light",
+      "direction": "ltr",
+      "overflow": false,
+      "title": "Brandkit | CoolVibes",
+      "images": [
+        {
+          "src": "/images/brand/dott-v3/wordmark.png",
+          "width": 840
+        },
+        {
+          "src": "/images/countries/1x1/us.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/brand/dott-v3/wordmark-master.png",
+          "width": 2172
+        },
+        {
+          "src": "/images/brand/dott-v3/wordmark.png",
+          "width": 840
+        },
+        {
+          "src": "/images/brand/dott-v3/icon-512.png",
+          "width": 512
+        },
+        {
+          "src": "/images/brand/dott-v3/og-1200x630.jpg",
+          "width": 1200
+        },
+        {
+          "src": "/images/brand/dott-v3/wordmark.png",
+          "width": 840
+        },
+        {
+          "src": "/images/countries/1x1/us.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/tr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/de.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/es.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/fr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/arab.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/bd.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/ir.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/il.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/in.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/hk.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/id.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/jp.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/kp.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/kr.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/pl.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/br.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/ru.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/th.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/tw.svg",
+          "width": 150
+        },
+        {
+          "src": "/images/countries/1x1/cn.svg",
+          "width": 150
+        }
+      ],
+      "targets": [
+        44.09375,
+        44,
+        44,
+        44
+      ],
+      "cards": [
+        "0px",
+        "0px",
+        "0px"
+      ],
+      "download": "passed",
+      "pageErrors": []
+    }
+  ]
+}

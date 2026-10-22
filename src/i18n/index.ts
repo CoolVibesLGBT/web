@@ -21,6 +21,8 @@ import id from '../locales/id/common.json';
 import pl from '../locales/pl/common.json';
 import kp from '../locales/kp/common.json';
 import kr from '../locales/kr/common.json';
+import ne from '../locales/ne/common.json';
+import km from '../locales/km/common.json';
 import { normalizeLanguage } from './language';
 
 
@@ -49,6 +51,8 @@ i18n
   .init({
     resources: {
       en: { common: en },
+      ne: { common: ne },
+      km: { common: km },
       tr: { common: tr },
       fa: { common: fa },
       he: { common: he },

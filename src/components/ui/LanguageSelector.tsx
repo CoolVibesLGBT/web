@@ -26,6 +26,8 @@ const FLAG_ASSET_BASE = '/images/countries/1x1';
 const regionalIndicatorPattern = /[\u{1F1E6}-\u{1F1FF}]/u;
 
 const LANGUAGE_FLAG_CODES: Record<string, string> = {
+  ne: 'np',
+  km: 'kh',
   ar: 'arab',
   bn: 'bd',
   en: 'us',
@@ -158,7 +160,7 @@ const LanguageSelectorModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const remoteLanguages = Object.values(data?.languages ?? {}) as LanguageOption[];
   const fallbackLanguages = SUPPORTED_LOCALES.map(({ lang }) => ({
     code: lang,
-    name: ({ hk: '繁體中文（香港）', tw: '繁體中文（台灣）', kp: '조선말', kr: '한국어' } as Record<string, string>)[lang] || new Intl.DisplayNames([lang], { type: 'language' }).of(lang) || lang,
+    name: ({ ne: 'नेपाली', km: 'ខ្មែរ', hk: '繁體中文（香港）', tw: '繁體中文（台灣）', kp: '조선말', kr: '한국어' } as Record<string, string>)[lang] || new Intl.DisplayNames([lang], { type: 'language' }).of(lang) || lang,
   }));
   const languages = fallbackLanguages.map(language => ({
     ...language,

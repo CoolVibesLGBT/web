@@ -1,0 +1,7 @@
+Tool: built-in image_gen. Mode: edit with existing illustration as reference.
+
+Edit the CoolVibes community-guidelines illustration, preserving its inclusive adult cafe group, clothing, pride flags and welcoming atmosphere. Match existing dott-v3-compatible 1990s cartoon adventure drawing: expressive faces, quirky architecture, dark navy contours, cel shading, violet/lavender, turquoise, peach/coral and gold. Replace skyline with an artistic Istanbul montage: Kiz Kulesi on an island, low Galata Bridge with fishermen, ancient crenellated city walls with square towers and Bosphorus suspension bridge in the distance. Make the sea visible. Add ginger and black-and-white Istanbul street cats. Remove all mosques, minarets and religious domes; ordinary residential roofs instead. Preserve people including the woman with the floral headscarf. Wide 2.17:1 full bleed, no text, logo, frame or watermark.
+
+Generated master: legal-guidelines-3-istanbul-master.png
+Production export: public/images/landing/legal-guidelines-3.avif (1254 × 578, AVIF quality 85).
+Export: sips resize, Pillow format encoding only. Composition reviewed directly from generated image, no screenshots.

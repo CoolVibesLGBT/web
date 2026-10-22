@@ -1,0 +1,130 @@
+[
+  {
+    "language": "ne",
+    "width": 320,
+    "theme": "light",
+    "enlargedText": false,
+    "checks": [
+      "language selection",
+      "persistence after reload",
+      "localized hero decode",
+      "HTML language",
+      "horizontal containment",
+      "authentication choices and Escape",
+      "brandkit image decode"
+    ],
+    "mode": "browser emulation; public routes; external network blocked; no screenshots"
+  },
+  {
+    "language": "km",
+    "width": 320,
+    "theme": "light",
+    "enlargedText": false,
+    "checks": [
+      "language selection",
+      "persistence after reload",
+      "localized hero decode",
+      "HTML language",
+      "horizontal containment",
+      "authentication choices and Escape",
+      "brandkit image decode"
+    ],
+    "mode": "browser emulation; public routes; external network blocked; no screenshots"
+  },
+  {
+    "language": "ne",
+    "width": 390,
+    "theme": "dark",
+    "enlargedText": false,
+    "checks": [
+      "language selection",
+      "persistence after reload",
+      "localized hero decode",
+      "HTML language",
+      "horizontal containment",
+      "authentication choices and Escape",
+      "brandkit image decode"
+    ],
+    "mode": "browser emulation; public routes; external network blocked; no screenshots"
+  },
+  {
+    "language": "km",
+    "width": 390,
+    "theme": "dark",
+    "enlargedText": false,
+    "checks": [
+      "language selection",
+      "persistence after reload",
+      "localized hero decode",
+      "HTML language",
+      "horizontal containment",
+      "authentication choices and Escape",
+      "brandkit image decode"
+    ],
+    "mode": "browser emulation; public routes; external network blocked; no screenshots"
+  },
+  {
+    "language": "ne",
+    "width": 820,
+    "theme": "light",
+    "enlargedText": true,
+    "checks": [
+      "language selection",
+      "persistence after reload",
+      "localized hero decode",
+      "HTML language",
+      "horizontal containment",
+      "authentication choices and Escape",
+      "brandkit image decode"
+    ],
+    "mode": "browser emulation; public routes; external network blocked; no screenshots"
+  },
+  {
+    "language": "km",
+    "width": 820,
+    "theme": "light",
+    "enlargedText": true,
+    "checks": [
+      "language selection",
+      "persistence after reload",
+      "localized hero decode",
+      "HTML language",
+      "horizontal containment",
+      "authentication choices and Escape",
+      "brandkit image decode"
+    ],
+    "mode": "browser emulation; public routes; external network blocked; no screenshots"
+  },
+  {
+    "language": "ne",
+    "width": 1440,
+    "theme": "light",
+    "enlargedText": false,
+    "checks": [
+      "language selection",
+      "persistence after reload",
+      "localized hero decode",
+      "HTML language",
+      "horizontal containment",
+      "authentication choices and Escape",
+      "brandkit image decode"
+    ],
+    "mode": "browser emulation; public routes; external network blocked; no screenshots"
+  },
+  {
+    "language": "km",
+    "width": 1440,
+    "theme": "light",
+    "enlargedText": false,
+    "checks": [
+      "language selection",
+      "persistence after reload",
+      "localized hero decode",
+      "HTML language",
+      "horizontal containment",
+      "authentication choices and Escape",
+      "brandkit image decode"
+    ],
+    "mode": "browser emulation; public routes; external network blocked; no screenshots"
+  }
+]

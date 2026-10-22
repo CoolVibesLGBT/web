@@ -5613,5 +5613,66 @@
       "status": "Generated art inspected; composed browser views unverified",
       "selection": "User explicitly selected dott-v3 after reviewing refined-v4; all active brand references use dott-v3."
     }
+  },
+  "brandkit20261022": {
+    "route": "/brandkit",
+    "assets": "/images/brand/dott-v3/",
+    "entryPoints": [
+      "landing footer",
+      "legal footer"
+    ],
+    "downloads": "Transparent PNG wordmark, 9 PNG icon sizes, JPG cover, ZIP",
+    "verification": "docs/brandkit-checks.json: DOM/image decoding, scrolling, 44px download targets, keyboard ZIP download, footer navigation/Back and auth dialog; 320/390/820/1440px, tr/en/ar RTL, light/dark, enlarged text. Browser emulation only; no screenshots; live authentication and real devices unverified."
+  },
+  "istanbulGuidelines20261022": {
+    "route": "/legal/guidelines",
+    "asset": "/images/landing/legal-guidelines-3.avif",
+    "size": [
+      1254,
+      578
+    ],
+    "content": "Kiz Kulesi, city walls, Galata Bridge, Bosphorus bridge, sea and two cats; no mosque/minaret skyline; existing cafe characters retained",
+    "source": "output/imagegen/legal-guidelines-3-istanbul-master.png",
+    "prompt": "output/imagegen/legal-guidelines-3-prompt.txt",
+    "verification": "Direct generated-art inspection; DOM/decode evidence in docs/istanbul-guidelines-checks.json; no screenshots. Artistic landmark montage, not literal geography."
+  },
+  "documentationLocales20261022": {
+    "routes": [
+      "/landing",
+      "/brandkit",
+      "authentication choices",
+      "/?tab=flows",
+      "/messages",
+      "/settings/appearance",
+      "/profile"
+    ],
+    "locales": {
+      "total": 23,
+      "added": [
+        "ne",
+        "km"
+      ],
+      "namespaces": [
+        "common",
+        "landing",
+        "auth",
+        "legal"
+      ]
+    },
+    "assets": [
+      "public/images/landing/hero-ne.avif",
+      "public/images/landing/hero-km.avif",
+      "docs/assets/heroes/",
+      "docs/assets/screenshots/"
+    ],
+    "documentation": [
+      "README.md",
+      "SUMMARY.md",
+      ".gitbook.yaml",
+      "docs/guide/",
+      "docs/readme/"
+    ],
+    "verification": "16 actual browser captures using fictional local fixtures; explicit documentation screenshot authorization supersedes prior prohibition for these captures only. docs/assets/screenshots/capture-manifest.json. Native-language review, live services, real devices and published GitBook rendering unverified.",
+    "browserEvidence": "docs/documentation-locale-checks.json: ne/km at 320/390/820/1440px, dark and enlarged text; selection/persistence, hero and brandkit decode, horizontal containment, auth choices/Escape; all eight passed."
   }
 }

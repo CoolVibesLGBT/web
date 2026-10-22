@@ -1,0 +1,166 @@
+{
+  "authorization": "User explicitly requested README screenshots, overriding the earlier no-screenshot instruction for this documentation task.",
+  "backend": "Playwright route fixtures only. No database records or real accounts created.",
+  "captures": [
+    {
+      "file": "feed-en.png",
+      "label": "English feed with fictional profiles and a local sample post",
+      "path": "/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "messages-en.png",
+      "label": "English messages with fictional conversation",
+      "path": "/messages",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "appearance-en.png",
+      "label": "Appearance themes and chat preview",
+      "path": "/settings/appearance",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "profile-mobile-en.png",
+      "label": "Mobile fictional Alex Rivera profile",
+      "path": "/profile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "landing-en.png",
+      "label": "en landing with locale-specific hero artwork",
+      "path": "/landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "brandkit-en.png",
+      "label": "Selected dott-v3 brandkit",
+      "path": "/brandkit",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "landing-zh.png",
+      "label": "zh landing with locale-specific hero artwork",
+      "path": "/landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "landing-ja.png",
+      "label": "ja landing with locale-specific hero artwork",
+      "path": "/landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "landing-ar.png",
+      "label": "ar landing with locale-specific hero artwork",
+      "path": "/landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "landing-tr.png",
+      "label": "tr landing with locale-specific hero artwork",
+      "path": "/landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "landing-hi.png",
+      "label": "hi landing with locale-specific hero artwork",
+      "path": "/landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "landing-ne.png",
+      "label": "ne landing with locale-specific hero artwork",
+      "path": "/landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "auth-ne.png",
+      "label": "ne login/register choices",
+      "path": "/landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "landing-km.png",
+      "label": "km landing with locale-specific hero artwork",
+      "path": "/landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "auth-km.png",
+      "label": "km login/register choices",
+      "path": "/landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    },
+    {
+      "file": "landing-id.png",
+      "label": "id landing with locale-specific hero artwork",
+      "path": "/landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "isolated fictional fixtures; external network blocked"
+    }
+  ]
+}

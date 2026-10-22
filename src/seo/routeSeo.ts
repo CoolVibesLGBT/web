@@ -21,6 +21,7 @@ export const ROUTE_DEFAULT_TITLES: Record<string, string> = {
   '/profile': 'Profile',
   '/landing': 'LGBTIQA+ Sosyal Medya ve Gay Dating Uygulaması',
   '/legal': 'Legal',
+  '/brandkit': 'Brandkit',
   '/premium': 'Premium',
   '/splash': 'Splash Preview',
 }
@@ -44,6 +45,7 @@ const ROUTE_DESCRIPTIONS: Record<string, string> = {
   '/profile': 'Your profile and activity on CoolVibes.',
   '/landing': 'Kendi renginde, kendi insanlarınla. CoolVibes’ta LGBTIQA+ topluluğunu keşfet, yeni arkadaşlar edin, gay dating deneyimini yaşa ve anlamlı bağlar kur.',
   '/legal': 'Legal information, policies, and guidelines for CoolVibes.',
+  '/brandkit': 'CoolVibes logos, colors and sharing assets.',
   '/premium': 'Learn about CoolVibes Premium benefits.',
   '/splash': 'CoolVibes splash screen preview.',
 }
@@ -70,6 +72,7 @@ export const NOINDEX_PREFIXES = [
 const ROUTE_SEO: Array<{ match: RouteMatcher; seo: SEOOptions }> = [
   { match: '/', seo: { title: ROUTE_DEFAULT_TITLES['/'], description: ROUTE_DESCRIPTIONS['/'] } },
   { match: '/landing', seo: { title: ROUTE_DEFAULT_TITLES['/landing'], description: ROUTE_DESCRIPTIONS['/landing'] } },
+  { match: '/brandkit', seo: { title: ROUTE_DEFAULT_TITLES['/brandkit'], description: ROUTE_DESCRIPTIONS['/brandkit'], type: 'website' } },
   { match: '/places', seo: { title: ROUTE_DEFAULT_TITLES['/places'], description: ROUTE_DESCRIPTIONS['/places'] } },
   { match: /^\/places\//, seo: { title: 'LGBTQ+ Place', description: ROUTE_DESCRIPTIONS['/places'] } },
   { match: /^\/legal(\/|$)/, seo: { title: ROUTE_DEFAULT_TITLES['/legal'], description: ROUTE_DESCRIPTIONS['/legal'] } },

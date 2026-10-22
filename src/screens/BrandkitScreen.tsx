@@ -28,7 +28,7 @@ export default function BrandkitScreen() {
   const [authOpen, setAuthOpen] = useState(false)
   const language = normalizeLanguage(i18n.language)
   const flag = getLanguageFlagDisplay(undefined, language)
-  useSEO({ title: `CoolVibes — ${t('brandkit.title')}`, description: t('brandkit.description'), canonical: '/brandkit' })
+  useSEO({ title: t('brandkit.title'), description: t('brandkit.description'), canonical: '/brandkit' })
   const join = () => isAuthenticated ? navigate('/pride') : setAuthOpen(true)
 
   return <div className="cv-landing cv-brandkit" lang={getLanguageTag(i18n.language)} dir={i18n.dir()}>

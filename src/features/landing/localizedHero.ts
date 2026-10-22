@@ -3,6 +3,8 @@ import { normalizeLanguage } from '@/i18n/language'
 type Hero = { image: string; place: string }
 
 const locations: Record<string, string> = {
+  ne: 'काठमाडौं · नेपाल',
+  km: 'ភ្នំពេញ · កម្ពុជា',
   tr: 'İstanbul · Türkiye',
   en: 'New York · United States',
   de: 'Berlin · Deutschland',

@@ -1,0 +1,41 @@
+{
+  "method": "DOM and image decode, no screenshots; browser emulation only",
+  "results": [
+    {
+      "viewport": 320,
+      "naturalWidth": 1254,
+      "naturalHeight": 578,
+      "width": 282,
+      "height": 129.96875,
+      "visible": true,
+      "objectFit": "contain"
+    },
+    {
+      "viewport": 390,
+      "naturalWidth": 1254,
+      "naturalHeight": 578,
+      "width": 352,
+      "height": 162.234375,
+      "visible": true,
+      "objectFit": "contain"
+    },
+    {
+      "viewport": 820,
+      "naturalWidth": 1254,
+      "naturalHeight": 578,
+      "width": 738,
+      "height": 340.15625,
+      "visible": true,
+      "objectFit": "contain"
+    },
+    {
+      "viewport": 1440,
+      "naturalWidth": 1254,
+      "naturalHeight": 578,
+      "width": 758,
+      "height": 349.375,
+      "visible": true,
+      "objectFit": "contain"
+    }
+  ]
+}
