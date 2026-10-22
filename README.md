@@ -157,7 +157,7 @@ Keep changes focused, use the `@/` import alias for new shared imports, preserve
 
 ## GitBook and GitHub
 
-This README is the English landing page for both GitHub and a GitBook Git Sync space. [SUMMARY.md](SUMMARY.md) provides the navigation; [.gitbook.yaml](.gitbook.yaml) declares the root and entry files. Translated overviews are ordinary Markdown pages with relative image links, so they remain usable in the repository too.
+This README is the English landing page for both GitHub and a GitBook Git Sync space. [gitbook-docs.yaml](gitbook-docs.yaml) defines the site structure and maps CoolVibes Documentation to the repository root. [SUMMARY.md](SUMMARY.md) provides page navigation; [.gitbook.yaml](.gitbook.yaml) declares the space's root and entry files. In GitBook's Content mapping screen, choose `gitbook-docs.yaml` with the repository root as the Project directory. Translated overviews are ordinary Markdown pages with relative image links, so they remain usable in the repository too.
 
 The files are **ready to import**; this change does not create or publish an external GitBook site. [GitBook setup](docs/guide/gitbook.md).
 

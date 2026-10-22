@@ -1,0 +1,13 @@
+$schema: https://api.gitbook.com/gitbook-docs.yaml
+
+site:
+  title: CoolVibes
+  structure:
+    - type: space
+      key: coolvibes-documentation
+      title: CoolVibes Documentation
+      path: docs
+      default: true
+      content:
+        directory: ./
+        language: en
