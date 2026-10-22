@@ -726,7 +726,11 @@
     "preview_out": "Suas mensagens, suas cores.",
     "upload_error": "Escolha uma imagem de até 20 MB.",
     "add_color": "Adicionar cor",
-    "remove_color": "Remover cor"
+    "remove_color": "Remover cor",
+    "message_colors": "Cores das mensagens",
+    "gradient_start": "Início",
+    "gradient_end": "Fim",
+    "message_gradient": "Degradê das mensagens"
   },
   "emoticons": {
     "title": "Emojis, figurinhas e GIFs",

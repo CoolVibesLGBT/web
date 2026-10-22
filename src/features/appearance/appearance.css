@@ -11,7 +11,7 @@
 .cv-chat-wallpaper-tinted .cv-chat-wallpaper-pattern { filter: invert(1); }
 .cv-chat-wallpaper-night .cv-chat-wallpaper-pattern { background: #000; mask-image: linear-gradient(#fff, #fff), url('/images/chat/telegram-pattern.svg'); mask-size: 100% 100%, auto calc(500px + 40vh); mask-position: center, left center; mask-repeat: no-repeat, repeat; mask-composite: exclude; mix-blend-mode: normal; }
 .cv-chat-bubble[data-side='incoming'] { background: var(--cv-chat-incoming) !important; color: var(--cv-chat-incoming-text) !important; border-color: transparent !important; }
-.cv-chat-bubble[data-side='outgoing'] { background: var(--cv-chat-outgoing) !important; color: var(--cv-chat-outgoing-text) !important; border-color: transparent !important; }
+.cv-chat-bubble[data-side='outgoing'] { background: var(--cv-chat-outgoing-background, var(--cv-chat-outgoing)) !important; color: var(--cv-chat-outgoing-text) !important; border-color: transparent !important; }
 .cv-chat-bubble .cv-chat-message-text { font-size: var(--cv-chat-font-size); }
 .cv-chat-wallpaper-host { position: relative; isolation: isolate; background: transparent !important; }
 .cv-chat-bubble[data-side='outgoing'].cv-appearance-bubble { align-self: flex-end; }
@@ -83,3 +83,17 @@ input.cv-appearance-range[type='range']:focus-visible::-moz-range-thumb { transf
 .cv-chat-wallpaper-night { background: #000; }
 
 .cv-chat-messages { position: relative; z-index: 1; }
+
+/* Message colors section: tweb demo .color-stops / .bubble-gradient. */
+.cv-appearance-message-stops { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; padding: 1rem 1rem .25rem; }
+.cv-appearance-message-stops label, .cv-appearance-accent-stop { display: flex; flex-direction: column; gap: .4rem; min-width: 0; font-size: .765rem; color: var(--cv-neutral-2); }
+.cv-appearance-message-stops label[data-disabled='true'] { opacity: .3; }
+.cv-appearance-accent-stop { flex-direction: row; align-items: center; justify-content: space-between; padding: .25rem 1rem .75rem; font-size: 1rem; color: var(--cv-neutral-1); }
+/* Round swatch showing the applied (contrast-adjusted) accent; the native picker covers it invisibly. */
+.cv-appearance-accent-swatch { position: relative; flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; box-shadow: 0 0 0 2px var(--cv-card-bg-solid), 0 0 0 3px var(--cv-inner-border); }
+.cv-appearance .cv-appearance-accent-swatch input[type='color'] { position: absolute; inset: 0; width: 100%; height: 100%; min-height: 0; padding: 0; border: 0; border-radius: 50%; opacity: 0; cursor: pointer; }
+.cv-appearance .cv-appearance-message-stops input[type='color'] { padding: 4px; min-height: 44px; background: var(--cv-surface-2); border: 1px solid var(--cv-inner-border); border-radius: 10px; }
+.cv-appearance-message-stops input[type='color'] { width: 100%; }
+/* tweb demo .bubble-preview: plain-surface incoming/outgoing pair above the message color stops. */
+.cv-appearance-bubble-preview { display: flex; flex-direction: column; gap: .5rem; margin: 1rem 1rem 0; padding: .875rem; border-radius: 12px; background: var(--cv-surface-2); }
+.cv-appearance-bubble-preview > .cv-chat-bubble { max-width: 80%; width: fit-content; padding: .5rem .625rem; border-radius: 10px; font-size: var(--cv-chat-font-size); transition: none; }

@@ -726,7 +726,11 @@
     "preview_out": "आपके संदेश, आपके रंग।",
     "upload_error": "20 MB तक की तस्वीर चुनें।",
     "add_color": "रंग जोड़ें",
-    "remove_color": "रंग हटाएँ"
+    "remove_color": "रंग हटाएँ",
+    "message_colors": "संदेश रंग",
+    "gradient_start": "शुरुआत",
+    "gradient_end": "अंत",
+    "message_gradient": "संदेश ग्रेडिएंट"
   },
   "emoticons": {
     "title": "इमोजी, स्टिकर और GIF",

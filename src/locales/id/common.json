@@ -726,7 +726,11 @@
     "preview_out": "Pesan Anda, warna Anda.",
     "upload_error": "Pilih gambar hingga 20 MB.",
     "add_color": "Tambah Warna",
-    "remove_color": "Hapus Warna"
+    "remove_color": "Hapus Warna",
+    "message_colors": "Warna pesan",
+    "gradient_start": "Awal",
+    "gradient_end": "Akhir",
+    "message_gradient": "Gradien pesan"
   },
   "emoticons": {
     "title": "Emoji, Stiker, dan GIF",

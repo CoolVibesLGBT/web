@@ -726,7 +726,11 @@
     "preview_out": "Ваши сообщения, ваши цвета.",
     "upload_error": "Выберите изображение размером до 20 МБ.",
     "add_color": "Добавить цвет",
-    "remove_color": "Удалить цвет"
+    "remove_color": "Удалить цвет",
+    "message_colors": "Цвета сообщений",
+    "gradient_start": "Начало",
+    "gradient_end": "Конец",
+    "message_gradient": "Градиент сообщений"
   },
   "emoticons": {
     "title": "Эмодзи, стикеры и GIF",

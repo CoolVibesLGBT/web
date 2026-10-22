@@ -154,3 +154,11 @@ Profile engagement lists keep the avatar/name/handle card visible above their Ba
 | `chat-forward-checks.json` | Forwarding/partial retry and visibility of forwarded content in current conversation |
 
 These cases cover 320/390/820/1440px, Turkish/English/Arabic, light/dark, RTL and enlarged text. They inspect real DOM, Canvas/image decoding and isolated HTTP fixtures, without screenshots, simulator or real account writes. Sources migrated without route-specific runtime evidence are explicitly marked `source-migrated; runtime-unverified` in `interface-inventory.json`; this is not completion of all-screen visual verification. Live registration, streaming, payment, provider services and unvisited gated states remain unverified. Existing full-TypeScript errors outside the changed components remain; production lint/build and the JSX/tab regression checks pass separately.
+
+### Landing wide-screen text layout — 2026-10-22
+
+The desktop chapter copy applied `(100vw - 1380px) / 2` padding to both sides of a half-width grid cell. Isolated browser DOM checks reproduced a 39px text area at 2560px and a zero-width text area at 3840/5120px. Desktop padding is now capped at 100px, with a centered 48rem maximum copy box. All five chapter text areas measure 616px at the tested 1920–5120px widths with the default font size.
+
+`landing-wide-checks.json` records geometry at 320/820/1440/1920/2560/3840/5120px, including Turkish, English, Arabic/RTL, light/dark and enlarged-text samples. No screenshots or simulator were used. Existing artwork is unchanged; asset decoding, authentication dialogs, real devices and live services were not verified in this pass. `yarn build` (including lint) and `node scripts/check-interface-regressions.mjs` passed.
+
+Follow-up for the user’s 25% browser zoom case: the whole landing canvas now has `max-width: 1920px` and automatic inline margins. Hero bottom controls use the canvas width rather than viewport width for their insets. DOM fixtures pass at 5760/7680/15360 CSS px (layout equivalents of 25% zoom on 1440/1920/3840px windows), with a centered canvas, bounded chapter copy and contained hero controls. These are layout-equivalent checks, not interaction with the browser zoom UI. Production lint/build and interface regressions passed again.

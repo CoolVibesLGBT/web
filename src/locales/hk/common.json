@@ -726,7 +726,11 @@
     "preview_out": "你的訊息，你的顏色。",
     "upload_error": "請選擇不超過20 MB的圖片。",
     "add_color": "新增顏色",
-    "remove_color": "移除顏色"
+    "remove_color": "移除顏色",
+    "message_colors": "訊息顏色",
+    "gradient_start": "開始",
+    "gradient_end": "結束",
+    "message_gradient": "訊息漸層"
   },
   "emoticons": {
     "title": "表情符號、貼圖與GIF",

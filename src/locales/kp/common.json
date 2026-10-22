@@ -760,7 +760,11 @@
     "preview_out": "나의 통보, 나의 색상.",
     "upload_error": "20 MB 이하의 화상을 선택하세요.",
     "add_color": "색상 추가",
-    "remove_color": "색상 삭제"
+    "remove_color": "색상 삭제",
+    "message_colors": "통보문 색",
+    "gradient_start": "시작",
+    "gradient_end": "끝",
+    "message_gradient": "통보문 그라데이션"
   },
   "emoticons": {
     "title": "그림문자, 스티커 및 GIF",

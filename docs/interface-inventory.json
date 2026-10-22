@@ -5571,5 +5571,21 @@
         "documents": 20
       }
     ]
+  },
+  "landingWideLayoutVerification": {
+    "date": "2026-10-22",
+    "route": "/ (unauthenticated)",
+    "subflows": [
+      "community",
+      "dating",
+      "nearby",
+      "chat",
+      "safety"
+    ],
+    "change": "Cap and center the complete landing canvas at 1920px; size hero inset relative to the canvas; bound desktop copy padding.",
+    "evidence": "docs/landing-wide-checks.json",
+    "status": "Isolated browser DOM geometry verified at 320–15360 CSS px, including 5760/7680/15360px layout equivalents of 25% zoom on 1440/1920/3840px windows. Canvas is centered, at most 1920px, with readable chapter copy and contained hero controls.",
+    "assets": "Existing landing artwork unchanged; image decoding not checked in this layout pass.",
+    "limitations": "Browser zoom UI not exercised: layout-width equivalents only. No screenshots, real-device or live-service checks; authentication dialogs not rechecked."
   }
 }

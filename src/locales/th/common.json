@@ -726,7 +726,11 @@
     "preview_out": "ข้อความของคุณ สีสันของคุณ",
     "upload_error": "เลือกรูปภาพขนาดไม่เกิน 20 MB",
     "add_color": "เพิ่มสี",
-    "remove_color": "ลบสี"
+    "remove_color": "ลบสี",
+    "message_colors": "สีข้อความ",
+    "gradient_start": "เริ่มต้น",
+    "gradient_end": "สิ้นสุด",
+    "message_gradient": "ไล่สีข้อความ"
   },
   "emoticons": {
     "title": "อีโมจิ สติกเกอร์ และ GIF",

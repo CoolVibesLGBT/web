@@ -1,0 +1,446 @@
+{
+  "method": "Isolated browser DOM fixtures; 5760/7680/15360 CSS px cover layout widths equivalent to 25% browser zoom on 1440/1920/3840px windows. Browser zoom UI and real devices not tested; no screenshots.",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "frame": {
+        "width": 320,
+        "left": 0,
+        "right": 320,
+        "viewport": 320,
+        "heroBottomInside": true
+      },
+      "geometry": [
+        {
+          "width": 320,
+          "contentWidth": 276,
+          "overflow": false,
+          "headingWidth": 276
+        },
+        {
+          "width": 320,
+          "contentWidth": 276,
+          "overflow": false,
+          "headingWidth": 276
+        },
+        {
+          "width": 320,
+          "contentWidth": 276,
+          "overflow": false,
+          "headingWidth": 276
+        },
+        {
+          "width": 320,
+          "contentWidth": 276,
+          "overflow": false,
+          "headingWidth": 276
+        },
+        {
+          "width": 320,
+          "contentWidth": 276,
+          "overflow": false,
+          "headingWidth": 276
+        }
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "frame": {
+        "width": 820,
+        "left": 0,
+        "right": 820,
+        "viewport": 820,
+        "heroBottomInside": true
+      },
+      "geometry": [
+        {
+          "width": 390.46875,
+          "contentWidth": 318.46875,
+          "overflow": false,
+          "headingWidth": 318.46875
+        },
+        {
+          "width": 390.484375,
+          "contentWidth": 318.484375,
+          "overflow": false,
+          "headingWidth": 318.484375
+        },
+        {
+          "width": 390.46875,
+          "contentWidth": 318.46875,
+          "overflow": false,
+          "headingWidth": 318.46875
+        },
+        {
+          "width": 390.484375,
+          "contentWidth": 318.484375,
+          "overflow": false,
+          "headingWidth": 318.484375
+        },
+        {
+          "width": 390.46875,
+          "contentWidth": 318.46875,
+          "overflow": false,
+          "headingWidth": 318.46875
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "frame": {
+        "width": 1440,
+        "left": 0,
+        "right": 1440,
+        "viewport": 1440,
+        "heroBottomInside": true
+      },
+      "geometry": [
+        {
+          "width": 685.703125,
+          "contentWidth": 527.3031249999999,
+          "overflow": false,
+          "headingWidth": 527.328125
+        },
+        {
+          "width": 685.71875,
+          "contentWidth": 527.3187499999999,
+          "overflow": false,
+          "headingWidth": 527.34375
+        },
+        {
+          "width": 685.703125,
+          "contentWidth": 527.3031249999999,
+          "overflow": false,
+          "headingWidth": 527.328125
+        },
+        {
+          "width": 685.71875,
+          "contentWidth": 527.3187499999999,
+          "overflow": false,
+          "headingWidth": 527.34375
+        },
+        {
+          "width": 685.703125,
+          "contentWidth": 527.3031249999999,
+          "overflow": false,
+          "headingWidth": 527.328125
+        }
+      ]
+    },
+    {
+      "width": 1920,
+      "language": "tr",
+      "theme": "light",
+      "frame": {
+        "width": 1920,
+        "left": 0,
+        "right": 1920,
+        "viewport": 1920,
+        "heroBottomInside": true
+      },
+      "geometry": [
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        }
+      ]
+    },
+    {
+      "width": 2560,
+      "language": "tr",
+      "theme": "light",
+      "frame": {
+        "width": 1920,
+        "left": 320,
+        "right": 2240,
+        "viewport": 2560,
+        "heroBottomInside": true
+      },
+      "geometry": [
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        }
+      ]
+    },
+    {
+      "width": 3840,
+      "language": "en",
+      "theme": "dark",
+      "frame": {
+        "width": 1920,
+        "left": 960,
+        "right": 2880,
+        "viewport": 3840,
+        "heroBottomInside": true
+      },
+      "geometry": [
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        }
+      ]
+    },
+    {
+      "width": 5120,
+      "language": "ar",
+      "theme": "dark",
+      "frame": {
+        "width": 1920,
+        "left": 1600,
+        "right": 3520,
+        "viewport": 5120,
+        "heroBottomInside": true
+      },
+      "geometry": [
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        }
+      ]
+    },
+    {
+      "width": 5760,
+      "language": "tr",
+      "theme": "light",
+      "frame": {
+        "width": 1920,
+        "left": 1920,
+        "right": 3840,
+        "viewport": 5760,
+        "heroBottomInside": true
+      },
+      "geometry": [
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        }
+      ]
+    },
+    {
+      "width": 7680,
+      "language": "en",
+      "theme": "dark",
+      "frame": {
+        "width": 1920,
+        "left": 2880,
+        "right": 4800,
+        "viewport": 7680,
+        "heroBottomInside": true
+      },
+      "geometry": [
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        }
+      ]
+    },
+    {
+      "width": 15360,
+      "language": "ar",
+      "theme": "dark",
+      "frame": {
+        "width": 1920,
+        "left": 6720,
+        "right": 8640,
+        "viewport": 15360,
+        "heroBottomInside": true
+      },
+      "geometry": [
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        },
+        {
+          "width": 816,
+          "contentWidth": 616,
+          "overflow": false,
+          "headingWidth": 616
+        }
+      ]
+    }
+  ]
+}

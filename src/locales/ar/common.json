@@ -726,7 +726,11 @@
     "preview_out": "رسائلك، ألوانك.",
     "upload_error": "اختر صورة بحجم يصل إلى 20 ميغابايت.",
     "add_color": "إضافة لون",
-    "remove_color": "إزالة لون"
+    "remove_color": "إزالة لون",
+    "message_colors": "ألوان الرسائل",
+    "gradient_start": "البداية",
+    "gradient_end": "النهاية",
+    "message_gradient": "تدرج الرسائل"
   },
   "emoticons": {
     "title": "الرموز التعبيرية والملصقات وGIF",

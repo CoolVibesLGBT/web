@@ -760,7 +760,11 @@
     "preview_out": "Twoje wiadomości, Twoje kolory.",
     "upload_error": "Wybierz obraz do 20 MB.",
     "add_color": "Dodaj kolor",
-    "remove_color": "Usuń kolor"
+    "remove_color": "Usuń kolor",
+    "message_colors": "Kolory wiadomości",
+    "gradient_start": "Początek",
+    "gradient_end": "Koniec",
+    "message_gradient": "Gradient wiadomości"
   },
   "emoticons": {
     "title": "Emoji, naklejki i GIF-y",

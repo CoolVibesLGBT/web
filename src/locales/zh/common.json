@@ -726,7 +726,11 @@
     "preview_out": "你的消息，你的颜色。",
     "upload_error": "请选择不超过20 MB的图片。",
     "add_color": "添加颜色",
-    "remove_color": "移除颜色"
+    "remove_color": "移除颜色",
+    "message_colors": "消息颜色",
+    "gradient_start": "开始",
+    "gradient_end": "结束",
+    "message_gradient": "消息渐变"
   },
   "emoticons": {
     "title": "表情、贴纸和GIF",

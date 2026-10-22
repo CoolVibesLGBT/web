@@ -925,7 +925,11 @@
     "preview_out": "Your messages, your colors.",
     "upload_error": "Choose an image up to 20 MB.",
     "add_color": "Add Color",
-    "remove_color": "Remove Color"
+    "remove_color": "Remove Color",
+    "message_colors": "Message colors",
+    "gradient_start": "Start",
+    "gradient_end": "End",
+    "message_gradient": "Message gradient"
   },
   "emoticons": {
     "title": "Emoji, Stickers and GIFs",

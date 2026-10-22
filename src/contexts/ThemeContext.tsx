@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState, type ReactNode } from 'react';
-import { defaultAppearance, readAppearance, resolveAppearance, type Appearance, type ThemeChoice, type ThemeSelection, type ResolvedAppearance, type Wallpaper } from '@/features/appearance/model';
+import { defaultAppearance, readAppearance, resolveAppearance, type Appearance, type ThemeChoice, type ThemeSelection, type ResolvedAppearance, type Wallpaper, type MessageColors } from '@/features/appearance/model';
 import { hexToRgb, mixColors, rgbaToHexa, rgbaToHsla } from '@/features/appearance/telegram-colors';
 import { readWallpaper, saveWallpaper } from '@/features/appearance/wallpaperStore';
 
@@ -15,6 +15,7 @@ interface ThemeContextType {
   selectPreset: (preset: number | null) => void;
   selectChatTheme: (theme: string | null) => void;
   setWallpaper: (wallpaper?: Wallpaper) => void;
+  setMessageColors: (messages?: MessageColors) => void;
   setTextSize: (size: number) => void;
   wallpaperImageUrl: string | null;
   uploadWallpaper: (file: File) => Promise<void>;
@@ -92,7 +93,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       '--cv-surface-2': palette.background, '--cv-surface-2-hover': 'var(--cv-list-hover)',
       '--cv-surface-3': `color-mix(in srgb, ${palette.secondary} 12%, ${palette.surface})`,
       '--cv-surface-3-hover': 'var(--cv-list-hover)',
-      '--cv-chat-incoming': palette.incoming, '--cv-chat-outgoing': palette.outgoing,
+      '--cv-chat-incoming': palette.incoming, '--cv-chat-outgoing': palette.outgoing, '--cv-chat-outgoing-background': palette.outgoingBackground,
       '--cv-chat-incoming-text': palette.text, '--cv-chat-outgoing-text': palette.outgoingText,
       '--cv-chat-incoming-meta': palette.secondary, '--cv-chat-outgoing-meta': palette.outgoingMeta,
       '--cv-chat-incoming-link': palette.accent, '--cv-chat-outgoing-link': palette.outgoingPrimary,
@@ -115,6 +116,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setAppearance(previous => ({ ...previous, themes: Object.fromEntries(['day', 'night', 'light', 'tinted'].map(base => [base, { preset: null, ...(theme ? { theme } : {}) }])) as Appearance['themes'] }));
   }, []);
   const setWallpaper = useCallback((wallpaper?: Wallpaper) => updateTheme(previous => ({ ...previous, wallpaper })), [updateTheme]);
+  const setMessageColors = useCallback((messages?: MessageColors) => updateTheme(previous => ({ ...previous, messages })), [updateTheme]);
   const setTextSize = useCallback((size: number) => setAppearance(previous => ({ ...previous, textSize: Math.max(12, Math.min(20, Math.round(size))) })), []);
   const uploadWallpaper = useCallback(async (file: File) => {
     if (!file.type.startsWith('image/') || file.size > 20 * 1024 * 1024) throw new Error('invalid-image');
@@ -124,5 +126,5 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setWallpaperImage(file);
     setWallpaper({ kind: 'image', colors: ['#e6ebee'], rotation: 0, pattern: false, intensity: 0, blur: false });
   }, [setWallpaper]);
-  return <ThemeContext.Provider value={{ theme, toggleTheme, setTheme, appearance, palette, setBaseTheme, selectPreset, selectChatTheme, setWallpaper, setTextSize, wallpaperImageUrl, uploadWallpaper }}>{children}</ThemeContext.Provider>;
+  return <ThemeContext.Provider value={{ theme, toggleTheme, setTheme, appearance, palette, setBaseTheme, selectPreset, selectChatTheme, setWallpaper, setMessageColors, setTextSize, wallpaperImageUrl, uploadWallpaper }}>{children}</ThemeContext.Provider>;
 }

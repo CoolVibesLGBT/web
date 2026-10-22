@@ -726,7 +726,11 @@
     "preview_out": "ההודעות שלך, הצבעים שלך.",
     "upload_error": "יש לבחור תמונה בגודל של עד 20 MB.",
     "add_color": "הוספת צבע",
-    "remove_color": "הסרת צבע"
+    "remove_color": "הסרת צבע",
+    "message_colors": "צבעי הודעות",
+    "gradient_start": "התחלה",
+    "gradient_end": "סוף",
+    "message_gradient": "מעבר צבע בהודעות"
   },
   "emoticons": {
     "title": "אימוג׳י, מדבקות ו-GIF",

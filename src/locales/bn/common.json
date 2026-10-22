@@ -726,7 +726,11 @@
     "preview_out": "আপনার বার্তা, আপনার রং।",
     "upload_error": "২০ MB পর্যন্ত একটি ছবি বেছে নিন।",
     "add_color": "রং যোগ করুন",
-    "remove_color": "রং মুছুন"
+    "remove_color": "রং মুছুন",
+    "message_colors": "বার্তার রং",
+    "gradient_start": "শুরু",
+    "gradient_end": "শেষ",
+    "message_gradient": "বার্তার গ্রেডিয়েন্ট"
   },
   "emoticons": {
     "title": "ইমোজি, স্টিকার ও GIF",

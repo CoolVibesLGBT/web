@@ -16,7 +16,7 @@ function previewStyle(value: ResolvedAppearance): CSSProperties {
     '--color-brand': value.accent, '--cv-neutral-1': value.text, '--cv-neutral-2': value.secondary,
     '--cv-card-bg-solid': value.surface, '--cv-card-bg': value.surface, '--cv-page-bg': value.background,
     '--cv-inner-border': value.border, '--cv-card-border': value.border, '--cv-surface-2': value.background,
-    '--cv-chat-incoming': value.incoming, '--cv-chat-outgoing': value.outgoing,
+    '--cv-chat-incoming': value.incoming, '--cv-chat-outgoing': value.outgoing, '--cv-chat-outgoing-background': value.outgoingBackground,
     '--cv-chat-incoming-text': value.text, '--cv-chat-outgoing-text': value.outgoingText,
     '--cv-chat-incoming-meta': value.secondary, '--cv-chat-outgoing-meta': value.outgoingMeta,
     '--cv-chat-font-size': `${value.textSize / 17}rem`,
@@ -32,14 +32,17 @@ export function AppearancePreview({ value }: { value?: ResolvedAppearance }) {
   return <section className="cv-appearance-preview" style={previewStyle(current)} aria-label={t('appearance.preview')}>
     <ChatWallpaper value={current} />
     <div className="cv-chat-bubble cv-appearance-bubble" data-side="incoming" style={{ background: current.incoming, color: current.text }}>{t('appearance.preview_in')}</div>
-    <div className="cv-chat-bubble cv-appearance-bubble" data-side="outgoing" style={{ background: current.outgoing, color: current.outgoingText }}>{t('appearance.preview_out')}</div>
+    <div className="cv-chat-bubble cv-appearance-bubble" data-side="outgoing" style={{ background: current.outgoingBackground, color: current.outgoingText }}>{t('appearance.preview_out')}</div>
   </section>;
 }
 
 export default function AppearanceScreen() {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
-  const { appearance, palette, setBaseTheme, selectPreset, selectChatTheme, setTextSize } = useTheme();
+  const { appearance, palette, setBaseTheme, selectPreset, selectChatTheme, setMessageColors, setTextSize } = useTheme();
+  const messages = appearance.themes[palette.base].messages ?? { accent: palette.sourceAccent, colors: palette.sourceMessageColors.slice(0, 1) };
+  const gradient = messages.colors.length > 1;
+  const messageStops = [messages.colors[0], messages.colors[1] ?? messages.colors[0]];
   const label = (base: ThemeChoice) => t(`appearance.${themeKeys[base]}`);
   return <div className="skyline-page-scroll w-full"><div className={`cv-appearance ${palette.dark ? 'dark' : 'light'}`} style={previewStyle(palette)}>
     <AppearancePreview />
@@ -68,6 +71,26 @@ export default function AppearanceScreen() {
           <span style={{ background: `linear-gradient(135deg, ${preset.message_colors.length > 1 ? preset.message_colors.map(hex).join(', ') : [hex(preset.accent_color), hex(preset.accent_color)].join(', ')})` }} />
         </button>)}
       </div>
+    </GroupedSection>
+    <GroupedSection title={t('appearance.message_colors')}>
+      <div className="cv-appearance-bubble-preview" aria-label={t('appearance.preview')} role="img">
+        <div className="cv-chat-bubble cv-appearance-bubble" data-side="incoming">{t('appearance.preview_in')}</div>
+        <div className="cv-chat-bubble cv-appearance-bubble" data-side="outgoing">{t('appearance.preview_out')}</div>
+      </div>
+      <div className="cv-appearance-message-stops">
+        {messageStops.map((color, index) => <label key={index} data-disabled={index > 0 && !gradient}>
+          <span>{t(index === 0 ? 'appearance.gradient_start' : 'appearance.gradient_end')}</span>
+          <input type="color" value={color} disabled={index > 0 && !gradient} onChange={event => setMessageColors({ ...messages, colors: messages.colors.map((value, position) => position === index ? event.target.value : value) })} />
+        </label>)}
+      </div>
+      <ListRow title={t('appearance.message_gradient')} accessory={<Switch checked={gradient} onChange={() => setMessageColors({ ...messages, colors: gradient ? messages.colors.slice(0, 1) : [messages.colors[0], palette.sourceMessageColors[1] ?? messages.accent] })} aria-label={t('appearance.message_gradient')} />} />
+      <label className="cv-appearance-accent-stop">
+        <span>{t('appearance.accent')}</span>
+        <span className="cv-appearance-accent-swatch" style={{ background: palette.accent }}>
+          <input type="color" value={messages.accent} aria-label={t('appearance.accent')} onChange={event => setMessageColors({ ...messages, accent: event.target.value })} />
+        </span>
+      </label>
+      {appearance.themes[palette.base].messages && <ListRow icon={<RotateCcw />} title={t('appearance.reset')} onClick={() => setMessageColors(undefined)} />}
     </GroupedSection>
   </div></div>;
 }

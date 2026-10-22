@@ -8,6 +8,8 @@
   --landing-pink-soft: #fff0fa;
   height: 100dvh;
   width: 100%;
+  max-width: 1920px;
+  margin-inline: auto;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -344,7 +346,7 @@
 .cv-landing-hero-bottom {
   position: absolute;
   bottom: 29px;
-  inset-inline: max(44px, calc((100vw - 1264px) / 2));
+  inset-inline: max(44px, calc((100% - 1264px) / 2));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1502,7 +1504,11 @@
 }
 @media (min-width: 1700px) {
   .cv-landing-section-copy {
-    padding-inline: max(90px, calc((100vw - 1380px) / 2));
+    /* Viewport gutters on both sides can consume the entire half-width column. */
+    width: 100%;
+    max-width: 48rem;
+    justify-self: center;
+    padding-inline: clamp(90px, 5.5vw, 100px);
   }
 }
 @media (max-width: 1100px) {

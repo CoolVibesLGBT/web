@@ -726,7 +726,11 @@
     "preview_out": "پیام‌های شما، رنگ‌های شما.",
     "upload_error": "تصویری تا حجم ۲۰ مگابایت انتخاب کنید.",
     "add_color": "افزودن رنگ",
-    "remove_color": "حذف رنگ"
+    "remove_color": "حذف رنگ",
+    "message_colors": "رنگ پیام‌ها",
+    "gradient_start": "شروع",
+    "gradient_end": "پایان",
+    "message_gradient": "گرادیان پیام"
   },
   "emoticons": {
     "title": "شکلک، برچسب و GIF",

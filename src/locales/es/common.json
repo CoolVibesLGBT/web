@@ -726,7 +726,11 @@
     "preview_out": "Tus mensajes, tus colores.",
     "upload_error": "Elige una imagen de hasta 20 MB.",
     "add_color": "Añadir color",
-    "remove_color": "Quitar color"
+    "remove_color": "Quitar color",
+    "message_colors": "Colores de mensajes",
+    "gradient_start": "Inicio",
+    "gradient_end": "Fin",
+    "message_gradient": "Degradado de mensajes"
   },
   "emoticons": {
     "title": "Emojis, stickers y GIF",

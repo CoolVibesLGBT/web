@@ -925,7 +925,11 @@
     "preview_out": "Mesajların, renklerin.",
     "upload_error": "En fazla 20 MB boyutunda bir görsel seç.",
     "add_color": "Renk Ekle",
-    "remove_color": "Rengi Kaldır"
+    "remove_color": "Rengi Kaldır",
+    "message_colors": "Mesaj renkleri",
+    "gradient_start": "Başlangıç",
+    "gradient_end": "Bitiş",
+    "message_gradient": "Mesaj gradyanı"
   },
   "emoticons": {
     "title": "Emoji, Sticker ve GIF",
