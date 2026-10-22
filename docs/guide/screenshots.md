@@ -2,8 +2,6 @@
 
 These are captures of the running React application, using isolated fictional data. Alex Rivera and Deniz Kaya are demo identities, not registered members. Post images reuse packaged brand artwork. No production accounts, private conversations or database records were used or created.
 
-The user explicitly requested documentation screenshots for this task, superseding the older no-screenshot instruction for these captures only. No iOS simulator was used.
-
 ## Reproduce
 
 Start `yarn dev` on `http://localhost:5173`, then run:
@@ -36,9 +34,9 @@ These images show selected states, not an exhaustive acceptance test. Authentica
 
 ![en landing with locale-specific hero artwork](../assets/screenshots/landing-en.png)
 
-## Selected dott-v3 brandkit
+## CoolVibes Brandkit
 
-![Selected dott-v3 brandkit](../assets/screenshots/brandkit-en.png)
+![CoolVibes Brandkit](../assets/screenshots/brandkit-en.png)
 
 ## zh landing with locale-specific hero artwork
 

@@ -128,9 +128,9 @@ docs/             guides, translated overviews, screenshots and audit evidence
 
 ## Interface and brand
 
-The interface uses shared Telegram-reference geometry, Roboto typography, fields, menus and dialogs adapted to native web behavior. Brand artwork is a separate layer: **dott-v3** is the selected CoolVibes wordmark/CV icon family, with turquoise, violet, navy and rainbow accents.
+CoolVibes combines a responsive interface with an expressive visual identity: the CoolVibes wordmark, CV app icon, turquoise and violet colors, and illustrations celebrating community.
 
-Keep native keyboard and browser navigation, localized labels, 44px targets, reduced-motion behavior and virtualized collections. Follow the current repository rules on focus styling, borderless cards and square feed cards rather than introducing a competing design system. Refer to [AGENTS.md](AGENTS.md), [interface audit](docs/interface-audit.md) and [Telegram reference mapping](docs/telegram-ui-reference.md).
+The interface supports localized navigation, light and dark themes, keyboard operation, touch interaction and reduced-motion preferences.
 
 The [Brandkit page](https://coolvibes.lgbt/brandkit) exposes the transparent wordmark, app icons, social cover, palette and ZIP download. Source files are in [`public/images/brand/dott-v3/`](public/images/brand/dott-v3/). These are raster assets; an editable vector master is not included.
 
@@ -143,9 +143,6 @@ yarn build
 node scripts/check-interface-regressions.mjs
 node scripts/check-public-locales.mjs
 node scripts/check-documentation.mjs
-
-# With the local app running on localhost:5173
-yarn check:telegram-ui
 
 # Documentation screenshots: fictional local fixtures, no real account writes
 node scripts/capture-readme.mjs
@@ -165,4 +162,4 @@ The files are **ready to import**; this change does not create or publish an ext
 
 Privacy controls, blocking/reporting and sensitive-media visibility are part of the product, but this repository is not evidence of a completed security or accessibility certification. The current HTML includes Google Analytics integration, and external media providers can be used; this README therefore does not claim “no tracking.”
 
-Package metadata declares **ISC**, while no top-level license text is currently present. Confirm the intended project license before redistribution rather than relying on the old README's MIT statement. Bundled fonts, patterns and animation code include their own licenses and notices, including [Roboto font notices](public/fonts/telegram/NOTICE.txt) and [chat artwork notices](public/images/chat/NOTICE.txt). Preserve third-party attribution.
+Package metadata declares **ISC**, while no top-level license text is currently present. Confirm the intended project license before redistribution. Bundled fonts, patterns and animation code include their own licenses and notices, distributed with the [font assets](public/fonts/) and [chat artwork](public/images/chat/NOTICE.txt). Preserve third-party attribution.

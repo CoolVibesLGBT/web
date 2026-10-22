@@ -21,6 +21,6 @@ Existing large lists use React Virtuoso or other established virtualized collect
 
 ## Styling and assets
 
-Shared interface foundations and panels implement the project's Telegram visual reference. Product illustration and logo assets use the separately selected dott-v3 art direction. Do not replace API behavior with mock success states or confuse a screenshot with verification of a live backend workflow.
+Shared components and styles keep navigation, forms, menus and dialogs consistent across CoolVibes. The brand assets include the CoolVibes wordmark, CV icon, community illustrations and locale-specific landing artwork. The public Brandkit provides downloadable assets and usage guidance.
 
-[Repository map](../../README.md#repository-map) · [Interface audit](../interface-audit.md)
+[Repository map](../../README.md#repository-map)
