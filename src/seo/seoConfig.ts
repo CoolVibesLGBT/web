@@ -8,7 +8,7 @@ export const DEFAULT_TITLE =
   'CoolVibes – LGBTQIA+ Social Network & Gay Dating App'
 export const DEFAULT_DESCRIPTION =
   'CoolVibes is a LGBTQIA+ social network and LGBT gay dating app. Meet people, chat, and build meaningful relationships in an inclusive community worldwide.'
-export const DEFAULT_IMAGE = 'https://coolvibes.lgbt/images/icons/icon_512x512.jpg'
+export const DEFAULT_IMAGE = 'https://coolvibes.lgbt/images/brand/dott-v3/og-1200x630.jpg'
 export const DEFAULT_IMAGE_ALT = 'CoolVibes – LGBTQIA+ social network'
 export const DEFAULT_KEYWORDS =
   'gay social network, LGBTQIA+ social media, LGBT gay dating, LGBTQIA+ dating app, queer community, inclusive social platform, CoolVibes'

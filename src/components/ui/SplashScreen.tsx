@@ -52,7 +52,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
         transition: { duration: 0 },
       }
 
-  const iconSrc = resolvePublicAssetUrl('/icons/icon_128x128.png')
+  const iconSrc = resolvePublicAssetUrl('/images/brand/dott-v3/icon-128.png')
   const shellClass = theme === 'dark'
     ? 'cv-pride-hero-bg text-white'
     : 'cv-pride-hero-bg text-slate-950'

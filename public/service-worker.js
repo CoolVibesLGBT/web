@@ -1,18 +1,18 @@
-const CACHE_NAME = 'coolvibes-cache-v20';
+const CACHE_NAME = 'coolvibes-cache-v25';
 const APP_SHELL = [
   '/',
   '/manifest.webmanifest',
   '/offline.html',
-  '/icons/icon_16x16.png',
-  '/icons/icon_16x16@2x.png',
-  '/icons/icon_32x32.png',
-  '/icons/icon_32x32@2x.png',
-  '/icons/icon_128x128.png',
-  '/icons/icon_128x128@2x.png',
-  '/icons/icon_256x256.png',
-  '/icons/icon_256x256@2x.png',
-  '/icons/icon_512x512.png',
-  '/icons/icon_512x512@2x.png'
+  '/images/brand/dott-v3/icon-16.png',
+  '/images/brand/dott-v3/icon-32.png',
+  '/images/brand/dott-v3/icon-32.png',
+  '/images/brand/dott-v3/icon-64.png',
+  '/images/brand/dott-v3/icon-128.png',
+  '/images/brand/dott-v3/icon-256.png',
+  '/images/brand/dott-v3/icon-256.png',
+  '/images/brand/dott-v3/icon-512.png',
+  '/images/brand/dott-v3/icon-512.png',
+  '/images/brand/dott-v3/icon-1024.png'
 ];
 
 // CACHE'LERİ DEVRE DIŞI BIRAKILMIŞ SERVICE WORKER

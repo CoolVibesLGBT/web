@@ -162,3 +162,13 @@ The desktop chapter copy applied `(100vw - 1380px) / 2` padding to both sides of
 `landing-wide-checks.json` records geometry at 320/820/1440/1920/2560/3840/5120px, including Turkish, English, Arabic/RTL, light/dark and enlarged-text samples. No screenshots or simulator were used. Existing artwork is unchanged; asset decoding, authentication dialogs, real devices and live services were not verified in this pass. `yarn build` (including lint) and `node scripts/check-interface-regressions.mjs` passed.
 
 Follow-up for the user’s 25% browser zoom case: the whole landing canvas now has `max-width: 1920px` and automatic inline margins. Hero bottom controls use the canvas width rather than viewport width for their insets. DOM fixtures pass at 5760/7680/15360 CSS px (layout equivalents of 25% zoom on 1440/1920/3840px windows), with a centered canvas, bounded chapter copy and contained hero controls. These are layout-equivalent checks, not interaction with the browser zoom UI. Production lint/build and interface regressions passed again.
+
+### Brand artwork — 2026-10-22
+
+New generated artwork in `public/images/brand/dott-v1/` supplies manifest/favicon/Apple icons, the static and dynamic default social cover, and the default Appearance/chat pattern. Original assets remain available. Manifests use `any` rather than claiming unverified maskable safety. Named Telegram themes and uploaded backgrounds retain their own sources. See `brand-artwork-2026-10-22.md` for prompts, scope and limitations. Generated artwork was inspected directly; composed browser flows, wallpaper seam continuity, installed PWA and live social crawlers remain unverified. No screenshots or simulator used.
+
+Brand V2 follow-up: replaced the heart/hands logo with an original purple/turquoise V-shaped tentacle mascot, including the OG emblem. Active icon references, explicit splash preview and notification icon now use `dott-v2`. V1 wallpaper remains active. Direct artwork inspection only; browser and installed-device rendering remain unverified.
+
+Brand V3 correction: user rejected the mascot. Active public Brand, manifest/favicon, splash preview, notifications and OG now use CoolVibes lettering / CV monogram in `dott-v3`. The OG mascot is removed. The shared Brand keeps its localized home action and at least 44px height. Build and interface regressions passed; browser composition remains unverified.
+
+Final user selection: **dott-v3** restored across public branding, metadata, manifest, splash preview and notification icon after reviewing the refined V4 proposal. V4 is an unused draft. No new composed-browser verification claimed.

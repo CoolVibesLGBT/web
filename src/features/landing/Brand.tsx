@@ -5,12 +5,11 @@ export default function Brand({ onClick }: { onClick: () => void }) {
   return (
     <button
       className="cv-landing-brand"
+      style={{ minHeight: 44, flexShrink: 0 }}
       onClick={onClick}
       aria-label={t('home_label')}
     >
-      <span>
-        coolvibes<span className="cv-landing-brand-dot">.</span>
-      </span>
+      <img src="/images/brand/dott-v3/wordmark.png" alt="CoolVibes" width={840} height={280} style={{ width: '8.25rem', height: 'auto', display: 'block' }} />
     </button>
   )
 }

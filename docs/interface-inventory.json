@@ -5587,5 +5587,31 @@
     "status": "Isolated browser DOM geometry verified at 320–15360 CSS px, including 5760/7680/15360px layout equivalents of 25% zoom on 1440/1920/3840px windows. Canvas is centered, at most 1920px, with readable chapter copy and contained hero controls.",
     "assets": "Existing landing artwork unchanged; image decoding not checked in this layout pass.",
     "limitations": "Browser zoom UI not exercised: layout-width equivalents only. No screenshots, real-device or live-service checks; authentication dialogs not rechecked."
+  },
+  "brandArtwork20261022": {
+    "assets": "/images/brand/dott-v1/",
+    "routes": [
+      "/settings/appearance",
+      "/settings/appearance/background",
+      "chat wallpaper",
+      "site sharing metadata",
+      "PWA installation"
+    ],
+    "status": "Generated assets inspected; runtime composition unverified",
+    "scope": "Manifest/favicon, default OG, default wallpaper; named Telegram themes and uploaded wallpapers preserved. Other illustrations not regenerated.",
+    "logoRevision": {
+      "assets": "/images/brand/dott-v3/",
+      "concept": "CoolVibes typographic wordmark and CV icon monogram; no mascot",
+      "surfaces": [
+        "public header/footer brand",
+        "PWA icons",
+        "favicon",
+        "OG",
+        "splash preview",
+        "notification icon"
+      ],
+      "status": "Generated art inspected; composed browser views unverified",
+      "selection": "User explicitly selected dott-v3 after reviewing refined-v4; all active brand references use dott-v3."
+    }
   }
 }

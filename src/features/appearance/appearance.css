@@ -7,9 +7,9 @@
 .cv-chat-wallpaper-pattern, .cv-chat-wallpaper-photo { position: absolute; inset: 0; }
 .cv-chat-wallpaper-photo { background-position: center; background-size: cover; }
 .cv-chat-wallpaper-photo[style*='blur'] { inset: -20px; }
-.cv-chat-wallpaper-pattern { background-image: url('/images/chat/telegram-pattern.svg'); background-repeat: repeat; background-position: left center; background-size: auto calc(500px + 40vh); mix-blend-mode: soft-light; }
+.cv-chat-wallpaper-pattern { background-image: url('/images/brand/dott-v1/chat-pattern.png'); background-repeat: repeat; background-position: left center; background-size: auto calc(500px + 40vh); mix-blend-mode: soft-light; }
 .cv-chat-wallpaper-tinted .cv-chat-wallpaper-pattern { filter: invert(1); }
-.cv-chat-wallpaper-night .cv-chat-wallpaper-pattern { background: #000; mask-image: linear-gradient(#fff, #fff), url('/images/chat/telegram-pattern.svg'); mask-size: 100% 100%, auto calc(500px + 40vh); mask-position: center, left center; mask-repeat: no-repeat, repeat; mask-composite: exclude; mix-blend-mode: normal; }
+.cv-chat-wallpaper-night .cv-chat-wallpaper-pattern { background: #000; mask-image: linear-gradient(#fff, #fff), url('/images/brand/dott-v1/chat-pattern.png'); mask-size: 100% 100%, auto calc(500px + 40vh); mask-position: center, left center; mask-repeat: no-repeat, repeat; mask-composite: exclude; mix-blend-mode: normal; }
 .cv-chat-bubble[data-side='incoming'] { background: var(--cv-chat-incoming) !important; color: var(--cv-chat-incoming-text) !important; border-color: transparent !important; }
 .cv-chat-bubble[data-side='outgoing'] { background: var(--cv-chat-outgoing-background, var(--cv-chat-outgoing)) !important; color: var(--cv-chat-outgoing-text) !important; border-color: transparent !important; }
 .cv-chat-bubble .cv-chat-message-text { font-size: var(--cv-chat-font-size); }

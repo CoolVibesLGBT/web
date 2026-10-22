@@ -137,7 +137,7 @@ export function PushNotificationSetupContext() {
 
             const notif = new Notification(firstUnread.title || "New Notification", {
               body: firstUnread.payload?.body || firstUnread.message || "You have new notifications",
-              icon: "https://coolvibes.lgbt/icons/icon_128x128.png"
+              icon: "https://coolvibes.lgbt/images/brand/dott-v3/icon-128.png"
             });
 
             notif.onclick = function (event) {
