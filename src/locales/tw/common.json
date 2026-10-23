@@ -363,6 +363,7 @@
     "video": "影片"
   },
   "wallet": {
+    "unavailable": "此服務暫不可用。",
     "title": "錢包",
     "overview": "總覽",
     "history": "歷史記錄",
@@ -889,5 +890,6 @@
   },
   "live": {
     "empty": "目前沒有直播。"
-  }
+  },
+  "tips": {"title": "傳送小費", "sent": "小費已傳送", "failed": "無法傳送小費，請重試。", "insufficient": "餘額不足"}
 }

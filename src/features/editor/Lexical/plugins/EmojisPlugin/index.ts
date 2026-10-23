@@ -12,6 +12,7 @@ import type {JSX} from 'react';
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import {TextNode} from 'lexical';
 import {useEffect} from 'react';
+import {emojiPattern} from '@/features/emoticons/emojiArtwork';
 
 import {$createEmojiNode, EmojiNode} from '../../nodes/EmojiNode';
 
@@ -24,6 +25,16 @@ const emojis: Map<string, [string, string]> = new Map([
 
 function $findAndTransformEmoji(node: TextNode): null | TextNode {
   const text = node.getTextContent();
+
+  const match = emojiPattern().exec(text);
+  if (match) {
+    const start = match.index;
+    const end = start + match[0].length;
+    const target = start === 0 ? node.splitText(end)[0] : node.splitText(start, end)[1];
+    const emojiNode = $createEmojiNode('emoji', match[0]).setFormat(node.getFormat()).setStyle(node.getStyle());
+    target.replace(emojiNode);
+    return emojiNode;
+  }
 
   for (let i = 0; i < text.length; i++) {
     const emojiData = emojis.get(text[i]) || emojis.get(text.slice(i, i + 2));

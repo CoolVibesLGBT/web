@@ -363,6 +363,7 @@
     "video": "Vídeo"
   },
   "wallet": {
+    "unavailable": "Este servicio aún no está disponible.",
     "title": "Billetera",
     "overview": "Resumen",
     "history": "Historial",
@@ -889,5 +890,6 @@
   },
   "live": {
     "empty": "No hay transmisiones en directo en este momento."
-  }
+  },
+  "tips": {"title": "Enviar propina", "sent": "Propina enviada", "failed": "No se pudo enviar la propina. Inténtalo de nuevo.", "insufficient": "Saldo insuficiente"}
 }

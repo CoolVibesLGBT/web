@@ -363,6 +363,7 @@
     "video": "Video"
   },
   "wallet": {
+    "unavailable": "Dieser Dienst ist noch nicht verfügbar.",
     "title": "Wallet",
     "overview": "Übersicht",
     "history": "Verlauf",
@@ -889,5 +890,6 @@
   },
   "live": {
     "empty": "Zurzeit keine Liveübertragungen."
-  }
+  },
+  "tips": {"title": "Trinkgeld senden", "sent": "Trinkgeld gesendet", "failed": "Trinkgeld konnte nicht gesendet werden. Bitte erneut versuchen.", "insufficient": "Unzureichendes Guthaben"}
 }

@@ -363,6 +363,7 @@
     "video": "동영상"
   },
   "wallet": {
+    "unavailable": "이 서비스는 아직 이용할 수 없습니다.",
     "title": "지갑",
     "overview": "개요",
     "history": "내역",
@@ -923,5 +924,6 @@
   },
   "live": {
     "empty": "현재 라이브 방송이 없습니다."
-  }
+  },
+  "tips": {"title": "팁 보내기", "sent": "팁을 보냈습니다", "failed": "팁을 보내지 못했습니다. 다시 시도해 주세요.", "insufficient": "잔액 부족"}
 }

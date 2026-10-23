@@ -1,0 +1,45 @@
+.cv-tip-trigger { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 44px; padding: .5rem .75rem; border-radius: var(--tg-radius-control); color: var(--color-brand); }
+.cv-tip-dialog > .cv-sheet-body { overflow-y: auto; overscroll-behavior: contain; }
+.cv-tip-dialog > .cv-sheet-header > .cv-icon-button { flex: 0 0 44px; transform: none; transition: background-color .15s; }
+.cv-tip-dialog > .cv-sheet-actions > button, .cv-tip-funding > button { width: 100%; display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px; }
+.cv-tip-recipient { display: flex; align-items: center; gap: .75rem; padding-block: .5rem; }
+.cv-tip-recipient > img, .cv-tip-avatar { width: 48px; height: 48px; flex: 0 0 48px; border-radius: 50%; object-fit: cover; }
+.cv-tip-avatar { display: grid; place-items: center; background: var(--color-brand); color: #fff; font-size: 1.25rem; }
+.cv-tip-recipient > div { display: flex; flex-direction: column; min-width: 0; overflow-wrap: anywhere; }
+.cv-tip-recipient strong { font-weight: 500; }
+.cv-tip-recipient > div > span, .cv-tip-balance { color: var(--cv-neutral-2); font-size: .875rem; }
+.cv-tip-balance { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+.cv-tip-balance > bdi { color: var(--cv-neutral-1); font-variant-numeric: tabular-nums; }
+.cv-tip-amounts { min-width: 0; margin: 0; padding: 0; border: 0; }
+.cv-tip-amounts legend { padding: .5rem 0 .75rem; color: var(--color-brand); font-weight: 500; }
+.cv-tip-amount-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .625rem; margin-inline: -1rem; padding: 1rem; background: var(--cv-surface-2); }
+.cv-tip-amount-grid > button, .cv-tip-ratios > button { min-height: 44px; padding: .5rem .25rem; border: 0; border-radius: .625rem; background: var(--cv-surface-2); color: var(--cv-neutral-1); font-size: .875rem; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.cv-tip-amount-grid > button:not(:disabled):hover, .cv-tip-ratios > button:not(:disabled):hover { background: var(--cv-list-hover); }
+.cv-tip-amount-grid > button[aria-pressed='true'] { background: var(--cv-list-hover); }
+.cv-tip-custom { display: flex; flex-direction: column; gap: .5rem; margin-top: 1rem; }
+.cv-tip-ratios { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
+.cv-tip-error { color: var(--cv-critical); margin: 0; font-size: .875rem; overflow-wrap: anywhere; }
+.cv-tip-success { display: flex; align-items: center; flex-direction: column; gap: .75rem; padding-block: 2rem; text-align: center; overflow-wrap: anywhere; }
+.cv-tip-success > svg { width: 48px; height: 48px; color: var(--color-brand); }
+.cv-tip-success > strong { font-size: 1.5rem; font-weight: 500; }
+.cv-tip-spinner { width: 20px; height: 20px; animation: cv-tip-spin 1s linear infinite; }
+@keyframes cv-tip-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .cv-tip-spinner { animation: none; } }
+
+/* tweb stargiftsGrid.module.scss: three columns, 10px gaps/radii, sticker and price pill. */
+.cv-tip-amount-grid > button { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: .625rem; padding: .25rem .625rem .625rem; background: var(--cv-popup-background); transition: background-color .15s; }
+.cv-tip-gift-art { display: grid; place-items: center; width: 100%; max-width: 84px; aspect-ratio: 1; pointer-events: none; }
+.cv-tip-gift-art > canvas { width: 100% !important; height: auto !important; aspect-ratio: 1; }
+.cv-tip-gift-price { display: inline-flex; align-items: center; justify-content: center; max-width: 100%; padding: .4375rem .625rem; border-radius: 9999px; background: var(--cv-list-hover); color: var(--color-brand); font-size: .8125rem; line-height: 1.15; font-weight: 500; }
+.cv-tip-gift-check { position: absolute; inset-block-start: .375rem; inset-inline-start: .375rem; display: grid; place-items: center; width: 1.25rem; height: 1.25rem; border-radius: 50%; background: var(--color-brand); color: #fff; }
+.cv-tip-gift-check > svg { width: .875rem; height: .875rem; }
+.cv-tip-recipient { flex-direction: column; text-align: center; }
+.cv-tip-recipient > img, .cv-tip-recipient > .cv-tip-avatar { width: 64px; height: 64px; flex-basis: 64px; }
+@media (max-width: 480px) { .cv-tip-gift-art { max-width: 72px; } }
+
+.cv-tip-custom-choice { display: flex; align-items: center; gap: .75rem; width: 100%; min-height: 48px; margin-top: .5rem; padding: .75rem .5rem; border-radius: .625rem; color: var(--color-brand); text-align: start; }
+.cv-tip-custom-choice > span { flex: 1; }
+.cv-tip-custom-choice > svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+.cv-tip-funding { width: 100%; display: flex; flex-direction: column; gap: .625rem; }
+.cv-tip-funding > p { margin: 0; color: var(--cv-neutral-2); text-align: center; font-size: .875rem; }
+.cv-tip-funding > button > svg { width: 1.25rem; height: 1.25rem; }

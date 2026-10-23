@@ -1,4 +1,8 @@
+import { EmojiNode } from '@/features/editor/Lexical/nodes/EmojiNode';
+import EmojisPlugin from '@/features/editor/Lexical/plugins/EmojisPlugin';
 import './post-card.css';
+import { PostMediaContext } from './PostMediaContext';
+import ViewOnceDust from '@/features/chat/ViewOnceDust';
 import React, { useState, useEffect, useCallback, useMemo, useRef, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { MessageCircle, Share, Bookmark, MapPin, Calendar, X, ChevronLeft, ChevronRight, CircleCheck, CheckSquare, ListOrdered, Scale, BarChart3, Loader2, ExternalLink, Sparkles, Globe, Users, HandCoins, Heart, HeartOff, Banana, MoreVertical, Trash2, Flag, Home, Car, Building2, Wallet, Zap, MessageSquare, Banknote, Droplet, Feather, Dumbbell, FlaskRound, Clock, Moon, Coffee, Smile, ShieldCheck, Hand, Eye } from 'lucide-react';
@@ -391,7 +395,7 @@ const createPostLexicalTheme = (theme: ThemeMode) => ({
 const createPostLexicalEditorConfig = (theme: ThemeMode, namespace = "CoolVibesEditorEx") => ({
   namespace,
   editable: true,
-  nodes: [HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode, MentionNode, ImageNode, YouTubeNode, TweetNode, MetadataNode],
+  nodes: [EmojiNode, HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode, MentionNode, ImageNode, YouTubeNode, TweetNode, MetadataNode],
   theme: createPostLexicalTheme(theme),
   onError(error: Error) {
     console.error("Lexical Error:", error);
@@ -443,7 +447,7 @@ export const PostLexicalContent = React.memo(({
   theme,
   className = 'relative',
   contentEditableClassName = 'editor-input lexical-editor py-0 px-0',
-  placeholder = 'Loading...',
+  placeholder = null,
 }: {
   content: unknown
   theme: ThemeMode
@@ -457,35 +461,38 @@ export const PostLexicalContent = React.memo(({
   );
 
   return (
-    <LexicalComposer initialConfig={editorConfig}>
-      <PostContentEditor content={content} />
-      <div className={className}>
-        <HashtagPlugin />
-        <ListPlugin />
-        <LinkPlugin />
-        <YouTubePlugin />
-        <ImagesPlugin captionsEnabled={false} />
-        <NewMentionsPlugin />
+    <PostMediaContext.Provider value={true}>
+      <LexicalComposer initialConfig={editorConfig}>
+        <PostContentEditor content={content} />
+        <div className={className}>
+          <HashtagPlugin />
+          <EmojisPlugin />
+          <ListPlugin />
+          <LinkPlugin />
+          <YouTubePlugin />
+          <ImagesPlugin captionsEnabled={false} />
+          <NewMentionsPlugin />
 
-        <RichTextPlugin
-          contentEditable={
-            <ContentEditable
-              className={contentEditableClassName}
-            />
-          }
-          placeholder={
-            placeholder ? (
-              <div className="pt-[24px] rounded-sm z-0 p-0 editor-placeholder w-full h-full text-start flex justify-start items-start">
-                {placeholder}
-              </div>
-            ) : (
-              <div />
-            )
-          }
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-      </div>
-    </LexicalComposer>
+          <RichTextPlugin
+            contentEditable={
+              <ContentEditable
+                className={contentEditableClassName}
+              />
+            }
+            placeholder={
+              placeholder ? (
+                <div className="pt-[24px] rounded-sm z-0 p-0 editor-placeholder w-full h-full text-start flex justify-start items-start">
+                  {placeholder}
+                </div>
+              ) : (
+                <div />
+              )
+            }
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+        </div>
+      </LexicalComposer>
+    </PostMediaContext.Provider>
   );
 });
 
@@ -518,6 +525,7 @@ const Post: React.FC<PostProps> = ({
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
+  const [revealedPhotos, setRevealedPhotos] = useState<Set<string>>(new Set());
   const [pressingChoiceId, setPressingChoiceId] = useState<string | null>(null);
   const [authorAvatarFailed, setAuthorAvatarFailed] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
@@ -541,6 +549,7 @@ const Post: React.FC<PostProps> = ({
   const { user } = useAuth();
   const { data: appData, defaultLanguage } = useApp();
   const { settings } = useSettings();
+  useEffect(() => { setRevealedPhotos(new Set()); }, [post.id, settings.blurPhotos]);
   const { t, i18n } = useTranslation('common');
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Leaflet.Map | null>(null);
@@ -1892,23 +1901,28 @@ const Post: React.FC<PostProps> = ({
     }
 
     const isLoaded = loadedImages.has(imageUrl);
+    const revealKey = `${post.id}:${attachment.id}`;
+    const concealed = settings.blurPhotos && !revealedPhotos.has(revealKey);
     const galleryIndex = galleryImageIndexById.get(attachment.id) ?? -1;
 
     return (
-      <div key={key} className={containerClassName}>
+      <div key={key} className={`${containerClassName} cv-post-photo`} data-concealed={concealed || undefined}>
         {!isLoaded && <ImageShimmer className="absolute inset-0 h-full w-full" />}
         <img
           src={imageUrl}
           alt={alt}
-          className={`${imageClassName} ${!isLoaded ? 'opacity-0' : 'opacity-100'} ${settings.blurPhotos ? 'blur-xl scale-110' : ''}`}
+          className={`${imageClassName} ${!isLoaded ? 'opacity-0' : 'opacity-100'}`}
           onLoad={() => handleImageLoad(imageUrl)}
           onClick={(e) => {
             e.stopPropagation();
-            if (galleryIndex >= 0) {
+            if (concealed) {
+              setRevealedPhotos(previous => new Set(previous).add(revealKey));
+            } else if (galleryIndex >= 0) {
               openGallery(galleryIndex);
             }
           }}
         />
+        {concealed && isLoaded && <ViewOnceDust />}
       </div>
     );
   };
@@ -2284,26 +2298,31 @@ const Post: React.FC<PostProps> = ({
                 }
 
                 const isLoaded = loadedImages.has(imageUrl);
+                const revealKey = `${post.id}:${attachment.id}`;
+                const concealed = settings.blurPhotos && !revealedPhotos.has(revealKey);
                 const galleryIndex = galleryImageIndexById.get(attachment.id) ?? -1;
 
                 return (
                   <>
                     {videoRender}
                     <div className="grid grid-cols-1 gap-2">
-                      <div className="w-full  relative ">
+                      <div className="cv-post-photo relative mx-auto w-fit max-w-full overflow-hidden rounded-2xl" data-concealed={concealed || undefined}>
                         {!isLoaded && <ImageShimmer className="absolute inset-0 w-full h-full" />}
                         <img
                           src={imageUrl}
                           alt="Post attachment"
-                          className={`mx-auto  rounded-2xl  max-h-[80dvh] aspect-[9/16]  cursor-pointer hover:opacity-90 transition-all duration-300 ${!isLoaded ? 'opacity-0' : 'opacity-100'} ${settings.blurPhotos ? 'blur-xl scale-110' : ''}`}
+                          className={`mx-auto  rounded-2xl  max-h-[80dvh] aspect-[9/16]  cursor-pointer hover:opacity-90 transition-all duration-300 ${!isLoaded ? 'opacity-0' : 'opacity-100'}`}
                           onLoad={() => handleImageLoad(imageUrl)}
                           onClick={(e) => {
                             e.stopPropagation();
-                            if (galleryIndex >= 0) {
+                            if (concealed) {
+                              setRevealedPhotos(previous => new Set(previous).add(revealKey));
+                            } else if (galleryIndex >= 0) {
                               openGallery(galleryIndex);
                             }
                           }}
                         />
+                        {concealed && isLoaded && <ViewOnceDust />}
                       </div>
                     </div>
                   </>

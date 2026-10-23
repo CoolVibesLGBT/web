@@ -1,3 +1,4 @@
+import Emoji from './Emoji';
 import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 // Shared React adaptation of tweb's emoticonsDropdown tabs/search/recent selection.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, forwardRef, type HTMLAttributes } from 'react';
@@ -34,7 +35,7 @@ export default function EmoticonPicker({ isOpen, onClose, onSelect, onBackspace,
   isOpen: boolean; onClose: () => void; onSelect: (selection: EmoticonSelection) => void;
   initialTab?: 'emoji' | 'stickers' | 'gifs';
   emojiOnly?: boolean;
-  presentation?: 'sheet' | 'popover'; anchor?: HTMLElement | null;
+  presentation?: 'sheet' | 'popover' | 'inline'; anchor?: HTMLElement | null;
   onBackspace?: () => void; canBackspace?: boolean;
 }) {
   const { t } = useTranslation('common');
@@ -129,11 +130,11 @@ export default function EmoticonPicker({ isOpen, onClose, onSelect, onBackspace,
         <button type="button" aria-label={t('emoticons.recent')} aria-pressed={pack === 'recent'} onClick={() => setPack('recent')}><TelegramIcon name="recent" /></button>
         {stickerSets.map(set => <button type="button" key={set.id} title={set.title} aria-label={set.title} aria-pressed={pack === set.id} onClick={() => setPack(set.id)}><StickerMedia document={set.documents[0]} size={32} /></button>)}
       </div>}
-      {tab !== 'stickers' && recentItems.length > 0 && <section aria-label={t('emoticons.recent')} className="cv-emoticon-recent">{recentItems.map((item, index) => <button type="button" key={index} onClick={() => choose(item)} aria-label={item.kind === 'emoji' ? item.emoji : `${t(`emoticons.${item.kind === 'gif' ? 'gifs' : 'stickers'}`)} ${index + 1}`}>{item.kind === 'emoji' ? item.emoji : item.kind === 'sticker' ? <StickerMedia document={item} size={56} /> : <GifMedia document={item} />}</button>)}</section>}
+      {tab !== 'stickers' && recentItems.length > 0 && <section aria-label={t('emoticons.recent')} className="cv-emoticon-recent">{recentItems.map((item, index) => <button type="button" key={index} onClick={() => choose(item)} aria-label={item.kind === 'emoji' ? item.emoji : `${t(`emoticons.${item.kind === 'gif' ? 'gifs' : 'stickers'}`)} ${index + 1}`}>{item.kind === 'emoji' ? <Emoji>{item.emoji}</Emoji> : item.kind === 'sticker' ? <StickerMedia document={item} size={56} /> : <GifMedia document={item} />}</button>)}</section>}
       {!emojiOnly && tab === 'emoji' && suggested && stickerSuggestions(suggested).length > 0 && <section className="cv-emoticon-suggestions" aria-label={t('emoticons.stickers')}>{stickerSuggestions(suggested).map(sticker => <EmoticonTile className="cv-sticker-item" key={sticker.id} label={`${t('emoticons.stickers')} ${suggested}`} onSelect={() => choose(sticker)} onHold={() => setPreview(sticker)} onHoldEnd={() => setPreview(null)}><StickerMedia document={sticker} size={72} /></EmoticonTile>)}</section>}
       <div className="cv-emoticon-results" aria-busy={loading}>
         {tab === 'stickers' && stickers.length === 0 && <AnimatedEmptyState compact title={t('emoticons.no_stickers')} />}
-        {tab === 'emoji' ? <VirtuosoGrid key={category + query} data={emojis} components={COMPONENTS} itemContent={(_, item) => <EmoticonTile className="cv-emoji-item" label={item.short_name} onSelect={() => choose({ kind: 'emoji', emoji: emojiFor(item) })} onHold={anchor => { if (toneVariants(item).length > 1) setTonePicker({ item, anchor }); }}>{emojiFor(item)}</EmoticonTile>} /> : tab === 'stickers' ? <VirtuosoGrid key={query + stickerGroup + pack} data={stickers} components={COMPONENTS} itemContent={(_, item) => <EmoticonTile className="cv-sticker-item" label={`${t('emoticons.stickers')} ${item.emoji}`} onSelect={() => choose(item)} onHold={() => setPreview(item)} onHoldEnd={() => setPreview(null)}><StickerMedia key={item.id} document={item} size={72} /></EmoticonTile>} /> : <>
+        {tab === 'emoji' ? <VirtuosoGrid key={category + query} data={emojis} components={COMPONENTS} itemContent={(_, item) => <EmoticonTile className="cv-emoji-item" label={item.short_name} onSelect={() => choose({ kind: 'emoji', emoji: emojiFor(item) })} onHold={anchor => { if (toneVariants(item).length > 1) setTonePicker({ item, anchor }); }}><Emoji>{emojiFor(item)}</Emoji></EmoticonTile>} /> : tab === 'stickers' ? <VirtuosoGrid key={query + stickerGroup + pack} data={stickers} components={COMPONENTS} itemContent={(_, item) => <EmoticonTile className="cv-sticker-item" label={`${t('emoticons.stickers')} ${item.emoji}`} onSelect={() => choose(item)} onHold={() => setPreview(item)} onHoldEnd={() => setPreview(null)}><StickerMedia key={item.id} document={item} size={72} /></EmoticonTile>} /> : <>
           {failed ? <div className="cv-emoticon-feedback" role="alert"><p>{t('emoticons.gif_unavailable')}</p><button type="button" onClick={() => setRetry(value => value + 1)}>{t('emoticons.retry')}</button></div> : !loading && gifRows.length === 0 ? <AnimatedEmptyState compact title={t('search.no_results')} /> : <Virtuoso key={query} scrollerRef={element => { gifScroller.current = element instanceof HTMLElement ? element : null; }} computeItemKey={(_, row) => row[0].id} data={gifRows} itemContent={(_, row) => <div className="cv-gif-row">{row.map(item => <button key={item.id} type="button" className="cv-gif-item" aria-label={t('emoticons.gifs')} onClick={() => choose(item)}><GifMedia document={item} /></button>)}</div>} atBottomStateChange={setGifsAtBottom} />}
           {loading && <div className="cv-emoticon-loading" role="status">{t('emoticons.loading')}</div>}
         </>}
@@ -143,7 +144,7 @@ export default function EmoticonPicker({ isOpen, onClose, onSelect, onBackspace,
         const updated = { ...tones, [tonePicker.item.unified]: index }; setTones(updated);
         try { localStorage.setItem('cv.emoticons.tones.v1', JSON.stringify(updated)); } catch { /* Keep session preference. */ }
         setTonePicker(null);
-      }}>{emoji}</button>)}</div></Popover>}
+      }}><Emoji>{emoji}</Emoji></button>)}</div></Popover>}
       <div className="cv-emoticon-toolbar emoji-tabs">
         <button type="button" aria-label={t('messages.search')} onClick={() => search.current?.focus()}><TelegramIcon name="search" /></button>
         <ViewTabs items={[{ id: 'emoji', label: t('messages.emoji'), icon: <TelegramIcon name="smile" /> }, { id: 'stickers', label: t('emoticons.stickers'), icon: <TelegramIcon name="stickers_face" /> }, { id: 'gifs', label: t('emoticons.gifs'), icon: <TelegramIcon name="gifs" /> }].filter(item => !emojiOnly || item.id === 'emoji')} activeId={tab} onSelect={id => { setTab(id); searchFor(''); }} label={t('emoticons.title')} />
@@ -151,6 +152,7 @@ export default function EmoticonPicker({ isOpen, onClose, onSelect, onBackspace,
       </div>
     </div>;
   if (!isOpen) return null;
+  if (presentation === 'inline') return <div className="cv-emoticon-inline">{content}</div>;
   return presentation === 'popover' && typeof HTMLElement.prototype.showPopover === 'function'
     ? <Popover anchor={anchor} align="end" onClose={onClose} label={t('emoticons.title')} className="emoji-dropdown" widthRem={22.4705882353} heightRem={24.7058823529}>{content}</Popover>
     : <Sheet isOpen={isOpen} onClose={onClose} title={t('emoticons.title')}>{content}</Sheet>;

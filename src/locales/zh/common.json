@@ -363,6 +363,7 @@
     "video": "视频"
   },
   "wallet": {
+    "unavailable": "此服务暂不可用。",
     "title": "钱包",
     "overview": "概览",
     "history": "历史",
@@ -889,5 +890,6 @@
   },
   "live": {
     "empty": "目前没有直播。"
-  }
+  },
+  "tips": {"title": "发送打赏", "sent": "打赏已发送", "failed": "无法发送打赏，请重试。", "insufficient": "余额不足"}
 }

@@ -1,0 +1,32 @@
+.cv-wallet-page { width: 100%; max-width: 52rem; margin-inline: auto; color: var(--cv-neutral-1); background: var(--cv-page-bg); padding-bottom: 2rem; }
+.cv-wallet-page > .cv-navigation-bar { position: relative; }
+.cv-wallet-main, .cv-wallet-surface, .cv-wallet-content { min-width: 0; width: 100%; }
+.cv-wallet-balance-card { background: var(--cv-card-bg-solid); border-radius: var(--tg-radius-section); overflow: hidden; }
+.cv-wallet-balance-card h2 { font-size: 2rem; font-weight: 500; line-height: 1.25; overflow-wrap: anywhere; }
+.cv-wallet-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin-top: 1.5rem; }
+.cv-wallet-actions > button { display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px; }
+.cv-wallet-dialog > .cv-sheet-body { overflow-y: auto; overscroll-behavior: contain; padding-block: .5rem 1rem; }
+.cv-wallet-dialog > .cv-sheet-header > .cv-icon-button { flex: 0 0 44px; transform: none; }
+.cv-wallet-dialog > .cv-sheet-actions > button { width: 100%; }
+.cv-wallet-dialog :is(input,select,textarea) { min-height: 48px; padding: .75rem; border: 1px solid var(--cv-inner-border); border-radius: var(--tg-radius-control); background: var(--cv-card-bg-solid); color: var(--cv-neutral-1); font: inherit; }
+.cv-wallet-dialog label { color: var(--cv-neutral-2); font-size: .875rem; font-weight: 400; }
+.cv-wallet-dialog button:not(.gpay-button) { min-height: 44px; }
+.cv-wallet-dialog :is(h3,h4) { font-weight: 500; letter-spacing: 0; }
+.cv-wallet-dialog .font-bold { font-weight: 500; }
+.cv-wallet-dialog .border-2 { border-width: 1px; }
+.cv-wallet-dialog :is(.bg-white,.bg-gray-900,.cv-card-surface-solid):not(button) { background: var(--cv-card-bg-solid); }
+.cv-wallet-dialog :is(.bg-gray-50,.bg-gray-800):not(button) { background: var(--cv-surface-2); }
+.cv-wallet-dialog :is(.text-gray-900,.text-white):not(button) { color: var(--cv-neutral-1); }
+.cv-wallet-dialog :is(.text-gray-400,.text-gray-500,.text-gray-600) { color: var(--cv-neutral-2); }
+.cv-wallet-unavailable { padding: .75rem 1rem; border-radius: .625rem; background: var(--cv-surface-2); color: var(--cv-neutral-2); font-size: .875rem; line-height: 1.5; }
+.cv-wallet-dialog .cv-wallet-unavailable { margin: 0; }
+.cv-wallet-dialog .space-y-4 > div:has(> input) { min-width: 0; }
+.cv-wallet-transaction { border: 0 !important; background: var(--cv-card-bg-solid) !important; border-radius: var(--tg-radius-control); }
+@media (max-width: 380px) { .cv-wallet-actions { grid-template-columns: minmax(0, 1fr); } }
+
+.cv-wallet-dialog .cv-wallet-choice { border: 0; box-shadow: none; background: var(--cv-surface-2); color: var(--cv-neutral-1); }
+.cv-wallet-dialog .cv-wallet-choice[class*="ring-2"] { background: var(--cv-list-hover); color: var(--cv-primary); }
+.cv-wallet-dialog .cv-wallet-choice:not(:disabled):hover { background: var(--cv-list-hover); }
+.cv-wallet-dialog .cv-wallet-choice > div { color: inherit; background: transparent; }
+.cv-wallet-dialog .text-xs { font-size: .8125rem; }
+.cv-wallet-dialog button:disabled { cursor: not-allowed; opacity: .5; }

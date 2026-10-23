@@ -1,3 +1,4 @@
+import { EmojiText } from '@/features/emoticons/Emoji';
 import { ChatMediaImage, ChatMediaVideo } from '@/features/chat/ProtectedChatMedia';
 import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
@@ -698,7 +699,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
         {/* Text Content */}
         {!isHiddenDisappearing && msg.text && (
           <div className="cv-chat-message-text text-sm leading-relaxed mb-1 whitespace-pre-wrap break-words">
-            {msg.text}
+            <EmojiText>{msg.text}</EmojiText>
             {!msg.isDisappearing && <span className="cv-message-time-space" aria-hidden="true" />}
           </div>
         )}

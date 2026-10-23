@@ -1,3 +1,4 @@
+import './view-once-dust.css'
 import { useEffect, useRef } from 'react'
 import DotRendererCore, { buildDotRendererConfig } from '@/features/chat/spoiler/DotRendererCore'
 

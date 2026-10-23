@@ -363,6 +363,7 @@
     "video": "Video"
   },
   "wallet": {
+    "unavailable": "Layanan ini belum tersedia.",
     "title": "Dompet",
     "overview": "Ringkasan",
     "history": "Riwayat",
@@ -889,5 +890,6 @@
   },
   "live": {
     "empty": "Belum ada siaran langsung saat ini."
-  }
+  },
+  "tips": {"title": "Kirim tip", "sent": "Tip terkirim", "failed": "Tip tidak dapat dikirim. Coba lagi.", "insufficient": "Saldo tidak cukup"}
 }

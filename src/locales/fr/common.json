@@ -363,6 +363,7 @@
     "video": "Vidéo"
   },
   "wallet": {
+    "unavailable": "Ce service n’est pas encore disponible.",
     "title": "Portefeuille",
     "overview": "Aperçu",
     "history": "Historique",
@@ -889,5 +890,6 @@
   },
   "live": {
     "empty": "Aucun direct pour le moment."
-  }
+  },
+  "tips": {"title": "Envoyer un pourboire", "sent": "Pourboire envoyé", "failed": "Impossible d’envoyer le pourboire. Réessayez.", "insufficient": "Solde insuffisant"}
 }

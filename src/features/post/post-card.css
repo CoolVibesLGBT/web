@@ -20,3 +20,11 @@
 .cv-post-actions button[aria-pressed='true'] { background: var(--cv-list-hover); }
 @container (min-width: 24rem) { .cv-post-actions { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 @container (max-width: 24rem) { .cv-post-header { flex-wrap: wrap; } .cv-post-identity { flex-basis: 100%; } .cv-post-header-actions { margin-inline-start: auto; } }
+
+/* Match the chat media spoiler while retaining the post gallery click target. */
+.cv-post-photo { position: relative; isolation: isolate; overflow: hidden; }
+.cv-post-photo[data-concealed] > img { filter: blur(1rem); transform: scale(1.12); }
+
+.cv-post-inline-media { position: relative; isolation: isolate; overflow: hidden; width: fit-content; max-width: 100%; border-radius: .75rem; }
+.cv-post-inline-media[data-concealed] { cursor: pointer; }
+.cv-post-inline-media[data-concealed] > img { filter: blur(1rem); transform: scale(1.12); }

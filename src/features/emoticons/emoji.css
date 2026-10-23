@@ -1,0 +1,4 @@
+.cv-emoji-art { display: inline-block; width: 1em; height: 1em; vertical-align: -.125em; line-height: 1; background-repeat: no-repeat; color: transparent !important; font-family: sans-serif; white-space: nowrap; overflow: hidden; }
+.cv-emoji-art > .emoji-inner { opacity: 0; }
+.cv-emoticon-inline { width: 100%; min-width: 0; height: 24rem; max-height: 60dvh; overflow: hidden; border-radius: var(--tg-radius-control); background: var(--cv-card-bg-solid); }
+.cv-emoticon-inline > .cv-emoticon-picker { height: 100%; }

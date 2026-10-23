@@ -1,3 +1,7 @@
+import './wallet.css';
+import { QRCodeSVG } from 'qrcode.react';
+import { createPortal } from 'react-dom';
+import { Sheet, NavigationBar, usePageBack } from '@/components/ui/Interface';
 import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
 import React, { useState, useEffect, useRef } from 'react';
@@ -24,7 +28,6 @@ import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 import Container from '../components/ui/Container';
 import { api } from '../services/api';
-import { QRCodeSVG } from 'qrcode.react';
 
 // Crypto currency types
 type CryptoCurrency = 'BNB' | 'USDT' | 'USDC' | 'ETH' | 'CHZ' | 'LGBT' | 'SOL';
@@ -137,7 +140,6 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
   const [showGooglePayProviderDropdown, setShowGooglePayProviderDropdown] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [withdrawAddress, setWithdrawAddress] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [depositPaymentMethod, setDepositPaymentMethod] = useState<'iban' | 'crypto' | 'google_pay'>('google_pay');
@@ -604,26 +606,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
   // Get packages from API or use empty array
   const packages: Package[] = paymentMethods?.packages || [];
 
-  // Mock transaction history - Replace with actual API calls
-  const [transactions] = useState<Transaction[]>([
-    {
-      id: '1',
-      type: 'deposit',
-      currency: 'LGBT',
-      amount: '1000',
-      amountUSD: '-',
-      status: 'completed',
-      timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      txHash: 'https://coolvibes.lgbt'
-    },
-  ]);
-
-
-  // Get deposit address - Single address for all currencies - Replace with actual API calls
-  const getDepositAddress = (): string => {
-    // Single address for all currencies - Replace with actual API calls
-    return 'AuxPrz4dnh7KfytKZPgcrGgch1BhkLW3hu1dRnNgTByA';
-  };
+  // No history endpoint is connected yet; never display fixture transactions as real.
+  const transactions: Transaction[] = [];
 
   const copyToClipboard = async (text: string, type: string) => {
     try {
@@ -632,27 +616,6 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
       setTimeout(() => setCopiedAddress(null), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
-    }
-  };
-
-  const handleWithdraw = async () => {
-    if (!withdrawAmount || !withdrawAddress) {
-      return;
-    }
-
-    setIsProcessing(true);
-    try {
-      // TODO: Implement withdraw logic
-      // await api.withdraw(withdrawCurrency, withdrawAmount, withdrawAddress);
-
-      // Reset form
-      setWithdrawAmount('');
-      setWithdrawAddress('');
-      setShowWithdrawModal(false);
-    } catch (error) {
-      console.error('Withdraw failed:', error);
-    } finally {
-      setIsProcessing(false);
     }
   };
 
@@ -710,16 +673,84 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
     });
   };
 
+  const goBack = usePageBack();
+  const closeDeposit = () => {
+              setShowDepositModal(false);
+              setSelectedPackage(null);
+              setGooglePayAmount('');
+              setDepositStep('payment_method');
+              setDefaultPaymentMethod();
+              setShowPackageDropdown(false);
+              setShowPaymentMethodDropdown(false);
+              setShowDepositDropdown(false);
+              setShowGooglePayProviderDropdown(false);
+              // Reset Google Pay states
+              setSelectedGooglePayProvider(null);
+              setGooglePayReady(false);
+              setIsGooglePayLoading(false);
+              setIsGooglePayProcessing(false);
+              if (googlePayButtonRef.current) {
+                googlePayButtonRef.current.innerHTML = '';
+              }
+  };
+  const backDeposit = () => {
+                      if (depositStep === 'payment_method') {
+                        setShowDepositModal(false);
+                        setSelectedPackage(null);
+                        setGooglePayAmount('');
+
+                        setDepositStep('payment_method');
+                        setDefaultPaymentMethod();
+                        setShowGooglePayProviderDropdown(false);
+                        // Reset Google Pay states
+                        setSelectedGooglePayProvider(null);
+                        setGooglePayReady(false);
+                        setIsGooglePayLoading(false);
+                        setIsGooglePayProcessing(false);
+                        if (googlePayButtonRef.current) {
+                          googlePayButtonRef.current.innerHTML = '';
+                        }
+                      } else if (depositStep === 'package') {
+                        setDepositStep('payment_method');
+                        setSelectedPackage(null);
+                        setGooglePayAmount('');
+                      } else if (depositStep === 'payment_screen') {
+                        if (depositPaymentMethod === 'google_pay') {
+                          setDepositStep('package');
+                        } else {
+                          setDepositStep('payment_method');
+  
+                        }
+                      } else if (depositStep === 'success' || depositStep === 'error') {
+                        setShowDepositModal(false);
+                        setSelectedPackage(null);
+                        setGooglePayAmount('');
+
+                        setDepositStep('payment_method');
+                        setDefaultPaymentMethod();
+                        setShowGooglePayProviderDropdown(false);
+                        // Reset Google Pay states
+                        setSelectedGooglePayProvider(null);
+                        setGooglePayReady(false);
+                        setIsGooglePayLoading(false);
+                        setIsGooglePayProcessing(false);
+                        if (googlePayButtonRef.current) {
+                          googlePayButtonRef.current.innerHTML = '';
+                        }
+                      }
+  };
+
   const content = (
     <>
-      <div className="mx-auto w-full max-w-5xl px-1 pb-8 md:px-2">
-        <main className={`flex-1 w-full min-w-0 ${theme === 'dark' ? 'border-x border-white/10' : 'border-x border-gray-200/50'}`}>
-          <div className={`min-h-full ${theme === 'dark' ? 'cv-card-surface-solid' : 'bg-white'}`}>
-            <div className={`max-w-4xl mx-auto border-x ${theme === 'dark' ? 'border-white/10' : 'border-gray-200/50'}`}>
+      <div className="cv-wallet-page">
+        <NavigationBar title={t('wallet.title')} onBack={goBack} />
+        <main className="cv-wallet-main">
+          <div className="cv-wallet-surface">
+            <div className="cv-wallet-content">
               {/* Tabs — kept outside the motion.div below: framer-motion leaves an
                   inline transform on its element even at rest, which breaks
                   position:sticky on descendants (the tab bar needs to stick). */}
-              <div className="cv-tab-bar cv-tab-bar--top -mx-1 md:-mx-2">
+              <div className="cv-tab-bar cv-tab-bar--top">
                 <ViewTabs items={[
                     { id: 'overview', label: t('wallet.overview') || 'Overview' },
                     { id: 'history', label: t('wallet.history') || 'History' },
@@ -745,10 +776,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                         className="space-y-6"
                       >
                         {/* Balance Card */}
-                        <div className={`rounded-2xl overflow-hidden transition-all duration-200 ${theme === 'dark'
-                          ? 'bg-gradient-to-br from-gray-900/90 to-gray-800/50 border border-gray-800/60'
-                          : 'bg-white border border-gray-200/90'
-                          }`}>
+                        <div className="cv-wallet-balance-card">
                           <div className="p-6">
                             <div className="flex items-center justify-between mb-4">
                               <div>
@@ -765,7 +793,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="flex gap-3 mt-6">
+                            <div className="cv-wallet-actions">
                               <motion.button
                                 onClick={() => {
                                   setDepositStep('payment_method');
@@ -790,12 +818,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                   }
                                   setShowDepositModal(true);
                                 }}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition-all ${theme === 'dark'
-                                  ? 'bg-white text-black hover:bg-gray-200'
-                                  : 'bg-gray-900 text-white hover:bg-gray-800'
-                                  }`}
+                                className="cv-btn cv-btn-branded"
                               >
                                 <ArrowDownCircle className="w-5 h-5" />
                                 {t('wallet.deposit') || 'Deposit'}
@@ -805,12 +828,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                   setWithdrawCurrency('LGBT');
                                   setShowWithdrawModal(true);
                                 }}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition-all border-2 ${theme === 'dark'
-                                  ? 'bg-transparent border-gray-700 text-white hover:bg-gray-900/50'
-                                  : 'bg-transparent border-gray-300 text-gray-900 hover:bg-gray-50'
-                                  }`}
+                                className="cv-btn cv-btn-secondary"
                               >
                                 <ArrowUpCircle className="w-5 h-5" />
                                 {t('wallet.withdraw') || 'Withdraw'}
@@ -838,7 +856,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                 key={transaction.id}
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className={`rounded-xl overflow-hidden transition-all duration-200 ${theme === 'dark'
+                                className={`cv-wallet-transaction rounded-xl overflow-hidden transition-all duration-200 ${theme === 'dark'
                                   ? 'bg-gradient-to-br from-gray-900/90 to-gray-800/50 border border-gray-800/60'
                                   : 'bg-white border border-gray-200/90'
                                   }`}
@@ -900,7 +918,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                             ))}
                           </div>
                         ) : (
-                          <AnimatedEmptyState title={t('wallet.no_transactions')} />
+                          <AnimatedEmptyState title={t('wallet.unavailable')} />
                         )}
                       </motion.div>
                     )}
@@ -912,103 +930,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
         </main>
       </div>
 
-      {/* Deposit Modal */}
-      <AnimatePresence>
-        {showDepositModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            onClick={() => {
-              setShowDepositModal(false);
-              setSelectedPackage(null);
-              setGooglePayAmount('');
-              setDepositStep('payment_method');
-              setDefaultPaymentMethod();
-              setShowPackageDropdown(false);
-              setShowPaymentMethodDropdown(false);
-              setShowDepositDropdown(false);
-              setShowGooglePayProviderDropdown(false);
-              // Reset Google Pay states
-              setSelectedGooglePayProvider(null);
-              setGooglePayReady(false);
-              setIsGooglePayLoading(false);
-              setIsGooglePayProcessing(false);
-              if (googlePayButtonRef.current) {
-                googlePayButtonRef.current.innerHTML = '';
-              }
-            }}
-          >
-            <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/80' : 'bg-black/50'}`} />
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className={`relative w-full max-w-lg rounded-2xl ${theme === 'dark'
-                ? 'bg-gray-900 border border-gray-800'
-                : 'bg-white border border-gray-200'
-                }`}
-            >
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                    {t('wallet.deposit') || 'Deposit'}
-                  </h3>
-                  <button
-                    onClick={() => {
-                      if (depositStep === 'payment_method') {
-                        setShowDepositModal(false);
-                        setSelectedPackage(null);
-                        setGooglePayAmount('');
-
-                        setDepositStep('payment_method');
-                        setDefaultPaymentMethod();
-                        setShowGooglePayProviderDropdown(false);
-                        // Reset Google Pay states
-                        setSelectedGooglePayProvider(null);
-                        setGooglePayReady(false);
-                        setIsGooglePayLoading(false);
-                        setIsGooglePayProcessing(false);
-                        if (googlePayButtonRef.current) {
-                          googlePayButtonRef.current.innerHTML = '';
-                        }
-                      } else if (depositStep === 'package') {
-                        setDepositStep('payment_method');
-                        setSelectedPackage(null);
-                        setGooglePayAmount('');
-                      } else if (depositStep === 'payment_screen') {
-                        if (depositPaymentMethod === 'google_pay') {
-                          setDepositStep('package');
-                        } else {
-                          setDepositStep('payment_method');
-  
-                        }
-                      } else if (depositStep === 'success' || depositStep === 'error') {
-                        setShowDepositModal(false);
-                        setSelectedPackage(null);
-                        setGooglePayAmount('');
-
-                        setDepositStep('payment_method');
-                        setDefaultPaymentMethod();
-                        setShowGooglePayProviderDropdown(false);
-                        // Reset Google Pay states
-                        setSelectedGooglePayProvider(null);
-                        setGooglePayReady(false);
-                        setIsGooglePayLoading(false);
-                        setIsGooglePayProcessing(false);
-                        if (googlePayButtonRef.current) {
-                          googlePayButtonRef.current.innerHTML = '';
-                        }
-                      }
-                    }}
-                    className={`p-2 rounded-lg ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'}`}
-                  >
-                    <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`} />
-                  </button>
-                </div>
-
+      {showDepositModal && createPortal(<Sheet isOpen={showDepositModal} onClose={closeDeposit} title={t('wallet.deposit')} className="cv-panel-sheet cv-wallet-dialog" headerActions={depositStep !== 'payment_method' && depositStep !== 'success' && depositStep !== 'error' ? <button type="button" className="cv-icon-button" onClick={backDeposit} aria-label={t('app.back')}><ArrowLeft aria-hidden="true" /></button> : undefined}>
                 <AnimatePresence mode="wait">
                   {/* Step 1: Payment Method Selection */}
                   {depositStep === 'payment_method' && (
@@ -1112,15 +1034,15 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                         }
                                       }}
                                       disabled={!paymentMethods?.is_iban_enabled}
-                                      whileHover={paymentMethods?.is_iban_enabled ? { scale: 1.05, y: -2 } : {}}
-                                      whileTap={paymentMethods?.is_iban_enabled ? { scale: 0.92 } : {}}
+
+
                                       transition={{
                                         type: "spring",
                                         stiffness: 400,
                                         damping: 20,
                                         scale: { duration: 0.1 }
                                       }}
-                                      className={`relative aspect-square rounded-xl transition-all duration-150 flex flex-col items-center justify-center gap-2 ${!paymentMethods?.is_iban_enabled
+                                      className={`cv-wallet-choice relative aspect-square rounded-xl transition-all duration-150 flex flex-col items-center justify-center gap-2 ${!paymentMethods?.is_iban_enabled
                                         ? 'opacity-50 cursor-not-allowed'
                                         : ''
                                         } ${depositPaymentMethod === 'iban' && paymentMethods?.is_iban_enabled
@@ -1162,15 +1084,15 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                         }
                                       }}
                                       disabled={!paymentMethods?.is_crypto_enabled}
-                                      whileHover={paymentMethods?.is_crypto_enabled ? { scale: 1.05, y: -2 } : {}}
-                                      whileTap={paymentMethods?.is_crypto_enabled ? { scale: 0.92 } : {}}
+
+
                                       transition={{
                                         type: "spring",
                                         stiffness: 400,
                                         damping: 20,
                                         scale: { duration: 0.1 }
                                       }}
-                                      className={`relative aspect-square rounded-xl transition-all duration-150 flex flex-col items-center justify-center gap-2 ${!paymentMethods?.is_crypto_enabled
+                                      className={`cv-wallet-choice relative aspect-square rounded-xl transition-all duration-150 flex flex-col items-center justify-center gap-2 ${!paymentMethods?.is_crypto_enabled
                                         ? 'opacity-50 cursor-not-allowed'
                                         : ''
                                         } ${depositPaymentMethod === 'crypto' && paymentMethods?.is_crypto_enabled
@@ -1212,15 +1134,15 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                         }
                                       }}
                                       disabled={!paymentMethods?.is_google_pay_enabled}
-                                      whileHover={paymentMethods?.is_google_pay_enabled ? { scale: 1.05, y: -2 } : {}}
-                                      whileTap={paymentMethods?.is_google_pay_enabled ? { scale: 0.92 } : {}}
+
+
                                       transition={{
                                         type: "spring",
                                         stiffness: 400,
                                         damping: 20,
                                         scale: { duration: 0.1 }
                                       }}
-                                      className={`relative aspect-square rounded-xl transition-all duration-150 flex flex-col items-center justify-center gap-2 ${!paymentMethods?.is_google_pay_enabled
+                                      className={`cv-wallet-choice relative aspect-square rounded-xl transition-all duration-150 flex flex-col items-center justify-center gap-2 ${!paymentMethods?.is_google_pay_enabled
                                         ? 'opacity-50 cursor-not-allowed'
                                         : ''
                                         } ${depositPaymentMethod === 'google_pay' && paymentMethods?.is_google_pay_enabled
@@ -1373,15 +1295,15 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                               setSelectedIban(iban);
                                               setShowIbanDropdown(false);
                                             }}
-                                            whileHover={{ scale: 1.05, y: -2 }}
-                                            whileTap={{ scale: 0.92 }}
+
+
                                             transition={{
                                               type: "spring",
                                               stiffness: 400,
                                               damping: 20,
                                               scale: { duration: 0.1 }
                                             }}
-                                            className={`relative aspect-square rounded-xl transition-all duration-150 flex flex-col items-center justify-center gap-2 ${isSelected
+                                            className={`cv-wallet-choice relative aspect-square rounded-xl transition-all duration-150 flex flex-col items-center justify-center gap-2 ${isSelected
                                               ? theme === 'dark'
                                                 ? 'bg-white text-black shadow-lg ring-2 ring-white/50'
                                                 : 'bg-gray-900 text-white shadow-lg ring-2 ring-gray-900/50'
@@ -1537,15 +1459,15 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                               setDepositCurrency(crypto.symbol as CryptoCurrency);
                                               setShowDepositDropdown(false);
                                             }}
-                                            whileHover={{ scale: 1.05, y: -2 }}
-                                            whileTap={{ scale: 0.92 }}
+
+
                                             transition={{
                                               type: "spring",
                                               stiffness: 400,
                                               damping: 20,
                                               scale: { duration: 0.1 }
                                             }}
-                                            className={`relative aspect-square rounded-xl transition-all duration-150 flex flex-col items-center justify-center gap-2 ${isSelected
+                                            className={`cv-wallet-choice relative aspect-square rounded-xl transition-all duration-150 flex flex-col items-center justify-center gap-2 ${isSelected
                                               ? theme === 'dark'
                                                 ? 'bg-white text-black shadow-lg ring-2 ring-white/50'
                                                 : 'bg-gray-900 text-white shadow-lg ring-2 ring-gray-900/50'
@@ -1624,8 +1546,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                               googlePayButtonRef.current.innerHTML = '';
                             }
                           }}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
+
+
                           className={`flex-1 px-4 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 border-2 ${theme === 'dark'
                             ? 'bg-transparent border-gray-700 text-white hover:bg-gray-900/50'
                             : 'bg-transparent border-gray-300 text-gray-900 hover:bg-gray-50'
@@ -1776,15 +1698,15 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                             setGooglePayAmount(pkg.priceUSD.toString());
                                             setShowPackageDropdown(false);
                                           }}
-                                          whileHover={{ scale: 1.05, y: -2 }}
-                                          whileTap={{ scale: 0.92 }}
+
+
                                           transition={{
                                             type: "spring",
                                             stiffness: 400,
                                             damping: 20,
                                             scale: { duration: 0.1 }
                                           }}
-                                          className={`relative aspect-square rounded-lg transition-all duration-150 flex flex-col items-center justify-center gap-1.5 ${isSelected
+                                          className={`cv-wallet-choice relative aspect-square rounded-lg transition-all duration-150 flex flex-col items-center justify-center gap-1.5 ${isSelected
                                             ? theme === 'dark'
                                               ? 'bg-white text-black shadow-lg ring-2 ring-white/50'
                                               : 'bg-gray-900 text-white shadow-lg ring-2 ring-gray-900/50'
@@ -1957,15 +1879,15 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                               setSelectedGooglePayProvider(googlePayDetail);
                                               setShowGooglePayProviderDropdown(false);
                                             }}
-                                            whileHover={{ scale: 1.05, y: -2 }}
-                                            whileTap={{ scale: 0.92 }}
+
+
                                             transition={{
                                               type: "spring",
                                               stiffness: 400,
                                               damping: 20,
                                               scale: { duration: 0.1 }
                                             }}
-                                            className={`relative aspect-square rounded-xl transition-all duration-150 flex flex-col items-center justify-center gap-2 ${isSelected
+                                            className={`cv-wallet-choice relative aspect-square rounded-xl transition-all duration-150 flex flex-col items-center justify-center gap-2 ${isSelected
                                               ? theme === 'dark'
                                                 ? 'bg-white text-black shadow-lg ring-2 ring-white/50'
                                                 : 'bg-gray-900 text-white shadow-lg ring-2 ring-gray-900/50'
@@ -2039,8 +1961,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                             setSelectedPackage(null);
                             setGooglePayAmount('');
                           }}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
+
+
                           className={`flex-1 px-4 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 border-2 ${theme === 'dark'
                             ? 'bg-transparent border-gray-700 text-white hover:bg-gray-900/50'
                             : 'bg-transparent border-gray-300 text-gray-900 hover:bg-gray-50'
@@ -2056,8 +1978,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                             }
                           }}
                           disabled={!selectedPackage || !selectedGooglePayProvider}
-                          whileHover={selectedPackage && selectedGooglePayProvider ? { scale: 1.02 } : {}}
-                          whileTap={selectedPackage && selectedGooglePayProvider ? { scale: 0.98 } : {}}
+
+
                           className={`flex-1 px-4 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${!selectedPackage || !selectedGooglePayProvider
                             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             : theme === 'dark'
@@ -2162,70 +2084,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                         </div>
                       )}
 
-                      {/* Deposit Address - Only for Crypto */}
-                      {depositPaymentMethod === 'crypto' && (
-                        <>
-                          <div>
-                            <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {t('wallet.deposit_address') || 'Deposit Address'}
-                            </label>
-                            <div className={`flex items-center gap-2 px-4 py-3 rounded-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}>
-                              <code className={`text-xs font-mono flex-1 truncate ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                {getDepositAddress()}
-                              </code>
-                              <button
-                                onClick={() => copyToClipboard(getDepositAddress(), 'deposit')}
-                                className={`p-2 rounded-lg transition-all ${theme === 'dark'
-                                  ? 'hover:bg-gray-700 text-gray-400 hover:text-gray-300'
-                                  : 'hover:bg-gray-200 text-gray-600 hover:text-gray-900'
-                                  }`}
-                              >
-                                {copiedAddress === 'deposit' ? (
-                                  <Check className="w-4 h-4 text-emerald-500" />
-                                ) : (
-                                  <Copy className="w-4 h-4" />
-                                )}
-                              </button>
-                            </div>
-                          </div>
-                          <div className={`p-4 rounded-xl ${theme === 'dark' ? 'bg-gray-900/50 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
-                            <div className="flex items-center justify-between mb-3">
-                              <div>
-                                <h4 className={`text-sm font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                  {t('wallet.qr_code') || 'QR Code'}
-                                </h4>
-                                <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                                  {t('wallet.qr_code_hint') || 'Scan to copy the address instantly.'}
-                                </p>
-                              </div>
-                              <div className={`text-xs font-semibold px-2 py-1 rounded ${theme === 'dark' ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-600'}`}>
-                                {depositCurrency}
-                              </div>
-                            </div>
-                            <div className="flex flex-col items-center gap-3">
-                              <div className={`p-3 rounded-2xl ${theme === 'dark' ? 'cv-card-surface-solid' : 'bg-white'} shadow-inner`}>
-                                <QRCodeSVG
-                                  value={getDepositAddress()}
-                                  size={160}
-                                  bgColor={theme === 'dark' ? '#0f172a' : '#ffffff'}
-                                  fgColor={theme === 'dark' ? '#ffffff' : '#0f172a'}
-                                />
-                              </div>
-                              <p className={`text-[0.765rem] text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                                {t('wallet.qr_code_note') || 'Show this code to send crypto quickly.'}
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className={`p-4 rounded-xl ${theme === 'dark' ? 'bg-yellow-500/10 border border-yellow-500/20' : 'bg-yellow-50 border border-yellow-200'}`}>
-                            <p className={`text-xs ${theme === 'dark' ? 'text-yellow-300' : 'text-yellow-700'}`}>
-                              {depositCurrency
-                                ? (t('wallet.deposit_warning', { currency: depositCurrency }) || `Only send ${depositCurrency} to this address. Sending other cryptocurrencies may result in permanent loss.`)
-                                : 'Only send the selected cryptocurrency to this address. Sending other cryptocurrencies may result in permanent loss.'}
-                            </p>
-                          </div>
-                        </>
-                      )}
+                      {depositPaymentMethod === 'crypto' && <p className="cv-wallet-unavailable" role="status">{t('wallet.unavailable')}</p>}
 
                       {/* IBAN Details - Only for IBAN */}
                       {depositPaymentMethod === 'iban' && selectedIban && (
@@ -2400,8 +2259,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                             onClick={() => {
                               setDepositStep('payment_method');
                             }}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+
+
                             className={`flex-1 px-4 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 border-2 ${theme === 'dark'
                               ? 'bg-transparent border-gray-700 text-white hover:bg-gray-900/50'
                               : 'bg-transparent border-gray-300 text-gray-900 hover:bg-gray-50'
@@ -2410,55 +2269,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                             <ArrowLeft className="w-4 h-4" />
                             {t('auth.back') || 'Back'}
                           </motion.button>
-                          <motion.button
-                            onClick={async () => {
-                              setIsProcessing(true);
-                              try {
-                                // TODO: Implement deposit logic
-                                if (depositPaymentMethod === 'iban') {
-                                  // await api.depositIBAN(selectedIban);
-                                } else if (depositPaymentMethod === 'crypto') {
-                                  // await api.deposit(depositCurrency);
-                                }
-
-                                // Simulate API call
-                                await new Promise(resolve => setTimeout(resolve, 1500));
-
-                                setIsProcessing(false);
-                                setDepositStep('success');
-                              } catch (error) {
-                                console.error('Deposit failed:', error);
-                                setIsProcessing(false);
-                                setDepositStep('error');
-                              }
-                            }}
-                            disabled={isProcessing ||
-                              (depositPaymentMethod === 'iban' && !selectedIban) ||
-                              (depositPaymentMethod === 'crypto' && !depositCurrency)}
-                            whileHover={!isProcessing &&
-                              ((depositPaymentMethod === 'iban' && selectedIban) ||
-                                (depositPaymentMethod === 'crypto' && depositCurrency)) ? { scale: 1.02 } : {}}
-                            whileTap={!isProcessing &&
-                              ((depositPaymentMethod === 'iban' && selectedIban) ||
-                                (depositPaymentMethod === 'crypto' && depositCurrency)) ? { scale: 0.98 } : {}}
-                            className={`flex-1 px-4 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${isProcessing ||
-                              (depositPaymentMethod === 'iban' && !selectedIban) ||
-                              (depositPaymentMethod === 'crypto' && !depositCurrency)
-                              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                              : theme === 'dark'
-                                ? 'bg-white text-black hover:bg-gray-200'
-                                : 'bg-gray-900 text-white hover:bg-gray-800'
-                              }`}
-                          >
-                            {isProcessing ? (
-                              <>
-                                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                                <span>{t('wallet.processing') || 'Processing...'}</span>
-                              </>
-                            ) : (
-                              <span>{t('wallet.confirm_deposit') || 'Confirm Deposit'}</span>
-                            )}
-                          </motion.button>
+                          <div className="cv-wallet-unavailable" role="status">{t('wallet.unavailable')}</div>
                         </div>
                       )}
 
@@ -2563,8 +2374,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                   }
                                 }}
                                 disabled={!googlePayAmount || isGooglePayProcessing}
-                                whileHover={!googlePayAmount || isGooglePayProcessing ? {} : { scale: 1.02 }}
-                                whileTap={!googlePayAmount || isGooglePayProcessing ? {} : { scale: 0.98 }}
+
+
                                 className={`w-full px-4 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${!googlePayAmount || isGooglePayProcessing
                                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                   : theme === 'dark'
@@ -2619,8 +2430,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
         
                                   }
                                 }}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
+
+
                                 className={`flex-1 px-4 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 border-2 ${theme === 'dark'
                                   ? 'bg-transparent border-gray-700 text-white hover:bg-gray-900/50'
                                   : 'bg-transparent border-gray-300 text-gray-900 hover:bg-gray-50'
@@ -2703,8 +2514,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                               googlePayButtonRef.current.innerHTML = '';
                             }
                           }}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
+
+
                           className={`w-full px-4 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${theme === 'dark'
                             ? 'bg-white text-black hover:bg-gray-200'
                             : 'bg-gray-900 text-white hover:bg-gray-800'
@@ -2747,8 +2558,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                             onClick={() => {
                               setDepositStep('payment_screen');
                             }}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+
+
                             className={`flex-1 px-4 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 border-2 ${theme === 'dark'
                               ? 'bg-transparent border-gray-700 text-white hover:bg-gray-900/50'
                               : 'bg-transparent border-gray-300 text-gray-900 hover:bg-gray-50'
@@ -2774,8 +2585,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                 googlePayButtonRef.current.innerHTML = '';
                               }
                             }}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+
+
                             className={`flex-1 px-4 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${theme === 'dark'
                               ? 'bg-white text-black hover:bg-gray-200'
                               : 'bg-gray-900 text-white hover:bg-gray-800'
@@ -2788,46 +2599,9 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </Sheet>, document.body)}
 
-      {/* Withdraw Modal */}
-      <AnimatePresence>
-        {showWithdrawModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            onClick={() => setShowWithdrawModal(false)}
-          >
-            <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/80' : 'bg-black/50'}`} />
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className={`relative w-full max-w-md rounded-2xl ${theme === 'dark'
-                ? 'bg-gray-900 border border-gray-800'
-                : 'bg-white border border-gray-200'
-                }`}
-            >
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                    {t('wallet.withdraw') || 'Withdraw'}
-                  </h3>
-                  <button
-                    onClick={() => setShowWithdrawModal(false)}
-                    className={`p-2 rounded-lg ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'}`}
-                  >
-                    <ArrowLeft className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`} />
-                  </button>
-                </div>
-
+      {showWithdrawModal && createPortal(<Sheet isOpen={showWithdrawModal} onClose={() => setShowWithdrawModal(false)} title={t('wallet.withdraw')} className="cv-panel-sheet cv-wallet-dialog" actions={<button type="button" className="cv-btn cv-btn-branded" disabled>{t('wallet.confirm_withdraw')}</button>}>
                 <div className="space-y-4">
                   {/* Balance Display */}
                   {user?.balance !== undefined && (
@@ -2904,8 +2678,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                               key={percentage}
                               type="button"
                               onClick={() => setWithdrawAmount(amount)}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
+
+
                               className={`flex-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${theme === 'dark'
                                 ? 'bg-gray-700 hover:bg-gray-600 text-white'
                                 : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
@@ -2935,33 +2709,8 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                     />
                   </div>
 
-                  <motion.button
-                    onClick={handleWithdraw}
-                    disabled={!withdrawAmount || !withdrawAddress || isProcessing}
-                    whileHover={{ scale: !withdrawAmount || !withdrawAddress || isProcessing ? 1 : 1.02 }}
-                    whileTap={{ scale: !withdrawAmount || !withdrawAddress || isProcessing ? 1 : 0.98 }}
-                    className={`w-full px-4 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${!withdrawAmount || !withdrawAddress || isProcessing
-                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      : theme === 'dark'
-                        ? 'bg-white text-black hover:bg-gray-200'
-                        : 'bg-gray-900 text-white hover:bg-gray-800'
-                      }`}
-                  >
-                    {isProcessing ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                        <span>{t('wallet.processing') || 'Processing...'}</span>
-                      </>
-                    ) : (
-                      <span>{t('wallet.confirm_withdraw') || 'Confirm Withdraw'}</span>
-                    )}
-                  </motion.button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+<p className="cv-wallet-unavailable" role="status">{t('wallet.unavailable')}</p></div>
+      </Sheet>, document.body)}
     </>
   );
 

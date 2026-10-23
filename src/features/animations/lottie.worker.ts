@@ -1,4 +1,5 @@
 /// <reference lib="webworker" />
+import { ungzip } from 'pako';
 import loadTLottieWasm, { type TLottieWasm, type TLottieAnimation } from './tlottieWasm';
 
 const items = new Map<number, { renderer: TLottieWasm; animation: TLottieAnimation }>();
@@ -12,7 +13,13 @@ async function source(url: string) {
     promise = fetch(url).then(async response => {
       if (!response.ok) throw new Error(`Animation request failed: ${response.status}`);
       const bytes = new Uint8Array(await response.arrayBuffer());
-      if (bytes[0] === 31 && bytes[1] === 139) return new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+      if (bytes[0] === 31 && bytes[1] === 139) {
+        if (typeof DecompressionStream !== 'undefined') {
+          try { return await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text(); }
+          catch { /* Older browsers may expose the constructor without gzip support. */ }
+        }
+        return ungzip(bytes, { to: 'string' });
+      }
       return new TextDecoder().decode(bytes);
     });
     sources.set(url, promise);

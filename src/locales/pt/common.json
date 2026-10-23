@@ -363,6 +363,7 @@
     "video": "Vídeo"
   },
   "wallet": {
+    "unavailable": "Este serviço ainda não está disponível.",
     "title": "Carteira",
     "overview": "Visão geral",
     "history": "Histórico",
@@ -889,5 +890,6 @@
   },
   "live": {
     "empty": "Nenhuma transmissão ao vivo no momento."
-  }
+  },
+  "tips": {"title": "Enviar gorjeta", "sent": "Gorjeta enviada", "failed": "Não foi possível enviar a gorjeta. Tente novamente.", "insufficient": "Saldo insuficiente"}
 }

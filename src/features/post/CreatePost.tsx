@@ -1,3 +1,5 @@
+import { EmojiNode } from '@/features/editor/Lexical/nodes/EmojiNode';
+import EmojisPlugin from '@/features/editor/Lexical/plugins/EmojisPlugin';
 import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import {
@@ -54,7 +56,7 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import ToolbarPlugin from '../editor/Lexical/plugins/ToolbarPlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $generateHtmlFromNodes } from '@lexical/html';
-import { $getRoot, $getSelection, $isRangeSelection, INSERT_PARAGRAPH_COMMAND } from 'lexical';
+import { $getRoot, $getSelection, $setSelection, $isRangeSelection, type BaseSelection, INSERT_PARAGRAPH_COMMAND } from 'lexical';
 import { MentionNode } from '../editor/Lexical/nodes/MentionNode';
 import NewMentionsPlugin from '../editor/Lexical/plugins/MentionsPlugin';
 import ImagesPlugin, { INSERT_IMAGE_COMMAND } from '../editor/Lexical/plugins/ImagesPlugin';
@@ -64,7 +66,7 @@ import YouTubePicker, { type YouTubeVideo } from './YouTubePicker';
 import { ImageNode } from '../editor/Lexical/nodes/ImageNode';
 import { YouTubeNode } from '../editor/Lexical/nodes/YouTubeNode';
 import YouTubePlugin, { INSERT_YOUTUBE_COMMAND } from '../editor/Lexical/plugins/YouTubePlugin';
-import EmojiPicker from './EmojiPicker';
+import EmojiPicker from '@/components/ui/EmojiPicker';
 import AutoLinkPlugin from '../editor/Lexical/plugins/AutoLinkPlugin';
 import { TweetNode } from '../editor/Lexical/nodes/TweetNode';
 import { MetadataNode } from '../editor/Lexical/nodes/MetadataNode';
@@ -227,6 +229,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   const [didRequestPreview, setDidRequestPreview] = useState(false);
   const [pollErrors, setPollErrors] = useState<Record<string, string>>({});
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  const emojiSelection = useRef<BaseSelection | null>(null);
   const [isStickerPickerOpen, setIsStickerPickerOpen] = useState(false);
   const [isLocationPickerOpen, setIsLocationPickerOpen] = useState(false);
   const [isGifPickerOpen, setIsGifPickerOpen] = useState(false);
@@ -1524,7 +1527,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
     selectionAlwaysOnDisplay: true,
     listStrictIndent: false,
     measureTypingPerf: false,
-    nodes: [HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode, MentionNode, ImageNode, YouTubeNode, TweetNode, MetadataNode],
+    nodes: [EmojiNode, HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode, MentionNode, ImageNode, YouTubeNode, TweetNode, MetadataNode],
     theme: {
       paragraph: `mb-2 text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`,
       heading: {
@@ -1689,6 +1692,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                       <LexicalComposer initialConfig={editorConfig}>
                         <div className="relative">
                           <HashtagPlugin />
+          <EmojisPlugin />
                           <ListPlugin />
                           <LinkPlugin />
                           <AutoLinkPlugin />
@@ -2788,10 +2792,10 @@ const CreatePost: React.FC<CreatePostProps> = ({
                             onEmojiSelect={(emoji) => {
                               if (editorInstance) {
                                 editorInstance.update(() => {
+                                  if (emojiSelection.current) $setSelection(emojiSelection.current.clone());
                                   const selection = $getSelection();
-                                  if ($isRangeSelection(selection)) {
-                                    selection.insertText(emoji.native);
-                                  }
+                                  if ($isRangeSelection(selection)) selection.insertText(emoji);
+                                  else $getRoot().selectEnd().insertText(emoji);
                                 });
                               }
                               setIsEmojiPickerOpen(false);
@@ -3088,6 +3092,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                     icon: Smile, action: () => {
                       setIsStickerPickerOpen(false);
                       setIsGifPickerOpen(false);
+                      if (!isEmojiPickerOpen && editorInstance) editorInstance.getEditorState().read(() => { emojiSelection.current = $getSelection()?.clone() ?? null; });
                       setIsEmojiPickerOpen(!isEmojiPickerOpen);
                     }, label: tp('toolbar_emoji', 'Emoji'), active: isEmojiPickerOpen
                   },

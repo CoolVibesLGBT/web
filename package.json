@@ -55,6 +55,7 @@
     "lucide-react": "^0.553.0",
     "maplibre-gl": "^5.24.0",
     "ngeohash": "^0.6.3",
+    "pako": "^2.1.0",
     "prettier": "^3.6.1",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.4",
@@ -88,7 +89,7 @@
     "typescript-eslint": "^8.46.3",
     "vite": "^8.0.16"
   },
-  "description": "Web client for **CoolVibes** \u2014 an inclusive LGBTIQA+ social and dating platform.",
+  "description": "Web client for **CoolVibes** — an inclusive LGBTIQA+ social and dating platform.",
   "main": "eslint.config.js",
   "repository": {
     "type": "git",

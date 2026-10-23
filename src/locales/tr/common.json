@@ -415,6 +415,7 @@
     "video": "Video"
   },
   "wallet": {
+    "unavailable": "Bu hizmet henüz kullanılamıyor.",
     "title": "Cüzdan",
     "overview": "Genel Bakış",
     "history": "Geçmiş",
@@ -1085,5 +1086,6 @@
   "search": {
     "no_results": "Sonuç bulunamadı",
     "no_results_subtitle": "Başka bir arama terimi veya kategori dene."
-  }
+  },
+  "tips": {"title": "Bahşiş gönder", "sent": "Bahşiş gönderildi", "failed": "Bahşiş gönderilemedi. Lütfen tekrar dene.", "insufficient": "Yetersiz bakiye"}
 }

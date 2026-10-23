@@ -415,6 +415,7 @@
     "video": "Video"
   },
   "wallet": {
+    "unavailable": "This service is not available yet.",
     "title": "Wallet",
     "overview": "Overview",
     "history": "History",
@@ -1085,5 +1086,6 @@
   "search": {
     "no_results": "No results found",
     "no_results_subtitle": "Try another search term or category."
-  }
+  },
+  "tips": {"title": "Send Tip", "sent": "Tip sent", "failed": "Unable to send tip. Please try again.", "insufficient": "Insufficient balance"}
 }

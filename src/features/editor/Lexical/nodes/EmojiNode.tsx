@@ -15,6 +15,8 @@ import type {
 } from 'lexical';
 
 import {$applyNodeReplacement, TextNode} from 'lexical';
+import {emojiArtwork} from '@/features/emoticons/emojiArtwork';
+import '@/features/emoticons/emoji.css';
 
 export type SerializedEmojiNode = Spread<
   {
@@ -43,6 +45,11 @@ export class EmojiNode extends TextNode {
     const dom = document.createElement('span');
     const inner = super.createDOM(config);
     dom.className = this.__className;
+    const artwork = emojiArtwork(this.__text);
+    if (artwork) {
+      dom.classList.add('cv-emoji-art');
+      Object.assign(dom.style, artwork);
+    }
     inner.className = 'emoji-inner';
     dom.appendChild(inner);
     return dom;
@@ -50,7 +57,7 @@ export class EmojiNode extends TextNode {
 
   updateDOM(prevNode: this, dom: HTMLElement, config: EditorConfig): boolean {
     const inner = dom.firstChild;
-    if (inner === null) {
+    if (inner === null || prevNode.__text !== this.__text) {
       return true;
     }
     super.updateDOM(prevNode, inner as HTMLElement, config);

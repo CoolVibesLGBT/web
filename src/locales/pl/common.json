@@ -363,6 +363,7 @@
     "video": "Wideo"
   },
   "wallet": {
+    "unavailable": "Ta usługa nie jest jeszcze dostępna.",
     "title": "Portfel",
     "overview": "Przegląd",
     "history": "Historia",
@@ -923,5 +924,6 @@
   },
   "live": {
     "empty": "Obecnie nie ma transmisji na żywo."
-  }
+  },
+  "tips": {"title": "Wyślij napiwek", "sent": "Napiwek wysłany", "failed": "Nie udało się wysłać napiwku. Spróbuj ponownie.", "insufficient": "Niewystarczające środki"}
 }

@@ -45,6 +45,8 @@ import {
   useRef,
   useState,
 } from 'react';
+import { PostMediaContext } from '@/features/post/PostMediaContext';
+import ViewOnceDust from '@/features/chat/ViewOnceDust';
 import { resolvePublicAssetUrl } from '@/platform/runtime';
 
 const brokenImage = resolvePublicAssetUrl('/images/image-broken.svg');
@@ -448,15 +450,39 @@ export default function ImageComponent({
 
   const {historyState} = useSharedHistoryContext();
   const {
-    settings: {showNestedEditorTreeView},
+    settings: {showNestedEditorTreeView, blurPhotos},
   } = useSettings();
+
+  const inPost = React.useContext(PostMediaContext);
+  const [revealed, setRevealed] = useState(false);
+  useEffect(() => { setRevealed(false); }, [src, blurPhotos]);
+  const concealed = inPost && !isEditable && blurPhotos && !revealed && !isLoadError;
 
   const draggable = isInNodeSelection && !isResizing;
   const isFocused = (isSelected || isResizing) && isEditable;
   return (
     <Suspense fallback={null}>
       <>
-        <div draggable={draggable}>
+        <div draggable={draggable}
+          className={inPost ? 'cv-post-inline-media' : undefined}
+          data-concealed={concealed || undefined}
+          role={concealed ? 'button' : undefined}
+          tabIndex={concealed ? 0 : undefined}
+          aria-label={concealed ? altText : undefined}
+          onClickCapture={event => {
+            if (!concealed) return;
+            event.preventDefault();
+            event.stopPropagation();
+            setRevealed(true);
+          }}
+          onKeyDown={event => {
+            if (concealed && (event.key === 'Enter' || event.key === ' ')) {
+              event.preventDefault();
+              event.stopPropagation();
+              setRevealed(true);
+            }
+          }}
+        >
           {isLoadError ? (
             <BrokenImage />
           ) : (
@@ -475,6 +501,7 @@ export default function ImageComponent({
               onError={() => setIsLoadError(true)}
             />
           )}
+          {concealed && <ViewOnceDust />}
         </div>
 
         {showCaption && (
