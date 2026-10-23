@@ -33,7 +33,7 @@ import { openExternalUrl } from '../platform/runtime';
 import { getSafeImageURLEx } from '../helpers/helpers';
 import ConfirmationModal from '../components/ui/ConfirmationModal';
 import LanguageSelectorModal from '../components/ui/LanguageSelector';
-import Switch from '../components/ui/Switch';
+import { SwitchIndicator } from '../components/ui/Switch';
 import { GroupedSection, ListRow, NavigationBar, usePageBack } from '@/components/ui/Interface';
 import type { SettingName } from '../appSettings';
 
@@ -327,7 +327,7 @@ export default function SettingsScreen() {
                             const checked = row.toggleKey ? !!settings[row.toggleKey] : !!row.switchOn;
                             const hasSwitch = !!row.toggleKey || !!row.onSwitch;
                             const toggle = () => row.toggleKey ? handleToggle(row.toggleKey) : row.onSwitch?.();
-                            return <ListRow key={row.key} icon={!row.centered ? <RowIcon /> : undefined} title={row.label} description={row.subtitle} value={row.value} destructive={row.danger} onClick={hasSwitch ? undefined : row.onClick} accessory={hasSwitch ? <Switch checked={checked} onChange={toggle} aria-label={row.label} /> : undefined} />;
+                            return <ListRow key={row.key} icon={!row.centered ? <RowIcon /> : undefined} title={row.label} description={row.subtitle} value={row.value} destructive={row.danger} onClick={hasSwitch ? toggle : row.onClick} checked={hasSwitch ? checked : undefined} accessory={hasSwitch ? <SwitchIndicator checked={checked} /> : undefined} />;
                         })}
                     </GroupedSection>)}
                     {normalizedQuery && visibleGroups.length === 0 && (

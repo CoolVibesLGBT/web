@@ -48,7 +48,7 @@ export function GroupedSection({ title, footer, children, className = '' }: {
   )
 }
 
-export function ListRow({ icon, title, description, value, accessory, onClick, destructive, selected }: {
+export function ListRow({ icon, title, description, value, accessory, onClick, destructive, selected, checked }: {
   icon?: ReactNode
   title: ReactNode
   description?: ReactNode
@@ -57,6 +57,7 @@ export function ListRow({ icon, title, description, value, accessory, onClick, d
   onClick?: () => void
   destructive?: boolean
   selected?: boolean
+  checked?: boolean
 }) {
   const content = <>
     {icon && <span className="cv-list-icon" aria-hidden="true">{icon}</span>}
@@ -66,7 +67,7 @@ export function ListRow({ icon, title, description, value, accessory, onClick, d
   </>
   const className = `cv-list-row${destructive ? ' cv-list-row-destructive' : ''}`
   return onClick
-    ? <button type="button" className={className} onClick={onClick} aria-pressed={selected}>{content}</button>
+    ? <button type="button" className={className} onClick={onClick} role={checked === undefined ? undefined : 'switch'} aria-checked={checked} aria-pressed={checked === undefined ? selected : undefined}>{content}</button>
     : <div className={className}>{content}</div>
 }
 
