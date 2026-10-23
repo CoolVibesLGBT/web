@@ -12,3 +12,8 @@ Apache License 2.0; the license is distributed with public/fonts/telegram/.
 
 Sticker artwork belongs to its respective set creators. Set attribution is
 retained in src/features/emoticons/sticker-packs.json.
+
+Telegram iOS: https://github.com/TelegramMessenger/Telegram-iOS
+Message palette adaptations use DefaultDayPresentationTheme.swift,
+DefaultDarkPresentationTheme.swift, DefaultDarkTintedPresentationTheme.swift,
+ThemeColorPresets.swift and UIKitUtils.swift from the user-provided source tree.

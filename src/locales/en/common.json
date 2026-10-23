@@ -914,6 +914,7 @@
     "default": "Default",
     "set_color": "Set Color",
     "gradient": "Gradient",
+    "gradient_animation": "Gradient animation",
     "photo": "Photo",
     "upload": "Upload Wallpaper",
     "pattern": "Pattern",

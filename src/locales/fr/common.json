@@ -715,6 +715,7 @@
     "default": "Par défaut",
     "set_color": "Choisir une couleur",
     "gradient": "Dégradé",
+    "gradient_animation": "Animation du dégradé",
     "photo": "Photo",
     "upload": "Importer un fond",
     "pattern": "Motif",

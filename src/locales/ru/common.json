@@ -715,6 +715,7 @@
     "default": "По умолчанию",
     "set_color": "Выбрать цвет",
     "gradient": "Градиент",
+    "gradient_animation": "Анимация градиента",
     "photo": "Фото",
     "upload": "Загрузить обои",
     "pattern": "Узор",

@@ -16,7 +16,7 @@ function load(name) {
   vm.runInNewContext(code, { exports, require: load, Uint8ClampedArray });
   return exports;
 }
-const { CHAT_THEMES, resolveTheme, telegramWallpaperColors } = load('model');
+const { CHAT_THEMES, PRESETS, readAppearance, resolveTheme, telegramWallpaperColors } = load('model');
 const { gradientPixels } = load('gradient');
 // Telegram's optional color slots use 0 as "no additional stop", not black.
 assert.deepEqual(Array.from(telegramWallpaperColors([0xffffff, 0])), [0xffffff]);
@@ -45,3 +45,37 @@ assert.deepEqual(Array.from(resolveTheme('light', { preset: null, theme: chick.i
 const custom = { kind: 'gradient', colors: ['#ffffff', '#000000'], rotation: 45, pattern: false, intensity: 0, blur: false };
 assert.equal(resolveTheme('light', { preset: null, theme: chick.id, wallpaper: custom }).wallpaper, custom);
 console.log(`Appearance color regression passed: ${previews} colored previews, original SVGs, zero sentinels and explicit custom wallpapers`);
+
+// Curated stops are checked against the actual Swift source, not our resolver.
+const reference = fs.readFileSync('/Users/ersanyakit/Downloads/Telegram-iOS-master/submodules/SettingsUI/Sources/Themes/ThemeColorPresets.swift', 'utf8');
+const names = {day:'dayClassic',light:'day',night:'night'};
+let count = 0;
+for (const [base, name] of Object.entries(names)) {
+ const section = reference.split(`var ${name}ColorPresets:`)[1].split('\n]')[0];
+ for (const line of section.split('\n').filter(line => !line.trim().startsWith('//'))) {
+  const match = line.match(/index: (\d+).*accentColor: (0x[\da-f]+), bubbleColors: \[([^\]]+)/i);
+  if (!match) continue;
+  const id = Number(match[1]);
+  const stops = match[3].split(',').map(value => '#' + (Number(value.trim()) & 0xffffff).toString(16).padStart(6,'0'));
+  const value = resolveTheme(base, {preset:id});
+  assert.deepEqual(Array.from(value.sourceMessageColors), stops, `${base}/${id}: Swift stops in source order`);
+  count++;
+ }
+}
+for (const base of ['day','light','night','tinted']) {
+ for (const preset of PRESETS[base]) {
+  const value = resolveTheme(base,{preset:preset.id});
+  const edited = resolveTheme(base,{preset:preset.id,messages:{accent:value.sourceAccent,colors:['#123456','#abcdef']}});
+  assert.equal(edited.accent,value.accent,'bubble editing must not change accent');
+  assert.equal(edited.surface,value.surface,'bubble editing must not change surface');
+  assert.equal(edited.outgoingBackground,'linear-gradient(to bottom, #123456, #abcdef)');
+ }
+}
+assert.deepEqual(Array.from(resolveTheme('night',{preset:10}).sourceMessageColors),['#a256bf','#9047ff','#0771ff']);
+assert.deepEqual(Array.from(resolveTheme('light',{preset:10}).sourceMessageColors),['#61c4f9','#0088ff']);
+assert.equal(resolveTheme('day').outgoing,'#e1ffc7');
+const old=readAppearance(JSON.stringify({version:1,themes:{night:{preset:12,messages:{accent:'#29b327',colors:['#ff00ff','#ffbbee'],followWallpaper:true}}}}),null);
+assert.equal(old.themes.night.messages,undefined,'remove incorrect automatic wallpaper override');
+const triple = {accent:'#3e88f7', colors:['#a256bf','#9047ff','#0771ff']};
+assert.equal(readAppearance(JSON.stringify({version:1,themes:{night:{messages:triple}}}),null).themes.night.messages.colors.length,3);
+console.log(`iOS reference checks passed: ${count} curated palettes, regular blue defaults, accent isolation and preference migration`);

@@ -16,8 +16,8 @@ try {
   await page.goto('http://localhost:5173/messages');await page.locator('.cv-chat-row-main').filter({hasText:'Theme Friend'}).click();
   await page.locator('[data-message-id="bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"] .cv-chat-message-text').waitFor();
   const application=await page.locator('[data-message-id="bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"] .cv-chat-bubble').evaluate(el=>{
-   const color=name=>{const span=document.createElement('span');span.style.color=getComputedStyle(document.documentElement).getPropertyValue(name);el.append(span);const result=getComputedStyle(span).color;span.remove();return result;};
-   return {background:getComputedStyle(el).backgroundColor,text:getComputedStyle(el.querySelector('.cv-chat-message-text')).color,expectedBackground:color('--cv-chat-outgoing'),expectedText:color('--cv-chat-outgoing-text')};
+   const color=name=>{const span=document.createElement('span');if(name==='--cv-chat-outgoing')span.style.background=getComputedStyle(document.documentElement).getPropertyValue('--cv-chat-outgoing-background');else span.style.color=getComputedStyle(document.documentElement).getPropertyValue(name);el.append(span);const result=name==='--cv-chat-outgoing'?getComputedStyle(span).backgroundImage:getComputedStyle(span).color;span.remove();return result;};
+   return {background:getComputedStyle(el).backgroundImage,text:getComputedStyle(el.querySelector('.cv-chat-message-text')).color,expectedBackground:color('--cv-chat-outgoing'),expectedText:color('--cv-chat-outgoing-text')};
   });
   assert.equal(application.background,application.expectedBackground,'bubble applies the chosen theme');assert.equal(application.text,application.expectedText,'text applies the chosen theme');assert.deepEqual(errors,[]);
   results.push({...item,status:'passed',cards,slider:field,application});await context.close();

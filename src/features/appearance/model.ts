@@ -1,6 +1,7 @@
 import presets from './telegram-presets.json';
 import themes from './telegram-themes.json';
-import { changeColorAccent, getAccentColor, getAverageColor, hexToRgb, hslaToRgba, hsvToRgb, mixColors, rgbToHsv, rgbaToHexa, rgbaToHsla, relativeLuminance, ensureTextContrast, type ColorRgb } from './telegram-colors';
+import { hexToRgb, hsvToRgb, rgbToHsv, rgbaToHexa, type ColorRgb } from './telegram-colors';
+import { iosBubbleColors, iosLightness, iosMultiply } from './ios-message-colors';
 
 export type BaseTheme = 'day' | 'night' | 'light' | 'tinted';
 export type ThemeChoice = BaseTheme | 'system';
@@ -11,9 +12,10 @@ export interface Wallpaper {
   pattern: boolean;
   intensity: number;
   blur: boolean;
+  animated?: boolean;
   source?: string;
 }
-/** User-picked message colors (tweb themeSettings.accent_color/message_colors): one solid stop or a two-stop gradient. */
+/** User-picked message colors (tweb themeSettings.accent_color/message_colors): one solid stop or up to four gradient stops. */
 export interface MessageColors { accent: string; colors: string[] }
 export interface ThemeSelection { preset: number | null; theme?: string; wallpaper?: Wallpaper; messages?: MessageColors }
 export interface Appearance {
@@ -60,10 +62,10 @@ export function readAppearance(raw: string | null, legacy: string | null): Appea
       if (PRESETS[base].some(p => p.id === entry?.preset)) result.themes[base].preset = entry.preset;
       const wp = entry?.wallpaper;
       if (wp && ['color', 'gradient', 'image'].includes(wp.kind) && Array.isArray(wp.colors) && wp.colors.length >= 1 && wp.colors.length <= 4 && wp.colors.every(validColor)) {
-        result.themes[base].wallpaper = { kind: wp.kind, colors: wp.colors, rotation: Number.isFinite(wp.rotation) ? Math.abs(wp.rotation) % 360 : 0, pattern: !!wp.pattern, intensity: Number.isFinite(wp.intensity) ? Math.max(0, Math.min(100, wp.intensity)) : 50, blur: !!wp.blur, ...(typeof wp.source === 'string' && /^\/images\/chat\/[\w-]+\.svg$/.test(wp.source) ? { source: wp.source } : {}) };
+        result.themes[base].wallpaper = { kind: wp.kind, colors: wp.colors, rotation: Number.isFinite(wp.rotation) ? Math.abs(wp.rotation) % 360 : 0, pattern: !!wp.pattern, intensity: Number.isFinite(wp.intensity) ? Math.max(0, Math.min(100, wp.intensity)) : 50, blur: !!wp.blur, animated: wp.animated !== false, ...(typeof wp.source === 'string' && /^\/images\/chat\/[\w-]+\.svg$/.test(wp.source) ? { source: wp.source } : {}) };
       }
       const messages = entry?.messages;
-      if (messages && validColor(messages.accent) && Array.isArray(messages.colors) && messages.colors.length >= 1 && messages.colors.length <= 2 && messages.colors.every(validColor)) {
+      if (messages && messages.followWallpaper !== true && validColor(messages.accent) && Array.isArray(messages.colors) && messages.colors.length >= 1 && messages.colors.length <= 4 && messages.colors.every(validColor)) {
         result.themes[base].messages = { accent: messages.accent, colors: messages.colors.slice() };
       }
     }
@@ -72,10 +74,10 @@ export function readAppearance(raw: string | null, legacy: string | null): Appea
 }
 
 const BASE = {
-  day: { accent: '#3390ec', surface: '#ffffff', background: '#f4f4f5', text: '#000000', secondary: '#707579', border: '#dfe1e5', incoming: '#ffffff', bubble: [0x5ca853], wallpaper: [0xdbddbb, 0x6ba587, 0xd5d88d, 0x88b884] },
-  night: { accent: '#8774e1', surface: '#212121', background: '#181818', text: '#ffffff', secondary: '#aaaaaa', border: '#0f0f0f', incoming: '#212121', bubble: [0x8774e1], wallpaper: [0xfec496, 0xdd6cb9, 0x962fbf, 0x4f5bd5] },
-  light: { accent: '#2d7ed5', surface: '#ffffff', background: '#f4f4f5', text: '#333333', secondary: '#8c8e91', border: '#dfe1e5', incoming: '#f0f0f0', bubble: [0x2d7ed5], wallpaper: [0xb1e0fa, 0x82b0d8, 0xa0d8e8, 0xe5f0f8] },
-  tinted: { accent: '#0088ff', surface: '#1d2733', background: '#151e27', text: '#ffffff', secondary: '#7d8b99', border: '#0f151b', incoming: '#232e3b', bubble: PRESETS.tinted[0].message_colors, wallpaper: [0x1e3557, 0x182036, 0x1c4352, 0x16263a] },
+  day: { accent: '#0088ff', surface: '#ffffff', background: '#f4f4f5', text: '#000000', secondary: '#707579', border: '#dfe1e5', incoming: '#ffffff', bubble: [0x5ca853], wallpaper: [0xdbddbb, 0x6ba587, 0xd5d88d, 0x88b884] },
+  night: { accent: '#3e88f7', surface: '#212121', background: '#181818', text: '#ffffff', secondary: '#aaaaaa', border: '#0f0f0f', incoming: '#212121', bubble: [0x8774e1], wallpaper: [0xfec496, 0xdd6cb9, 0x962fbf, 0x4f5bd5] },
+  light: { accent: '#0088ff', surface: '#ffffff', background: '#f4f4f5', text: '#333333', secondary: '#8c8e91', border: '#dfe1e5', incoming: '#f0f0f0', bubble: [0x2d7ed5], wallpaper: [0xb1e0fa, 0x82b0d8, 0xa0d8e8, 0xe5f0f8] },
+  tinted: { accent: '#2ea6ff', surface: '#1d2733', background: '#151e27', text: '#ffffff', secondary: '#7d8b99', border: '#0f151b', incoming: '#232e3b', bubble: PRESETS.tinted[0].message_colors, wallpaper: [0x1e3557, 0x182036, 0x1c4352, 0x16263a] },
 };
 
 export function resolveAppearance(appearance: Appearance, systemDark: boolean) {
@@ -98,10 +100,8 @@ export function resolveTheme(base: BaseTheme, selection: ThemeSelection = { pres
   }
   const preset = chatTheme ?? PRESETS[base].find(p => p.id === selection.preset);
   const custom = selection.messages;
-  const sourceAccent = custom ? custom.accent : preset ? hex(preset.accent_color) : original.accent;
-  // A user-picked accent keeps its hue but is moved just enough to stay visible (3:1) on the base surface;
-  // very dark picks would otherwise vanish on Night and turn the derived Dark surfaces black.
-  let accent = custom ? ensureTextContrast(custom.accent, hexToRgb(original.surface), 3) : sourceAccent;
+  const sourceAccent = custom ? custom.accent : !chatTheme && base === 'night' && selection.preset === 10 ? '#3e88f7' : preset ? hex(preset.accent_color) : original.accent;
+  let accent = sourceAccent;
   let surface = original.surface, background = original.background, secondary = original.secondary, border = original.border, incoming = original.incoming;
   if (base === 'tinted') {
     const hsv = rgbToHsv(...hexToRgb(accent));
@@ -112,37 +112,27 @@ export function resolveTheme(base: BaseTheme, selection: ThemeSelection = { pres
     background = multiplied(1.024, .573, .18);
     border = multiplied(1.033, .426, .34);
     secondary = multiplied(.956, .17, 1);
-    if (custom) secondary = ensureTextContrast(secondary, hexToRgb(surface), 4.5);
-  } else if (!custom) {
-    accent = rgbaToHexa(changeColorAccent(rgbToHsv(...hexToRgb(original.accent)), rgbToHsv(...hexToRgb(accent)), hexToRgb(original.accent), !dark));
+  } else if (!dark && iosLightness(accent) > .705) {
+    const [h, s, v] = rgbToHsv(...hexToRgb(accent));
+    accent = rgbaToHexa(hsvToRgb(h, Math.min(1, s * 1.1), Math.min(v, .6)));
   }
-  const sourceMessageColors = custom ? custom.colors : (preset?.message_colors ?? original.bubble).map(hex);
-  const baseMessageColor = hexToRgb(base === 'tinted' ? '#3685fa' : hex(original.bubble[0]));
-  const surfaceRgb = hexToRgb(surface);
-  const weight = dark ? 1 : .12;
-  // tweb themeController.applyTheme: message accent and outgoing fill for a set of message colors.
-  const messageFill = (rawMessageColors: ColorRgb[]) => {
-    let messageAccent: ColorRgb = rawMessageColors[0];
-    if (rawMessageColors.length > 1) {
-      messageAccent = rawMessageColors.slice(1).reduce((a, b) => getAverageColor(a, b), messageAccent);
-      messageAccent = getAccentColor(rgbToHsv(...baseMessageColor), mixColors(baseMessageColor, surfaceRgb, weight), messageAccent);
-    }
-    let outgoing = mixColors(messageAccent, surfaceRgb, weight);
-    if (!dark) {
-      const hsl = rgbaToHsla(...outgoing);
-      outgoing = hslaToRgba(hsl.h, Math.min(hsl.s + 63, 100), hsl.l, hsl.a).slice(0, 3) as ColorRgb;
-    }
-    return { messageAccent, outgoing };
-  };
-  const { messageAccent, outgoing } = messageFill(sourceMessageColors.map(hexToRgb));
-  // User-picked message colors paint the outgoing bubble exactly as chosen (solid or two-stop gradient),
-  // with black or white text, whichever contrasts more with the average of the stops.
-  const customLight = custom ? relativeLuminance(custom.colors.map(hexToRgb).reduce((a, b) => getAverageColor(a, b))) > .179 : false;
-  const customText = customLight ? '#000000' : '#ffffff';
-  const outgoingHex = rgbaToHexa(outgoing);
-  const outboxAccent = custom ? undefined : chatTheme?.outbox_accent_color;
-  const outgoingPrimary = dark ? '#ffffff' : rgbaToHexa(outboxAccent === undefined ? messageAccent : hexToRgb(hex(outboxAccent)));
-  const thumbnailOutgoing = rgbaToHexa(mixColors(dark ? [255, 255, 255] : outboxAccent === undefined ? messageAccent : hexToRgb(hex(outboxAccent)), outgoing, .08));
+  // iOS keeps curated/cloud stops intact; regular accent swatches derive their own fills.
+  const sourceMessageColors = custom ? custom.colors : preset && (chatTheme || (selection.preset ?? 0) >= 100)
+    ? preset.message_colors.map(hex)
+    : base === 'day' && !preset ? ['#e1ffc7'] : iosBubbleColors(base, sourceAccent);
+  const outgoingHex = sourceMessageColors[sourceMessageColors.length - 1];
+  const outgoingBackground = sourceMessageColors.length > 1
+    ? `linear-gradient(to bottom, ${sourceMessageColors.join(', ')})` : outgoingHex;
+  let textStops = dark ? [sourceMessageColors[0], outgoingHex] : sourceMessageColors;
+  if (base === 'night' && Math.abs(iosLightness(textStops[0]) - iosLightness(textStops[1])) > .7) {
+    const brighter = iosLightness(textStops[0]) > iosLightness(textStops[1]) ? 0 : 1;
+    textStops = textStops.map((color, index) => index === brighter ? iosMultiply(color, 1, 1, .85) : color);
+  }
+  const lightFill = textStops.reduce((sum, color) => sum + iosLightness(color), 0) / textStops.length > (base === 'night' ? .735 : base === 'tinted' ? .7 : .705);
+  const outgoingText = lightFill ? '#000000' : '#ffffff';
+  const outgoingPrimary = lightFill && !dark ? '#004bad' : outgoingText;
+  const outgoingMeta = dark ? (lightFill ? 'rgba(0,0,0,.5)' : 'rgba(255,255,255,.5)')
+    : lightFill ? iosMultiply(sourceMessageColors[0], 1.344 * .75, 4.554 * 1.1, .549) : 'rgba(255,255,255,.65)';
   const wp = PRESETS[base].find(p => p.id === selection.preset)?.wallpaper;
   const colors = wp ? telegramWallpaperColors([wp.background_color, wp.second_background_color, wp.third_background_color, wp.fourth_background_color].filter((n): n is number => n !== undefined)).map(hex) : original.wallpaper.map(hex);
   // tweb blends cloud wallpapers 85% toward the closest tinted base-color wallpaper.
@@ -164,7 +154,7 @@ export function resolveTheme(base: BaseTheme, selection: ThemeSelection = { pres
     intensity: base === 'tinted' ? 38 : Math.abs(themeWallpaper.intensity),
     rotation: 0, blur: false, source: themeWallpaper.source,
   } : { kind: 'gradient', colors, pattern: true, intensity: base === 'tinted' ? 38 : wp?.intensity ?? 50, rotation: 0, blur: false });
-  return { base, dark, accent, surface, background, text: original.text, secondary, border, incoming, outgoing: custom ? custom.colors[custom.colors.length - 1] : outgoingHex, outgoingBackground: custom ? custom.colors.length > 1 ? `linear-gradient(to bottom, ${custom.colors.join(', ')})` : custom.colors[0] : outgoingHex, thumbnailOutgoing: custom ? custom.colors[0] : thumbnailOutgoing, sourceAccent, sourceMessageColors, outgoingText: custom ? customText : original.text, outgoingPrimary: custom ? customText : outgoingPrimary, outgoingMeta: custom ? customLight ? 'rgba(0,0,0,.55)' : 'rgba(255,255,255,.7)' : dark ? 'rgba(255,255,255,.6)' : outgoingPrimary, textSize, wallpaper };
+  return { base, dark, accent, surface, background, text: original.text, secondary, border, incoming, outgoing: outgoingHex, outgoingBackground, thumbnailOutgoing: outgoingBackground, sourceAccent, sourceMessageColors, outgoingText, outgoingPrimary, outgoingMeta, textSize, wallpaper };
 }
 
 export type ResolvedAppearance = ReturnType<typeof resolveTheme>;

@@ -715,6 +715,7 @@
     "default": "デフォルト",
     "set_color": "色を選択",
     "gradient": "グラデーション",
+    "gradient_animation": "グラデーションのアニメーション",
     "photo": "写真",
     "upload": "背景をアップロード",
     "pattern": "パターン",

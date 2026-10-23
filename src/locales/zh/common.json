@@ -715,6 +715,7 @@
     "default": "默认",
     "set_color": "选择颜色",
     "gradient": "渐变",
+    "gradient_animation": "渐变动画",
     "photo": "照片",
     "upload": "上传背景",
     "pattern": "图案",

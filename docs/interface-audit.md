@@ -218,3 +218,21 @@ Compared local tweb `_chatBubble.scss` and `_chatVariables.scss`. Applied its 56
 ### Photo scroll stability — 2026-10-23
 
 Corrected the previous bubble layout regression: a protected photo initially rendered no image, so its auto-height row grew after fetch/decode and collapsed again when remounted by virtualization. Attachment frames now reserve a metadata-based aspect ratio (stable 4:3 fallback when absent), with media absolutely contained inside. Album cells remain square. Virtuoso keeps 400px of extra content mounted on either side while retaining virtualization. `scripts/telegram-ui/chat-media-scroll.mjs` passed delayed photo loads and rapid wheel reversals with 70 messages at 390/820/1440px, Turkish/English/Arabic RTL, dark mode and enlarged text. Lint and interface checks passed. No screenshots; physical-device momentum and live network unverified.
+
+### Default wallpaper source correction — 2026-10-23
+
+Appearance and chat default pattern CSS incorrectly referenced the Dott PNG. Both the background-image and night mask now reference `/images/chat/telegram-pattern.svg`, verified byte-identical by SHA-1 to tweb-master/public/assets/img/pattern.svg. Explicit theme pattern selections remain intact. `check-appearance-colors.mjs` passed; no screenshots or new visual verification.
+
+### Gradient animation setting — 2026-10-23
+
+The previous canvas only drew one static frame. Added a localized persisted gradient-animation switch under chat background settings and a bounded 30fps animation using the existing tweb-derived phase interpolation. Default enabled for gradient wallpapers, with static theme thumbnails and paused offscreen/hidden/reduced-motion states. Four-width DOM/canvas fixtures verify pixel changes, toggle persistence and chat playback; lint, appearance color and interface checks passed. No screenshots; real-device performance unverified.
+
+### iOS message palettes and accent isolation — 2026-10-23
+
+The user selected Telegram-iOS-master as the updated color reference. Curated bubble stops are preserved in source order instead of being averaged or derived from wallpaper. Regular accent fills use DefaultDayPresentationTheme.swift, DefaultDarkPresentationTheme.swift and DefaultDarkTintedPresentationTheme.swift calculations; Night blue retains its explicit three-stop purple-to-blue gradient. Lightness and channel conversion follow UIKitUtils.swift. Palette buttons, settings previews and chat share the same resolved fill. The editor preserves up to four stops and saves them without altering the selected accent. Old automatic followWallpaper overrides are discarded; explicitly picked colors remain.
+
+Model checks passed for 14 curated palettes read directly from ThemeColorPresets.swift, 36 wallpaper previews, regular blue defaults, accent/surface isolation and stored three-stop gradients. Interface regression checks passed. The 49 accent options passed DOM fixtures at 320/390/820/1440px with Turkish/English/Arabic RTL and enlarged text: displayed accent equals applied accent, default circle remains first, reset works, selections survive reload, and chat uses the resolved fill. Lint passed with two existing map warnings. No screenshots or simulators; live-service and real-device appearance remain unverified.
+
+The default circular control remains in its original position. Gradient animation is also exposed directly beneath Wallpaper in Appearance, sharing the background editor’s persisted preference; it remains visible but disabled for non-gradient backgrounds.
+
+Animation DOM/canvas fixtures passed across four widths/locales: the main Appearance switch persists through reload, background-editor toggle changes actual pixels, reduced motion pauses, and chat animates. Final lint passed with the same two existing map warnings.

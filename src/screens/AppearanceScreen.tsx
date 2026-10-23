@@ -9,7 +9,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useNavigate } from '@/router';
 import ChatWallpaper from '@/features/appearance/ChatWallpaper';
 import TelegramThemePicker from '@/features/appearance/TelegramThemePicker';
-import { BACKGROUND_COLORS, PRESETS, THEME_CHOICES, hex, resolveTheme, type ThemeChoice, type ResolvedAppearance } from '@/features/appearance/model';
+import { BACKGROUND_COLORS, PRESETS, THEME_CHOICES, resolveTheme, type ThemeChoice, type ResolvedAppearance } from '@/features/appearance/model';
 
 function previewStyle(value: ResolvedAppearance): CSSProperties {
   return {
@@ -39,10 +39,10 @@ export function AppearancePreview({ value }: { value?: ResolvedAppearance }) {
 export default function AppearanceScreen() {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
-  const { appearance, palette, setBaseTheme, selectPreset, selectChatTheme, setMessageColors, setTextSize } = useTheme();
-  const messages = appearance.themes[palette.base].messages ?? { accent: palette.sourceAccent, colors: palette.sourceMessageColors.slice(0, 1) };
+  const { appearance, palette, setBaseTheme, selectPreset, selectChatTheme, setMessageColors, setTextSize, setWallpaper } = useTheme();
+  const messages = appearance.themes[palette.base].messages ?? { accent: palette.sourceAccent, colors: palette.sourceMessageColors };
   const gradient = messages.colors.length > 1;
-  const messageStops = [messages.colors[0], messages.colors[1] ?? messages.colors[0]];
+  const messageStops = messages.colors.length > 1 ? messages.colors : [messages.colors[0], messages.colors[0]];
   const label = (base: ThemeChoice) => t(`appearance.${themeKeys[base]}`);
   return <div className="skyline-page-scroll w-full"><div className={`cv-appearance ${palette.dark ? 'dark' : 'light'}`} style={previewStyle(palette)}>
     <AppearancePreview />
@@ -52,6 +52,7 @@ export default function AppearanceScreen() {
         <AppearanceRange id="message-text-size" min={12} max={20} value={appearance.textSize} onChange={setTextSize} />
       </div>
       <ListRow icon={<Image />} title={t('appearance.wallpaper')} onClick={() => navigate('/settings/appearance/background')} />
+      <ListRow title={t('appearance.gradient_animation')} accessory={<Switch checked={palette.wallpaper.kind === 'gradient' && palette.wallpaper.animated !== false} disabled={palette.wallpaper.kind !== 'gradient'} onChange={animated => setWallpaper({ ...palette.wallpaper, animated })} aria-label={t('appearance.gradient_animation')} />} />
     </GroupedSection>
     <GroupedSection title={t('appearance.color_theme')}>
       <TelegramThemePicker base={palette.base} selectedId={appearance.themes[palette.base].preset === null ? appearance.themes[palette.base].theme ?? '' : undefined} onSelect={selectChatTheme} />
@@ -64,12 +65,15 @@ export default function AppearanceScreen() {
     </GroupedSection>
     <GroupedSection title={t('appearance.accent')}>
       <div className="cv-appearance-colors" aria-label={t('appearance.accent')}>
-        <button type="button" className="cv-appearance-swatch" aria-label={t('appearance.default')} aria-pressed={appearance.themes[palette.base].preset === null && !appearance.themes[palette.base].theme} onClick={() => selectPreset(null)}>
+        <button type="button" className="cv-appearance-swatch" data-preset="default" aria-label={t('appearance.default')} aria-pressed={appearance.themes[palette.base].preset === null && !appearance.themes[palette.base].theme && !appearance.themes[palette.base].messages} onClick={() => selectPreset(null)}>
           <span style={{ background: resolveTheme(palette.base).accent, display: 'grid', placeItems: 'center', color: '#fff' }}><RotateCcw size={18} aria-hidden="true" /></span>
         </button>
-        {PRESETS[palette.base].map(preset => <button type="button" key={preset.id} className="cv-appearance-swatch" aria-label={`${t('appearance.accent')} ${hex(preset.accent_color)}`} aria-pressed={appearance.themes[palette.base].preset === preset.id} onClick={() => selectPreset(preset.id)}>
-          <span style={{ background: `linear-gradient(135deg, ${preset.message_colors.length > 1 ? preset.message_colors.map(hex).join(', ') : [hex(preset.accent_color), hex(preset.accent_color)].join(', ')})` }} />
-        </button>)}
+        {PRESETS[palette.base].map(preset => {
+          const swatch = resolveTheme(palette.base, { preset: preset.id });
+          return <button type="button" key={preset.id} data-preset={preset.id} className="cv-appearance-swatch" style={{ '--cv-swatch-accent': swatch.accent } as CSSProperties} aria-label={`${t('appearance.accent')} ${swatch.accent}`} aria-pressed={!appearance.themes[palette.base].theme && !appearance.themes[palette.base].messages && appearance.themes[palette.base].preset === preset.id} onClick={() => selectPreset(preset.id)}>
+            <span style={{ background: swatch.accent }} />
+          </button>;
+        })}
       </div>
     </GroupedSection>
     <GroupedSection title={t('appearance.message_colors')}>
@@ -79,11 +83,11 @@ export default function AppearanceScreen() {
       </div>
       <div className="cv-appearance-message-stops">
         {messageStops.map((color, index) => <label key={index} data-disabled={index > 0 && !gradient}>
-          <span>{t(index === 0 ? 'appearance.gradient_start' : 'appearance.gradient_end')}</span>
+          <span>{messageStops.length > 2 ? `${t('appearance.set_color')} ${index + 1}` : t(index === 0 ? 'appearance.gradient_start' : 'appearance.gradient_end')}</span>
           <input type="color" value={color} disabled={index > 0 && !gradient} onChange={event => setMessageColors({ ...messages, colors: messages.colors.map((value, position) => position === index ? event.target.value : value) })} />
         </label>)}
       </div>
-      <ListRow title={t('appearance.message_gradient')} accessory={<Switch checked={gradient} onChange={() => setMessageColors({ ...messages, colors: gradient ? messages.colors.slice(0, 1) : [messages.colors[0], palette.sourceMessageColors[1] ?? messages.accent] })} aria-label={t('appearance.message_gradient')} />} />
+      <ListRow title={t('appearance.message_gradient')} accessory={<Switch checked={gradient} onChange={() => setMessageColors({ ...messages, colors: gradient ? messages.colors.slice(0, 1) : [messages.colors[0], messages.colors[0]] })} aria-label={t('appearance.message_gradient')} />} />
       <label className="cv-appearance-accent-stop">
         <span>{t('appearance.accent')}</span>
         <span className="cv-appearance-accent-swatch" style={{ background: palette.accent }}>
@@ -124,6 +128,7 @@ export function ChatBackgroundScreen() {
           {colors.length > 2 && <button type="button" className="cv-appearance-button" onClick={() => patch({ colors: colors.slice(0, -1) })}>{t('appearance.remove_color')}</button>}
           <button type="button" className="cv-appearance-button" onClick={() => patch({ rotation: (wp.rotation + 45) % 360 })}>{t('appearance.rotate')}</button>
         </div>}
+        {wp.kind === 'gradient' && <ListRow title={t('appearance.gradient_animation')} accessory={<Switch checked={wp.animated !== false} onChange={() => patch({ animated: wp.animated === false })} aria-label={t('appearance.gradient_animation')} />} />}
         <ListRow title={t('appearance.pattern')} accessory={<Switch checked={wp.pattern} onChange={() => patch({ pattern: !wp.pattern })} aria-label={t('appearance.pattern')} />} />
         {wp.pattern && <div className="cv-appearance-slider">
           <label htmlFor="wallpaper-intensity"><span>{t('appearance.intensity')}</span><output htmlFor="wallpaper-intensity">{wp.intensity}%</output></label>

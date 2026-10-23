@@ -715,6 +715,7 @@
     "default": "Predeterminado",
     "set_color": "Elegir color",
     "gradient": "Degradado",
+    "gradient_animation": "Animación del degradado",
     "photo": "Foto",
     "upload": "Subir fondo",
     "pattern": "Patrón",

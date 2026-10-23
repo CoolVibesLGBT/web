@@ -715,6 +715,7 @@
     "default": "Standard",
     "set_color": "Farbe wählen",
     "gradient": "Farbverlauf",
+    "gradient_animation": "Farbverlaufsanimation",
     "photo": "Foto",
     "upload": "Hintergrund hochladen",
     "pattern": "Muster",

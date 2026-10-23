@@ -749,6 +749,7 @@
     "default": "기본값",
     "set_color": "색상 선택",
     "gradient": "그라데이션",
+    "gradient_animation": "그라데이션 애니메이션",
     "photo": "사진",
     "upload": "배경 업로드",
     "pattern": "무늬",
