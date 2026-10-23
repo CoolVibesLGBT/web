@@ -236,3 +236,7 @@ Model checks passed for 14 curated palettes read directly from ThemeColorPresets
 The default circular control remains in its original position. Gradient animation is also exposed directly beneath Wallpaper in Appearance, sharing the background editor’s persisted preference; it remains visible but disabled for non-gradient backgrounds.
 
 Animation DOM/canvas fixtures passed across four widths/locales: the main Appearance switch persists through reload, background-editor toggle changes actual pixels, reduced motion pauses, and chat animates. Final lint passed with the same two existing map warnings.
+
+### Settings list interaction and switch accents — 2026-10-23
+
+DOM inspection found 8px (12px with enlarged text) of section padding above the first row that belonged to the container, so it received neither row clicks nor hover. Shared grouped lists now place that space inside their edge rows. Settings toggle rows now expose one full-row switch with native button keyboard handling and an inert visual indicator. Enabled shared switches use the chosen brand/hover tokens instead of fixed green. Lint and interface regression checks passed; browser checks pending. No screenshots; the supplied image was inaccessible.
