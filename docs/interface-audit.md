@@ -239,4 +239,14 @@ Animation DOM/canvas fixtures passed across four widths/locales: the main Appear
 
 ### Settings list interaction and switch accents — 2026-10-23
 
-DOM inspection found 8px (12px with enlarged text) of section padding above the first row that belonged to the container, so it received neither row clicks nor hover. Shared grouped lists now place that space inside their edge rows. Settings toggle rows now expose one full-row switch with native button keyboard handling and an inert visual indicator. Enabled shared switches use the chosen brand/hover tokens instead of fixed green. Lint and interface regression checks passed; browser checks pending. No screenshots; the supplied image was inaccessible.
+DOM inspection found 8px (12px with enlarged text) of section padding above the first row that belonged to the container, so it received neither row clicks nor hover. Shared grouped lists now place that space inside their edge rows. Settings toggle rows now expose one full-row switch with native button keyboard handling and an inert visual indicator. Enabled shared switches use the chosen brand/hover tokens instead of fixed green. Lint passed with two existing map warnings; interface regression checks passed. Settings DOM fixtures passed at 320/390/820/1440px, Turkish/English/Arabic RTL, light/dark and enlarged text: upper-edge hover/navigation, full-row toggle, keyboard and switch/accent equality. No screenshots; the supplied image was inaccessible.
+
+### Accent palette wrapping — 2026-10-23
+
+Accent circles now wrap instead of scrolling horizontally, preserving existing sizes, spacing and selection order. Target inferred from the recent accent discussion because the supplied screenshot was inaccessible. CSS reviewed; no browser layout or real-device verification this pass.
+
+### Color theme two-column layout — 2026-10-23
+
+Per explicit user clarification, Color theme preview cards now use two equal columns at all widths with natural height. Removed horizontal scrolling classes and automatic centering; Up/Down move by two cards and keyboard focus reveals the destination through normal page scrolling. Existing previews and selection actions remain. Source reviewed; browser layout unverified this pass. No screenshots.
+
+User follow-up: changed Color theme grid to five columns and Up/Down keyboard navigation to five-card steps. Browser layout remains unverified this pass.

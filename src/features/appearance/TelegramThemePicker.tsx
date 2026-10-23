@@ -23,12 +23,10 @@ export default function TelegramThemePicker({ base, selectedId, onSelect }: {
     const buttons = Array.from(container.querySelectorAll<HTMLButtonElement>('button'));
     const selected = buttons.find(button => button.getAttribute('aria-pressed') === 'true') ?? buttons[0];
     buttons.forEach(button => { button.tabIndex = button === selected ? 0 : -1; });
-    const card = selected.getBoundingClientRect(), viewport = container.getBoundingClientRect();
-    container.scrollBy({ left: card.left - viewport.left - (container.clientWidth - card.width) / 2, behavior: 'instant' });
   }, [base, selectedId]);
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
     const container = event.currentTarget;
     const buttons = Array.from(container.querySelectorAll<HTMLButtonElement>('button'));
     const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
@@ -36,14 +34,14 @@ export default function TelegramThemePicker({ base, selectedId, onSelect }: {
     event.preventDefault();
     const rtl = getComputedStyle(container).direction === 'rtl';
     const nextKey = rtl ? 'ArrowLeft' : 'ArrowRight';
-    const next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : (index + (event.key === nextKey ? 1 : buttons.length - 1)) % buttons.length;
+    const step = event.key === 'ArrowDown' ? 5 : event.key === 'ArrowUp' ? -5 : event.key === nextKey ? 1 : -1;
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : Math.max(0, Math.min(buttons.length - 1, index + step));
     buttons.forEach((button, position) => { button.tabIndex = position === next ? 0 : -1; });
     buttons[next].focus({ preventScroll: true });
-    const card = buttons[next].getBoundingClientRect(), viewport = container.getBoundingClientRect();
-    container.scrollBy({ left: card.left - viewport.left - (container.clientWidth - card.width) / 2, behavior: 'instant' });
+    buttons[next].scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' });
   };
 
-  return <div ref={strip} className="cv-appearance-themes scrollable scrollable-x themes-container" role="toolbar" aria-label={t('appearance.color_theme')} onKeyDown={onKeyDown}>
+  return <div ref={strip} className="cv-appearance-themes themes-container" role="toolbar" aria-label={t('appearance.color_theme')} onKeyDown={onKeyDown}>
     {ITEMS.map(theme => {
       const preview = resolveTheme(base, { preset: null, theme: theme.id || undefined });
       const active = selectedId === theme.id;
