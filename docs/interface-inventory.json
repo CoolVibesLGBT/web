@@ -1,5 +1,10 @@
 {
-  "generatedBy": "yarn node scripts/audit-interface.mjs",
+  "concurrentRenderingReview": {
+    "date": "2026-10-24",
+    "scope": ["ViewTabs all consumers", "MessagesScreen search/filter", "Home post/view tabs", "PlacesScreen search/category/grid/map", "NearbyScreen view mode", "CheckInScreen map/list", "SearchScreen filters/results", "GameMap shared markers", "PlaceDetailsScreen and PostDetails data/loading"],
+    "implementation": "Shared tab transitions, deferred search/marker rendering and paired successful data/loading commits. Jotai mutations, pagination, message actions and player position keep their existing scheduling. Detail requests discard obsolete responses; place errors stop loading. Places initializes its persistent map after initial location is available.",
+    "verification": "Build and interface regressions passed. Posts (including concealed-photo reveal then gallery), discovery, profile-tabs and groups passed four viewport/locale cases. Dedicated DOM/API transition checks passed all four viewport/locale cases, including mocked map markers and check-in views; see transition-checks.json. No live-service or measured performance claim."
+  },
   "sources": [
     {
       "file": "src/App.tsx",

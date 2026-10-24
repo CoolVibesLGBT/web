@@ -1,6 +1,6 @@
 import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, startTransition } from 'react';
 import { motion, AnimatePresence, useMotionValue, animate } from 'framer-motion';
 import {
     MapPin,
@@ -297,7 +297,7 @@ export default function CheckInScreen() {
         const handleViewMode = (event: Event) => {
             const viewMode = (event as CustomEvent<{ viewMode?: 'map' | 'list' }>).detail?.viewMode;
             if (viewMode === 'map' || viewMode === 'list') {
-                setCheckInViewMode(viewMode);
+                startTransition(() => setCheckInViewMode(viewMode));
             }
         };
 

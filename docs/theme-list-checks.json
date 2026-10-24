@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-21",
+  "date": "2026-10-24",
   "method": "DOM/CSS/HTTP fixtures; no screenshots",
   "results": [
     {
@@ -8,8 +8,8 @@
       "theme": "light",
       "mode": "day",
       "status": "passed",
-      "first": "#f6f2fb",
-      "second": "#f1f4fd",
+      "first": "#f6f2fa",
+      "second": "#f1f4fc",
       "settingsCard": {
         "background": "rgb(255, 255, 255)",
         "radius": "24px",
@@ -23,8 +23,8 @@
         "shadow": "rgba(0, 0, 0, 0.05) 0px 1px 4px 0px"
       },
       "groupHover": {
-        "actual": "rgb(241, 244, 253)",
-        "expected": "rgb(241, 244, 253)"
+        "actual": "rgb(241, 244, 252)",
+        "expected": "rgb(241, 244, 252)"
       },
       "checks": [
         "theme change updates one shared hover token",

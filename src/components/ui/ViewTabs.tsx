@@ -1,4 +1,4 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState, useTransition, type ReactNode } from 'react'
 import { Check, ChevronDown, Lock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { GroupedSection, ListRow, Sheet } from '@/components/ui/Interface'
@@ -31,6 +31,7 @@ export default function ViewTabs<T extends string>({ items, activeId, onSelect, 
   const moreMeasurement = useRef<HTMLSpanElement>(null)
   const pendingFocus = useRef<T | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const [size, setSize] = useState<{ width: number; widths: number[]; more: number }>({ width: 0, widths: [], more: 88 })
   const signature = items.map(item => `${item.id}:${item.label}:${item.count ?? ''}:${!!item.icon}:${!!item.locked}`).join('|')
   const moreLabel = t('app.nav.more')
@@ -69,7 +70,7 @@ export default function ViewTabs<T extends string>({ items, activeId, onSelect, 
     if (disabled || item.disabled) return
     pendingFocus.current = focus ? item.id : null
     setMenuOpen(false)
-    onSelect(item.id)
+    startTransition(() => onSelect(item.id))
   }
   const contents = (item: ViewTabItem<T>) => <>
     {item.icon && <span className="cv-adaptive-icon" aria-hidden="true">{item.icon}</span>}
@@ -79,12 +80,12 @@ export default function ViewTabs<T extends string>({ items, activeId, onSelect, 
   </>
 
   return <div ref={root} className={`cv-adaptive-tabs cv-adaptive-tabs-${variant}`}>
-    <div className="cv-adaptive-visible" role="tablist" aria-label={label} onKeyDown={event => {
+    <div className="cv-adaptive-visible" role="tablist" aria-label={label} aria-busy={isPending} onKeyDown={event => {
       if (disabled || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
       const enabled = items.filter(item => !item.disabled)
       if (!enabled.length) return
       event.preventDefault()
-      const current = Math.max(0, enabled.findIndex(item => item.id === activeId))
+      const current = Math.max(0, enabled.findIndex(item => item.id === (pendingFocus.current ?? activeId)))
       const direction = i18n.dir() === 'rtl' ? -1 : 1
       const offset = event.key === 'ArrowRight' ? direction : -direction
       const next = event.key === 'Home' ? enabled[0] : event.key === 'End' ? enabled[enabled.length - 1] : enabled[(current + offset + enabled.length) % enabled.length]

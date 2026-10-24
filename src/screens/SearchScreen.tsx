@@ -1,6 +1,6 @@
 import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState, startTransition } from 'react';
 import { motion } from 'framer-motion';
 import {
   AlertCircle,
@@ -195,7 +195,10 @@ const SearchScreen: React.FC = () => {
           limit: 12,
         });
         if (cancelled) return;
-        setResponse(normalizeResponse(nextResponse));
+        startTransition(() => {
+          setResponse(normalizeResponse(nextResponse));
+          setIsSearching(false);
+        });
       } catch (requestError: unknown) {
         if (cancelled) return;
         const message = requestError instanceof Error
@@ -203,8 +206,7 @@ const SearchScreen: React.FC = () => {
           : t('search.load_failed', { defaultValue: 'Search could not be completed. Please try again.' });
         setResponse(EMPTY_RESPONSE);
         setError(message);
-      } finally {
-        if (!cancelled) setIsSearching(false);
+        setIsSearching(false);
       }
     }, 280);
 
@@ -414,7 +416,7 @@ const SearchScreen: React.FC = () => {
         {showAll && (
           <button
             type="button"
-            onClick={() => setActiveFilter(filterId)}
+            onClick={() => startTransition(() => setActiveFilter(filterId))}
             className="flex shrink-0 items-center gap-0.5 text-[0.765rem] font-bold text-[var(--color-brand)] transition-opacity hover:opacity-80"
           >
             {t('search.show_all', { defaultValue: 'Show all' })}

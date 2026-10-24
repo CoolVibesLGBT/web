@@ -1,6 +1,6 @@
 import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef, useDeferredValue, startTransition } from 'react';
 import { MapPin, Loader, RefreshCw, Grid, Map as MapIcon, X, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
@@ -46,6 +46,7 @@ const PlacesScreen: React.FC = () => {
   });
 
   const [searchQuery, setSearchQuery] = useState('');
+  const deferredSearchQuery = useDeferredValue(searchQuery);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
   const [places, setPlaces] = useState<Place[]>([]);
@@ -181,15 +182,15 @@ const PlacesScreen: React.FC = () => {
       if (selectedCategory !== 'all' && !tags.some((h: any) => h.tag === selectedCategory)) {
         return false;
       }
-      if (searchQuery) {
+      if (deferredSearchQuery) {
         const name = (place.extras?.place?.name ?? '').toLowerCase();
         const description = (place.extras?.place?.description ?? '').toLowerCase();
-        const query = searchQuery.toLowerCase();
+        const query = deferredSearchQuery.toLowerCase();
         return name.includes(query) || description.includes(query);
       }
       return true;
     });
-  }, [places, selectedCategory, searchQuery]);
+  }, [places, selectedCategory, deferredSearchQuery]);
 
   useEffect(() => {
     const handleSearchQuery = (event: Event) => {
@@ -252,14 +253,14 @@ const PlacesScreen: React.FC = () => {
     const handleViewMode = (event: Event) => {
       const mode = (event as CustomEvent<{ viewMode?: 'grid' | 'map' }>).detail?.viewMode;
       if (mode === 'grid' || mode === 'map') {
-        setViewMode(mode);
+        startTransition(() => setViewMode(mode));
       }
     };
 
     const handleCategory = (event: Event) => {
       const category = (event as CustomEvent<{ category?: string }>).detail?.category;
       if (category) {
-        setSelectedCategory(category);
+        startTransition(() => setSelectedCategory(category));
       }
     };
 
@@ -392,7 +393,8 @@ const PlacesScreen: React.FC = () => {
     navigate(`/places/${place.public_id}`, { state: { place } });
   }, [navigate]);
 
-  const renderMap = (
+  // Wait for the initial location so the persistent map starts at the actual center.
+  const renderMap = location ? (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -409,7 +411,7 @@ const PlacesScreen: React.FC = () => {
         initialCenter={defaultCenter}
       />
     </motion.div>
-  );
+  ) : null;
 
   const renderContent = () => {
     if (loadingInitial && places.length === 0) {
@@ -576,7 +578,7 @@ const PlacesScreen: React.FC = () => {
                       <button
                         key={cat}
                         type="button"
-                        onClick={() => setSelectedCategory(cat)}
+                        onClick={() => startTransition(() => setSelectedCategory(cat))}
                         aria-pressed={isSelected}
                         className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2 text-[0.765rem] font-semibold transition-colors ${isSelected
                           ? 'bg-[var(--color-brand)] text-white'

@@ -1,6 +1,6 @@
 import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
-import { useState, useEffect, useRef, useCallback, useMemo, type CSSProperties } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo, startTransition, type CSSProperties } from 'react';
 import { Grid, List, Square, RefreshCw, X, Map as MapIcon, Bubbles } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSettings } from '../contexts/SettingsContext';
@@ -153,7 +153,7 @@ const NearbyScreen: React.FC = () => {
   const adsInNearbyEnabled = useMemo(() => isFeatureEnabled('ads_in_nearby'), []);
 
   const setViewMode = useCallback((nextMode: NearbyViewMode) => {
-    setNearbyViewMode(nextMode);
+    startTransition(() => setNearbyViewMode(nextMode));
     persistGlobalViewMode(nextMode);
     if (typeof window !== 'undefined') {
       window.localStorage.setItem(NEARBY_VIEW_MODE_STORAGE_KEY, nextMode);

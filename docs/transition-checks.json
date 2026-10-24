@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-24",
+  "method": "Browser DOM and intercepted APIs; no screenshots, live mutations or performance benchmark",
+  "results": [
+    {
+      "width": 320,
+      "language": "tr",
+      "theme": "light",
+      "status": "passed",
+      "checks": [
+        "chat search, no-match and clear",
+        "transition tabs preserve keyboard selection and focus including overflow and RTL",
+        "Places search, clear and category filter",
+        "Places deferred markers add/remove under filters and map/grid switching",
+        "Check-in map and player mount; header event returns to list",
+        "place detail success and missing-place error settle loading"
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en",
+      "theme": "dark",
+      "status": "passed",
+      "checks": [
+        "chat search, no-match and clear",
+        "transition tabs preserve keyboard selection and focus including overflow and RTL",
+        "Places search, clear and category filter",
+        "Places deferred markers add/remove under filters and map/grid switching",
+        "Check-in map and player mount; header event returns to list",
+        "place detail success and missing-place error settle loading"
+      ]
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "status": "passed",
+      "checks": [
+        "chat search, no-match and clear",
+        "transition tabs preserve keyboard selection and focus including overflow and RTL",
+        "Places search, clear and category filter",
+        "Places deferred markers add/remove under filters and map/grid switching",
+        "Check-in map and player mount; header event returns to list",
+        "place detail success and missing-place error settle loading"
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "light",
+      "status": "passed",
+      "checks": [
+        "chat search, no-match and clear",
+        "transition tabs preserve keyboard selection and focus including overflow and RTL",
+        "Places search, clear and category filter",
+        "Places deferred markers add/remove under filters and map/grid switching",
+        "Check-in map and player mount; header event returns to list",
+        "place detail success and missing-place error settle loading"
+      ]
+    }
+  ]
+}

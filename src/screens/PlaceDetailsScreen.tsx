@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, startTransition } from 'react';
 import { useLocation, useNavigate, useParams } from '@/router';
 import { motion } from 'framer-motion';
 import { ChevronRight, MapPin, Globe, Phone, Loader, Mail, Compass, Navigation } from 'lucide-react';
@@ -24,8 +24,9 @@ const PlaceDetailsScreen: React.FC = () => {
   const location = useLocation();
   const state = location.state as LocationState | null;
 
-  const [place, setPlace] = useState<Place | null>(state?.place || null);
-  const [loading, setLoading] = useState<boolean>(!place);
+  const providedPlace = state?.place && String(state.place.public_id) === publicId ? state.place : null;
+  const [place, setPlace] = useState<Place | null>(providedPlace);
+  const [loading, setLoading] = useState<boolean>(!providedPlace);
   const [error, setError] = useState<string | null>(null);
 
   // Dynamic SEO – updates when place data is available
@@ -41,34 +42,41 @@ const PlaceDetailsScreen: React.FC = () => {
     type: 'website',
   });
 
-  const fetchPlaceDetails = useCallback(async () => {
-    if (!place && publicId) {
-      setLoading(true);
-      setError(null);
+  useEffect(() => {
+    let cancelled = false;
+    setError(null);
+    setPlace(providedPlace);
+    setLoading(!providedPlace);
+
+    if (!publicId) {
+      setError(t('places.no_public_id'));
+      setLoading(false);
+      return;
+    }
+    if (providedPlace) return;
+
+    const fetchPlaceDetails = async () => {
       try {
         const response = (await api.fetchPlace(publicId)) as any;
-        // The API might return a single place in an array or as a single object
-        const foundPlace = Array.isArray(response.places) && response.places.length > 0 ? response.places[0] : response.place;
-
-        if (foundPlace) {
+        if (cancelled) return;
+        const foundPlace = Array.isArray(response?.places) && response.places.length > 0
+          ? response.places[0]
+          : response?.place;
+        if (!foundPlace) throw new Error(response?.error || t('places.details_not_found'));
+        startTransition(() => {
           setPlace(foundPlace);
-        } else {
-          throw new Error(response.error || t('places.details_not_found', { defaultValue: 'Place not found' }));
-        }
-      } catch (err: any) {
-        setError(err.message || 'An error occurred while fetching place details.');
+          setLoading(false);
+        });
+      } catch (err: unknown) {
+        if (cancelled) return;
+        setError(err instanceof Error ? err.message : t('places.details_not_found'));
+        setLoading(false);
       }
-    } else if (!publicId) {
-      setError(t('places.no_public_id', { defaultValue: 'No place ID provided.' }));
-      setLoading(false);
-    } else {
-      setLoading(false);
-    }
-  }, [place, publicId, t]);
+    };
 
-  useEffect(() => {
-    fetchPlaceDetails();
-  }, [fetchPlaceDetails]);
+    void fetchPlaceDetails();
+    return () => { cancelled = true; };
+  }, [providedPlace, publicId, t]);
 
   const isDark = theme === 'dark';
   const pageClassName = 'skyline-page-scroll w-full';

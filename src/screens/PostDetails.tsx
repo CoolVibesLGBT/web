@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, startTransition } from 'react';
 import { useParams, useNavigate } from '@/router';
 import { useTheme } from '../contexts/ThemeContext';
 import Post, { type PostProps, type ApiPost } from '../features/post/Post';
@@ -128,10 +128,11 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
     setPost(updatedPost);
   }, [navigate, isDeletedMarker]);
 
+  const postAttachments = post?.attachments;
   const processingAttachmentCount = React.useMemo(() => {
-    if (!post?.attachments || !Array.isArray(post.attachments)) return 0;
-    return post.attachments.filter((attachment) => isProcessingAttachment(attachment)).length;
-  }, [post?.attachments, isProcessingAttachment]);
+    if (!Array.isArray(postAttachments)) return 0;
+    return postAttachments.filter((attachment) => isProcessingAttachment(attachment)).length;
+  }, [postAttachments, isProcessingAttachment]);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -155,17 +156,19 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
       setIsDeleted(false);
     }
 
+    let cancelled = false;
     const fetchPostData = async () => {
       try {
-        if (!isMountedRef.current) return;
+        if (cancelled || !isMountedRef.current) return;
         setLoading(true);
         setError(null);
         const postData = await api.fetchPost(postId) as PostFetchResponse;
-        if (!isMountedRef.current) return;
+        if (cancelled || !isMountedRef.current) return;
         const resolvedPost = resolveFetchedPost(postData);
         if (isDeletedMarker(resolvedPost?.deleted_at)) {
           setIsDeleted(true);
           setPost(resolvedPost);
+          setLoading(false);
           if (redirectTimeoutRef.current) {
             window.clearTimeout(redirectTimeoutRef.current);
           }
@@ -174,19 +177,26 @@ const PostDetails: React.FC<PostDetailsProps> = ({ showChildren = true, ...restP
           }, 150);
           return;
         }
-        setPost(resolvedPost);
+        startTransition(() => {
+          setPost(resolvedPost);
+          setLoading(false);
+        });
       } catch (err) {
         console.error('Error fetching post:', err);
-        if (!isMountedRef.current) return;
+        if (cancelled || !isMountedRef.current) return;
         setError(t('post_details.errors.load_failed'));
-      } finally {
-        if (isMountedRef.current) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     };
 
-    fetchPostData();
+    void fetchPostData();
+    return () => {
+      cancelled = true;
+      if (redirectTimeoutRef.current) {
+        window.clearTimeout(redirectTimeoutRef.current);
+        redirectTimeoutRef.current = null;
+      }
+    };
   }, [postId, t, navigate, isDeletedMarker, resolveFetchedPost]);
 
   useEffect(() => {

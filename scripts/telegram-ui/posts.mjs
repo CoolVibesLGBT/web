@@ -40,7 +40,13 @@ try {
    for(const label of ['Like post','Dislike post','Banana','Comment','Tip','Bookmark'])assert.equal(await card.getByRole('button',{name:label,exact:true}).count(),1);
   }
   await controlsFit(feed);
-  await feed.getByAltText('Post attachment 1',{exact:true}).click();const gallery=page.locator('.cv-post-gallery');await gallery.waitFor();assert.equal(await gallery.locator('xpath=ancestor::*[contains(@class,"cv-feed-post")]').count(),0,'Gallery escapes card containment');const galleryBox=await gallery.boundingBox();assert.equal(galleryBox.width,item.width);assert.equal(galleryBox.height,900);await gallery.getByRole('button',{name:JSON.parse(fs.readFileSync(`${root}/src/locales/${item.language}/common.json`)).app.close,exact:true}).click();await gallery.waitFor({state:'hidden'});
+  const firstPhoto=feed.getByAltText('Post attachment 1',{exact:true});
+  const firstTile=feed.locator('.cv-post-photo').first();
+  assert.equal(await firstTile.getAttribute('data-concealed'),'true','Default photo privacy remains enabled');
+  await firstPhoto.click();
+  await page.waitForFunction(()=>!document.querySelector('.cv-feed-post .cv-post-photo')?.hasAttribute('data-concealed'));
+  assert.equal(await page.locator('.cv-post-gallery').count(),0,'First click reveals the photo without opening the gallery');
+  await firstPhoto.click();const gallery=page.locator('.cv-post-gallery');await gallery.waitFor();assert.equal(await gallery.locator('xpath=ancestor::*[contains(@class,"cv-feed-post")]').count(),0,'Gallery escapes card containment');const galleryBox=await gallery.boundingBox();assert.equal(galleryBox.width,item.width);assert.equal(galleryBox.height,900);await gallery.getByRole('button',{name:JSON.parse(fs.readFileSync(`${root}/src/locales/${item.language}/common.json`)).app.close,exact:true}).click();await gallery.waitFor({state:'hidden'});
 
   const like=feed.getByRole('button',{name:'Like post',exact:true});
   assert.equal(await like.getAttribute('aria-pressed'),'true','Initial saved engagement is visible');

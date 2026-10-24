@@ -26,7 +26,7 @@ import EmptyConversation from '@/features/chat/EmptyConversation';
 import StickerMedia from '@/features/emoticons/StickerMedia';
 import GifMedia from '@/features/emoticons/GifMedia';
 import { normalizeEmoticon, type ChatEmoticon, type EmoticonSelection } from '@/features/emoticons/types';
-import React, { useState, useRef, useEffect, useCallback, useLayoutEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useLayoutEffect, useMemo, useDeferredValue } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
@@ -802,6 +802,17 @@ const MessagesScreen: React.FC = () => {
   const [showComposerOptions, setShowComposerOptions] = useState(false);
   const attachmentButtonRef = useRef<HTMLButtonElement>(null);
   const [chatSearch, setChatSearch] = useState('');
+  const deferredChatSearch = useDeferredValue(chatSearch);
+  const visibleChats = useMemo(() => {
+    const query = deferredChatSearch.trim().replace(/^@/, '').toLocaleLowerCase();
+    return chatsList.filter((chat: ChatItem) => {
+      if (query && !`${chat.name} ${chat.username}`.toLocaleLowerCase().includes(query)) return false;
+      if (activeFilter === 'unread') return chat.unread > 0;
+      if (activeFilter === 'unencrypted') return !chat.encrypted;
+      if (activeFilter === 'groups') return chat.type === 'group';
+      return true;
+    });
+  }, [chatsList, deferredChatSearch, activeFilter]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [selectedVideos, setSelectedVideos] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -2856,24 +2867,9 @@ const MessagesScreen: React.FC = () => {
                     </div>
                   ))}
                 </div>
-              ) : chatsList.filter((chat: ChatItem) => {
-                if (chatSearch && !`${chat.name} ${chat.username}`.toLocaleLowerCase().includes(chatSearch.trim().replace(/^@/, '').toLocaleLowerCase())) return false;
-                if (activeFilter === 'all') return true;
-                if (activeFilter === 'unread') return chat.unread > 0;
-                if (activeFilter === 'unencrypted') return !chat.encrypted;
-                  if (activeFilter === 'groups') return chat.type === 'group';
-                return true;
-              }).length === 0 ? (
+              ) : visibleChats.length === 0 ? (
                 <AnimatedEmptyState compact title={t('messages.no_chats_found')} />
               ) : (() => {
-                const visibleChats = chatsList.filter((chat: ChatItem) => {
-                  if (chatSearch && !`${chat.name} ${chat.username}`.toLocaleLowerCase().includes(chatSearch.trim().replace(/^@/, '').toLocaleLowerCase())) return false;
-                  if (activeFilter === 'all') return true;
-                  if (activeFilter === 'unread') return chat.unread > 0;
-                  if (activeFilter === 'unencrypted') return !chat.encrypted;
-                  if (activeFilter === 'groups') return chat.type === 'group';
-                  return true;
-                });
                 return <Virtuoso style={{ height: '100%' }} data={visibleChats} computeItemKey={(_, chat) => chat.id} itemContent={(_, chat) => (
               <React.Fragment>
                 <TelegramChatListRow chat={chat} selected={selectedChat === chat.id} typing={selectedChat === chat.id && otherUserTyping} onSelect={() => handleChatSelect(chat.id)} onMenu={point => openListMenu(chat.id, point)}>

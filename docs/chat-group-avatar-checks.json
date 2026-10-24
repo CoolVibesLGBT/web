@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-21",
+  "date": "2026-10-24",
   "method": "Playwright DOM and multipart fixtures; no screenshots, no real user mutations",
   "results": [
     {
@@ -112,8 +112,8 @@
         "rangeHeight": "44px"
       },
       "background": {
-        "panel": "rgb(20, 31, 46)",
-        "summary": "rgb(26, 43, 64)",
+        "panel": "rgb(24, 35, 46)",
+        "summary": "rgb(33, 48, 64)",
         "wallpaper": "-1"
       },
       "checks": [

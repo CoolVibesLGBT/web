@@ -48,7 +48,6 @@ export default function GlMarker({ position, html, className, anchor = 'center',
     // html/className kasıtlı olarak dışarıda: ikon markup'ı mount anında
     // sabitlenir, sadece konum canlı takip edilir (aşağıdaki efekt) — aynı
     // marker'ın her render'da yeniden yaratılıp titremesini önler.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [glMap, anchor]);
 
   useEffect(() => {

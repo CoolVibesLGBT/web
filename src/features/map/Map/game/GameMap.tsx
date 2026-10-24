@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useDeferredValue, memo } from 'react';
 import maplibregl from 'maplibre-gl';
 import { LocateFixed, Shrink, ZoomIn, ZoomOut } from 'lucide-react';
 import { useTheme } from '../../../../contexts/ThemeContext';
@@ -147,8 +147,37 @@ function GameMapControls({ mapRef, onRecenter }: GameMapControlsProps) {
  * tutup diff'lemek yerine bu yaklaşım, kanıtlanmış bir referans
  * mimarisinden (Context + per-marker bileşen) birebir alındı.
  */
+
+const EMPTY_LOCATIONS: any[] = [];
+
+// Keep marker reconciliation interruptible without delaying the player or camera.
+const MapMarkers = memo(function MapMarkers({
+  locations = EMPTY_LOCATIONS,
+  getMarkerCoords = defaultGetMarkerCoords,
+  getMarkerId = defaultGetMarkerId,
+  getMarkerContent,
+  onMarkerClick,
+}: GameMapProps) {
+  return locations.map((item) => {
+    const coords = getMarkerCoords(item);
+    if (!coords) return null;
+    const id = getMarkerId(item);
+    const content: GameMarkerContent = getMarkerContent?.(item) ?? {};
+    return (
+      <GlMarker
+        key={id}
+        position={coords}
+        anchor="bottom"
+        html={buildMarkerHtml(content)}
+        className={`gm-game-object gm-${content.variant ?? 'pokestop'}`}
+        onClick={() => onMarkerClick?.(item)}
+      />
+    );
+  });
+});
+
 export default function GameMap({
-  locations = [],
+  locations = EMPTY_LOCATIONS,
   getMarkerId = defaultGetMarkerId,
   getMarkerCoords = defaultGetMarkerCoords,
   getMarkerContent,
@@ -160,6 +189,7 @@ export default function GameMap({
   pitch = DEFAULT_PITCH,
   bearing = DEFAULT_BEARING,
 }: GameMapProps) {
+  const deferredLocations = useDeferredValue(locations);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const [glMap, setGlMap] = useState<maplibregl.Map | null>(null);
@@ -229,7 +259,6 @@ export default function GameMap({
     };
     // Harita bir kez kurulur; merkez/zoom/pitch değişiklikleri recenter
     // butonu veya ayrı efektlerle ele alınır.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -258,22 +287,7 @@ export default function GameMap({
         {playerPosition && (
           <GlMarker key="__player" position={playerPosition} anchor="center" html={PLAYER_HTML} className="gm-player-wrap" />
         )}
-        {locations.map((item) => {
-          const coords = getMarkerCoords(item);
-          if (!coords) return null;
-          const id = getMarkerId(item);
-          const content: GameMarkerContent = getMarkerContent?.(item) ?? {};
-          return (
-            <GlMarker
-              key={id}
-              position={coords}
-              anchor="bottom"
-              html={buildMarkerHtml(content)}
-              className={`gm-game-object gm-${content.variant ?? 'pokestop'}`}
-              onClick={() => onMarkerClick?.(item)}
-            />
-          );
-        })}
+        <MapMarkers locations={deferredLocations} getMarkerCoords={getMarkerCoords} getMarkerId={getMarkerId} getMarkerContent={getMarkerContent} onMarkerClick={onMarkerClick} />
       </GlMapContext.Provider>
       <GameMapControls mapRef={mapRef} onRecenter={handleRecenter} />
     </div>

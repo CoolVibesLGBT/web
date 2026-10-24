@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-21",
+  "date": "2026-10-24",
   "method": "DOM and intercepted post APIs; no screenshots, live posts or account mutations",
   "results": [
     {
@@ -9,10 +9,10 @@
       "status": "passed",
       "checks": [
         "Cool and detail use same renderer, poll/options and multi-attachment data",
-        "six responsive real API actions",
+        "six responsive actions; four toggle APIs and failure rollback; gallery escapes containment and closes at viewport size",
         "saved initial engagement and bookmark persist to detail; failure rolls back",
         "reply opens without card navigation",
-        "no card border/radius or focus ring"
+        "no card border/radius or focus ring; detail uses column width with zero outer gutters"
       ],
       "calls": [
         "post.like",
@@ -29,10 +29,10 @@
       "status": "passed",
       "checks": [
         "Cool and detail use same renderer, poll/options and multi-attachment data",
-        "six responsive real API actions",
+        "six responsive actions; four toggle APIs and failure rollback; gallery escapes containment and closes at viewport size",
         "saved initial engagement and bookmark persist to detail; failure rolls back",
         "reply opens without card navigation",
-        "no card border/radius or focus ring"
+        "no card border/radius or focus ring; detail uses column width with zero outer gutters"
       ],
       "calls": [
         "post.like",
@@ -50,10 +50,10 @@
       "status": "passed",
       "checks": [
         "Cool and detail use same renderer, poll/options and multi-attachment data",
-        "six responsive real API actions",
+        "six responsive actions; four toggle APIs and failure rollback; gallery escapes containment and closes at viewport size",
         "saved initial engagement and bookmark persist to detail; failure rolls back",
         "reply opens without card navigation",
-        "no card border/radius or focus ring"
+        "no card border/radius or focus ring; detail uses column width with zero outer gutters"
       ],
       "calls": [
         "post.like",
@@ -70,10 +70,10 @@
       "status": "passed",
       "checks": [
         "Cool and detail use same renderer, poll/options and multi-attachment data",
-        "six responsive real API actions",
+        "six responsive actions; four toggle APIs and failure rollback; gallery escapes containment and closes at viewport size",
         "saved initial engagement and bookmark persist to detail; failure rolls back",
         "reply opens without card navigation",
-        "no card border/radius or focus ring"
+        "no card border/radius or focus ring; detail uses column width with zero outer gutters"
       ],
       "calls": [
         "post.like",
