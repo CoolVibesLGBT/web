@@ -1,5 +1,7 @@
 # Architecture and integrations
 
+[Download CoolVibes for VS Code](https://marketplace.visualstudio.com/items?itemName=CoolVibes.coolvibes-vscode-extension)
+
 ## Application flow
 
 `src/main.tsx` mounts the React application. `src/entry/` supplies the root/provider composition, `src/router/` implements browser-history navigation, and `src/App.tsx` chooses route screens and application shell behavior. Public pages have their own header/footer composition; authenticated screens retain permission and feature gates.

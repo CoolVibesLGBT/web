@@ -1,5 +1,7 @@
 # Testing and contribution
 
+[Download CoolVibes for VS Code](https://marketplace.visualstudio.com/items?itemName=CoolVibes.coolvibes-vscode-extension)
+
 ## Routine checks
 
 ```bash

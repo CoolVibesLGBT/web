@@ -1,5 +1,7 @@
 # Screenshot gallery
 
+[Download CoolVibes for VS Code](https://marketplace.visualstudio.com/items?itemName=CoolVibes.coolvibes-vscode-extension)
+
 These are captures of the running React application, using isolated fictional data. Alex Rivera and Deniz Kaya are demo identities, not registered members. Post images reuse packaged brand artwork. No production accounts, private conversations or database records were used or created.
 
 ## Reproduce

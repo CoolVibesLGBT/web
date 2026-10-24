@@ -1,5 +1,7 @@
 # Product scope
 
+[Download CoolVibes for VS Code](https://marketplace.visualstudio.com/items?itemName=CoolVibes.coolvibes-vscode-extension)
+
 CoolVibes connects social publishing, friendship and dating for LGBTIQA+ adults and respectful allies. The web app contains both public discovery/brand pages and authenticated community workflows.
 
 ## Share and participate

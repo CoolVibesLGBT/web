@@ -6,7 +6,7 @@
 
 **Your colors. Your people.** A multilingual social and dating web application for the LGBTIQA+ community and respectful allies, aged 18 and over.
 
-[Website](https://coolvibes.lgbt) · [Brandkit](https://coolvibes.lgbt/brandkit) · [Documentation contents](SUMMARY.md) · [Getting started](docs/guide/getting-started.md) · [Issues](https://github.com/CoolVibesLGBT/web/issues)
+[Website](https://coolvibes.lgbt) · [Brandkit](https://coolvibes.lgbt/brandkit) · [Documentation contents](SUMMARY.md) · [Getting started](docs/guide/getting-started.md) · [Issues](https://github.com/CoolVibesLGBT/web/issues) · [Download for VS Code](https://marketplace.visualstudio.com/items?itemName=CoolVibes.coolvibes-vscode-extension)
 
 ![CoolVibes English hero — an illustrated queer community in New York](docs/assets/heroes/en.jpg)
 

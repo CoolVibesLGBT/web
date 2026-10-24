@@ -1,5 +1,7 @@
 # Languages and regional artwork
 
+[Download CoolVibes for VS Code](https://marketplace.visualstudio.com/items?itemName=CoolVibes.coolvibes-vscode-extension)
+
 CoolVibes includes **23 locale variants**. The English README is the full project entry point; translated overviews explain the purpose, scope, setup, brand and verification boundaries in each supported locale. Detailed engineering guides are currently in English.
 
 | Locale code | Language | Documentation hero |

@@ -1,5 +1,7 @@
 # GitBook and GitHub publishing
 
+[Download CoolVibes for VS Code](https://marketplace.visualstudio.com/items?itemName=CoolVibes.coolvibes-vscode-extension)
+
 This repository is prepared for **one GitBook Git Sync space** with an English overview, detailed guides and a language section containing all 23 localized overviews. It also remains readable directly on GitHub.
 
 ## Configuration

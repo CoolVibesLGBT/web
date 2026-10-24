@@ -36,3 +36,7 @@
 * [ไทย](docs/readme/README.th.md)
 * [繁體中文（台灣）](docs/readme/README.tw.md)
 * [简体中文](docs/readme/README.zh.md)
+
+## Downloads
+
+* [CoolVibes for VS Code — Marketplace](https://marketplace.visualstudio.com/items?itemName=CoolVibes.coolvibes-vscode-extension)

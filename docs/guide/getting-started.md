@@ -1,5 +1,7 @@
 # Getting started
 
+[Download CoolVibes for VS Code](https://marketplace.visualstudio.com/items?itemName=CoolVibes.coolvibes-vscode-extension)
+
 ## Requirements
 
 Use Yarn Classic with `yarn.lock` and a Node release supported by the installed Vite version: `^20.19.0 || >=22.12.0`. Node 22.12+ on the 22.x line is a suitable baseline. Browser tests require Playwright and a compatible browser.
