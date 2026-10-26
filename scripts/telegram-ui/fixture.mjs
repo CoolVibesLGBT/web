@@ -4,7 +4,7 @@ import { chromium } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
 const root=fileURLToPath(new URL('../../',import.meta.url)).replace(/\/$/,'');
 const browser=await chromium.launch({headless:true,channel:process.env.PLAYWRIGHT_CHANNEL || (process.platform==='darwin'?'chrome':undefined)});
-async function setup(item,{external=false,authenticated=true,privacy='public',premium=false}={}){
+async function setup(item,{external=false,authenticated=true,privacy='public',premium=false,following=false}={}){
  const context=await browser.newContext({viewport:{width:item.width,height:900},colorScheme:item.theme,reducedMotion:'reduce'});
  await context.route('**/*',route=>{const url=new URL(route.request().url());return url.origin==='http://localhost:5173'?route.continue():route.abort();});
  const page=await context.newPage();
@@ -20,6 +20,9 @@ async function setup(item,{external=false,authenticated=true,privacy='public',pr
  const name=item.long?(item.language==='ar'?'اسم طويل جداً للتحقق من محاذاة الملف الشخصي وعرض النص بالكامل':'VeryLongProfileNameWithoutAnySpacesToCheckWrappingAndAlignment'):'Profile Check';
  const user={id:'9007199254740993',public_id:'9007199254740993',username:item.long?'profilewithalongusernameforlayoutverification':'profilecheck',displayname:name,email:'profile@example.invalid',bio:{[item.language]:'Profile biography for layout verification.'},privacy_level:privacy,created_at:'2025-01-01T00:00:00Z',default_language:item.language,languages:[item.language],is_premium:premium,location:{display:'İstanbul, Türkiye'},website:'https://example.invalid/profilewithaverylongaddressforlayoutverification',engagements:{counts:{follower_count:1205,following_count:78,like_given_count:9,view_received_count:10}},avatar:{file:{url:'http://localhost:5173/icons/icon_512x512@2x.png'}},...(item.cover?{cover:{file:{url:'http://localhost:5173/images/auth/login-bear.avif'}}}:{})};
  const viewer=external?{...user,id:'999999999',public_id:'999999999',username:'viewer',privacy_level:'public'}:user;
+ const followingDetail=()=>({kind:'following',engager_id:viewer.id,engager:{id:viewer.id,public_id:viewer.public_id},engagee_id:user.id,engagee:{id:user.id,public_id:user.public_id}});
+ viewer.engagements={...viewer.engagements,counts:{...viewer.engagements.counts},engagement_details:following?[followingDetail()]:[]};
+ const followState={following,fail:false,nextStatus:null,hold:null,requests:[]};
  const calls=[];
  const photo={public_id:'9007199254740999',processing_status:'ready',file:{url:'http://localhost:4001/static/uploads/social-fixture.webp',mime_type:'image/png'}};
  const social={friend:null,grant:false,access:'none',failGrant:false,public:[{...photo,public_id:'9007199254740998'}],private:[photo],mutations:[],imageAuth:[],requests:[{request_id:'9007199254741000',viewer_id:'12345',status:'pending',viewer:{public_id:'12345',username:'requester',displayname:'Access Requester'}}]};
@@ -33,6 +36,16 @@ async function setup(item,{external=false,authenticated=true,privacy='public',pr
   const action=new URL(req.url()).searchParams.get('action')??body.match(/name="action"\r\n\r\n([^\r]+)/)?.[1];
   calls.push(action);
   const field=name=>body.match(new RegExp('name="'+name+'"\\r\\n\\r\\n([^\\r]*)'))?.[1]??'';
+  if(action==='user.follow.toggle'){
+   followState.requests.push(field('followee_id'));
+   if(followState.hold)await followState.hold;
+   if(followState.fail){followState.fail=false;await route.fulfill({status:500,json:{success:false,error:'fixture'}});return;}
+   const next=followState.nextStatus??!followState.following;followState.nextStatus=null;
+   const delta=Number(next)-Number(followState.following);followState.following=next;
+   user.engagements.counts.follower_count+=delta;viewer.engagements.counts.following_count+=delta;
+   viewer.engagements.engagement_details=next?[followingDetail()]:[];
+   await route.fulfill({json:{success:true,data:{status:next,user:viewer}}});return;
+  }
   if(new URL(req.url()).pathname==='/static/uploads/social-fixture.webp'){social.imageAuth.push(req.headers().authorization);await route.fulfill({body:fs.readFileSync(root+'/public/icons/icon_512x512@2x.png'),contentType:'image/png'});return;}
   if(action==='user.friend.status'){await route.fulfill({json:{success:true,data:{friendship:social.friend}}});return;}
   if(action==='user.friend.request'){social.friend={request_id:'9007199254741999',requester_id:viewer.id,recipient_id:user.id,status:'pending',user};social.mutations.push({action,id:field('user_id')});await route.fulfill({json:{success:true,data:{friendship:social.friend}}});return;}
@@ -92,13 +105,13 @@ async function setup(item,{external=false,authenticated=true,privacy='public',pr
     sent.push({extras,reply:field('reply_to'),content:field('content')});fixtureMessages.push(message);
     await route.fulfill({json:{success:true,data:{message}}});return;
   }
-  const data=action==='auth.user_info'?{user:viewer}:action==='user.fetch_profile'?{user}:action==='system.initial_sync'?{preferences:{attributes:[],interests:[],fantasies:[]},languages:{en:{code:'en',name:'English'},tr:{code:'tr',name:'Türkçe'},ar:{code:'ar',name:'العربية'}},countries:{},event_kinds:[],report_kinds:[],checkin_tag_types:[],status:'online'}:action==='user.follow.toggle'?{is_following:true,user}:{posts:[],medias:[],users:[],notifications:[]};
+  const data=action==='auth.user_info'?{user:viewer}:action==='user.fetch_profile'?{user}:action==='system.initial_sync'?{preferences:{attributes:[],interests:[],fantasies:[]},languages:{en:{code:'en',name:'English'},tr:{code:'tr',name:'Türkçe'},ar:{code:'ar',name:'العربية'}},countries:{},event_kinds:[],report_kinds:[],checkin_tag_types:[],status:'online'}:{posts:[],medias:[],users:[],notifications:[]};
   await route.fulfill({json:{success:true,data}});
  });
  await page.goto('http://localhost:5173'+(external?'/'+user.username:'/profile'));
  await page.locator('.cv-profile-name h1').waitFor();
  await page.waitForTimeout(120);
- return {context,page,user,errors,calls,sent,forwardState,groupState,social,viewer};
+ return {context,page,user,errors,calls,sent,forwardState,groupState,social,viewer,followState};
 }
 
 

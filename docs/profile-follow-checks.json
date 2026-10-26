@@ -1,0 +1,52 @@
+{
+  "checkedAt": "2026-10-26T00:53:23.951Z",
+  "mode": "isolated API fixtures; existing userinfo engagements contract",
+  "results": [
+    {
+      "width": 390,
+      "language": "tr",
+      "theme": "light",
+      "initialFollowing": true,
+      "reload": true,
+      "toggle": true,
+      "pending": true,
+      "failureRollback": true,
+      "serverStatus": true,
+      "privacy": true,
+      "legacyIDs": true,
+      "followerDirection": true,
+      "missingDetailsPagination": true
+    },
+    {
+      "width": 820,
+      "language": "ar",
+      "theme": "dark",
+      "large": true,
+      "initialFollowing": true,
+      "reload": true,
+      "toggle": true,
+      "pending": true,
+      "failureRollback": true,
+      "serverStatus": true,
+      "privacy": true,
+      "legacyIDs": true,
+      "followerDirection": true,
+      "missingDetailsPagination": true
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "theme": "dark",
+      "initialFollowing": true,
+      "reload": true,
+      "toggle": true,
+      "pending": true,
+      "failureRollback": true,
+      "serverStatus": true,
+      "privacy": true,
+      "legacyIDs": true,
+      "followerDirection": true,
+      "missingDetailsPagination": true
+    }
+  ]
+}

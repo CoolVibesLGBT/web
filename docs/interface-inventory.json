@@ -4932,7 +4932,7 @@
           "initial": "'profile'"
         },
         {
-          "name": "[isFollowing, setIsFollowing]",
+          "name": "[followError, setFollowError]",
           "type": null,
           "initial": "false"
         },

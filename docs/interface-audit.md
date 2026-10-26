@@ -4,6 +4,12 @@ Current standard: the supplied Telegram source, as documented in `telegram-ui-re
 
 Scope: this web repository only. Apple visual hierarchy and typography; web/Android browser behavior remains native. No hotel flows, UIKit handlers or mobile project were added.
 
+## Profile follow state — 2026-10-26
+
+The web profile now derives its initial follow state from the existing authenticated `engagements.engagement_details` list (with the optional profile relationship hint), normalizes legacy ID types, and uses the toggle API’s boolean `status` and returned account. If userinfo omits the details, the existing paginated `user.fetch_engagements` following list resolves the relationship; the toggle stays disabled until it is known and read failures expose retry. The duplicate follow-state synchronization and fetch-skip flags were removed. Failed mutations restore the exact previous count and show localized feedback; pending actions cannot submit twice. No backend contract changes are included.
+
+`yarn check:telegram-ui profile-follow` passed in Turkish/mobile, Arabic/tablet with enlarged text, and English/desktop fixtures. These cover initial state, reload, follow/unfollow, pending, failure, server disagreement, privacy gating and legacy IDs. This is fixture verification of the supplied userinfo-list contract, not verification of a signed-in live account. See `profile-follow-checks.json`.
+
 ## Shared implementation
 
 - System font stack replaces Basel Grotesk. Body 17px; supporting text 15px; captions at least 13px; labels medium and headings/actions semibold. UI sizes use rem.

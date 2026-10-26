@@ -263,48 +263,6 @@ type ProfileWizardStepId =
   | 'interests'
   | 'fantasies';
 
-const getIsFollowingFromEngagements = (authUserData: unknown, targetUser: ProfileUser | null): boolean => {
-  if (!authUserData || !targetUser) {
-    return false;
-  }
-
-  const engagementDetails = (authUserData as { engagements?: { engagement_details?: UserEngagementDetail[] } })?.engagements?.engagement_details;
-  if (!Array.isArray(engagementDetails)) {
-    return false;
-  }
-
-  const targetPublicId = targetUser.public_id != null ? String(targetUser.public_id) : null;
-  const targetId = targetUser.id;
-
-  const matchesTarget = (detail: UserEngagementDetail) => {
-    if (!detail || detail.kind !== 'following') {
-      return false;
-    }
-
-    const candidatePublicIds = [
-      detail.recipient?.public_id,
-      detail.recipient_id,
-      detail.engagee?.public_id,
-      detail.engagee_id,
-    ].filter(Boolean) as Array<string | number>;
-
-    if (targetPublicId && candidatePublicIds.some((id) => String(id) === targetPublicId)) {
-      return true;
-    }
-
-    const candidateIds = [
-      detail.recipient?.id,
-      detail.recipient_id,
-      detail.engagee?.id,
-      detail.engagee_id,
-    ].filter(Boolean) as string[];
-
-    return !!targetId && candidateIds.some((id) => id === targetId);
-  };
-
-  return engagementDetails.some(matchesTarget);
-};
-
 const getHasFollowingRelationship = (sourceUserData: unknown, targetUser: ProfileUser | null): boolean => {
   if (!sourceUserData || !targetUser) {
     return false;
@@ -481,12 +439,8 @@ const normalizeProfileUser = (rawUser: unknown): ProfileUser | null => {
   };
 };
 
-const withAdjustedFollowerCount = (profile: ProfileUser, delta: number): ProfileUser => {
-  const currentFollowers =
-    profile.followers_count ??
-    profile.engagements?.counts?.follower_count ??
-    0;
-  const nextFollowers = Math.max(0, currentFollowers + delta);
+const withFollowerCount = (profile: ProfileUser, count: number): ProfileUser => {
+  const nextFollowers = Math.max(0, count);
 
   return {
     ...profile,
@@ -1396,9 +1350,43 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const [activeTab, setActiveTab] = useState<'profile' | 'photos' | 'friends' | 'posts' | 'replies' | 'media' | 'likes'>('profile');
   const profileTabsRef = useRef<HTMLDivElement>(null);
   const preferenceMutationRef = useRef(false);
-  const [isFollowing, setIsFollowing] = useState(false);
-  const skipFollowSyncRef = useRef(false);
+  const isFollowing = !!authUser && (user?.is_following ?? getHasFollowingRelationship(authUser, user));
+  const [followError, setFollowError] = useState(false);
+  const followRequestRef = useRef(false);
+  const currentFollowContext = useRef({ username, viewerId: authUser?.id });
+  currentFollowContext.current = { username, viewerId: authUser?.id };
+  useEffect(() => { setFollowError(false); }, [username]);
   const [isFollowPending, setIsFollowPending] = useState(false);
+  const [followReadAttempt, setFollowReadAttempt] = useState(0);
+  const needsFollowDetails = !!authUser && !!user && authUser.id !== user.id &&
+    typeof user.is_following !== 'boolean' && !Array.isArray(authUser.engagements?.engagement_details);
+  useEffect(() => {
+    if (!needsFollowDetails || !authUser || !user) return;
+    let active = true;
+    const target = user;
+    const readFollowing = async () => {
+      setFollowError(false);
+      try {
+        let cursor: string | undefined;
+        const cursors = new Set<string>();
+        let follows = false;
+        do {
+          const response = await api.fetchEngagements({ user_id: authUser.public_id ?? authUser.id, engagement_type: 'following', limit: 100, ...(cursor ? { cursor } : {}) });
+          if (!active) return;
+          if (!Array.isArray(response.engagements)) throw new Error('Missing engagement list');
+          follows = getHasFollowingRelationship({ engagements: { engagement_details: response.engagements } }, target);
+          cursor = response.cursor?.next || undefined;
+          if (cursor && cursors.has(cursor)) throw new Error('Repeated engagement cursor');
+          if (cursor) cursors.add(cursor);
+        } while (!follows && cursor);
+        if (active) setUser(previous => previous?.id === target.id ? { ...previous, is_following: follows } : previous);
+      } catch {
+        if (active) setFollowError(true);
+      }
+    };
+    void readFollowing();
+    return () => { active = false; };
+  }, [authUser, user, needsFollowDetails, followReadAttempt]);
   const [showAuthWizard, setShowAuthWizard] = useState(false);
   const [showProfileStats, setShowProfileStats] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -1477,106 +1465,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
       image: avatarUrl || undefined,
     };
   }, [profileUsername, profileDisplayName, profileBioExcerpt, user?.public_id, user?.avatar]);
-  useEffect(() => {
-    if (!user || !authUser) {
-      setIsFollowing(false);
-      return;
-    }
-    if (skipFollowSyncRef.current) {
-      skipFollowSyncRef.current = false;
-      return;
-    }
-    const nextFollowingState = getIsFollowingFromEngagements(authUser, user);
-    setIsFollowing(nextFollowingState);
-  }, [authUser, user]);
   const [isSaving, setIsSaving] = useState(false);
-  const syncAuthFollowingState = React.useCallback((targetUser: ProfileUser, shouldFollow: boolean) => {
-    if (!authUser) {
-      return;
-    }
-
-    const currentEngagements = (authUser.engagements || {}) as UserEngagements;
-    const currentDetails: UserEngagementDetail[] = (currentEngagements.engagement_details || []) as UserEngagementDetail[];
-    const targetPublicId = targetUser.public_id != null ? String(targetUser.public_id) : null;
-    const targetId = targetUser.id ? String(targetUser.id) : null;
-
-    const matchesTarget = (detail: UserEngagementDetail) => {
-      if (!detail || detail.kind !== 'following') {
-        return false;
-      }
-
-      const candidatePublicIds = [
-        detail.recipient?.public_id,
-        detail.recipient_id,
-        detail.engagee?.public_id,
-        detail.engagee_id,
-      ].filter(Boolean) as Array<string | number>;
-
-      if (targetPublicId && candidatePublicIds.some((id) => String(id) === targetPublicId)) {
-        return true;
-      }
-
-      const candidateIds = [
-        detail.recipient?.id,
-        detail.recipient_id,
-        detail.engagee?.id,
-        detail.engagee_id,
-      ].filter(Boolean) as string[];
-
-      if (targetId && candidateIds.some((id) => id === targetId)) {
-        return true;
-      }
-
-      return false;
-    };
-
-    const alreadyFollowing = currentDetails.some(matchesTarget);
-    let updatedDetails = currentDetails;
-    let followingDelta = 0;
-
-    if (shouldFollow && !alreadyFollowing) {
-      const targetRecipient = {
-        id: targetUser.id,
-        public_id: targetUser.public_id,
-      };
-
-      const newDetail: UserEngagementDetail = {
-        kind: 'following',
-        recipient_id: targetUser.id,
-        recipient: targetRecipient,
-        engagee_id: targetUser.id,
-        engagee: targetRecipient,
-      };
-      updatedDetails = [...currentDetails, newDetail];
-      followingDelta = 1;
-    } else if (!shouldFollow && alreadyFollowing) {
-      updatedDetails = currentDetails.filter((detail: UserEngagementDetail) => !matchesTarget(detail));
-      followingDelta = -1;
-    }
-
-    if (followingDelta === 0 && updatedDetails === currentDetails) {
-      return;
-    }
-
-    const currentFollowingCount =
-      currentEngagements.counts?.following_count ??
-      authUser?.following_count ??
-      0;
-    const nextFollowingCount = Math.max(0, currentFollowingCount + followingDelta);
-
-    updateUser({
-      following_count: nextFollowingCount,
-      engagements: {
-        ...currentEngagements,
-        counts: {
-          ...(currentEngagements.counts || {}),
-          following_count: nextFollowingCount,
-        },
-        engagement_details: updatedDetails as any,
-      },
-    } as any);
-    skipNextFetchRef.current = true;
-  }, [authUser, updateUser]);
   const [editFormData, setEditFormData] = useState<Partial<ProfileUser>>({});
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
   const [coverImagePreview, setCoverImagePreview] = useState<string | null>(null);
@@ -1584,7 +1473,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   const [uploadingCoverImage, setUploadingCoverImage] = useState(false);
   const profileImageInputRef = useRef<HTMLInputElement>(null);
   const coverImageInputRef = useRef<HTMLInputElement>(null);
-  const skipNextFetchRef = useRef(false);
   const [selectedField, setSelectedField] = useState<string | null>(null);
   const [updatingAttributes, setUpdatingAttributes] = useState<Record<string, boolean>>({});
   const [editTab, setEditTab] = useState<'profile' | 'attributes' | 'interests' | 'fantasies'>('profile');
@@ -3409,11 +3297,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
 
       console.log('ProfileScreen - fetchUserData called, username:', username);
 
-      if (skipNextFetchRef.current) {
-        skipNextFetchRef.current = false;
-        return;
-      }
-
       try {
         setLoading(true);
         setError(null);
@@ -3590,62 +3473,41 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
   }, [activeTab, user, canViewActivityTabs, setError, setMediasLoading, setMedias]);
 
   const handleFollowClick = async () => {
-    if (!user?.public_id || isFollowPending) return;
+    if (!authUser) {
+      setShowAuthWizard(true);
+      return;
+    }
+    if (!user?.public_id || followRequestRef.current || needsFollowDetails) return;
 
     const targetUser = user;
+    const viewerId = authUser.id;
     const wasFollowing = isFollowing;
-    const nextIsFollowing = !wasFollowing;
-    const followerDelta = nextIsFollowing ? 1 : -1;
-    const currentFollowers =
-      targetUser.followers_count ??
-      targetUser.engagements?.counts?.follower_count ??
-      0;
-    const expectedFollowers = Math.max(0, currentFollowers + followerDelta);
+    const currentFollowers = targetUser.followers_count ?? targetUser.engagements?.counts?.follower_count ?? 0;
+    const countFor = (following: boolean) => currentFollowers + Number(following) - Number(wasFollowing);
+    const isCurrentProfile = () => currentFollowContext.current.username === username && currentFollowContext.current.viewerId === viewerId;
+    const applyFollowing = (following: boolean) => {
+      if (!isCurrentProfile()) return;
+      setUser(previous => previous?.id === targetUser.id
+        ? withFollowerCount({ ...previous, is_following: following }, countFor(following))
+        : previous);
+    };
 
-    skipFollowSyncRef.current = true;
+    followRequestRef.current = true;
     setIsFollowPending(true);
-    setIsFollowing(nextIsFollowing);
-    setUser((prevUser) => (prevUser ? withAdjustedFollowerCount(prevUser, followerDelta) : prevUser));
-
+    setFollowError(false);
+    applyFollowing(!wasFollowing);
     try {
-      const followResponse = await api.toggleFollow({
-        followee_id: user.public_id,
-      });
-
-      const responseUser =
-        (followResponse as any)?.target_user ||
-        (followResponse as any)?.followee ||
-        (followResponse as any)?.user;
-
-      const normalized = normalizeProfileUser(responseUser);
-      if (normalized && (normalized as any).id === (targetUser as any).id) {
-        const normalizedFollowers =
-          normalized.followers_count ??
-          normalized.engagements?.counts?.follower_count ??
-          expectedFollowers;
-        const shouldKeepOptimistic = normalizedFollowers === currentFollowers;
-        const finalFollowers = shouldKeepOptimistic ? expectedFollowers : normalizedFollowers;
-
-        setUser({
-          ...normalized,
-          followers_count: finalFollowers,
-          engagements: {
-            ...(normalized.engagements || {}),
-            counts: {
-              ...(normalized.engagements?.counts || {}),
-              follower_count: finalFollowers,
-            },
-          },
-        });
+      const response = await api.toggleFollow({ followee_id: targetUser.public_id }) as { status: boolean; user?: ProfileUser };
+      if (typeof response.status !== 'boolean') throw new Error('Missing follow status');
+      applyFollowing(response.status);
+      if (currentFollowContext.current.viewerId === viewerId && response.user?.id === viewerId) {
+        updateUser(response.user as unknown as Parameters<typeof updateUser>[0]);
       }
-
-      syncAuthFollowingState(targetUser, nextIsFollowing);
-    } catch (error) {
-      console.error('Error toggling follow:', error);
-      setIsFollowing(wasFollowing);
-      setUser((prevUser) => (prevUser ? withAdjustedFollowerCount(prevUser, -followerDelta) : prevUser));
-      // Optionally show error message to user
+    } catch {
+      applyFollowing(wasFollowing);
+      if (isCurrentProfile()) setFollowError(true);
     } finally {
+      followRequestRef.current = false;
       setIsFollowPending(false);
     }
   };
@@ -5648,11 +5510,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                   <button
                     type="button"
                     onClick={handleFollowClick}
-                    disabled={isFollowPending}
-                    aria-busy={isFollowPending}
+                    disabled={isFollowPending || needsFollowDetails}
+                    aria-busy={isFollowPending || (needsFollowDetails && !followError)}
                     className={`cv-profile-action${isFollowing ? '' : ' cv-profile-action-primary'}`}
                   >
-                    {isFollowing ? t('profile.following') : t('profile.follow')}
+                    {needsFollowDetails ? t('match.loading') : isFollowing ? t('profile.following') : t('profile.follow')}
                   </button>
                   <button
                     type="button"
@@ -5666,6 +5528,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
                 </>
               )}
             >
+              {followError && <div className="cv-profile-preferences-feedback" role="alert">
+                <span>{t('chat_actions.action_failed')}</span>
+                {needsFollowDetails && <button type="button" onClick={() => setFollowReadAttempt(attempt => attempt + 1)}>{t('nearby.try_again')}</button>}
+              </div>}
               {canViewSensitiveProfileSections && profileBioText && (
                 <div className="cv-profile-bio">
                   <ProfileBioPreview theme={theme} content={profileBioText} />
