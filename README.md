@@ -2,7 +2,7 @@
   <img src="public/images/brand/dott-v3/wordmark.png" alt="CoolVibes" width="420">
 </p>
 
-# CoolVibes Web
+# CoolVibes Web - Opensource LGBTIQA+ Social Network 
 
 **Your colors. Your people.** A multilingual social and dating web application for the LGBTIQA+ community and respectful allies, aged 18 and over.
 
