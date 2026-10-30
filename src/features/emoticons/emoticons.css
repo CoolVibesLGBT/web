@@ -10,7 +10,7 @@
 .cv-emoticon-search button { flex: 0 0 auto; width: 44px; height: 44px; color: var(--cv-neutral-2); border-radius: 50%; }
 .cv-emoticon-search button svg { width: 1.25rem; height: 1.25rem; }
 .cv-emoticon-categories, .cv-emoticon-recent, .cv-emoticon-suggestions { display: flex; flex: 0 0 auto; gap: .25rem; overflow-x: auto; scrollbar-width: none; }
-.cv-emoticon-categories { height: max(44px, 3.0625rem); align-items: center; padding-inline: .3125rem; border-bottom: 1px solid var(--cv-inner-border); }
+.cv-emoticon-categories { flex: 1; min-width: 0; align-items: center; }
 .cv-emoticon-categories button { display: grid; place-items: center; flex: 0 0 auto; width: 44px; height: 44px; padding: .5rem; color: var(--cv-neutral-2); border: 0; border-radius: 50%; }
 .cv-emoticon-categories button svg { width: 1.5rem; height: 1.5rem; }
 .cv-emoticon-categories button[aria-pressed='true'] { color: var(--cv-neutral-1); background: color-mix(in srgb, var(--cv-neutral-1) 6%, transparent); }
@@ -73,9 +73,9 @@
 .cv-emoticon-search { gap: 0; margin: calc(var(--tg-emoticon-unit) * .5); padding: 0; min-height: max(44px, calc(var(--tg-emoticon-unit) * 2.375)); border-radius: calc(var(--tg-emoticon-unit) * 1.5); background: var(--cv-telegram-row-hover); }
 .cv-emoticon-search input { width: 100%; min-height: 44px; font-size: calc(var(--tg-emoticon-unit) * 1); appearance: none; }
 .cv-emoticon-search input::-webkit-search-cancel-button { appearance: none; }
-.cv-emoticon-stickers .cv-emoticon-search input { flex: 0 1 40%; width: 40%; }
-.cv-emoticon-stickers .cv-emoticon-search.is-searching input { flex: 1; width: 100%; }
-.cv-emoticon-search.is-searching .cv-sticker-emotions { display: none; }
+.cv-emoticon-stickers .cv-emoticon-search input, .cv-emoticon-emoji .cv-emoticon-search input { flex: 0 1 40%; width: 40%; }
+.cv-emoticon-stickers .cv-emoticon-search.is-searching input, .cv-emoticon-emoji .cv-emoticon-search.is-searching input { flex: 1; width: 100%; }
+.cv-emoticon-search.is-searching .cv-sticker-emotions, .cv-emoticon-search.is-searching .cv-emoticon-categories { display: none; }
 .cv-emoticon-search-icon { display: grid; place-items: center; padding: 10px; }
 .cv-emoticon-search button svg { width: calc(var(--tg-emoticon-unit) * 1.5); height: calc(var(--tg-emoticon-unit) * 1.5); }
 .cv-sticker-emotions { display: flex; flex: 1; min-width: 0; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; }

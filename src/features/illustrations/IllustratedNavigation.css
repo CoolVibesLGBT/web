@@ -1,6 +1,6 @@
 /* Real brand illustrations in consistent navigation rows, never large action tiles. */
 .cv-nav-grid, .cv-menu-grid { display: flex; flex-direction: column; gap: 2px; }
-.cv-nav-tile { display: flex; align-items: center; gap: 12px; min-height: 52px; width: 100%; padding: 10px 14px; border: none; border-radius: 10px; text-align: start; background: transparent; transition: background 150ms; }
+.cv-nav-tile { display: flex; align-items: center; gap: 12px; min-height: 52px; width: 100%; padding: 10px 14px; border: none; border-radius: 10px; text-align: start; background: transparent; transition: background 150ms; -webkit-user-select: none; user-select: none; }
 .cv-nav-tile:hover { background: var(--cv-surface-3); }
 .cv-nav-tile[aria-current='page'] { background: var(--color-brand-light-solid); color: var(--color-brand); }
 .cv-nav-tile:focus-visible { outline: 3px solid var(--color-brand); outline-offset: -3px; }

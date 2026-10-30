@@ -550,6 +550,7 @@ export class ApiService {
   async fetchChatParticipants(chatId: string) { return this.call(Actions.CMD_CHAT_PARTICIPANTS_FETCH, { method: 'POST', body: { chat_id: chatId } }); }
   async addChatParticipant(chatId: string, participantId: string) { return this.call(Actions.CMD_CHAT_PARTICIPANT_ADD, { method: 'POST', body: { chat_id: chatId, participant_id: participantId } }); }
   async removeChatParticipant(chatId: string, participantId: string) { return this.call(Actions.CMD_CHAT_PARTICIPANT_REMOVE, { method: 'POST', body: { chat_id: chatId, participant_id: participantId } }); }
+  async listGroups(payload: Record<string, unknown> = {}) { return this.call(Actions.CMD_CHAT_GROUP_LIST, { method: 'POST', body: payload }); }
   async exportGroupInvite(chatId: string, rotate = false) { return this.call(Actions.CMD_CHAT_GROUP_INVITE, { method: 'POST', body: { chat_id: chatId, rotate } }); }
   async previewGroup(link: { invite_token?: string; public_username?: string }) { return this.call(Actions.CMD_CHAT_GROUP_PREVIEW, { method: 'POST', body: link }); }
   async joinGroup(link: { invite_token?: string; public_username?: string }) { return this.call(Actions.CMD_CHAT_GROUP_JOIN, { method: 'POST', body: link }); }

@@ -34,7 +34,7 @@ import { getSafeImageURLEx } from '../helpers/helpers';
 import ConfirmationModal from '../components/ui/ConfirmationModal';
 import LanguageSelectorModal from '../components/ui/LanguageSelector';
 import { SwitchIndicator } from '../components/ui/Switch';
-import { GroupedSection, ListRow, NavigationBar, usePageBack } from '@/components/ui/Interface';
+import { GroupedSection, ListRow } from '@/components/ui/Interface';
 import type { SettingName } from '../appSettings';
 
 interface IOSRowDef {
@@ -64,7 +64,6 @@ export default function SettingsScreen() {
     const { settings, setOption } = useSettings();
     const { logout, user } = useAuth();
     const navigate = useNavigate();
-    const goBack = usePageBack();
 
     const [isLangModalOpen, setIsLangModalOpen] = useState(false);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -287,7 +286,6 @@ export default function SettingsScreen() {
         <div className={`cv-settings-page skyline-page-scroll w-full ${pageBg} text-[var(--cv-neutral-1)]`}>
             <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col px-4 pb-10 pt-4 md:px-6">
                 <div className="cv-settings-top">
-                    <NavigationBar title={t('app.nav.settings')} onBack={goBack} />
                     <SearchField value={searchQuery} onChange={setSearchQuery} label={t('app.search_placeholder', { defaultValue: 'Ara' })} />
                 </div>
 

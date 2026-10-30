@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-21",
+  "date": "2026-10-29",
   "method": "DOM/Canvas/HTTP fixtures; real bundled sticker assets, no screenshots",
   "results": [
     {
@@ -68,7 +68,7 @@
       "status": "passed",
       "grid": {
         "columns": 5,
-        "items": 20
+        "items": 1
       },
       "checks": [
         "11 actual Telegram packs/294 documents",

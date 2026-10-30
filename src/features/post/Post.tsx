@@ -29,6 +29,8 @@ import { HashtagNode } from '@lexical/hashtag';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { ListNode, ListItemNode } from '@lexical/list';
 import { LinkNode, AutoLinkNode } from '@lexical/link';
+import { CodeNode, CodeHighlightNode } from '@lexical/code';
+import { TableNode, TableRowNode, TableCellNode } from '@lexical/table';
 import { MentionNode } from '../editor/Lexical/nodes/MentionNode';
 import { getLocalizedContent, getSafeImageURL, getSafeImageURLEx } from '../../helpers/helpers';
 import { tagNameToColor } from '../../helpers/colors';
@@ -47,6 +49,7 @@ import YouTubePlugin from '../editor/Lexical/plugins/YouTubePlugin';
 import { YouTubeNode } from '../editor/Lexical/nodes/YouTubeNode';
 import { TweetNode } from '../editor/Lexical/nodes/TweetNode';
 import { MetadataNode } from '../editor/Lexical/nodes/MetadataNode';
+import { StickerNode } from '../editor/Lexical/nodes/StickerNode';
 
 const LUCIDE_ICON_MAP: Record<string, LucideIcon> = {
   home: Home,
@@ -395,7 +398,7 @@ const createPostLexicalTheme = (theme: ThemeMode) => ({
 const createPostLexicalEditorConfig = (theme: ThemeMode, namespace = "CoolVibesEditorEx") => ({
   namespace,
   editable: true,
-  nodes: [EmojiNode, HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode, MentionNode, ImageNode, YouTubeNode, TweetNode, MetadataNode],
+  nodes: [EmojiNode, HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode, MentionNode, ImageNode, YouTubeNode, TweetNode, MetadataNode, CodeNode, CodeHighlightNode, TableNode, TableRowNode, TableCellNode, StickerNode],
   theme: createPostLexicalTheme(theme),
   onError(error: Error) {
     console.error("Lexical Error:", error);
@@ -497,6 +500,50 @@ export const PostLexicalContent = React.memo(({
 });
 
 PostLexicalContent.displayName = 'PostLexicalContent';
+
+// Keeps the post header height constant regardless of display-name length: truncates
+// with an ellipsis by default, and only promotes to a looping marquee once the text
+// actually overflows its viewport (so short names never animate or shift the layout).
+const MarqueeName = React.memo(({ text, className, ...buttonProps }: {
+  text: string;
+  className?: string;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+  const viewportRef = useRef<HTMLSpanElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [marqueeDistance, setMarqueeDistance] = useState(0);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    const textEl = textRef.current;
+    if (!viewport || !textEl) return;
+
+    const measure = () => {
+      const distance = textEl.scrollWidth - viewport.clientWidth;
+      setMarqueeDistance(distance > 4 ? distance : 0);
+    };
+
+    measure();
+
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(viewport);
+    return () => observer.disconnect();
+  }, [text]);
+
+  return (
+    <button {...buttonProps} className={className}>
+      <span
+        ref={viewportRef}
+        className={`cv-post-name-viewport${marqueeDistance > 0 ? ' cv-post-name-viewport--marquee' : ''}`}
+        style={marqueeDistance > 0 ? ({ '--cv-marquee-distance': `${marqueeDistance}px` } as CSSProperties) : undefined}
+      >
+        <span ref={textRef} className="cv-post-name-text">{text}</span>
+      </span>
+    </button>
+  );
+});
+
+MarqueeName.displayName = 'MarqueeName';
 
 const Post: React.FC<PostProps> = ({
   post: postProp,
@@ -2048,7 +2095,8 @@ const Post: React.FC<PostProps> = ({
             </button>
             <div>
               <div className="cv-post-author-meta">
-                <button
+                <MarqueeName
+                  text={post.author.displayname}
                   data-no-post-click="true"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -2058,9 +2106,7 @@ const Post: React.FC<PostProps> = ({
                   onPointerDown={(e) => e.stopPropagation()}
                   className={`font-semibold hover:underline transition-colors duration-200 ${theme === 'dark' ? 'text-white hover:text-gray-300' : 'text-gray-900 hover:text-gray-600'
                     }`}
-                >
-                  {post.author.displayname}
-                </button>
+                />
                 <button
                   data-no-post-click="true"
                   onClick={(e) => {
@@ -2069,7 +2115,7 @@ const Post: React.FC<PostProps> = ({
                   }}
                   onMouseDown={(e) => e.stopPropagation()}
                   onPointerDown={(e) => e.stopPropagation()}
-                  className={`text-sm hover:underline transition-colors duration-200 ${theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-600'
+                  className={`text-sm hover:underline transition-colors duration-200 flex-shrink-0 truncate max-w-[40%] ${theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-600'
                     }`}
                 >
                   @{post.author.username}
@@ -3259,16 +3305,17 @@ const Post: React.FC<PostProps> = ({
         {/* Check-In Section */}
         {(post.type === 'checkin' || post.post_kind === 'checkin') && Array.isArray(postExtras.tags) && postExtras.tags.length > 0 && (
           <div className="px-4 py-3">
-            <div className="flex flex-wrap gap-2 rounded-2xl border border-[var(--cv-inner-border)] bg-[var(--cv-surface-2)] px-4 py-3">
+            <div className="flex flex-wrap gap-2">
               {postExtras.tags.map((t: string) => {
                 const tagType = appData?.checkin_tag_types?.find((ct: unknown) => ct.tag === t);
                 if (!tagType) {
                   return (
                     <div
                       key={t}
-                      className="flex cursor-default items-center gap-1.5 rounded-xl border border-[var(--cv-inner-border)] bg-[var(--cv-surface-3)] px-3 py-1.5 text-[var(--cv-neutral-1)] transition-all duration-150 hover:scale-[1.03] hover:bg-[var(--cv-surface-3-hover)]"
+                      style={tagNameToColor('')}
+                      className="flex items-center gap-1.5 rounded-full px-3 py-1.5"
                     >
-                      <span className="text-xs font-bold">{t}</span>
+                      <span className="text-[0.8125rem] font-semibold">{t}</span>
                     </div>
                   );
                 }
@@ -3277,10 +3324,10 @@ const Post: React.FC<PostProps> = ({
                   <div
                     key={t}
                     style={tagNameToColor(tagType.category)}
-                    className="flex cursor-default items-center gap-1.5 rounded-xl border border-[var(--cv-inner-border)] px-3 py-1.5 transition-all duration-150 hover:scale-[1.03] hover:brightness-95"
+                    className="flex items-center gap-1.5 rounded-full px-3 py-1.5"
                   >
                     <Icon className="w-3.5 h-3.5" strokeWidth={2} />
-                    <span className="text-xs font-bold">{getLocalizedContent(tagType.name, defaultLanguage)}</span>
+                    <span className="text-[0.8125rem] font-semibold">{getLocalizedContent(tagType.name, defaultLanguage)}</span>
                   </div>
                 );
               })}

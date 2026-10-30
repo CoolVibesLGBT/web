@@ -53,7 +53,7 @@ import {
   CircleAlert,
 } from 'lucide-react';
 import { useSocket } from '../contexts/SocketContext';
-import { getSafeImageURLEx } from '../helpers/helpers';
+import { getSafeImageURLEx, getLocalizedContent } from '../helpers/helpers';
 import { useTranslation } from 'react-i18next';
 import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 import { useAtom } from 'jotai';
@@ -66,6 +66,17 @@ import {
 import type { ResolvedChatMedia } from '@/features/chat/chatMedia';
 
 const EmoticonPicker = React.lazy(() => import('@/features/emoticons/EmoticonPicker'));
+
+// Mirrors the Go backend's types.ChatGroupPreview (chat.group.list response).
+type PublicGroupPreview = {
+  id: string;
+  title: Record<string, string>;
+  description?: Record<string, string>;
+  visibility: string;
+  public_username?: string;
+  avatar?: { file?: { url?: string } };
+  member_count: number;
+};
 
 type MessageExpirySeconds = 0 | 10 | 60 | 3600 | 86400 | 604800;
 
@@ -742,7 +753,7 @@ const MessagesScreen: React.FC = () => {
   const { setShowBottomBar } = useSettings();
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation('common');
+  const { t, i18n } = useTranslation('common');
   const [chatState, setChatState] = useAtom(chatStateAtom);
   const chatsList = chatState.chatsList;
   const selectedChat = chatState.selectedChatId;
@@ -813,6 +824,34 @@ const MessagesScreen: React.FC = () => {
       return true;
     });
   }, [chatsList, deferredChatSearch, activeFilter]);
+  const joinedGroupUsernames = useMemo(() => new Set(chatsList.filter(chat => chat.type === 'group' && chat.publicUsername).map(chat => chat.publicUsername)), [chatsList]);
+  const [publicGroups, setPublicGroups] = useState<PublicGroupPreview[]>([]);
+  const [isLoadingPublicGroups, setIsLoadingPublicGroups] = useState(false);
+  const [joiningGroupId, setJoiningGroupId] = useState<string | null>(null);
+  useEffect(() => {
+    if (activeFilter !== 'groups' || publicGroups.length > 0 || isLoadingPublicGroups) return;
+    let cancelled = false;
+    setIsLoadingPublicGroups(true);
+    api.listGroups({ limit: 20 }).then((response: any) => {
+      if (cancelled) return;
+      setPublicGroups(Array.isArray(response?.groups) ? response.groups : []);
+    }).catch(() => { if (!cancelled) setPublicGroups([]); }).finally(() => { if (!cancelled) setIsLoadingPublicGroups(false); });
+    return () => { cancelled = true; };
+  }, [activeFilter, publicGroups.length, isLoadingPublicGroups]);
+  const handleJoinPublicGroup = useCallback(async (group: PublicGroupPreview) => {
+    if (!group.public_username || joiningGroupId) return;
+    setJoiningGroupId(group.id);
+    try {
+      await api.joinGroup({ public_username: group.public_username });
+      setPublicGroups(previous => previous.filter(item => item.id !== group.id));
+      void refreshChatsRef.current?.();
+    } catch { /* Keep the card so the user can retry. */ }
+    finally { setJoiningGroupId(null); }
+  }, [joiningGroupId]);
+  const discoverableGroups = useMemo(
+    () => publicGroups.filter(group => !group.public_username || !joinedGroupUsernames.has(group.public_username)),
+    [publicGroups, joinedGroupUsernames]
+  );
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [selectedVideos, setSelectedVideos] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -1573,65 +1612,6 @@ const MessagesScreen: React.FC = () => {
       setChatState(initialChatState);
     };
   }, [setChatState]);
-
-  // Group chats - will be used in future
-  // const groupChats = [
-  //   {
-  //     id: 'taiwan',
-  //     name: 'Taiwan Pride Community',
-  //     flag: '🇹🇼',
-  //     members: 1247,
-  //     lastMessage: 'Happy Pride everyone! 🏳️‍🌈',
-  //     lastTime: '2m',
-  //     unread: 3,
-  //     online: 89,
-  //     pinned: true
-  //   },
-  //   {
-  //     id: 'thailand',
-  //     name: 'Thailand LGBTQ+ Network',
-  //     flag: '🇹🇭',
-  //     members: 892,
-  //     lastMessage: 'Great event yesterday!',
-  //     lastTime: '15m',
-  //     unread: 0,
-  //     online: 45,
-  //     pinned: false
-  //   },
-  //   {
-  //     id: 'turkey',
-  //     name: 'Türkiye Pride Community',
-  //     flag: '🇹🇷',
-  //     members: 2156,
-  //     lastMessage: 'Supporting each other! 💪',
-  //     lastTime: '1h',
-  //     unread: 7,
-  //     online: 156,
-  //     pinned: true
-  //   },
-  //   {
-  //     id: 'japan',
-  //     name: 'Japan Rainbow Network',
-  //     flag: '🇯🇵',
-  //     members: 678,
-  //     lastMessage: 'Beautiful day for celebration!',
-  //     lastTime: '2h',
-  //     unread: 0,
-  //     online: 34,
-  //     pinned: false
-  //   },
-  //   {
-  //     id: 'china',
-  //     name: 'China Pride Alliance',
-  //     flag: '🇨🇳',
-  //     members: 1890,
-  //     lastMessage: 'Love is love! ❤️',
-  //     lastTime: '3h',
-  //     unread: 12,
-  //     online: 203,
-  //     pinned: false
-  //   }
-  // ];
 
   // Use ref to access current chatsList in socket handler
   const chatsListRef = useRef(chatsList);
@@ -2848,6 +2828,47 @@ const MessagesScreen: React.FC = () => {
                   )} activeId={activeFilter} onSelect={id => setActiveFilter(id)} label={t('app.nav.messages')} />
               </div>
             </div>
+
+            {activeFilter === 'groups' && (isLoadingPublicGroups || discoverableGroups.length > 0) && (
+              <div className="border-b border-[var(--cv-inner-border)] px-3 py-3 sm:px-4">
+                <p className={`mb-2 text-[0.765rem] font-semibold ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'}`}>
+                  {t('messages.discover_groups', { defaultValue: 'Discover groups' })}
+                </p>
+                <div className="flex gap-2.5 overflow-x-auto no-scrollbar">
+                  {isLoadingPublicGroups && discoverableGroups.length === 0
+                    ? Array.from({ length: 3 }).map((_, idx) => (
+                      <div key={idx} className={`h-24 w-36 flex-shrink-0 rounded-2xl animate-pulse ${theme === 'dark' ? 'bg-white/[0.06]' : 'bg-slate-200'}`} />
+                    ))
+                    : discoverableGroups.map(group => {
+                      const title = String(getLocalizedContent(group.title, i18n.language) || '');
+                      const avatar = group.avatar?.file?.url || null;
+                      return (
+                        <div key={group.id} className={`flex w-36 flex-shrink-0 flex-col gap-2 rounded-2xl p-3 ${theme === 'dark' ? 'bg-white/[0.06]' : 'bg-slate-100'}`}>
+                          <div className="flex items-center gap-2">
+                            <div className={`flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-full text-sm font-semibold ${theme === 'dark' ? 'bg-white/10 text-white' : 'bg-white text-slate-900'}`}>
+                              {avatar ? <img src={avatar} alt="" className="h-full w-full object-cover" /> : title.charAt(0).toLocaleUpperCase()}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className={`truncate text-[0.765rem] font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>{title}</p>
+                              <p className={`text-[0.706rem] ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'}`}>
+                                {t('messages.group_members', { count: group.member_count, defaultValue: '{{count}} members' })}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            disabled={!group.public_username || joiningGroupId === group.id}
+                            onClick={() => handleJoinPublicGroup(group)}
+                            className={`h-8 rounded-full text-[0.765rem] font-semibold transition-colors disabled:opacity-60 ${theme === 'dark' ? 'bg-white text-black hover:bg-white/90' : 'bg-black text-white hover:bg-black/90'}`}
+                          >
+                            {joiningGroupId === group.id ? t('messages.joining', { defaultValue: 'Joining…' }) : t('messages.join', { defaultValue: 'Join' })}
+                          </button>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            )}
 
             {/* Chat List */}
             <div className="flex-1 overflow-y-auto no-scrollbar min-h-0">

@@ -52,6 +52,8 @@ import { HashtagNode } from '@lexical/hashtag';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { ListNode, ListItemNode } from '@lexical/list';
 import { LinkNode, AutoLinkNode } from '@lexical/link';
+import { CodeNode, CodeHighlightNode } from '@lexical/code';
+import { TableNode, TableRowNode, TableCellNode } from '@lexical/table';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import ToolbarPlugin from '../editor/Lexical/plugins/ToolbarPlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
@@ -59,14 +61,15 @@ import { $generateHtmlFromNodes } from '@lexical/html';
 import { $getRoot, $getSelection, $setSelection, $isRangeSelection, type BaseSelection, INSERT_PARAGRAPH_COMMAND } from 'lexical';
 import { MentionNode } from '../editor/Lexical/nodes/MentionNode';
 import NewMentionsPlugin from '../editor/Lexical/plugins/MentionsPlugin';
-import ImagesPlugin, { INSERT_IMAGE_COMMAND } from '../editor/Lexical/plugins/ImagesPlugin';
-import StickerPicker, { type StickerItem } from './StickerPicker';
-import GifPicker, { type GifItem } from './GifPicker';
+import ImagesPlugin from '../editor/Lexical/plugins/ImagesPlugin';
 import YouTubePicker, { type YouTubeVideo } from './YouTubePicker';
 import { ImageNode } from '../editor/Lexical/nodes/ImageNode';
 import { YouTubeNode } from '../editor/Lexical/nodes/YouTubeNode';
 import YouTubePlugin, { INSERT_YOUTUBE_COMMAND } from '../editor/Lexical/plugins/YouTubePlugin';
-import EmojiPicker from '@/components/ui/EmojiPicker';
+import StickerPlugin, { INSERT_STICKER_COMMAND } from '../editor/Lexical/plugins/StickerPlugin';
+import { StickerNode } from '../editor/Lexical/nodes/StickerNode';
+import EmoticonPicker from '@/features/emoticons/EmoticonPicker';
+import type { EmoticonSelection } from '@/features/emoticons/types';
 import AutoLinkPlugin from '../editor/Lexical/plugins/AutoLinkPlugin';
 import { TweetNode } from '../editor/Lexical/nodes/TweetNode';
 import { MetadataNode } from '../editor/Lexical/nodes/MetadataNode';
@@ -228,11 +231,10 @@ const CreatePost: React.FC<CreatePostProps> = ({
   const [isPreviewLocating, setIsPreviewLocating] = useState(false);
   const [didRequestPreview, setDidRequestPreview] = useState(false);
   const [pollErrors, setPollErrors] = useState<Record<string, string>>({});
-  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  // Single emoji/sticker/GIF panel (one button, tabbed inside — matches the chat composer).
+  const [emojiPanelTab, setEmojiPanelTab] = useState<'emoji' | 'stickers' | 'gifs' | null>(null);
   const emojiSelection = useRef<BaseSelection | null>(null);
-  const [isStickerPickerOpen, setIsStickerPickerOpen] = useState(false);
   const [isLocationPickerOpen, setIsLocationPickerOpen] = useState(false);
-  const [isGifPickerOpen, setIsGifPickerOpen] = useState(false);
   const [isYouTubePickerOpen, setIsYouTubePickerOpen] = useState(false);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(fullScreen);
@@ -431,33 +433,22 @@ const CreatePost: React.FC<CreatePostProps> = ({
     setSelectedVideos(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleStickerSelect = (sticker: StickerItem) => {
+  // Same picker, same handler shape as the chat composer: emoji inserts as text, sticker/GIF
+  // insert as a StickerNode so Lottie/video documents keep animating inside the post too.
+  const handleEmoticonSelect = (selection: EmoticonSelection) => {
     if (!editorInstance) return;
-    editorInstance.dispatchCommand(INSERT_IMAGE_COMMAND, {
-      src: sticker.src,
-      altText: sticker.label,
-      width: '100%',
-      showCaption: false,
-      captionsEnabled: false,
-      height: '100%',
-    });
-    editorInstance.dispatchCommand(INSERT_PARAGRAPH_COMMAND, undefined);
-
-    setIsStickerPickerOpen(false);
-  };
-
-  const handleGifSelect = (gif: GifItem) => {
-    if (!editorInstance) return;
-    editorInstance.dispatchCommand(INSERT_IMAGE_COMMAND, {
-      src: gif.url,
-      altText: gif.description || tp('gif_alt', 'GIF'),
-      width: '100%',
-      height: '100%',
-      showCaption: false,
-      captionsEnabled: false,
-    });
-    editorInstance.dispatchCommand(INSERT_PARAGRAPH_COMMAND, undefined);
-    setIsGifPickerOpen(false);
+    if (selection.kind === 'emoji') {
+      editorInstance.update(() => {
+        if (emojiSelection.current) $setSelection(emojiSelection.current.clone());
+        const range = $getSelection();
+        if ($isRangeSelection(range)) range.insertText(selection.emoji);
+        else $getRoot().selectEnd().insertText(selection.emoji);
+      });
+    } else {
+      editorInstance.dispatchCommand(INSERT_STICKER_COMMAND, selection);
+      editorInstance.dispatchCommand(INSERT_PARAGRAPH_COMMAND, undefined);
+    }
+    setEmojiPanelTab(null);
   };
 
   const handleYouTubeSelect = (video: YouTubeVideo) => {
@@ -1527,7 +1518,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
     selectionAlwaysOnDisplay: true,
     listStrictIndent: false,
     measureTypingPerf: false,
-    nodes: [EmojiNode, HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode, MentionNode, ImageNode, YouTubeNode, TweetNode, MetadataNode],
+    nodes: [EmojiNode, HashtagNode, HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode, AutoLinkNode, MentionNode, ImageNode, YouTubeNode, TweetNode, MetadataNode, CodeNode, CodeHighlightNode, TableNode, TableRowNode, TableCellNode, StickerNode],
     theme: {
       paragraph: `mb-2 text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`,
       heading: {
@@ -1669,14 +1660,16 @@ const CreatePost: React.FC<CreatePostProps> = ({
                 {/* Close Button - Compact */}
                 {canClose && onClose && (
                   <motion.button
+                    type="button"
                     onClick={onClose}
-                    className={`flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg transition-all duration-200 ${theme === 'dark'
+                    className={`flex items-center justify-center min-w-11 min-h-11 rounded-lg transition-all duration-200 ${theme === 'dark'
                       ? 'text-gray-400 hover:text-white hover:bg-gray-900/50 active:bg-gray-900/50'
                       : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/60 active:bg-gray-100/60'
                     }`}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     title={tp('close', 'Close')}
+                    aria-label={tp('close', 'Close')}
                   >
                     <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </motion.button>
@@ -1698,6 +1691,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                           <AutoLinkPlugin />
                           <ImagesPlugin captionsEnabled={false} />
                           <YouTubePlugin />
+                          <StickerPlugin />
                           <NewMentionsPlugin />
 
                           <div className="-mx-2 mt-1">
@@ -1738,7 +1732,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
 
             <div className={`w-full scrollbar-hide`}>
               <AnimatePresence>
-                {(selectedImages.length > 0 || selectedVideos.length > 0 || location || polls.length > 0 || isEventActive || isEmojiPickerOpen || isStickerPickerOpen || isLocationPickerOpen || isGifPickerOpen || isYouTubePickerOpen) && (
+                {(selectedImages.length > 0 || selectedVideos.length > 0 || location || polls.length > 0 || isEventActive || emojiPanelTab !== null || isLocationPickerOpen || isYouTubePickerOpen) && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
@@ -1858,18 +1852,18 @@ const CreatePost: React.FC<CreatePostProps> = ({
                         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                         className="mb-4 sm:mb-8"
                       >
-                        <div className={`w-full overflow-visible  ${theme === 'dark'
-                          ? 'cv-card-surface-solid border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]'
-                          : 'bg-white border border-gray-200/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]'
+                        <div className={`w-full overflow-visible rounded-2xl sm:rounded-3xl ${theme === 'dark'
+                          ? 'cv-card-surface-solid'
+                          : 'bg-white'
                           }`}>
                           {/* Apple-Style Header */}
                           <div className={`px-4  sm:px-6 py-3 sm:py-4 border-b ${theme === 'dark' ? 'border-white/10' : 'border-gray-200/50'
                             }`}>
                             <div className="flex items-center justify-between gap-2 sm:gap-3">
                               <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-xl flex-shrink-0 ${theme === 'dark'
-                                  ? 'bg-gray-900/30 border border-gray-900 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]'
-                                  : 'bg-black/5 border border-black/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.08)]'
+                                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 ${theme === 'dark'
+                                  ? 'bg-gray-900/30'
+                                  : 'bg-black/5'
                                   }`}>
                                   <BarChart3 className={`w-4 h-4 sm:w-5 sm:h-5 ${theme === 'dark' ? 'text-white/90' : 'text-gray-900/90'
                                     }`} />
@@ -1890,9 +1884,9 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                   setPolls([]);
                                   setPollErrors({});
                                 }}
-                                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl backdrop-blur-xl transition-all duration-300 flex items-center justify-center flex-shrink-0 ${theme === 'dark'
-                                  ? 'bg-gray-900/50 border border-gray-900 hover:bg-gray-900/70 active:bg-gray-900/70'
-                                  : 'bg-gray-100 border border-gray-200/50 hover:bg-gray-200 active:bg-gray-200'
+                                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl transition-all duration-300 flex items-center justify-center flex-shrink-0 ${theme === 'dark'
+                                  ? 'bg-gray-900/50 hover:bg-gray-900/70 active:bg-gray-900/70'
+                                  : 'bg-gray-100 hover:bg-gray-200 active:bg-gray-200'
                                   }`}
                                 whileHover={{ scale: 1.08, rotate: 90 }}
                                 whileTap={{ scale: 0.92 }}
@@ -1910,10 +1904,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                 initial={{ opacity: 0, y: 20, scale: 0.98 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 transition={{ delay: pollIndex * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                                className={`w-full overflow-hidden rounded-2xl sm:rounded-3xl ${theme === 'dark'
-                                  ? 'cv-card-surface-solid border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]'
-                                  : 'bg-white border border-gray-200/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]'
-                                  }`}
+                                className={`w-full overflow-hidden rounded-xl sm:rounded-2xl ${pollIndex > 0 ? (theme === 'dark' ? 'border-t border-white/10 pt-4 sm:pt-6' : 'border-t border-gray-200/50 pt-4 sm:pt-6') : ''}`}
                               >
                                 {/* Apple-Style Poll Header */}
                                 <div className={`px-4 sm:px-6 py-4 sm:py-5 border-b ${theme === 'dark' ? 'border-white/10' : 'border-gray-200/50'
@@ -1956,9 +1947,9 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                     </div>
                                     <motion.button
                                       onClick={() => removePoll(poll.id)}
-                                      className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl backdrop-blur-xl transition-all duration-300 flex items-center justify-center flex-shrink-0 mt-7 ${theme === 'dark'
-                                        ? 'bg-gray-900/50 border border-gray-900 hover:bg-gray-900/70 active:bg-gray-900/70'
-                                        : 'bg-gray-100 border border-gray-200/50 hover:bg-gray-200 active:bg-gray-200'
+                                      className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl transition-all duration-300 flex items-center justify-center flex-shrink-0 mt-7 ${theme === 'dark'
+                                        ? 'bg-gray-900/50 hover:bg-gray-900/70 active:bg-gray-900/70'
+                                        : 'bg-gray-100 hover:bg-gray-200 active:bg-gray-200'
                                         }`}
                                       whileHover={{ scale: 1.08, rotate: 90 }}
                                       whileTap={{ scale: 0.92 }}
@@ -1990,9 +1981,9 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                         className={`rounded-2xl border p-2.5 ${theme === 'dark' ? 'border-white/10 bg-white/[0.04]' : 'border-gray-200/60 bg-white/70'}`}
                                       >
                                         <div className="flex items-center gap-2 sm:gap-3">
-                                          <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 backdrop-blur-xl ${theme === 'dark'
-                                            ? 'bg-gray-900/30 border border-gray-900 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]'
-                                            : 'bg-gray-100 border border-gray-200/50'
+                                          <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${theme === 'dark'
+                                            ? 'bg-gray-900/30'
+                                            : 'bg-gray-100'
                                             }`}>
                                             <span className={`text-xs sm:text-sm font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
                                               }`}>
@@ -2029,9 +2020,9 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                               }`}
                                           />
                                           <label
-                                            className={`relative flex w-8 h-8 sm:w-9 sm:h-9 cursor-pointer items-center justify-center rounded-lg sm:rounded-xl border transition-all duration-300 flex-shrink-0 ${theme === 'dark'
-                                              ? 'border-gray-900 bg-gray-900/50 text-white hover:bg-gray-900/70'
-                                              : 'border-gray-200/50 bg-gray-100 text-gray-900 hover:bg-gray-200'
+                                            className={`relative flex w-8 h-8 sm:w-9 sm:h-9 cursor-pointer items-center justify-center rounded-lg sm:rounded-xl transition-all duration-300 flex-shrink-0 ${theme === 'dark'
+                                              ? 'bg-gray-900/50 text-white hover:bg-gray-900/70'
+                                              : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
                                               }`}
                                             title={tp('poll_option_add_photo', 'Add photo')}
                                           >
@@ -2060,9 +2051,9 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                             <motion.button
                                               type="button"
                                               onClick={() => removePollOption(poll.id, optionIndex)}
-                                              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl backdrop-blur-xl transition-all duration-300 flex items-center justify-center flex-shrink-0 ${theme === 'dark'
-                                                ? 'bg-gray-900/50 border border-gray-900 hover:bg-gray-900/70 active:bg-gray-900/70'
-                                                : 'bg-gray-100 border border-gray-200/50 hover:bg-gray-200 active:bg-gray-200'
+                                              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl transition-all duration-300 flex items-center justify-center flex-shrink-0 ${theme === 'dark'
+                                                ? 'bg-gray-900/50 hover:bg-gray-900/70 active:bg-gray-900/70'
+                                                : 'bg-gray-100 hover:bg-gray-200 active:bg-gray-200'
                                                 }`}
                                               whileHover={{ scale: 1.08, rotate: 90 }}
                                               whileTap={{ scale: 0.92 }}
@@ -2144,8 +2135,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                                   ? 'bg-white text-black shadow-[0_8px_32px_0_rgba(255,255,255,0.2)]'
                                                   : 'bg-black text-white shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]'
                                                 : theme === 'dark'
-                                                  ? 'bg-gray-900/30 border border-gray-900 text-white/60 hover:text-white hover:bg-gray-900/50 active:bg-gray-900/50'
-                                                  : 'bg-gray-100 border border-gray-200/50 text-gray-500 hover:text-gray-900 hover:bg-gray-200 active:bg-gray-200'
+                                                  ? 'bg-gray-900/30 text-white/60 hover:text-white hover:bg-gray-900/50 active:bg-gray-900/50'
+                                                  : 'bg-gray-100 text-gray-500 hover:text-gray-900 hover:bg-gray-200 active:bg-gray-200'
                                                 }`}
                                               whileHover={{ scale: 1.05 }}
                                               whileTap={{ scale: 0.95 }}
@@ -2185,8 +2176,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                                 ? 'bg-white text-black shadow-[0_8px_32px_0_rgba(255,255,255,0.2)]'
                                                 : 'bg-black text-white shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]'
                                               : theme === 'dark'
-                                                ? 'bg-gray-900/30 border border-gray-900 text-white/60 hover:text-white hover:bg-gray-900/50 active:bg-gray-900/50'
-                                                : 'bg-gray-100 border border-gray-200/50 text-gray-500 hover:text-gray-900 hover:bg-gray-200 active:bg-gray-200'
+                                                ? 'bg-gray-900/30 text-white/60 hover:text-white hover:bg-gray-900/50 active:bg-gray-900/50'
+                                                : 'bg-gray-100 text-gray-500 hover:text-gray-900 hover:bg-gray-200 active:bg-gray-200'
                                               }`}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
@@ -2223,13 +2214,13 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                             }
                                           }}
                                           disabled={poll.maxSelectable <= 1}
-                                          className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl backdrop-blur-xl transition-all duration-300 flex items-center justify-center flex-shrink-0 ${poll.maxSelectable <= 1
+                                          className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl transition-all duration-300 flex items-center justify-center flex-shrink-0 ${poll.maxSelectable <= 1
                                             ? theme === 'dark'
-                                              ? 'bg-gray-900/20 border border-gray-900 text-white/30 cursor-not-allowed'
-                                              : 'bg-gray-100 border border-gray-200/50 text-gray-300 cursor-not-allowed'
+                                              ? 'bg-gray-900/20 text-white/30 cursor-not-allowed'
+                                              : 'bg-gray-100 text-gray-300 cursor-not-allowed'
                                             : theme === 'dark'
-                                              ? 'bg-gray-900/50 border border-gray-900 text-white hover:bg-gray-900/70 active:bg-gray-900/70'
-                                              : 'bg-gray-100 border border-gray-200/50 text-gray-900 hover:bg-gray-200 active:bg-gray-200'
+                                              ? 'bg-gray-900/50 text-white hover:bg-gray-900/70 active:bg-gray-900/70'
+                                              : 'bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-200'
                                             }`}
                                           whileHover={poll.maxSelectable > 1 ? { scale: 1.05 } : {}}
                                           whileTap={poll.maxSelectable > 1 ? { scale: 0.95 } : {}}
@@ -2244,9 +2235,9 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                             const nextValue = poll.maxSelectable >= maxOptions ? 1 : poll.maxSelectable + 1;
                                             updatePollMaxSelectable(poll.id, nextValue);
                                           }}
-                                          className={`flex-1 min-w-[100px] sm:min-w-[120px] px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border transition-all duration-300 backdrop-blur-xl flex items-center justify-center gap-2 ${theme === 'dark'
-                                            ? 'bg-gray-900/30 border-gray-900 text-white hover:bg-gray-900/50 hover:border-gray-900 active:bg-gray-900/50'
-                                            : 'bg-gray-50 border-gray-200/50 text-gray-900 hover:bg-gray-100 hover:border-gray-300 active:bg-gray-100'
+                                          className={`flex-1 min-w-[100px] sm:min-w-[120px] px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 ${theme === 'dark'
+                                            ? 'bg-gray-900/30 text-white hover:bg-gray-900/50 active:bg-gray-900/50'
+                                            : 'bg-gray-50 text-gray-900 hover:bg-gray-100 active:bg-gray-100'
                                             }`}
                                           whileHover={{ scale: 1.02 }}
                                           whileTap={{ scale: 0.98 }}
@@ -2271,13 +2262,13 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                             }
                                           }}
                                           disabled={poll.maxSelectable >= (poll.options.filter(opt => opt.trim() !== '').length || 1)}
-                                          className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl backdrop-blur-xl transition-all duration-300 flex items-center justify-center flex-shrink-0 ${poll.maxSelectable >= (poll.options.filter(opt => opt.trim() !== '').length || 1)
+                                          className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl transition-all duration-300 flex items-center justify-center flex-shrink-0 ${poll.maxSelectable >= (poll.options.filter(opt => opt.trim() !== '').length || 1)
                                             ? theme === 'dark'
-                                              ? 'bg-gray-900/20 border border-gray-900 text-white/30 cursor-not-allowed'
-                                              : 'bg-gray-100 border border-gray-200/50 text-gray-300 cursor-not-allowed'
+                                              ? 'bg-gray-900/20 text-white/30 cursor-not-allowed'
+                                              : 'bg-gray-100 text-gray-300 cursor-not-allowed'
                                             : theme === 'dark'
-                                              ? 'bg-gray-900/50 border border-gray-900 text-white hover:bg-gray-900/70 active:bg-gray-900/70'
-                                              : 'bg-gray-100 border border-gray-200/50 text-gray-900 hover:bg-gray-200 active:bg-gray-200'
+                                              ? 'bg-gray-900/50 text-white hover:bg-gray-900/70 active:bg-gray-900/70'
+                                              : 'bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-200'
                                             }`}
                                           whileHover={poll.maxSelectable < (poll.options.filter(opt => opt.trim() !== '').length || 1) ? { scale: 1.05 } : {}}
                                           whileTap={poll.maxSelectable < (poll.options.filter(opt => opt.trim() !== '').length || 1) ? { scale: 0.95 } : {}}
@@ -2779,55 +2770,22 @@ const CreatePost: React.FC<CreatePostProps> = ({
                       </motion.div>
                     )}
 
-                    {/* Attachment Pickers */}
+                    {/* Attachment Picker - the exact same emoji/sticker/GIF component the chat composer uses */}
                     <AnimatePresence>
-                      {isEmojiPickerOpen && (
+                      {emojiPanelTab !== null && (
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
-                          className="w-full mt-4"
+                          className="w-full mt-4 overflow-hidden rounded-2xl"
                         >
-                          <EmojiPicker
-                            onEmojiSelect={(emoji) => {
-                              if (editorInstance) {
-                                editorInstance.update(() => {
-                                  if (emojiSelection.current) $setSelection(emojiSelection.current.clone());
-                                  const selection = $getSelection();
-                                  if ($isRangeSelection(selection)) selection.insertText(emoji);
-                                  else $getRoot().selectEnd().insertText(emoji);
-                                });
-                              }
-                              setIsEmojiPickerOpen(false);
-                            }}
-                            onClose={() => setIsEmojiPickerOpen(false)}
+                          <EmoticonPicker
+                            isOpen
+                            initialTab={emojiPanelTab}
+                            presentation="inline"
+                            onSelect={handleEmoticonSelect}
+                            onClose={() => setEmojiPanelTab(null)}
                           />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    <AnimatePresence>
-                      {isStickerPickerOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="w-full mt-4"
-                        >
-                          <StickerPicker onStickerSelect={handleStickerSelect} onClose={() => setIsStickerPickerOpen(false)} />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    <AnimatePresence>
-                      {isGifPickerOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="w-full mt-4"
-                        >
-                          <GifPicker onGifSelect={handleGifSelect} onClose={() => setIsGifPickerOpen(false)} />
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -3090,31 +3048,14 @@ const CreatePost: React.FC<CreatePostProps> = ({
                   { icon: MapPin, action: () => setIsLocationPickerOpen(!isLocationPickerOpen), label: tp('toolbar_location', 'Location'), active: isLocationPickerOpen },
                   {
                     icon: Smile, action: () => {
-                      setIsStickerPickerOpen(false);
-                      setIsGifPickerOpen(false);
-                      if (!isEmojiPickerOpen && editorInstance) editorInstance.getEditorState().read(() => { emojiSelection.current = $getSelection()?.clone() ?? null; });
-                      setIsEmojiPickerOpen(!isEmojiPickerOpen);
-                    }, label: tp('toolbar_emoji', 'Emoji'), active: isEmojiPickerOpen
-                  },
-                  {
-                    icon: Sparkles, action: () => {
-                      setIsEmojiPickerOpen(false);
-                      setIsGifPickerOpen(false);
-                      setIsStickerPickerOpen(!isStickerPickerOpen);
-                    }, label: tp('toolbar_sticker', 'Sticker'), active: isStickerPickerOpen
-                  },
-                  {
-                    icon: 'GIF', action: () => {
-                      setIsEmojiPickerOpen(false);
-                      setIsStickerPickerOpen(false);
-                      setIsGifPickerOpen(!isGifPickerOpen);
-                    }, label: tp('toolbar_gif', 'GIF'), active: isGifPickerOpen
+                      setIsYouTubePickerOpen(false);
+                      if (emojiPanelTab === null && editorInstance) editorInstance.getEditorState().read(() => { emojiSelection.current = $getSelection()?.clone() ?? null; });
+                      setEmojiPanelTab(emojiPanelTab === null ? 'emoji' : null);
+                    }, label: tp('toolbar_emoji', 'Emoji'), active: emojiPanelTab !== null
                   },
                   {
                     icon: Youtube, action: () => {
-                      setIsEmojiPickerOpen(false);
-                      setIsStickerPickerOpen(false);
-                      setIsGifPickerOpen(false);
+                      setEmojiPanelTab(null);
                       setIsYouTubePickerOpen(!isYouTubePickerOpen);
                     }, label: tp('toolbar_youtube', 'YouTube'), active: isYouTubePickerOpen
                   },

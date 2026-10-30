@@ -327,7 +327,7 @@ const PopularUsersPanel: React.FC<PopularUsersPanelProps> = ({
             <button
               type="button"
               onClick={() => navigate('/nearby')}
-              className="cv-btn-text cv-btn-sm gap-0.5 text-[0.765rem] font-semibold normal-case tracking-wider"
+              className="cv-btn-text cv-btn-sm inline-flex items-center gap-0.5 text-[0.765rem] font-semibold normal-case tracking-wider"
             >
               Tümü
               <ChevronRight className="h-3.5 w-3.5" />

@@ -18,6 +18,7 @@ export const Actions = {
   // CHAT
   CMD_CHAT_CREATE: "chat.create", // Chat olustur
   CMD_CHAT_GIFS_SEARCH: "chat.media.gifs",
+  CMD_CHAT_GROUP_LIST: "chat.group.list",
   CMD_CHAT_GROUP_UPDATE: "chat.group.update",
   CMD_CHAT_GROUP_INVITE: "chat.group.invite",
   CMD_CHAT_GROUP_PREVIEW: "chat.group.preview",

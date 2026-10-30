@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-21",
+  "date": "2026-10-30",
   "method": "DOM/pointer/keyboard fixtures; no screenshots or real group creation",
   "results": [
     {
@@ -8,8 +8,8 @@
       "theme": "light",
       "status": "passed",
       "hover": {
-        "actual": "rgb(238, 246, 253)",
-        "expected": "rgb(238, 246, 253)"
+        "actual": "rgb(234, 245, 255)",
+        "expected": "rgb(234, 245, 255)"
       },
       "checks": [
         "single native button with switch semantics",
@@ -26,8 +26,8 @@
       "theme": "dark",
       "status": "passed",
       "hover": {
-        "actual": "rgb(41, 39, 48)",
-        "expected": "rgb(41, 39, 48)"
+        "actual": "rgb(35, 41, 50)",
+        "expected": "rgb(35, 41, 50)"
       },
       "checks": [
         "single native button with switch semantics",
@@ -45,8 +45,8 @@
       "large": true,
       "status": "passed",
       "hover": {
-        "actual": "rgb(41, 39, 48)",
-        "expected": "rgb(41, 39, 48)"
+        "actual": "rgb(35, 41, 50)",
+        "expected": "rgb(35, 41, 50)"
       },
       "checks": [
         "single native button with switch semantics",
@@ -63,8 +63,8 @@
       "theme": "light",
       "status": "passed",
       "hover": {
-        "actual": "rgb(238, 246, 253)",
-        "expected": "rgb(238, 246, 253)"
+        "actual": "rgb(234, 245, 255)",
+        "expected": "rgb(234, 245, 255)"
       },
       "checks": [
         "single native button with switch semantics",

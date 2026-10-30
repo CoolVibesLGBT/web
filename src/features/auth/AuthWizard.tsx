@@ -417,7 +417,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
               <ReCAPTCHA
                 ref={recaptchaRef}
                 sitekey={RECAPTCHA_SITE_KEY}
-                size="compact"
+                size="normal"
                 hl={getLanguageTag(i18n.language)}
                 onChange={(token) => {
                   setRecaptchaToken(token);

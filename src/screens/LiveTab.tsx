@@ -1833,7 +1833,7 @@ export const LiveTab: React.FC<{ theme: 'dark' | 'light'; headerVariant?: 'tab' 
     <div className={rootClassName}>
       {showHeader && (headerVariant === 'page' ? (
         <div
-          className={`mb-4 rounded-[30px] border p-4 backdrop-blur-3xl ${theme === 'dark' ? 'cv-card-surface-soft border-white/10' : 'border-white/70 bg-white/75'} shadow-[0_24px_70px_-48px_rgba(15,23,42,0.55)]`}
+          className={`mb-4 border-b px-1 pb-4 ${theme === 'dark' ? 'border-white/10' : 'border-slate-200'}`}
         >
           {headerContent}
         </div>

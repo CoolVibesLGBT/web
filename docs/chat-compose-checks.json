@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-21",
+  "date": "2026-10-29",
   "method": "DOM/HTTP fixtures; real bundled animations; no screenshots",
   "results": [
     {
@@ -14,7 +14,7 @@
         "bottom": 830.203125,
         "border": "0px",
         "radius": "16px",
-        "shadow": "rgba(0, 0, 0, 0.15) 0px 0px 10px 0px"
+        "shadow": "none"
       },
       "checks": [
         "themed expiry submenu; no native select",
@@ -30,13 +30,13 @@
       "theme": "dark",
       "status": "passed",
       "geometry": {
-        "left": 8.5,
+        "left": 49.9375,
         "right": 284.75,
-        "top": 635.5,
+        "top": 664.7054443359375,
         "bottom": 830.203125,
         "border": "0px",
         "radius": "16px",
-        "shadow": "rgba(0, 0, 0, 0.15) 0px 0px 10px 0px"
+        "shadow": "none"
       },
       "checks": [
         "themed expiry submenu; no native select",
@@ -53,13 +53,13 @@
       "large": true,
       "status": "passed",
       "geometry": {
-        "left": 405.625,
-        "right": 820,
-        "top": 237,
-        "bottom": 464.4375,
+        "left": 392.875,
+        "right": 807.25,
+        "top": 571,
+        "bottom": 798,
         "border": "0px",
         "radius": "16px",
-        "shadow": "rgba(0, 0, 0, 0.15) 0px 0px 10px 0px"
+        "shadow": "none"
       },
       "checks": [
         "themed expiry submenu; no native select",
@@ -77,8 +77,8 @@
       "geometry": {
         "left": 745,
         "right": 1021.25,
-        "top": 631.25,
-        "bottom": 825.953125,
+        "top": 452.25,
+        "bottom": 646.953125,
         "border": "0px",
         "radius": "16px",
         "shadow": "rgba(0, 0, 0, 0.15) 0px 0px 10px 0px"

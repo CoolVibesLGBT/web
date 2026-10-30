@@ -6,8 +6,23 @@
 .cv-post-identity { display: flex; flex: 1; align-items: start; gap: .588rem; min-width: 0; }
 .cv-post-author-avatar { flex-shrink: 0; }
 .cv-post-identity > div { flex: 1; min-width: 0; }
-.cv-post-author-meta { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: .353rem; row-gap: .118rem; min-width: 0; }
+.cv-post-author-meta { display: flex; align-items: center; flex-wrap: nowrap; column-gap: .353rem; row-gap: .118rem; min-width: 0; }
 .cv-post-author-meta button { max-width: 100%; text-align: start; overflow-wrap: anywhere; }
+.cv-post-author-meta > button:not(:first-child),
+.cv-post-author-meta > span { flex-shrink: 0; }
+.cv-post-author-meta > button:first-child { flex: 0 1 auto; min-width: 0; }
+.cv-post-name-viewport { display: block; overflow: hidden; white-space: nowrap; max-width: 100%; }
+.cv-post-name-text { display: inline-block; white-space: nowrap; }
+.cv-post-name-viewport:not(.cv-post-name-viewport--marquee) .cv-post-name-text { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.cv-post-name-viewport--marquee .cv-post-name-text { animation: cv-post-name-marquee 7s ease-in-out infinite; }
+@keyframes cv-post-name-marquee {
+  0%, 12% { transform: translateX(0); }
+  45%, 55% { transform: translateX(calc(-1 * var(--cv-marquee-distance, 0px))); }
+  88%, 100% { transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-post-name-viewport--marquee .cv-post-name-text { animation: none; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+}
 .cv-post-header-actions { display: flex; flex-shrink: 0; align-items: center; gap: .118rem; }
 .cv-post-header-actions button { display: inline-grid; place-items: center; min-width: 44px; min-height: 44px; padding: .588rem; }
 .cv-post-header-actions > span { border: 0; background: transparent; padding-inline: .235rem; }

@@ -1,6 +1,5 @@
 .cv-settings-page > div { padding-top: 0; }
-.cv-settings-top { position: sticky; top: 0; z-index: 20; margin-inline: -.941rem; padding: 0 .941rem .941rem; background: var(--cv-page-bg); }
-.cv-settings-top .cv-navigation-bar { margin-inline: -.471rem; padding-inline: 0; background: transparent; }
+.cv-settings-top { position: sticky; top: 0; z-index: 20; margin-inline: -.941rem; padding: .941rem .941rem; background: var(--cv-page-bg); }
 .cv-settings-account { border: 0; box-shadow: none; }
 .cv-settings-account > button { min-height: 88px; }
 .cv-settings-account > button > span > span { overflow-wrap: anywhere; white-space: normal; }

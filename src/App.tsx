@@ -879,6 +879,7 @@ function AppContent() {
     const routeTitles: Record<string, string> = {
       '/wallet': t('wallet.title', { defaultValue: 'Wallet' }),
       '/premium': t('premium.title', { defaultValue: 'Premium' }),
+      '/settings': t('app.nav.settings'),
     };
 
     return routeTitles[normalizedPath] || null;
