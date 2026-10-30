@@ -11,6 +11,7 @@ import {
   MessageCircle,
   Search,
   Users,
+  Users2,
   X,
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
@@ -22,12 +23,14 @@ import { CoolVibesPostCard, PostSkeleton } from '../features/post/Flows';
 import type { ApiPost } from '../features/post/Post';
 import PlaceCard from '../features/discovery/PlaceCard';
 import { UserCard } from '../features/profile/UserCard';
+import ChatAvatarImage from '../features/chat/ChatAvatarImage';
+import { getPublicGroupImage, type PublicGroupPreview } from '../features/chat/groupChatItem';
 import {
   getLocalizedContent,
   htmlToPlainText,
 } from '../helpers/helpers';
 
-type SearchFilter = 'all' | 'people' | 'events' | 'posts' | 'locations';
+type SearchFilter = 'all' | 'people' | 'events' | 'posts' | 'locations' | 'groups';
 type ResultType = Exclude<SearchFilter, 'all' | 'locations'> | 'locations';
 type SearchRecord = Record<string, unknown>;
 
@@ -43,6 +46,7 @@ const EMPTY_RESPONSE: GlobalSearchResponse = {
   events: [],
   posts: [],
   places: [],
+  groups: [],
 };
 
 const asRecord = (value: unknown): SearchRecord | null => {
@@ -112,6 +116,7 @@ const normalizeResponse = (response: GlobalSearchResponse | null | undefined): G
   events: Array.isArray(response?.events) ? response.events : [],
   posts: Array.isArray(response?.posts) ? response.posts : [],
   places: Array.isArray(response?.places) ? response.places : [],
+  groups: Array.isArray(response?.groups) ? response.groups : [],
 });
 
 const SECTION_PREVIEW_LIMIT: Record<ResultType, number> = {
@@ -119,6 +124,7 @@ const SECTION_PREVIEW_LIMIT: Record<ResultType, number> = {
   locations: 4,
   posts: 3,
   events: 4,
+  groups: 4,
 };
 
 const SearchScreen: React.FC = () => {
@@ -219,6 +225,7 @@ const SearchScreen: React.FC = () => {
   const filters = useMemo(() => [
     { id: 'all' as const, label: t('search.filters.all', { defaultValue: 'All' }), icon: Search },
     { id: 'people' as const, label: t('search.filters.people', { defaultValue: 'People' }), icon: Users },
+    { id: 'groups' as const, label: t('search.filters.groups', { defaultValue: 'Groups' }), icon: Users2 },
     { id: 'events' as const, label: t('search.filters.events', { defaultValue: 'Events' }), icon: Calendar },
     { id: 'posts' as const, label: t('search.filters.posts', { defaultValue: 'Posts' }), icon: MessageCircle },
     { id: 'locations' as const, label: t('search.filters.locations', { defaultValue: 'Places' }), icon: MapPin },
@@ -230,11 +237,16 @@ const SearchScreen: React.FC = () => {
       events: [],
       posts: [],
       locations: [],
+      groups: [],
     };
 
     (response.users || []).forEach((user, index) => {
       const data = asRecord(user) || {};
       groups.people.push({ id: `people-${recordId(data, String(index))}`, type: 'people', data });
+    });
+    (response.groups || []).forEach((group, index) => {
+      const data = asRecord(group) || {};
+      groups.groups.push({ id: `groups-${recordId(data, String(index))}`, type: 'groups', data });
     });
     (response.events || []).forEach((event, index) => {
       const data = asRecord(event) || {};
@@ -254,7 +266,7 @@ const SearchScreen: React.FC = () => {
 
   const items = useMemo<SearchItem[]>(() => {
     if (activeFilter === 'all') {
-      return [...grouped.people, ...grouped.events, ...grouped.posts, ...grouped.locations];
+      return [...grouped.people, ...grouped.groups, ...grouped.events, ...grouped.posts, ...grouped.locations];
     }
     if (activeFilter === 'locations') return grouped.locations;
     return grouped[activeFilter];
@@ -279,6 +291,12 @@ const SearchScreen: React.FC = () => {
     if (item.type === 'people') {
       const username = getString(item.data, 'username');
       if (username) navigate(`/${encodeURIComponent(username)}`);
+      return;
+    }
+
+    if (item.type === 'groups') {
+      const username = getString(item.data, 'public_username');
+      if (username) navigate(`/group/${encodeURIComponent(username)}`);
       return;
     }
 
@@ -357,6 +375,41 @@ const SearchScreen: React.FC = () => {
     );
   };
 
+  const renderGroupCard = (item: SearchItem) => {
+    const group = item.data as unknown as PublicGroupPreview;
+    const title = localizedText(item.data.title, language) || t('messages.groups');
+    const description = localizedText(item.data.description, language);
+    const memberCount = Number(item.data.member_count) || 0;
+    const avatar = group.id ? getPublicGroupImage(group) : null;
+
+    return (
+      <article
+        key={item.id}
+        role="button"
+        tabIndex={0}
+        onClick={() => openResult(item)}
+        onKeyDown={(event) => handleResultKeyDown(event, item)}
+        className={`group flex cursor-pointer gap-4 rounded-xl border p-4 transition-colors ${
+          isDark
+            ? 'cv-card-surface-solid border-white/10 hover:bg-[var(--cv-list-hover)]'
+            : 'border-gray-100 bg-white hover:bg-[var(--cv-list-hover)]'
+        }`}
+      >
+        <div className={`flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[18px] ${isDark ? 'bg-sky-500/15 text-sky-300' : 'bg-sky-50 text-sky-600'}`}>
+          {avatar ? <ChatAvatarImage protectedMedia src={avatar} alt="" className="h-full w-full object-cover" /> : <Users2 className="h-7 w-7" />}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start gap-3">
+            <h3 className={`min-w-0 flex-1 truncate text-[0.882rem] font-bold ${textColor}`}>{title}</h3>
+            <ArrowUpRight className={`h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${secondaryTextColor}`} />
+          </div>
+          <p className="mt-1 text-[0.765rem] font-bold text-sky-500">{t('chat_actions.member_count', { count: memberCount })}</p>
+          {description && <p className={`mt-2 line-clamp-2 text-[0.765rem] ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{description}</p>}
+        </div>
+      </article>
+    );
+  };
+
   const renderPeopleGrid = (people: SearchItem[]) => (
     <div className="cv-people-grid">
       {people.map((item) => (
@@ -402,6 +455,12 @@ const SearchScreen: React.FC = () => {
   const renderEventsList = (events: SearchItem[]) => (
     <div className="flex flex-col gap-2.5">
       {events.map((item) => renderEventCard(item))}
+    </div>
+  );
+
+  const renderGroupsList = (groups: SearchItem[]) => (
+    <div className="flex flex-col gap-2.5">
+      {groups.map((item) => renderGroupCard(item))}
     </div>
   );
 
@@ -479,6 +538,7 @@ const SearchScreen: React.FC = () => {
     if (activeFilter === 'people') return renderPeopleGrid(grouped.people);
     if (activeFilter === 'locations') return renderPlacesGrid(grouped.locations);
     if (activeFilter === 'posts') return renderPostsList(grouped.posts);
+    if (activeFilter === 'groups') return renderGroupsList(grouped.groups);
     return renderEventsList(grouped.events);
   };
 
@@ -488,6 +548,11 @@ const SearchScreen: React.FC = () => {
         id: 'people' as ResultType,
         count: grouped.people.length,
         node: renderPeopleGrid(grouped.people.slice(0, SECTION_PREVIEW_LIMIT.people)),
+      },
+      {
+        id: 'groups' as ResultType,
+        count: grouped.groups.length,
+        node: renderGroupsList(grouped.groups.slice(0, SECTION_PREVIEW_LIMIT.groups)),
       },
       {
         id: 'locations' as ResultType,

@@ -1,0 +1,55 @@
+/* Full "All groups" directory reached from the Messages discover strip's "See all". */
+.cv-groups-browse-content { max-width: 42rem; margin-inline: auto; padding: var(--tg-gap) 0 2rem; }
+/* Virtuoso wraps each row in its own measuring div, so the shared
+   `.cv-list-row + .cv-list-row::before` sibling separator never fires here —
+   the grouped-card frame (background/radius/shadow) is what reads as a single
+   section instead, matching the member list in GroupDetails. */
+/* No padding-block here on purpose: Virtuoso puts its own measuring wrapper
+   between this card and each `.cv-list-row`, so the usual `.cv-grouped-list`
+   trick of moving the card's padding onto the first/last `> .cv-list-row`
+   child (via `:has()`) can't reach through it — a flat padding would instead
+   leave a strip of card background above/below the rows that never gets the
+   hover/press fill, undercutting the rounded card they sit in. Rows run
+   flush to the edges instead and this `overflow: hidden` alone rounds off
+   whichever one is first/last. */
+.cv-groups-browse-list { margin: 0 calc(var(--tg-unit) * .9375) var(--tg-gap); background: var(--cv-card-bg-solid); border-radius: var(--tg-radius-section); box-shadow: var(--cv-telegram-section-shadow); overflow: hidden; }
+.cv-groups-browse-scope { margin: 0 calc(var(--tg-unit) * .9375) var(--tg-gap); }
+.cv-groups-browse-footer { padding: calc(var(--tg-unit) * .75); text-align: center; font-size: .824rem; color: var(--cv-neutral-2); }
+/* Two independent targets per row: the row body opens the group/chat, the
+   pill on the right joins or leaves it — ListRow can't host both (it renders
+   the whole row as one <button> when given an onClick), so this list builds
+   the row by hand from the same `.cv-list-row`/`.cv-list-icon`/`.cv-list-copy`
+   tokens instead. */
+.cv-groups-browse-row { align-items: center; }
+/* Keyed off the row's own `is-hovered`/`is-pressed` class (set from the
+   group's id in GroupsBrowseScreen), not a CSS :hover/:active pseudo-class —
+   Virtuoso recycles each slot's DOM node for new data as it scrolls, and a
+   pseudo-class stays pinned to that node, so it would light up whatever
+   unrelated row scrolled under a stationary cursor instead of following the
+   row the viewer actually pointed at. */
+.cv-groups-browse-row.is-hovered { background: var(--cv-list-hover); }
+.cv-groups-browse-row.is-pressed { background: var(--cv-list-pressed); }
+/* A scope change (Join while viewing Not-joined, Leave while viewing Joined)
+   keeps the row mounted for a beat past the point its own filter would drop
+   it (see `leavingRowId`/`scheduleRowLeave`) so it can fade out instead of
+   the whole list snapping up by one row the instant the request resolves. */
+.cv-groups-browse-row { transition: opacity 260ms ease, transform 260ms ease; }
+.cv-groups-browse-row.is-leaving { opacity: 0; transform: scale(.97); pointer-events: none; }
+.cv-groups-browse-row-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: var(--tg-gap); padding: 0; margin: 0; border: 0; background: transparent; color: inherit; font: inherit; text-align: start; }
+.cv-groups-browse-row-main:disabled { cursor: default; }
+.cv-groups-browse-retry { display: flex; align-items: center; gap: var(--tg-gap); margin: var(--tg-gap) calc(var(--tg-unit) * .9375); }
+.cv-groups-browse-retry p { flex: 1; min-width: 0; margin: 0; font-size: .824rem; font-weight: 500; color: var(--cv-critical); }
+.cv-groups-browse-action { flex: 0 0 auto; min-width: 4.7rem; min-height: 2.118rem; padding: 0 calc(var(--tg-unit) * .9375); font-size: .765rem; border: 0; background: var(--color-brand); color: #fff; box-shadow: inset 0 0 0 1px transparent; transition: background-color .22s ease, color .22s ease, box-shadow .22s ease, opacity .22s ease; }
+.cv-groups-browse-action:not(:disabled):hover { background: var(--color-brand-hovered); }
+.cv-groups-browse-action.is-leave { background: transparent; color: var(--cv-critical); box-shadow: inset 0 0 0 1px var(--cv-inner-border); }
+.cv-groups-browse-action.is-leave:not(:disabled):hover { background: var(--cv-list-hover); }
+.cv-groups-browse-action:disabled { opacity: var(--cv-opacity-disabled, .5); }
+.cv-groups-browse-error { color: var(--cv-critical); }
+.cv-groups-browse-skeleton-row { display: flex; align-items: center; gap: var(--tg-gap); min-height: calc(var(--tg-unit) * 3.5); padding: calc(var(--tg-unit) * .5) calc(var(--tg-unit) * .9375); }
+.cv-groups-browse-skeleton-row > span { border-radius: var(--tg-radius-control); background: var(--cv-list-hover); }
+.cv-groups-browse-skeleton-row > span:first-child { flex: 0 0 auto; width: 2.529rem; height: 2.529rem; border-radius: 50%; }
+.cv-groups-browse-skeleton-row > span:last-child { flex: 1; height: calc(var(--tg-unit) * .875); }
+@media (prefers-reduced-motion: no-preference) {
+  .cv-groups-browse-skeleton-row > span { animation: cv-groups-browse-pulse 1.5s ease-in-out infinite; }
+  @keyframes cv-groups-browse-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+}

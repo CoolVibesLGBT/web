@@ -14,6 +14,7 @@ const ChatBackgroundScreen = lazy(() => import('./screens/AppearanceScreen').the
 const ProfileEngagementsScreen = lazy(() => import('./screens/ProfileEngagementsScreen'));
 const SearchScreen = lazy(() => import('./screens/SearchScreen'));
 const MessagesScreen = lazy(() => import('./screens/MessagesScreen'));
+const GroupsBrowseScreen = lazy(() => import('./screens/GroupsBrowseScreen'));
 const GroupInviteScreen = lazy(() => import('./screens/GroupInviteScreen'));
 const NotificationsScreen = lazy(() => import('./screens/NotificationsScreen'));
 const PlaceDetailsScreen = lazy(() => import('./screens/PlaceDetailsScreen'));
@@ -122,6 +123,7 @@ const isProtectedRoutePath = (path: string) => {
   if (path === '/') return false;
   if (/^\/checkin\/[^/]+$/.test(path)) return true;
   if (/^\/classifieds\/[^/]+$/.test(path)) return true;
+  if (path === '/messages/groups') return true;
   const segment = path.match(/^\/([^/]+)$/)?.[1] || null;
   return Boolean(segment && PROTECTED_SINGLE_SEGMENT_ROUTES.has(segment));
 };
@@ -549,6 +551,13 @@ function AppContent() {
         </ProtectedRoute>
       );
     }
+    if (path === '/messages/groups') {
+      return (
+        <ProtectedRoute>
+          <GroupsBrowseScreen />
+        </ProtectedRoute>
+      );
+    }
     if (path === '/notifications') {
       return (
         <ProtectedRoute>
@@ -605,6 +614,8 @@ function AppContent() {
       setActiveScreen(liveEnabled ? 'live' : 'pride');
     } else if (path.startsWith('/settings/')) {
       setActiveScreen('settings');
+    } else if (path.startsWith('/messages/')) {
+      setActiveScreen('messages');
     } else if (nextScreen) {
       setActiveScreen(nextScreen);
     } else if (path.startsWith('/') && path.split('/').length === 2) {

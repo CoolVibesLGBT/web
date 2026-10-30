@@ -352,6 +352,18 @@
     "all": "All",
     "unread": "Unread",
     "groups": "Groups",
+    "discover_groups": "Discover groups",
+    "view_all_groups": "See all",
+    "group_members": "{{count}} members",
+    "no_public_groups": "No public groups yet",
+    "filter_joined": "Joined",
+    "filter_not_joined": "Not joined",
+    "no_joined_groups": "You haven't joined any groups yet",
+    "no_unjoined_groups": "You've joined every group",
+    "join": "Join",
+    "joining": "Joining…",
+    "leave": "Leave",
+    "leaving": "Leaving…",
     "unencrypted": "Unencrypted",
     "loading_chats": "Loading chats...",
     "no_chats_found": "No chats found.",
@@ -1085,7 +1097,10 @@
   },
   "search": {
     "no_results": "No results found",
-    "no_results_subtitle": "Try another search term or category."
+    "no_results_subtitle": "Try another search term or category.",
+    "filters": {
+      "groups": "Groups"
+    }
   },
   "tips": {"title": "Send Tip", "sent": "Tip sent", "failed": "Unable to send tip. Please try again.", "insufficient": "Insufficient balance"}
 }

@@ -7,7 +7,7 @@ import { httpClient } from "./httpClient";
 import { DEFAULT_APP_URL } from "../constants/constants";
 import { getRuntimeAppDomain } from "../platform/runtime";
 
-export type GlobalSearchScope = 'all' | 'people' | 'events' | 'posts' | 'places';
+export type GlobalSearchScope = 'all' | 'people' | 'events' | 'posts' | 'places' | 'groups';
 
 export interface GlobalSearchResponse {
   query?: string;
@@ -15,6 +15,7 @@ export interface GlobalSearchResponse {
   events?: Array<Record<string, unknown>>;
   posts?: Array<Record<string, unknown>>;
   places?: Array<Record<string, unknown>>;
+  groups?: Array<Record<string, unknown>>;
 }
 
 export interface CountedViewResponse {
@@ -563,10 +564,10 @@ export class ApiService {
   }
 
   // Messages
-  async fetchChats() {
+  async fetchChats(payload: { limit?: number; cursor?: string } = {}) {
     return this.call(Actions.CMD_FETCH_CHATS, {
       method: "POST",
-      body: {},
+      body: payload,
     });
   }
 

@@ -35,8 +35,17 @@
 .cv-group-info-edit .cv-group-save:disabled { opacity: .4; }
 .cv-group-info button:focus-visible { outline: 2px solid var(--color-brand); outline-offset: -2px; }
 @media (max-height: 650px) { .cv-group-info-summary { padding: .5rem; } .cv-group-info-avatar { width: 4.7rem; height: 4.7rem; } }
-.cv-group-invitation { min-height: 70dvh; color: var(--cv-neutral-1); background: var(--cv-page-bg); }
-.cv-group-invitation-card { max-width: 25rem; margin: 2rem auto; padding: 1.5rem; border-radius: 1.412rem; background: var(--cv-card-bg-solid); box-shadow: var(--cv-telegram-section-shadow); text-align: center; }
+.cv-group-invitation { position: relative; isolation: isolate; height: 100%; min-height: 100%; display: flex; flex-direction: column; overflow: hidden; color: var(--cv-neutral-1); background: var(--cv-page-bg); }
+/* The group's own hero photo (falling back to its cover) fills the whole
+   screen behind the card, shown as-is — only the generic `ChatWallpaper`
+   pattern is used when the group has neither. */
+.cv-group-invitation-wallpaper { position: absolute; inset: 0; z-index: 0; background-position: center; background-size: cover; background-color: var(--cv-surface-2); }
+.cv-group-invitation-body { position: relative; z-index: 1; flex: 1 1 auto; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 1.5rem .9375rem; overflow-y: auto; }
+.cv-group-invitation-card { max-width: 25rem; width: 100%; padding: 1.5rem; border-radius: 1.412rem; overflow: hidden; background: var(--cv-card-bg-solid); box-shadow: var(--cv-telegram-section-shadow); text-align: center; }
 .cv-group-invitation-card h1 { font-size: 1.412rem; font-weight: 500; overflow-wrap: anywhere; }
 .cv-group-invitation-card p { overflow-wrap: anywhere; }
 .cv-group-invitation-card .cv-group-save { color: white; background: var(--color-brand); }
+/* The group's own cover/hero photo as a banner, with the avatar notched into
+   its bottom edge — same "card over its own photo" shape as a profile cover. */
+.cv-group-invitation-cover { height: 9.41rem; margin: -1.5rem -1.5rem .75rem; background-position: center; background-size: cover; background-color: var(--cv-surface-2); }
+.cv-group-info-avatar.cv-group-info-avatar--overlap { margin-top: -3.529rem; box-shadow: 0 0 0 4px var(--cv-card-bg-solid); }

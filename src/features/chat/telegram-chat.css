@@ -298,3 +298,26 @@ dialog.cv-chat-media-viewer[open] { display: flex; align-items: center; justify-
 .cv-media-send-menu svg { flex: 0 0 24px; width: 24px; height: 24px; }
 
 .cv-media-send-dialog > .cv-sheet-header > .cv-media-send-menu-toggle { order: 1; margin-inline: 0; color: var(--cv-neutral-2); }
+
+/* Discover public groups strip above the dialog list (Groups tab). */
+.cv-discover-section { border-bottom: 1px solid var(--cv-inner-border); padding: var(--tg-gap) calc(var(--tg-unit) * .9375); }
+.cv-discover-section-header { display: flex; align-items: baseline; justify-content: space-between; gap: var(--tg-gap); }
+.cv-discover-heading { margin: 0 0 calc(var(--tg-unit) * .5); font-size: .765rem; font-weight: 600; color: var(--cv-neutral-2); }
+.cv-discover-viewall { flex: 0 0 auto; padding: 0; border: 0; background: transparent; font-size: .765rem; font-weight: 600; color: var(--color-brand); }
+.cv-discover-viewall:hover { color: var(--color-brand-hovered); }
+.cv-discover-error { margin: calc(var(--tg-unit) * .375) 0 0; font-size: .706rem; line-height: 1.3; color: var(--cv-critical); }
+.cv-discover-strip { display: flex; gap: var(--tg-gap); overflow-x: auto; }
+.cv-discover-card { position: relative; flex: 0 0 auto; display: flex; flex-direction: column; gap: calc(var(--tg-unit) * .5); width: calc(var(--tg-unit) * 8.5); padding: calc(var(--tg-unit) * .75); border: 0; border-radius: var(--tg-radius-control); background: var(--cv-surface-2); }
+.cv-discover-card-header { display: flex; align-items: center; gap: calc(var(--tg-unit) * .5); min-width: 0; }
+.cv-discover-avatar { position: relative; flex: 0 0 auto; display: grid; place-items: center; width: calc(var(--tg-unit) * 2.25); height: calc(var(--tg-unit) * 2.25); border-radius: 50%; overflow: hidden; background: var(--cv-list-hover); color: var(--cv-neutral-1); font-size: .824rem; font-weight: 600; }
+.cv-discover-avatar img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+.cv-discover-copy { display: flex; min-width: 0; flex: 1; flex-direction: column; }
+.cv-discover-title { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .765rem; font-weight: 600; line-height: 1.25; color: var(--cv-neutral-1); }
+.cv-discover-members { margin: 0; font-size: .706rem; line-height: 1.3; color: var(--cv-neutral-2); }
+.cv-discover-join { flex: 0 0 auto; width: 100%; padding-block: calc(var(--tg-unit) * .25); border: 0; background: var(--color-brand); color: #fff; }
+.cv-discover-join:not(:disabled):hover { background: var(--color-brand-hovered); }
+.cv-discover-retry { padding-inline: calc(var(--tg-unit) * .875); font-size: .765rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .cv-discover-card.cv-discover-skeleton { animation: cv-skeleton-pulse 1.5s ease-in-out infinite; }
+  @keyframes cv-skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+}

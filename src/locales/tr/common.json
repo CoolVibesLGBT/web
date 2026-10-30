@@ -352,6 +352,18 @@
     "all": "Tümü",
     "unread": "Okunmamış",
     "groups": "Gruplar",
+    "discover_groups": "Grupları keşfet",
+    "view_all_groups": "Tümünü gör",
+    "group_members": "{{count}} üye",
+    "no_public_groups": "Henüz herkese açık grup yok",
+    "filter_joined": "Katıldıklarım",
+    "filter_not_joined": "Katılmadıklarım",
+    "no_joined_groups": "Henüz hiçbir gruba katılmadın",
+    "no_unjoined_groups": "Tüm gruplara katılmışsın",
+    "join": "Katıl",
+    "joining": "Katılıyor…",
+    "leave": "Ayrıl",
+    "leaving": "Ayrılıyor…",
     "unencrypted": "Şifrelenmemiş",
     "loading_chats": "Sohbetler yükleniyor...",
     "no_chats_found": "Sohbet bulunamadı.",
@@ -1085,7 +1097,10 @@
   },
   "search": {
     "no_results": "Sonuç bulunamadı",
-    "no_results_subtitle": "Başka bir arama terimi veya kategori dene."
+    "no_results_subtitle": "Başka bir arama terimi veya kategori dene.",
+    "filters": {
+      "groups": "Gruplar"
+    }
   },
   "tips": {"title": "Bahşiş gönder", "sent": "Bahşiş gönderildi", "failed": "Bahşiş gönderilemedi. Lütfen tekrar dene.", "insufficient": "Yetersiz bakiye"}
 }

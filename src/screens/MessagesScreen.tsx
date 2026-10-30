@@ -8,6 +8,8 @@ import ViewOnceDust from '@/features/chat/ViewOnceDust';
 import MediaSendDialog from '@/features/chat/MediaSendDialog';
 import { createViewOncePreview, readViewOncePreview } from '@/features/chat/viewOncePreview';
 import '@/features/chat/telegram-chat.css';
+import ChatAvatarImage from '@/features/chat/ChatAvatarImage';
+import { buildGroupChatItem, fetchJoinedGroupIds, getPublicGroupImage, searchJoinedGroupChats, type PublicGroupPreview } from '@/features/chat/groupChatItem';
 import TelegramChatListRow from '@/features/chat/TelegramChatListRow';
 import ChatPeerHeader from '@/features/chat/ChatPeerHeader';
 import TelegramIcon from '@/features/chat/TelegramIcon';
@@ -66,17 +68,6 @@ import {
 import type { ResolvedChatMedia } from '@/features/chat/chatMedia';
 
 const EmoticonPicker = React.lazy(() => import('@/features/emoticons/EmoticonPicker'));
-
-// Mirrors the Go backend's types.ChatGroupPreview (chat.group.list response).
-type PublicGroupPreview = {
-  id: string;
-  title: Record<string, string>;
-  description?: Record<string, string>;
-  visibility: string;
-  public_username?: string;
-  avatar?: { file?: { url?: string } };
-  member_count: number;
-};
 
 type MessageExpirySeconds = 0 | 10 | 60 | 3600 | 86400 | 604800;
 
@@ -824,34 +815,171 @@ const MessagesScreen: React.FC = () => {
       return true;
     });
   }, [chatsList, deferredChatSearch, activeFilter]);
-  const joinedGroupUsernames = useMemo(() => new Set(chatsList.filter(chat => chat.type === 'group' && chat.publicUsername).map(chat => chat.publicUsername)), [chatsList]);
+  // A group chat's `id` is always the backend chat ID (see the chatsList mapping
+  // below), so matching on ID also covers groups without a public_username —
+  // the username set alone let already-joined private-linked groups leak back
+  // into the strip.
+  //
+  // `chatsList` only ever holds the sidebar's first, uncursored page of chats
+  // (`chat.fetch_chats` defaults to 20 rows), so a viewer in more than 20 chats
+  // has joined groups it doesn't know about. `allJoinedGroups` is a one-time,
+  // fully-paginated fetch of every group chat ID/username the viewer belongs
+  // to, unioned in below so the strip never offers a group already joined.
+  const [allJoinedGroups, setAllJoinedGroups] = useState<{ ids: Set<string>; usernames: Set<string> }>({ ids: new Set(), usernames: new Set() });
+  const joinedGroupsFetchedRef = useRef(false);
+  useEffect(() => {
+    if (activeFilter !== 'groups' || joinedGroupsFetchedRef.current) return;
+    joinedGroupsFetchedRef.current = true;
+    void fetchJoinedGroupIds().then(setAllJoinedGroups).catch(() => {});
+  }, [activeFilter]);
+  const joinedGroupIds = useMemo(() => {
+    const ids = new Set(chatsList.filter(chat => chat.type === 'group').map(chat => chat.id));
+    allJoinedGroups.ids.forEach(id => ids.add(id));
+    return ids;
+  }, [chatsList, allJoinedGroups]);
+  const joinedGroupUsernames = useMemo(() => {
+    const usernames = new Set(chatsList.filter(chat => chat.type === 'group' && chat.publicUsername).map(chat => chat.publicUsername));
+    allJoinedGroups.usernames.forEach(name => usernames.add(name));
+    return usernames;
+  }, [chatsList, allJoinedGroups]);
+  // `visibleChats`' search only matches what's already in `chatsList`, which
+  // — same 20-row cap as above — means searching the Groups tab could come up
+  // empty for a group the viewer has actually joined. Walking every
+  // `chat.fetch_chats` page for a match and merging any newly-found ones into
+  // `chatsList` lets the existing name/username filter pick them up normally.
+  const groupSearchSeqRef = useRef(0);
+  useEffect(() => {
+    const query = deferredChatSearch.trim();
+    if (activeFilter !== 'groups' || !query) return;
+    const requestId = ++groupSearchSeqRef.current;
+    void searchJoinedGroupChats(query, i18n.language).then(matches => {
+      if (requestId !== groupSearchSeqRef.current || matches.length === 0) return;
+      setChatsList(previous => {
+        const known = new Set(previous.map(chat => chat.id));
+        const additions = matches.filter(chat => !known.has(String(chat.id))).map(chat => buildGroupChatItem(chat, i18n.language, user?.id));
+        return additions.length > 0 ? [...previous, ...additions] : previous;
+      });
+    }).catch(() => {});
+  }, [activeFilter, deferredChatSearch, i18n.language, user?.id, setChatsList]);
   const [publicGroups, setPublicGroups] = useState<PublicGroupPreview[]>([]);
   const [isLoadingPublicGroups, setIsLoadingPublicGroups] = useState(false);
+  // Server pagination cursor for chat.group.list. undefined: initial fetch
+  // needed, null: no more pages, string: cursor for the next page.
+  const publicGroupsCursorRef = useRef<string | null | undefined>(undefined);
+  const [publicGroupsFailed, setPublicGroupsFailed] = useState(false);
   const [joiningGroupId, setJoiningGroupId] = useState<string | null>(null);
-  useEffect(() => {
-    if (activeFilter !== 'groups' || publicGroups.length > 0 || isLoadingPublicGroups) return;
-    let cancelled = false;
+  const [joinErrorId, setJoinErrorId] = useState<string | null>(null);
+  const discoverableGroups = useMemo(
+    () => publicGroups.filter(group => !joinedGroupIds.has(group.id) && (!group.public_username || !joinedGroupUsernames.has(group.public_username))),
+    [publicGroups, joinedGroupIds, joinedGroupUsernames]
+  );
+  // Requests are hosted in this ref-backed loader instead of an effect so the
+  // loading flags never re-trigger themselves: a failure must neither loop
+  // requests forever nor leave the skeletons stuck on screen.
+  const groupsFilterActiveRef = useRef(false);
+  const publicGroupsFetchingRef = useRef(false);
+  const publicGroupsRequestSeqRef = useRef(0);
+  // Sentinel `undefined` (never equals a real, possibly-empty search) so the
+  // unified effect below both loads the first page on first visit and resets
+  // whenever the search text actually changes.
+  const publicGroupsSearchRef = useRef<string | undefined>(undefined);
+  const loadPublicGroups = useCallback(async (cursor?: string) => {
+    if (!groupsFilterActiveRef.current || publicGroupsFetchingRef.current) return;
+    if (cursor === undefined && publicGroupsCursorRef.current === null) return; // Exhausted.
+    if (cursor && publicGroupsCursorRef.current === null) return;
+    publicGroupsFetchingRef.current = true;
+    const requestId = ++publicGroupsRequestSeqRef.current;
     setIsLoadingPublicGroups(true);
-    api.listGroups({ limit: 20 }).then((response: any) => {
-      if (cancelled) return;
-      setPublicGroups(Array.isArray(response?.groups) ? response.groups : []);
-    }).catch(() => { if (!cancelled) setPublicGroups([]); }).finally(() => { if (!cancelled) setIsLoadingPublicGroups(false); });
-    return () => { cancelled = true; };
-  }, [activeFilter, publicGroups.length, isLoadingPublicGroups]);
+    try {
+      const search = publicGroupsSearchRef.current;
+      // The backend's `chat.group.list` reads the search term from a form
+      // field literally named `query` (not `search`).
+      const response: any = await api.listGroups({ limit: 20, ...(search ? { query: search } : {}), ...(cursor ? { cursor } : {}) });
+      const rows: PublicGroupPreview[] = Array.isArray(response?.groups) ? response.groups : [];
+      if (requestId !== publicGroupsRequestSeqRef.current) return;
+      if (rows.length > 0) {
+        setPublicGroups(previous => {
+          const known = new Set(previous.map(group => group.id));
+          return [...previous, ...rows.filter(group => !known.has(group.id))];
+        });
+      }
+      publicGroupsCursorRef.current = typeof response?.cursor === 'string' && response.cursor ? response.cursor : null;
+      if (!cursor && rows.length === 0) setPublicGroupsFailed(false); // Empty service: hide the strip, keep nothing retryable.
+    } catch {
+      // The retry row drives recovery; the previously served cursor stays valid.
+      if (requestId === publicGroupsRequestSeqRef.current) setPublicGroupsFailed(true);
+    } finally {
+      if (requestId === publicGroupsRequestSeqRef.current) {
+        publicGroupsFetchingRef.current = false;
+        setIsLoadingPublicGroups(false);
+      }
+    }
+  }, []);
+  useEffect(() => { groupsFilterActiveRef.current = activeFilter === 'groups'; }, [activeFilter]);
+  useEffect(() => () => {
+    // Leaving the screen invalidates any in-flight response.
+    publicGroupsRequestSeqRef.current += 1;
+    publicGroupsFetchingRef.current = false;
+  }, []);
+  // Entry point: visiting the Groups tab keeps any already fetched pages and
+  // starts from the first page for a fresh one; typing a search term resets
+  // and refetches against it the same way, since `chat.group.list` filters
+  // server-side and a client-side-only filter would still miss anything
+  // beyond the pages already loaded.
+  useEffect(() => {
+    if (activeFilter !== 'groups') return;
+    const nextSearch = deferredChatSearch.trim();
+    if (nextSearch === publicGroupsSearchRef.current) return;
+    publicGroupsSearchRef.current = nextSearch;
+    publicGroupsCursorRef.current = undefined;
+    publicGroupsRequestSeqRef.current += 1; // Invalidate any in-flight response for the old search.
+    publicGroupsFetchingRef.current = false;
+    setPublicGroups([]);
+    setPublicGroupsFailed(false);
+    void loadPublicGroups();
+  }, [activeFilter, deferredChatSearch, loadPublicGroups]);
+  // As the user joins groups, the joined-username filter empties the strip;
+  // walk the cursor pages until no pages remain so every public group is shown.
+  const PUBLIC_GROUPS_MIN_CARDS = 10;
+  useEffect(() => {
+    if (activeFilter !== 'groups' || publicGroupsFailed || isLoadingPublicGroups) return;
+    if (discoverableGroups.length >= PUBLIC_GROUPS_MIN_CARDS) return;
+    const cursor = publicGroupsCursorRef.current;
+    if (typeof cursor !== 'string' || publicGroupsFetchingRef.current) return;
+    void loadPublicGroups(cursor);
+  }, [activeFilter, publicGroups.length, publicGroupsFailed, isLoadingPublicGroups, discoverableGroups.length, loadPublicGroups]);
+  const retryPublicGroups = useCallback(() => {
+    if (publicGroupsFetchingRef.current) return;
+    publicGroupsCursorRef.current = undefined;
+    publicGroupsRequestSeqRef.current += 1; // Invalidate any in-flight response.
+    setPublicGroups([]);
+    setPublicGroupsFailed(false);
+    void loadPublicGroups();
+  }, [loadPublicGroups]);
   const handleJoinPublicGroup = useCallback(async (group: PublicGroupPreview) => {
     if (!group.public_username || joiningGroupId) return;
     setJoiningGroupId(group.id);
+    setJoinErrorId(null);
     try {
-      await api.joinGroup({ public_username: group.public_username });
-      setPublicGroups(previous => previous.filter(item => item.id !== group.id));
+      const response: any = await api.joinGroup({ public_username: group.public_username });
+      // Insert the joined chat immediately instead of waiting on the full
+      // chats refetch: `joinedGroupIds` then excludes this card on the very
+      // next render, rather than racing a slow/failed background refresh.
+      if (response?.chat) {
+        const item = buildGroupChatItem(response.chat, i18n.language, user?.id);
+        setChatsList(previous => [item, ...previous.filter(existing => existing.id !== item.id)]);
+        setAllJoinedGroups(previous => ({
+          ids: new Set(previous.ids).add(item.id),
+          usernames: item.publicUsername ? new Set(previous.usernames).add(item.publicUsername) : previous.usernames,
+        }));
+      }
       void refreshChatsRef.current?.();
-    } catch { /* Keep the card so the user can retry. */ }
-    finally { setJoiningGroupId(null); }
-  }, [joiningGroupId]);
-  const discoverableGroups = useMemo(
-    () => publicGroups.filter(group => !group.public_username || !joinedGroupUsernames.has(group.public_username)),
-    [publicGroups, joinedGroupUsernames]
-  );
+    } catch {
+      // Surfaced inline on the card so a failed join is never mistaken for a
+      // no-op; the card stays so the user can retry.
+      setJoinErrorId(group.id);
+    } finally { setJoiningGroupId(null); }
+  }, [joiningGroupId, i18n.language, user?.id, setChatsList]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [selectedVideos, setSelectedVideos] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -1385,11 +1513,11 @@ const MessagesScreen: React.FC = () => {
 
   // Handle navigation state to open chat from MatchScreen
   React.useEffect(() => {
-    const state = location.state as { openChat?: string; userId?: string; publicId?: number; username?: string; groupChat?: ChatItem } | null;
+    const state = location.state as { openChat?: string; userId?: string; publicId?: number; username?: string; groupChat?: ChatItem; openGroupInfo?: boolean } | null;
     if (state?.groupChat) {
       const group = state.groupChat;
       setChatsList(previous => [group, ...previous.filter(chat => chat.chatId !== group.chatId)]);
-      setSelectedChat(group.id); setShowSidebar(false); setShowProfile(false);
+      setSelectedChat(group.id); setShowSidebar(false); setShowProfile(!!state.openGroupInfo);
       navigate(location.pathname, { replace: true, state: {} });
       return;
     }
@@ -1415,6 +1543,7 @@ const MessagesScreen: React.FC = () => {
         if (chatToOpen) {
           setSelectedChat(chatToOpen.id);
           setShowSidebar(false);
+          if (state.openGroupInfo) setShowProfile(true);
           return prev;
         } else {
           // Chat doesn't exist in list, create a temporary entry
@@ -2829,44 +2958,61 @@ const MessagesScreen: React.FC = () => {
               </div>
             </div>
 
-            {activeFilter === 'groups' && (isLoadingPublicGroups || discoverableGroups.length > 0) && (
-              <div className="border-b border-[var(--cv-inner-border)] px-3 py-3 sm:px-4">
-                <p className={`mb-2 text-[0.765rem] font-semibold ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'}`}>
-                  {t('messages.discover_groups', { defaultValue: 'Discover groups' })}
-                </p>
-                <div className="flex gap-2.5 overflow-x-auto no-scrollbar">
+            {activeFilter === 'groups' && (isLoadingPublicGroups || publicGroupsFailed || discoverableGroups.length > 0) && (
+              <div className="cv-discover-section">
+                <div className="cv-discover-section-header">
+                  <p className="cv-discover-heading">{t('messages.discover_groups', { defaultValue: 'Discover groups' })}</p>
+                  <button type="button" className="cv-discover-viewall" onClick={() => navigate('/messages/groups')}>
+                    {t('messages.view_all_groups', { defaultValue: 'See all' })}
+                  </button>
+                </div>
+                {publicGroupsFailed && !isLoadingPublicGroups ? (
+                  <div className="flex items-center gap-3">
+                    <p className="min-w-0 flex-1 text-[0.765rem] font-medium text-red-500">{t('chat_actions.action_failed')}</p>
+                    <button
+                      type="button"
+                      className="cv-btn cv-discover-retry"
+                      onClick={retryPublicGroups}
+                      aria-label={t('nearby.try_again', { defaultValue: 'Try Again' })}
+                    >
+                      {t('nearby.try_again', { defaultValue: 'Try Again' })}
+                    </button>
+                  </div>
+                ) : (
+                <div className="cv-discover-strip">
                   {isLoadingPublicGroups && discoverableGroups.length === 0
-                    ? Array.from({ length: 3 }).map((_, idx) => (
-                      <div key={idx} className={`h-24 w-36 flex-shrink-0 rounded-2xl animate-pulse ${theme === 'dark' ? 'bg-white/[0.06]' : 'bg-slate-200'}`} />
+                    ? Array.from({ length: 4 }).map((_, idx) => (
+                      <div key={idx} className="cv-discover-card cv-discover-skeleton" aria-hidden="true" />
                     ))
                     : discoverableGroups.map(group => {
                       const title = String(getLocalizedContent(group.title, i18n.language) || '');
-                      const avatar = group.avatar?.file?.url || null;
+                      const avatar = getPublicGroupImage(group);
                       return (
-                        <div key={group.id} className={`flex w-36 flex-shrink-0 flex-col gap-2 rounded-2xl p-3 ${theme === 'dark' ? 'bg-white/[0.06]' : 'bg-slate-100'}`}>
-                          <div className="flex items-center gap-2">
-                            <div className={`flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-full text-sm font-semibold ${theme === 'dark' ? 'bg-white/10 text-white' : 'bg-white text-slate-900'}`}>
-                              {avatar ? <img src={avatar} alt="" className="h-full w-full object-cover" /> : title.charAt(0).toLocaleUpperCase()}
+                        <div key={group.id} className="cv-discover-card">
+                          <div className="cv-discover-card-header">
+                            <div className="cv-discover-avatar">
+                              {title.charAt(0).toLocaleUpperCase()}
+                              {avatar && <ChatAvatarImage protectedMedia src={avatar} alt="" loading="lazy" />}
                             </div>
-                            <div className="min-w-0 flex-1">
-                              <p className={`truncate text-[0.765rem] font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>{title}</p>
-                              <p className={`text-[0.706rem] ${theme === 'dark' ? 'text-zinc-400' : 'text-slate-500'}`}>
-                                {t('messages.group_members', { count: group.member_count, defaultValue: '{{count}} members' })}
-                              </p>
+                            <div className="cv-discover-copy">
+                              <p className="cv-discover-title"><bdi>{title}</bdi></p>
+                              <p className="cv-discover-members">{t('messages.group_members', { count: group.member_count, defaultValue: '{{count}} members' })}</p>
                             </div>
                           </div>
                           <button
                             type="button"
+                            className="cv-btn cv-discover-join"
                             disabled={!group.public_username || joiningGroupId === group.id}
                             onClick={() => handleJoinPublicGroup(group)}
-                            className={`h-8 rounded-full text-[0.765rem] font-semibold transition-colors disabled:opacity-60 ${theme === 'dark' ? 'bg-white text-black hover:bg-white/90' : 'bg-black text-white hover:bg-black/90'}`}
                           >
                             {joiningGroupId === group.id ? t('messages.joining', { defaultValue: 'Joining…' }) : t('messages.join', { defaultValue: 'Join' })}
                           </button>
+                          {joinErrorId === group.id && <p className="cv-discover-error">{t('chat_actions.action_failed')}</p>}
                         </div>
                       );
                     })}
                 </div>
+                )}
               </div>
             )}
 
