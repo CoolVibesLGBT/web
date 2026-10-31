@@ -276,6 +276,12 @@
     "screen_error_title": "This screen could not load",
     "screen_error_message": "Something went wrong. Try again or return to the home page.",
     "people": "People",
+    "groups": "Groups",
+    "popular_groups_title": "Discover groups",
+    "popular_groups_subtitle": "Public groups you can join right now.",
+    "popular_groups_badge": "COMMUNITY",
+    "popular_groups_empty": "No public groups to show yet.",
+    "popular_groups_retry": "Try again",
     "back": "Back"
   },
   "months": {
@@ -364,6 +370,7 @@
     "joining": "Joining…",
     "leave": "Leave",
     "leaving": "Leaving…",
+    "already_joined": "Joined",
     "unencrypted": "Unencrypted",
     "loading_chats": "Loading chats...",
     "no_chats_found": "No chats found.",

@@ -843,14 +843,15 @@ const MessagesScreen: React.FC = () => {
     return usernames;
   }, [chatsList, allJoinedGroups]);
   // `visibleChats`' search only matches what's already in `chatsList`, which
-  // — same 20-row cap as above — means searching the Groups tab could come up
+  // — same 20-row cap as above — means searching from any tab could come up
   // empty for a group the viewer has actually joined. Walking every
   // `chat.fetch_chats` page for a match and merging any newly-found ones into
-  // `chatsList` lets the existing name/username filter pick them up normally.
+  // `chatsList` lets the existing name/username filter pick them up normally,
+  // regardless of which tab the search happened from.
   const groupSearchSeqRef = useRef(0);
   useEffect(() => {
     const query = deferredChatSearch.trim();
-    if (activeFilter !== 'groups' || !query) return;
+    if (!query) return;
     const requestId = ++groupSearchSeqRef.current;
     void searchJoinedGroupChats(query, i18n.language).then(matches => {
       if (requestId !== groupSearchSeqRef.current || matches.length === 0) return;
@@ -860,7 +861,7 @@ const MessagesScreen: React.FC = () => {
         return additions.length > 0 ? [...previous, ...additions] : previous;
       });
     }).catch(() => {});
-  }, [activeFilter, deferredChatSearch, i18n.language, user?.id, setChatsList]);
+  }, [deferredChatSearch, i18n.language, user?.id, setChatsList]);
   const [publicGroups, setPublicGroups] = useState<PublicGroupPreview[]>([]);
   const [isLoadingPublicGroups, setIsLoadingPublicGroups] = useState(false);
   // Server pagination cursor for chat.group.list. undefined: initial fetch
@@ -915,7 +916,13 @@ const MessagesScreen: React.FC = () => {
       }
     }
   }, []);
-  useEffect(() => { groupsFilterActiveRef.current = activeFilter === 'groups'; }, [activeFilter]);
+  // Public-group search needs to work from any tab — not just Groups — since
+  // the chat search box is the one place people look for "a group called X"
+  // regardless of which filter happens to be selected; without a search term
+  // the strip still stays Groups-tab-only.
+  useEffect(() => {
+    groupsFilterActiveRef.current = activeFilter === 'groups' || deferredChatSearch.trim().length > 0;
+  }, [activeFilter, deferredChatSearch]);
   useEffect(() => () => {
     // Leaving the screen invalidates any in-flight response.
     publicGroupsRequestSeqRef.current += 1;
@@ -923,12 +930,13 @@ const MessagesScreen: React.FC = () => {
   }, []);
   // Entry point: visiting the Groups tab keeps any already fetched pages and
   // starts from the first page for a fresh one; typing a search term resets
-  // and refetches against it the same way, since `chat.group.list` filters
+  // and refetches against it the same way (from any tab — see
+  // `groupsFilterActiveRef` above), since `chat.group.list` filters
   // server-side and a client-side-only filter would still miss anything
   // beyond the pages already loaded.
   useEffect(() => {
-    if (activeFilter !== 'groups') return;
     const nextSearch = deferredChatSearch.trim();
+    if (activeFilter !== 'groups' && !nextSearch) return;
     if (nextSearch === publicGroupsSearchRef.current) return;
     publicGroupsSearchRef.current = nextSearch;
     publicGroupsCursorRef.current = undefined;
@@ -2958,7 +2966,7 @@ const MessagesScreen: React.FC = () => {
               </div>
             </div>
 
-            {activeFilter === 'groups' && (isLoadingPublicGroups || publicGroupsFailed || discoverableGroups.length > 0) && (
+            {(activeFilter === 'groups' || deferredChatSearch.trim().length > 0) && (isLoadingPublicGroups || publicGroupsFailed || discoverableGroups.length > 0) && (
               <div className="cv-discover-section">
                 <div className="cv-discover-section-header">
                   <p className="cv-discover-heading">{t('messages.discover_groups', { defaultValue: 'Discover groups' })}</p>

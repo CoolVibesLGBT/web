@@ -26,7 +26,8 @@ import {
 } from '@/features/post/timelineUtils';
 
 import PopularUsersPanel from '../features/discovery/PopularUsersPanel';
-import { Users } from 'lucide-react';
+import PopularGroupsPanel from '../features/discovery/PopularGroupsPanel';
+import { Users2 } from 'lucide-react';
 
 const LiveTab = React.lazy(() => import('./LiveTab'));
 
@@ -75,13 +76,13 @@ const HomeScreen: React.FC = () => {
       setActiveTab('vibes');
       return;
     }
-    if (tab === 'people' || tab === 'users') {
-      setActiveTab('people');
+    if (tab === 'groups' || tab === 'people' || tab === 'users') {
+      setActiveTab('groups');
     }
   }, [location.search, liveEnabled]);
 
   useEffect(() => {
-    setShowBottomBar(activeTab === 'flows' || activeTab === 'people');
+    setShowBottomBar(activeTab === 'flows' || activeTab === 'groups');
   }, [activeTab, setShowBottomBar]);
 
   useEffect(() => {
@@ -218,9 +219,9 @@ const HomeScreen: React.FC = () => {
           <ViewTabs items={[
  ...(liveEnabled ? [{ id: 'live' as const, label: 'Live', icon: <img src={resolvePublicAssetUrl('/icons/live.webp')} alt="" /> }] : []),
  { id: 'flows' as const, label: 'Cool', icon: <img src={resolvePublicAssetUrl('/icons/flows.webp')} alt="" /> },
- { id: 'people' as const, label: t('app.people'), icon: <Users /> },
+ { id: 'groups' as const, label: t('app.groups'), icon: <Users2 /> },
  { id: 'vibes' as const, label: 'Vibes', icon: <img src={resolvePublicAssetUrl('/icons/vibes.webp')} alt="" /> },
-]} activeId={activeTab} onSelect={id => { setActiveTab(id); setShowBottomBar(id === 'flows' || id === 'people'); }} label={t('app.nav.home')} />
+]} activeId={activeTab} onSelect={id => { setActiveTab(id); setShowBottomBar(id === 'flows' || id === 'groups'); }} label={t('app.nav.home')} />
         </div>
       )}
 
@@ -254,9 +255,9 @@ const HomeScreen: React.FC = () => {
               onProfileClick={handleProfileClick}
               scrollParentRef={scrollContainerRef}
             />
-          ) : activeTab === 'people' ? (
-            <div key="people" className="w-full max-w-[640px] mx-auto px-4 py-2">
-              <PopularUsersPanel limit={24} variant="grid" showHeader={true} />
+          ) : activeTab === 'groups' ? (
+            <div key="groups" className="w-full max-w-[640px] mx-auto px-4 py-2">
+              <PopularGroupsPanel limit={24} showHeader={true} />
             </div>
           ) : activeTab === 'live' && liveEnabled ? (
             <React.Suspense fallback={null}>

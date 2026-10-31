@@ -276,6 +276,12 @@
     "screen_error_title": "Ekran yüklenemedi",
     "screen_error_message": "Bir sorun oluştu. Yeniden deneyebilir veya ana sayfaya dönebilirsin.",
     "people": "Kişiler",
+    "groups": "Gruplar",
+    "popular_groups_title": "Grupları keşfet",
+    "popular_groups_subtitle": "Şu anda katılabileceğin herkese açık gruplar.",
+    "popular_groups_badge": "TOPLULUK",
+    "popular_groups_empty": "Henüz gösterilecek herkese açık grup yok.",
+    "popular_groups_retry": "Tekrar dene",
     "back": "Geri"
   },
   "months": {
@@ -364,6 +370,7 @@
     "joining": "Katılıyor…",
     "leave": "Ayrıl",
     "leaving": "Ayrılıyor…",
+    "already_joined": "Üyesin",
     "unencrypted": "Şifrelenmemiş",
     "loading_chats": "Sohbetler yükleniyor...",
     "no_chats_found": "Sohbet bulunamadı.",
