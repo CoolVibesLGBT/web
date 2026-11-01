@@ -61,3 +61,59 @@
 }
 .cv-classified-template-title { font-size: 1rem; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
 .cv-classified-template-description { font-size: .765rem; font-weight: 400; line-height: 1.4; color: #f2e8fa; overflow-wrap: anywhere; }
+
+/* Property (key/value) editor used by the classifieds create form. */
+.cv-property-editor { display: flex; flex-direction: column; gap: calc(var(--tg-unit) * .75); padding-inline: var(--tg-unit); padding-block: calc(var(--tg-unit) * .25); }
+.cv-property-suggestions { display: flex; flex-wrap: wrap; gap: calc(var(--tg-unit) * .5); }
+.cv-property-suggestion { display: inline-flex; align-items: center; gap: calc(var(--tg-unit) * .35); min-height: 2.25rem; margin: 0; padding: 0 calc(var(--tg-unit) * .8); border: 1px solid var(--cv-inner-border); border-radius: calc(var(--tg-unit) * 1.25); background: var(--cv-surface-2); color: var(--cv-neutral-1); font-size: calc(var(--tg-unit) * .875); font-weight: 500; appearance: none; transition: background-color .15s, border-color .15s; }
+.cv-property-suggestion:hover { background: var(--cv-list-hover); border-color: var(--color-brand); }
+.cv-property-suggestion svg { display: block; width: 1rem; height: 1rem; color: var(--color-brand); flex-shrink: 0; }
+.cv-property-entries { display: flex; flex-direction: column; }
+.cv-property-entry { display: flex; align-items: center; gap: calc(var(--tg-unit) * .5); }
+.cv-property-entry + .cv-property-entry { border-top: 1px solid var(--cv-inner-border); }
+.cv-property-entry-fields { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+/* Row height matches Telegram-iOS's ItemListSingleLineInputItem (11pt vertical inset either side ≈ 44pt total, the same floor as this app's 44px touch target rule). */
+.cv-property-field-row { display: flex; align-items: center; gap: var(--tg-unit); min-height: max(44px, calc(var(--tg-unit) * 2.9)); }
+.cv-property-field-row + .cv-property-field-row { border-top: 1px solid var(--cv-inner-border); }
+/* A fixed caption stays put on the left; only the value text to its right changes, so the row never loses its meaning once filled in. */
+.cv-property-field-label { flex-shrink: 0; width: 5.5rem; font-size: calc(var(--tg-unit) * .875); color: var(--cv-neutral-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* `all: unset` guards against unrelated global input rules (two design-system stylesheets ship side by side in this app) leaking padding/line-height in here. */
+.cv-property-field-row input { all: unset; box-sizing: border-box; display: block; flex: 1; min-width: 0; text-align: start; font-size: var(--tg-unit); line-height: 1.3; color: var(--cv-neutral-1); cursor: text; }
+.cv-property-field-row input::placeholder { color: var(--cv-neutral-3); }
+/* Filled-in entries collapse to one compact line (key muted/left, value dark/right) — the same
+   key-left/value-right relationship ListRow and the published post card already use, instead of
+   repeating "Field name / Value" captions down the whole list. `flex-direction: row` here is load-bearing:
+   this element also carries `.cv-property-entry-fields`, which sets `column`, so without an explicit
+   override the two inputs silently stack instead of sitting on one line. */
+.cv-property-entry-compact { display: flex; flex-direction: row; align-items: center; gap: calc(var(--tg-unit) * .75); min-height: max(44px, calc(var(--tg-unit) * 2.9)); }
+.cv-property-entry-compact input { all: unset; box-sizing: border-box; display: block; line-height: 1.3; cursor: text; }
+.cv-property-compact-key { flex-shrink: 0; max-width: 45%; font-size: calc(var(--tg-unit) * .875); font-weight: 400; color: var(--cv-neutral-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cv-property-compact-value { flex: 1; min-width: 30%; text-align: end; font-size: var(--tg-unit); font-weight: 500; color: var(--cv-neutral-1); }
+/* aspect-ratio pins the box to a true circle no matter what squeezes width/height in a flex row. */
+.cv-property-remove { flex: none; align-self: center; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; aspect-ratio: 1 / 1; margin: 0; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--cv-neutral-2); font: inherit; line-height: 0; appearance: none; }
+.cv-property-remove:hover { background: var(--cv-list-hover); color: var(--cv-menu-danger); }
+.cv-property-remove svg { display: block; width: 1.05rem; height: 1.05rem; }
+.cv-property-add { display: inline-flex; align-self: flex-start; align-items: center; gap: calc(var(--tg-unit) * .6); min-height: max(44px, var(--tg-control-height)); margin: 0; padding: 0 calc(var(--tg-unit) * .5) 0 0; border: 0; border-radius: var(--tg-radius-control); background: transparent; color: var(--color-brand); font-size: var(--tg-unit); font-weight: 500; appearance: none; }
+.cv-property-add:hover { background: var(--cv-list-hover); }
+.cv-property-add-icon { flex: none; display: grid; place-items: center; width: 1.5rem; height: 1.5rem; aspect-ratio: 1 / 1; border: 1.5px solid var(--color-brand); border-radius: 50%; }
+.cv-property-add-icon svg { display: block; width: .85rem; height: .85rem; }
+
+/* Create-listing modal: each block renders as its own floating grouped-section card on the page background, matching Settings. */
+/* Section-to-section gap matches Telegram-iOS's own grouped-table spacing (ItemListItem.swift: ~28pt between sections, ~24pt before the first one). */
+.cv-classified-form .cv-grouped-section { margin-block: calc(var(--tg-unit) * 1.85); }
+.cv-classified-form .cv-grouped-section:first-child { margin-top: calc(var(--tg-unit) * 1.6); }
+/* Title field: a plain static caption above a clearly bordered/filled input — no floating "notch"
+   label, no outer GroupedSection card. Simpler and sturdier than the notched-label FormField pattern
+   (which kept fighting telegram-foundation.css's :has() specificity), and matches the profile edit
+   screen's own field style (caption above, visibly boxed input below). */
+.cv-classified-title-field { display: flex; flex-direction: column; gap: calc(var(--tg-unit) * .4); margin-block: calc(var(--tg-unit) * 1.85); }
+.cv-classified-title-field label { font-size: calc(var(--tg-unit) * .875); font-weight: 500; color: var(--cv-neutral-2); }
+.cv-classified-title-field input { all: unset; box-sizing: border-box; width: 100%; min-height: max(44px, calc(var(--tg-unit) * 2.9)); padding: calc(var(--tg-unit) * .6) calc(var(--tg-unit) * .8); border: 1.5px solid var(--cv-inner-border); border-radius: var(--tg-radius-control); background: var(--cv-card-bg-solid); color: var(--cv-neutral-1); font-size: var(--tg-unit); line-height: 1.3; cursor: text; }
+.cv-classified-title-field input:hover { border-color: var(--color-brand); }
+.cv-classified-title-field input:focus { border-color: var(--color-brand); box-shadow: inset 0 0 0 1px var(--color-brand); }
+.cv-classified-title-field input::placeholder { color: var(--cv-neutral-3); }
+.cv-classified-form .cv-list-row .cv-list-check { width: calc(var(--tg-unit) * 1.125); height: calc(var(--tg-unit) * 1.125); flex-shrink: 0; }
+/* A 2-row radio list reads as lopsided with the icon-inset divider cut short against a full-bleed selected highlight; run it edge to edge instead. */
+.cv-classified-form .cv-list-row + .cv-list-row::before { inset-inline: 0; }
+/* CreatePost owns its own popovers (mentions, emoji, media); never clip them. */
+.cv-classified-create-section > .cv-grouped-list { overflow: visible; }

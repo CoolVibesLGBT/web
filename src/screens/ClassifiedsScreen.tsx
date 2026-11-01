@@ -16,12 +16,15 @@ import {
   GraduationCap,
   PawPrint,
   RefreshCw,
+  Check,
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import CreatePost from '../features/post/CreatePost';
 import { api } from '../services/api';
 import { CoolVibesPostCard, PostSkeleton } from '../features/post/Flows';
+import { GroupedSection, ListRow } from '@/components/ui/Interface';
+import PropertyFieldsEditor, { type PropertyField } from '../features/classifieds/PropertyFieldsEditor';
 
 const JOB_KIND = {
   offer: 'job_offer',
@@ -43,10 +46,7 @@ export default function ClassifiedsScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [postKind, setPostKind] = useState<JobPostKind>(JOB_KIND.offer);
   const [listingTitle, setListingTitle] = useState('');
-  const [metadataKeyInput, setMetadataKeyInput] = useState('');
-  const [metadataValueInput, setMetadataValueInput] = useState('');
-  const [metadataItems, setMetadataItems] = useState<Array<{ key: string; value: string }>>([]);
-  const [isMetadataEnabled, setIsMetadataEnabled] = useState(true);
+  const [metadataItems, setMetadataItems] = useState<PropertyField[]>([]);
   const [posts, setPosts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -63,10 +63,7 @@ export default function ClassifiedsScreen() {
     }
     setPostKind(defaultKind);
     setListingTitle(options?.title ?? '');
-    setMetadataKeyInput('');
-    setMetadataValueInput('');
     setMetadataItems([]);
-    setIsMetadataEnabled(true);
     setIsAddingTopic(true);
   }, [activeTab]);
 
@@ -189,37 +186,20 @@ export default function ClassifiedsScreen() {
     });
   }, [posts, searchQuery]);
 
-  const handleMetadataToggle = () => {
-    setIsMetadataEnabled(prev => {
-      if (prev) {
-        setMetadataKeyInput('');
-        setMetadataValueInput('');
-        setMetadataItems([]);
-      }
-      return !prev;
-    });
-  };
+  const metadataSuggestions = useMemo(() => ([
+    { label: t('classifieds.location'), hint: t('classifieds.location_hint', { defaultValue: 'e.g. Kadıköy' }) },
+    { label: t('classifieds.salary'), hint: t('classifieds.salary_hint', { defaultValue: 'e.g. 25,000' }) },
+    { label: t('classifieds.work_type'), hint: t('classifieds.work_type_hint', { defaultValue: 'e.g. Full-time' }) },
+    { label: t('classifieds.expectations'), hint: t('classifieds.expectations_hint', { defaultValue: 'e.g. 3+ years experience' }) },
+    { label: t('classifieds.date'), hint: t('classifieds.date_hint', { defaultValue: 'e.g. Nov 15' }) },
+  ].filter(s => s.label)), [t]);
 
-  const addMetadataItem = () => {
-    const key = metadataKeyInput.trim();
-    const value = metadataValueInput.trim();
-    if (!key || !value) return;
-    setMetadataItems(prev => {
-      const existingIndex = prev.findIndex(item => item.key.toLowerCase() === key.toLowerCase());
-      if (existingIndex >= 0) {
-        const nextItems = [...prev];
-        nextItems[existingIndex] = { key, value };
-        return nextItems;
-      }
-      return [...prev, { key, value }];
-    });
-    setMetadataKeyInput('');
-    setMetadataValueInput('');
-  };
-
-  const removeMetadataItem = (key: string) => {
-    setMetadataItems(prev => prev.filter(entry => entry.key !== key));
-  };
+  const publishableMetadata = useMemo(
+    () => metadataItems
+      .map(item => ({ key: item.key.trim(), value: item.value.trim() }))
+      .filter(item => item.key.length > 0 && item.value.length > 0),
+    [metadataItems],
+  );
 
   const templateCards = useMemo(() => ([
     {
@@ -465,153 +445,74 @@ export default function ClassifiedsScreen() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className={`w-full max-w-2xl rounded-[24px] overflow-hidden flex flex-col max-h-[calc(100vh-3rem)] ${dark ? 'cv-card-surface-solid border border-white/10 text-white' : 'bg-white border border-slate-200 text-slate-900'} shadow-[0_24px_80px_rgba(0,0,0,0.2)]`}
+              className="w-full max-w-2xl rounded-[24px] overflow-hidden flex flex-col max-h-[calc(100vh-3rem)] bg-[var(--cv-page-bg)] text-[var(--cv-neutral-1)] shadow-[0_24px_80px_rgba(0,0,0,0.2)]"
             >
-              <div className={`flex items-center justify-between px-6 h-14 border-b ${dark ? 'cv-card-surface-soft border-white/10' : 'bg-white/70 border-slate-200'}`}>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
+              <div className="flex items-center justify-between px-6 h-14 shrink-0 bg-[var(--cv-card-bg-solid)]">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="aspect-square flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand-light-solid)] text-[var(--color-brand)]">
                     <Briefcase className="w-4 h-4" strokeWidth={2} />
                   </div>
-                  <h3 className="text-sm font-semibold tracking-tight">
+                  <h3 className="text-sm font-semibold tracking-tight truncate">
                     {postKind === JOB_KIND.offer
                       ? t('classifieds.new_job_listing')
                       : t('classifieds.new_seeking_listing')}
                   </h3>
                 </div>
                 <button
+                  type="button"
                   onClick={closeCreateModal}
-                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${dark ? 'text-gray-400 hover:text-white hover:bg-white/10' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'}`}
+                  aria-label={t('app.close', { defaultValue: 'Close' })}
+                  className="aspect-square w-9 h-9 shrink-0 appearance-none border-0 rounded-full flex items-center justify-center text-[var(--cv-neutral-2)] transition-colors hover:bg-[var(--cv-list-hover)] hover:text-[var(--cv-neutral-1)]"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5 pointer-events-none" />
                 </button>
               </div>
-              <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4 no-scrollbar">
-                <div className={`grid grid-cols-2 gap-2 p-1 rounded-full ${dark ? 'bg-white/5 border border-white/10' : 'bg-slate-100 border border-slate-200'}`}>
-                  <button
+              <div className="cv-classified-form flex-1 overflow-y-auto px-4 sm:px-6 py-4 no-scrollbar">
+                <GroupedSection title={t('classifieds.form_type', { defaultValue: 'Listing Type' })}>
+                  <ListRow
+                    icon={<Briefcase />}
+                    title={t('classifieds.hire')}
+                    selected={postKind === JOB_KIND.offer}
                     onClick={() => setPostKind(JOB_KIND.offer)}
-                    className={`h-9 rounded-full text-xs font-semibold tracking-tight transition-all flex items-center justify-center gap-2 ${postKind === JOB_KIND.offer
-                      ? dark ? 'bg-white text-black' : 'bg-slate-900 text-white'
-                      : dark ? 'text-gray-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'
-                      }`}
-                  >
-                    <Briefcase className="w-4 h-4" />
-                    {t('classifieds.hire')}
-                  </button>
-                  <button
+                    accessory={<Check className={`cv-list-check ${postKind === JOB_KIND.offer ? 'text-[var(--color-brand)]' : 'opacity-0'}`} />}
+                  />
+                  <ListRow
+                    icon={<Search />}
+                    title={t('classifieds.jobs')}
+                    selected={postKind === JOB_KIND.search}
                     onClick={() => setPostKind(JOB_KIND.search)}
-                    className={`h-9 rounded-full text-xs font-semibold tracking-tight transition-all flex items-center justify-center gap-2 ${postKind === JOB_KIND.search
-                      ? dark ? 'bg-white text-black' : 'bg-slate-900 text-white'
-                      : dark ? 'text-gray-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'
-                      }`}
-                  >
-                    <Search className="w-4 h-4" />
-                    {t('classifieds.jobs')}
-                  </button>
+                    accessory={<Check className={`cv-list-check ${postKind === JOB_KIND.search ? 'text-[var(--color-brand)]' : 'opacity-0'}`} />}
+                  />
+                </GroupedSection>
+
+                <div className="cv-classified-title-field">
+                  <label htmlFor="classified-title">{t('classifieds.form_title')}</label>
+                  <input
+                    id="classified-title"
+                    value={listingTitle}
+                    onChange={(e) => setListingTitle(e.target.value)}
+                    placeholder={t('classifieds.form_title_placeholder')}
+                  />
                 </div>
 
-                <div className="grid gap-4">
-                  <div className="space-y-2">
-                    <label className={`text-xs font-semibold ${dark ? 'text-gray-300' : 'text-slate-600'}`}>
-                      {t('classifieds.form_title')}
-                    </label>
-                    <input
-                      value={listingTitle}
-                      onChange={(e) => setListingTitle(e.target.value)}
-                      placeholder={t('classifieds.form_title_placeholder')}
-                      className={`w-full h-11 px-4 rounded-xl text-sm font-medium outline-none transition-all border ${dark
-                        ? 'bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-white/30'
-                        : 'bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-slate-400'
-                        }`}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between gap-3">
-                      <label className={`text-xs font-semibold ${dark ? 'text-gray-300' : 'text-slate-600'}`}>
-                        {t('classifieds.form_metadata')}
-                      </label>
-                      <button
-                        onClick={handleMetadataToggle}
-                        aria-pressed={isMetadataEnabled}
-                        aria-label={t('classifieds.form_metadata')}
-                        title={t('classifieds.form_metadata')}
-                        className={`flex items-center gap-2 text-xs font-semibold transition-colors ${dark ? 'text-gray-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
-                      >
-                        <span className={`relative inline-flex w-9 h-5 rounded-full transition-colors ${isMetadataEnabled ? (dark ? 'bg-emerald-500/70' : 'bg-emerald-500') : (dark ? 'bg-white/10' : 'bg-slate-200')}`}>
-                          <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full transition-all ${isMetadataEnabled ? 'translate-x-4 bg-white' : (dark ? 'bg-gray-400' : 'bg-white')}`} />
-                        </span>
-                      </button>
-                    </div>
-                    {isMetadataEnabled && (
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.4fr_auto] gap-2">
-                          <input
-                            value={metadataKeyInput}
-                            onChange={(e) => setMetadataKeyInput(e.target.value)}
-                            placeholder={t('classifieds.form_metadata_key', { defaultValue: 'Key' })}
-                            className={`w-full h-10 px-3.5 rounded-xl text-sm font-medium outline-none transition-all border ${dark
-                              ? 'bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-white/30'
-                              : 'bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-slate-400'
-                              }`}
-                          />
-                          <input
-                            value={metadataValueInput}
-                            onChange={(e) => setMetadataValueInput(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                e.preventDefault();
-                                addMetadataItem();
-                              }
-                            }}
-                            placeholder={t('classifieds.form_metadata_value', { defaultValue: 'Value' })}
-                            className={`w-full h-10 px-3.5 rounded-xl text-sm font-medium outline-none transition-all border ${dark
-                              ? 'bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-white/30'
-                              : 'bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-slate-400'
-                              }`}
-                          />
-                          <button
-                            onClick={addMetadataItem}
-                            className={`h-10 px-4 rounded-xl text-xs font-semibold tracking-tight flex items-center justify-center gap-2 transition-all ${dark
-                              ? 'bg-white text-black hover:bg-gray-200'
-                              : 'bg-slate-900 text-white hover:bg-slate-800'
-                              }`}
-                          >
-                            <Plus className="w-4 h-4" />
-                            {t('classifieds.form_metadata_add', { defaultValue: 'Ekle' })}
-                          </button>
-                        </div>
-                        {metadataItems.length > 0 && (
-                          <div className={`rounded-xl border p-2 space-y-2 ${dark ? 'border-white/10 bg-white/5' : 'border-slate-200 bg-slate-50'}`}>
-                            {metadataItems.map(item => (
-                              <div
-                                key={item.key}
-                                className={`flex items-center justify-between gap-3 px-3 py-2 rounded-lg ${dark ? 'cv-card-surface-muted border border-white/10' : 'bg-white border border-slate-200'}`}
-                              >
-                                <div className="min-w-0">
-                                  <div className={`text-[0.765rem] font-semibold ${dark ? 'text-gray-300' : 'text-slate-500'}`}>{item.key}</div>
-                                  <div className={`text-sm font-medium truncate ${dark ? 'text-white' : 'text-slate-900'}`}>{item.value}</div>
-                                </div>
-                                <button
-                                  onClick={() => removeMetadataItem(item.key)}
-                                  className={`w-8 h-8 rounded-full flex items-center justify-center ${dark ? 'text-gray-400 hover:text-white hover:bg-white/10' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-100'}`}
-                                >
-                                  <X className="w-4 h-4" />
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <GroupedSection
+                  title={t('classifieds.form_metadata')}
+                  footer={t('classifieds.form_metadata_hint', { defaultValue: 'Tap a suggestion below or add your own field.' })}
+                >
+                  <PropertyFieldsEditor
+                    items={metadataItems}
+                    onChange={setMetadataItems}
+                    suggestions={metadataSuggestions}
+                  />
+                </GroupedSection>
 
-                <div className={`rounded-[20px] border overflow-hidden ${dark ? 'border-white/10 bg-white/5' : 'border-slate-200 bg-white'}`}>
+                <GroupedSection className="cv-classified-create-section">
                   <CreatePost
                     title={t('classifieds.form_description')}
                     postTitle={listingTitle.trim()}
                     postKind={postKind}
                     extras={{
-                      ...(isMetadataEnabled && metadataItems.length > 0 ? { metadata: metadataItems } : {}),
+                      ...(publishableMetadata.length > 0 ? { metadata: publishableMetadata } : {}),
                     }}
                     buttonText={t('classifieds.form_publish')}
                     fullScreen={false}
@@ -622,7 +523,7 @@ export default function ClassifiedsScreen() {
                       fetchClassifieds();
                     }}
                   />
-                </div>
+                </GroupedSection>
               </div>
             </motion.div>
           </motion.div>

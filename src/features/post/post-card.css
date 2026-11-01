@@ -43,3 +43,7 @@
 .cv-post-inline-media { position: relative; isolation: isolate; overflow: hidden; width: fit-content; max-width: 100%; border-radius: .75rem; }
 .cv-post-inline-media[data-concealed] { cursor: pointer; }
 .cv-post-inline-media[data-concealed] > img { filter: blur(1rem); transform: scale(1.12); }
+
+/* Sticker/GIF reaction attached to a post (extras.emoticon), same document shape as chat messages. */
+.cv-post-emoticon { display: flex; justify-content: center; padding: .235rem 1rem .235rem; }
+.cv-post-gif { display: block; width: min(16rem, 100%); max-height: 20rem; object-fit: contain; border-radius: .625rem; }

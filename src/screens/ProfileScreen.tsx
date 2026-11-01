@@ -3164,7 +3164,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ inline = false, isEmbed =
             coordinates[0]
           );
 
-          appendLocationField('contentable_type', locationObj.contentable_type || 'users');
+          appendLocationField('contentable_type', 'user');
           appendLocationField('country_code', locationObj.country_code || locationObj.countryCode);
           appendLocationField('address', locationObj.address || locationObj.formatted_address || locationObj.display_name);
           appendLocationField('city', locationObj.city);

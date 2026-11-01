@@ -50,6 +50,10 @@ import { YouTubeNode } from '../editor/Lexical/nodes/YouTubeNode';
 import { TweetNode } from '../editor/Lexical/nodes/TweetNode';
 import { MetadataNode } from '../editor/Lexical/nodes/MetadataNode';
 import { StickerNode } from '../editor/Lexical/nodes/StickerNode';
+import StickerMedia from '@/features/emoticons/StickerMedia';
+import GifMedia from '@/features/emoticons/GifMedia';
+import { normalizeEmoticon } from '@/features/emoticons/types';
+import '@/features/emoticons/emoticons.css';
 
 const LUCIDE_ICON_MAP: Record<string, LucideIcon> = {
   home: Home,
@@ -699,6 +703,8 @@ const Post: React.FC<PostProps> = ({
     }
     return [];
   }, [postExtras]);
+
+  const postEmoticon = useMemo(() => normalizeEmoticon(postExtras.emoticon), [postExtras]);
 
   // Memoize post ID and key engagement data to prevent unnecessary updates
   const postIdRef = useRef<string>(postProp.public_id);
@@ -2255,6 +2261,18 @@ const Post: React.FC<PostProps> = ({
             theme={theme}
           />
         </div>
+
+        {/* Sticker / GIF reaction */}
+        {postEmoticon?.kind === 'sticker' && (
+          <div className="cv-post-emoticon">
+            <StickerMedia document={postEmoticon} size={144} />
+          </div>
+        )}
+        {postEmoticon?.kind === 'gif' && (
+          <div className="cv-post-emoticon">
+            <GifMedia className="cv-post-gif" document={postEmoticon} />
+          </div>
+        )}
 
         {/* Post Attachments */}
         {post.attachments && post.attachments.length > 0 && (
