@@ -1,4 +1,10 @@
 {
+  "registrationCaptchaReview": {
+    "date": "2026-11-03",
+    "scope": "AuthWizard registration",
+    "implementation": "captcha_enabled defaults to false; registration submits from the credentials step without a captcha token. Enabling the flag restores the captcha step.",
+    "verification": "Code review only; browser flow and live registration not verified. No asset changes."
+  },
   "concurrentRenderingReview": {
     "date": "2026-10-24",
     "scope": ["ViewTabs all consumers", "MessagesScreen search/filter", "Home post/view tabs", "PlacesScreen search/category/grid/map", "NearbyScreen view mode", "CheckInScreen map/list", "SearchScreen filters/results", "GameMap shared markers", "PlaceDetailsScreen and PostDetails data/loading"],

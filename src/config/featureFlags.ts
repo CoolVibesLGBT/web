@@ -5,6 +5,7 @@ export type FeatureFlagKey =
   | 'ads_in_nearby'
   | 'ads_in_live'
   | 'live_enabled'
+  | 'captcha_enabled'
 
 type FeatureFlagMap = Record<FeatureFlagKey, boolean>
 
@@ -15,6 +16,7 @@ const DEFAULT_FEATURE_FLAGS: FeatureFlagMap = {
   ads_in_nearby: false,
   ads_in_live: false,
   live_enabled: true,
+  captcha_enabled: false,
 }
 
 const FEATURE_FLAG_ENV_KEYS: Record<FeatureFlagKey, string> = {
@@ -24,6 +26,7 @@ const FEATURE_FLAG_ENV_KEYS: Record<FeatureFlagKey, string> = {
   ads_in_nearby: 'PUBLIC_FF_ADS_NEARBY',
   ads_in_live: 'PUBLIC_FF_ADS_LIVE',
   live_enabled: 'PUBLIC_FF_LIVE_ENABLED',
+  captcha_enabled: 'PUBLIC_FF_CAPTCHA_ENABLED',
 }
 
 const parseBooleanFlag = (value: unknown): boolean | null => {
@@ -85,4 +88,5 @@ export const getFeatureFlagsSnapshot = (): FeatureFlagMap => ({
   ads_in_nearby: isFeatureEnabled('ads_in_nearby'),
   ads_in_live: isFeatureEnabled('ads_in_live'),
   live_enabled: isFeatureEnabled('live_enabled'),
+  captcha_enabled: isFeatureEnabled('captcha_enabled'),
 })

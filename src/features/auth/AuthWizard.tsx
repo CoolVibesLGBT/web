@@ -14,6 +14,7 @@ import { DEFAULT_APP_NAME } from '../../constants/constants';
 import { getLanguageTag, normalizeLanguage } from '@/i18n/language';
 import { FormField, Sheet } from '@/components/ui/Interface';
 import AuthIllustration from '@/features/auth/AuthIllustration';
+import { isFeatureEnabled } from '@/config/featureFlags';
 
 interface AuthWizardProps {
   isOpen: boolean;
@@ -35,6 +36,8 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
   const [isLanguageSelectorOpen, setIsLanguageSelectorOpen] = useState(false);
   const [languageFlagFailed, setLanguageFlagFailed] = useState(false);
   const externalRegistrationURL = getRuntimeRegistrationURL();
+  const captchaEnabled = isFeatureEnabled('captcha_enabled');
+  const registrationFinalStep = captchaEnabled ? 3 : 2;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -190,10 +193,10 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
           setError(typeof message === 'string' ? message : t('login_error'));
         }
       });
-    } else if (currentStep === 2 && authMode === 'register') {
+    } else if (currentStep === 2 && authMode === 'register' && captchaEnabled) {
       setCurrentStep(3); // captcha step
-    } else if (currentStep === 3 && authMode === 'register') {
-      if (!recaptchaToken) {
+    } else if (currentStep === registrationFinalStep && authMode === 'register') {
+      if (captchaEnabled && !recaptchaToken) {
         setError(t('captcha_required', { defaultValue: 'Please complete the reCAPTCHA verification' }));
         return;
       }
@@ -203,7 +206,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         nickname: formData.nickname,
         password: formData.password,
         referralCode: formData.referralCode,
-        recaptchaToken: recaptchaToken,
+        ...(captchaEnabled ? { recaptchaToken } : {}),
         domain: getCurrentAppDomain(),
       };
 
@@ -280,7 +283,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
     if (authMode === 'login') {
       return 2; // auth-mode, login-form
     } else if (authMode === 'register') {
-      return 3; // auth-mode, nickname, captcha
+      return captchaEnabled ? 3 : 2; // auth-mode, nickname, optional captcha
     }
     return 3;
   };
@@ -462,7 +465,7 @@ const AuthWizard: React.FC<AuthWizardProps> = ({ isOpen, onClose, mode = 'modal'
         {isPending ? (
           <><span className="cv-auth-spinner" aria-hidden="true" /><span>{authMode === 'login' ? t('signing_in') : t('creating_account')}</span></>
         ) : (
-          <><span>{currentStep === (authMode === 'login' ? 1 : 3) ? (authMode === 'login' ? t('sign_in') : t('complete_registration')) : t('continue')}</span><ArrowRight aria-hidden="true" /></>
+          <><span>{currentStep === (authMode === 'login' ? 1 : registrationFinalStep) ? (authMode === 'login' ? t('sign_in') : t('complete_registration')) : t('continue')}</span><ArrowRight aria-hidden="true" /></>
         )}
       </button>
     </div>

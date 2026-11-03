@@ -337,3 +337,8 @@ Search, place detail and post detail apply successful responses and the end of l
 The earlier post fixture timeout was caused by expecting the first photo click to open the gallery when photo concealment is enabled by default. The fixture now verifies first-click reveal and second-click gallery opening, preserving that preference. Post fixtures passed all four configured phone/tablet/desktop and locale/theme cases, including gallery containment, API actions, failure rollback and detail parity. Discovery, profile-tabs and groups fixtures also passed all four configured cases. Existing list fixtures passed in the preceding pass.
 
 `yarn build` and `node scripts/check-interface-regressions.mjs` passed. The new `transitions` suite passed at 320px/TR/light, 390px/EN/dark, 820px/AR/dark/enlarged text and 1440px/EN/light. It checks chat search/clear, keyboard focus, RTL/overflow selection, Places filters, mocked map marker addition/removal and navigation, retained grid/map state, check-in views/player marker, and place detail success/errors. Its report is `transition-checks.json`. No screenshots, live-service, real-device or measured latency improvement is claimed.
+
+
+### Registration captcha flag — 2026-11-03
+
+AuthWizard uses `captcha_enabled` (default `false`, environment override `PUBLIC_FF_CAPTCHA_ENABLED`). Disabled registration submits directly from the credentials step without `recaptchaToken`; progress and submit labels reflect the shorter flow. Enabling the flag restores captcha validation. Entry choices and Back behavior are preserved. No asset changes. Browser and live-service registration were not verified.
