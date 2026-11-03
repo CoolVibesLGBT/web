@@ -101,7 +101,7 @@ export default function SettingsScreen() {
 
     const handleDataRequest = useCallback(() => {
         if (typeof window === 'undefined') return;
-        openExternalUrl('mailto:privacy@coolvibes.lgbt');
+        openExternalUrl('mailto:privacy@coolvibes.gay');
     }, []);
 
     const handleOpenPrivacyManager = useCallback(() => {

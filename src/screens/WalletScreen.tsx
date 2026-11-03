@@ -892,7 +892,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ inline = false }) => {
                                         </p>
                                         {transaction.txHash && (
                                           <button
-                                            onClick={() => window.open(`https://coolvibes.lgbt`, '_blank')}
+                                            onClick={() => window.open(`https://coolvibes.gay`, '_blank')}
                                             className={`flex items-center gap-1 mt-1 text-xs ${theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'}`}
                                           >
                                             <ExternalLink className="w-3 h-3" />

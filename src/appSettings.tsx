@@ -22,12 +22,14 @@ const runtimeServiceURL = getRuntimeServiceURL()
 const runtimeSocketURL = getRuntimeSocketURL()
 
 const domainToServiceURL: Record<string, [string, string]> = {
+  'coolvibes.gay': ['https://api.coolvibes.gay', 'https://api.coolvibes.gay'],
   'coolvibes.lgbt': ['https://api.coolvibes.lgbt', 'https://api.coolvibes.lgbt'],
   'coolvibes.io': ['https://api.coolvibes.io', 'https://api.coolvibes.io'],
   'coolvibes.app': ['https://api.coolvibes.app', 'https://api.coolvibes.app'],
 };
 
 const domainToSocketURL: Record<string, [string, string]> = {
+  'coolvibes.gay': ['wss://socket.coolvibes.gay', 'wss://socket2.coolvibes.gay'],
   'coolvibes.lgbt': ['wss://socket.coolvibes.lgbt', 'wss://socket2.coolvibes.lgbt'],
   'coolvibes.io': ['wss://socket.coolvibes.io', 'wss://socket2.coolvibes.io'],
   'coolvibes.app': ['wss://socket.coolvibes.app', 'wss://socket2.coolvibes.app'],
@@ -41,10 +43,10 @@ const isKnownDomain = Boolean(hostName && domainToServiceURL[hostName]);
 
 const remoteDebug = false
 const defaultServiceURL: [string, string] = remoteDebug
-  ? ['https://api.coolvibes.app', 'https://api.coolvibes.app']
+  ? ['https://api.coolvibes.gay', 'https://api.coolvibes.gay']
   : ['http://localhost:4001', 'http://localhost:4001'];
 const defaultSocketURL: [string, string] = remoteDebug
-  ? ['wss://socket.coolvibes.app', 'wss://socket2.coolvibes.app']
+  ? ['wss://socket.coolvibes.gay', 'wss://socket2.coolvibes.gay']
   : ['ws://localhost:4002', 'ws://localhost:4003'];
 
 const lanServiceURL: [string, string] = hostName

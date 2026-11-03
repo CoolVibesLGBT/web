@@ -15,5 +15,5 @@ Disallow: /premium
 Disallow: /testpage
 Disallow: /ref/
 
-Sitemap: https://coolvibes.lgbt/sitemap.xml
-Sitemap: https://api.coolvibes.lgbt/sitemap.xml
+Sitemap: https://coolvibes.gay/sitemap.xml
+Sitemap: https://api.coolvibes.gay/sitemap.xml

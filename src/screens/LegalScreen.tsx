@@ -186,7 +186,7 @@ export default function LegalScreen() {
                   <div className="cv-legal-support">
                     <div>
                       <p>{t('need_help')}</p>
-                      <span>support@coolvibes.lgbt</span>
+                      <span>support@coolvibes.gay</span>
                     </div>
                     <Link to="/legal/help">{t('help_cta')}</Link>
                   </div>
@@ -242,7 +242,7 @@ export default function LegalScreen() {
           © {new Date().getFullYear()} {t('copyright')}
         </p>
         <Link to="/">{t('home')}</Link>
-        <a href="https://docs.coolvibes.lgbt/">{landing('documentation')}</a>
+        <a href="https://docs.coolvibes.gay/">{landing('documentation')}</a>
         <Link to="/brandkit">{landing('brandkit.title')}</Link>
       </footer>
       <LanguageSelector

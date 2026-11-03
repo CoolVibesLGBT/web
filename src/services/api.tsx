@@ -85,9 +85,9 @@ export interface EventRSVPResponse {
 
 const fallbackAppDomain = (() => {
   try {
-    return new URL(DEFAULT_APP_URL).hostname || "coolvibes.lgbt";
+    return new URL(DEFAULT_APP_URL).hostname || "coolvibes.gay";
   } catch {
-    return "coolvibes.lgbt";
+    return "coolvibes.gay";
   }
 })();
 

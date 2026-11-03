@@ -6,7 +6,7 @@
 
 **Your colors. Your people.** A multilingual social and dating web application for the LGBTIQA+ community and respectful allies, aged 18 and over.
 
-[Website](https://coolvibes.lgbt) · [Brandkit](https://coolvibes.lgbt/brandkit) · [Documentation contents](SUMMARY.md) · [Getting started](docs/guide/getting-started.md) · [Issues](https://github.com/CoolVibesLGBT/web/issues) · [Download for VS Code](https://marketplace.visualstudio.com/items?itemName=CoolVibes.coolvibes-vscode-extension)
+[Website](https://coolvibes.gay) · [Brandkit](https://coolvibes.gay/brandkit) · [Documentation contents](SUMMARY.md) · [Getting started](docs/guide/getting-started.md) · [Issues](https://github.com/CoolVibesLGBT/web/issues) · [Download for VS Code](https://marketplace.visualstudio.com/items?itemName=CoolVibes.coolvibes-vscode-extension)
 
 ![CoolVibes English hero — an illustrated queer community in New York](docs/assets/heroes/en.jpg)
 
@@ -132,7 +132,7 @@ CoolVibes combines a responsive interface with an expressive visual identity: th
 
 The interface supports localized navigation, light and dark themes, keyboard operation, touch interaction and reduced-motion preferences.
 
-The [Brandkit page](https://coolvibes.lgbt/brandkit) exposes the transparent wordmark, app icons, social cover, palette and ZIP download. Source files are in [`public/images/brand/dott-v3/`](public/images/brand/dott-v3/). These are raster assets; an editable vector master is not included.
+The [Brandkit page](https://coolvibes.gay/brandkit) exposes the transparent wordmark, app icons, social cover, palette and ZIP download. Source files are in [`public/images/brand/dott-v3/`](public/images/brand/dott-v3/). These are raster assets; an editable vector master is not included.
 
 ## Verification and contribution
 

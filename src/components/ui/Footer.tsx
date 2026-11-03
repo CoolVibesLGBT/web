@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
       { name: 'Accessibility', href: '/legal/accessibility' },
     ],
     resources: [
-      { name: t('documentation'), href: 'https://docs.coolvibes.lgbt/' },
+      { name: t('documentation'), href: 'https://docs.coolvibes.gay/' },
       { name: 'Events', href: '#' },
       { name: 'Communities', href: '#' },
       { name: 'Professional Network', href: '#' },

@@ -11,31 +11,31 @@ English, human-voice launch copy for gay and lesbian communities. Every tweet ex
 - These tweets introduce an online, browser-based product. Do not imply local events, local moderation, payments, support or services unless those are actually available.
 - Do not claim end-to-end encryption, guaranteed safety, free-forever pricing or a completed security certification.
 - Live, wallet, referral and premium availability depends on backend and provider configuration; this set does not promise those services in every market.
-- Replace `coolvibes.lgbt` only if the public landing URL changes.
+- Replace `coolvibes.gay` only if the public landing URL changes.
 
 ---
 
 ## What CoolVibes is
 
-1. CoolVibes is a browser-based social network and dating app for LGBTIQA+ adults. one place for your feed, your profile, your matches, your group chats, queer-friendly places and privacy controls. no download. 18+ | coolvibes.lgbt
+1. CoolVibes is a browser-based social network and dating app for LGBTIQA+ adults. one place for your feed, your profile, your matches, your group chats, queer-friendly places and privacy controls. no download. 18+ | coolvibes.gay
 
-2. okay gays and lesbians, meet CoolVibes: a social network and dating app built for us. feed, profiles, matches, group chats and queer-friendly places in one browser tab. no download. 18+ | coolvibes.lgbt
+2. okay gays and lesbians, meet CoolVibes: a social network and dating app built for us. feed, profiles, matches, group chats and queer-friendly places in one browser tab. no download. 18+ | coolvibes.gay
 
 3. if your group chat is doing the heavy lifting for your entire social life, CoolVibes is for you. it's a social network and dating app for LGBTIQA+ adults. feed, dating, private chat. one tab. 18+
 
-4. lesbians, this one's for you: CoolVibes is a dating app and social network that doesn't feel like a job interview. profiles, matches, real conversations. 18+ | coolvibes.lgbt
+4. lesbians, this one's for you: CoolVibes is a dating app and social network that doesn't feel like a job interview. profiles, matches, real conversations. 18+ | coolvibes.gay
 
 5. gays, be honest: how many apps are you juggling? CoolVibes is a social network and dating app for your feed, your dating life and your group chats. built for LGBTIQA+ adults. 18+
 
 6. we built CoolVibes because "queer community" and "dating" shouldn't be two separate apps. it's a social network and dating app for LGBTIQA+ adults. 18+
 
-7. CoolVibes is one place to post, match, chat and find queer-friendly spots. a social network and dating app for LGBTIQA+ adults. 18+ | coolvibes.lgbt
+7. CoolVibes is one place to post, match, chat and find queer-friendly spots. a social network and dating app for LGBTIQA+ adults. 18+ | coolvibes.gay
 
 8. not every app needs to be a dating app. CoolVibes is a social network and dating app, so you can find friends, dates or both. 18+
 
-9. we built CoolVibes for the gays, the lesbians and the rest of the queer fam. it's a social network and dating app for LGBTIQA+ adults. 18+ | coolvibes.lgbt
+9. we built CoolVibes for the gays, the lesbians and the rest of the queer fam. it's a social network and dating app for LGBTIQA+ adults. 18+ | coolvibes.gay
 
-10. okay gays and lesbians, your queer community is invited. CoolVibes is a social network and dating app for adults 18+. come as you are. coolvibes.lgbt
+10. okay gays and lesbians, your queer community is invited. CoolVibes is a social network and dating app for adults 18+. come as you are. coolvibes.gay
 
 ## Feed and community
 
@@ -231,9 +231,9 @@ English, human-voice launch copy for gay and lesbian communities. Every tweet ex
 
 98. CoolVibes is a social network and dating app for the gays and lesbians who want community, the ones who want a date, and the ones who want both. 18+
 
-99. CoolVibes is a social network and dating app for LGBTIQA+ adults. your feed, your profile, your people. 18+ | coolvibes.lgbt
+99. CoolVibes is a social network and dating app for LGBTIQA+ adults. your feed, your profile, your people. 18+ | coolvibes.gay
 
-100. CoolVibes is a social network and dating app for LGBTIQA+ adults. come as you are. 18+ | coolvibes.lgbt
+100. CoolVibes is a social network and dating app for LGBTIQA+ adults. come as you are. 18+ | coolvibes.gay
 
 ---
 

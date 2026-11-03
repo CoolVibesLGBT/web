@@ -35,7 +35,7 @@ self.addEventListener('push', event => {
   const options = {
     body: received.body,
       data: {
-      url: 'https://coolvibes.lgbt' || '/' // tıklanınca açılacak URL
+      url: 'https://coolvibes.gay' || '/' // tıklanınca açılacak URL
     }
   };
 

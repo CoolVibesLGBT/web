@@ -45,7 +45,7 @@ export const LEGAL_PAGES: Record<LegalPage, LegalPageData> = {
       },
       {
         heading: 'Contact',
-        body: 'If you have any questions about this Privacy Policy, please contact us at privacy@coolvibes.lgbt.',
+        body: 'If you have any questions about this Privacy Policy, please contact us at privacy@coolvibes.gay.',
       },
     ],
   },
@@ -157,7 +157,7 @@ export const LEGAL_PAGES: Record<LegalPage, LegalPageData> = {
       },
       {
         heading: 'Feedback',
-        body: 'We welcome your feedback on the accessibility of CoolVibes. Please contact us at accessibility@coolvibes.lgbt if you experience accessibility barriers.',
+        body: 'We welcome your feedback on the accessibility of CoolVibes. Please contact us at accessibility@coolvibes.gay if you experience accessibility barriers.',
       },
     ],
   },
@@ -179,7 +179,7 @@ export const LEGAL_PAGES: Record<LegalPage, LegalPageData> = {
       },
       {
         heading: 'Contact',
-        body: 'Reach us at hello@coolvibes.lgbt for partnerships, press inquiries, or general questions.',
+        body: 'Reach us at hello@coolvibes.gay for partnerships, press inquiries, or general questions.',
       },
     ],
   },
@@ -193,7 +193,7 @@ export const LEGAL_PAGES: Record<LegalPage, LegalPageData> = {
       },
       {
         heading: 'Account Issues',
-        body: 'If you have trouble logging in, use the "Forgot Password" option on the login screen. If you continue to have issues, contact support@coolvibes.lgbt.',
+        body: 'If you have trouble logging in, use the "Forgot Password" option on the login screen. If you continue to have issues, contact support@coolvibes.gay.',
       },
       {
         heading: 'Privacy & Safety',
@@ -205,7 +205,7 @@ export const LEGAL_PAGES: Record<LegalPage, LegalPageData> = {
       },
       {
         heading: 'Contact Support',
-        body: 'For any other issues, email us at support@coolvibes.lgbt or use the in-app feedback button in Settings.',
+        body: 'For any other issues, email us at support@coolvibes.gay or use the in-app feedback button in Settings.',
       },
     ],
   },

@@ -5484,7 +5484,7 @@
         {
           "name": "[transactions]",
           "type": "Transaction[]",
-          "initial": "[\n    {\n      id: '1',\n      type: 'deposit',\n      currency: 'LGBT',\n      amount: '1000',\n      amountUSD: '-',\n      status: 'completed',\n      timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),\n      txHash: 'https://coolvibes.lgbt'\n    },\n  ]"
+          "initial": "[\n    {\n      id: '1',\n      type: 'deposit',\n      currency: 'LGBT',\n      amount: '1000',\n      amountUSD: '-',\n      status: 'completed',\n      timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),\n      txHash: 'https://coolvibes.gay'\n    },\n  ]"
         }
       ],
       "fields": [
@@ -5693,7 +5693,7 @@
       "brandkit footer",
       "legacy Footer component"
     ],
-    "href": "https://docs.coolvibes.lgbt/",
+    "href": "https://docs.coolvibes.gay/",
     "localization": "landing:documentation in all 23 locales",
     "verification": "Native anchor implementation; composed browser layout and external service unverified."
   },

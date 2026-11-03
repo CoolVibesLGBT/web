@@ -27,7 +27,7 @@ export default function ReferralsScreen() {
  const clipboard = useClipboard();
  const [scrollParent, setScrollParent] = useState<HTMLDivElement | null>(null);
  const referralCode = user?.public_id?.toString() ?? '';
- const referralLink = `https://coolvibes.lgbt/ref/${referralCode}`;
+ const referralLink = `https://coolvibes.gay/ref/${referralCode}`;
  const history = useMemo(() => user?.engagements?.engagement_details?.filter((item: ReferralEngagement) => item.kind === 'referral') || [], [user?.engagements?.engagement_details]);
  const number = (value: number) => new Intl.NumberFormat(i18n.language).format(value);
  const copy = () => { if (referralCode) void clipboard.copy(referralLink); };
