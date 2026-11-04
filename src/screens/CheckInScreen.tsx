@@ -1,40 +1,15 @@
 import AnimatedEmptyState from '@/components/ui/AnimatedEmptyState';
 import ViewTabs from '@/components/ui/ViewTabs';
-import { useState, useEffect, useCallback, startTransition } from 'react';
-import { motion, AnimatePresence, useMotionValue, animate } from 'framer-motion';
-import {
-    MapPin,
-    Clock,
-    Home,
-    Car,
-    Building2,
-    Wallet,
-    Heart,
-    Zap,
-    MessageSquare,
-    Banknote,
-    Moon,
-    Coffee,
-    Smile,
-    ShieldCheck,
-    Hand,
-    X,
-    Globe,
-    Sparkles,
-    Droplet,
-    Feather,
-    Dumbbell,
-    FlaskRound,
-    List,
-    Map as MapIcon,
-    RefreshCw,
-} from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { Sheet } from '@/components/ui/Interface';
+import { useState, useEffect, useCallback, useMemo, useRef, startTransition, memo } from 'react';
+import { motion, AnimatePresence, useMotionValue, useMotionValueEvent, animate } from 'framer-motion';
+import { MapPin, Map as MapIcon, X, List, RefreshCw, CircleCheck } from 'lucide-react';
+import CheckInTagArtwork from '@/features/checkin/CheckInTagArtwork';
+import type { CheckInTagItem } from '@/contexts/AppContext';
 import { useNavigate, useLocation } from '@/router';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../contexts/ThemeContext';
 import { useApp } from '../contexts/AppContext';
-import { tagNameToColor } from '../helpers/colors';
 import CreatePost from '../features/post/CreatePost';
 import { getLocalizedContent } from '../helpers/helpers';
 import Post from '../features/post/Post';
@@ -43,123 +18,105 @@ import GameMap, { type GameMarkerContent } from '../features/map/Map/game/GameMa
 import { useAtom, useSetAtom } from 'jotai';
 import { checkinsStateAtom, fetchCheckinsAtom } from '@/state/checkins';
 
-type TagCategory = 'capacity' | 'intent' | 'availability' | 'personality' | 'safety';
-
-interface CheckInTag {
-    id: string;
-    tag: string;
-    name: { en: string; tr: string };
-    icon: LucideIcon;
-    category: TagCategory;
-    color: string;
+// Walk complete axial hex rings so every tag has its own position.
+function hexPositions(count: number, rowHeight = 160) {
+    const cells = [{ q: 0, r: 0 }];
+    const directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]];
+    for (let ring = 1; cells.length < count; ring++) {
+        let q = -ring, r = ring;
+        for (const [dq, dr] of directions) {
+            for (let step = 0; step < ring && cells.length < count; step++) {
+                cells.push({ q, r }); q += dq; r += dr;
+            }
+        }
+    }
+    return cells.slice(0, count).map(({ q, r }) => ({ x: 128 * (q + r / 2), y: rowHeight * r }));
 }
 
-
-
-const LUCIDE_ICON_MAP: Record<string, LucideIcon> = {
-    home: Home,
-    car: Car,
-    building: Building2,
-    wallet: Wallet,
-    heart: Heart,
-    zap: Zap,
-    'message-circle': MessageSquare,
-    banknote: Banknote,
-    sparkles: Sparkles,
-    droplet: Droplet,
-    feather: Feather,
-    dumbbell: Dumbbell,
-    'flask-round': FlaskRound,
-    clock: Clock,
-    moon: Moon,
-    coffee: Coffee,
-    smile: Smile,
-    'shield-check': ShieldCheck,
-    hand: Hand,
-    globe: Globe,
-};
-
-const resolveTagIcon = (icon?: string | LucideIcon): LucideIcon => {
-    if (!icon) return MapPin;
-    if (typeof icon === 'function') return icon as LucideIcon;
-    const key = icon.toLowerCase();
-    return LUCIDE_ICON_MAP[key] ?? MapPin;
-};
-
-/* ─── Hex position helper (Apple Watch spiral layout) ─────────────────────── */
-const getHexPosition = (index: number) => {
-    const hexCoords = [
-        { q: 0, r: 0 },
-        { q: 1, r: -1 }, { q: 1, r: 0 }, { q: 0, r: 1 },
-        { q: -1, r: 1 }, { q: -1, r: 0 }, { q: 0, r: -1 },
-        { q: 2, r: -2 }, { q: 2, r: -1 }, { q: 2, r: 0 }, { q: 1, r: 1 },
-        { q: 0, r: 2 }, { q: -1, r: 2 }, { q: -2, r: 2 }, { q: -2, r: 1 },
-        { q: -2, r: 0 }, { q: -1, r: -1 }, { q: 0, r: -2 }, { q: 1, r: -2 },
-    ];
-    const coord = hexCoords[index] || { q: 0, r: 0 };
-    const size = 98;
-    const x = size * (Math.sqrt(3) * coord.q + (Math.sqrt(3) / 2) * coord.r);
-    const y = size * ((3 / 2) * coord.r);
-    return { x, y };
-};
-
-/* ─── Honeycomb Item ────────────────────────────────────────────────────────── */
-function HoneycombItem({ tag, pos, isSelected, hasSelection, onToggle, dark, defaultLanguage }: {
-    tag: CheckInTag;
-    pos: { x: number; y: number };
-    isSelected: boolean;
-    hasSelection: boolean;
-    onToggle: (pos: { x: number; y: number }) => void;
-    dark: boolean;
-    defaultLanguage: string;
+const CheckInTagSelector = memo(function CheckInTagSelector({ tags, selected, onToggle, language }: {
+    tags: CheckInTagItem[];
+    selected: string[];
+    onToggle: (tag: string) => void;
+    language: string;
 }) {
-   const Icon = tag.icon ?? MapPin;
-    // pos hiç değişmediği için spring gereksiz — doğrudan kullanıyoruz
-    return (
-        <motion.button
-            style={{ x: pos.x, y: pos.y, zIndex: isSelected ? 20 : 1 }}
-            animate={{ opacity: hasSelection && !isSelected ? 0.55 : 1 }}
-            transition={{ opacity: { duration: 0.25, ease: 'easeInOut' } }}
-            whileTap={{ scale: 0.93 }}
-            onClick={e => { e.stopPropagation(); onToggle(pos); }}
-            className={`
-                absolute w-[116px] h-[116px] rounded-full flex flex-col items-center justify-center gap-2
-                border-2 overflow-hidden
-                ${isSelected
-                    ? 'border-transparent'
-                    : dark
-                        ? 'bg-gray-900/60 border-white/[0.10] hover:border-white/[0.22] hover:bg-gray-800/45'
-                        : 'bg-white/80 border-black/[0.08] hover:border-black/[0.18] hover:bg-black/[0.03]'
-                }
-            `}
-        >
-            <motion.div
-                 style={tagNameToColor(tag.category)}
-
-                className={`absolute inset-0`}
-                initial={false}
-                animate={{ opacity: isSelected ? 1 : 0 }}
-                transition={{ duration: 0.22, ease: 'easeInOut' }}
-            />
-            <div className="relative flex flex-col items-center gap-1">
-                
-               <Icon
-            className={`w-8 h-8 transition-colors duration-250 ${
-                isSelected
-                    ? 'text-white'
-                    : dark
-                        ? 'text-gray-200'
-                        : 'text-gray-700'
-            }`}
-            strokeWidth={1.8}
-        />
-                <span className={`text-[0.765rem] font-semibold normal-case tracking-tight text-center px-1 leading-none transition-colors duration-250 ${isSelected ? 'text-white' : dark ? 'text-gray-300' : 'text-gray-600'}`}>
-                    {getLocalizedContent(tag.name, defaultLanguage) as any}
+    const viewport = useRef<HTMLDivElement>(null);
+    const [size, setSize] = useState({ width: 320, height: 300 });
+    const [camera, setCamera] = useState({ x: 0, y: 0 });
+    const dragX = useMotionValue(0), dragY = useMotionValue(0);
+    // Motion values move the plane without rendering React on every animation frame.
+    // Refresh the overscanned window only when entering another 96px cell.
+    const cameraCell = useRef({ x: 0, y: 0 });
+    const updateWindow = () => {
+        const next = { x: Math.round(dragX.get() / 96) * 96, y: Math.round(dragY.get() / 96) * 96 };
+        if (next.x === cameraCell.current.x && next.y === cameraCell.current.y) return;
+        cameraCell.current = next;
+        setCamera(next);
+    };
+    useMotionValueEvent(dragX, 'change', updateWindow);
+    useMotionValueEvent(dragY, 'change', updateWindow);
+    const [rowHeight, setRowHeight] = useState(160);
+    const positions = useMemo(() => hexPositions(tags.length, rowHeight), [tags.length, rowHeight]);
+    useEffect(() => {
+        const element = viewport.current;
+        if (!element) return;
+        const observer = new ResizeObserver(([entry]) => {
+            const width = Math.round(entry.contentRect.width), height = Math.round(entry.contentRect.height);
+            setSize(previous => previous.width === width && previous.height === height ? previous : { width, height });
+        });
+        observer.observe(element);
+        return () => observer.disconnect();
+    }, []);
+    const extentX = Math.max(0, ...positions.map(position => Math.abs(position.x)));
+    const extentY = Math.max(0, ...positions.map(position => Math.abs(position.y)));
+    // Cull off-screen circles while keeping one ring for drag/keyboard overscan.
+    const visible = useMemo(() => tags.flatMap((tag, index) => {
+        const position = positions[index];
+        return Math.abs(position.x + camera.x) < size.width / 2 + 190 && Math.abs(position.y + camera.y) < size.height / 2 + Math.max(190, rowHeight)
+            ? [{ tag, position, index }] : [];
+    }), [tags, positions, camera, size, rowHeight]);
+    useEffect(() => {
+        // Let translations and enlarged text wrap completely, then reserve row space.
+        const observer = new ResizeObserver(entries => {
+            const required = Math.ceil(Math.max(...entries.map(entry => entry.target.getBoundingClientRect().height))) + 16;
+            setRowHeight(previous => Math.max(previous, required));
+        });
+        viewport.current?.querySelectorAll('.cv-checkin-tag-option').forEach(element => observer.observe(element));
+        return () => observer.disconnect();
+    }, [visible]);
+    const center = (index: number, focus = false) => {
+        const position = positions[index];
+        if (!position) return;
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        animate(dragX, -position.x, reduced ? { duration: 0 } : { type: 'spring', stiffness: 200, damping: 28 });
+        animate(dragY, -position.y, { ...(reduced ? { duration: 0 } : { type: 'spring' as const, stiffness: 200, damping: 28 }), onComplete: () => {
+            if (focus) requestAnimationFrame(() => viewport.current?.querySelector<HTMLButtonElement>(`[data-checkin-index="${index}"]`)?.focus({ preventScroll: true }));
+        } });
+    };
+    return <div ref={viewport} className="cv-checkin-honeycomb">
+        <motion.div className="cv-checkin-honeycomb-plane" drag dragConstraints={{ left: -extentX, right: extentX, top: -extentY, bottom: extentY }} dragElastic={0.04} dragMomentum={false} style={{ x: dragX, y: dragY }}>
+            {visible.map(({ tag, position, index }) => <motion.button
+                key={tag.id}
+                type="button"
+                className="cv-checkin-tag-option"
+                style={{ x: position.x, y: position.y }}
+                aria-pressed={selected.includes(tag.tag)}
+                data-checkin-index={index}
+                onClick={() => onToggle(tag.tag)}
+                onKeyDown={event => {
+                    const next = event.key === 'ArrowRight' ? index + 1 : event.key === 'ArrowLeft' ? index - 1 : event.key === 'Home' ? 0 : event.key === 'End' ? tags.length - 1 : null;
+                    if (next === null || next < 0 || next >= tags.length) return;
+                    event.preventDefault(); center(next, true);
+                }}
+            >
+                <span className="cv-checkin-tag-portrait">
+                    <CheckInTagArtwork tag={tag} sizes="72px" />
+                    {selected.includes(tag.tag) && <CircleCheck aria-hidden="true" className="cv-checkin-tag-check" />}
                 </span>
-            </div>
-        </motion.button>
-    );
-}
+                <span className="cv-checkin-tag-label" lang={language}>{String(getLocalizedContent(tag.name, language))}</span>
+            </motion.button>)}
+        </motion.div>
+    </div>;
+});
 
 /* ─── Main Component ────────────────────────────────────────────────────────── */
 export default function CheckInScreen() {
@@ -169,23 +126,7 @@ export default function CheckInScreen() {
     const location = useLocation();
     const { t } = useTranslation('common');
     const { data: appData,defaultLanguage } = useApp();
-    interface RawTag {
-        id: string;
-        tag: string;
-        name: { en: string; tr: string };
-        icon?: string;
-        category: TagCategory;
-    }
-
-    const checkinTags: CheckInTag[] = ((appData?.checkin_tag_types as RawTag[]) ?? []).map((tag: RawTag) => ({
-        ...tag,
-        icon: resolveTagIcon(tag.icon),
-        color: tagByTagNameToColor(tag.category).background?.toString() || '#8b5cf6'
-    } as CheckInTag));
-
-    function tagByTagNameToColor(category: string) {
-        return tagNameToColor(category) as any;
-    }
+    const checkinTags = useMemo(() => (appData?.checkin_tag_types ?? []).filter(tag => tag.is_visible !== false), [appData?.checkin_tag_types]);
 
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [checkinsState] = useAtom(checkinsStateAtom);
@@ -196,9 +137,6 @@ export default function CheckInScreen() {
     const [userLocation, setUserLocation] = useState<[number, number]>([41.0082, 28.9784]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [checkInViewMode, setCheckInViewMode] = useState<'map' | 'list'>('list');
-    // useMotionValue — drag sırasında lag yok, centerOnItem'da animate() ile smooth spring
-    const dragX = useMotionValue(0);
-    const dragY = useMotionValue(0);
 
     const fetchCheckIns = useCallback(async () => {
         await runFetchCheckins({ limit: 50 });
@@ -225,26 +163,14 @@ export default function CheckInScreen() {
     }, []);
 
     useEffect(() => {
-        if (isModalOpen) {
-            animate(dragX, 0, { duration: 0 });
-            animate(dragY, 0, { duration: 0 });
-            setSelectedTags([]);
-        }
-    }, [isModalOpen, dragX, dragY]);
+        if (isModalOpen) setSelectedTags([]);
+    }, [isModalOpen]);
 
-    const centerOnItem = (pos: { x: number; y: number }) => {
-        // animate() — spring ile smooth kayma, drag sırasında ise anlık
-        animate(dragX, -pos.x, { type: 'spring', stiffness: 200, damping: 28, mass: 0.7 });
-        animate(dragY, -pos.y, { type: 'spring', stiffness: 200, damping: 28, mass: 0.7 });
-    };
-
-    const toggleTag = (tag: string, pos?: { x: number; y: number }) => {
-        const willSelect = !selectedTags.includes(tag);
-        setSelectedTags(prev =>
-            prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
-        );
-        if (willSelect && pos) centerOnItem(pos);
-    };
+    const toggleTag = useCallback((tag: string) => {
+        setSelectedTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
+    }, []);
+    // Sheet's modal lifecycle depends on onClose; keep it stable across selections.
+    const handleCloseCreate = useCallback(() => setIsModalOpen(false), []);
 
     const handleProfileClick = useCallback((username: string) => {
         const returnTo = `${location.pathname}${location.search}`;
@@ -437,153 +363,48 @@ export default function CheckInScreen() {
             <AnimatePresence>
                 {isModalOpen && (
                     <>
-                        {/* Modal: fullscreen honeycomb + bottom panel */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className={`
-                                pointer-events-auto fixed inset-0 z-[700] flex min-h-0 flex-col
-                                ${dark ? 'bg-slate-950/96 text-white' : 'bg-white/95 text-slate-950'}
-                                backdrop-blur-3xl
-                            `}
+                        <Sheet
+                            isOpen={isModalOpen}
+                            onClose={handleCloseCreate}
+                            title={t('app.nav.checkin')}
+                            className="cv-checkin-selector-sheet"
+                            hideCloseButton
                         >
-                            <div className={`mx-3 mt-[calc(env(safe-area-inset-top)+0.75rem)] shrink-0 rounded-[26px] border px-3 py-2 backdrop-blur-3xl md:mx-auto md:w-full md:max-w-3xl ${panelClassName} shadow-[0_24px_80px_-48px_rgba(15,23,42,0.7)]`}>
-                                <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[var(--color-brand)] to-transparent opacity-50" />
-                                <div className="flex items-center justify-between gap-3">
-                                    <div className="flex min-w-0 items-center gap-3">
-                                        <div className="sky-glow flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white">
-                                            <MapPin className="h-5 w-5" />
-                                        </div>
-                                        <div className="min-w-0">
-                                            <p className="truncate text-[0.765rem] font-semibold normal-case tracking-normal text-[var(--color-brand)]">
-                                                {t('app.nav.checkin', { defaultValue: 'Check-in' })}
-                                            </p>
-                                            <div className="mt-0.5 flex items-center gap-2">
-                                                <h2 className="truncate text-base font-semibold leading-none tracking-tight md:text-lg">
-                                                    Durumunu seç
-                                                </h2>
-                                                {selectedTags.length > 0 && (
-                                                    <span className={`rounded-full px-2 py-0.5 text-[0.765rem] font-semibold ${dark ? 'bg-white/[0.08] text-zinc-300' : 'bg-slate-100 text-slate-500'}`}>
-                                                        {selectedTags.length}
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsModalOpen(false)}
-                                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all ${dark
-                                            ? 'bg-white text-slate-950 hover:bg-zinc-200'
-                                            : 'bg-slate-950 text-white hover:bg-slate-800'
-                                            }`}
-                                        aria-label="Kapat"
-                                    >
-                                        <X className="h-4 w-4" />
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Draggable honeycomb area */}
-                            <div className="relative min-h-[240px] flex-1 overflow-hidden">
-                                <motion.div
-                                    drag
-                                    dragConstraints={{ left: -320, right: 320, top: -240, bottom: 240 }}
-                                    dragElastic={0.06}
-                                    dragMomentum={false}
-                                    style={{ x: dragX, y: dragY }}
-                                    className="absolute inset-0 flex items-center justify-center cursor-grab active:cursor-grabbing"
-                                >
-                                    {checkinTags.map((tag, idx) => {
-                                        const pos = getHexPosition(idx);
-                                        return (
-                                            <HoneycombItem
-                                                key={tag.id}
-                                                tag={tag}
-                                                pos={pos}
-                                                isSelected={selectedTags.includes(tag.tag)}
-                                                hasSelection={selectedTags.length > 0}
-                                                onToggle={pos => toggleTag(tag.tag, pos)}
-                                                dark={dark}
-                                                defaultLanguage={defaultLanguage}
-                                            />
-                                        );
-                                    })}
-                                </motion.div>
-
-                                {/* Hint label */}
-                                <div className={`absolute bottom-3 left-1/2 -translate-x-1/2 text-[0.765rem] font-bold normal-case tracking-normal px-3 py-1 rounded-full pointer-events-none ${dark ? 'text-gray-600 bg-gray-900/60' : 'text-gray-400 bg-gray-100/80'}`}>
-                                    Sürükle &amp; Seç
-                                </div>
-                            </div>
-
-                            {/* Bottom panel */}
-                            <div className={`mx-3 mb-[calc(env(safe-area-inset-bottom)+0.75rem)] max-h-[48vh] shrink-0 overflow-y-auto rounded-[20px] border p-3 backdrop-blur-3xl no-scrollbar md:mx-auto md:w-full md:max-w-3xl ${panelClassName}`}>
-
-                                {/* Selected tags row */}
-                                <AnimatePresence>
-                                    {selectedTags.length > 0 && (
-                                        <motion.div
-                                            initial={{ opacity: 0, height: 0 }}
-                                            animate={{ opacity: 1, height: 'auto' }}
-                                            exit={{ opacity: 0, height: 0 }}
-                                            className="overflow-hidden"
-                                        >
-                                            <div className={`px-3.5 py-2.5 rounded-2xl flex flex-wrap gap-1.5 ${dark ? 'bg-white/[0.04] border border-white/[0.06]' : 'bg-gray-50 border border-black/[0.06]'}`}>
-                                                {selectedTags.map(t => {
-                                                    const tag = checkinTags.find(ct => ct.tag === t);
-                                                    if (!tag) {
+                            <div className="cv-checkin-composer">
+                                <CreatePost
+                                    title={t('app.nav.checkin')}
+                                    postKind="checkin"
+                                    extras={{ tags: selectedTags }}
+                                    buttonText={t('app.nav.checkin')}
+                                    fullScreen={false}
+                                    allowFullScreenToggle={false}
+                                    compact
+                                    canClose
+                                    onClose={handleCloseCreate}
+                                    composerAttachment={
+                                        <div className="cv-checkin-attachment">
+                                            <CheckInTagSelector tags={checkinTags} selected={selectedTags} onToggle={toggleTag} language={defaultLanguage} />
+                                                <div className="cv-checkin-selected-tags" aria-live="polite">
+                                                    {selectedTags.map(value => {
+                                                        const tag = checkinTags.find(item => item.tag === value);
                                                         return (
-                                                            <button
-                                                                key={t}
-                                                                onClick={() => toggleTag(t)}
-                                                                className={`flex items-center gap-1.5 px-2 py-1 rounded-xl ${dark ? 'bg-white/10 text-white' : 'bg-black/10 text-gray-800'}`}
-                                                            >
-                                                                <span className="text-[0.765rem] font-bold">{t}</span>
-                                                                <X className="w-2 h-2 opacity-60" />
+                                                            <button type="button" key={value} onClick={() => toggleTag(value)} aria-pressed="true">
+                                                                {tag && <CheckInTagArtwork tag={tag} className="cv-checkin-selected-artwork" sizes="32px" />}
+                                                                <span>{tag ? String(getLocalizedContent(tag.name, defaultLanguage)) : value}</span>
+                                                                <X aria-hidden="true" />
                                                             </button>
                                                         );
-                                                    }
-                                                    const Icon = tag.icon;
-                                                    return (
-                                                        <button
-                                                            key={t}
-                                                            onClick={() => toggleTag(t)}
-                                                            style={tagNameToColor(tag.category) as any}
-                                                            className="flex items-center gap-1.5 rounded-xl px-2 py-1"
-                                                        >
-                                                            <Icon className="w-3 h-3" strokeWidth={2} />
-                                                            <span className="text-[0.765rem] font-bold">{getLocalizedContent(tag.name, defaultLanguage) as any}</span>
-                                                            <X className="w-2 h-2 opacity-60" />
-                                                        </button>
-                                                    );
-                                                })}
-                                            </div>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-
-                                {/* Shout + media input — replaced with CreatePost */}
-                                <div className={`mt-3 overflow-hidden rounded-[22px] border ${dark ? 'cv-card-surface-soft border-white/10' : 'border-white/70 bg-white/80'}`}>
-                                    <CreatePost
-                                        title="CheckIn"
-                                        postKind="checkin"
-                                        extras={{ tags: selectedTags }}
-                                        buttonText="CheckIn"
-                                        fullScreen={false}
-                                        placeholder="Ne söylemek istersin?"
-                                        canClose={false}
-                                        onPostCreated={() => {
-                                            setIsModalOpen(false);
-                                            void fetchCheckIns();
-                                        }}
-                                    />
-                                </div>
-
-                     
+                                                    })}
+                                                </div>
+                                        </div>
+                                    }
+                                    onPostCreated={() => {
+                                        setIsModalOpen(false);
+                                        void fetchCheckIns();
+                                    }}
+                                />
                             </div>
-                        </motion.div>
+                        </Sheet>
                     </>
                 )}
             </AnimatePresence>

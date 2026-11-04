@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {browser,root,setup} from './fixture.mjs';
-const catalog=JSON.parse(fs.readFileSync(root+'/scripts/telegram-ui/assets/profile-preferences.json','utf8'));
+const catalog=JSON.parse(fs.readFileSync(root+'/scripts/ui/assets/profile-preferences.json','utf8'));
 const artwork=JSON.parse(fs.readFileSync(root+'/src/features/illustrations/icon-catalog.json','utf8'));
 const aliases=new Map(artwork.flatMap(icon=>icon.aliases.map(alias=>[String(alias).toLowerCase().replaceAll('_','-'),icon.key])));
 const label=(item,lang)=>item.title?.[lang]||item.title?.en;

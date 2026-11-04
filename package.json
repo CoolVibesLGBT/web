@@ -8,7 +8,7 @@
     "build": "eslint . && vite build",
     "start": "vite preview",
     "lint": "eslint .",
-    "check:telegram-ui": "node scripts/check-telegram-ui.mjs"
+    "check:ui": "node scripts/check-ui.mjs"
   },
   "dependencies": {
     "@excalidraw/excalidraw": "^0.18.0",

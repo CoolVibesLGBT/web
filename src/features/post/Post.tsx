@@ -5,8 +5,8 @@ import { PostMediaContext } from './PostMediaContext';
 import ViewOnceDust from '@/features/chat/ViewOnceDust';
 import React, { useState, useEffect, useCallback, useMemo, useRef, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
-import { MessageCircle, Share, Bookmark, MapPin, Calendar, X, ChevronLeft, ChevronRight, CircleCheck, CheckSquare, ListOrdered, Scale, BarChart3, Loader2, ExternalLink, Sparkles, Globe, Users, HandCoins, Heart, HeartOff, Banana, MoreVertical, Trash2, Flag, Home, Car, Building2, Wallet, Zap, MessageSquare, Banknote, Droplet, Feather, Dumbbell, FlaskRound, Clock, Moon, Coffee, Smile, ShieldCheck, Hand, Eye } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { MessageCircle, Share, Bookmark, MapPin, Calendar, X, ChevronLeft, ChevronRight, CircleCheck, CheckSquare, ListOrdered, Scale, BarChart3, Loader2, ExternalLink, Sparkles, Globe, Users, HandCoins, Heart, HeartOff, Banana, MoreVertical, Trash2, Flag, Eye } from 'lucide-react';
+import CheckInTagArtwork from '@/features/checkin/CheckInTagArtwork';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
@@ -33,7 +33,6 @@ import { CodeNode, CodeHighlightNode } from '@lexical/code';
 import { TableNode, TableRowNode, TableCellNode } from '@lexical/table';
 import { MentionNode } from '../editor/Lexical/nodes/MentionNode';
 import { getLocalizedContent, getSafeImageURL, getSafeImageURLEx } from '../../helpers/helpers';
-import { tagNameToColor } from '../../helpers/colors';
 import { ImageNode } from '../editor/Lexical/nodes/ImageNode';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin';
@@ -55,35 +54,7 @@ import GifMedia from '@/features/emoticons/GifMedia';
 import { normalizeEmoticon } from '@/features/emoticons/types';
 import '@/features/emoticons/emoticons.css';
 
-const LUCIDE_ICON_MAP: Record<string, LucideIcon> = {
-  home: Home,
-  car: Car,
-  building: Building2,
-  wallet: Wallet,
-  heart: Heart,
-  zap: Zap,
-  'message-circle': MessageSquare,
-  banknote: Banknote,
-  sparkles: Sparkles,
-  droplet: Droplet,
-  feather: Feather,
-  dumbbell: Dumbbell,
-  'flask-round': FlaskRound,
-  clock: Clock,
-  moon: Moon,
-  coffee: Coffee,
-  smile: Smile,
-  'shield-check': ShieldCheck,
-  hand: Hand,
-  globe: Globe,
-};
 
-const resolveTagIcon = (icon?: string | LucideIcon): LucideIcon => {
-  if (!icon) return MapPin;
-  if (typeof icon === 'function') return icon as LucideIcon;
-  const key = icon.toLowerCase();
-  return LUCIDE_ICON_MAP[key] ?? MapPin;
-};
 
 // API data structure interfaces
 interface ApiPost {
@@ -3322,34 +3293,14 @@ const Post: React.FC<PostProps> = ({
 
         {/* Check-In Section */}
         {(post.type === 'checkin' || post.post_kind === 'checkin') && Array.isArray(postExtras.tags) && postExtras.tags.length > 0 && (
-          <div className="px-4 py-3">
-            <div className="flex flex-wrap gap-2">
-              {postExtras.tags.map((t: string) => {
-                const tagType = appData?.checkin_tag_types?.find((ct: unknown) => ct.tag === t);
-                if (!tagType) {
-                  return (
-                    <div
-                      key={t}
-                      style={tagNameToColor('')}
-                      className="flex items-center gap-1.5 rounded-full px-3 py-1.5"
-                    >
-                      <span className="text-[0.8125rem] font-semibold">{t}</span>
-                    </div>
-                  );
-                }
-                const Icon = resolveTagIcon(tagType.icon);
-                return (
-                  <div
-                    key={t}
-                    style={tagNameToColor(tagType.category)}
-                    className="flex items-center gap-1.5 rounded-full px-3 py-1.5"
-                  >
-                    <Icon className="w-3.5 h-3.5" strokeWidth={2} />
-                    <span className="text-[0.8125rem] font-semibold">{getLocalizedContent(tagType.name, defaultLanguage)}</span>
-                  </div>
-                );
-              })}
-            </div>
+          <div className="cv-checkin-post-tags">
+            {postExtras.tags.map((tag: string) => {
+              const tagType = appData?.checkin_tag_types?.find(item => item.tag === tag);
+              return <div key={tag} className="cv-checkin-post-tag">
+                <CheckInTagArtwork tag={tagType ?? { tag }} sizes="88px" />
+                <span>{tagType ? String(getLocalizedContent(tagType.name, defaultLanguage)) : tag}</span>
+              </div>;
+            })}
           </div>
         )}
 

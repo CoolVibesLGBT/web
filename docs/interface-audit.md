@@ -1,8 +1,14 @@
 # Web interface design record
 
-Current standard: the supplied Telegram source, as documented in `telegram-ui-reference.md`, supersedes the earlier Apple and preview-only entries below. Current profiles use embedded Photos/Friends tabs, shared popup tones, real photo-permission actions and the existing source Lottie lock. Earlier entries are historical verification records.
+Current standard: the supplied Telegram source, as documented in `ui-reference.md`, supersedes the earlier Apple and preview-only entries below. Current profiles use embedded Photos/Friends tabs, shared popup tones, real photo-permission actions and the existing source Lottie lock. Earlier entries are historical verification records.
 
 Scope: this web repository only. Apple visual hierarchy and typography; web/Android browser behavior remains native. No hotel flows, UIKit handlers or mobile project were added.
+
+## Check-in artwork and compact circular picker — 2026-11-03
+
+The check-in picker retains its draggable circular layout with the new character artwork. Complete hex rings assign a distinct position to all 84 tags, and off-screen circles are culled with overscan. Keyboard Home/End and arrow navigation can center the full catalog. The shared native Sheet handles dialog focus and dismissal. The check-in-only compact composer uses a 64px minimum and 120px maximum editable area, disables automatic editor focus and the nested full-screen control, and keeps its panel separate from the picker. Other post composers keep their previous sizing.
+
+Shared `CheckInTagArtwork` consumes `thumb` (256) and `icon` (512), resolves relative paths against the API origin, supplies width-based responsive sources and falls back for legacy icon-name metadata. Check-in post cards use the same artwork. `yarn check:ui checkin-assets` verifies actual local initial-sync metadata, all 168 AVIF endpoints, React image serialization and unique non-overlapping circle positions. Build and interface regression checks pass. Browser interaction and live visual layout remain unverified: both Chrome and bundled Chromium abort at launch with SIGABRT. No screenshots were captured. UI check entry points are now `check:ui`, `scripts/check-ui.mjs` and `scripts/ui`.
 
 ## Messages discover-group fetch lifecycle — 2026-10-30
 
@@ -65,7 +71,7 @@ Browser-session pass (Playwright headless, 390×820, `tr` locale, fresh throwawa
 
 The web profile now derives its initial follow state from the existing authenticated `engagements.engagement_details` list (with the optional profile relationship hint), normalizes legacy ID types, and uses the toggle API’s boolean `status` and returned account. If userinfo omits the details, the existing paginated `user.fetch_engagements` following list resolves the relationship; the toggle stays disabled until it is known and read failures expose retry. The duplicate follow-state synchronization and fetch-skip flags were removed. Failed mutations restore the exact previous count and show localized feedback; pending actions cannot submit twice. No backend contract changes are included.
 
-`yarn check:telegram-ui profile-follow` passed in Turkish/mobile, Arabic/tablet with enlarged text, and English/desktop fixtures. These cover initial state, reload, follow/unfollow, pending, failure, server disagreement, privacy gating and legacy IDs. This is fixture verification of the supplied userinfo-list contract, not verification of a signed-in live account. See `profile-follow-checks.json`.
+`yarn check:ui profile-follow` passed in Turkish/mobile, Arabic/tablet with enlarged text, and English/desktop fixtures. These cover initial state, reload, follow/unfollow, pending, failure, server disagreement, privacy gating and legacy IDs. This is fixture verification of the supplied userinfo-list contract, not verification of a signed-in live account. See `profile-follow-checks.json`.
 
 ## Shared implementation
 
@@ -167,7 +173,7 @@ The gallery is now a separate `TelegramThemePicker.tsx`, adapted from the suppli
 
 ## Telegram profile, media and shared-control pass (2026-10-21)
 
-Source mapping, finite sticker availability and verification limits are recorded in `telegram-ui-reference.md`. The shared foundation uses original Roboto files, tgico outlines, source popup/section geometry and the selected Appearance palette. List hover/press colors follow the chosen accent as explicitly requested.
+Source mapping, finite sticker availability and verification limits are recorded in `ui-reference.md`. The shared foundation uses original Roboto files, tgico outlines, source popup/section geometry and the selected Appearance palette. List hover/press colors follow the chosen accent as explicitly requested.
 
 The profile keeps Friends and Photos in its own adaptive tabs. It removes the extra owner action card; album browsing and friendship requests do not open a second page. Photo privacy, owner access requests and incoming/outgoing friendship scopes remain backed by their existing APIs. An empty album has a compact state; populated grids reserve their measured rows. Photo upload uses native selection plus explicit preview/confirmation, with truthful transport/processing states and retained files after failure. The locked album uses the existing Telegram safe-lock Lottie through the shared worker. Property rows display actual values or localized “Not specified”, with a separate owner edit action and no misleading selection prompt/yellow markers.
 
@@ -268,11 +274,11 @@ View-once photos use a tiny JPEG preview (at most 12px per side) under the adapt
 
 ### Media upload lifecycle — 2026-10-23
 
-The message composer now retains selected files and caption until upload succeeds, blocks duplicate sends and dismissal during upload, and displays failures inside the modal for retry. Temporary view-once message IDs cannot trigger an open request. `scripts/telegram-ui/media-upload.mjs` passed at 390px Turkish with intercepted delayed success and failure responses, Escape and retry; lint and interface regression checks passed. Existing four-width view-once fixtures also passed. No screenshots captured. The reported live upload failure and its server-side cause remain unverified.
+The message composer now retains selected files and caption until upload succeeds, blocks duplicate sends and dismissal during upload, and displays failures inside the modal for retry. Temporary view-once message IDs cannot trigger an open request. `scripts/ui/media-upload.mjs` passed at 390px Turkish with intercepted delayed success and failure responses, Escape and retry; lint and interface regression checks passed. Existing four-width view-once fixtures also passed. No screenshots captured. The reported live upload failure and its server-side cause remain unverified.
 
 ### Protected chat photo requests — 2026-10-23
 
-The reported PNG originals and landscape_md.webp variants both exist in the local backend upload directory. The Go media handler deliberately returns 404 when private-media authorization is absent; chat thumbnails and viewer previously used unauthenticated image requests. They now use authorized fetches for configured API upload origins, render temporary blob URLs, and revoke those URLs on cleanup. Video sources/posters use the same loader. Public/external, optimistic blob and view-once data sources retain their direct URLs. Four-width DOM/API fixture coverage lives in `scripts/telegram-ui/protected-chat-media.mjs`; authenticated live-service and video playback remain unverified. No screenshots captured.
+The reported PNG originals and landscape_md.webp variants both exist in the local backend upload directory. The Go media handler deliberately returns 404 when private-media authorization is absent; chat thumbnails and viewer previously used unauthenticated image requests. They now use authorized fetches for configured API upload origins, render temporary blob URLs, and revoke those URLs on cleanup. Video sources/posters use the same loader. Public/external, optimistic blob and view-once data sources retain their direct URLs. Four-width DOM/API fixture coverage lives in `scripts/ui/protected-chat-media.mjs`; authenticated live-service and video playback remain unverified. No screenshots captured.
 
 ### Message bubble layout — 2026-10-23
 
@@ -280,7 +286,7 @@ Compared local tweb `_chatBubble.scss` and `_chatVariables.scss`. Applied its 56
 
 ### Photo scroll stability — 2026-10-23
 
-Corrected the previous bubble layout regression: a protected photo initially rendered no image, so its auto-height row grew after fetch/decode and collapsed again when remounted by virtualization. Attachment frames now reserve a metadata-based aspect ratio (stable 4:3 fallback when absent), with media absolutely contained inside. Album cells remain square. Virtuoso keeps 400px of extra content mounted on either side while retaining virtualization. `scripts/telegram-ui/chat-media-scroll.mjs` passed delayed photo loads and rapid wheel reversals with 70 messages at 390/820/1440px, Turkish/English/Arabic RTL, dark mode and enlarged text. Lint and interface checks passed. No screenshots; physical-device momentum and live network unverified.
+Corrected the previous bubble layout regression: a protected photo initially rendered no image, so its auto-height row grew after fetch/decode and collapsed again when remounted by virtualization. Attachment frames now reserve a metadata-based aspect ratio (stable 4:3 fallback when absent), with media absolutely contained inside. Album cells remain square. Virtuoso keeps 400px of extra content mounted on either side while retaining virtualization. `scripts/ui/chat-media-scroll.mjs` passed delayed photo loads and rapid wheel reversals with 70 messages at 390/820/1440px, Turkish/English/Arabic RTL, dark mode and enlarged text. Lint and interface checks passed. No screenshots; physical-device momentum and live network unverified.
 
 ### Default wallpaper source correction — 2026-10-23
 
@@ -342,3 +348,15 @@ The earlier post fixture timeout was caused by expecting the first photo click t
 ### Registration captcha flag — 2026-11-03
 
 AuthWizard uses `captcha_enabled` (default `false`, environment override `PUBLIC_FF_CAPTCHA_ENABLED`). Disabled registration submits directly from the credentials step without `recaptchaToken`; progress and submit labels reflect the shorter flow. Enabling the flag restores captcha validation. Entry choices and Back behavior are preserved. No asset changes. Browser and live-service registration were not verified.
+
+### Integrated check-in composer correction — 2026-11-03
+
+The supplied screenshot exposed a specificity conflict: the generic popup selector overrode the check-in width and height. Excluded this dialog from that rule. The picker and selected tags now enter CreatePost through an optional composerAttachment slot, with one visible localized header, audience control, close action and Lexical editor. Removed nested rounded cards and composer height cap. Mobile uses the available width; desktop expands to 56rem. One dialog scroll container keeps the actions reachable on short viewports. Existing composers do not use the new slot. Updated the DOM fixture for containment, responsive width and overlap; no screenshots captured. Build/lint passed. Browser visual verification remains pending due to the previously observed browser launch failure.
+
+### Check-in selection stability and compact sizing — 2026-11-03
+
+Stabilized onClose passed to Sheet so selection renders no longer trigger the dialog effect cleanup/close/showModal cycle. Pointer selection no longer recenters the canvas. Motion values move the plane directly; React culling updates only at 96px camera-cell boundaries with 190px overscan. Reserved the selected strip height, disabled scroll anchoring, and reduced circles to 112px with 72px artwork and non-overlapping hex spacing. Keyboard centering remains available. Browser fixture now checks no native close event, unchanged dialog/picker/camera geometry after selection, and compact dimensions. Runtime frame-rate measurement and live visual review remain unverified because browser launch is unavailable.
+
+### Check-in label readability — 2026-11-04
+
+Moved labels outside the circular portrait: 80px circle, 72px artwork, 112px-wide button with natural-height wrapping text. Removed the two-line clamp and circular overflow clipping. ResizeObserver increases staggered row spacing to fit the tallest rendered label, preserving space for translations and enlarged text. Updated the existing DOM fixture to check circular portraits separately and untruncated labels. Live visual verification remains pending browser availability.

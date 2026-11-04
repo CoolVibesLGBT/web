@@ -1,7 +1,7 @@
 // DOM checks only; documentation screenshots have their own explicit capture script.
 import fs from 'node:fs'
 import assert from 'node:assert/strict'
-import { browser, root } from './telegram-ui/fixture.mjs'
+import { browser, root } from './ui/fixture.mjs'
 const evidence = []
 try {
   for (const width of [320, 390, 820, 1440]) {

@@ -2,7 +2,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import assert from 'node:assert/strict'
-import { browser, root, setup } from './telegram-ui/fixture.mjs'
+import { browser, root, setup } from './ui/fixture.mjs'
 
 const out = path.join(root, 'docs/assets/screenshots')
 fs.mkdirSync(out, { recursive: true })

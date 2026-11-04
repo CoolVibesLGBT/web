@@ -1,0 +1,36 @@
+.cv-checkin-artwork { display: block; flex-shrink: 0; object-fit: contain; aspect-ratio: 1; }
+.cv-checkin-honeycomb { position: relative; height: clamp(14rem, calc(var(--cv-viewport-height, 100dvh) * .44), 26rem); min-height: 14rem; width: 100%; overflow: hidden; touch-action: none; contain: layout paint; }
+.cv-checkin-honeycomb-plane { position: absolute; inset: 0; cursor: grab; will-change: transform; }
+.cv-checkin-honeycomb-plane:active { cursor: grabbing; }
+.cv-checkin-tag-option { position: absolute; left: 50%; top: 50%; margin-left: -56px; margin-top: -56px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: .375rem; width: 112px; height: auto; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--cv-neutral-1); cursor: pointer; overflow: visible; }
+.cv-checkin-tag-portrait { position: relative; display: flex; flex: 0 0 80px; align-items: center; justify-content: center; width: 80px; height: 80px; border-radius: 50%; background: var(--cv-card-bg-solid); }
+.cv-checkin-tag-option:hover .cv-checkin-tag-portrait { background: var(--cv-list-hover); }
+.cv-checkin-tag-option[aria-pressed='true'] .cv-checkin-tag-portrait { background: var(--cv-list-pressed); }
+.cv-checkin-tag-portrait > .cv-checkin-artwork { width: 72px; height: 72px; }
+.cv-checkin-tag-label { display: block; width: 100%; font-size: .8125rem; font-weight: 500; line-height: 1.35; text-align: center; white-space: normal; overflow-wrap: anywhere; hyphens: auto; }
+.cv-checkin-composer { width: 100%; min-width: 0; background: var(--cv-card-bg-solid); }
+.cv-checkin-composer .lexical-editor { padding-block: .5rem; }
+.cv-checkin-tag-check { position: absolute; inset-block-start: 0; inset-inline-end: 0; width: 1rem; height: 1rem; color: var(--color-brand); }
+.cv-checkin-selected-artwork { width: 2rem; height: 2rem; }
+.cv-checkin-post-tags { display: flex; gap: .5rem; overflow-x: auto; padding: .5rem 1rem .75rem; }
+.cv-checkin-post-tag { display: flex; flex: 0 0 6.5rem; flex-direction: column; align-items: center; gap: .25rem; min-width: 0; color: var(--cv-neutral-1); }
+.cv-checkin-post-tag > .cv-checkin-artwork { width: 5.5rem; height: 5.5rem; }
+.cv-checkin-post-tag > span { font-size: .8125rem; line-height: 1.35; text-align: center; overflow-wrap: anywhere; }
+
+.cv-sheet.cv-checkin-selector-sheet { width: min(56rem, calc(100vw - 2rem)); max-width: none; max-height: calc(var(--cv-viewport-height, 100dvh) - 2rem); margin: auto; padding: 0; border-radius: var(--cv-popup-radius); overflow: auto; overflow-anchor: none; scrollbar-gutter: stable; background: var(--cv-card-bg-solid); }
+/* The native dialog keeps its accessible name; the composer supplies the single visible header. */
+.cv-checkin-selector-sheet > .cv-sheet-header { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.cv-checkin-selector-sheet > .cv-sheet-body { padding: 0; }
+.cv-checkin-composer .cv-create-post-heading { min-height: 3.25rem; gap: .75rem; }
+.cv-checkin-composer .cv-create-post-heading h2 { font-size: 1.176rem; }
+.cv-checkin-attachment { margin: .5rem -.75rem 0; }
+.cv-checkin-honeycomb { background: var(--cv-popup-background); }
+.cv-checkin-selected-tags { display: flex; height: 3.75rem; box-sizing: border-box; gap: .375rem; overflow-x: auto; padding: .5rem .75rem; border-bottom: 1px solid var(--cv-inner-border); }
+.cv-checkin-selected-tags > button { display: flex; flex: 0 0 auto; align-items: center; gap: .375rem; min-height: 44px; max-width: 100%; padding: .25rem .625rem; border: 0; border-radius: .75rem; background: var(--cv-list-pressed); color: var(--cv-neutral-1); }
+.cv-checkin-selected-tags > button span { font-size: .8125rem; overflow-wrap: anywhere; }
+.cv-checkin-selected-tags > button svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+.cv-checkin-composer .editor-placeholder { top: .5rem !important; padding-top: 0; }
+@media (max-width: 600px) {
+  .cv-sheet.cv-checkin-selector-sheet { width: 100%; max-height: var(--cv-viewport-height, 100dvh); border-radius: 0; }
+  .cv-checkin-composer { padding-bottom: env(safe-area-inset-bottom); }
+}

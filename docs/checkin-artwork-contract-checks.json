@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "tag_count": 84,
+  "asset_count": 168,
+  "checks": [
+    "84 distinct non-overlapping circular picker positions",
+    "React artwork serialization and responsive sources",
+    "legacy icon-name fallback",
+    "invalid URL/slug fallback",
+    "real initial-sync Icon/Thumb paths",
+    "168 real AVIF HTTP responses and file-weight limits"
+  ],
+  "browser": "not verified: installed Chrome and Chromium abort at startup in this environment"
+}

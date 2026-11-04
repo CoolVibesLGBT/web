@@ -7,7 +7,7 @@ try {
  for (const item of [{width:320,language:'tr',theme:'light'}, {width:390,language:'en',theme:'dark'}, {width:820,language:'ar',theme:'dark',large:true}, {width:1440,language:'en',theme:'light'}]) {
   const {context,page,errors,sent} = await setup(item);
   const calls=[], unavailable={value:true};
-  const video=fs.readFileSync(root+'/scripts/telegram-ui/assets/gif-fixture.mp4');
+  const video=fs.readFileSync(root+'/scripts/ui/assets/gif-fixture.mp4');
   const documentFor = (query,index) => ({kind:'gif',id:(query?'b':'a').repeat(62)+String(index).padStart(2,'0'),url:'/static/telegram/gifs/'+(query?'b':'a').repeat(62)+String(index).padStart(2,'0')+'.mp4',width:96,height:64});
   await page.route('http://localhost:4001/**',async route=>{
    const request=route.request(),url=new URL(request.url()),body=request.postData()||'';

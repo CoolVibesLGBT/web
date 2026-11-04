@@ -1,4 +1,4 @@
-# Telegram source contract
+# UI source contract
 
 The user's shared reference is `/Users/ersanyakit/Downloads/tweb-master`. This applies across the web app: colors, typography, icons, input borders, radius, shadows, hover/press states, spacing and composition. It supersedes older Apple appearance values. One instruction covers these properties; they do not need to be requested separately for each screen.
 
@@ -55,13 +55,13 @@ The upstream application is coupled to Telegram authorization, managers and MTPr
 Use Yarn. Start the frontend on `http://localhost:5173` with `yarn dev`, then run:
 
 ```sh
-yarn check:telegram-ui
+yarn check:ui
 yarn build
 node scripts/check-interface-regressions.mjs
 node scripts/check-appearance-colors.mjs
 ```
 
-`check:telegram-ui` uses `@playwright/test` and Chrome on macOS (or bundled Chromium elsewhere). Install the latter with `yarn playwright install chromium` if necessary; `PLAYWRIGHT_CHANNEL` selects an installed browser channel. These tests use fresh browser contexts and isolated API fixtures. They block external network/API/socket traffic, never use personal browser sessions, never mutate real users and capture no screenshots.
+`check:ui` uses `@playwright/test` and Chrome on macOS (or bundled Chromium elsewhere). Install the latter with `yarn playwright install chromium` if necessary; `PLAYWRIGHT_CHANNEL` selects an installed browser channel. These tests use fresh browser contexts and isolated API fixtures. They block external network/API/socket traffic, never use personal browser sessions, never mutate real users and capture no screenshots.
 
 | Evidence | Coverage |
 | --- | --- |
@@ -95,4 +95,4 @@ Source attribution: `licenses/THIRD-PARTY-NOTICES.txt`, `LICENSE-telegram.txt`, 
 
 Use `AnimatedEmptyState` for loaded empty collections with the original message TGS assets; use compact mode in pickers and embedded panels. People cards use `UserCardView` and an available-width grid; list mode shows all four actions. Cool feed/detail share `Post`, real API actions and responsive controls; feed cards have square outer corners and no outer border. Profile engagement identity and Back/navigation stay sticky, and Settings shares `NavigationBar`/`SearchField`. Global focus rings are removed per user preference; focus and keyboard behavior remain native. Automatic splash/loading overlays and forced startup delays are removed; `RouteLoader` stays inline. The explicit `/splash` preview is retained.
 
-Additional repeatable suites: `node scripts/check-telegram-ui.mjs discovery posts empty-states`. Evidence: `discovery-checks.json`, `post-parity-checks.json`, `empty-state-checks.json` and `auth-artwork-checks.json`. See `interface-inventory.json` for per-source components, corrections and fixture/source-only status. These artifacts do not establish full visual completion of unvisited routes.
+Additional repeatable suites: `node scripts/check-ui.mjs discovery posts empty-states`. Evidence: `discovery-checks.json`, `post-parity-checks.json`, `empty-state-checks.json` and `auth-artwork-checks.json`. See `interface-inventory.json` for per-source components, corrections and fixture/source-only status. These artifacts do not establish full visual completion of unvisited routes.

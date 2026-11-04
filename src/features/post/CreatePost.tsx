@@ -169,6 +169,8 @@ interface CreatePostProps {
   parentPostId?: string;
   fullScreen?: boolean;
   allowFullScreenToggle?: boolean;
+  compact?: boolean;
+  composerAttachment?: React.ReactNode;
   onReply?: (content: string, parentPostId?: string) => void;
   onPostCreated?: (createdPost?: ApiPost) => void;
   postKind?: string;
@@ -186,6 +188,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
   onReply,
   fullScreen = false,
   allowFullScreenToggle = true,
+  compact = false,
+  composerAttachment,
   onPostCreated,
   postKind,
   extras,
@@ -1594,7 +1598,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   return (
     <div style={{
       zIndex: 100,
-    }} className={`${isFullScreen ? "fixed left-0 right-0 bottom-0 top-[65px] md:top-0 w-full z-[999] flex flex-col overflow-hidden" : ""} ${theme === 'dark' ? "cv-card-surface-solid" : "bg-white"}`}>
+    }} className={`${composerAttachment ? "cv-create-post-integrated" : ""} ${isFullScreen ? "fixed left-0 right-0 bottom-0 top-[65px] md:top-0 w-full z-[999] flex flex-col overflow-hidden" : ""} ${theme === 'dark' ? "cv-card-surface-solid" : "bg-white"}`}>
 
 
 
@@ -1606,7 +1610,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
           <div className={`${isFullScreen ? 'px-3 sm:px-6 py-2' : 'px-3 sm:px-4 py-2 sm:py-3'} border-b flex-shrink-0 ${theme === 'dark' ? 'border-white/10' : 'border-gray-200/30'
             }`}>
 
-            <div className="flex items-center justify-between">
+            <div className="cv-create-post-heading flex items-center justify-between">
               {/* Left: Title Only */}
               <div className="flex items-center flex-1 min-w-0">
                 <h2 className={`text-sm sm:text-base font-semibold tracking-tight truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'
@@ -1677,6 +1681,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
               </div>
             </div>
 
+            {composerAttachment}
+
             {/* Main Content Area */}
             <div className={`py-2 w-full max-w-full flex-shrink-0 !z-0`}>
            
@@ -1698,14 +1704,16 @@ const CreatePost: React.FC<CreatePostProps> = ({
                             <ToolbarPluginWrapper setEditorInstance={setEditorInstance} />
                           </div>
 
+                          <div className={compact ? 'relative' : undefined}>
                           <RichTextPlugin
 
                             contentEditable={
                               <ContentEditable
                                 className="editor-input lexical-editor py-4 px-0"
                                 style={{
-                                  minHeight: isFullScreen ? '50dvh' : '140px',
-                                  maxHeight: isFullScreen ? '100%' : '100%',
+                                  minHeight: isFullScreen ? '50dvh' : compact ? '64px' : '140px',
+                                  maxHeight: compact && !isFullScreen ? '120px' : '100%',
+                                  overflowY: compact && !isFullScreen ? 'auto' : undefined,
                                   wordWrap: 'break-word',
                                   overflowWrap: 'break-word'
                                 }}
@@ -1719,8 +1727,9 @@ const CreatePost: React.FC<CreatePostProps> = ({
                             ErrorBoundary={LexicalErrorBoundary}
                           />
 
+                          </div>
                           <OnChangePlugin onChange={onChange} />
-                          <AutoFocusPlugin />
+                          {!compact && <AutoFocusPlugin />}
                           <HistoryPlugin />
                         </div>
                       </LexicalComposer>

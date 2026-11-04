@@ -7,7 +7,17 @@
   },
   "concurrentRenderingReview": {
     "date": "2026-10-24",
-    "scope": ["ViewTabs all consumers", "MessagesScreen search/filter", "Home post/view tabs", "PlacesScreen search/category/grid/map", "NearbyScreen view mode", "CheckInScreen map/list", "SearchScreen filters/results", "GameMap shared markers", "PlaceDetailsScreen and PostDetails data/loading"],
+    "scope": [
+      "ViewTabs all consumers",
+      "MessagesScreen search/filter",
+      "Home post/view tabs",
+      "PlacesScreen search/category/grid/map",
+      "NearbyScreen view mode",
+      "CheckInScreen map/list",
+      "SearchScreen filters/results",
+      "GameMap shared markers",
+      "PlaceDetailsScreen and PostDetails data/loading"
+    ],
     "implementation": "Shared tab transitions, deferred search/marker rendering and paired successful data/loading commits. Jotai mutations, pagination, message actions and player position keep their existing scheduling. Detail requests discard obsolete responses; place errors stop loading. Places initializes its persistent map after initial location is available.",
     "verification": "Build and interface regressions passed. Posts (including concealed-photo reveal then gallery), discovery, profile-tabs and groups passed four viewport/locale cases. Dedicated DOM/API transition checks passed all four viewport/locale cases, including mocked map markers and check-in views; see transition-checks.json. No live-service or measured performance claim."
   },
@@ -5533,7 +5543,7 @@
     ],
     "systemIcons": "Original tweb tgico SVG paths in chat/emoticons; lucide-react remains on other routes. Brand illustrations remain in domain content.",
     "font": "Original tweb Roboto WOFF2 with Apache license; system fallback for uncovered scripts.",
-    "visualReference": "docs/telegram-ui-reference.md",
+    "visualReference": "docs/ui-reference.md",
     "popupTokens": "src/styles/telegram-panels.css",
     "profileLockLottie": "public/animations/telegram/assets/UtyanPasscode.json",
     "stickerPacks": [
@@ -5717,7 +5727,7 @@
       "failure retains files and caption",
       "retry closes only after success"
     ],
-    "verification": "scripts/telegram-ui/media-upload.mjs: 390px Turkish intercepted API fixture passed; no screenshots. Live upload failure cause remains unverified.",
+    "verification": "scripts/ui/media-upload.mjs: 390px Turkish intercepted API fixture passed; no screenshots. Live upload failure cause remains unverified.",
     "assets": "Existing packaged icon-128.png fixture"
   },
   "protectedChatMedia": {
@@ -5725,7 +5735,7 @@
     "route": "/messages",
     "implementation": "Authorized fetch for configured API upload URLs in thumbnails and viewer; temporary blob URLs disposed on source change/unmount. Credentials never included in URL.",
     "evidence": "Both reported original PNGs and landscape_md.webp files exist on local backend disk. Backend intentionally returns 404 for unauthenticated private media.",
-    "verification": "scripts/telegram-ui/protected-chat-media.mjs exercises authenticated thumbnails/originals and repeated modal close/reopen at four widths with tr/en/ar RTL, dark and enlarged text. API fixture; no screenshots. Authenticated live service unverified."
+    "verification": "scripts/ui/protected-chat-media.mjs exercises authenticated thumbnails/originals and repeated modal close/reopen at four widths with tr/en/ar RTL, dark and enlarged text. API fixture; no screenshots. Authenticated live service unverified."
   },
   "telegramMessageBubbleLayout": {
     "date": "2026-10-23",
@@ -5738,7 +5748,7 @@
       "edge-to-edge album and single photo; overlay time without caption",
       "removed obsolete circular thumbnail and hover scale classes"
     ],
-    "verification": "scripts/telegram-ui/protected-chat-media.mjs: 320/390/820/1440 DOM fixtures, tr/en/ar RTL, dark and enlarged text. No screenshots; inaccessible user screenshot prevents visual equivalence claim. Live-service behavior not reverified."
+    "verification": "scripts/ui/protected-chat-media.mjs: 320/390/820/1440 DOM fixtures, tr/en/ar RTL, dark and enlarged text. No screenshots; inaccessible user screenshot prevents visual equivalence claim. Live-service behavior not reverified."
   },
   "chatMediaScrollStability": {
     "date": "2026-10-23",
@@ -5749,14 +5759,142 @@
       "Absolute media inside reserved frame; album cells remain square",
       "Virtualized 400px overscan each direction"
     ],
-    "verification": "scripts/telegram-ui/chat-media-scroll.mjs: 70-message delayed-media fixtures at 390/820/1440px, tr/en/ar RTL, dark and enlarged text. Row height and scroll offset stable through decode and fast wheel reversals. No screenshots; physical touch/momentum performance and live network unverified."
+    "verification": "scripts/ui/chat-media-scroll.mjs: 70-message delayed-media fixtures at 390/820/1440px, tr/en/ar RTL, dark and enlarged text. Row height and scroll offset stable through decode and fast wheel reversals. No screenshots; physical touch/momentum performance and live network unverified."
   },
-  "defaultTelegramPatternFix": {"date": "2026-10-23", "routes": ["/settings/appearance", "/messages"], "asset": "/images/chat/telegram-pattern.svg", "source": "/Users/ersanyakit/Downloads/tweb-master/public/assets/img/pattern.svg", "verification": "SHA-1 matches source: 3b9d3e49c4fa9f531aa5b97d9599047ac00c328c. Default CSS background and night mask reference original SVG. Appearance color regression passed. No new visual browser verification."},
-  "gradientAnimationPreference": {"date": "2026-10-23", "routes": ["/settings/appearance/background", "/messages"], "behavior": "Localized persisted gradient animation switch; default enabled. Existing Telegram gradient interpolation advances continuously at capped 30fps. Reduced motion, hidden document and offscreen canvas pause; theme thumbnails remain static.", "verification": "scripts/telegram-ui/gradient-animation.mjs passed at 320/390/820/1440px tr/en/ar RTL, light/dark, enlarged text: actual canvas pixels change, disabling freezes, preference survives reload, reduced motion pauses and chat animates. No screenshots; real-device performance unverified."},
-  "messageGradientToneEditing": {"date": "2026-10-23", "routes": ["/settings/appearance", "/messages"], "changes": ["User-selected Telegram-iOS color reference: curated stops preserved in source order", "Regular accent bubble colors use iOS Day, Night and Tinted derivations", "Palette previews and chat share resolved gradients; up to four manual stops persist", "Removed erroneous automatic wallpaper-derived overrides"], "verification": "Model checks passed: 14 curated Swift palettes, 36 wallpaper previews, blue defaults and accent isolation. Interface regression checks and four-width DOM fixtures passed for 49 accent selections, displayed/applied color equality, original default circle, reset and chat gradients. Animation control is accessible in Appearance and the background editor. No screenshots, simulator or real-device checks."},
-  "settingsListInteraction": {"date": "2026-10-23", "routes": ["/settings", "/settings/appearance"], "changes": ["Grouped list edge padding belongs to first/last rows, covering top/bottom hit and hover regions", "Settings toggles use a single full-row semantic switch with decorative indicator", "Shared enabled switches use selected accent and hover tokens instead of fixed green"], "verification": "Lint and interface regression checks passed. Settings DOM fixtures passed at 320/390/820/1440px, tr/en/ar RTL, light/dark and enlarged text: edge click/hover, full-row toggle, keyboard and accent-colored switch. No screenshots or real-device checks."},
-  "appearanceAccentWrap": {"date": "2026-10-23", "route": "/settings/appearance", "change": "Accent color circles wrap into additional rows instead of horizontal scrolling; size and order unchanged.", "verification": "CSS change reviewed; browser layout not verified this pass. Screenshot inaccessible; target inferred from recent accent discussion."},
-  "appearanceThemeColumns": {"date": "2026-10-23", "route": "/settings/appearance", "change": "Color theme previews use five columns with natural page height instead of a horizontal strip. Removed strip scroll classes and centering; arrow keys support five-column navigation.", "verification": "Source reviewed; browser layout not verified this pass. No screenshots."},
-  "postChatStyleBlur": {"date": "2026-10-23", "routes": ["/", "/status/:id"], "changes": ["Blurred post photos and published inline stickers use chat particle renderer and clipped blur", "First click reveals only the selected image; subsequent click opens existing gallery", "Removed perpetual Loading placeholder for empty read-only post text"], "verification": "Lint and interface checks passed. DOM/API fixtures passed at 320/390/820/1440px, tr/en/ar RTL, light/dark and enlarged text: single/album blur, published Lexical sticker concealment and reveal without navigation, isolated photo reveal, second-click gallery, blur disabled, and no empty-text Loading placeholder. Shared Post renderer; no screenshots or live-service validation."},
-  "tipGiftDialog": {"date": "2026-10-23", "flows": ["post > Send Tip > amount/custom amount > submit/error/success", "Send Tip > insufficient balance > wallet"], "reference": ["tweb-master/src/components/stargifts/stargiftsGrid.module.scss", "tweb-master/src/components/popups/sendGift.module.scss"], "changes": ["Native shared Sheet dialog with fixed 44px close control and body scrolling", "Three-column gift artwork cards with price pills; selected accent/check; original Gift3/Gift6/Gift12 animations reused across existing USD amounts", "Localized 23 locales, custom amount/ratios, balance and API error handling retained; success stays in same dialog"], "verification": "Four-width DOM fixtures passed at 320/390/820/1440px in tr/en/ar RTL, light/dark and enlarged text: three columns, 24 original gift animations, selection, fixed close after hover/body scrolling, native focus/Escape, insufficient balance, custom decimal entry, error and mocked success. Lint and interface checks passed. Actual payments not sent. No screenshots or real-device validation."}
+  "defaultTelegramPatternFix": {
+    "date": "2026-10-23",
+    "routes": [
+      "/settings/appearance",
+      "/messages"
+    ],
+    "asset": "/images/chat/telegram-pattern.svg",
+    "source": "/Users/ersanyakit/Downloads/tweb-master/public/assets/img/pattern.svg",
+    "verification": "SHA-1 matches source: 3b9d3e49c4fa9f531aa5b97d9599047ac00c328c. Default CSS background and night mask reference original SVG. Appearance color regression passed. No new visual browser verification."
+  },
+  "gradientAnimationPreference": {
+    "date": "2026-10-23",
+    "routes": [
+      "/settings/appearance/background",
+      "/messages"
+    ],
+    "behavior": "Localized persisted gradient animation switch; default enabled. Existing Telegram gradient interpolation advances continuously at capped 30fps. Reduced motion, hidden document and offscreen canvas pause; theme thumbnails remain static.",
+    "verification": "scripts/ui/gradient-animation.mjs passed at 320/390/820/1440px tr/en/ar RTL, light/dark, enlarged text: actual canvas pixels change, disabling freezes, preference survives reload, reduced motion pauses and chat animates. No screenshots; real-device performance unverified."
+  },
+  "messageGradientToneEditing": {
+    "date": "2026-10-23",
+    "routes": [
+      "/settings/appearance",
+      "/messages"
+    ],
+    "changes": [
+      "User-selected Telegram-iOS color reference: curated stops preserved in source order",
+      "Regular accent bubble colors use iOS Day, Night and Tinted derivations",
+      "Palette previews and chat share resolved gradients; up to four manual stops persist",
+      "Removed erroneous automatic wallpaper-derived overrides"
+    ],
+    "verification": "Model checks passed: 14 curated Swift palettes, 36 wallpaper previews, blue defaults and accent isolation. Interface regression checks and four-width DOM fixtures passed for 49 accent selections, displayed/applied color equality, original default circle, reset and chat gradients. Animation control is accessible in Appearance and the background editor. No screenshots, simulator or real-device checks."
+  },
+  "settingsListInteraction": {
+    "date": "2026-10-23",
+    "routes": [
+      "/settings",
+      "/settings/appearance"
+    ],
+    "changes": [
+      "Grouped list edge padding belongs to first/last rows, covering top/bottom hit and hover regions",
+      "Settings toggles use a single full-row semantic switch with decorative indicator",
+      "Shared enabled switches use selected accent and hover tokens instead of fixed green"
+    ],
+    "verification": "Lint and interface regression checks passed. Settings DOM fixtures passed at 320/390/820/1440px, tr/en/ar RTL, light/dark and enlarged text: edge click/hover, full-row toggle, keyboard and accent-colored switch. No screenshots or real-device checks."
+  },
+  "appearanceAccentWrap": {
+    "date": "2026-10-23",
+    "route": "/settings/appearance",
+    "change": "Accent color circles wrap into additional rows instead of horizontal scrolling; size and order unchanged.",
+    "verification": "CSS change reviewed; browser layout not verified this pass. Screenshot inaccessible; target inferred from recent accent discussion."
+  },
+  "appearanceThemeColumns": {
+    "date": "2026-10-23",
+    "route": "/settings/appearance",
+    "change": "Color theme previews use five columns with natural page height instead of a horizontal strip. Removed strip scroll classes and centering; arrow keys support five-column navigation.",
+    "verification": "Source reviewed; browser layout not verified this pass. No screenshots."
+  },
+  "postChatStyleBlur": {
+    "date": "2026-10-23",
+    "routes": [
+      "/",
+      "/status/:id"
+    ],
+    "changes": [
+      "Blurred post photos and published inline stickers use chat particle renderer and clipped blur",
+      "First click reveals only the selected image; subsequent click opens existing gallery",
+      "Removed perpetual Loading placeholder for empty read-only post text"
+    ],
+    "verification": "Lint and interface checks passed. DOM/API fixtures passed at 320/390/820/1440px, tr/en/ar RTL, light/dark and enlarged text: single/album blur, published Lexical sticker concealment and reveal without navigation, isolated photo reveal, second-click gallery, blur disabled, and no empty-text Loading placeholder. Shared Post renderer; no screenshots or live-service validation."
+  },
+  "tipGiftDialog": {
+    "date": "2026-10-23",
+    "flows": [
+      "post > Send Tip > amount/custom amount > submit/error/success",
+      "Send Tip > insufficient balance > wallet"
+    ],
+    "reference": [
+      "tweb-master/src/components/stargifts/stargiftsGrid.module.scss",
+      "tweb-master/src/components/popups/sendGift.module.scss"
+    ],
+    "changes": [
+      "Native shared Sheet dialog with fixed 44px close control and body scrolling",
+      "Three-column gift artwork cards with price pills; selected accent/check; original Gift3/Gift6/Gift12 animations reused across existing USD amounts",
+      "Localized 23 locales, custom amount/ratios, balance and API error handling retained; success stays in same dialog"
+    ],
+    "verification": "Four-width DOM fixtures passed at 320/390/820/1440px in tr/en/ar RTL, light/dark and enlarged text: three columns, 24 original gift animations, selection, fixed close after hover/body scrolling, native focus/Escape, insufficient balance, custom decimal entry, error and mocked success. Lint and interface checks passed. Actual payments not sent. No screenshots or real-device validation."
+  },
+  "checkInArtworkReview": {
+    "date": "2026-11-03",
+    "scope": [
+      "/checkin picker/composer",
+      "shared post check-in tags"
+    ],
+    "implementation": "Icon/Thumb AVIF sources, responsive image selection, original draggable circular layout with complete hex rings and viewport culling; compact composer does not auto-focus or expose a nested full-screen toggle. Shared native Sheet provides focus containment and Escape handling.",
+    "verification": {
+      "passed": [
+        "84 initial-sync tags and 168 real local AVIF responses",
+        "React rendering and legacy metadata/invalid source contracts",
+        "84 unique non-overlapping circular positions",
+        "production build and interface regression checks"
+      ],
+      "unverified": [
+        "live visual layout and browser interaction: both installed Chrome and bundled Chromium abort with SIGABRT before test execution"
+      ]
+    },
+    "integratedComposerUpdate": {
+      "date": "2026-11-03",
+      "changes": [
+        "Exclude check-in dialog from generic 420px popup rule",
+        "Single CreatePost header, audience control, picker, selected strip and Lexical editor",
+        "Full-width mobile dialog and 56rem desktop maximum",
+        "One scroll container, no nested composer card or 42% height cap"
+      ],
+      "verification": "Build/lint passed; browser fixture updated, live visual review pending"
+    },
+    "selectionPerformance": {
+      "changes": [
+        "Stable modal close callback prevents close/showModal on each selection",
+        "No automatic camera centering on pointer selection; keyboard navigation retained",
+        "96px camera windows retain overscanned culling without per-pixel React updates",
+        "Reserved selected-tag strip prevents dialog height changes",
+        "112px targets with 72px artwork"
+      ],
+      "verification": "Build/lint and asset/geometry checks; browser regression fixture added, runtime performance not measured"
+    },
+    "labelReadability": {
+      "date": "2026-11-04",
+      "changes": [
+        "80px circular portrait with 72px artwork; full label outside the circle",
+        "Removed line clamp and overflow clipping on labels",
+        "Row spacing expands to measured content height for translations and enlarged text"
+      ],
+      "verification": "DOM fixture updated; live visual verification pending browser availability"
+    }
+  }
 }

@@ -26,6 +26,14 @@ export interface InitialItem {
   [key: string]: unknown;
 }
 
+export interface CheckInTagItem extends InitialItem {
+  tag: string;
+  icon?: string | null;
+  thumb?: string | null;
+  category?: string;
+  is_visible?: boolean;
+}
+
 export interface ReportKind {
   key: string;
   name?: LocalizedString;
@@ -53,7 +61,7 @@ export interface InitialData {
   } | Record<string, unknown>;
   event_kinds: InitialItem[];
   report_kinds: ReportKind[];
-  checkin_tag_types: InitialItem[];
+  checkin_tag_types: CheckInTagItem[];
   countries: Record<string, InitialItem>;
   languages: Record<string, LanguageInfo>;
   status: string;
