@@ -1,8 +1,6 @@
 export const SITE_URL = 'https://coolvibes.gay'
 export const SITE_NAME = 'CoolVibes'
 export const SITE_TWITTER_HANDLE = '@coolvibeslgbt'
-export const GA_MEASUREMENT_ID =
-  import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-ZSKTH9D2CQ'
 
 export const DEFAULT_TITLE =
   'CoolVibes – LGBTQIA+ Social Network & Gay Dating App'

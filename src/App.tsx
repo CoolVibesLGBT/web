@@ -380,34 +380,6 @@ function AppContent() {
   }, [isAuthenticated, routeSeoPath, t]);
   useSEO(routeSeo);
 
-  const hasTrackedInitialView = React.useRef(false);
-
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (!hasTrackedInitialView.current) {
-      hasTrackedInitialView.current = true;
-      return;
-    }
-
-    const pagePath = `${location.pathname}${location.search || ''}`;
-    const payload = {
-      page_path: pagePath,
-      page_location: window.location.href,
-      page_title: document.title,
-    };
-
-    const gtag = (window as any).gtag;
-    if (typeof gtag === 'function') {
-      gtag('config', 'G-ZSKTH9D2CQ', payload);
-      return;
-    }
-
-    const dataLayer = (window as any).dataLayer;
-    if (Array.isArray(dataLayer)) {
-      dataLayer.push(['config', 'G-ZSKTH9D2CQ', payload]);
-    }
-  }, [location.pathname, location.search]);
-
   const normalizedPath = React.useMemo(
     () => normalizePath(location.pathname || '/'),
     [location.pathname]
